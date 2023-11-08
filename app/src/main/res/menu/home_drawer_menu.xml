@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_item_store"
+        android:visible="false"
+        android:icon="@drawable/round_shop_24"
+        android:title="Apps &amp; Games" />
+    <item
+        android:id="@+id/navigation_item_website"
+        android:icon="@drawable/round_public_24"
+        android:title="Vectras Website" />
+    <item
+        android:id="@+id/navigation_item_info"
+        android:icon="@drawable/round_info_24"
+        android:title="About"/>
+
+</menu>

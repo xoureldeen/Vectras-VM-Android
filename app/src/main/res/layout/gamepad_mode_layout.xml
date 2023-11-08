@@ -1,0 +1,235 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="50dp"
+		android:layout_gravity="top|center_horizontal"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:gravity="center_vertical|center|center_horizontal"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@+id/leftBtn"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:background="@drawable/controls_button"
+                android:clickable="true"
+                android:gravity="center_vertical|center|center_horizontal"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical|center|center_horizontal"
+                    android:text="Left" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:gravity="center_vertical|center|center_horizontal"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@+id/upBtn"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:background="@drawable/controls_button"
+                android:clickable="true"
+                android:gravity="center_vertical|center|center_horizontal"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical|center|center_horizontal"
+                    android:text="Up" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:gravity="center_vertical|center|center_horizontal"
+                android:orientation="vertical" />
+
+            <LinearLayout
+                android:id="@+id/downBtn"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:background="@drawable/controls_button"
+                android:clickable="true"
+                android:gravity="center_vertical|center|center_horizontal"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical|center|center_horizontal"
+                    android:text="Down" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:gravity="center_vertical|center|center_horizontal"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@+id/rightBtn"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:background="@drawable/controls_button"
+                android:clickable="true"
+                android:gravity="center_vertical|center|center_horizontal"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical|center|center_horizontal"
+                    android:text="Right" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <com.epicstudios.vectras.widgets.JoystickView
+        android:id="@+id/joyStick"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="bottom|left"
+        android:layout_marginBottom="48dp"
+        android:alpha="0.5"
+        custom:JV_backgroundColor="#44000000"
+        custom:JV_borderColor="#88000000"
+        custom:JV_borderWidth="4dp"
+        custom:JV_buttonColor="#99000000"
+        custom:JV_buttonSizeRatio="15%"
+        custom:JV_fixedCenter="false" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1.0"
+        android:gravity="bottom|center_vertical|left"
+        android:orientation="vertical" >
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="50dp"
+		android:layout_gravity="bottom|center_horizontal"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:gravity="center_vertical|center|center_horizontal"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@+id/BtnSpace"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:background="@drawable/controls_button"
+                android:clickable="true"
+                android:gravity="center_vertical|center|center_horizontal"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical|center|center_horizontal"
+                    android:text="Space" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:gravity="center_vertical|center|center_horizontal"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@+id/BtnF"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:background="@drawable/controls_button"
+                android:clickable="true"
+                android:gravity="center_vertical|center|center_horizontal"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical|center|center_horizontal"
+                    android:text="F" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:gravity="center_vertical|center|center_horizontal"
+                android:orientation="vertical" />
+
+            <LinearLayout
+                android:id="@+id/BtnShift"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:background="@drawable/controls_button"
+                android:clickable="true"
+                android:gravity="center_vertical|center|center_horizontal"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical|center|center_horizontal"
+                    android:text="Shift" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:gravity="center_vertical|center|center_horizontal"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@+id/Btn0"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:background="@drawable/controls_button"
+                android:clickable="true"
+                android:gravity="center_vertical|center|center_horizontal"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical|center|center_horizontal"
+                    android:text="0" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

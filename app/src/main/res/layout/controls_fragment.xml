@@ -1,0 +1,149 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:alpha="0.5">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <LinearLayout
+            android:id="@+id/gamepadLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+			android:visibility="gone"
+            android:orientation="horizontal" >
+
+            <include layout="@layout/gamepad_mode_layout" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/desktopLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+			android:visibility="visible"
+            android:orientation="horizontal" >
+
+            <include layout="@layout/desktop_mode_layout" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+			android:layout_gravity="right"
+            android:orientation="vertical"
+            android:padding="10dp" >
+
+            <TextView
+                android:id="@+id/ramTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Free Memory:" />
+
+            <TextView
+                android:id="@+id/cpuTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cpu Usage:" />
+
+            <TextView
+                android:id="@+id/dvcTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Device Model:" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:orientation="horizontal" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="15dp" >
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:popupTheme="@style/PopupMenuStyle"
+                android:background="#00000000" />
+
+            <LinearLayout
+                android:id="@+id/hideBtn"
+                android:layout_width="100dp"
+                android:layout_height="48dp"
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:gravity="center_vertical|center|center_horizontal"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/hideTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hide" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/modeBtn"
+                android:layout_width="100dp"
+                android:layout_height="48dp"
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:gravity="center_vertical|center|center_horizontal"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mode" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/kbdBtn"
+                android:layout_width="100dp"
+                android:layout_height="48dp"
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:gravity="center_vertical|center|center_horizontal"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Keyboard" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/settingsBtn"
+                android:layout_width="100dp"
+                android:layout_height="48dp"
+                android:visibility="gone"
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:gravity="center_vertical|center|center_horizontal"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Settings" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>
