@@ -30,6 +30,8 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -116,9 +118,7 @@ public class MainActivity extends AppCompatActivity {
 	public ViewPager viewPager;
 	MenuItem prevMenuItem;
 	int pager_number = 2;
-	public static File fileImg = new File(Config.basefiledir+"config_path.txt");
-	public static String imgPath = FileUtils.readFromFile(activity, fileImg);
-	
+
 	//Widgets
 	private boolean timeQuit = false;
 	private Object lockTime = new Object();
@@ -137,13 +137,34 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	public void FAB_Click(View v) {
-		Thread thread = new Thread(new Runnable() {
+		/*Thread thread = new Thread(new Runnable() {
 			public void run() {
 				MainActivity.onStartButton();
 			}
 		});
 		thread.setPriority(Thread.MIN_PRIORITY);
-		thread.start();
+		thread.start();*/
+		if (HomeFragment.romsLayout.getVisibility() == View.GONE) {
+			Animation animation;
+			animation = AnimationUtils.loadAnimation(MainActivity.activity, R.anim.slide_from_left);
+			animation.setDuration(300);
+			HomeFragment.romsLayout.startAnimation(animation);
+			Animation animation2;
+			animation2 = AnimationUtils.loadAnimation(MainActivity.activity, R.anim.slide_from_top);
+			animation2.setDuration(300);
+			HomeFragment.mRVBlog.startAnimation(animation2);
+			HomeFragment.romsLayout.setVisibility(View.VISIBLE);
+		} else if (HomeFragment.romsLayout.getVisibility() == View.VISIBLE) {
+			Animation animation;
+			animation = AnimationUtils.loadAnimation(MainActivity.activity, R.anim.slide_to_left);
+			animation.setDuration(300);
+			HomeFragment.romsLayout.startAnimation(animation);
+			Animation animation2;
+			animation2 = AnimationUtils.loadAnimation(MainActivity.activity, R.anim.slide_from_top);
+			animation2.setDuration(300);
+			HomeFragment.mRVBlog.startAnimation(animation2);
+			HomeFragment.romsLayout.setVisibility(View.GONE);
+		}
 	}
 
 	public static void quit() {
@@ -194,12 +215,6 @@ public class MainActivity extends AppCompatActivity {
 		NotificationManager notificationManager = (NotificationManager) getApplicationContext()
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 		notificationManager.cancelAll();
-		try {
-			prepareParams();
-		} catch (Exception ex) {
-			//UIUtils.toastLong(this, ex.getMessage());
-		}
-
 		setupStrictMode();
 		activity = this;
 		this.setContentView(R.layout.main);
@@ -400,7 +415,6 @@ public class MainActivity extends AppCompatActivity {
 
 		output = "Starting VM...";
 		VectrasStatus.logInfo(String.format("Starting VM..."));
-		VectrasStatus.logInfo(String.format(imgPath));
 		vmexecutor.paused = 0;
 		startSDL();
 
@@ -464,7 +478,7 @@ public class MainActivity extends AppCompatActivity {
 		t.start();
 	}
 
-	public void prepareParams() throws FileNotFoundException {
+	public static void prepareParams(String hda) throws FileNotFoundException {
 		String libqemu = null;
 		libqemu = FileUtils.getDataDir() + "/lib/libqemu-system-x86_64.so";
 		
@@ -478,17 +492,26 @@ public class MainActivity extends AppCompatActivity {
 		paramsList.add("-L");
 		paramsList.add(Config.basefiledir);
 
-		if (FileUtils.fileValid(activity, imgPath)) {
-			paramsList.add("-hda");
-			paramsList.add(imgPath);
-		} else {
-			UIUtils.toastLong(activity, "please set the correct downloaded os");
-			startActivity(new Intent(activity, FirstActivity.class));
-			return;
-		}
+		paramsList.add("-hda");
+		paramsList.add(hda);
 
+		paramsList.add("-hdb");
+		paramsList.add(Config.basefiledir+"harddisk/hdb.qcow2");
+
+		paramsList.add("-hdc");
+		paramsList.add(Config.basefiledir+"harddisk/hdc.qcow2");
+
+		paramsList.add("-hdd");
+		paramsList.add(Config.basefiledir+"harddisk/hdd.qcow2");
+/*
+		paramsList.add("-cdrom");
+		paramsList.add(Config.basefiledir+"iso/cdrom.iso");
+*/
 		paramsList.add("-boot");
 		paramsList.add("c");
+
+		paramsList.add("-k");
+		paramsList.add("en-us");
 /*
 		paramsList.add("-drive");
 		String driveParams = "index=3";
@@ -498,8 +521,8 @@ public class MainActivity extends AppCompatActivity {
 		driveParams += ",file=fat:";
 		driveParams += "rw:";
 		driveParams += Config.sharedFolder;
-		paramsList.add(driveParams);
-*/
+		paramsList.add(driveParams);*/
+
 		params = (String[]) paramsList.toArray(new String[paramsList.size()]);
 
 	}
@@ -531,12 +554,7 @@ public class MainActivity extends AppCompatActivity {
 
 			}
 		});
-		
-		try {
-			prepareParams();
-		} catch (Exception ex) {
-			//UIUtils.toastLong(this, ex.getMessage());
-		}
+
 		AppBarLayout nnl_appbar = findViewById(R.id.nnl_appbar);
 		nnl_appbar.setExpanded(false);
 		mainToolbar = (Toolbar) findViewById(R.id.nnl_toolbar);
@@ -609,7 +627,7 @@ public class MainActivity extends AppCompatActivity {
 
 						totalRam.setText("Total Memory: " + totalMemory + " MB");
 						usedRam.setText("Used Memory: " + usedMemory + " MB");
-						freeRam.setText("Free Memory: " + freeMemory + " MB");
+						freeRam.setText("Free Memory: " + freeMemory + " MB ("+RamInfo.vectrasMemory()+")");
 					}
 				});
 			}
@@ -628,6 +646,9 @@ public class MainActivity extends AppCompatActivity {
 		AdRequest adRequest = new AdRequest.Builder().build();
 		mAdView.loadAd(adRequest);
 		UIAlert(getString(R.string.app_version), "This is only the first beta version of Vectras. Please note that the application is still in the experimental stage so that it is available in the best condition. Do not be lazy and support the application with your opinion.", activity);
+
+
+
 		//File extra = new File(Config.basefiledir+"config_extra.txt");
 		//String extraParams = FileUtils.readFromFile(MainActivity.activity, extra);
 	

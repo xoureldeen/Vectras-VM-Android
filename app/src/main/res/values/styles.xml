@@ -40,7 +40,6 @@
     <style name="MyCheckBoxStyle" parent="Base.Widget.Material3.CompoundButton.CheckBox">
         <item name="android:theme">@style/MyCheckboxTheme</item>
     </style>
-
     <style name="MyCheckboxTheme">
         <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryDark">@color/white</item>
@@ -49,5 +48,9 @@
         <item name="colorControlActivated">@color/blue</item>
         <item name="colorAccent">@color/blue</item>
         <item name="android:textColorSecondary">@color/white</item>
+    </style>
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_in_bottom</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_bottom</item>
     </style>
 </resources>

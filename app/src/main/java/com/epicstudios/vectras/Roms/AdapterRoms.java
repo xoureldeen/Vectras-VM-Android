@@ -7,6 +7,8 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.webkit.URLUtil;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -70,7 +72,6 @@ public class AdapterRoms extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 			myHolder.textAvail.setText("availability: unavailable");
 			myHolder.textAvail.setTextColor(Color.RED);
 			myHolder.checkBox.setEnabled(false);
-			myHolder.cdItem.setEnabled(false);
 		}
 		if (current.itemAvail)
 			myHolder.checkBox.setOnClickListener(new View.OnClickListener() {
@@ -86,34 +87,6 @@ public class AdapterRoms extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 						FirstActivity.selectedIcon = current.itemIcon;
 				}
 			});
-		//Glide.with(MainActivity.activity).load(current.itemIcon).into(myHolder.ivIcon);
-		if (current.itemAvail)
-			myHolder.cdItem.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					if (FileUtils.fileValid(FirstActivity.activity, Config.maindirpath + current.itemPath)) {
-						mSelectedItem = position;
-						notifyItemRangeChanged(0, data.size());
-						FirstActivity.selected = true;
-						FirstActivity.selectedPath = current.itemPath;
-						FirstActivity.selectedExtra = current.itemExtra;
-					} else {
-						AlertDialog ad;
-						ad = new AlertDialog.Builder(FirstActivity.activity, R.style.MainDialogTheme).create();
-						ad.setTitle(current.itemName + " Not found");
-						ad.setMessage(current.itemName + " Rom not found  please download from our official website");
-						ad.setButton(Dialog.BUTTON_POSITIVE, "DOWNLAOD WEBSITE", new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int which) {
-								String gt = current.itemUrl;
-								Intent g = new Intent(Intent.ACTION_VIEW);
-								g.setData(Uri.parse(gt));
-								FirstActivity.activity.startActivity(g);
-								FirstActivity.activity.finish();
-							}
-						});
-					}
-				}
-			});
 
 	}
 
@@ -125,7 +98,6 @@ public class AdapterRoms extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 	class MyHolder extends RecyclerView.ViewHolder {
 
-		CardView cdItem;
 		TextView textName, textAvail, textSize;
 		ImageView ivIcon;
 
@@ -134,7 +106,6 @@ public class AdapterRoms extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 		// create constructor to get widget reference
 		public MyHolder(View itemView) {
 			super(itemView);
-			cdItem = (CardView) itemView.findViewById(R.id.cdItem);
 			textName = (TextView) itemView.findViewById(R.id.textName);
 			ivIcon = (ImageView) itemView.findViewById(R.id.ivIcon);
 			textSize = (TextView) itemView.findViewById(R.id.textSize);

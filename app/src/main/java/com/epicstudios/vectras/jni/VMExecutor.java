@@ -12,6 +12,8 @@ import com.epicstudios.vectras.utils.FileUtils;
 import com.epicstudios.vectras.utils.RamInfo;
 import com.epicstudios.vectras.utils.UIUtils;
 import java.io.File;
+import java.util.Arrays;
+
 import android.os.Environment;
 
 public class VMExecutor {
@@ -30,7 +32,7 @@ public class VMExecutor {
 	private int height;
 
 	public static final File fileExtra = new File(Config.basefiledir + "config_extra.txt");
-	public static final String extraParams = FileUtils.readFromFile(MainActivity.activity, fileExtra);
+	public static String extraParams;
 
 	/**
 	 * @throws Exception
@@ -81,7 +83,7 @@ public class VMExecutor {
 				VectrasStatus.logInfo(String.format(" QEMU Params Error: "+extraParams));
 				return "error";
 			}
-			VectrasStatus.logInfo(String.format("QEMU PARAMS: "+extraParams+" -m "+ RamInfo.vectrasMemory()));
+			VectrasStatus.logInfo(String.format("QEMU PARAMS: "+ Arrays.toString(MainActivity.params) +extraParams+" -m "+ RamInfo.vectrasMemory()));
 			res = start(this.libqemu, MainActivity.params, extraParams+" -m "+ RamInfo.vectrasMemory(), paused, "VECTRAS");
 		} catch (Exception ex) {
 			ex.printStackTrace();

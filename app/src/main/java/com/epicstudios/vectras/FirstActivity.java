@@ -11,9 +11,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.Html;
 import android.util.Log;
@@ -29,6 +33,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.epicstudios.vectras.Config;
+import com.epicstudios.vectras.MainRoms.AdapterMainRoms;
+import com.epicstudios.vectras.MainRoms.DataMainRoms;
 import com.epicstudios.vectras.Roms.AdapterRoms;
 import com.epicstudios.vectras.Roms.DataRoms;
 import com.epicstudios.vectras.logger.VectrasStatus;
@@ -303,25 +309,13 @@ public class FirstActivity extends AppCompatActivity {
 	public static final String CREDENTIAL_SHARED_PREF = "settings_prefs";
 
 	private void startIconDownload() {
-		String url = selectedIcon;
-		new DownloadIconAsync().execute(url);
+		new DownloadsImage().execute(selectedIcon);
 	}
 
-	public void onFirstStartup() {
+	public void onFirstStartup()  {
 		if (selected) {
 			if (FileUtils.fileValid(activity, Config.maindirpath+selectedPath)) {
 				SharedPreferences credentials = activity.getSharedPreferences(CREDENTIAL_SHARED_PREF, Context.MODE_PRIVATE);
-
-				File path = new File(Config.basefiledir);
-				File file = new File(path, "config_path.txt");
-				File file2 = new File(path, "config_extra.txt");
-				FileUtils.writeToFile(Config.maindirpath + selectedPath, file, activity);
-				new Timer().schedule(new TimerTask() {
-					@Override
-					public void run() {
-						FileUtils.writeToFile(selectedExtra, file2, activity);
-					}
-				}, 500);
 				ProgressDialog mProgressDialog = new ProgressDialog(this, R.style.MainDialogTheme);
 				mProgressDialog.setMessage("Data Setup");
 				mProgressDialog.setMessage("Please Wait...");
@@ -333,20 +327,56 @@ public class FirstActivity extends AppCompatActivity {
 				editor.commit();
 				RomsJso obj = new RomsJso();
 				startIconDownload();
-				obj.makeJSONObject(selectedName, Config.maindirpath+"icons/"+selectedPath.replace(".IMG", ".png"), selectedPath, selectedExtra);
+				final File jsonFile = new File(Config.maindirpath + "roms-data" + ".json");
 
-				try {
-					Writer output = null;
-					File jsonFile = new File(Config.maindirpath + selectedPath + ".json");
-					output = new BufferedWriter(new FileWriter(jsonFile));
-					output.write(obj.toString());
-					output.close();
-					Toast.makeText(getApplicationContext(), "Composition saved", Toast.LENGTH_LONG).show();
+				if (jsonFile.exists()) {
+					try {
+						List<DataMainRoms> data=new ArrayList<>();
+						JSONArray jArray = new JSONArray(FileUtils.readFromFile(MainActivity.activity, jsonFile));
 
-				} catch (Exception e) {
-					UIUtils.toastLong(activity, e.toString());
+						try {
+							// Extract data from json and store into ArrayList as class objects
+							for(int i=0;i<jArray.length();i++){
+								JSONObject json_data = jArray.getJSONObject(i);
+								DataMainRoms romsMainData = new DataMainRoms();
+								romsMainData.itemName= json_data.getString("imgName");
+								romsMainData.itemIcon= json_data.getString("imgIcon");
+								romsMainData.itemPath= json_data.getString("imgPath");
+								romsMainData.itemExtra= json_data.getString("imgExtra");
+								data.add(romsMainData);
+							}
+
+						} catch (JSONException e) {
+							Toast.makeText(MainActivity.activity, e.toString(), Toast.LENGTH_LONG).show();
+						}
+
+						JSONObject jsonObject = obj.makeJSONObject(selectedName, Config.maindirpath+"icons/"+selectedPath.replace(".IMG", ".jpg"), Config.maindirpath + selectedPath, selectedExtra);
+						jArray.put(jsonObject);
+						try {
+							Writer output = null;
+							output = new BufferedWriter(new FileWriter(jsonFile));
+							output.write(jArray.toString().replace("\\","").replace("//","/"));
+							output.close();
+						} catch (Exception e) {
+							UIUtils.toastLong(activity, e.toString());
+						}
+					} catch (JSONException e) {
+						UIUtils.toastLong(activity, e.toString());
+					}
+				} else {
+					JSONObject jsonObject = obj.makeJSONObject(selectedName, Config.maindirpath+"icons/"+selectedPath.replace(".IMG", ".jpg"), Config.maindirpath + selectedPath, selectedExtra);
+					JSONArray jsonArray = new JSONArray();
+					jsonArray.put(jsonObject);
+					try {
+						Writer output = null;
+						output = new BufferedWriter(new FileWriter(jsonFile));
+						output.write(jsonArray.toString().replace("\\","").replace("//","/"));
+						output.close();
+					} catch (Exception e) {
+						UIUtils.toastLong(activity, e.toString());
+					}
+					VectrasStatus.logInfo(String.format("Welcome to Vectras ♡"));
 				}
-				VectrasStatus.logInfo(String.format("Welcome to Vectras ♡"));
 				new Timer().schedule(new TimerTask() {
 					@Override
 					public void run() {
@@ -405,11 +435,11 @@ public class FirstActivity extends AppCompatActivity {
 		if (requestCode == 0 && resultCode == RESULT_OK){
 			Uri content_describer = data.getData();
 
-			String selectedFilePath = getPath(content_describer);
-			if (selectedFilePath.endsWith(".vbi")) {
+			File selectedFilePath = new File(getPath(content_describer));
+			if (selectedFilePath.getName().equals(selectedPath.replace(".IMG", ".vbi"))) {
 			
                 try {
-                    unzip(selectedFilePath, Config.maindirpath);
+                    unzip(selectedFilePath.toString(), Config.maindirpath);
                 } catch (IOException e) {
                     progressDialog.dismiss(); // Close Progress Dialog
                 	UIUtils.toastLong(activity, e.toString());
@@ -417,7 +447,7 @@ public class FirstActivity extends AppCompatActivity {
                 }
             			
 			} else {
-				MainActivity.UIAlert("File not supported", "please use vailed '.vbi' file to continue.", activity);
+				MainActivity.UIAlert("File not supported", "please select "+selectedPath.replace(".IMG", ".vbi")+" file to continue.", activity);
 			}
 
 		}
@@ -488,54 +518,57 @@ public class FirstActivity extends AppCompatActivity {
     }
 
 	public static final int DIALOG_DOWNLOAD_PROGRESS = 0;
-	class DownloadIconAsync extends AsyncTask<String, String, String> {
+	class DownloadsImage extends AsyncTask<String, Void,Void>{
 
 		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			showDialog(DIALOG_DOWNLOAD_PROGRESS);
-		}
-
-		@Override
-		protected String doInBackground(String... aurl) {
-			int count;
-
+		protected Void doInBackground(String... strings) {
+			URL url = null;
 			try {
-				URL url = new URL(aurl[0]);
-				URLConnection conexion = url.openConnection();
-				conexion.connect();
+				url = new URL(strings[0]);
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
+			Bitmap bm = null;
+			try {
+				bm =    BitmapFactory.decodeStream(url.openConnection().getInputStream());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 
-				int lenghtOfFile = conexion.getContentLength();
-				String fileName = URLUtil.guessFileName(selectedIcon,null,null);
-				InputStream input = new BufferedInputStream(url.openStream());
-				OutputStream output = new FileOutputStream(Config.maindirpath+"icons/"+selectedPath.replace(".IMG", ".png"));
+			//Create Path to save Image
+			File path = new File(Config.maindirpath + "icons"); //Creates app specific folder
 
-				byte data[] = new byte[1024];
+			if(!path.exists()) {
+				path.mkdirs();
+			}
 
-				long total = 0;
-
-				while ((count = input.read(data)) != -1) {
-					total += count;
-					publishProgress("" + (int) ((total * 100) / lenghtOfFile));
-					output.write(data, 0, count);
-				}
-
-				output.flush();
-				output.close();
-				input.close();
-			} catch (Exception e) {
+			File imageFile = new File(path, selectedPath.replace(".IMG", ".jpg")); // Imagename.png
+			FileOutputStream out = null;
+			try {
+				out = new FileOutputStream(imageFile);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+			try{
+				bm.compress(Bitmap.CompressFormat.PNG, 100, out); // Compress Image
+				out.flush();
+				out.close();
+				// Tell the media scanner about the new file so that it is
+				// immediately available to the user.
+				MediaScannerConnection.scanFile(activity,new String[] { imageFile.getAbsolutePath() }, null,new MediaScannerConnection.OnScanCompletedListener() {
+					public void onScanCompleted(String path, Uri uri) {
+						// Log.i("ExternalStorage", "Scanned " + path + ":");
+						//    Log.i("ExternalStorage", "-> uri=" + uri);
+					}
+				});
+			} catch(Exception e) {
 			}
 			return null;
-
-		}
-
-		protected void onProgressUpdate(String... progress) {
-
 		}
 
 		@Override
-		protected void onPostExecute(String unused) {
-
+		protected void onPostExecute(Void aVoid) {
+			super.onPostExecute(aVoid);
 		}
 	}
 

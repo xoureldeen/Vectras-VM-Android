@@ -8,6 +8,11 @@
                 android:width="2dp"
                 android:color="#90000000" />
             <corners android:radius="30dp" />
+            <padding
+                android:top="10dp"
+                android:bottom="10dp"
+                android:right="10dp"
+                android:left="10dp"/>
         </shape>
     </item>
 
@@ -19,6 +24,11 @@
                 android:width="2dp"
                 android:color="#90000000" />
             <corners android:radius="30dp" />
+            <padding
+                android:top="10dp"
+                android:bottom="10dp"
+                android:right="10dp"
+                android:left="10dp"/>
         </shape>
     </item>
     <item>
@@ -29,6 +39,11 @@
                 android:width="2dp"
                 android:color="#90000000" />
             <corners android:radius="30dp" />
+            <padding
+                android:top="10dp"
+                android:bottom="10dp"
+                android:right="10dp"
+                android:left="10dp"/>
         </shape>
     </item>
 </selector>

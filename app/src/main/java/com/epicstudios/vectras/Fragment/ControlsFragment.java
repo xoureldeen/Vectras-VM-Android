@@ -188,35 +188,6 @@ public class ControlsFragment extends Fragment {
 				SDLActivity.onNativeKeyDown(KeyEvent.KEYCODE_SPACE);
 			}
 		});
-		final Toolbar optionsTb = view.findViewById(R.id.toolbar);
-		optionsTb.setTitle(null);
-		optionsTb.inflateMenu(R.menu.sdl_menu);
-
-		// and finally set click listener
-		optionsTb.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-			@Override
-			public boolean onMenuItemClick(MenuItem item) {
-				int id = item.getItemId();
-				if(id == R.id.shutdownItem) {
-					//VectrasSDLActivity.stopVM(VectrasSDLActivity.activity, false);
-					return true;
-				} else if (item.getItemId() == R.id.itemFitToScreen) {
-					//VectrasSDLActivity.setFitToScreen();
-				} else if (item.getItemId() == R.id.itemStretchToScreen) {
-					//VectrasSDLActivity.setStretchToScreen();
-				} else if (item.getItemId() == R.id.itemZoomIn) {
-					//VectrasSDLActivity.setZoomIn();
-				} else if (item.getItemId() == R.id.itemZoomOut) {
-					//VectrasSDLActivity.setZoomOut();
-				} else if (item.getItemId() == R.id.itemOneToOne) {
-					//VectrasSDLActivity.setOneToOne();
-				} else if (item.getItemId() == R.id.itemZoomable) {
-					//VectrasSDLActivity.setZoomable();
-				}
-				return false;
-			}
-		});
-		setHasOptionsMenu(true);
 		int loop =25;
 		JoystickView joystick = (JoystickView) view.findViewById(R.id.joyStick);
 		joystick.setOnMoveListener(new JoystickView.OnMoveListener() {
@@ -455,21 +426,5 @@ public class ControlsFragment extends Fragment {
 			}
 		});
 		return view;
-	}
-
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		// Do something that differs the Activity's menu here
-		inflater.inflate(R.menu.sdl_menu, menu);
-		super.onCreateOptionsMenu(menu, inflater);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		int id = item.getItemId();
-		if (id == R.id.shutdownItem) {
-			VectrasSDLActivity.stop();
-		}
-		return super.onOptionsItemSelected(item);
 	}
 }

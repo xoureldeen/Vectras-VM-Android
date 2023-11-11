@@ -3,6 +3,7 @@ package com.epicstudios.vectras;
 import static android.os.Build.VERSION.SDK_INT;
 
 import android.Manifest;
+import android.animation.ValueAnimator;
 import android.app.Dialog;
 import android.content.*;
 import android.content.pm.*;
@@ -16,6 +17,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import com.airbnb.lottie.LottieAnimationView;
 import com.epicstudios.vectras.R;
 import com.epicstudios.vectras.MainActivity;
 import com.epicstudios.vectras.utils.UIUtils;
@@ -113,8 +116,11 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
     			intent.setData(uri);
     			startActivity(intent);
     			ad.cancel();
+				finish();
+    		} else {
 				new Handler().postDelayed(this, 2000);
-    		}
+
+			}
 		} else if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
 			ActivityCompat.requestPermissions(SplashActivity.this,
 					new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);

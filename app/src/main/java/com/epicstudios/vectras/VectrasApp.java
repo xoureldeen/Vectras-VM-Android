@@ -162,7 +162,7 @@ public class VectrasApp extends Application {
 
 								@Override
 								public void run() {
-									VectrasStatus.logError("<font color='red'>[E] "+e.getMessage()+"</font>");
+									VectrasStatus.logError("<font color='red'>[E] >"+ mContext.getApplicationContext().toString() +e.getMessage()+"</font>");
 								}
 							});
 						} else {

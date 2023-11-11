@@ -1,73 +1,77 @@
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/cdItem"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:cardBackgroundColor="@color/main_dark"
-    app:cardCornerRadius="10dp"
-    card_view:cardUseCompatPadding="true"
-    card_view:cardPreventCornerOverlap="false" >
-
-    <LinearLayout
+    android:layout_height="wrap_content">
+    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/cdItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
-        <ImageView
-            android:id="@+id/ivIcon"
-            android:layout_width="84dp"
-            android:layout_height="84dp"
-            android:scaleType="centerCrop" />
-
+        android:layout_margin="10dp"
+        android:clipToPadding="false"
+        app:cardBackgroundColor="@color/colorPrimaryDark"
+        app:cardCornerRadius="10dp"
+        app:cardPreventCornerOverlap="true">
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1.0"
-            android:orientation="vertical"
-            android:padding="10dp" >
+            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/textName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:text="name"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+            <ImageView
+                android:id="@+id/ivIcon"
+                android:layout_width="85dp"
+                android:layout_height="85dp"
+                android:scaleType="centerCrop" />
 
             <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:orientation="horizontal" >
+                android:layout_weight="1.0"
+                android:orientation="vertical"
+                android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/textSize"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/textName"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="size: "
-					android:maxLines="1"
-					android:layout_weight="1.0"
-                    android:textSize="15sp" />
+                    android:maxLines="1"
+                    android:text="@string/name"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/textAvail"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="availablity: "
-					android:maxLines="1"
-                    android:textSize="10sp" />
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/textSize"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.0"
+                        android:maxLines="1"
+                        android:text="@string/size"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/textAvail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:text="@string/availablity"
+                        android:textSize="10sp" />
+                </LinearLayout>
             </LinearLayout>
+
+            <RadioButton
+                android:id="@+id/checkBox"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:buttonTint="@color/white"
+                android:clickable="true"
+                android:theme="@style/MyCheckboxTheme" />
         </LinearLayout>
 
-        <RadioButton
-            android:id="@+id/checkBox"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:theme="@style/MyCheckboxTheme"
-            android:layout_margin="10dp" />
-			
-    </LinearLayout>
-
-</androidx.cardview.widget.CardView>
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

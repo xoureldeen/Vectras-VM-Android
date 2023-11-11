@@ -2,6 +2,7 @@ package com.epicstudios.vectras.Fragment;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkInfo;
@@ -13,19 +14,26 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.epicstudios.vectras.FirstActivity;
+import com.epicstudios.vectras.MainRoms.AdapterMainRoms;
+import com.epicstudios.vectras.MainRoms.DataMainRoms;
 import com.epicstudios.vectras.R;
 import com.epicstudios.vectras.Blog.AdapterBlog;
 import com.epicstudios.vectras.Blog.DataBlog;
 import com.epicstudios.vectras.Config;
 import com.epicstudios.vectras.MainActivity;
+import com.epicstudios.vectras.utils.FileUtils;
 import com.epicstudios.vectras.utils.UIUtils;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.InetAddress;
@@ -44,12 +52,18 @@ public class HomeFragment extends Fragment {
 
 	View view;
 
-	private RecyclerView mRVBlog;
+	public static RecyclerView mRVBlog;
+	public static RecyclerView mRVMainRoms;
+	public static LinearLayout romsLayout;
 	private AdapterBlog mAdapter;
+    public static AdapterMainRoms mMainAdapter;
 	public MainActivity activity;
 	public String Data;
 	public static LinearLayout noConnectionLayout;
 	public SwipeRefreshLayout pullToRefresh;
+	public ImageView ivRomsManager;
+	public static JSONArray jArray;
+	public static List<DataMainRoms> data;
 
 	/*private ImageButton mStop;
 	private ImageButton mRestart;*/
@@ -61,9 +75,12 @@ public class HomeFragment extends Fragment {
 
 		view = inflater.inflate(R.layout.home_fragment, container, false);
 
+		romsLayout = view.findViewById(R.id.romsLayout);
+
+		ivRomsManager = view.findViewById(R.id.ivRomsManager);
+
 		noConnectionLayout = view.findViewById(R.id.noConnectionLayout);
 		mRVBlog = view.findViewById(R.id.blogRv);
-
 		if (checkConnection(activity)) {
 			new AsyncLogin().execute();
 			noConnectionLayout.setVisibility(View.GONE);
@@ -85,23 +102,40 @@ public class HomeFragment extends Fragment {
 				}
 			}
 		});
+		data=new ArrayList<>();
 
-		/*mStop = (ImageButton) view.findViewById(R.id.stopvm);
-		mStop.setOnClickListener(new View.OnClickListener() {
-		        public void onClick(View view) {
-		            MainActivity.onStopButton(false);
-		
-		        }
-		    });
-		
-		mRestart = (ImageButton) view.findViewById(R.id.restartvm);
-		mRestart.setOnClickListener(new View.OnClickListener() {
-		        public void onClick(View view) {
-		
-		            MainActivity.onRestartButton();
-		
-		        }
-		    });*/
+		try {
+
+			jArray = new JSONArray(FileUtils.readFromFile(MainActivity.activity, new File(Config.maindirpath
+					+ "roms-data.json")));
+
+			// Extract data from json and store into ArrayList as class objects
+			for(int i=0;i<jArray.length();i++){
+				JSONObject json_data = jArray.getJSONObject(i);
+				DataMainRoms romsMainData = new DataMainRoms();
+				romsMainData.itemName= json_data.getString("imgName");
+				romsMainData.itemIcon= json_data.getString("imgIcon");
+				romsMainData.itemPath= json_data.getString("imgPath");
+				romsMainData.itemExtra= json_data.getString("imgExtra");
+				data.add(romsMainData);
+			}
+
+			// Setup and Handover data to recyclerview
+			mRVMainRoms = (RecyclerView)view.findViewById(R.id.mRVMainRoms);
+			mMainAdapter = new AdapterMainRoms(MainActivity.activity, data);
+			mRVMainRoms.setAdapter(mMainAdapter);
+			mRVMainRoms.setLayoutManager(new LinearLayoutManager(MainActivity.activity));
+
+		} catch (JSONException e) {
+			Toast.makeText(MainActivity.activity, e.toString(), Toast.LENGTH_LONG).show();
+		}
+
+		ivRomsManager.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(MainActivity.activity, FirstActivity.class));
+			}
+		});
 
 		return view;
 	}
