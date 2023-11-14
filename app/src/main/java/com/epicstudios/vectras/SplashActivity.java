@@ -48,7 +48,7 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
 				public void onClick(DialogInterface dialog, int which) {
 					try {
 						ActivityCompat.requestPermissions(SplashActivity.this,
-								new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+								new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
 					} catch (Exception e) {
 						UIUtils.toastLong(activity, e.toString());
 						throw new RuntimeException(e);
@@ -91,16 +91,11 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
 			return Environment.isExternalStorageManager();
 		} else {
 			int result = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
-			int result1 = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 			if (android.os.Build.VERSION.SDK_INT >= 30) {
-    
-    			int result2 = ContextCompat.checkSelfPermission(this, Manifest.permission.MANAGE_EXTERNAL_STORAGE);
-    			return result == PackageManager.PERMISSION_GRANTED && result1 == PackageManager.PERMISSION_GRANTED && result2 == PackageManager.PERMISSION_GRANTED;
-    			
+    			int result1 = ContextCompat.checkSelfPermission(this, Manifest.permission.MANAGE_EXTERNAL_STORAGE);
+    			return result == PackageManager.PERMISSION_GRANTED && result1 == PackageManager.PERMISSION_GRANTED;
     		} else {
-    		
-    		    return result == PackageManager.PERMISSION_GRANTED && result1 == PackageManager.PERMISSION_GRANTED;
-    			
+    		    return result == PackageManager.PERMISSION_GRANTED;
     		}
 		}
 	}
@@ -123,7 +118,7 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
 			}
 		} else if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
 			ActivityCompat.requestPermissions(SplashActivity.this,
-					new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+					new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
 		}
 	}
 	public static final String CREDENTIAL_SHARED_PREF = "settings_prefs";
