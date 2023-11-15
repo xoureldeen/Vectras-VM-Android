@@ -2,7 +2,6 @@
 [![Telegram Channel][ico-telegram]][link-telegram]
 [![Latest Version][ico-version]][link-releases]
 [![Software License][ico-license]](LICENSE.md)
-[![Total Downloads][ico-downloads]][link-releases]
 
 # Vectras-VM-Android (Open Source Code)
 
@@ -33,10 +32,9 @@ Has The Capbility to Run (ReactOS - Xp - 7 - Kali Linux)
 
 * https://vectras.netlify.app/download
 
-[ico-telegram]: https://img.shields.io/badge/@PHPChatCo-2CA5E0.svg?style=flat-square&logo=telegram&label=Telegram
-[ico-version]: https://img.shields.io/packagist/v/laravel-notification-channels/telegram.svg?style=flat-square
+[ico-telegram]: https://raw.githubusercontent.com/epicstudios856/Vectras-windows-emulator/main/res/images/telegram.svg
+[ico-version]: https://raw.githubusercontent.com/epicstudios856/Vectras-windows-emulator/main/res/images/version.svg
 [ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
-[ico-downloads]: https://img.shields.io/packagist/dt/laravel-notification-channels/telegram.svg?style=flat-square
 
 [link-telegram]: https://t.me/vectras_os
 [link-repo]: https://github.com/epicstudios856/Vectras-VM-Android/
