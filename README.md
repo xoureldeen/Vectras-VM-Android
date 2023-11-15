@@ -34,7 +34,7 @@ Has The Capbility to Run (ReactOS - Xp - 7 - Kali Linux)
 
 [ico-telegram]: https://raw.githubusercontent.com/epicstudios856/Vectras-windows-emulator/main/res/images/telegram.svg
 [ico-version]: https://raw.githubusercontent.com/epicstudios856/Vectras-windows-emulator/main/res/images/version.svg
-[ico-license]: https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square
+[ico-license]: https://img.shields.io/badge/License-GPL_v2-blue.svg
 
 [link-telegram]: https://t.me/vectras_os
 [link-repo]: https://github.com/epicstudios856/Vectras-VM-Android/
