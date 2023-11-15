@@ -1,4 +1,8 @@
 ![logo](https://github.com/ahmedbarakat2007/Vectras-windows-emulator/assets/118398763/096d4a06-8d3c-489f-9fb5-d273f361200c)
+[![Telegram Channel][ico-telegram]][https://t.me/vectras_os]
+[![Latest Version][ico-version]][link-packagist]
+[![Software License][ico-license]](LICENSE.md)
+[![Total Downloads][ico-downloads]][link-packagist]
 
 # Vectras-VM-Android (Open Source Code)
 
