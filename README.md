@@ -21,7 +21,7 @@ Has The Capbility to Run (ReactOS - Xp - 7 - Kali Linux)
 
 * Android 11+
 
-* 4gb Ram (2gb free ram)
+* 8gb Ram (4gb free ram)
 
 * 8-Cores Snapdragon 720G or better
 
