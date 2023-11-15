@@ -10,29 +10,26 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
+            android:layout_gravity="left"
             android:orientation="vertical"
             android:padding="10dp">
+            <TextView
+                android:id="@+id/dvcTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/ramTxt"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Free Memory:" />
+                android:layout_height="wrap_content" />
 
             <TextView
                 android:id="@+id/cpuTxt"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Cpu Usage:" />
+                android:layout_height="wrap_content" />
 
-            <TextView
-                android:id="@+id/dvcTxt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Device Model:" />
         </LinearLayout>
 
         <LinearLayout
@@ -154,8 +151,8 @@
 
                 <com.epicstudios.vectras.widgets.JoystickView
                     android:id="@+id/joyStick"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
                     android:layout_gravity="bottom|left"
                     android:layout_marginBottom="48dp"
                     android:alpha="0.5"
@@ -417,7 +414,7 @@
                         <LinearLayout
                             android:id="@+id/F1"
                             android:layout_width="80dp"
-                            android:layout_height="80dp"
+                            android:layout_height="59dp"
                             android:background="@drawable/controls_button"
                             android:clickable="true"
                             android:gravity="center_vertical|center|center_horizontal"

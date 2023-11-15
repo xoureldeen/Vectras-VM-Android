@@ -2,6 +2,10 @@ package com.epicstudios.vectras;
 
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import static android.os.Build.VERSION.SDK_INT;
@@ -16,6 +20,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -32,6 +37,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -512,7 +518,28 @@ public class MainActivity extends AppCompatActivity {
 
 		paramsList.add("-k");
 		paramsList.add("en-us");
+
+		paramsList.add("-monitor");
+		paramsList.add("none");
+
+		paramsList.add("-serial");
+		paramsList.add("none");
+
+		paramsList.add("-parallel");
+		paramsList.add("none");
+
+
 /*
+		paramsList.add("-drive"); //empty
+		String paramIso = "index=2";
+		paramIso += ",if=";
+		paramIso += "ide";
+
+		paramIso += ",media=cdrom";
+		paramIso += ",file=" + Config.basefiledir+"iso/cdrom.iso";
+
+		paramsList.add(paramIso);
+
 		paramsList.add("-drive");
 		String driveParams = "index=3";
 		driveParams += ",media=disk";
@@ -610,6 +637,8 @@ public class MainActivity extends AppCompatActivity {
 		totalRam = findViewById(R.id.totalRam);
 		usedRam = findViewById(R.id.usedRam);
 		freeRam = findViewById(R.id.freeRam);
+
+		ipTxt.setVisibility(View.GONE);
 		t = new TimerTask() {
 			@Override
 			public void run() {
@@ -628,6 +657,13 @@ public class MainActivity extends AppCompatActivity {
 						totalRam.setText("Total Memory: " + totalMemory + " MB");
 						usedRam.setText("Used Memory: " + usedMemory + " MB");
 						freeRam.setText("Free Memory: " + freeMemory + " MB ("+RamInfo.vectrasMemory()+")");
+						ProgressBar progressBar = findViewById(R.id.progressBar);
+						progressBar.setMax((int) totalMemory);
+						if (SDK_INT >= Build.VERSION_CODES.N) {
+							progressBar.setProgress((int) freeMemory, true);
+						} else {
+							progressBar.setProgress((int) freeMemory);
+						}
 					}
 				});
 			}
@@ -645,10 +681,8 @@ public class MainActivity extends AppCompatActivity {
 		AdView mAdView = findViewById(R.id.adView);
 		AdRequest adRequest = new AdRequest.Builder().build();
 		mAdView.loadAd(adRequest);
-		UIAlert(getString(R.string.app_version), "This is only the first beta version of Vectras. Please note that the application is still in the experimental stage so that it is available in the best condition. Do not be lazy and support the application with your opinion.", activity);
 
-
-
+		//UIAlert(getString(R.string.app_version), "This is only the first beta version of Vectras. Please note that the application is still in the experimental stage so that it is available in the best condition. Do not be lazy and support the application with your opinion.", activity);
 		//File extra = new File(Config.basefiledir+"config_extra.txt");
 		//String extraParams = FileUtils.readFromFile(MainActivity.activity, extra);
 	

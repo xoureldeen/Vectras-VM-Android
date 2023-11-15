@@ -128,8 +128,8 @@ public class FirstActivity extends AppCompatActivity {
 					in.close();
 				} catch (Exception e) {
 					acceptLiceneseChkBox.setEnabled(false);
-					Toast.makeText(activity, "no internet connection", Toast.LENGTH_LONG).show();
-					Log.d("VECTRAS", e.toString());
+					MainActivity.UIAlert("no internet connection", e.toString(), activity);
+					Log.d("TERMS", e.toString());
 				}
 
 				//since we are in background thread, to post results we have to go back to ui thread. do the following for that

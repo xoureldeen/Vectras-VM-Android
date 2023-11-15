@@ -51,6 +51,14 @@
                         android:layout_margin="10dp"
                         android:textSize="15sp" />
 
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:progressBackgroundTint="@color/white"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:progressTint="@color/blue" />
+
                     <TextView
                         android:id="@+id/ipTxt"
                         android:layout_width="match_parent"

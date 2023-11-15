@@ -2,7 +2,12 @@ package com.epicstudios.vectras.Fragment;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.InputDevice;
 import android.view.KeyEvent;
@@ -13,6 +18,8 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.view.inputmethod.BaseInputConnection;
 import android.widget.LinearLayout;
@@ -20,6 +27,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+
+import com.epicstudios.vectras.MainActivity;
 import com.epicstudios.vectras.R;
 import com.epicstudios.vectras.Config;
 import com.epicstudios.vectras.VectrasSDLActivity;
@@ -27,6 +36,9 @@ import com.epicstudios.vectras.widgets.JoystickView;
 import com.epicstudios.vectras.utils.KeyboardUtils;
 import com.epicstudios.vectras.utils.UIUtils;
 import android.view.View.OnClickListener;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.libsdl.app.SDLActivity;
@@ -39,6 +51,8 @@ public class ControlsFragment extends Fragment {
 	private Timer _timer = new Timer();
 	private TimerTask t;
 
+	public static final int MAX_LINES = 1;
+	public static final String TWO_SPACES = " ";
 	public static LinearLayout escBtn, enterBtn, shiftBtn, delBtn, gamepadLayout, desktopLayout, BtnUp, BtnDown,
 			BtnRight, BtnLeft, BtnF, BtnShift, Btn0, BtnSpace, BtnSettings, kbdBtn, BtnMode, BtnHide;
 
@@ -48,6 +62,12 @@ public class ControlsFragment extends Fragment {
 
 	public static LinearLayout rightClick, leftClick;
 
+	ProcessBuilder processBuilder;
+	String Holder = "";
+	String[] DATA = {"/system/bin/cat", "/proc/cpuinfo"};
+	InputStream inputStream;
+	Process process ;
+	byte[] byteArry ;
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -116,6 +136,51 @@ public class ControlsFragment extends Fragment {
 		_timer.scheduleAtFixedRate(t, (int) (0), (int) (1000));
 
 		//txtMem.setVisibility(View.GONE);
+		//txtCpu.setVisibility(View.GONE);
+		byteArry = new byte[1024];
+
+		try{
+			processBuilder = new ProcessBuilder(DATA);
+
+			process = processBuilder.start();
+
+			inputStream = process.getInputStream();
+
+			while(inputStream.read(byteArry) != -1){
+
+				Holder = Holder + new String(byteArry);
+			}
+
+			inputStream.close();
+
+		} catch(IOException ex){
+
+			ex.printStackTrace();
+		}
+
+		String cpuTxt = "Cpu Info:\n" + Holder;
+
+		txtCpu.setText(cpuTxt);
+		txtCpu.post(() -> {
+			// Past the maximum number of lines we want to display.
+			if (txtCpu.getLineCount() > MAX_LINES) {
+				int lastCharShown = txtCpu.getLayout().getLineVisibleEnd(MAX_LINES - 1);
+
+				txtCpu.setMaxLines(MAX_LINES);
+
+				String moreString = "Show More";
+				String suffix = TWO_SPACES + moreString;
+
+				// 3 is a "magic number" but it's just basically the length of the ellipsis we're going to insert
+				String actionDisplayText = cpuTxt.substring(0, lastCharShown - suffix.length() - 3) + "..." + suffix;
+
+				SpannableString truncatedSpannableString = new SpannableString(actionDisplayText);
+				int startIndex = actionDisplayText.indexOf(moreString);
+				truncatedSpannableString.setSpan(new ForegroundColorSpan(Color.GRAY), startIndex, startIndex + moreString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+				txtCpu.setText(truncatedSpannableString);
+			}
+		});
+
 		txtCpu.setVisibility(View.GONE);
 
 		if (gamepadLayout.getVisibility() != View.VISIBLE) {
@@ -236,10 +301,26 @@ public class ControlsFragment extends Fragment {
 			@Override
 			public void onClick(View view) {
 				if (gamepadLayout.getVisibility() != View.VISIBLE) {
-					gamepadLayout.setVisibility(View.VISIBLE);
+					Animation animation2;
+					animation2 = AnimationUtils.loadAnimation(VectrasSDLActivity.activity, R.anim.slide_to_left);
+					animation2.setDuration(300);
+					desktopLayout.startAnimation(animation2);
 					desktopLayout.setVisibility(View.GONE);
+					Animation animation;
+					animation = AnimationUtils.loadAnimation(VectrasSDLActivity.activity, R.anim.slide_from_left);
+					animation.setDuration(300);
+					gamepadLayout.startAnimation(animation);
+					gamepadLayout.setVisibility(View.VISIBLE);
 				} else {
+					Animation animation;
+					animation = AnimationUtils.loadAnimation(VectrasSDLActivity.activity, R.anim.slide_to_left);
+					animation.setDuration(300);
+					gamepadLayout.startAnimation(animation);
 					gamepadLayout.setVisibility(View.GONE);
+					Animation animation2;
+					animation2 = AnimationUtils.loadAnimation(VectrasSDLActivity.activity, R.anim.slide_from_left);
+					animation2.setDuration(300);
+					desktopLayout.startAnimation(animation2);
 					desktopLayout.setVisibility(View.VISIBLE);
 				}
 			}
@@ -249,10 +330,20 @@ public class ControlsFragment extends Fragment {
 			@Override
 			public void onClick(View view) {
 				if (gamepadLayout.getVisibility() == View.GONE && desktopLayout.getVisibility() == View.GONE) {
+					Animation animation;
+					animation = AnimationUtils.loadAnimation(VectrasSDLActivity.activity, R.anim.slide_from_left);
+					animation.setDuration(300);
+					desktopLayout.startAnimation(animation);
+					gamepadLayout.startAnimation(animation);
 					gamepadLayout.setVisibility(View.VISIBLE);
 					desktopLayout.setVisibility(View.GONE);
 					TxtHide.setText("Hide");
 				} else {
+					Animation animation;
+					animation = AnimationUtils.loadAnimation(VectrasSDLActivity.activity, R.anim.slide_to_left);
+					animation.setDuration(300);
+					desktopLayout.startAnimation(animation);
+					gamepadLayout.startAnimation(animation);
 					gamepadLayout.setVisibility(View.GONE);
 					desktopLayout.setVisibility(View.GONE);
 					TxtHide.setText("Show");
