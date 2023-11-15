@@ -5,14 +5,6 @@ plugins {
 }
 
 android {
-    signingConfigs {
-        release {
-            storeFile file('C:\\vectras\\VECTRAS\\vectras.jks')
-            storePassword 'epicstudios-vectras856'
-            keyAlias 'Vectras'
-            keyPassword 'xoureldeen856'
-        }
-    }
     namespace 'com.epicstudios.vectras'
     compileSdk 34
 
