@@ -11,7 +11,7 @@ Has The Capbility to Run (ReactOS - Xp - 7 - Kali Linux)
 
 # Minimum System Requirement
 
-* Android 5.0+
+* Android 7.0+
 
 * 4gb Ram (2gb free ram)
 
