@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Vectras VM</string>
-    <string name="app_version">1.1b</string>
+    <string name="app_version">1.2b</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
 	<string name="fab_info">Start Emulation</string>

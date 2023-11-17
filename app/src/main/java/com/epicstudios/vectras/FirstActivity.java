@@ -16,8 +16,10 @@ import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.text.Html;
 import android.util.Log;
@@ -391,14 +393,17 @@ public class FirstActivity extends AppCompatActivity {
 				ad.setMessage("press import button and select "+selectedPath.replace(".IMG", ".vbi")+" file.");
 				ad.setButton(Dialog.BUTTON_POSITIVE, "IMPORT", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
-						Intent chooseFile = new Intent(ACTION_OPEN_DOCUMENT);
-						// Ask specifically for something that can be opened:
-						chooseFile.addCategory(Intent.CATEGORY_OPENABLE);
-						chooseFile.setType("*/*");
-						startActivityForResult(
-								Intent.createChooser(chooseFile, "Choose a file"),
-								0
-						);
+						Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
+						intent.addCategory(Intent.CATEGORY_OPENABLE);
+						intent.setType("*/*");
+
+						// Optionally, specify a URI for the file that should appear in the
+						// system file picker when it loads.
+						if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+							intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
+						}
+
+						startActivityForResult(intent, 0);
 					}
 				});
 				ad.setButton(Dialog.BUTTON_NEGATIVE, "DOWNLAOD "+selectedPath.replace(".IMG", ".vbi"), new DialogInterface.OnClickListener() {
@@ -434,13 +439,72 @@ public class FirstActivity extends AppCompatActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == 0 && resultCode == RESULT_OK){
 			Uri content_describer = data.getData();
-
 			File selectedFilePath = new File(getPath(content_describer));
 			if (selectedFilePath.getName().equals(selectedPath.replace(".IMG", ".vbi"))) {
 			
                 try {
-                    unzip(selectedFilePath.toString(), Config.maindirpath);
-                } catch (IOException e) {
+					progressDialog = new ProgressDialog(activity,
+							R.style.MainDialogTheme);
+					progressDialog.setMessage("Please wait...");
+					progressDialog.setCancelable(false);
+					progressDialog.show(); // Showing Progress Dialog
+					Thread t = new Thread() {
+						public void run() {
+							FileInputStream zipFile = null;
+							try {
+								zipFile = (FileInputStream) getContentResolver().openInputStream(content_describer);
+							} catch (FileNotFoundException e) {
+								throw new RuntimeException(e);
+							}
+							File targetDirectory = new File(Config.maindirpath);
+							ZipInputStream zis = null;
+							zis = new ZipInputStream(
+									new BufferedInputStream(zipFile));
+							try {
+								ZipEntry ze;
+								int count;
+								byte[] buffer = new byte[8192];
+								while ((ze = zis.getNextEntry()) != null) {
+									File file = new File(targetDirectory, ze.getName());
+									File dir = ze.isDirectory() ? file : file.getParentFile();
+									if (!dir.isDirectory() && !dir.mkdirs())
+										throw new FileNotFoundException("Failed to ensure directory: " +
+												dir.getAbsolutePath());
+									if (ze.isDirectory())
+										continue;
+									FileOutputStream fout = new FileOutputStream(file);
+									try {
+										while ((count = zis.read(buffer)) != -1)
+											fout.write(buffer, 0, count);
+									} finally {
+										fout.close();
+									}
+                        /* if time should be restored as well
+                        long time = ze.getTime();
+                        if (time > 0)
+                            file.setLastModified(time);
+                        */
+								}
+							} catch (FileNotFoundException e) {
+								UIUtils.toastLong(activity, e.toString());
+								throw new RuntimeException(e);
+							} catch (IOException e) {
+								UIUtils.toastLong(activity, e.toString());
+								throw new RuntimeException(e);
+							} finally {
+								progressDialog.cancel(); // cancelling Dialog.
+
+								try {
+									zis.close();
+								} catch (IOException e) {
+									UIUtils.toastLong(activity, e.toString());
+									throw new RuntimeException(e);
+								}
+							}
+						}
+					};
+					t.start();
+                } catch (Exception e) {
                     progressDialog.dismiss(); // Close Progress Dialog
                 	UIUtils.toastLong(activity, e.toString());
                 	throw new RuntimeException(e);
@@ -453,70 +517,6 @@ public class FirstActivity extends AppCompatActivity {
 		}
 	}
 	
-    public void unzip(String _zipFile, String _location) throws IOException {
-        progressDialog = new ProgressDialog(activity,
-                R.style.MainDialogTheme);
-        progressDialog.setMessage("Please wait...");
-        progressDialog.setCancelable(false);
-        progressDialog.show(); // Showing Progress Dialog
-        Thread t = new Thread() {
-            public void run() {
-                File zipFile = new File(_zipFile);
-                File targetDirectory = new File(_location);
-				ZipInputStream zis = null;
-				try {
-					zis = new ZipInputStream(
-							new BufferedInputStream(new FileInputStream(zipFile)));
-				} catch (FileNotFoundException e) {
-					UIUtils.toastLong(activity, e.toString());
-					throw new RuntimeException(e);
-				}
-				try {
-                    ZipEntry ze;
-                    int count;
-                    byte[] buffer = new byte[8192];
-                    while ((ze = zis.getNextEntry()) != null) {
-                        File file = new File(targetDirectory, ze.getName());
-                        File dir = ze.isDirectory() ? file : file.getParentFile();
-                        if (!dir.isDirectory() && !dir.mkdirs())
-                            throw new FileNotFoundException("Failed to ensure directory: " +
-                                    dir.getAbsolutePath());
-                        if (ze.isDirectory())
-                            continue;
-                        FileOutputStream fout = new FileOutputStream(file);
-                        try {
-                            while ((count = zis.read(buffer)) != -1)
-                                fout.write(buffer, 0, count);
-                        } finally {
-                            fout.close();
-                        }
-                        /* if time should be restored as well
-                        long time = ze.getTime();
-                        if (time > 0)
-                            file.setLastModified(time);
-                        */
-                    }
-                } catch (FileNotFoundException e) {
-					UIUtils.toastLong(activity, e.toString());
-					throw new RuntimeException(e);
-				} catch (IOException e) {
-					UIUtils.toastLong(activity, e.toString());
-					throw new RuntimeException(e);
-				} finally {
-					progressDialog.cancel(); // cancelling Dialog.
-
-					try {
-						zis.close();
-					} catch (IOException e) {
-						UIUtils.toastLong(activity, e.toString());
-						throw new RuntimeException(e);
-					}
-				}
-            }
-        };
-        t.start();
-    }
-
 	public static final int DIALOG_DOWNLOAD_PROGRESS = 0;
 	class DownloadsImage extends AsyncTask<String, Void,Void>{
 
@@ -575,6 +575,8 @@ public class FirstActivity extends AppCompatActivity {
 	@Override
 	public void onBackPressed() {
 		super.onBackPressed();
+		if (getParentActivityIntent()==MainActivity.activity.getIntent()
+		)
 		finish();
 	}
 

@@ -660,9 +660,9 @@ public class MainActivity extends AppCompatActivity {
 						ProgressBar progressBar = findViewById(R.id.progressBar);
 						progressBar.setMax((int) totalMemory);
 						if (SDK_INT >= Build.VERSION_CODES.N) {
-							progressBar.setProgress((int) freeMemory, true);
+							progressBar.setProgress((int) usedMemory, true);
 						} else {
-							progressBar.setProgress((int) freeMemory);
+							progressBar.setProgress((int) usedMemory);
 						}
 					}
 				});
