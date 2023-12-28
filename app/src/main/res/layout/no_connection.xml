@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 		android:gravity="center_vertical|center|center_horizontal"
-        app:cardBackgroundColor="@color/main_dark"
+        app:cardBackgroundColor="@color/mainDark"
         app:cardCornerRadius="10dp"
         app:cardUseCompatPadding="true" >
 

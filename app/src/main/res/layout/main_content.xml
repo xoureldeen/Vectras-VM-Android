@@ -14,14 +14,14 @@
             android:id="@+id/nnl_appbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/main_dark" >
+            android:background="@color/black" >
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:id="@+id/main_ctl"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fitsSystemWindows="true"
-                app:contentScrim="@color/main_dark"
+                app:contentScrim="@color/black"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
                 <LinearLayout
@@ -54,10 +54,11 @@
                     <ProgressBar
                         android:id="@+id/progressBar"
                         style="?android:attr/progressBarStyleHorizontal"
-                        android:progressBackgroundTint="@color/white"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:progressTint="@color/blue" />
+                        android:progressBackgroundTint="@color/secondaryLightColor"
+                        android:progressTint="@color/secondaryDarkColor"
+                        android:secondaryProgressTint="@color/secondaryColor" />
 
                     <TextView
                         android:id="@+id/ipTxt"
@@ -69,12 +70,14 @@
                 </LinearLayout>
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
+
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/nnl_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Dark" />
+                android:background="@color/black"
+                android:theme="@style/ThemeOverlay.Material3.Dark"
+                app:popupTheme="@style/ThemeOverlay.Material3.Dark" />
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.core.widget.NestedScrollView
@@ -108,7 +111,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:backgroundTint="@color/main_dark"
+            app:backgroundTint="@color/black"
             app:buttonGravity="center_vertical"
             app:fabAlignmentMode="center"
             app:fabAnimationMode="slide"
@@ -120,7 +123,7 @@
                 android:id="@+id/bottom_navigation_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/main_dark"
+                android:background="#00FFFFFF"
                 app:elevation="0dp"
                 app:itemIconTint="@android:color/white"
                 app:itemRippleColor="@android:color/white"
@@ -133,17 +136,17 @@
             android:id="@+id/nnl_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:backgroundTint="@android:color/white"
             android:contentDescription="@string/fab_info"
             android:onClick="FAB_Click"
-            android:layout_gravity="center_horizontal"
-            app:tint="@color/black"
-            app:layout_anchor="@+id/bottom_app_bar"
-            app:layout_anchorGravity="center"
             android:scaleType="centerInside"
             android:src="@drawable/round_play_arrow_24"
-            app:borderWidth="0dp"
-            app:fabSize="normal" />
+            app:fabSize="normal"
+            app:layout_anchor="@+id/bottom_app_bar"
+            app:layout_anchorGravity="center"
+            app:tint="@color/main"
+            app:useCompatPadding="false" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

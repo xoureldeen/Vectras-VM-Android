@@ -17,7 +17,7 @@
             android:layout_margin="8dp"
             android:padding="15dp"
             android:visibility="visible"
-            app:cardBackgroundColor="@color/main_dark"
+            app:cardBackgroundColor="@color/mainDark"
             app:cardCornerRadius="12dp">
 
             <LinearLayout
@@ -63,11 +63,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    android:backgroundTint="@color/blue"
+                    android:backgroundTint="@color/mainDark"
                     app:icon="@drawable/ic_github"
                     android:padding="8dp"
                     android:text="Repository"
-                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    style="@style/Widget.Material3.Button.TextButton"
                     android:textColor="@android:color/white"
                     app:iconTint="@color/white" />
 
@@ -79,9 +79,9 @@
                     app:icon="@drawable/ic_telegram"
                     android:padding="8dp"
                     android:text="Telegram Channel"
-                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    style="@style/Widget.Material3.Button.TextButton"
                     android:textColor="@android:color/white"
-                    android:backgroundTint="@color/blue"
+                    android:backgroundTint="@color/mainDark"
                     app:iconTint="@color/white" />
 
                 <Button
@@ -91,11 +91,11 @@
                     android:layout_margin="8dp"
                     app:icon="@drawable/ic_youtube"
                     app:iconTint="@color/white"
-                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    style="@style/Widget.Material3.Button.TextButton"
                     android:padding="8dp"
                     android:text="Youtube"
                     android:textColor="@android:color/white"
-                    android:backgroundTint="@color/blue" />
+                    android:backgroundTint="@color/mainDark" />
 
             </LinearLayout>
 
@@ -107,7 +107,7 @@
             android:layout_margin="8dp"
             android:padding="4dp"
             android:visibility="visible"
-            app:cardBackgroundColor="@color/main_dark"
+            app:cardBackgroundColor="@color/mainDark"
             app:cardCornerRadius="12dp">
 
             <LinearLayout
@@ -124,10 +124,10 @@
                     app:icon="@drawable/round_info_24"
                     app:iconTint="@color/white"
                     android:padding="8dp"
-                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    style="@style/Widget.Material3.Button.TextButton"
                     android:text="Change Log"
                     android:textColor="@color/white"
-                    android:backgroundTint="@color/blue" />
+                    android:backgroundTint="@color/mainDark" />
 
                 <Button
                     android:id="@+id/btn_osl"
@@ -136,11 +136,11 @@
                     android:layout_margin="8dp"
                     app:icon="@drawable/round_info_24"
                     app:iconTint="@color/white"
-                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    style="@style/Widget.Material3.Button.TextButton"
                     android:padding="8dp"
                     android:text="Info"
                     android:textColor="@color/white"
-                    android:backgroundTint="@color/blue" />
+                    android:backgroundTint="@color/mainDark" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 

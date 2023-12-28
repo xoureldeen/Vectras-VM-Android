@@ -2,16 +2,19 @@
 
     <item
         android:id="@+id/navigation_item_store"
-        android:visible="false"
         android:icon="@drawable/round_shop_24"
-        android:title="Apps &amp; Games" />
+        android:title="@string/apps_amp_games" />
     <item
         android:id="@+id/navigation_item_website"
         android:icon="@drawable/round_public_24"
-        android:title="Vectras Website" />
+        android:title="@string/vectras_website" />
+    <item
+        android:id="@+id/navigation_item_settings"
+        android:icon="@drawable/round_settings_24"
+        android:title="@string/settings"/>
     <item
         android:id="@+id/navigation_item_info"
         android:icon="@drawable/round_info_24"
-        android:title="About"/>
+        android:title="@string/about"/>
 
 </menu>

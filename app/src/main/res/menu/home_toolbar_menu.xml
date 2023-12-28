@@ -5,6 +5,6 @@
         android:id="@+id/vectrasInfo"
 		android:icon="@drawable/round_info_24"
 		app:showAsAction="always"
-        android:title="Emulation Information"/>
+        android:title="@string/emulation_information"/>
     
 </menu>

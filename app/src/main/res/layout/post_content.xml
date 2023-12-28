@@ -9,7 +9,7 @@
         android:id="@+id/nnl_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/main_dark"
+        android:background="@color/mainDark"
         android:theme="@style/ThemeOverlay.AppCompat.Dark"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Dark" />
 
@@ -47,7 +47,7 @@
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:cardBackgroundColor="@color/main_dark"
+                    app:cardBackgroundColor="@color/mainDark"
                     app:cardCornerRadius="10dp"
                     app:cardUseCompatPadding="true" >
 

@@ -1,11 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#202125</color>
-    <color name="colorPrimaryDark">#17181b</color>
-    <color name="colorAccent">#FFFFFFFF</color>
-	<color name="main">#202125</color>
-	<color name="main_dark">#17181b</color>
+    <color name="colorPrimary">@color/main</color>
+    <color name="colorPrimaryDark">@color/mainDark</color>
+    <color name="colorAccent">@color/blue</color>
+    <color name="main">@color/content_background</color>
+    <color name="mainDark">@color/black</color>
 	<color name="blue">#FF2196F3</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="red">#BD0D00</color>
+    <color name="darkGray">#190000</color>
+    <color name="primaryColor">#121212</color>
+    <color name="primaryLightColor">#373737</color>
+    <color name="primaryDarkColor">#010101</color>
+    <color name="secondaryColor">#5277FF</color>
+    <color name="secondaryLightColor">#7FC3FF</color>
+    <color name="secondaryLightColor_transparent">#1F7FAAFF</color>
+    <color name="secondaryDarkColor">#0E70C5</color>
+    <color name="primaryTextColor">#ffffff</color>
+    <color name="primaryTextColorLight">#bdbdbd</color>
+    <color name="secondaryTextColor">#70ffffff</color>
+    <color name="secondaryTextColor_light">#50ffffff</color>
+    <color name="primaryIconColor">#ffffff</color>
+    <color name="completionList_background">#373737</color>
+    <color name="completionList_backgroundSelected">#505050</color>
+    <color name="symbolInput_background">#000000</color>
+    <color name="symbolInput_text">@color/primaryTextColor</color>
+    <color name="tabAction_background">#ffffff</color>
+    <color name="tabAction_text">@color/primaryLightColor</color>
+    <color name="tabAction_icon">#000000</color>
+    <color name="rippleHighlightColor">#50121212</color>
+    <color name="log_error">@color/secondaryDarkColor</color>
+    <color name="log_warning">#FF7043</color>
+    <color name="log_info">#4CAF50</color>
+    <color name="log_normal">@color/primaryTextColor</color>
+    <color name="diagnostic_error">@color/secondaryDarkColor</color>
+    <color name="diagnostic_warning">@color/log_warning</color>
+    <color name="content_background">#212121</color>
+    <color name="bg_green">#4CAF50</color>
+    <color name="bg_widget_selected">#212121</color>
 </resources>

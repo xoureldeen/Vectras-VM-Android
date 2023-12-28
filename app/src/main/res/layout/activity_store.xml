@@ -6,19 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".StoreActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/storeAppBar"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/storeAppBar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/main_dark" />
+            android:layout_height="wrap_content">
 
-    </com.google.android.material.appbar.AppBarLayout>
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/mainDark" />
 
-    <include layout="@layout/content_store" />
-    
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <include layout="@layout/content_store" />
+    </LinearLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

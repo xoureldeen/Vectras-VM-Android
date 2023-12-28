@@ -1,20 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Vectras VM</string>
-    <string name="app_version">1.2b</string>
+    <string name="app_version">2.0</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
-	<string name="fab_info">Start Emulation</string>
-	
-	<!--logger-->
-	<string name="startvm">VM STARTED!</string>
-	<string name="stopvm">VM STOPPED!</string>
-	<string name="noproccesses">NO PROCCESSES!</string>
-	<string name="unknownstate">UNKNOWN STATE!</string>
-    
+    <string name="fab_info">Start Emulation</string>
+    <!-- logger -->
+    <string name="startvm">VM STARTED!</string>
+    <string name="stopvm">VM STOPPED!</string>
+    <string name="noproccesses">NO PROCCESSES!</string>
+    <string name="unknownstate">UNKNOWN STATE!</string>
     <string name="navigation_drawer_open">drawer open</string>
     <string name="navigation_drawer_close">drawer close</string>
-    
     <string name="address_caption">Address</string>
     <string name="alt_check">Alt</string>
     <string name="arrow_down">Down Arrow</string>
@@ -58,9 +54,6 @@
     <string name="import_settings">Import</string>
     <string name="import_settings_file_url">Import from file or URL</string>
     <string name="info">Info</string>
-    <string name="intro_text">If you need help, please check the &lt;a href="http://code.google.com/p/android-vnc-viewer/wiki/Documentation"&gt;manual&lt;/a&gt; (press phone\'s Menu button to access manual and other menu items), or the &lt;a href="http://code.google.com/p/android-vnc-viewer/wiki/faq"&gt;FAQ&lt;/a&gt;.&lt;br&gt;</string>
-    <string name="intro_title">Welcome</string>
-    <string name="intro_version_text">&lt;br&gt;--Sent text is remembered across sessions (optionally)&lt;br&gt;--Import/Export settings to file&lt;br&gt;--Button with zoom controls to bring up keyboard&lt;br&gt;--Can force tiling mode (very large screens)</string>
     <string name="input_mode">Input Mode</string>
     <string name="input_mode_fit_to_screen">No Pan; Trackball Mouse</string>
     <string name="input_mode_mouse">Mouse Pointer Control Mode</string>
@@ -87,7 +80,6 @@
     <string name="password_caption">Password</string>
     <string name="port_caption">Port</string>
     <string name="repeater_button">Repeater</string>
-    <string name="repeater_caption">Enter the repeater address &lt;b&gt;only if&lt;/b&gt; you are using an&lt;br&gt;&lt;i&gt;UltraVNC&lt;/i&gt;-type repeater</string>
     <string name="repeater_clear">Don\'t use repeater</string>
     <string name="repeater_dialog_title">Repeater Information</string>
     <string name="repeater_empty_text">No repeater</string>
@@ -97,7 +89,7 @@
     <string name="save_state">Pause VM</string>
     <string name="save_snapshot">Save Snapshot</string>
     <string name="scaling_zoomable">Zoomable</string>
-    <!-- Send selected metakey -->
+    <!--  Send selected metakey  -->
     <string name="send_button">Send</string>
     <string name="send_key_again">Send Key Again</string>
     <string name="shift_check">Shift</string>
@@ -105,12 +97,12 @@
     <string name="showkbd_label">Keyboard</string>
     <string name="special_keys">Special Keys</string>
     <string name="username_caption">Username</string>
+    <string name="email_caption">Email</string>
     <string name="username_hint">For Windows Authentication</string>
     <string name="right_click">Mouse Right Click</string>
     <string name="help">Help</string>
     <string name="drives">Drives</string>
     <string name="volume">Volume</string>
-
     <string name="hide_toolbar">Hide Toolbar</string>
     <string name="view_log">View Log</string>
     <string name="mode">Mode</string>
@@ -118,4 +110,25 @@
     <string name="name">name</string>
     <string name="size">size:</string>
     <string name="availablity">availablity:</string>
+    <string name="hide">Hide</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_up">Sign up</string>
+    <string name="action_sign_with_google">Sign in with google</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="profile">Profile</string>
+    <string name="apps_amp_games"><![CDATA[Apps & Games]]></string>
+    <string name="vectras_website">Vectras Website</string>
+    <string name="about">About</string>
+    <string name="emulation_information">Emulation Information</string>
+    <string name="full_name">Full Name</string>
+    <string name="terms_amp_conditions"><![CDATA[Terms&Conditions]]></string>
+    <string name="i_accept_terms_amp_conditions"><![CDATA[I Accept Terms&Conditions]]></string>
+    <string name="settings">Settings</string>
+    <string name="go_ahead">Go ahead</string>
 </resources>

@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.epicstudios.vectras"
-    android:installLocation="auto">
+    android:installLocation="auto" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -11,6 +10,7 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <uses-feature android:glEsVersion="0x00020000" />
@@ -18,17 +18,17 @@
     <application
         android:name=".VectrasApp"
         android:allowBackup="true"
-        android:banner="@mipmap/tv_banner"
-        android:hardwareAccelerated="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:largeHeap="true"
         android:supportsRtl="false"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:targetApi="31" >
         <activity
             android:name=".SplashActivity"
             android:exported="true"
-            android:hardwareAccelerated="false">
+            android:hardwareAccelerated="false" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,34 +36,52 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ui.login.SignupActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.login.GoogleSignInActivity"
+            android:exported="true"
+            android:hardwareAccelerated="false"
+            android:label="@string/title_activity_login"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.login.LoginActivity"
+            android:exported="true"
+            android:hardwareAccelerated="false"
+            android:label="@string/title_activity_login"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
+            android:hardwareAccelerated="true"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:hardwareAccelerated="true"/>
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".FirstActivity"
+            android:name=".RomsManagerActivity"
             android:exported="true"
+            android:hardwareAccelerated="false"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:hardwareAccelerated="false"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".AboutActivity"
             android:exported="true"
-            android:label="@string/app_name"
             android:hardwareAccelerated="true"
+            android:label="About App"
             android:screenOrientation="portrait" />
         <activity
             android:name=".StoreActivity"
             android:exported="true"
-            android:label="Apps &amp; Games"
             android:hardwareAccelerated="true"
+            android:label="Apps &amp; Games"
             android:screenOrientation="portrait" />
         <activity
             android:name=".StoreItemActivity"
             android:exported="true"
             android:hardwareAccelerated="true"
+            android:label="Download"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ImagePrvActivity"
@@ -78,42 +96,38 @@
         <activity
             android:name=".VectrasApp$CrashActivity"
             android:exported="true"
-            android:label="App Crash"
             android:hardwareAccelerated="true"
+            android:label="App Crash"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.epicstudios.vectras.VectrasSDLActivity"
-            class="com.epicstudios.vectras.VectrasSDLActivityToolbar"
+            android:name="com.vectras.qemu.MainSDLActivity"
+            android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|screenLayout|fontScale|uiMode|orientation|screenSize|smallestScreenSize"
+            android:launchMode="singleTask" />
+        <activity
+            android:name="com.vectras.qemu.MainVNCActivity"
             android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|screenLayout|fontScale|uiMode|orientation|screenSize|smallestScreenSize"
             android:launchMode="singleTask"
             android:screenOrientation="landscape"
-            android:theme="@style/Theme.FullScreen"
-            android:exported="true">
-            <intent-filter>
-                <action
-                    android:name=".SDLActivity"
-                    android:value="android.intent.action.VIEW" />
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.vectras.qemu.MainSettingsManager"
+            android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|screenLayout|fontScale|uiMode|orientation|screenSize|smallestScreenSize"
+            android:screenOrientation="portrait"
+            android:label="Settings" />
 
-                <category
-                    android:name=".SDLActivity"
-                    android:value="android.intent.category.NORMAL" />
-            </intent-filter>
-        </activity>
         <service
-            android:name="com.epicstudios.vectras.VectrasService"
+            android:name="com.vectras.qemu.MainService"
             android:enabled="true"
             android:exported="false"
             android:label="Vectras Service" >
             <intent-filter>
-                <action android:name="com.epicstudios.vectras.action.STARTVM" />
-				<action android:name="com.epicstudios.vectras.action.STOPVM" />
+                <action android:name="com.vectras.qemu.action.STARTVM" />
             </intent-filter>
         </service>
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3568137780412047~1296857222"/>
-
+            android:value="ca-app-pub-3568137780412047~1296857222" />
     </application>
 
 </manifest>

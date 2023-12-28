@@ -16,7 +16,7 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/main_dark"
+            app:cardBackgroundColor="@color/mainDark"
             app:cardCornerRadius="10dp"
             app:cardUseCompatPadding="true" >
 
@@ -63,11 +63,11 @@
                     android:id="@+id/btn_download"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/blue"
+                    android:backgroundTint="@color/mainDark"
                     app:icon="@drawable/round_file_download_24"
                     android:text="Download"
                     android:layout_margin="8dp"
-                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    style="@style/Widget.Material3.Button.TextButton"
                     android:textColor="@android:color/white"
                     app:iconTint="@color/white" />
 
@@ -76,7 +76,7 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/main_dark"
+        app:cardBackgroundColor="@color/mainDark"
         app:cardCornerRadius="10dp"
         app:cardUseCompatPadding="true" >
         <LinearLayout
