@@ -1,4 +1,4 @@
-![logo]([https://raw.githubusercontent.com/epicstudios856/Vectras-VM-Android/master/resources/vectras-logo.png])
+![logo](https://raw.githubusercontent.com/epicstudios856/Vectras-VM-Android/master/resources/vectras-logo.png)
 [![Telegram Channel][ico-telegram]][link-telegram]
 [![Latest Version][ico-version]][link-releases]
 [![Software License][ico-license]](LICENSE.md)
