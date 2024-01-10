@@ -1,0 +1,19 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="APP SETTINGS"
+        app:icon="@drawable/round_settings_24">
+
+        <SwitchPreferenceCompat
+            android:id="@+id/switchPreferenceCompat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="true"
+            android:key="updateVersionPrompt"
+            android:summary="CHECK FOR SOFTWARE UPDATES ON STARTUP"
+            android:title="CHECK FOR SOFTWARE UPDATES"
+            app:icon="@drawable/round_update_24" />
+    </PreferenceCategory>
+</PreferenceScreen>

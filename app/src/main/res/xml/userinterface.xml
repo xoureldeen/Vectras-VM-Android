@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory
+        android:title="USER INTERFACE"
+        app:icon="@drawable/ic_theme">
+
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="modeNight"
+            android:title="NIGHT MODE"
+            app:icon="@drawable/round_dark_mode_24" />
+
+    </PreferenceCategory>
+</PreferenceScreen>

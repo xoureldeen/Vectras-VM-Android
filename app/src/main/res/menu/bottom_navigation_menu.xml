@@ -1,0 +1,6 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/menu_home" android:enabled="true" android:icon="@drawable/round_home_24" android:title="@string/str_home" app:showAsAction="ifRoom"/>
+    <item android:id="@+id/menu_logger" android:enabled="true" android:icon="@drawable/round_menu_24" android:title="@string/str_logger" app:showAsAction="ifRoom"/>
+
+</menu>

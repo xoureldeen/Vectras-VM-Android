@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="QEMU"
+        app:icon="@drawable/ic_qemu">
+
+        <SwitchPreferenceCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="false"
+            android:key="customMemory"
+            android:title="CUSTOM MEMORY"
+            app:icon="@drawable/round_build_24" />
+        <EditTextPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="512"
+            android:inputType="number"
+            android:key="memory"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="MEMORY"
+            app:icon="@drawable/round_memory_24" />
+        <SwitchPreferenceCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="true"
+            android:key="MTTCG"
+            android:title="MTTCG"
+            app:icon="@drawable/ic_mttcg" />
+        <ListPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="1"
+            android:entries="@array/cpuCoresLabels"
+            android:entryValues="@array/cpuCoresValues"
+            android:key="cpuNum"
+            android:title="CPU CORES"
+            app:icon="@drawable/round_hub_24" />
+    </PreferenceCategory>
+</PreferenceScreen>
