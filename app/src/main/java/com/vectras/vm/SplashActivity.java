@@ -1,34 +1,17 @@
 package com.vectras.vm;
 
-import static android.os.Build.VERSION.SDK_INT;
-
-import android.Manifest;
-import android.animation.ValueAnimator;
-import android.app.ActivityManager;
-import android.app.Dialog;
 import android.content.*;
 import android.content.pm.*;
-import android.net.Uri;
 import android.os.*;
-import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.view.*;
-import android.graphics.*;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
-import com.airbnb.lottie.LottieAnimationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.vectras.qemu.MainActivityCommon;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.qemu.utils.RamInfo;
-import com.vectras.vm.R;
-import com.vectras.vm.MainActivity;
 import com.vectras.vm.ui.login.LoginActivity;
-import com.vectras.vm.utils.UIUtils;
 
 import java.io.File;
 

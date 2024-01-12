@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 
 import com.vectras.qemu.Config;
-import com.vectras.qemu.MainActivityCommon;
 import com.vectras.qemu.MainSDLActivity;
 import com.vectras.qemu.MainService;
 import com.vectras.qemu.MainSettingsManager;
@@ -15,6 +14,7 @@ import com.vectras.qemu.utils.FileUtils;
 import com.vectras.qemu.utils.Machine;
 import com.vectras.qemu.utils.QmpClient;
 import com.vectras.qemu.utils.RamInfo;
+import com.vectras.vm.MainActivity;
 import com.vectras.vm.logger.VectrasStatus;
 import com.vectras.vm.utils.UIUtils;
 
@@ -126,8 +126,8 @@ public class StartVM {
         this.context = context;
         this.libqemu = FileUtils.getNativeLibDir(context) + "/libqemu-system-x86_64.so";
         this.arch = "x86_64";
-        this.cpuNum = MainSettingsManager.getCpuNum(MainActivityCommon.activity);
-        if (MainSettingsManager.getMTTCG(MainActivityCommon.activity))
+        this.cpuNum = MainSettingsManager.getCpuNum(MainActivity.activity);
+        if (MainSettingsManager.getMTTCG(MainActivity.activity))
             this.enable_mttcg = 1;
         else
             this.enable_mttcg = 0;
@@ -384,7 +384,7 @@ public class StartVM {
         if (this.cpuNum > 1 &&
                 (enablekvm == 1 || enable_mttcg == 1 || !Config.enableSMPOnlyOnKVM)) {
             paramsList.add("-smp");
-            paramsList.add(this.cpuNum + "");
+            paramsList.add("sockets="+"1"+",cores="+this.cpuNum+",threads="+this.cpuNum+"");
         }
 
         if (machine_type != null && !machine_type.equals("Default")) {
@@ -411,7 +411,7 @@ public class StartVM {
 
         if (this.cpu != null && !cpu.equals("Default")) {
             paramsList.add("-cpu");
-            paramsList.add(cpu);
+            paramsList.add(cpu + ",+avx");
 
         }
 
@@ -427,6 +427,9 @@ public class StartVM {
             String tcgParams = "tcg";
             if (cpuNum > 1)
                 tcgParams += ",thread=multi";
+            else
+                tcgParams += ",thread=single";
+            tcgParams += ",tb-size=2048";
             paramsList.add(tcgParams);
             //#endif
         }

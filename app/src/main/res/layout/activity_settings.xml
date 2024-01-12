@@ -19,8 +19,8 @@
 
     <fragment
         android:id="@+id/settingz"
-        android:name="com.vectras.qemu.MainSettingsManager$MainFragment"
-        class="com.vectras.qemu.MainSettingsManager$MainFragment"
+        android:name="com.vectras.qemu.MainSettingsManager$AppPreferencesFragment"
+        class="com.vectras.qemu.MainSettingsManager$AppPreferencesFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

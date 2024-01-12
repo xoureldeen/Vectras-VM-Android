@@ -44,12 +44,11 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 import android.widget.ZoomControls;
 
 import com.antlersoft.android.bc.BCFactory;
 import com.vectras.qemu.Config;
-import com.vectras.qemu.MainActivityCommon;
+import com.vectras.vm.MainActivity;
 import com.vectras.vm.R;
 import com.vectras.vm.utils.UIUtils;
 
@@ -778,7 +777,7 @@ public class VncCanvasActivity extends AppCompatActivity {
 			// connection.setAddress(host.substring(0, host.indexOf(':')));
 			// }
 		}
-		connection.setPassword(MainActivityCommon.getVnc_passwd());
+		connection.setPassword(MainActivity.getVnc_passwd());
 		setContentView();
 
 		vncCanvas = (VncCanvas) findViewById(R.id.vnc_canvas);

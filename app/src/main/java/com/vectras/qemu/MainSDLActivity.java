@@ -36,6 +36,7 @@ import androidx.appcompat.app.ActionBar;
 import com.vectras.qemu.utils.FileUtils;
 import com.vectras.qemu.utils.Machine;
 import com.vectras.qemu.utils.QmpClient;
+import com.vectras.vm.MainActivity;
 import com.vectras.vm.R;
 import com.vectras.vm.utils.UIUtils;
 
@@ -146,13 +147,13 @@ public class MainSDLActivity extends SDLActivity {
 				} catch (InterruptedException ex) {
 					// Log.v("singletap", "Could not sleep");
 				}
-				MainActivityCommon.vmexecutor.onVectrasMouse(Config.SDL_MOUSE_LEFT, MotionEvent.ACTION_DOWN, 1,0, 0);
+				MainActivity.vmexecutor.onVectrasMouse(Config.SDL_MOUSE_LEFT, MotionEvent.ACTION_DOWN, 1,0, 0);
 				try {
 					Thread.sleep(50);
 				} catch (InterruptedException ex) {
 					// Log.v("singletap", "Could not sleep");
 				}
-				MainActivityCommon.vmexecutor.onVectrasMouse(Config.SDL_MOUSE_LEFT, MotionEvent.ACTION_UP, 1, 0, 0);
+				MainActivity.vmexecutor.onVectrasMouse(Config.SDL_MOUSE_LEFT, MotionEvent.ACTION_UP, 1, 0, 0);
 			}
 		});
 		t.start();
@@ -207,7 +208,7 @@ public class MainSDLActivity extends SDLActivity {
 		}
 		this.stopTimeListener();
 
-		MainActivityCommon.vmexecutor.doStopVM(0);
+		MainActivity.vmexecutor.doStopVM(0);
 		super.onDestroy();
 	}
 
@@ -370,7 +371,7 @@ public class MainSDLActivity extends SDLActivity {
         //MainSDLActivity.singleClick(a, 0);
         Config.mouseMode = Config.MouseMode.Trackpad;
         MainSettingsManager.setDesktopMode(this, false);
-			MainActivityCommon.vmexecutor.setRelativeMouseMode(1);
+			MainActivity.vmexecutor.setRelativeMouseMode(1);
             if(Config.showToast)
                 UIUtils.toastShort(this.getApplicationContext(), "Trackpad Enabled");
         if(fitToScreen)
@@ -448,7 +449,7 @@ public class MainSDLActivity extends SDLActivity {
 
             Config.mouseMode = Config.MouseMode.External;
             MainSettingsManager.setDesktopMode(this, true);
-            MainActivityCommon.vmexecutor.setRelativeMouseMode(0);
+            MainActivity.vmexecutor.setRelativeMouseMode(0);
             if(Config.showToast)
                 UIUtils.toastShort(MainSDLActivity.this, "External Mouse Enabled");
             onNormalScreen();
@@ -903,17 +904,17 @@ public class MainSDLActivity extends SDLActivity {
 		Thread t = new Thread(new Runnable() {
 			public void run() {
 				// Delete any previous state file
-				if (MainActivityCommon.vmexecutor.save_state_name != null) {
-					File file = new File(MainActivityCommon.vmexecutor.save_state_name);
+				if (MainActivity.vmexecutor.save_state_name != null) {
+					File file = new File(MainActivity.vmexecutor.save_state_name);
 					if (file.exists()) {
 						file.delete();
 					}
 				}
                 if(Config.showToast)
 				    UIUtils.toastShort(getApplicationContext(), "Please wait while saving VM State");
-				MainActivityCommon.vmexecutor.current_fd = MainActivityCommon.vmexecutor.get_fd(MainActivityCommon.vmexecutor.save_state_name);
+				MainActivity.vmexecutor.current_fd = MainActivity.vmexecutor.get_fd(MainActivity.vmexecutor.save_state_name);
 
-				String uri = "fd:" + MainActivityCommon.vmexecutor.current_fd;
+				String uri = "fd:" + MainActivity.vmexecutor.current_fd;
 				String command = QmpClient.stop();
 				String msg = QmpClient.sendCommand(command);
 				command = QmpClient.migrate(false, false, uri);
@@ -995,19 +996,19 @@ public class MainSDLActivity extends SDLActivity {
 	}
 
 	private void resumeVM() {
-		if(MainActivityCommon.vmexecutor == null){
+		if(MainActivity.vmexecutor == null){
 			return;
 		}
 		Thread t = new Thread(new Runnable() {
 			public void run() {
-				if (MainActivityCommon.vmexecutor.paused == 1) {
+				if (MainActivity.vmexecutor.paused == 1) {
 
 					try {
 						Thread.sleep(4000);
 					} catch (InterruptedException ex) {
 						Logger.getLogger(MainVNCActivity.class.getName()).log(Level.SEVERE, null, ex);
 					}
-					MainActivityCommon.vmexecutor.paused = 0;
+					MainActivity.vmexecutor.paused = 0;
 
 					String command = QmpClient.cont();
 					String msg = QmpClient.sendCommand(command);
@@ -1123,7 +1124,7 @@ public class MainSDLActivity extends SDLActivity {
                 int progress = arg0.getProgress()+1;
                 int refreshMs = 1000 / progress;
                 Log.v(TAG, "Changing idle refresh rate: (ms)" + refreshMs);
-                MainActivityCommon.vmexecutor.setsdlrefreshrate(refreshMs);
+                MainActivity.vmexecutor.setsdlrefreshrate(refreshMs);
             }
         });
 
@@ -1135,7 +1136,7 @@ public class MainSDLActivity extends SDLActivity {
     }
 
     public int getCurrentSDLRefreshRate() {
-        return 1000 / MainActivityCommon.vmexecutor.getsdlrefreshrate();
+        return 1000 / MainActivity.vmexecutor.getsdlrefreshrate();
     }
 
 
@@ -1194,7 +1195,7 @@ public class MainSDLActivity extends SDLActivity {
 	protected synchronized void runSDLMain(){
 
 		//We go through the vm executor
-		MainActivityCommon.startvm(this, Config.UI_SDL);
+		MainActivity.startvm(this, Config.UI_SDL);
 
 		//XXX: we hold the thread because SDLActivity will exit
 		try {
@@ -1481,11 +1482,11 @@ public class MainSDLActivity extends SDLActivity {
 				if (action == MotionEvent.ACTION_MOVE) {
 					if(Config.mouseMode == Config.MouseMode.External) {
 						//Log.d("SDL", "onTouch Absolute Move by=" + action + ", X,Y=" + (x) + "," + (y) + " P=" + p);
-						MainActivityCommon.vmexecutor.onVectrasMouse(0, MotionEvent.ACTION_MOVE,0, x , y );
+						MainActivity.vmexecutor.onVectrasMouse(0, MotionEvent.ACTION_MOVE,0, x , y );
 					}else {
 						//Log.d("SDL", "onTouch Relative Moving by=" + action + ", X,Y=" + (x -
 //                            old_x) + "," + (y - old_y) + " P=" + p);
-						MainActivityCommon.vmexecutor.onVectrasMouse(0, MotionEvent.ACTION_MOVE,1, (x - old_x)  * sensitivity_mult, (y - old_y) * sensitivity_mult);
+						MainActivity.vmexecutor.onVectrasMouse(0, MotionEvent.ACTION_MOVE,1, (x - old_x)  * sensitivity_mult, (y - old_y) * sensitivity_mult);
 					}
 
 				}
@@ -1501,9 +1502,9 @@ public class MainSDLActivity extends SDLActivity {
 				if(sdlMouseButton == Config.SDL_MOUSE_MIDDLE
 						||sdlMouseButton == Config.SDL_MOUSE_RIGHT
 						) {
-						 MainActivityCommon.vmexecutor.onVectrasMouse(sdlMouseButton, MotionEvent.ACTION_UP, relative, x, y);
+						 MainActivity.vmexecutor.onVectrasMouse(sdlMouseButton, MotionEvent.ACTION_UP, relative, x, y);
 				} else if (sdlMouseButton != 0) {
-					MainActivityCommon.vmexecutor.onVectrasMouse(sdlMouseButton, MotionEvent.ACTION_UP, relative, x, y);
+					MainActivity.vmexecutor.onVectrasMouse(sdlMouseButton, MotionEvent.ACTION_UP, relative, x, y);
 				} else { // if we don't have inforamtion about which button we can make some guesses
 
 					//Or only the last one pressed
@@ -1511,17 +1512,17 @@ public class MainSDLActivity extends SDLActivity {
 						if(lastMouseButtonDown == Config.SDL_MOUSE_MIDDLE
 								||lastMouseButtonDown == Config.SDL_MOUSE_RIGHT
 								) {
-								 MainActivityCommon.vmexecutor.onVectrasMouse(lastMouseButtonDown, MotionEvent.ACTION_UP, relative,x, y);
+								 MainActivity.vmexecutor.onVectrasMouse(lastMouseButtonDown, MotionEvent.ACTION_UP, relative,x, y);
 						}else
-							MainActivityCommon.vmexecutor.onVectrasMouse(lastMouseButtonDown, MotionEvent.ACTION_UP, relative, x, y);
+							MainActivity.vmexecutor.onVectrasMouse(lastMouseButtonDown, MotionEvent.ACTION_UP, relative, x, y);
 					} else {
 						//ALl buttons
 						if (Config.mouseMode == Config.MouseMode.Trackpad) {
-							MainActivityCommon.vmexecutor.onVectrasMouse(Config.SDL_MOUSE_LEFT, MotionEvent.ACTION_UP, 1, 0, 0);
+							MainActivity.vmexecutor.onVectrasMouse(Config.SDL_MOUSE_LEFT, MotionEvent.ACTION_UP, 1, 0, 0);
 						} else if (Config.mouseMode == Config.MouseMode.External) {
-							MainActivityCommon.vmexecutor.onVectrasMouse(Config.SDL_MOUSE_LEFT, MotionEvent.ACTION_UP, 0, x, y);
-							MainActivityCommon.vmexecutor.onVectrasMouse(Config.SDL_MOUSE_RIGHT, MotionEvent.ACTION_UP, 0, x, y);
-							MainActivityCommon.vmexecutor.onVectrasMouse(Config.SDL_MOUSE_MIDDLE, MotionEvent.ACTION_UP, 0, x, y);
+							MainActivity.vmexecutor.onVectrasMouse(Config.SDL_MOUSE_LEFT, MotionEvent.ACTION_UP, 0, x, y);
+							MainActivity.vmexecutor.onVectrasMouse(Config.SDL_MOUSE_RIGHT, MotionEvent.ACTION_UP, 0, x, y);
+							MainActivity.vmexecutor.onVectrasMouse(Config.SDL_MOUSE_MIDDLE, MotionEvent.ACTION_UP, 0, x, y);
 						}
 					}
 				}
@@ -1537,7 +1538,7 @@ public class MainSDLActivity extends SDLActivity {
 					sdlMouseButton = Config.SDL_MOUSE_LEFT;
 				}
 
-			   MainActivityCommon.vmexecutor.onVectrasMouse(sdlMouseButton, MotionEvent.ACTION_DOWN, relative, x, y);
+			   MainActivity.vmexecutor.onVectrasMouse(sdlMouseButton, MotionEvent.ACTION_DOWN, relative, x, y);
 				lastMouseButtonDown = sdlMouseButton;
 			}
 			return true;
@@ -1613,13 +1614,13 @@ public class MainSDLActivity extends SDLActivity {
 		Thread t = new Thread(new Runnable() {
 			public void run() {
 				Log.d("SDL", "Mouse Right Click");
-				MainActivityCommon.vmexecutor.onVectrasMouse(Config.SDL_MOUSE_RIGHT, MotionEvent.ACTION_DOWN, 1, -1, -1);
+				MainActivity.vmexecutor.onVectrasMouse(Config.SDL_MOUSE_RIGHT, MotionEvent.ACTION_DOWN, 1, -1, -1);
 				try {
 					Thread.sleep(100);
 				} catch (InterruptedException ex) {
 //					Log.v("SDLSurface", "Interrupted: " + ex);
 				}
-				MainActivityCommon.vmexecutor.onVectrasMouse(Config.SDL_MOUSE_RIGHT, MotionEvent.ACTION_UP, 1, -1, -1);
+				MainActivity.vmexecutor.onVectrasMouse(Config.SDL_MOUSE_RIGHT, MotionEvent.ACTION_UP, 1, -1, -1);
 			}
 		});
 		t.start();
@@ -1631,13 +1632,13 @@ public class MainSDLActivity extends SDLActivity {
 		Thread t = new Thread(new Runnable() {
 			public void run() {
                 Log.d("SDL", "Mouse Middle Click");
-				MainActivityCommon.vmexecutor.onVectrasMouse(Config.SDL_MOUSE_MIDDLE, MotionEvent.ACTION_DOWN, 1,-1, -1);
+				MainActivity.vmexecutor.onVectrasMouse(Config.SDL_MOUSE_MIDDLE, MotionEvent.ACTION_DOWN, 1,-1, -1);
 				try {
 					Thread.sleep(100);
 				} catch (InterruptedException ex) {
 //                    Log.v("SDLSurface", "Interrupted: " + ex);
 				}
-				MainActivityCommon.vmexecutor.onVectrasMouse(Config.SDL_MOUSE_MIDDLE, MotionEvent.ACTION_UP, 1,-1, -1);
+				MainActivity.vmexecutor.onVectrasMouse(Config.SDL_MOUSE_MIDDLE, MotionEvent.ACTION_UP, 1,-1, -1);
 			}
 		});
 		t.start();
@@ -1651,13 +1652,13 @@ public class MainSDLActivity extends SDLActivity {
 			public void run() {
 				//Log.d("SDL", "Mouse Double Click");
 				for (int i = 0; i < 2; i++) {
-					MainActivityCommon.vmexecutor.onVectrasMouse(Config.SDL_MOUSE_LEFT, MotionEvent.ACTION_DOWN, 1, 0, 0);
+					MainActivity.vmexecutor.onVectrasMouse(Config.SDL_MOUSE_LEFT, MotionEvent.ACTION_DOWN, 1, 0, 0);
 					try {
 						Thread.sleep(50);
 					} catch (InterruptedException ex) {
 						// Log.v("doubletap", "Could not sleep");
 					}
-					MainActivityCommon.vmexecutor.onVectrasMouse(Config.SDL_MOUSE_LEFT, MotionEvent.ACTION_UP, 1,0, 0);
+					MainActivity.vmexecutor.onVectrasMouse(Config.SDL_MOUSE_LEFT, MotionEvent.ACTION_UP, 1,0, 0);
 					try {
 						Thread.sleep(50);
 					} catch (InterruptedException ex) {
@@ -1748,7 +1749,7 @@ public class MainSDLActivity extends SDLActivity {
 
     private void dragPointer(MotionEvent event) {
 
-        MainActivityCommon.vmexecutor.onVectrasMouse(Config.SDL_MOUSE_LEFT, MotionEvent.ACTION_DOWN, 1, 0, 0);
+        MainActivity.vmexecutor.onVectrasMouse(Config.SDL_MOUSE_LEFT, MotionEvent.ACTION_DOWN, 1, 0, 0);
         Vibrator v = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
         if (v.hasVibrator()) {
             v.vibrate(100);
@@ -1804,7 +1805,7 @@ public class MainSDLActivity extends SDLActivity {
 							x = event.getAxisValue(MotionEvent.AXIS_HSCROLL, 0);
 							y = event.getAxisValue(MotionEvent.AXIS_VSCROLL, 0);
 //                            Log.d("SDL", "Mouse Scroll: " + x + "," + y);
-							MainActivityCommon.vmexecutor.onVectrasMouse(0, action, 0, x, y);
+							MainActivity.vmexecutor.onVectrasMouse(0, action, 0, x, y);
 							return true;
 
 						case MotionEvent.ACTION_HOVER_MOVE:
@@ -1845,7 +1846,7 @@ public class MainSDLActivity extends SDLActivity {
 
 			if(Config.mouseMode == Config.MouseMode.External) {
 				//Log.d("SDL", "Mouse Hover: " + x + "," + y);
-				MainActivityCommon.vmexecutor.onVectrasMouse(0, action, 0, x, y);
+				MainActivity.vmexecutor.onVectrasMouse(0, action, 0, x, y);
 			}
 		}
 

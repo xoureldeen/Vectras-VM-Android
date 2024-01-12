@@ -106,6 +106,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/appNameTxt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingLeft="8dp"

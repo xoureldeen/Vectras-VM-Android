@@ -1,7 +1,6 @@
 package com.vectras.vm.MainRoms;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
@@ -16,20 +15,13 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.vectras.qemu.Config;
-import com.vectras.qemu.MainActivityCommon;
-import com.vectras.qemu.MainService;
-import com.vectras.qemu.MainSettingsManager;
-import com.vectras.qemu.jni.StartVM;
-import com.vectras.qemu.utils.Machine;
 import com.vectras.vm.AppConfig;
 import com.vectras.vm.Fragment.HomeFragment;
 import com.vectras.vm.MainActivity;
@@ -42,9 +34,6 @@ import java.io.FileWriter;
 import java.io.Writer;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -82,15 +71,15 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         myHolder.cdRoms.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                MainActivityCommon.setupNativeLibs();
+                MainActivity.setupNativeLibs();
                 Config.hda_path = current.itemPath;
                 Config.extra_params = current.itemExtra;
                 Thread thread = new Thread(new Runnable() {
                     public void run() {
                         if (!Config.loadNativeLibsEarly && !Config.loadNativeLibsMainThread) {
-                            MainActivityCommon.setupNativeLibs();
+                            MainActivity.setupNativeLibs();
                         }
-                        MainActivityCommon.onStartButton();
+                        MainActivity.onStartButton();
                     }
                 });
                 thread.setPriority(Thread.MIN_PRIORITY);

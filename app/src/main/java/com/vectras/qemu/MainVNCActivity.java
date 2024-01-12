@@ -52,6 +52,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
 import com.vectras.vm.Fragment.ControlersOptionsFragment;
+import com.vectras.vm.MainActivity;
 import com.vectras.vm.R;
 import com.vectras.qemu.utils.Machine;
 import com.vectras.qemu.utils.QmpClient;
@@ -506,11 +507,11 @@ public class MainVNCActivity extends VncCanvasActivity {
 
     public void checkStatus() {
         while (timeQuit != true) {
-            MainActivityCommon.VMStatus status = Machine.checkSaveVMStatus(activity);
+            MainActivity.VMStatus status = Machine.checkSaveVMStatus(activity);
             Log.v(TAG, "Status: " + status);
-            if (status == MainActivityCommon.VMStatus.Unknown
-                    || status == MainActivityCommon.VMStatus.Completed
-                    || status == MainActivityCommon.VMStatus.Failed
+            if (status == MainActivity.VMStatus.Unknown
+                    || status == MainActivity.VMStatus.Completed
+                    || status == MainActivity.VMStatus.Failed
             ) {
                 //Log.v(TAG, "Saving state is done: " + status);
                 stopTimeListener();
@@ -1037,12 +1038,12 @@ public class MainVNCActivity extends VncCanvasActivity {
     }
 
     private void resumeVM() {
-        if (MainActivityCommon.vmexecutor == null) {
+        if (MainActivity.vmexecutor == null) {
             return;
         }
         Thread t = new Thread(new Runnable() {
             public void run() {
-                if (MainActivityCommon.vmexecutor.paused == 1) {
+                if (MainActivity.vmexecutor.paused == 1) {
                     try {
                         Thread.sleep(4000);
                     } catch (InterruptedException ex) {
@@ -1051,7 +1052,7 @@ public class MainVNCActivity extends VncCanvasActivity {
                     if (vncCanvas == null)
                         return;
 
-                    MainActivityCommon.vmexecutor.paused = 0;
+                    MainActivity.vmexecutor.paused = 0;
                     String command = QmpClient.cont();
                     String msg = QmpClient.sendCommand(command);
                     new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
@@ -1072,8 +1073,8 @@ public class MainVNCActivity extends VncCanvasActivity {
         Thread t = new Thread(new Runnable() {
             public void run() {
                 // Delete any previous state file
-                if (MainActivityCommon.vmexecutor.save_state_name != null) {
-                    File file = new File(MainActivityCommon.vmexecutor.save_state_name);
+                if (MainActivity.vmexecutor.save_state_name != null) {
+                    File file = new File(MainActivity.vmexecutor.save_state_name);
                     if (file.exists()) {
                         file.delete();
                     }
@@ -1081,7 +1082,7 @@ public class MainVNCActivity extends VncCanvasActivity {
 
                 UIUtils.toastShort(getApplicationContext(), "Please wait while saving VM State");
 
-                String uri = "fd:" + MainActivityCommon.vmexecutor.get_fd(MainActivityCommon.vmexecutor.save_state_name);
+                String uri = "fd:" + MainActivity.vmexecutor.get_fd(MainActivity.vmexecutor.save_state_name);
                 String command = QmpClient.stop();
                 String msg = QmpClient.sendCommand(command);
 //				if (msg != null)
@@ -1312,7 +1313,7 @@ public class MainVNCActivity extends VncCanvasActivity {
                 int progress = arg0.getProgress() + 1;
                 int refreshMs = 1000 / progress;
                 Log.v(TAG, "Changing display refresh rate (ms): " + refreshMs);
-                MainActivityCommon.vmexecutor.setvncrefreshrate(refreshMs);
+                MainActivity.vmexecutor.setvncrefreshrate(refreshMs);
 
             }
         });
@@ -1325,7 +1326,7 @@ public class MainVNCActivity extends VncCanvasActivity {
     }
 
     public int getCurrentVNCRefreshRate() {
-        return 1000 / MainActivityCommon.vmexecutor.getvncrefreshrate();
+        return 1000 / MainActivity.vmexecutor.getvncrefreshrate();
     }
 
 }

@@ -82,7 +82,7 @@ public class MainService extends Service {
 
                             @Override
                             public void run() {
-                                MainActivityCommon.startvnc();
+                                MainActivity.startvnc();
                             }
                         }, 2000);
                     }
@@ -91,7 +91,7 @@ public class MainService extends Service {
                     String res = executor.startvm();
 
                     //VM has exited
-                    MainActivityCommon.cleanup();
+                    MainActivity.cleanup();
 
                 }
             });
@@ -114,7 +114,7 @@ public class MainService extends Service {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                MainActivityCommon.startTimer();
+                MainActivity.startTimer();
             }
         });
         t.start();
@@ -123,11 +123,11 @@ public class MainService extends Service {
 
     private void setUpAsForeground(String text) {
         isRunning = true;
-        MainActivityCommon.vmStarted = true;
+        MainActivity.vmStarted = true;
         Class<?> clientClass = null;
         if (Config.ui != null) {
             if (Config.ui.equals("VNC")) {
-                if (MainSettingsManager.getVncExternal(MainActivityCommon.activity)) {
+                if (MainSettingsManager.getVncExternal(MainActivity.activity)) {
                     MainActivity.extVncLayout.setVisibility(View.VISIBLE);
                     MainActivity.appbar.setExpanded(true);
                 }

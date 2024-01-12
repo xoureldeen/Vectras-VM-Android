@@ -23,6 +23,9 @@
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:title="MEMORY"
+            android:enabled="false"
+            android:shouldDisableView="true"
+            app:shouldDisableView="true"
             app:icon="@drawable/round_memory_24" />
         <SwitchPreferenceCompat
             android:layout_width="wrap_content"
@@ -40,5 +43,14 @@
             android:key="cpuNum"
             android:title="CPU CORES"
             app:icon="@drawable/round_hub_24" />
+        <SwitchPreferenceCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="false"
+            android:title="VIRTIO HARDDISK"
+            android:key="virtio"
+            android:summaryOff="hdd type: ide"
+            app:summaryOn="hdd type: virtio"
+            app:icon="@drawable/round_dns_24" />
     </PreferenceCategory>
 </PreferenceScreen>

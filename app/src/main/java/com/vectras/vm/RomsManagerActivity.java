@@ -384,7 +384,7 @@ public class RomsManagerActivity extends AppCompatActivity {
 
     public void onFirstStartup() {
         if (selected) {
-            if (FileUtils.fileValid(activity, AppConfig.maindirpath + selectedPath)) {
+            if (FileUtils.fileValid(activity, AppConfig.maindirpath + selectedPath) && !FileUtils.fileValid(activity, AppConfig.maindirpath + "icons/" + selectedPath.replace(".IMG", ".jpg"))) {
                 SharedPreferences credentials = activity.getSharedPreferences(CREDENTIAL_SHARED_PREF, Context.MODE_PRIVATE);
                 ProgressDialog mProgressDialog = new ProgressDialog(this, R.style.MainDialogTheme);
                 mProgressDialog.setTitle("Data Setup");

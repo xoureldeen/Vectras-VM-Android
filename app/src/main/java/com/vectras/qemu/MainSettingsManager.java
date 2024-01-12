@@ -19,13 +19,17 @@ Copyright (C) Max Kastanas 2012
 package com.vectras.qemu;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
@@ -34,197 +38,257 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragment;
 import androidx.preference.PreferenceFragmentCompat;
+
 import com.vectras.vm.R;
+import com.vectras.vm.SplashActivity;
 
 import java.util.List;
 
-public class MainSettingsManager extends AppCompatActivity {
-
-    private static final String TAG = "SettingsActivity";
+public class MainSettingsManager extends AppCompatActivity
+        implements PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
     public static MainSettingsManager activity;
+
+    private static Handler mHandler;
     public static SharedPreferences sp;
 
-    public static int fragment = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // TODO: Implement this method
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
         activity = this;
 
-        fragment = 0;
+        sp = PreferenceManager.getDefaultSharedPreferences(activity);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        PreferenceFragmentCompat preference = new MainPreferencesFragment();
+        Intent intent = getIntent();
+
+        // add preference settings
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.settingz, preference)
+                .commit();
+
+        // toolbar
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        toolbar.setTitle("Settings");
     }
+
     @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId()== android.R.id.home){
-            if (fragment == 0) {
-                finish();
-            } else {
-                MainFragment.mainFragment();
-            }
-        }
-        return super.onOptionsItemSelected(item);
+    public boolean onPreferenceStartFragment(PreferenceFragmentCompat caller, Preference pref) {
+        // Instantiate the new Fragment
+        final Bundle bundle = pref.getExtras();
+        final Fragment fragment = Fragment.instantiate(this, pref.getFragment(), bundle);
+
+        fragment.setTargetFragment(caller, 0);
+
+        // Replace the existing Fragment with the new Fragment
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.settingz, fragment)
+                .addToBackStack(null)
+                .commit();
+
+        return true;
     }
 
-    public static class MainFragment extends PreferenceFragmentCompat {
-
-        public static MainFragment fr;
-        @Override
-        public void onCreatePreferences(@Nullable Bundle savedInstanceState, @Nullable String rootKey) {
-            setPreferencesFromResource(R.xml.headers_preference, rootKey);
-            fr = MainFragment.this;
-            fragment = 0;
-            findPreference("app").setOnPreferenceClickListener(preference -> {
-                getFragmentManager().beginTransaction().replace(R.id.settingz,
-                        new AppPreferencesFragment()).commit();
-                return false;
-            });
-            findPreference("userinterface").setOnPreferenceClickListener(preference -> {
-                getFragmentManager().beginTransaction().replace(R.id.settingz,
-                        new UserInterfacePreferencesFragment()).commit();
-                return false;
-            });
-            findPreference("qemu").setOnPreferenceClickListener(preference -> {
-                getFragmentManager().beginTransaction().replace(R.id.settingz,
-                        new QemuPreferencesFragment()).commit();
-                return false;
-            });
-            findPreference("vnc").setOnPreferenceClickListener(preference -> {
-                getFragmentManager().beginTransaction().replace(R.id.settingz,
-                        new VncPreferencesFragment()).commit();
-                return false;
-            });
-        }
-        public static void mainFragment(){
-            fr.getFragmentManager().beginTransaction().replace(R.id.settingz,
-                    new MainFragment()).commit();
-        }
-
-        @Override
-        public void onResume() {
-            super.onResume();
-            fragment = 0;
-        }
-
-        @Override
-        public void onPause() {
-            super.onPause();
-            fragment = 0;
-        }
-
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
-    public static class AppPreferencesFragment extends PreferenceFragmentCompat
-            implements OnSharedPreferenceChangeListener {
+    public static class MainPreferencesFragment extends PreferenceFragmentCompat
+            implements Preference.OnPreferenceChangeListener {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            sp = getPreferenceScreen().getSharedPreferences();
 
-            Toolbar toolbar = (Toolbar) activity.findViewById(R.id.toolbar);
-            activity.setSupportActionBar(toolbar);
-            activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            activity.getSupportActionBar().setDisplayShowHomeEnabled(true);
-            toolbar.setTitle("APP SETTINGS");
-            fragment = 1;
-        }
-
-        @Override
-        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-            setPreferencesFromResource(R.xml.settings, rootKey);
         }
 
         @Override
         public void onResume() {
             super.onResume();
-            fragment = 1;
+
         }
 
         @Override
         public void onPause() {
             super.onPause();
+
         }
 
-        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            sp = sharedPreferences;
+
+        @Override
+        public void onCreatePreferences(Bundle bundle, String root_key) {
+            // Load the Preferences from the XML file
+            setPreferencesFromResource(R.xml.headers_preference, root_key);
+
         }
+
+        @Override
+        public boolean onPreferenceChange(Preference pref, Object newValue) {
+            if (pref.getKey().equals("app")) {
+
+            }
+            return true;
+        }
+
+    }
+
+
+    public static class AppPreferencesFragment extends PreferenceFragmentCompat
+            implements Preference.OnPreferenceChangeListener {
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+
+        }
+
+        @Override
+        public void onPause() {
+            super.onPause();
+
+        }
+
+
+        @Override
+        public void onCreatePreferences(Bundle bundle, String root_key) {
+            // Load the Preferences from the XML file
+            setPreferencesFromResource(R.xml.settings, root_key);
+
+        }
+
+        @Override
+        public boolean onPreferenceChange(Preference pref, Object newValue) {
+            if (pref.getKey().equals("app")) {
+
+            }
+            return true;
+        }
+
     }
 
     public static class UserInterfacePreferencesFragment extends PreferenceFragmentCompat
-            implements OnSharedPreferenceChangeListener {
+            implements Preference.OnPreferenceChangeListener {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.userinterface);
-            sp = getPreferenceScreen().getSharedPreferences();
 
-            Toolbar toolbar = (Toolbar) activity.findViewById(R.id.toolbar);
-            activity.setSupportActionBar(toolbar);
-            activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            activity.getSupportActionBar().setDisplayShowHomeEnabled(true);
-            toolbar.setTitle("USER INTERFACE");
-            fragment = 2;
+            mHandler = new Handler();
+            Preference pref = findPreference("modeNight");
+            if (pref != null) {
+                pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+
+                    @Override
+                    public boolean onPreferenceChange(@NonNull Preference preference,
+                                                      Object newValue) {
+                        onNightMode();
+                        return true;
+                    }
+
+                });
+            }
         }
 
-        @Override
-        public void onCreatePreferences(@Nullable Bundle savedInstanceState, String rootKey) {
+        private void onNightMode() {
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Intent startActivity = new Intent(getContext(), SplashActivity.class);
+                    int pendingIntentId = 123456;
+                    PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), pendingIntentId, startActivity, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
+                    AlarmManager mgr = (AlarmManager) MainSettingsManager.activity.getSystemService(Context.ALARM_SERVICE);
+                    mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 500, pendingIntent);
+
+                    System.exit(0);
+                }
+            }, 300);
         }
 
         @Override
         public void onResume() {
             super.onResume();
-            fragment = 2;
+
         }
 
         @Override
         public void onPause() {
             super.onPause();
+
         }
 
-        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            sp = sharedPreferences;
+
+        @Override
+        public void onCreatePreferences(Bundle bundle, String root_key) {
+            // Load the Preferences from the XML file
+            setPreferencesFromResource(R.xml.userinterface, root_key);
+
+        }
+
+        @Override
+        public boolean onPreferenceChange(Preference pref, Object newValue) {
+            return true;
         }
 
     }
+
     public static class QemuPreferencesFragment extends PreferenceFragmentCompat
             implements Preference.OnPreferenceChangeListener {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.qemu);
-            sp = getPreferenceScreen().getSharedPreferences();
+            Preference pref = findPreference("customMemory");
+            if (pref != null) {
+                pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 
-            Toolbar toolbar = (Toolbar) activity.findViewById(R.id.toolbar);
-            activity.setSupportActionBar(toolbar);
-            activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            activity.getSupportActionBar().setDisplayShowHomeEnabled(true);
-            toolbar.setTitle("QEMU");
-            fragment = 3;
-        }
+                    @Override
+                    public boolean onPreferenceChange(@NonNull Preference preference,
+                                                      Object newValue) {
+                        findPreference("memory").setEnabled(!sp.getBoolean("customMemory", false));
+                        return true;
+                    }
 
-        @Override
-        public void onCreatePreferences(@Nullable Bundle savedInstanceState, String rootKey) {
+                });
+            }
+            Preference pref2 = findPreference("customMemory");
+            if (pref2 != null) {
+                pref2.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 
-        }
+                    @Override
+                    public boolean onPreferenceChange(@NonNull Preference preference,
+                                                      Object newValue) {
+                        if (MainSettingsManager.getVirtio(activity)) {
+                            Config.hd_if_type = "virtio";
+                        } else {
+                            Config.hd_if_type = "ide";
+                        }
+                        return true;
+                    }
 
-        @Override
-        public void onResume() {
-            super.onResume();
-            onMemory();
-            fragment = 3;
+                });
+            }
         }
 
         private void onMemory() {
-            //findPreference("memory").setEnabled(getCusRam(activity));
+            findPreference("memory").setEnabled(sp.getBoolean("customMemory", false));
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            onMemory();
         }
 
         @Override
@@ -233,49 +297,60 @@ public class MainSettingsManager extends AppCompatActivity {
             onMemory();
         }
 
+
         @Override
-        public boolean onPreferenceChange(@NonNull Preference preference, Object newValue) {
-            onMemory();
+        public void onCreatePreferences(Bundle bundle, String root_key) {
+            // Load the Preferences from the XML file
+            setPreferencesFromResource(R.xml.qemu, root_key);
+
+        }
+
+        @Override
+        public boolean onPreferenceChange(Preference pref, Object newValue) {
+
             return true;
         }
+
     }
+
     public static class VncPreferencesFragment extends PreferenceFragmentCompat
-            implements OnSharedPreferenceChangeListener {
+            implements Preference.OnPreferenceChangeListener {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            addPreferencesFromResource(R.xml.vnc);
-            sp = getPreferenceScreen().getSharedPreferences();
-
-            Toolbar toolbar = (Toolbar) activity.findViewById(R.id.toolbar);
-            activity.setSupportActionBar(toolbar);
-            activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            activity.getSupportActionBar().setDisplayShowHomeEnabled(true);
-            toolbar.setTitle("VNC");
-            fragment = 4;
-        }
-
-        @Override
-        public void onCreatePreferences(@Nullable Bundle savedInstanceState, String rootKey) {
 
         }
 
         @Override
         public void onResume() {
             super.onResume();
-            fragment = 4;
+
         }
 
         @Override
         public void onPause() {
             super.onPause();
+
         }
 
-        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            sp = sharedPreferences;
+
+        @Override
+        public void onCreatePreferences(Bundle bundle, String root_key) {
+            // Load the Preferences from the XML file
+            setPreferencesFromResource(R.xml.vnc, root_key);
+
+        }
+
+        @Override
+        public boolean onPreferenceChange(Preference pref, Object newValue) {
+            if (pref.getKey().equals("app")) {
+
+            }
+            return true;
         }
 
     }
+
     static String getDNSServer(Activity activity) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         return prefs.getString("dnsServer", Config.defaultDNSServer);
@@ -543,6 +618,17 @@ public class MainSettingsManager extends AppCompatActivity {
         return prefs.getBoolean("customMemory", false);
     }
 
+    public static void setVirtio(Activity activity, Boolean virtio) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putBoolean("virtio", virtio);
+        edit.apply();
+    }
+
+    public static boolean getVirtio(Activity activity) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        return prefs.getBoolean("virtio", false);
+    }
     public static boolean isFirstLaunch(Activity activity) {
         PackageInfo pInfo = null;
 
@@ -570,16 +656,6 @@ public class MainSettingsManager extends AppCompatActivity {
         SharedPreferences.Editor edit = prefs.edit();
         edit.putBoolean("firstTime" + pInfo.versionName, false);
         edit.commit();
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (fragment == 0) {
-            finish();
-            super.onBackPressed();
-        } else {
-            MainFragment.mainFragment();
-        }
     }
 
 }

@@ -9,7 +9,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import com.vectras.qemu.Config;
-import com.vectras.qemu.MainActivityCommon;
+import com.vectras.vm.MainActivity;
 import com.vectras.vm.R;
 import com.vectras.vm.utils.UIUtils;
 
@@ -34,8 +34,8 @@ public class Machine {
                             activity.finish();
                         }
 
-                        if (MainActivityCommon.vmexecutor != null) {
-                            MainActivityCommon.vmexecutor.stopvm(0);
+                        if (MainActivity.vmexecutor != null) {
+                            MainActivity.vmexecutor.stopvm(0);
                         }
                     }
                 }).show();
@@ -45,11 +45,11 @@ public class Machine {
     public static void onRestartVM(final Context context) {
         Thread t = new Thread(new Runnable() {
             public void run() {
-                if (MainActivityCommon.vmexecutor != null) {
+                if (MainActivity.vmexecutor != null) {
                     Log.v(TAG, "Restarting the VM...");
-                    MainActivityCommon.vmexecutor.stopvm(1);
+                    MainActivity.vmexecutor.stopvm(1);
 
-                    MainActivityCommon.vmStarted = true;
+                    MainActivity.vmStarted = true;
                     if(Config.showToast)
                         UIUtils.toastShort(context, "VM Reset");
 
@@ -94,8 +94,8 @@ public class Machine {
                             activity.finish();
                         }
 
-                        if (MainActivityCommon.vmexecutor != null) {
-                            MainActivityCommon.vmexecutor.stopvm(0);
+                        if (MainActivity.vmexecutor != null) {
+                            MainActivity.vmexecutor.stopvm(0);
                         }
                     }
                 }).setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -104,9 +104,9 @@ public class Machine {
         }).show();
     }
 
-    public static MainActivityCommon.VMStatus checkSaveVMStatus(final Activity activity) {
+    public static MainActivity.VMStatus checkSaveVMStatus(final Activity activity) {
         String pause_state = "";
-        if (MainActivityCommon.vmexecutor != null) {
+        if (MainActivity.vmexecutor != null) {
 
             String command = QmpClient.query_migrate();
             String res = QmpClient.sendCommand(command);
@@ -130,9 +130,9 @@ public class Machine {
         }
 
         if (pause_state.toUpperCase().equals("ACTIVE")) {
-            return MainActivityCommon.VMStatus.Saving;
+            return MainActivity.VMStatus.Saving;
         } else if (pause_state.toUpperCase().equals("COMPLETED")) {
-            MainActivityCommon.vmexecutor.paused = 1;
+            MainActivity.vmexecutor.paused = 1;
             
             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                 @Override
@@ -140,7 +140,7 @@ public class Machine {
                     promptPausedVM(activity);
                 }
             }, 1000);
-            return MainActivityCommon.VMStatus.Completed;
+            return MainActivity.VMStatus.Completed;
 
         } else if (pause_state.toUpperCase().equals("FAILED")) {
             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
@@ -149,9 +149,9 @@ public class Machine {
                     pausedErrorVM(activity, null);
                 }
             }, 100);
-            return MainActivityCommon.VMStatus.Failed;
+            return MainActivity.VMStatus.Failed;
         }
-        return MainActivityCommon.VMStatus.Unknown;
+        return MainActivity.VMStatus.Unknown;
     }
 
     public static boolean isHostX86_64() {

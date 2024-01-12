@@ -28,16 +28,12 @@ import android.webkit.WebView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import com.vectras.qemu.Config;
-import com.vectras.qemu.MainActivityCommon;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.qemu.utils.FileUtils;
+import com.vectras.vm.MainActivity;
 import com.vectras.vm.R;
-import com.vectras.vm.AppConfig;
 import com.vectras.vm.logger.VectrasStatus;
 
 import java.io.IOException;
@@ -111,7 +107,7 @@ public class UIUtils {
 
     public static boolean onKeyboard(Activity activity, boolean toggle, View view) {
         // Prevent crashes from activating mouse when machine is paused
-        if (MainActivityCommon.vmexecutor.paused == 1)
+        if (MainActivity.vmexecutor.paused == 1)
             return !toggle;
 
         InputMethodManager inputMgr = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
