@@ -196,6 +196,16 @@
                 android:translationY="-6dp">
 
                 <ImageButton
+                    android:id="@+id/btnLogs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:background="@drawable/controls_button"
+                    android:backgroundTint="?attr/colorPrimary"
+                    android:src="@drawable/round_menu_24"
+                    app:tint="?attr/colorPrimary" />
+
+                <ImageButton
                     android:id="@+id/btnSettings"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

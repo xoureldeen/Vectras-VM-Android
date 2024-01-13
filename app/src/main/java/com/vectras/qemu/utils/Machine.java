@@ -1,13 +1,15 @@
 package com.vectras.qemu.utils;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+
+import androidx.appcompat.app.AlertDialog;
+
 import com.vectras.qemu.Config;
 import com.vectras.vm.MainActivity;
 import com.vectras.vm.R;

@@ -6,12 +6,14 @@ import android.androidVNC.VncCanvasActivity;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.core.view.MenuItemCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -51,6 +53,7 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
+import com.vectras.qemu.utils.FileUtils;
 import com.vectras.vm.Fragment.ControlersOptionsFragment;
 import com.vectras.vm.MainActivity;
 import com.vectras.vm.R;
@@ -124,8 +127,15 @@ public class MainVNCActivity extends VncCanvasActivity {
         ImageButton ctrlBtn = findViewById(R.id.ctrlBtn);
         ImageButton altBtn = findViewById(R.id.altBtn);
         ImageButton delBtn = findViewById(R.id.delBtn);
+        ImageButton btnLogs = findViewById(R.id.btnLogs);
         Button ctrlAltDelBtn = findViewById(R.id.ctrlAltDelBtn);
         qmpBtn = findViewById(R.id.btnQmp);
+        btnLogs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FileUtils.viewVectrasLog(activity);
+            }
+        });
         shutdownBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1184,20 +1194,11 @@ public class MainVNCActivity extends VncCanvasActivity {
 
     }
 
+
     public void onBackPressed() {
-
-        // super.onBackPressed();
-        if (!MainSettingsManager.getAlwaysShowMenuToolbar(activity)) {
-            ActionBar bar = this.getSupportActionBar();
-            if (bar != null) {
-                if (bar.isShowing() && Config.mouseMode == Config.MouseMode.Trackpad) {
-                    bar.hide();
-                }/* else
-                    bar.show();*/
-            }
-        } else
-            super.onBackPressed();
-
+        super.onBackPressed();
+        Machine.stopVM(activity);
+        return;
     }
 
     public void onHideToolbar() {

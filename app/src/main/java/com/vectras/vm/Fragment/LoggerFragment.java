@@ -1,5 +1,6 @@
 package com.vectras.vm.Fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,6 +22,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.vectras.vm.R;
 import com.vectras.vm.RomsManagerActivity;
 import com.vectras.vm.MainActivity;
+import com.vectras.vm.VectrasApp;
 import com.vectras.vm.adapter.LogsAdapter;
 import com.vectras.vm.logger.VectrasStatus;
 import com.vectras.vm.utils.UIUtils;
@@ -46,20 +49,21 @@ import java.util.TimerTask;
 public class LoggerFragment extends Fragment {
 
     View view;
-    MainActivity activity = MainActivity.activity;
     private final String CREDENTIAL_SHARED_PREF = "settings_prefs";
     private LogsAdapter mLogAdapter;
     private RecyclerView logList;
     private Timer _timer = new Timer();
     private TimerTask t;
+    Activity activity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // TODO Auto-generated method stub
 
         view = inflater.inflate(R.layout.fragment_logs, container, false);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(MainActivity.activity);
-        mLogAdapter = new LogsAdapter(layoutManager, MainActivity.activity);
+        activity = getActivity();
+        LinearLayoutManager layoutManager = new LinearLayoutManager(VectrasApp.getApp());
+        mLogAdapter = new LogsAdapter(layoutManager, VectrasApp.getApp());
         logList = (RecyclerView) view.findViewById(R.id.recyclerLog);
         logList.setAdapter(mLogAdapter);
         logList.setLayoutManager(layoutManager);

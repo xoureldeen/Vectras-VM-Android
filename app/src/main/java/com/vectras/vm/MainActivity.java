@@ -6,6 +6,7 @@ import android.androidVNC.RfbProto;
 import android.androidVNC.VncCanvas;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Dialog;
@@ -49,6 +50,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.vectordrawable.graphics.drawable.ArgbEvaluator;
 import androidx.viewpager.widget.ViewPager;
 
@@ -71,6 +73,7 @@ import com.vectras.qemu.utils.Machine;
 import com.vectras.qemu.utils.QmpClient;
 import com.vectras.vm.Fragment.HomeFragment;
 import com.vectras.vm.Fragment.LoggerFragment;
+import com.vectras.vm.MainRoms.AdapterMainRoms;
 import com.vectras.vm.logger.VectrasStatus;
 import com.vectras.vm.utils.AppUpdater;
 import com.vectras.qemu.utils.FileInstaller;
@@ -146,7 +149,6 @@ public class MainActivity extends AppCompatActivity {
         setupStrictMode();
         execTimer();
         checkAndLoadLibs();
-        Config.logFilePath = Config.cacheDir + "/vectras/vectras-log.txt";
         activity = this;
         this.setContentView(R.layout.main);
         this.setupWidgets();
@@ -446,7 +448,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         if (MainSettingsManager.getPromptUpdateVersion(activity))
-            updateApp(true);
+            updateApp(false);
         /*FirebaseUser user = mAuth.getCurrentUser();
         TextView usernameTxt = findViewById(R.id.usernameTxt);
         TextView emailTxt = findViewById(R.id.emailTxt);
@@ -476,6 +478,12 @@ public class MainActivity extends AppCompatActivity {
             AlertDialog alertDialog;
             alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
             alertDialog.setTitle("JOIN US ON TELEGRAM");
+            TextView title = alertDialog.findViewById(R.id.title_text);
+            ObjectAnimator rgbAnim=ObjectAnimator.ofObject(title,"textColor",new ArgbEvaluator(), Color.RED,Color.GREEN,Color.BLUE);
+            rgbAnim.setDuration(1000);
+            rgbAnim.setRepeatMode(ValueAnimator.REVERSE);
+            rgbAnim.setRepeatCount(ValueAnimator.INFINITE);
+            rgbAnim.start();
             alertDialog.setMessage("Join us on Telegram where we publish all the news and updates and receive your opinions and bugs");
             alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "JOIN", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
@@ -533,6 +541,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
     public void onStart() {
         super.onStart();
@@ -541,6 +550,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Config.hd_if_type = "ide";
         }
+        setupFolders();
+        Config.ui = MainSettingsManager.getVmUi(activity);
         InterstitialAd.load(this, "ca-app-pub-3568137780412047/7745973511", adRequest,
                 new InterstitialAdLoadCallback() {
                     @Override
@@ -756,21 +767,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void setupFolders() {
-        Thread t = new Thread(new Runnable() {
-            public void run() {
+        try {
+            Config.cacheDir = activity.getCacheDir().getAbsolutePath();
+            Config.storagedir = Environment.getDataDirectory().toString();
 
-                Config.cacheDir = activity.getCacheDir().getAbsolutePath();
-                Config.storagedir = Environment.getExternalStorageDirectory().toString();
+            // Create Temp folder
+            File folder = new File(Config.getTmpFolder());
+            if (!folder.exists())
+                folder. mkdirs();
 
-                // Create Temp folder
-                File folder = new File(Config.getTmpFolder());
-                if (!folder.exists())
-                    folder.mkdirs();
+        } catch (Exception ignored) {
 
-
-            }
-        });
-        t.start();
+        }
     }
 
     //XXX: sometimes this needs to be called from the main thread otherwise

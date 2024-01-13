@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Vectras VM</string>
-    <string name="app_version">2.2</string>
+    <string name="app_version">2.3</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
     <string name="fab_info">Start Emulation</string>

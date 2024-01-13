@@ -248,7 +248,7 @@ public class MainSettingsManager extends AppCompatActivity
             implements Preference.OnPreferenceChangeListener {
         @Override
         public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
+            super.onCreate(savedInstanceState);/*
             Preference pref = findPreference("customMemory");
             if (pref != null) {
                 pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -278,7 +278,7 @@ public class MainSettingsManager extends AppCompatActivity
                     }
 
                 });
-            }
+            }*/
         }
 
         private void onMemory() {
@@ -628,6 +628,61 @@ public class MainSettingsManager extends AppCompatActivity
     public static boolean getVirtio(Activity activity) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         return prefs.getBoolean("virtio", false);
+    }
+
+    public static void setAvx(Activity activity, boolean AVX) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putBoolean("AVX", AVX);
+        edit.apply();
+    }
+
+    public static boolean getAvx(Activity activity) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        return prefs.getBoolean("AVX", false);
+    }
+
+    public static void setTbSize(Activity activity, String TbSize) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putString("TbSize", TbSize);
+        edit.apply();
+    }
+
+    public static String getTbSize(Activity activity) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        return prefs.getString("TbSize", "2048");
+    }
+
+    public static void setVmUi(Activity activity, String vmUi) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putString("vmUi", vmUi);
+        edit.apply();
+    }
+    public static String getVmUi(Activity activity) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        return prefs.getString("vmUi", "VNC");
+    }
+    public static void setUsbTablet(Activity activity, boolean UsbTablet) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putBoolean("UsbTablet", UsbTablet);
+        edit.apply();
+    }
+    public static boolean getUsbTablet(Activity activity) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        return prefs.getBoolean("UsbTablet", false);
+    }
+    public static void setCustomParams(Activity activity, String customParams) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putString("customParams", customParams);
+        edit.apply();
+    }
+    public static String getCustomParams(Activity activity) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        return prefs.getString("customParams", "");
     }
     public static boolean isFirstLaunch(Activity activity) {
         PackageInfo pInfo = null;

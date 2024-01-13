@@ -26,6 +26,8 @@ import android.os.Environment;
 import android.widget.ImageView.ScaleType;
 
 import com.vectras.vm.AppConfig;
+import com.vectras.vm.SplashActivity;
+import com.vectras.vm.VectrasApp;
 
 import java.util.Hashtable;
 import java.util.LinkedHashMap;
@@ -116,7 +118,7 @@ public class Config {
     public static String getMachineDir(){
         return getBasefileDir() + machineFolder;
     }
-    public static String logFilePath = null;
+    public static String logFilePath = cacheDir + "/vectras/vectras-log.txt";
 
 
     public static final String defaultDNSServer = "8.8.8.8";
@@ -176,7 +178,9 @@ public class Config {
     //Change to true in prod if you want to be notified by default for new versions
     public static boolean defaultCheckNewVersion = true;
 
-    public static final String sharedFolder = AppConfig.sharedFolder;
+    // App config
+    public static final String datadirpath = VectrasApp.getApp().getExternalFilesDir("data")+"/";
+    public static final String sharedFolder = datadirpath + "Vectras/ProgramFiles/";
 
 	public static String machinename = "VECTRAS";
 	public static int paused = 0;

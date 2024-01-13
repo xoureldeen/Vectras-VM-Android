@@ -16,4 +16,12 @@
         <item>5</item>
         <item>6</item>
     </string-array>
+    <string-array name="vmUiLabels">
+        <item>SDL</item>
+        <item>VNC</item>
+    </string-array>
+    <string-array name="vmUiValues">
+        <item>SDL</item>
+        <item>VNC</item>
+    </string-array>
 </resources>

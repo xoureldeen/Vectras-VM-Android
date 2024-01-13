@@ -23,14 +23,30 @@
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:title="MEMORY"
-            android:enabled="false"
-            android:shouldDisableView="true"
-            app:shouldDisableView="true"
+            app:useSimpleSummaryProvider="true"
             app:icon="@drawable/round_memory_24" />
+        <EditTextPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="2048"
+            android:inputType="number"
+            android:key="TbSize"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="TB SIZE (MB)"
+            app:useSimpleSummaryProvider="true"
+            app:icon="@drawable/ic_t" />
         <SwitchPreferenceCompat
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:defaultValue="true"
+            android:defaultValue="false"
+            android:key="AVX"
+            android:title="AVX"
+            app:icon="@drawable/ic_a" />
+        <SwitchPreferenceCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="false"
             android:key="MTTCG"
             android:title="MTTCG"
             app:icon="@drawable/ic_mttcg" />
@@ -42,6 +58,7 @@
             android:entryValues="@array/cpuCoresValues"
             android:key="cpuNum"
             android:title="CPU CORES"
+            app:useSimpleSummaryProvider="true"
             app:icon="@drawable/round_hub_24" />
         <SwitchPreferenceCompat
             android:layout_width="wrap_content"
@@ -52,5 +69,42 @@
             android:summaryOff="hdd type: ide"
             app:summaryOn="hdd type: virtio"
             app:icon="@drawable/round_dns_24" />
+        <EditTextPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue=""
+            android:inputType="text"
+            android:key="customParams"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="CUSTOM PARAMS"
+            app:useSimpleSummaryProvider="true"
+            app:icon="@drawable/round_terminal_24" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="VM UI ENVIRONMENT"
+        app:iconSpaceReserved="false">
+
+        <ListPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="SDL"
+            android:entries="@array/vmUiLabels"
+            android:entryValues="@array/vmUiValues"
+            android:key="vmUi"
+            android:title="UI"
+            app:useSimpleSummaryProvider="true"
+            app:icon="@drawable/computer"/>
+        <SwitchPreferenceCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="true"
+            android:key="UsbTablet"
+            android:title="USB TABLET"
+            app:summaryOn="mouse: usb tablet"
+            app:summaryOff="mouse: ps2"
+            app:icon="@drawable/round_mouse_24" />
     </PreferenceCategory>
 </PreferenceScreen>

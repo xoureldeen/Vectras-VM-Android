@@ -64,22 +64,22 @@ public class StartVM {
     public String vnc_passwd = "vectras";
 
     // cpu/board settings
-    private String cpu;
+    public String cpu;
     private String arch = "x86";
     private String machine_type;
-    private int memory = 128;
+    public int memory = 128;
     private int cpuNum = 1;
     public int enablekvm;
     public int enable_mttcg;
 
     // disks
     public String hda_img_path;
-    private String hdb_img_path;
-    private String hdc_img_path;
-    private String hdd_img_path;
+    public String hdb_img_path;
+    public String hdc_img_path;
+    public String hdd_img_path;
     public String shared_folder_path;
     public int shared_folder_readonly = 1;
-    private String hd_cache = "default";
+    public String hd_cache = "default";
 
     //removable devices
     public String cd_iso_path;
@@ -88,26 +88,30 @@ public class StartVM {
     public String sd_img_path;
 
     //boot options
-    private String bootdevice = null;
+    public String bootdevice = null;
     private String kernel;
     private String initrd;
 
     //graphics
-    private String vga_type = "std";
+    public String vga_type = "std";
 
     //audio
     public String sound_card;
 
     // net
-    private String net_cfg = "None";
-    private String nic_card = null;
+    public String net_cfg = "None";
+    public String nic_card = null;
     private String hostfwd = null;
     private String guestfwd = null;
 
     //advanced
-    private int disableacpi = 0;
-    private int disablehpet = 0;
-    private int disabletsc = 0;
+    public int disableacpi = 0;
+    public int disablehpet = 0;
+    public int disabletsc = 0;
+
+    public boolean enablleAvx = false;
+    public String tbSize = "2048";
+
     public String extra_params;
 
     /**
@@ -120,7 +124,11 @@ public class StartVM {
         save_dir = Config.getMachineDir() + name;
         save_state_name = save_dir + "/" + Config.state_filename;
         hda_img_path = Config.hda_path;
+
         extra_params = Config.extra_params;
+        extra_params += " ";
+        extra_params += MainSettingsManager.getCustomParams(MainActivity.activity);
+
         shared_folder_path = Config.sharedFolder;
         //extra_params = Config.extra_params;
         this.context = context;
@@ -133,6 +141,14 @@ public class StartVM {
             this.enable_mttcg = 0;
         this.vnc_allow_external = 0;
 
+        this.enablleAvx = MainSettingsManager.getAvx(MainActivity.activity);
+
+        this.tbSize = MainSettingsManager.getTbSize(MainActivity.activity);
+
+        if (MainSettingsManager.getUsbTablet(MainActivity.activity))
+            this.mouse = "usb-tablet";
+        else
+            this.mouse = "ps2";
     }
 
     public static void onVMResolutionChanged(int width, int height) {
@@ -283,7 +299,8 @@ public class StartVM {
         }
 
         if (mouse != null && !mouse.equals("ps2")) {
-            paramsList.add("-usb");
+            paramsList.add("-machine");
+            paramsList.add("usb=on");
             paramsList.add("-device");
             paramsList.add(mouse);
         }
@@ -309,7 +326,7 @@ public class StartVM {
 
     private void addAudioOptions(ArrayList<String> paramsList) {
 
-        if (sound_card != null && !sound_card.equals("None")) {
+        if (sound_card != null && !sound_card.equals("None") && enablevnc != 1) {
             paramsList.add("-soundhw");
             paramsList.add(sound_card);
         }
@@ -384,7 +401,7 @@ public class StartVM {
         if (this.cpuNum > 1 &&
                 (enablekvm == 1 || enable_mttcg == 1 || !Config.enableSMPOnlyOnKVM)) {
             paramsList.add("-smp");
-            paramsList.add("sockets="+"1"+",cores="+this.cpuNum+",threads="+this.cpuNum+"");
+            paramsList.add("sockets=" + "1" + ",cores=" + this.cpuNum + ",threads=" + this.cpuNum + "");
         }
 
         if (machine_type != null && !machine_type.equals("Default")) {
@@ -411,7 +428,11 @@ public class StartVM {
 
         if (this.cpu != null && !cpu.equals("Default")) {
             paramsList.add("-cpu");
-            paramsList.add(cpu + ",+avx");
+            String cpuParams = null;
+            cpuParams += cpu;
+            if (enablleAvx)
+                cpuParams += ",+avx";
+            paramsList.add(cpuParams);
 
         }
 
@@ -429,7 +450,7 @@ public class StartVM {
                 tcgParams += ",thread=multi";
             else
                 tcgParams += ",thread=single";
-            tcgParams += ",tb-size=2048";
+            tcgParams += ",tb-size=" + tbSize;
             paramsList.add(tcgParams);
             //#endif
         }

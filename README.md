@@ -1,4 +1,4 @@
-![logo](https://raw.githubusercontent.com/epicstudios856/Vectras-VM-Android/master/resources/vectras-logo.png)
+![logo](https://github.com/ahmedbarakat2007/Vectras-windows-emulator/assets/118398763/096d4a06-8d3c-489f-9fb5-d273f361200c)
 [![Telegram Channel][ico-telegram]][link-telegram]
 [![Latest Version][ico-version]][link-releases]
 [![Software License][ico-license]](LICENSE.md)

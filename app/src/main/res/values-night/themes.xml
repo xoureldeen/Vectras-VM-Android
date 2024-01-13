@@ -65,7 +65,7 @@
         <item name="android:activityCloseEnterAnimation">@anim/popup_in</item>
         <item name="android:activityCloseExitAnimation">@anim/popup_out</item>
     </style>
-	<style name="Theme.FullScreen" parent="Theme.Material3.DayNight.NoActionBar">
+	<style name="Theme.FullScreen" parent="AppTheme">
 		<item name="android:windowFullscreen">true</item>
 		<item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">false</item>
