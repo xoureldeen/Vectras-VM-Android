@@ -1,5 +1,7 @@
 package com.vectras.qemu.jni;
 
+import static android.os.Build.VERSION.SDK_INT;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -77,7 +79,7 @@ public class StartVM {
     public String hdb_img_path;
     public String hdc_img_path;
     public String hdd_img_path;
-    public String shared_folder_path;
+    public String shared_folder_path = null;
     public int shared_folder_readonly = 1;
     public String hd_cache = "default";
 
@@ -129,12 +131,14 @@ public class StartVM {
         extra_params += " ";
         extra_params += MainSettingsManager.getCustomParams(MainActivity.activity);
 
-        shared_folder_path = Config.sharedFolder;
+        if (MainSettingsManager.getSharedFolder(MainActivity.activity) && SDK_INT < 33)
+            shared_folder_path = Config.sharedFolder;
         //extra_params = Config.extra_params;
         this.context = context;
         this.libqemu = FileUtils.getNativeLibDir(context) + "/libqemu-system-x86_64.so";
         this.arch = "x86_64";
         this.cpuNum = MainSettingsManager.getCpuNum(MainActivity.activity);
+        this.cpu = "qemu64";
         if (MainSettingsManager.getMTTCG(MainActivity.activity))
             this.enable_mttcg = 1;
         else
@@ -428,8 +432,7 @@ public class StartVM {
 
         if (this.cpu != null && !cpu.equals("Default")) {
             paramsList.add("-cpu");
-            String cpuParams = null;
-            cpuParams += cpu;
+            String cpuParams = cpu;
             if (enablleAvx)
                 cpuParams += ",+avx";
             paramsList.add(cpuParams);

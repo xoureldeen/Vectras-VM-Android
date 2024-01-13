@@ -111,9 +111,6 @@ public class Config {
         return getCacheDir() + "/vectras/";
     }
 
-    public static String getTmpFolder() {
-        return getBasefileDir() + "var/tmp"; // Do not modify
-    }
     public static String machineFolder = "machines/";
     public static String getMachineDir(){
         return getBasefileDir() + machineFolder;

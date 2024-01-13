@@ -18,6 +18,8 @@ Copyright (C) Max Kastanas 2012
  */
 package com.vectras.qemu;
 
+import static android.os.Build.VERSION.SDK_INT;
+
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -248,7 +250,9 @@ public class MainSettingsManager extends AppCompatActivity
             implements Preference.OnPreferenceChangeListener {
         @Override
         public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);/*
+            super.onCreate(savedInstanceState);
+            if (SDK_INT > 33)
+                findPreference("sharedFolder").setEnabled(false);/*
             Preference pref = findPreference("customMemory");
             if (pref != null) {
                 pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -282,19 +286,23 @@ public class MainSettingsManager extends AppCompatActivity
         }
 
         private void onMemory() {
-            findPreference("memory").setEnabled(sp.getBoolean("customMemory", false));
+            //findPreference("memory").setEnabled(sp.getBoolean("customMemory", false));
         }
 
         @Override
         public void onResume() {
             super.onResume();
             onMemory();
+            if (SDK_INT > 33)
+                findPreference("sharedFolder").setEnabled(false);
         }
 
         @Override
         public void onPause() {
             super.onPause();
             onMemory();
+            if (SDK_INT > 33)
+                findPreference("sharedFolder").setEnabled(false);
         }
 
 
@@ -302,7 +310,8 @@ public class MainSettingsManager extends AppCompatActivity
         public void onCreatePreferences(Bundle bundle, String root_key) {
             // Load the Preferences from the XML file
             setPreferencesFromResource(R.xml.qemu, root_key);
-
+            if (SDK_INT > 33)
+                findPreference("sharedFolder").setEnabled(false);
         }
 
         @Override
@@ -660,30 +669,48 @@ public class MainSettingsManager extends AppCompatActivity
         edit.putString("vmUi", vmUi);
         edit.apply();
     }
+
     public static String getVmUi(Activity activity) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         return prefs.getString("vmUi", "VNC");
     }
+
     public static void setUsbTablet(Activity activity, boolean UsbTablet) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putBoolean("UsbTablet", UsbTablet);
         edit.apply();
     }
+
     public static boolean getUsbTablet(Activity activity) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         return prefs.getBoolean("UsbTablet", false);
     }
+
     public static void setCustomParams(Activity activity, String customParams) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putString("customParams", customParams);
         edit.apply();
     }
+
     public static String getCustomParams(Activity activity) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         return prefs.getString("customParams", "");
     }
+
+    public static void setSharedFolder(Activity activity, boolean customParams) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putBoolean("customParams", customParams);
+        edit.apply();
+    }
+
+    public static boolean getSharedFolder(Activity activity) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        return prefs.getBoolean("sharedFolder", false);
+    }
+
     public static boolean isFirstLaunch(Activity activity) {
         PackageInfo pInfo = null;
 

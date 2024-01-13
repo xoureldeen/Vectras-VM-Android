@@ -770,12 +770,6 @@ public class MainActivity extends AppCompatActivity {
         try {
             Config.cacheDir = activity.getCacheDir().getAbsolutePath();
             Config.storagedir = Environment.getDataDirectory().toString();
-
-            // Create Temp folder
-            File folder = new File(Config.getTmpFolder());
-            if (!folder.exists())
-                folder. mkdirs();
-
         } catch (Exception ignored) {
 
         }

@@ -69,6 +69,14 @@
             android:summaryOff="hdd type: ide"
             app:summaryOn="hdd type: virtio"
             app:icon="@drawable/round_dns_24" />
+        <SwitchPreferenceCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="false"
+            android:title="SHARED FOLDER"
+            android:key="sharedFolder"
+            android:summary="/data/Vectras/ProgramFiles/"
+            app:icon="@drawable/round_folder_24" />
         <EditTextPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
