@@ -23,22 +23,29 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.text.Html;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.URLUtil;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButtonToggleGroup;
+import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.AppConfig;
+import com.vectras.vm.Fragment.HomeFragment;
 import com.vectras.vm.MainRoms.AdapterMainRoms;
 import com.vectras.vm.MainRoms.DataMainRoms;
 import com.vectras.vm.Roms.AdapterRoms;
@@ -110,6 +117,31 @@ public class RomsManagerActivity extends AppCompatActivity {
     public MaterialButton androidToggle;
     public MaterialButton otherToggle;
 
+    public ProgressBar loadingPb;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+
+        menu.add(0, 0, 0, "arch").setShortcut('3', 'c').setIcon(R.drawable.ic_arch).setShowAsAction(1);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case 0:
+                startActivity(new Intent(activity, SetArchActivity.class));
+                return true;
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     /**
      * Called when the activity is first created.
      */
@@ -119,6 +151,7 @@ public class RomsManagerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         activity = this;
         setContentView(R.layout.activity_roms_manager);
+        loadingPb = findViewById(R.id.loadingPb);
         filterToggle = findViewById(R.id.filterToggle);
         windowsToggle = findViewById(R.id.windowsToggle);
         linuxToggle = findViewById(R.id.linuxToggle);
@@ -163,6 +196,7 @@ public class RomsManagerActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        setTitle("Roms Manager " + MainSettingsManager.getArch(activity));
 
         new RomsManagerActivity.AsyncLogin().execute();
         new Thread(new Runnable() {
@@ -189,7 +223,7 @@ public class RomsManagerActivity extends AppCompatActivity {
                     in.close();
                 } catch (Exception e) {
                     acceptLiceneseChkBox.setEnabled(false);
-                    UIUtils.toastLong(activity, "no internet connection "+e.toString());
+                    UIUtils.toastLong(activity, "no internet connection " + e.toString());
                 }
 
                 //since we are in background thread, to post results we have to go back to ui thread. do the following for that
@@ -227,6 +261,15 @@ public class RomsManagerActivity extends AppCompatActivity {
             }
         });
 
+        CardView custom = (CardView) findViewById(R.id.cdCustom);
+
+        custom.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(activity, CustomRomActivity.class));
+            }
+        });
     }
 
     public static void UIAlertLicense(String title, String html, final Activity activity) {
@@ -270,7 +313,7 @@ public class RomsManagerActivity extends AppCompatActivity {
         protected String doInBackground(String... params) {
             HttpsURLConnection con = null;
             try {
-                URL u = new URL(AppConfig.romsJson);
+                URL u = new URL(AppConfig.romsJson(activity));
                 con = (HttpsURLConnection) u.openConnection();
 
                 con.connect();
@@ -349,23 +392,36 @@ public class RomsManagerActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-        }
-        return super.onOptionsItemSelected(item);
-    }
+    public static class RomsJso extends JSONObject {
 
-    public class RomsJso extends JSONObject {
-
-        public JSONObject makeJSONObject(String imgName, String imgIcon, String imgPath, String imgExtra) {
+        public JSONObject makeJSONObject(String imgName, String imgIcon, String imgArch, String imgPath, String imgExtra) {
 
             JSONObject obj = new JSONObject();
 
             try {
                 obj.put("imgName", imgName);
                 obj.put("imgIcon", imgIcon);
+                obj.put("imgArch", imgArch);
+                obj.put("imgPath", imgPath);
+                obj.put("imgExtra", imgExtra);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return obj;
+        }
+    }
+
+    public static class RomsJso2 extends JSONObject {
+
+        public JSONObject makeJSONObject(String imgName, String imgIcon, String imgArch, String imgPath, String imgExtra) {
+
+            JSONObject obj = new JSONObject();
+
+            try {
+                obj.put("imgName", imgName);
+                obj.put("imgIcon", imgIcon);
+                obj.put("imgArch", imgArch);
                 obj.put("imgPath", imgPath);
                 obj.put("imgExtra", imgExtra);
             } catch (JSONException e) {
@@ -384,7 +440,7 @@ public class RomsManagerActivity extends AppCompatActivity {
 
     public void onFirstStartup() {
         if (selected) {
-            if (FileUtils.fileValid(activity, AppConfig.maindirpath + selectedPath) && !FileUtils.fileValid(activity, AppConfig.maindirpath + "icons/" + selectedPath.replace(".IMG", ".jpg"))) {
+            if (FileUtils.fileValid(activity, AppConfig.maindirpath + selectedPath)) {
                 SharedPreferences credentials = activity.getSharedPreferences(CREDENTIAL_SHARED_PREF, Context.MODE_PRIVATE);
                 ProgressDialog mProgressDialog = new ProgressDialog(this, R.style.MainDialogTheme);
                 mProgressDialog.setTitle("Data Setup");
@@ -396,64 +452,78 @@ public class RomsManagerActivity extends AppCompatActivity {
                 editor.putBoolean("isFirstLaunch", Boolean.TRUE);
                 editor.apply();
                 RomsJso obj = new RomsJso();
-                startIconDownload();
-                final File jsonFile = new File(AppConfig.maindirpath + "roms-data" + ".json");
-
-                if (jsonFile.exists()) {
+                try {
+                    startIconDownload();
+                } catch (Exception e) {
+                    File file = new File(selectedPath);
                     try {
-                        List<DataMainRoms> data = new ArrayList<>();
-                        JSONArray jArray = new JSONArray(FileUtils.readFromFile(MainActivity.activity, jsonFile));
+                        file.delete();
+                    } catch (Exception er) {
+                        throw new RuntimeException(er);
+                    }
+                    throw new RuntimeException(e);
+                } finally {
+                    mProgressDialog.dismiss();
+                    final File jsonFile = new File(AppConfig.maindirpath + "roms-data" + ".json");
 
+                    if (jsonFile.exists()) {
                         try {
-                            // Extract data from json and store into ArrayList as class objects
-                            for (int i = 0; i < jArray.length(); i++) {
-                                JSONObject json_data = jArray.getJSONObject(i);
-                                DataMainRoms romsMainData = new DataMainRoms();
-                                romsMainData.itemName = json_data.getString("imgName");
-                                romsMainData.itemIcon = json_data.getString("imgIcon");
-                                romsMainData.itemPath = json_data.getString("imgPath");
-                                romsMainData.itemExtra = json_data.getString("imgExtra");
-                                data.add(romsMainData);
+                            List<DataMainRoms> data = new ArrayList<>();
+                            JSONArray jArray = new JSONArray(FileUtils.readFromFile(MainActivity.activity, jsonFile));
+
+                            try {
+                                // Extract data from json and store into ArrayList as class objects
+                                for (int i = 0; i < jArray.length(); i++) {
+                                    JSONObject json_data = jArray.getJSONObject(i);
+                                    DataMainRoms romsMainData = new DataMainRoms();
+                                    romsMainData.itemName = json_data.getString("imgName");
+                                    romsMainData.itemIcon = json_data.getString("imgIcon");
+                                    romsMainData.itemPath = json_data.getString("imgPath");
+                                    romsMainData.itemExtra = json_data.getString("imgExtra");
+                                    data.add(romsMainData);
+                                }
+
+                            } catch (JSONException e) {
+                                Toast.makeText(MainActivity.activity, e.toString(), Toast.LENGTH_LONG).show();
                             }
 
+                            JSONObject jsonObject = obj.makeJSONObject(selectedName, AppConfig.maindirpath + "icons/" + selectedPath.replace(".IMG", ".jpg"), MainSettingsManager.getArch(activity), AppConfig.maindirpath + selectedPath, selectedExtra);
+                            jArray.put(jsonObject);
+                            try {
+                                Writer output = null;
+                                output = new BufferedWriter(new FileWriter(jsonFile));
+                                output.write(jArray.toString().replace("\\", "").replace("//", "/"));
+                                output.close();
+                            } catch (Exception e) {
+                                UIUtils.toastLong(activity, e.toString());
+                            }
                         } catch (JSONException e) {
-                            Toast.makeText(MainActivity.activity, e.toString(), Toast.LENGTH_LONG).show();
+                            UIUtils.toastLong(activity, e.toString());
                         }
-
-                        JSONObject jsonObject = obj.makeJSONObject(selectedName, AppConfig.maindirpath + "icons/" + selectedPath.replace(".IMG", ".jpg"), AppConfig.maindirpath + selectedPath, selectedExtra);
-                        jArray.put(jsonObject);
+                        MainActivity.activity.finish();
+                    } else {
+                        JSONObject jsonObject = obj.makeJSONObject(selectedName, AppConfig.maindirpath + "icons/" + selectedPath.replace(".IMG", ".jpg"), MainSettingsManager.getArch(activity), AppConfig.maindirpath + selectedPath, selectedExtra);
+                        JSONArray jsonArray = new JSONArray();
+                        jsonArray.put(jsonObject);
                         try {
                             Writer output = null;
                             output = new BufferedWriter(new FileWriter(jsonFile));
-                            output.write(jArray.toString().replace("\\", "").replace("//", "/"));
+                            output.write(jsonArray.toString().replace("\\", "").replace("//", "/"));
                             output.close();
                         } catch (Exception e) {
                             UIUtils.toastLong(activity, e.toString());
                         }
-                    } catch (JSONException e) {
-                        UIUtils.toastLong(activity, e.toString());
+                        VectrasStatus.logInfo("Welcome to Vectras ♡");
                     }
-                } else {
-                    JSONObject jsonObject = obj.makeJSONObject(selectedName, AppConfig.maindirpath + "icons/" + selectedPath.replace(".IMG", ".jpg"), AppConfig.maindirpath + selectedPath, selectedExtra);
-                    JSONArray jsonArray = new JSONArray();
-                    jsonArray.put(jsonObject);
-                    try {
-                        Writer output = null;
-                        output = new BufferedWriter(new FileWriter(jsonFile));
-                        output.write(jsonArray.toString().replace("\\", "").replace("//", "/"));
-                        output.close();
-                    } catch (Exception e) {
-                        UIUtils.toastLong(activity, e.toString());
-                    }
-                    VectrasStatus.logInfo("Welcome to Vectras ♡");
-                }
-                activity.startActivity(new Intent(activity, MainActivity.class));
 
 				/*new Timer().schedule(new TimerTask() {
 					@Override
 					public void run() {
 						mProgressDialog.dismiss();					}
 				}, 3000);*/
+                    finish();
+                    startActivity(new Intent(activity, SplashActivity.class));
+                }
             } else {
                 AlertDialog ad;
                 ad = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
@@ -501,8 +571,6 @@ public class RomsManagerActivity extends AppCompatActivity {
         return FileUtils.getPath(activity, uri);
     }
 
-    public ProgressDialog progressDialog = null;
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -512,12 +580,10 @@ public class RomsManagerActivity extends AppCompatActivity {
             if (selectedFilePath.getName().equals(selectedPath.replace(".IMG", ".vbi"))) {
 
                 try {
-                    progressDialog = new ProgressDialog(activity,
-                            R.style.MainDialogTheme);
-                    progressDialog.setTitle("Extracting");
-                    progressDialog.setMessage("Please wait...");
-                    progressDialog.setCancelable(false);
-                    progressDialog.show(); // Showing Progress Dialog
+                    loadingPb.setVisibility(View.VISIBLE);
+                    goBtn.setEnabled(false);
+                    acceptLiceneseChkBox.setEnabled(false);
+                    mRVRoms.setVisibility(View.GONE);
                     Thread t = new Thread() {
                         public void run() {
                             FileInputStream zipFile = null;
@@ -556,7 +622,17 @@ public class RomsManagerActivity extends AppCompatActivity {
                                 UIUtils.toastLong(activity, e.toString());
                                 throw new RuntimeException(e);
                             } finally {
-                                progressDialog.cancel(); // cancelling Dialog.
+                                Runnable runnable = new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        loadingPb.setVisibility(View.GONE);
+                                        goBtn.setEnabled(true);
+                                        acceptLiceneseChkBox.setEnabled(true);
+                                        mRVRoms.setVisibility(View.VISIBLE);
+                                        onFirstStartup();
+                                    }
+                                };
+                                activity.runOnUiThread(runnable);
                                 try {
                                     zis.close();
                                 } catch (IOException e) {
@@ -568,7 +644,10 @@ public class RomsManagerActivity extends AppCompatActivity {
                     };
                     t.start();
                 } catch (Exception e) {
-                    progressDialog.dismiss(); // Close Progress Dialog
+                    loadingPb.setVisibility(View.GONE);
+                    goBtn.setEnabled(true);
+                    acceptLiceneseChkBox.setEnabled(true);
+                    mRVRoms.setVisibility(View.VISIBLE);
                     UIUtils.toastLong(activity, e.toString());
                     throw new RuntimeException(e);
                 }
@@ -579,8 +658,6 @@ public class RomsManagerActivity extends AppCompatActivity {
 
         }
     }
-
-    public static final int DIALOG_DOWNLOAD_PROGRESS = 0;
 
     static class DownloadsImage extends AsyncTask<String, Void, Void> {
 
@@ -641,6 +718,15 @@ public class RomsManagerActivity extends AppCompatActivity {
         super.onBackPressed();
         if (getParentActivityIntent() == MainActivity.activity.getIntent())
             finish();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (MainSettingsManager.getArch(activity) == null) {
+            startActivity(new Intent(this, SetArchActivity.class));
+        }
+        activity = this;
     }
 
 }

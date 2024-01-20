@@ -1,5 +1,6 @@
 package com.vectras.vm;
 
+import static android.content.Intent.ACTION_OPEN_DOCUMENT;
 import static android.os.Build.VERSION.SDK_INT;
 
 import android.androidVNC.RfbProto;
@@ -18,7 +19,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -28,12 +32,15 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
+import android.provider.DocumentsContract;
 import android.text.Html;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -61,6 +68,8 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.elevation.SurfaceColors;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.vectras.qemu.Config;
@@ -88,7 +97,14 @@ import com.vectras.vm.utils.UIUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -136,6 +152,8 @@ public class MainActivity extends AppCompatActivity {
         ad.show();
     }
 
+    public static ProgressBar loadingPbb;
+
     /**
      * Called when the activity is first created.
      */
@@ -143,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        loadingPbb = findViewById(R.id.loadingPb);
         activity = this;
         clearNotifications();
         setupFolders();
@@ -154,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
         this.setupWidgets();
         initNavigationMenu();
         FileInstaller.installFiles(activity, false);
-
+        getWindow().setNavigationBarColor(SurfaceColors.SURFACE_2.getColor(this));
         //updateApp(true);
         //mAuth = FirebaseAuth.getInstance();
     }
@@ -231,6 +250,8 @@ public class MainActivity extends AppCompatActivity {
 
         } else if (id == R.id.installRoms) {
             startActivity(new Intent(activity, RomsManagerActivity.class));
+        } else if (id == R.id.arch) {
+            startActivity(new Intent(activity, SetArchActivity.class));
         }
 
         return super.onOptionsItemSelected(item);
@@ -371,12 +392,62 @@ public class MainActivity extends AppCompatActivity {
                 //Check to see which item was being clicked and perform appropriate action
                 int id = menuItem.getItemId();
                 if (id == R.id.navigation_item_info) {
-                    startActivity(new Intent(activity, AboutActivity.class));
+                    if (SDK_INT > 33)
+                        UIAlert("ANDROID 13+", "sorry android 13+ have storage issues and we are working on it", activity);
+                    else
+                        startActivity(new Intent(activity, AboutActivity.class));
                 } else if (id == R.id.navigation_item_website) {
                     String tw = AppConfig.vectrasWebsite;
                     Intent w = new Intent(Intent.ACTION_VIEW);
                     w.setData(Uri.parse(tw));
                     startActivity(w);
+                } else if (id == R.id.navigation_item_import_iso) {
+                    if (new File(AppConfig.maindirpath + "/drive.iso").exists()) {
+                        AlertDialog ad;
+                        ad = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
+                        ad.setTitle("REPLACE ISO");
+                        ad.setMessage("there is iso imported you want to replace it?");
+                        ad.setButton(Dialog.BUTTON_POSITIVE, "REPLACE", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
+                                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                                intent.setType("*/*");
+
+                                // Optionally, specify a URI for the file that should appear in the
+                                // system file picker when it loads.
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
+                                }
+
+                                startActivityForResult(intent, 1004);
+                                return;
+                            }
+                        });
+                        ad.setButton(Dialog.BUTTON_NEGATIVE, "REMOVE", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                File isoFile = new File(AppConfig.maindirpath + "/drive.iso");
+                                try {
+                                    isoFile.delete();
+                                } catch (Exception e) {
+                                    throw new RuntimeException(e);
+                                }
+                                return;
+                            }
+                        });
+                        ad.show();
+                    } else {
+                        Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
+                        intent.addCategory(Intent.CATEGORY_OPENABLE);
+                        intent.setType("*/*");
+
+                        // Optionally, specify a URI for the file that should appear in the
+                        // system file picker when it loads.
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
+                        }
+
+                        startActivityForResult(intent, 1004);
+                    }
                 } else if (id == R.id.navigation_item_view_logs) {
                     FileUtils.viewVectrasLog(activity);
                 } else if (id == R.id.navigation_item_settings) {
@@ -478,8 +549,8 @@ public class MainActivity extends AppCompatActivity {
             AlertDialog alertDialog;
             alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
             alertDialog.setTitle("JOIN US ON TELEGRAM");
-            TextView title = alertDialog.findViewById(R.id.title_text);
-            ObjectAnimator rgbAnim=ObjectAnimator.ofObject(title,"textColor",new ArgbEvaluator(), Color.RED,Color.GREEN,Color.BLUE);
+            TextView title = alertDialog.findViewById(android.R.id.title);
+            ObjectAnimator rgbAnim = ObjectAnimator.ofObject(title, "textColor", new ArgbEvaluator(), Color.RED, Color.GREEN, Color.BLUE);
             rgbAnim.setDuration(1000);
             rgbAnim.setRepeatMode(ValueAnimator.REVERSE);
             rgbAnim.setRepeatCount(ValueAnimator.INFINITE);
@@ -545,10 +616,19 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        if (MainSettingsManager.getVirtio(activity)) {
-            Config.hd_if_type = "virtio";
-        } else {
-            Config.hd_if_type = "ide";
+        try {
+            HomeFragment.loadDataVbi();
+        } catch (Exception ignored) {
+
+        }
+        if (MainSettingsManager.getArch(activity) == "X86_64") {
+            if (MainSettingsManager.getVirtio(activity)) {
+                Config.hd_if_type = "virtio";
+            } else {
+                Config.hd_if_type = "ide";
+            }
+        } else if (MainSettingsManager.getArch(activity) == "ARM") {
+            Config.hd_if_type = "scsi";
         }
         setupFolders();
         Config.ui = MainSettingsManager.getVmUi(activity);
@@ -822,10 +902,18 @@ public class MainActivity extends AppCompatActivity {
 
     public static void loadQEMULib() {
 
-        try {
-            System.loadLibrary("qemu-system-i386");
-        } catch (Error ex) {
-            System.loadLibrary("qemu-system-x86_64");
+        if (Objects.equals(MainSettingsManager.getArch(activity), "X86_64")) {
+            try {
+                System.loadLibrary("qemu-system-i386");
+            } catch (Error ex) {
+                System.loadLibrary("qemu-system-x86_64");
+            }
+        } else if (Objects.equals(MainSettingsManager.getArch(activity), "ARM")) {
+            try {
+                System.loadLibrary("qemu-system-arm");
+            } catch (Error ex) {
+                System.loadLibrary("qemu-system-aarch64");
+            }
         }
 
     }
@@ -993,11 +1081,47 @@ public class MainActivity extends AppCompatActivity {
         t.start();
     }
 
-    public static void toggleVisibility(View view) {
-        if (view.getVisibility() == View.VISIBLE) {
-            view.setVisibility(View.GONE);
-        } else if (view.getVisibility() == View.GONE || view.getVisibility() == View.INVISIBLE) {
-            view.setVisibility(View.VISIBLE);
+    public String getPath(Uri uri) {
+        return com.vectras.vm.utils.FileUtils.getPath(this, uri);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent ReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, ReturnedIntent);
+        if (requestCode == 1004 && resultCode == RESULT_OK) {
+            Uri content_describer = ReturnedIntent.getData();
+            File selectedFilePath = new File(getPath(content_describer));
+            FileInputStream isoFile = null;
+            try {
+                isoFile = (FileInputStream) getContentResolver().openInputStream(content_describer);
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+            if (selectedFilePath.toString().endsWith(".iso")) {
+                loadingPbb.setVisibility(View.VISIBLE);
+                try {
+                    try {
+                        OutputStream out = new FileOutputStream(new File(AppConfig.maindirpath + "/drive.iso"));
+                        try {
+                            // Transfer bytes from in to out
+                            byte[] buf = new byte[1024];
+                            int len;
+                            while ((len = isoFile.read(buf)) > 0) {
+                                out.write(buf, 0, len);
+                            }
+                        } finally {
+                            out.close();
+                        }
+                    } finally {
+                        loadingPbb.setVisibility(View.GONE);
+                        isoFile.close();
+                    }
+                } catch (IOException e) {
+                    loadingPbb.setVisibility(View.GONE);
+                    UIAlert("error", e.toString(), activity);
+                }
+            } else
+                UIAlert("NOT VAILED FILE", "please select iso file", activity);
         }
     }
 

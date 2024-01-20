@@ -12,6 +12,7 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
 
     <uses-feature android:glEsVersion="0x00020000" />
 
@@ -26,10 +27,14 @@
         android:theme="@style/AppTheme"
         tools:targetApi="31">
         <activity
+            android:name=".SetArchActivity"
+            android:exported="false"
+            android:label="@string/title_activity_set_arch"
+            android:theme="@style/AppTheme" />
+        <activity
             android:name=".SplashActivity"
             android:exported="true"
-            android:hardwareAccelerated="true"
-            >
+            android:hardwareAccelerated="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -112,24 +117,34 @@
             android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|screenLayout|fontScale|uiMode|orientation|screenSize|smallestScreenSize"
             android:label="Settings"
             android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.vectras.vm.CustomRomActivity"
+            android:label="Custom Rom"
+            android:theme="@style/AppTheme" />
 
         <service
             android:name="com.vectras.qemu.MainService"
             android:enabled="true"
             android:exported="false"
+            android:foregroundServiceType="location"
             android:label="Vectras Service">
             <intent-filter>
                 <action android:name="com.vectras.qemu.action.STARTVM" />
             </intent-filter>
         </service>
-        <receiver android:name=".WidgetProvider"
+
+        <receiver
+            android:name=".WidgetProvider"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
-            <meta-data android:name="android.appwidget.provider"
+
+            <meta-data
+                android:name="android.appwidget.provider"
                 android:resource="@xml/widgetproviderinfo" />
         </receiver>
+
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3568137780412047~1296857222" />

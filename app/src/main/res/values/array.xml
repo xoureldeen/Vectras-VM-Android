@@ -24,4 +24,28 @@
         <item>SDL</item>
         <item>VNC</item>
     </string-array>
+    <string-array name="vmArchLabels">
+        <item>X86_64 QEMU</item>
+        <!--<item>ARM QEMU</item>-->
+    </string-array>
+    <string-array name="vmArchValues">
+        <item>X86_64</item>
+        <!--<item>ARM</item>-->
+    </string-array>
+    <string-array name="soundCardLabels">
+        <item>NONE</item>
+        <item>ALL SOUNDCARD</item>
+        <item>AC97 SOUNDCARD</item>
+        <item>SB16 SOUNDCARD</item>
+        <item>ADLIB SOUNDCARD</item>
+        <item>PCSPK SOUNDCARD</item>
+    </string-array>
+    <string-array name="soundCardValues">
+        <item>None</item>
+        <item>all</item>
+        <item>ac97</item>
+        <item>sb16</item>
+        <item>adlib</item>
+        <item>pcspk</item>
+    </string-array>
 </resources>

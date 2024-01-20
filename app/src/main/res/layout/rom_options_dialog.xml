@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="8dp">
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/qemuField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/qemu_params"
+        android:theme="@style/AppTheme.TextInput"
+        app:startIconDrawable="@drawable/ic_qemu">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/qemu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:selectAllOnFocus="true"
+            android:singleLine="true" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/saveRomBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/save" />
+</LinearLayout>

@@ -119,6 +119,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/action_sign_with_google"
+            android:visibility="gone"
             app:icon="@drawable/ic_google" />
 
         <ProgressBar

@@ -13,7 +13,9 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+
 import androidx.appcompat.app.AlertDialog;
+
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
@@ -43,6 +45,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -55,6 +58,7 @@ import android.widget.TextView;
 
 import com.vectras.qemu.utils.FileUtils;
 import com.vectras.vm.Fragment.ControlersOptionsFragment;
+import com.vectras.vm.Fragment.LoggerDialogFragment;
 import com.vectras.vm.MainActivity;
 import com.vectras.vm.R;
 import com.vectras.qemu.utils.Machine;
@@ -133,7 +137,10 @@ public class MainVNCActivity extends VncCanvasActivity {
         btnLogs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FileUtils.viewVectrasLog(activity);
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                // Create and show the dialog.
+                LoggerDialogFragment newFragment = new LoggerDialogFragment();
+                newFragment.show(ft, "Logger");
             }
         });
         shutdownBtn.setOnClickListener(new View.OnClickListener() {
@@ -328,6 +335,21 @@ public class MainVNCActivity extends VncCanvasActivity {
                     keyDownUp(KeyEvent.KEYCODE_F11);
                 } else if (position == 11) {
                     keyDownUp(KeyEvent.KEYCODE_F12);
+                }
+            }
+        });
+
+        ImageButton hideBtn = findViewById(R.id.visibilityButton);
+        hideBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FrameLayout l = findViewById(R.id.mainControl);
+                if (l.getVisibility() == View.VISIBLE) {
+                    l.setVisibility(View.GONE);
+                    hideBtn.setImageResource(R.drawable.round_visibility_24);
+                } else {
+                    l.setVisibility(View.VISIBLE);
+                    hideBtn.setImageResource(R.drawable.round_visibility_off_24);
                 }
             }
         });
@@ -1197,8 +1219,13 @@ public class MainVNCActivity extends VncCanvasActivity {
 
     public void onBackPressed() {
         super.onBackPressed();
-        Machine.stopVM(activity);
-        return;
+        FrameLayout l = findViewById(R.id.mainControl);
+        if (l != null) {
+            if (l.getVisibility() == View.VISIBLE) {
+                l.setVisibility(View.GONE);
+            } else
+                l.setVisibility(View.VISIBLE);
+        }
     }
 
     public void onHideToolbar() {

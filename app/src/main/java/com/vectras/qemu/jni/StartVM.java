@@ -16,13 +16,16 @@ import com.vectras.qemu.utils.FileUtils;
 import com.vectras.qemu.utils.Machine;
 import com.vectras.qemu.utils.QmpClient;
 import com.vectras.qemu.utils.RamInfo;
+import com.vectras.vm.AppConfig;
 import com.vectras.vm.MainActivity;
 import com.vectras.vm.logger.VectrasStatus;
 import com.vectras.vm.utils.UIUtils;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -135,24 +138,53 @@ public class StartVM {
             shared_folder_path = Config.sharedFolder;
         //extra_params = Config.extra_params;
         this.context = context;
-        this.libqemu = FileUtils.getNativeLibDir(context) + "/libqemu-system-x86_64.so";
-        this.arch = "x86_64";
+        if (Objects.equals(MainSettingsManager.getArch(MainActivity.activity), "ARM")) {
+            this.libqemu = FileUtils.getNativeLibDir(context) + "/libqemu-system-arm.so";
+            File libFile = new File(libqemu);
+            if (!libFile.exists()) {
+                this.libqemu = FileUtils.getNativeLibDir(context) + "/libqemu-system-aarch64.so";
+                libFile = new File(libqemu);
+            }
+            this.arch = "arm";
+            this.machine_type = "virt";
+            this.disablehpet = 0;
+            this.disableacpi = 0;
+            this.disabletsc = 0;
+            this.cpu = "cortex-a57";
+        } else if (Objects.equals(MainSettingsManager.getArch(MainActivity.activity), "X86_64")) {
+            this.libqemu = FileUtils.getNativeLibDir(context) + "/libqemu-system-x86_64.so";
+            this.arch = "x86_64";
+            this.machine_type = "pc";
+            this.cpu = "qemu64";
+        }
+        this.sound_card = MainSettingsManager.getSoundCard(MainActivity.activity);
         this.cpuNum = MainSettingsManager.getCpuNum(MainActivity.activity);
-        this.cpu = "qemu64";
-        if (MainSettingsManager.getMTTCG(MainActivity.activity))
-            this.enable_mttcg = 1;
-        else
-            this.enable_mttcg = 0;
+
         this.vnc_allow_external = 0;
 
         this.enablleAvx = MainSettingsManager.getAvx(MainActivity.activity);
 
         this.tbSize = MainSettingsManager.getTbSize(MainActivity.activity);
 
+        if (MainSettingsManager.getKvm(MainActivity.activity)) {
+            this.enablekvm = 1;
+            this.cpu = "host";
+            this.enable_mttcg = 0;
+        } else {
+            if (MainSettingsManager.getMTTCG(MainActivity.activity)) {
+                this.enable_mttcg = 1;
+            }
+        }
+
         if (MainSettingsManager.getUsbTablet(MainActivity.activity))
             this.mouse = "usb-tablet";
         else
             this.mouse = "ps2";
+
+        if (new File(AppConfig.maindirpath + "/drive.iso").exists())
+            cd_iso_path = AppConfig.maindirpath + "/drive.iso";
+        else
+            cd_iso_path = null;
     }
 
     public static void onVMResolutionChanged(int width, int height) {

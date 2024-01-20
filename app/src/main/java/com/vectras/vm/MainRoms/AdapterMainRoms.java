@@ -6,12 +6,15 @@ import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -28,9 +31,14 @@ import com.vectras.vm.MainActivity;
 import com.vectras.vm.R;
 import com.vectras.vm.utils.UIUtils;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.Writer;
 import java.util.Collections;
 import java.util.List;
@@ -66,8 +74,45 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
         final MyHolder myHolder = (MyHolder) holder;
         final DataMainRoms current = data.get(position);
         myHolder.textName.setText(current.itemName);
+        myHolder.textArch.setText(current.itemArch);
         Bitmap bmImg = BitmapFactory.decodeFile(current.itemIcon);
         myHolder.ivIcon.setImageBitmap(bmImg);
+        myHolder.optionsBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                Dialog d;
+                d = new Dialog(MainActivity.activity);
+                d.setTitle(current.itemName);
+                d.setContentView(R.layout.rom_options_dialog);
+                TextView qemu = d.findViewById(R.id.qemu);
+                qemu.setText(current.itemExtra);
+                Button saveRomBtn = d.findViewById(R.id.saveRomBtn);
+                saveRomBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final File jsonFile = new File(AppConfig.maindirpath + "roms-data" + ".json");
+                        current.itemExtra = qemu.getText().toString();
+                        try {
+                            JSONObject jObj = HomeFragment.jArray.getJSONObject(position);
+                            jObj.put("imgExtra", qemu.getText().toString());
+                            HomeFragment.jArray.put(position, jObj);
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                        try {
+                            Writer output = null;
+                            output = new BufferedWriter(new FileWriter(jsonFile));
+                            output.write(HomeFragment.jArray.toString());
+                            output.close();
+                        } catch (Exception e) {
+                            UIUtils.toastLong(MainActivity.activity, e.toString());
+                        } finally {
+                            d.dismiss();
+                        }
+                    }
+                });
+                d.show();
+            }
+        });
 
         myHolder.cdRoms.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -90,7 +135,43 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
         myHolder.cdRoms.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                showDialog(current.itemName, current.itemPath, current.itemIcon);
+                AlertDialog ad;
+                ad = new AlertDialog.Builder(MainActivity.activity, R.style.MainDialogTheme).create();
+                ad.setTitle("Remove " + current.itemName);
+                ad.setMessage("Are you sure?");
+                ad.setButton(Dialog.BUTTON_NEGATIVE, "REMOVE " + current.itemName, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        File file = new File(current.itemPath);
+                        try {
+                            file.delete();
+                        } catch (Exception e) {
+                            UIUtils.toastLong(MainActivity.activity, e.toString());
+                        } finally {
+                        }
+                        HomeFragment.mMainAdapter = new AdapterMainRoms(MainActivity.activity, HomeFragment.data);
+                        HomeFragment.data.remove(position);
+                        HomeFragment.mRVMainRoms.setAdapter(HomeFragment.mMainAdapter);
+                        HomeFragment.mRVMainRoms.setLayoutManager(new GridLayoutManager(MainActivity.activity, 2));
+                        HomeFragment.jArray.remove(position);
+                        try {
+                            Writer output = null;
+                            File jsonFile = new File(AppConfig.maindirpath + "roms-data" + ".json");
+                            output = new BufferedWriter(new FileWriter(jsonFile));
+                            output.write(HomeFragment.jArray.toString());
+                            output.close();
+                        } catch (Exception e) {
+                            UIUtils.toastLong(MainActivity.activity, e.toString());
+                        }
+                        UIUtils.toastLong(MainActivity.activity, current.itemName + " are removed successfully!");
+                        return;
+                    }
+                });
+                ad.setButton(Dialog.BUTTON_POSITIVE, "CANCEL", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        return;
+                    }
+                });
+                ad.show();
                 return false;
             }
         });
@@ -114,9 +195,11 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 ad.setButton(Dialog.BUTTON_NEGATIVE, "REMOVE " + title, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         File file = new File(path);
-                        file.delete();
-                        File fileIcon = new File(pathIcon);
-                        fileIcon.delete();
+                        try {
+                            file.delete();
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
 
                         HomeFragment.mMainAdapter = new AdapterMainRoms(MainActivity.activity, HomeFragment.data);
                         HomeFragment.data.remove(currentPos);
@@ -163,15 +246,18 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
     class MyHolder extends RecyclerView.ViewHolder {
 
         CardView cdRoms;
-        TextView textName;
+        TextView textName, textArch;
         ImageView ivIcon;
+        ImageButton optionsBtn;
 
         // create constructor to get widget reference
         public MyHolder(View itemView) {
             super(itemView);
             cdRoms = (CardView) itemView.findViewById(R.id.cdItem);
             textName = (TextView) itemView.findViewById(R.id.textName);
+            textArch = (TextView) itemView.findViewById(R.id.textArch);
             ivIcon = (ImageView) itemView.findViewById(R.id.ivIcon);
+            optionsBtn = (ImageButton) itemView.findViewById(R.id.optionsButton);
         }
 
     }

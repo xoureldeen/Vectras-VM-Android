@@ -75,14 +75,15 @@ public class AdapterRoms extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         myHolder.textSize.setText(current.itemSize);
         myHolder.checkBox.setChecked(position == mSelectedItem);
         if (current.itemAvail) {
-            myHolder.textAvail.setText("availability: available");
-            myHolder.textAvail.setTextColor(Color.GREEN);
-        } else if (!current.itemAvail) {
-            myHolder.textAvail.setText("availability: unavailable");
-            myHolder.textAvail.setTextColor(Color.RED);
-            myHolder.checkBox.setEnabled(false);
-        }
-        if (current.itemAvail)
+            if (FileUtils.fileValid(RomsManagerActivity.activity, AppConfig.maindirpath + current.itemPath)) {
+                myHolder.checkBox.setEnabled(false);
+                myHolder.textAvail.setTextColor(Color.BLUE);
+                myHolder.textAvail.setText("(installed)");
+            } else {
+                myHolder.checkBox.setEnabled(true);
+                myHolder.textAvail.setTextColor(Color.GREEN);
+                myHolder.textAvail.setText("availability: available");
+            }
             myHolder.checkBox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -96,6 +97,11 @@ public class AdapterRoms extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     RomsManagerActivity.selectedIcon = current.itemIcon;
                 }
             });
+        } else {
+            myHolder.textAvail.setText("availability: unavailable");
+            myHolder.textAvail.setTextColor(Color.RED);
+            myHolder.checkBox.setEnabled(false);
+        }
 
     }
 

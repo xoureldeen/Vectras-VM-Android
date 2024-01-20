@@ -39,6 +39,7 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.preference.Preference;
@@ -47,8 +48,10 @@ import androidx.preference.PreferenceFragmentCompat;
 
 import com.vectras.vm.R;
 import com.vectras.vm.SplashActivity;
+import com.vectras.vm.VectrasApp;
 
 import java.util.List;
+import java.util.Objects;
 
 public class MainSettingsManager extends AppCompatActivity
         implements PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
@@ -204,19 +207,13 @@ public class MainSettingsManager extends AppCompatActivity
         }
 
         private void onNightMode() {
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Intent startActivity = new Intent(getContext(), SplashActivity.class);
-                    int pendingIntentId = 123456;
-                    PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), pendingIntentId, startActivity, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-
-                    AlarmManager mgr = (AlarmManager) MainSettingsManager.activity.getSystemService(Context.ALARM_SERVICE);
-                    mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 500, pendingIntent);
-
-                    System.exit(0);
-                }
-            }, 300);
+            if (MainSettingsManager.getModeNight(activity)) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                VectrasApp.getApp().setTheme(R.style.AppTheme);
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                VectrasApp.getApp().setTheme(R.style.AppTheme);
+            }
         }
 
         @Override
@@ -252,8 +249,89 @@ public class MainSettingsManager extends AppCompatActivity
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             if (SDK_INT > 33)
-                findPreference("sharedFolder").setEnabled(false);/*
-            Preference pref = findPreference("customMemory");
+                findPreference("sharedFolder").setEnabled(false);
+
+            mHandler = new Handler();
+            Preference pref = findPreference("vmArch");
+            if (pref != null) {
+                pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+
+                    @Override
+                    public boolean onPreferenceChange(@NonNull Preference preference,
+                                                      Object newValue) {
+                        onArch();
+                        return true;
+                    }
+
+                });
+            }
+            Preference pref2 = findPreference("kvm");
+            if (pref2 != null) {
+                pref2.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+
+                    @Override
+                    public boolean onPreferenceChange(@NonNull Preference preference,
+                                                      Object newValue) {
+                        onKvm();
+                        return true;
+                    }
+
+                    private void onKvm() {
+                        if (getKvm(activity))
+                            setMTTCG(activity, true);
+                        else
+                            setMTTCG(activity, false);
+                        mHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Intent startActivity = new Intent(getContext(), SplashActivity.class);
+                                int pendingIntentId = 123456;
+                                PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), pendingIntentId, startActivity, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+                                AlarmManager mgr = (AlarmManager) MainSettingsManager.activity.getSystemService(Context.ALARM_SERVICE);
+                                mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 500, pendingIntent);
+
+                                System.exit(0);
+                            }
+                        }, 300);
+                    }
+
+                });
+            }
+            Preference pref3 = findPreference("MTTCG");
+            if (pref3 != null) {
+                pref3.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+
+                    @Override
+                    public boolean onPreferenceChange(@NonNull Preference preference,
+                                                      Object newValue) {
+                        onMttcg();
+                        return true;
+                    }
+
+                    private void onMttcg() {
+                        if (getMTTCG(activity))
+                            setKvm(activity, true);
+                        else
+                            setKvm(activity, false);
+                        mHandler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Intent startActivity = new Intent(getContext(), SplashActivity.class);
+                                int pendingIntentId = 123456;
+                                PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), pendingIntentId, startActivity, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+                                AlarmManager mgr = (AlarmManager) MainSettingsManager.activity.getSystemService(Context.ALARM_SERVICE);
+                                mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 500, pendingIntent);
+
+                                System.exit(0);
+                            }
+                        }, 300);
+                    }
+
+                });
+            }
+            /*Preference pref = findPreference("customMemory");
             if (pref != null) {
                 pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 
@@ -305,6 +383,21 @@ public class MainSettingsManager extends AppCompatActivity
                 findPreference("sharedFolder").setEnabled(false);
         }
 
+        private void onArch() {
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Intent startActivity = new Intent(getContext(), SplashActivity.class);
+                    int pendingIntentId = 123456;
+                    PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), pendingIntentId, startActivity, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+                    AlarmManager mgr = (AlarmManager) MainSettingsManager.activity.getSystemService(Context.ALARM_SERVICE);
+                    mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 500, pendingIntent);
+
+                    System.exit(0);
+                }
+            }, 300);
+        }
 
         @Override
         public void onCreatePreferences(Bundle bundle, String root_key) {
@@ -316,7 +409,6 @@ public class MainSettingsManager extends AppCompatActivity
 
         @Override
         public boolean onPreferenceChange(Preference pref, Object newValue) {
-
             return true;
         }
 
@@ -672,7 +764,18 @@ public class MainSettingsManager extends AppCompatActivity
 
     public static String getVmUi(Activity activity) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        return prefs.getString("vmUi", "VNC");
+        return prefs.getString("vmUi", "SDL");
+    }
+    public static void setSoundCard(Activity activity, String soundCard) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putString("soundCard", soundCard);
+        edit.apply();
+    }
+
+    public static String getSoundCard(Activity activity) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        return prefs.getString("soundCard", "None");
     }
 
     public static void setUsbTablet(Activity activity, boolean UsbTablet) {
@@ -709,6 +812,30 @@ public class MainSettingsManager extends AppCompatActivity
     public static boolean getSharedFolder(Activity activity) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         return prefs.getBoolean("sharedFolder", false);
+    }
+
+    public static void setArch(Activity activity, String vmArch) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putString("vmArch", vmArch);
+        edit.apply();
+    }
+
+    public static String getArch(Activity activity) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        return prefs.getString("vmArch", "X86_64");
+    }
+
+    public static void setKvm(Activity activity, boolean kvm) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putBoolean("kvm", kvm);
+        edit.apply();
+    }
+
+    public static boolean getKvm(Activity activity) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        return prefs.getBoolean("kvm", false);
     }
 
     public static boolean isFirstLaunch(Activity activity) {

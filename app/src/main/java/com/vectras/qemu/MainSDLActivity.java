@@ -2,7 +2,9 @@ package com.vectras.qemu;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+
 import androidx.appcompat.app.AlertDialog;
+
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -35,6 +37,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -55,6 +58,7 @@ import com.vectras.qemu.utils.FileUtils;
 import com.vectras.qemu.utils.Machine;
 import com.vectras.qemu.utils.QmpClient;
 import com.vectras.vm.Fragment.ControlersOptionsFragment;
+import com.vectras.vm.Fragment.LoggerDialogFragment;
 import com.vectras.vm.MainActivity;
 import com.vectras.vm.R;
 import com.vectras.vm.adapter.LogsAdapter;
@@ -82,7 +86,7 @@ import org.libsdl.app.SDLSurface;
 public class MainSDLActivity extends SDLActivity {
     public static final String TAG = "MainSDLActivity";
 
-    public static MainSDLActivity activity ;
+    public static MainSDLActivity activity;
 
     public static final int KEYBOARD = 10000;
     public static final int QUIT = 10001;
@@ -172,7 +176,7 @@ public class MainSDLActivity extends SDLActivity {
                 } catch (InterruptedException ex) {
                     // Log.v("singletap", "Could not sleep");
                 }
-                MainActivity.vmexecutor.onVectrasMouse(Config.SDL_MOUSE_LEFT, MotionEvent.ACTION_DOWN, 1,0, 0);
+                MainActivity.vmexecutor.onVectrasMouse(Config.SDL_MOUSE_LEFT, MotionEvent.ACTION_DOWN, 1, 0, 0);
                 try {
                     Thread.sleep(50);
                 } catch (InterruptedException ex) {
@@ -277,13 +281,14 @@ public class MainSDLActivity extends SDLActivity {
             e.printStackTrace();
         }
     }
+
     public static void sendCtrlAltKey(int code) {
         delayKey(100);
         SDLActivity.onNativeKeyDown(KeyEvent.KEYCODE_CTRL_LEFT);
         delayKey(100);
         SDLActivity.onNativeKeyDown(KeyEvent.KEYCODE_ALT_LEFT);
         delayKey(100);
-        if(code>=0) {
+        if (code >= 0) {
             SDLActivity.onNativeKeyDown(code);
             delayKey(100);
             SDLActivity.onNativeKeyUp(code);
@@ -388,8 +393,7 @@ public class MainSDLActivity extends SDLActivity {
                 }
             }, 200);
 
-        }
-        else if (item.getItemId() == R.id.itemMonitor) {
+        } else if (item.getItemId() == R.id.itemMonitor) {
             if (this.monitorMode) {
                 this.onVMConsole();
             } else {
@@ -421,7 +425,7 @@ public class MainSDLActivity extends SDLActivity {
         } else if (item.getItemId() == this.QUIT) {
         } else if (item.getItemId() == R.id.itemHelp) {
 
-        }  else if (item.getItemId() == R.id.itemHideToolbar) {
+        } else if (item.getItemId() == R.id.itemHideToolbar) {
             this.onHideToolbar();
         } else if (item.getItemId() == R.id.itemDisplay) {
             this.onSelectMenuSDLDisplay();
@@ -439,7 +443,7 @@ public class MainSDLActivity extends SDLActivity {
         FileUtils.viewVectrasLog(this);
     }
 
-    public void onHideToolbar(){
+    public void onHideToolbar() {
         ActionBar bar = this.getSupportActionBar();
         if (bar != null) {
             bar.hide();
@@ -449,7 +453,7 @@ public class MainSDLActivity extends SDLActivity {
 
     private void onMouseMode() {
 
-        String [] items = {"Trackpad Mouse (Phone)",
+        String[] items = {"Trackpad Mouse (Phone)",
                 "Bluetooth/USB Mouse (Desktop mode)", //Physical mouse for Chromebook, Android x86 PC, or Bluetooth Mouse
         };
         final AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
@@ -457,7 +461,7 @@ public class MainSDLActivity extends SDLActivity {
         mBuilder.setSingleChoiceItems(items, Config.mouseMode.ordinal(), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
-                switch(i){
+                switch (i) {
                     case 0:
                         setUIModeMobile(true);
                         break;
@@ -485,7 +489,7 @@ public class MainSDLActivity extends SDLActivity {
             height += bar.getHeight();
         }
 
-        if(vm_width < width && vm_height < height)
+        if (vm_width < width && vm_height < height)
             return true;
 
         return false;
@@ -495,7 +499,7 @@ public class MainSDLActivity extends SDLActivity {
         //XXX: No need to calibrate for SDL trackpad.
     }
 
-    private void setUIModeMobile(boolean fitToScreen){
+    private void setUIModeMobile(boolean fitToScreen) {
 
         try {
             UIUtils.setOrientation(this);
@@ -506,16 +510,16 @@ public class MainSDLActivity extends SDLActivity {
             Config.mouseMode = Config.MouseMode.Trackpad;
             MainSettingsManager.setDesktopMode(this, false);
             MainActivity.vmexecutor.setRelativeMouseMode(1);
-            if(Config.showToast)
+            if (Config.showToast)
                 UIUtils.toastShort(this.getApplicationContext(), "Trackpad Enabled");
-            if(fitToScreen)
+            if (fitToScreen)
                 onFitToScreen();
             else
                 onNormalScreen();
             calibration();
             invalidateOptionsMenu();
-        }catch (Exception ex){
-            if(Config.debug)
+        } catch (Exception ex) {
+            if (Config.debug)
                 ex.printStackTrace();
         }
 
@@ -529,15 +533,15 @@ public class MainSDLActivity extends SDLActivity {
         alertDialog.setTitle("Desktop Mode");
 
         LinearLayout mLayout = new LinearLayout(this);
-        mLayout.setPadding(20,20,20,20);
+        mLayout.setPadding(20, 20, 20, 20);
         mLayout.setOrientation(LinearLayout.VERTICAL);
 
         TextView textView = new TextView(activity);
         textView.setVisibility(View.VISIBLE);
         String desktopInstructions = this.getString(R.string.desktopInstructions);
-        if(!checkVMResolutionFits()){
+        if (!checkVMResolutionFits()) {
             String resolutionWarning = "Warning: MainActivity.vmexecutor resolution "
-                    + vm_width+ "x" + vm_height +
+                    + vm_width + "x" + vm_height +
                     " is too high for Desktop Mode. " +
                     "Scaling will be used and Mouse Alignment will not be accurate. " +
                     "Reduce display resolution within the Guest OS for better experience.\n\n";
@@ -584,13 +588,13 @@ public class MainSDLActivity extends SDLActivity {
             Config.mouseMode = Config.MouseMode.External;
             MainSettingsManager.setDesktopMode(this, true);
             MainActivity.vmexecutor.setRelativeMouseMode(0);
-            if(Config.showToast)
+            if (Config.showToast)
                 UIUtils.toastShort(MainSDLActivity.this, "External Mouse Enabled");
             onNormalScreen();
             calibration();
             invalidateOptionsMenu();
-        }catch (Exception ex){
-            if(Config.debug)
+        } catch (Exception ex) {
+            if (Config.debug)
                 ex.printStackTrace();
         }
     }
@@ -623,7 +627,7 @@ public class MainSDLActivity extends SDLActivity {
                 Log.d(TAG, "onStretchToScreen");
                 screenMode = SDLScreenMode.Fullscreen;
                 sendCtrlAltKey(KeyEvent.KEYCODE_F); // not working
-                if(Config.showToast)
+                if (Config.showToast)
                     UIUtils.toastShort(activity, "Resizing, Please Wait");
                 resize(null);
 
@@ -643,14 +647,14 @@ public class MainSDLActivity extends SDLActivity {
                 public void run() {
                     Log.d(TAG, "onFitToScreen");
                     screenMode = SDLScreenMode.FitToScreen;
-                    if(Config.showToast)
+                    if (Config.showToast)
                         UIUtils.toastShort(activity, "Resizing, Please Wait");
                     resize(null);
 
                 }
             }).start();
-        }catch (Exception ex){
-            if(Config.debug)
+        } catch (Exception ex) {
+            if (Config.debug)
                 ex.printStackTrace();
         }
 
@@ -667,14 +671,14 @@ public class MainSDLActivity extends SDLActivity {
                 public void run() {
                     Log.d(TAG, "onNormalScreen");
                     screenMode = SDLScreenMode.Normal;
-                    if(Config.showToast)
+                    if (Config.showToast)
                         UIUtils.toastShort(activity, "Resizing, Please Wait");
                     resize(null);
 
                 }
             }).start();
-        }catch (Exception ex){
-            if(Config.debug)
+        } catch (Exception ex) {
+            if (Config.debug)
                 ex.printStackTrace();
         }
 
@@ -751,7 +755,7 @@ public class MainSDLActivity extends SDLActivity {
 
         int maxMenuItemsShown = 4;
         int actionShow = MenuItemCompat.SHOW_AS_ACTION_IF_ROOM;
-        if(UIUtils.isLandscapeOrientation(this)) {
+        if (UIUtils.isLandscapeOrientation(this)) {
             maxMenuItemsShown = 6;
             actionShow = MenuItemCompat.SHOW_AS_ACTION_ALWAYS;
         }
@@ -782,11 +786,10 @@ public class MainSDLActivity extends SDLActivity {
             maxMenuItemsShown--;
         }
 
-        if (soundcard==null || soundcard.equals("None")) {
+        if (soundcard == null || soundcard.equals("None")) {
             menu.removeItem(menu.findItem(R.id.itemVolume).getItemId());
             maxMenuItemsShown--;
         }
-
 
 
         for (int i = 0; i < menu.size() && i < maxMenuItemsShown; i++) {
@@ -825,12 +828,12 @@ public class MainSDLActivity extends SDLActivity {
         if (event.getAction() == KeyEvent.ACTION_MULTIPLE && event.getKeyCode() == KeyEvent.KEYCODE_UNKNOWN) {
             sendText(event.getCharacters().toString());
             return true;
-        }  else if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+        } else /*if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
             this.onBackPressed();
             return true;
-        } if (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN) {
+        }*/ if (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN) {
             // We emulate right click with volume down
-            if(event.getAction() == KeyEvent.ACTION_DOWN) {
+            if (event.getAction() == KeyEvent.ACTION_DOWN) {
                 MotionEvent e = MotionEvent.obtain(1000, 1000, MotionEvent.ACTION_DOWN, 0, 0, 0, 0, 0, 0, 0,
                         InputDevice.SOURCE_TOUCHSCREEN, 0);
                 rightClick(e, 0);
@@ -838,7 +841,7 @@ public class MainSDLActivity extends SDLActivity {
             return true;
         } else if (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP) {
             // We emulate middle click with volume up
-            if(event.getAction() == KeyEvent.ACTION_DOWN) {
+            if (event.getAction() == KeyEvent.ACTION_DOWN) {
                 MotionEvent e = MotionEvent.obtain(1000, 1000, MotionEvent.ACTION_DOWN, 0, 0, 0, 0, 0, 0, 0,
                         InputDevice.SOURCE_TOUCHSCREEN, 0);
                 middleClick(e, 0);
@@ -880,6 +883,7 @@ public class MainSDLActivity extends SDLActivity {
     private TimerTask t;
     public boolean ctrlClicked = false;
     public boolean altClicked = false;
+
     // Setup
     @SuppressLint("UseCompatLoadingForDrawables")
     protected void onCreate(Bundle savedInstanceState) {
@@ -936,7 +940,10 @@ public class MainSDLActivity extends SDLActivity {
         btnLogs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FileUtils.viewVectrasLog(activity);
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                // Create and show the dialog.
+                LoggerDialogFragment newFragment = new LoggerDialogFragment();
+                newFragment.show(ft, "Logger");
             }
         });
         shutdownBtn.setOnClickListener(new View.OnClickListener() {
@@ -1132,6 +1139,21 @@ public class MainSDLActivity extends SDLActivity {
                 }
             }
         });*/
+
+        ImageButton hideBtn = findViewById(R.id.visibilityButton);
+        hideBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FrameLayout l = findViewById(R.id.mainControl);
+                if (l.getVisibility() == View.VISIBLE) {
+                    l.setVisibility(View.GONE);
+                    hideBtn.setImageResource(R.drawable.round_visibility_24);
+                } else {
+                    l.setVisibility(View.VISIBLE);
+                    hideBtn.setImageResource(R.drawable.round_visibility_off_24);
+                }
+            }
+        });
     }
 
     private void createUI(int w, int h) {
@@ -1194,7 +1216,7 @@ public class MainSDLActivity extends SDLActivity {
     }
 
     public LinearLayout createVolumePanel() {
-        LinearLayout layout = new LinearLayout (this);
+        LinearLayout layout = new LinearLayout(this);
         layout.setPadding(20, 20, 20, 20);
 
         LinearLayout.LayoutParams volparams = new LinearLayout.LayoutParams(
@@ -1277,7 +1299,7 @@ public class MainSDLActivity extends SDLActivity {
                         file.delete();
                     }
                 }
-                if(Config.showToast)
+                if (Config.showToast)
                     UIUtils.toastShort(getApplicationContext(), "Please wait while saving VM State");
                 MainActivity.vmexecutor.current_fd = MainActivity.vmexecutor.get_fd(MainActivity.vmexecutor.save_state_name);
 
@@ -1309,8 +1331,8 @@ public class MainSDLActivity extends SDLActivity {
         try {
             JSONObject object = new JSONObject(response);
             errorStr = object.getString("error");
-        }catch (Exception ex) {
-            if(Config.debug)
+        } catch (Exception ex) {
+            if (Config.debug)
                 ex.printStackTrace();
         }
         if (errorStr != null) {
@@ -1319,8 +1341,8 @@ public class MainSDLActivity extends SDLActivity {
             try {
                 JSONObject descObj = new JSONObject(errorStr);
                 descStr = descObj.getString("desc");
-            }catch (Exception ex) {
-                if(Config.debug)
+            } catch (Exception ex) {
+                if (Config.debug)
                     ex.printStackTrace();
             }
             final String descStr1 = descStr;
@@ -1353,7 +1375,7 @@ public class MainSDLActivity extends SDLActivity {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         boolean res = false;
-        if(Config.mouseMode == Config.MouseMode.External){
+        if (Config.mouseMode == Config.MouseMode.External) {
             return res;
         }
         //TODO:
@@ -1363,7 +1385,7 @@ public class MainSDLActivity extends SDLActivity {
     }
 
     private void resumeVM() {
-        if(MainActivity.vmexecutor == null){
+        if (MainActivity.vmexecutor == null) {
             return;
         }
         Thread t = new Thread(new Runnable() {
@@ -1382,7 +1404,7 @@ public class MainSDLActivity extends SDLActivity {
                     new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            if(Config.mouseMode == Config.MouseMode.External)
+                            if (Config.mouseMode == Config.MouseMode.External)
                                 setUIModeDesktop();
                             else
                                 setUIModeMobile(screenMode == SDLScreenMode.FitToScreen);
@@ -1393,13 +1415,6 @@ public class MainSDLActivity extends SDLActivity {
         });
         t.start();
 
-    }
-
-    public void onBackPressed() {
-        super.onBackPressed();
-        UIUtils.hideKeyboard(this, mSurface);
-        Machine.stopVM(activity);
-        return;
     }
 
     @Override
@@ -1446,7 +1461,7 @@ public class MainSDLActivity extends SDLActivity {
         LinearLayout buttonsLayout = new LinearLayout(this);
         buttonsLayout.setOrientation(LinearLayout.HORIZONTAL);
         buttonsLayout.setGravity(Gravity.CENTER_HORIZONTAL);
-        Button displayMode = new Button (this);
+        Button displayMode = new Button(this);
 
         displayMode.setText("Display Mode");
         displayMode.setOnClickListener(new View.OnClickListener() {
@@ -1458,7 +1473,7 @@ public class MainSDLActivity extends SDLActivity {
         layout.addView(buttonsLayout);
 
         final TextView value = new TextView(this);
-        value.setText("Idle Refresh Rate: " + currRate+" Hz");
+        value.setText("Idle Refresh Rate: " + currRate + " Hz");
         layout.addView(value);
         value.setLayoutParams(params);
 
@@ -1471,7 +1486,7 @@ public class MainSDLActivity extends SDLActivity {
         ((SeekBar) rate).setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
             public void onProgressChanged(SeekBar s, int progress, boolean touch) {
-                value.setText("Idle Refresh Rate: " + (progress+1)+" Hz");
+                value.setText("Idle Refresh Rate: " + (progress + 1) + " Hz");
             }
 
             public void onStartTrackingTouch(SeekBar arg0) {
@@ -1479,7 +1494,7 @@ public class MainSDLActivity extends SDLActivity {
             }
 
             public void onStopTrackingTouch(SeekBar arg0) {
-                int progress = arg0.getProgress()+1;
+                int progress = arg0.getProgress() + 1;
                 int refreshMs = 1000 / progress;
                 Log.v(TAG, "Changing idle refresh rate: (ms)" + refreshMs);
                 MainActivity.vmexecutor.setsdlrefreshrate(refreshMs);
@@ -1498,18 +1513,17 @@ public class MainSDLActivity extends SDLActivity {
     }
 
 
-
     private void onDisplayMode() {
 
-        String [] items = {
+        String[] items = {
                 "Normal (One-To-One)",
                 "Fit To Screen"
 //                ,"Stretch To Screen" //Stretched
         };
         int currentScaleType = 0;
-        if(screenMode == SDLScreenMode.FitToScreen){
+        if (screenMode == SDLScreenMode.FitToScreen) {
             currentScaleType = 1;
-        } else if(screenMode == SDLScreenMode.Fullscreen)
+        } else if (screenMode == SDLScreenMode.Fullscreen)
             currentScaleType = 2;
 
         final AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
@@ -1517,12 +1531,12 @@ public class MainSDLActivity extends SDLActivity {
         mBuilder.setSingleChoiceItems(items, currentScaleType, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
-                switch(i){
+                switch (i) {
                     case 0:
                         onNormalScreen();
                         break;
                     case 1:
-                        if(Config.mouseMode == Config.MouseMode.External){
+                        if (Config.mouseMode == Config.MouseMode.External) {
                             UIUtils.toastShort(MainSDLActivity.this, "Fit to Screen Disabled under Desktop Mode");
                             dialog.dismiss();
                             return;
@@ -1530,7 +1544,7 @@ public class MainSDLActivity extends SDLActivity {
                         onFitToScreen();
                         break;
                     case 2:
-                        if(Config.mouseMode == Config.MouseMode.External){
+                        if (Config.mouseMode == Config.MouseMode.External) {
                             UIUtils.toastShort(MainSDLActivity.this, "Stretch Screen Disabled under Desktop Mode");
                             dialog.dismiss();
                             return;
@@ -1550,7 +1564,7 @@ public class MainSDLActivity extends SDLActivity {
 
 
     @Override
-    protected synchronized void runSDLMain(){
+    protected synchronized void runSDLMain() {
 
         //We go through the vm executor
         MainActivity.startvm(this, Config.UI_SDL);
@@ -1563,11 +1577,10 @@ public class MainSDLActivity extends SDLActivity {
         }
     }
 
-    public static void onVMResolutionChanged(int w, int h)
-    {
+    public static void onVMResolutionChanged(int w, int h) {
         boolean refreshDisplay = false;
 
-        if(w!=vm_width || h!=vm_height)
+        if (w != vm_width || h != vm_height)
             refreshDisplay = true;
         vm_width = w;
         vm_height = h;
@@ -1575,7 +1588,7 @@ public class MainSDLActivity extends SDLActivity {
         Log.v(TAG, "VM resolution changed to " + vm_width + "x" + vm_height);
 
 
-        if(refreshDisplay) {
+        if (refreshDisplay) {
             activity.resize(null);
         }
 
@@ -1594,13 +1607,13 @@ public class MainSDLActivity extends SDLActivity {
     private void setLayout(Configuration newConfig) {
 
         boolean isLanscape =
-                (newConfig!=null && newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
+                (newConfig != null && newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
                         || UIUtils.isLandscapeOrientation(this);
 
         View vnc_canvas_layout = (View) this.findViewById(R.id.sdl_layout);
         RelativeLayout.LayoutParams vnc_canvas_layout_params = null;
         //normal 1-1
-        if(screenMode == SDLScreenMode.Normal) {
+        if (screenMode == SDLScreenMode.Normal) {
             if (isLanscape) {
                 vnc_canvas_layout_params = new RelativeLayout.LayoutParams(
                         ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -1674,21 +1687,20 @@ public class MainSDLActivity extends SDLActivity {
                 @Override
                 public void run() {
 
-                    if(Config.mouseMode == Config.MouseMode.External)
+                    if (Config.mouseMode == Config.MouseMode.External)
                         setUIModeDesktop();
                     else
                         setUIModeMobile(screenMode == SDLScreenMode.FitToScreen);
                 }
-            },1000);
+            }, 1000);
         }
 
         @Override
         public void onConfigurationChanged(Configuration newConfig) {
             super.onConfigurationChanged(newConfig);
-            Log.d(TAG,"Configuration changed");
+            Log.d(TAG, "Configuration changed");
             resize(newConfig);
         }
-
 
 
         public synchronized void doResize(boolean reverse, final Configuration newConfig) {
@@ -1706,18 +1718,18 @@ public class MainSDLActivity extends SDLActivity {
 
             final ActionBar bar = ((SDLActivity) activity).getSupportActionBar();
 
-            if(MainSDLActivity.mLayout != null) {
+            if (MainSDLActivity.mLayout != null) {
                 width = MainSDLActivity.mLayout.getWidth();
                 height = MainSDLActivity.mLayout.getHeight();
             }
 
             //native resolution for use with external mouse
-            if(screenMode != SDLScreenMode.Fullscreen && screenMode != SDLScreenMode.FitToScreen) {
+            if (screenMode != SDLScreenMode.Fullscreen && screenMode != SDLScreenMode.FitToScreen) {
                 width = MainSDLActivity.vm_width;
                 height = MainSDLActivity.vm_height;
             }
 
-            if(reverse){
+            if (reverse) {
                 int temp = width;
                 width = height;
                 height = temp;
@@ -1727,13 +1739,13 @@ public class MainSDLActivity extends SDLActivity {
                     .getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
 
             if (portrait) {
-                if(Config.mouseMode != Config.MouseMode.External) {
+                if (Config.mouseMode != Config.MouseMode.External) {
                     int height_n = (int) (width / (MainSDLActivity.vm_width / (float) MainSDLActivity.vm_height));
                     Log.d(TAG, "Resizing portrait: " + width + " x " + height_n);
                     getHolder().setFixedSize(width, height_n);
                 }
             } else {
-                if ( (screenMode == SDLScreenMode.Fullscreen || screenMode == SDLScreenMode.FitToScreen)
+                if ((screenMode == SDLScreenMode.Fullscreen || screenMode == SDLScreenMode.FitToScreen)
                         && !MainSettingsManager.getAlwaysShowMenuToolbar(MainSDLActivity.this)
                         && bar != null && bar.isShowing()) {
                     height += bar.getHeight();
@@ -1749,7 +1761,6 @@ public class MainSDLActivity extends SDLActivity {
                     isResizing = false;
                 }
             }, 1000);
-
 
 
         }
@@ -1818,14 +1829,14 @@ public class MainSDLActivity extends SDLActivity {
             float y = event.getY(0);
             float p = event.getPressure(0);
 
-            int relative = Config.mouseMode == Config.MouseMode.External? 0: 1;
+            int relative = Config.mouseMode == Config.MouseMode.External ? 0 : 1;
 
             int sdlMouseButton = 0;
-            if(event.getButtonState() == MotionEvent.BUTTON_PRIMARY)
+            if (event.getButtonState() == MotionEvent.BUTTON_PRIMARY)
                 sdlMouseButton = Config.SDL_MOUSE_LEFT;
-            else if(event.getButtonState() == MotionEvent.BUTTON_SECONDARY)
+            else if (event.getButtonState() == MotionEvent.BUTTON_SECONDARY)
                 sdlMouseButton = Config.SDL_MOUSE_RIGHT;
-            else if(event.getButtonState() == MotionEvent.BUTTON_TERTIARY)
+            else if (event.getButtonState() == MotionEvent.BUTTON_TERTIARY)
                 sdlMouseButton = Config.SDL_MOUSE_MIDDLE;
 
 
@@ -1837,13 +1848,13 @@ public class MainSDLActivity extends SDLActivity {
                     mouseUp = false;
                 }
                 if (action == MotionEvent.ACTION_MOVE) {
-                    if(Config.mouseMode == Config.MouseMode.External) {
+                    if (Config.mouseMode == Config.MouseMode.External) {
                         //Log.d("SDL", "onTouch Absolute Move by=" + action + ", X,Y=" + (x) + "," + (y) + " P=" + p);
-                        MainActivity.vmexecutor.onVectrasMouse(0, MotionEvent.ACTION_MOVE,0, x , y );
-                    }else {
+                        MainActivity.vmexecutor.onVectrasMouse(0, MotionEvent.ACTION_MOVE, 0, x, y);
+                    } else {
                         //Log.d("SDL", "onTouch Relative Moving by=" + action + ", X,Y=" + (x -
 //                            old_x) + "," + (y - old_y) + " P=" + p);
-                        MainActivity.vmexecutor.onVectrasMouse(0, MotionEvent.ACTION_MOVE,1, (x - old_x)  * sensitivity_mult, (y - old_y) * sensitivity_mult);
+                        MainActivity.vmexecutor.onVectrasMouse(0, MotionEvent.ACTION_MOVE, 1, (x - old_x) * sensitivity_mult, (y - old_y) * sensitivity_mult);
                     }
 
                 }
@@ -1851,13 +1862,12 @@ public class MainSDLActivity extends SDLActivity {
                 old_x = x;
                 old_y = y;
 
-            }
-            else if (event.getAction() == event.ACTION_UP ) {
+            } else if (event.getAction() == event.ACTION_UP) {
                 //Log.d("SDL", "onTouch Up: " + sdlMouseButton);
                 //XXX: it seems that the Button state is not available when Button up so
                 //  we should release all mouse buttons to be safe since we don't know which one fired the event
-                if(sdlMouseButton == Config.SDL_MOUSE_MIDDLE
-                        ||sdlMouseButton == Config.SDL_MOUSE_RIGHT
+                if (sdlMouseButton == Config.SDL_MOUSE_MIDDLE
+                        || sdlMouseButton == Config.SDL_MOUSE_RIGHT
                 ) {
                     MainActivity.vmexecutor.onVectrasMouse(sdlMouseButton, MotionEvent.ACTION_UP, relative, x, y);
                 } else if (sdlMouseButton != 0) {
@@ -1866,11 +1876,11 @@ public class MainSDLActivity extends SDLActivity {
 
                     //Or only the last one pressed
                     if (lastMouseButtonDown > 0) {
-                        if(lastMouseButtonDown == Config.SDL_MOUSE_MIDDLE
-                                ||lastMouseButtonDown == Config.SDL_MOUSE_RIGHT
+                        if (lastMouseButtonDown == Config.SDL_MOUSE_MIDDLE
+                                || lastMouseButtonDown == Config.SDL_MOUSE_RIGHT
                         ) {
-                            MainActivity.vmexecutor.onVectrasMouse(lastMouseButtonDown, MotionEvent.ACTION_UP, relative,x, y);
-                        }else
+                            MainActivity.vmexecutor.onVectrasMouse(lastMouseButtonDown, MotionEvent.ACTION_UP, relative, x, y);
+                        } else
                             MainActivity.vmexecutor.onVectrasMouse(lastMouseButtonDown, MotionEvent.ACTION_UP, relative, x, y);
                     } else {
                         //ALl buttons
@@ -1885,13 +1895,12 @@ public class MainSDLActivity extends SDLActivity {
                 }
                 lastMouseButtonDown = -1;
                 mouseUp = true;
-            }
-            else if (event.getAction() == event.ACTION_DOWN
+            } else if (event.getAction() == event.ACTION_DOWN
                     && Config.mouseMode == Config.MouseMode.External
             ) {
 
                 //XXX: Some touch events for touchscreen mode are primary so we force left mouse button
-                if(sdlMouseButton == 0 && MotionEvent.TOOL_TYPE_FINGER == event.getToolType(0)) {
+                if (sdlMouseButton == 0 && MotionEvent.TOOL_TYPE_FINGER == event.getToolType(0)) {
                     sdlMouseButton = Config.SDL_MOUSE_LEFT;
                 }
 
@@ -1903,8 +1912,8 @@ public class MainSDLActivity extends SDLActivity {
 
         public boolean onTouch(View v, MotionEvent event) {
             boolean res = false;
-            if(Config.mouseMode == Config.MouseMode.External){
-                res = onTouchProcess(v,event);
+            if (Config.mouseMode == Config.MouseMode.External) {
+                res = onTouchProcess(v, event);
                 res = onTouchEventProcess(event);
             }
             return res;
@@ -1949,13 +1958,13 @@ public class MainSDLActivity extends SDLActivity {
     }
 
     public void setVolume(int volume) {
-        if(am!=null)
+        if (am != null)
             am.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0);
     }
 
     protected int getCurrentVolume() {
         int volumeTmp = 0;
-        if(am!=null)
+        if (am != null)
             volumeTmp = am.getStreamVolume(AudioManager.STREAM_MUSIC);
         return volumeTmp;
     }
@@ -1989,13 +1998,13 @@ public class MainSDLActivity extends SDLActivity {
         Thread t = new Thread(new Runnable() {
             public void run() {
                 Log.d("SDL", "Mouse Middle Click");
-                MainActivity.vmexecutor.onVectrasMouse(Config.SDL_MOUSE_MIDDLE, MotionEvent.ACTION_DOWN, 1,-1, -1);
+                MainActivity.vmexecutor.onVectrasMouse(Config.SDL_MOUSE_MIDDLE, MotionEvent.ACTION_DOWN, 1, -1, -1);
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException ex) {
 //                    Log.v("SDLSurface", "Interrupted: " + ex);
                 }
-                MainActivity.vmexecutor.onVectrasMouse(Config.SDL_MOUSE_MIDDLE, MotionEvent.ACTION_UP, 1,-1, -1);
+                MainActivity.vmexecutor.onVectrasMouse(Config.SDL_MOUSE_MIDDLE, MotionEvent.ACTION_UP, 1, -1, -1);
             }
         });
         t.start();
@@ -2015,7 +2024,7 @@ public class MainSDLActivity extends SDLActivity {
                     } catch (InterruptedException ex) {
                         // Log.v("doubletap", "Could not sleep");
                     }
-                    MainActivity.vmexecutor.onVectrasMouse(Config.SDL_MOUSE_LEFT, MotionEvent.ACTION_UP, 1,0, 0);
+                    MainActivity.vmexecutor.onVectrasMouse(Config.SDL_MOUSE_LEFT, MotionEvent.ACTION_UP, 1, 0, 0);
                     try {
                         Thread.sleep(50);
                     } catch (InterruptedException ex) {
@@ -2036,7 +2045,6 @@ public class MainSDLActivity extends SDLActivity {
     private boolean firstTouch = false;
 
 
-
     private class GestureListener extends GestureDetector.SimpleOnGestureListener {
 
         @Override
@@ -2051,10 +2059,10 @@ public class MainSDLActivity extends SDLActivity {
             // Log.d("SDL", "Long Press Action=" + event.getAction() + ", X,Y="
             // + event.getX() + "," + event.getY() + " P="
             // + event.getPressure());
-            if(Config.mouseMode == Config.MouseMode.External)
+            if (Config.mouseMode == Config.MouseMode.External)
                 return;
 
-            if(Config.enableDragOnLongPress)
+            if (Config.enableDragOnLongPress)
                 dragPointer(event);
         }
 
@@ -2062,7 +2070,7 @@ public class MainSDLActivity extends SDLActivity {
             float x1 = event.getX();
             float y1 = event.getY();
 
-            if(Config.mouseMode == Config.MouseMode.External)
+            if (Config.mouseMode == Config.MouseMode.External)
                 return true;
 
 //			 Log.d("onSingleTapConfirmed", "Tapped at: (" + x1 + "," + y1 +
@@ -2090,12 +2098,12 @@ public class MainSDLActivity extends SDLActivity {
         public boolean onDoubleTap(MotionEvent event) {
 //			Log.d("onDoubleTap", "Tapped at: (" + event.getX() + "," + event.getY() + ")");
 
-            if(Config.mouseMode == Config.MouseMode.External
+            if (Config.mouseMode == Config.MouseMode.External
                 //&& MotionEvent.TOOL_TYPE_MOUSE == event.getToolType(0)
             )
                 return true;
 
-            if(!Config.enableDragOnLongPress)
+            if (!Config.enableDragOnLongPress)
                 processDoubleTap(event);
             else
                 doubleClick(event, 0);
@@ -2152,7 +2160,7 @@ public class MainSDLActivity extends SDLActivity {
                     return true;
 
                 case InputDevice.SOURCE_MOUSE:
-                    if(Config.mouseMode == Config.MouseMode.Trackpad)
+                    if (Config.mouseMode == Config.MouseMode.Trackpad)
                         break;
 
                     action = event.getActionMasked();
@@ -2166,7 +2174,7 @@ public class MainSDLActivity extends SDLActivity {
                             return true;
 
                         case MotionEvent.ACTION_HOVER_MOVE:
-                            if(Config.processMouseHistoricalEvents) {
+                            if (Config.processMouseHistoricalEvents) {
                                 final int historySize = event.getHistorySize();
                                 for (int h = 0; h < historySize; h++) {
                                     float ex = event.getHistoricalX(h);
@@ -2197,11 +2205,10 @@ public class MainSDLActivity extends SDLActivity {
             return false;
         }
 
-        private void processHoverMouse(float x,float y,float p, int action) {
+        private void processHoverMouse(float x, float y, float p, int action) {
 
 
-
-            if(Config.mouseMode == Config.MouseMode.External) {
+            if (Config.mouseMode == Config.MouseMode.External) {
                 //Log.d("SDL", "Mouse Hover: " + x + "," + y);
                 MainActivity.vmexecutor.onVectrasMouse(0, action, 0, x, y);
             }

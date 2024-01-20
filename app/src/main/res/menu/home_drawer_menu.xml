@@ -9,8 +9,12 @@
         android:icon="@drawable/round_public_24"
         android:title="@string/vectras_website" />
     <item
+        android:id="@+id/navigation_item_import_iso"
+        android:icon="@drawable/round_album_24"
+        android:title="@string/import_iso"/>
+    <item
         android:id="@+id/navigation_item_view_logs"
-        android:icon="@drawable/round_menu_24"
+        android:icon="@drawable/round_adb_24"
         android:title="@string/view_logs" />
     <item
         android:id="@+id/navigation_item_settings"

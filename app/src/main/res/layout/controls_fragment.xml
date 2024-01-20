@@ -5,283 +5,308 @@
     android:layout_height="match_parent"
     android:alpha="0.5">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
+        android:id="@+id/mainControl"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_height="match_parent">
 
-        <ListView
-            android:id="@+id/functions"
-            android:layout_width="56dp"
-            android:layout_height="150dp"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="0dp"
-            android:background="@drawable/background1"
-            android:backgroundTint="?attr/colorPrimary"
-            android:layout_marginLeft="8dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginRight="8dp"
-            android:visibility="gone"
-            app:layout_constraintLeft_toLeftOf="parent"
-            tools:listitem="@layout/container_function"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ListView
+                android:id="@+id/functions"
+                android:layout_width="56dp"
+                android:layout_height="150dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/background1"
+                android:backgroundTint="?attr/colorPrimary"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="0dp"
+                android:visibility="gone"
+                app:layout_constraintLeft_toLeftOf="parent"
+                tools:listitem="@layout/container_function" />
+
+            <LinearLayout
+                android:id="@+id/dpad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <ImageButton
+                        android:id="@+id/upBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:background="@drawable/controls_button1"
+                        android:backgroundTint="?attr/colorPrimary"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:src="@drawable/ic_arrow_up"
+                        app:tint="?attr/colorPrimary" />
+
+                    <ImageButton
+                        android:id="@+id/leftBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:background="@drawable/controls_button1"
+                        android:backgroundTint="?attr/colorPrimary"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:src="@drawable/ic_arrow_left"
+                        app:tint="?attr/colorPrimary" />
+
+                    <ImageButton
+                        android:id="@+id/downBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:background="@drawable/controls_button1"
+                        android:backgroundTint="?attr/colorPrimary"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:src="@drawable/ic_arrow_down"
+                        app:tint="?attr/colorPrimary" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageButton
+                        android:id="@+id/rightBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:background="@drawable/controls_button1"
+                        android:backgroundTint="?attr/colorPrimary"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:src="@drawable/ic_arrow_right"
+                        app:tint="?attr/colorPrimary" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_margin="15dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_constraintRight_toRightOf="parent">
+
+                <ImageButton
+                    android:id="@+id/escBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:background="@drawable/controls_button1"
+                    android:backgroundTint="?attr/colorPrimary"
+                    android:src="@drawable/ic_esc"
+                    app:tint="?attr/colorPrimary" />
+
+                <ImageButton
+                    android:id="@+id/delBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:background="@drawable/controls_button1"
+                    android:backgroundTint="?attr/colorPrimary"
+                    android:src="@drawable/ic_del"
+                    app:tint="?attr/colorPrimary" />
+
+                <ImageButton
+                    android:id="@+id/enterBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:background="@drawable/controls_button1"
+                    android:backgroundTint="?attr/colorPrimary"
+                    android:src="@drawable/ic_enter"
+                    app:tint="?attr/colorPrimary" />
+
+                <ImageButton
+                    android:id="@+id/ctrlBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:background="@drawable/controls_button1"
+                    android:backgroundTint="?attr/colorPrimary"
+                    android:src="@drawable/ic_ctrl"
+                    app:tint="?attr/colorPrimary" />
+
+                <ImageButton
+                    android:id="@+id/altBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:background="@drawable/controls_button1"
+                    android:backgroundTint="?attr/colorPrimary"
+                    android:src="@drawable/ic_alt"
+                    app:tint="?attr/colorPrimary" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/ctrlAltDelBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:background="@drawable/controls_button1"
+                android:backgroundTint="?attr/colorPrimary"
+                android:text="Ctrl Alt Del"
+                android:textColor="?attr/colorPrimary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
-            android:id="@+id/dpad"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
-                <ImageButton
-                    android:id="@+id/upBtn"
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="left"
+                    android:layout_weight="1.0"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:background="@drawable/controls_button1"
+                    android:background="@drawable/background1"
                     android:backgroundTint="?attr/colorPrimary"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:src="@drawable/ic_arrow_up"
-                    app:tint="?attr/colorPrimary" />
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:translationY="-6dp">
 
-                <ImageButton
-                    android:id="@+id/leftBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:background="@drawable/controls_button1"
-                    android:backgroundTint="?attr/colorPrimary"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:src="@drawable/ic_arrow_left"
-                    app:tint="?attr/colorPrimary" />
+                    <ImageButton
+                        android:id="@+id/btnLogs"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="8dp"
+                        android:background="@drawable/controls_button"
+                        android:backgroundTint="?attr/colorPrimary"
+                        android:src="@drawable/round_menu_24"
+                        app:tint="?attr/colorPrimary" />
 
-                <ImageButton
-                    android:id="@+id/downBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:background="@drawable/controls_button1"
-                    android:backgroundTint="?attr/colorPrimary"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:src="@drawable/ic_arrow_down"
-                    app:tint="?attr/colorPrimary" />
+                    <ImageButton
+                        android:id="@+id/btnSettings"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="8dp"
+                        android:background="@drawable/controls_button"
+                        android:backgroundTint="?attr/colorPrimary"
+                        android:src="@drawable/round_settings_24"
+                        android:visibility="gone"
+                        app:tint="?attr/colorPrimary" />
+
+                    <ImageButton
+                        android:id="@+id/btnQmp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="8dp"
+                        android:background="@drawable/controls_button"
+                        android:backgroundTint="?attr/colorPrimary"
+                        android:src="@drawable/round_terminal_24"
+                        app:tint="?attr/colorPrimary" />
+
+                    <ImageButton
+                        android:id="@+id/btnMode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/controls_button"
+                        android:backgroundTint="?attr/colorPrimary"
+                        android:src="@drawable/round_games_24"
+                        android:visibility="gone"
+                        app:tint="?attr/colorPrimary" />
+
+                    <ImageButton
+                        android:id="@+id/kbdBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="0dp"
+                        android:background="@drawable/controls_button"
+                        android:backgroundTint="?attr/colorPrimary"
+                        android:src="@drawable/round_keyboard_24"
+                        app:tint="?attr/colorPrimary" />
+
+                    <ImageButton
+                        android:id="@+id/shutdownBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:background="@drawable/controls_button"
+                        android:backgroundTint="?attr/colorPrimary"
+                        android:src="@drawable/round_logout_24"
+                        app:tint="?attr/colorPrimary" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.0"
+                    android:orientation="horizontal" />
+
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageButton
-                    android:id="@+id/rightBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
-                    android:background="@drawable/controls_button1"
-                    android:backgroundTint="?attr/colorPrimary"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:src="@drawable/ic_arrow_right"
-                    app:tint="?attr/colorPrimary" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:layout_margin="15dp"
-            app:layout_constraintRight_toRightOf="parent">
-            <ImageButton
-                android:id="@+id/escBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="2dp"
-                android:background="@drawable/controls_button1"
-                android:backgroundTint="?attr/colorPrimary"
-                android:src="@drawable/ic_esc"
-                app:tint="?attr/colorPrimary" />
-            <ImageButton
-                android:id="@+id/delBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="2dp"
-                android:background="@drawable/controls_button1"
-                android:backgroundTint="?attr/colorPrimary"
-                android:src="@drawable/ic_del"
-                app:tint="?attr/colorPrimary" />
-            <ImageButton
-                android:id="@+id/enterBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="2dp"
-                android:background="@drawable/controls_button1"
-                android:backgroundTint="?attr/colorPrimary"
-                android:src="@drawable/ic_enter"
-                app:tint="?attr/colorPrimary" />
-            <ImageButton
-                android:id="@+id/ctrlBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="2dp"
-                android:background="@drawable/controls_button1"
-                android:backgroundTint="?attr/colorPrimary"
-                android:src="@drawable/ic_ctrl"
-                app:tint="?attr/colorPrimary" />
-            <ImageButton
-                android:id="@+id/altBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="2dp"
-                android:background="@drawable/controls_button1"
-                android:backgroundTint="?attr/colorPrimary"
-                android:src="@drawable/ic_alt"
-                app:tint="?attr/colorPrimary" />
-        </LinearLayout>
-        <Button
-            android:id="@+id/ctrlAltDelBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/controls_button1"
-            android:backgroundTint="?attr/colorPrimary"
-            android:text="Ctrl Alt Del"
-            android:textColor="?attr/colorPrimary"
-            android:layout_margin="15dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
                 android:layout_weight="1.0"
+                android:orientation="horizontal">
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="left"
-                android:orientation="vertical"
-                android:padding="10dp">
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/background1"
-                android:backgroundTint="?attr/colorPrimary"
-                android:gravity="center"
+                android:gravity="center_horizontal"
                 android:orientation="horizontal"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:translationY="-6dp">
+                android:padding="15dp">
 
-                <ImageButton
-                    android:id="@+id/btnLogs"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="8dp"
-                    android:background="@drawable/controls_button"
-                    android:backgroundTint="?attr/colorPrimary"
-                    android:src="@drawable/round_menu_24"
-                    app:tint="?attr/colorPrimary" />
-
-                <ImageButton
-                    android:id="@+id/btnSettings"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="8dp"
-                    android:background="@drawable/controls_button"
-                    android:backgroundTint="?attr/colorPrimary"
-                    android:src="@drawable/round_settings_24"
-                    app:tint="?attr/colorPrimary"
-                    android:visibility="gone" />
-
-                <ImageButton
-                    android:id="@+id/btnQmp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="8dp"
-                    android:background="@drawable/controls_button"
-                    android:backgroundTint="?attr/colorPrimary"
-                    android:src="@drawable/round_terminal_24"
-                    app:tint="?attr/colorPrimary" />
-
-                <ImageButton
-                    android:id="@+id/btnMode"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/controls_button"
-                    android:backgroundTint="?attr/colorPrimary"
-                    android:src="@drawable/round_games_24"
-                    app:tint="?attr/colorPrimary"
-                    android:visibility="gone" />
-
-                <ImageButton
-                    android:id="@+id/kbdBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="0dp"
-                    android:background="@drawable/controls_button"
-                    android:backgroundTint="?attr/colorPrimary"
-                    android:src="@drawable/round_keyboard_24"
-                    app:tint="?attr/colorPrimary" />
-
-                <ImageButton
-                    android:id="@+id/shutdownBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:background="@drawable/controls_button"
-                    android:backgroundTint="?attr/colorPrimary"
-                    android:src="@drawable/round_logout_24"
-                    app:tint="?attr/colorPrimary" />
             </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1.0"
-                android:orientation="horizontal" />
-
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1.0"
-            android:orientation="horizontal">
+    </FrameLayout>
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal"
-            android:padding="15dp">
-
-        </LinearLayout>
-    </LinearLayout>
+    <ImageButton
+        android:id="@+id/visibilityButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|left"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="10dp"
+        android:src="@drawable/visibility_off"
+        app:tint="?attr/colorPrimary" />
 
 </FrameLayout>
