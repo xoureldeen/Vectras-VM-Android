@@ -174,6 +174,7 @@ public class MainActivity extends AppCompatActivity {
         initNavigationMenu();
         FileInstaller.installFiles(activity, false);
         getWindow().setNavigationBarColor(SurfaceColors.SURFACE_2.getColor(this));
+        requestPermissions();
         //updateApp(true);
         //mAuth = FirebaseAuth.getInstance();
     }
