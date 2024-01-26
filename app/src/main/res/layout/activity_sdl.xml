@@ -14,7 +14,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-
         <RelativeLayout
             android:id="@+id/sdl_layout"
             android:layout_width="wrap_content"
@@ -23,20 +22,24 @@
             android:layout_centerVertical="true"
             android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:gravity="center"
-                android:src="@mipmap/ic_launcher" />
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animation_view"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                app:lottie_speed="0.5"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/logo2" />
 
             <RelativeLayout
                 android:id="@+id/sdl"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
                 android:layout_margin="4dp"
-
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
                 android:orientation="vertical" />
 
             <include layout="@layout/controls_fragment" />

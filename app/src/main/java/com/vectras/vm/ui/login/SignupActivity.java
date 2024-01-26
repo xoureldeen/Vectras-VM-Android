@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.vectras.vm.R;
 import com.vectras.vm.RomsManagerActivity;
+import com.vectras.vm.SplashActivity;
 
 public class SignupActivity extends AppCompatActivity {
 
@@ -127,7 +128,8 @@ public class SignupActivity extends AppCompatActivity {
                                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                 @Override
                                                 public void onComplete(@NonNull Task<Void> task) {
-                                                    startActivity(new Intent(SignupActivity.this, RomsManagerActivity.class));
+                                                    finish();
+                                                    startActivity(new Intent(SignupActivity.this, SplashActivity.class));
                                                 }
                                             });
 

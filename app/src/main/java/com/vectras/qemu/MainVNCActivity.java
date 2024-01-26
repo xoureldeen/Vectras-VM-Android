@@ -93,6 +93,7 @@ public class MainVNCActivity extends VncCanvasActivity {
     public boolean ctrlClicked = false;
     public boolean altClicked = false;
     private ImageButton qmpBtn;
+    public static MainVNCActivity activity;
 
     @Override
     public void onCreate(Bundle b) {
@@ -102,6 +103,7 @@ public class MainVNCActivity extends VncCanvasActivity {
                     WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         super.onCreate(b);
+        activity = this;
 
         this.vncCanvas.setFocusableInTouchMode(true);
 
@@ -132,7 +134,6 @@ public class MainVNCActivity extends VncCanvasActivity {
         ImageButton altBtn = findViewById(R.id.altBtn);
         ImageButton delBtn = findViewById(R.id.delBtn);
         ImageButton btnLogs = findViewById(R.id.btnLogs);
-        Button ctrlAltDelBtn = findViewById(R.id.ctrlAltDelBtn);
         qmpBtn = findViewById(R.id.btnQmp);
         btnLogs.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -277,12 +278,6 @@ public class MainVNCActivity extends VncCanvasActivity {
             @Override
             public void onClick(View v) {
                 keyDownUp(KeyEvent.KEYCODE_DEL);
-            }
-        });
-        ctrlAltDelBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendCtrlAtlDelKey();
             }
         });
         qmpBtn.setOnClickListener(new View.OnClickListener() {
@@ -630,7 +625,7 @@ public class MainVNCActivity extends VncCanvasActivity {
         return true;
     }
 
-    private void onMouseMode() {
+    public void onMouseMode() {
 
         String[] items = {"Trackpad Mouse (Phone)",
                 "Bluetooth/USB Mouse (Desktop mode)", //Physical mouse for Chromebook, Android x86 PC, or Bluetooth Mouse
@@ -732,32 +727,16 @@ public class MainVNCActivity extends VncCanvasActivity {
         final AlertDialog alertDialog;
         alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
         alertDialog.setTitle("Desktop mode");
-
-        LinearLayout mLayout = new LinearLayout(this);
-        mLayout.setPadding(20, 20, 20, 20);
-        mLayout.setOrientation(LinearLayout.VERTICAL);
-
-        TextView textView = new TextView(activity);
-        textView.setVisibility(View.VISIBLE);
-
         String desktopInstructions = this.getString(R.string.desktopInstructions);
         if (!checkVMResolutionFits()) {
-            String resolutionWarning = "Warning: Machine resolution "
+            String resolutionWarning = "Warning: MainActivity.vmexecutor resolution "
                     + vncCanvas.rfb.framebufferWidth + "x" + vncCanvas.rfb.framebufferHeight +
                     " is too high for Desktop Mode. " +
                     "Scaling will be used and Mouse Alignment will not be accurate. " +
-                    "Reduce display resolution for better experience\n\n";
+                    "Reduce display resolution within the Guest OS for better experience.\n\n";
             desktopInstructions = resolutionWarning + desktopInstructions;
         }
-        textView.setText(desktopInstructions);
-
-        LinearLayout.LayoutParams textViewParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        ScrollView scrollView = new ScrollView(this);
-        scrollView.addView(textView);
-        mLayout.addView(scrollView, textViewParams);
-        alertDialog.setView(mLayout);
-
+        alertDialog.setMessage(desktopInstructions);
         alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
 

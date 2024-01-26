@@ -63,6 +63,11 @@
             android:label="@string/title_activity_login"
             android:launchMode="singleTask" />
         <activity
+            android:name=".ui.login.VerifyEmailActivity"
+            android:exported="true"
+            android:hardwareAccelerated="false"
+            android:launchMode="singleTask" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:hardwareAccelerated="true"

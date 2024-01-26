@@ -1,5 +1,8 @@
 package com.vectras.vm;
 
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static android.Manifest.permission.POST_NOTIFICATIONS;
 import static android.content.Intent.ACTION_OPEN_DOCUMENT;
 import static android.os.Build.VERSION.SDK_INT;
 
@@ -52,6 +55,8 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -84,6 +89,7 @@ import com.vectras.vm.Fragment.HomeFragment;
 import com.vectras.vm.Fragment.LoggerFragment;
 import com.vectras.vm.MainRoms.AdapterMainRoms;
 import com.vectras.vm.logger.VectrasStatus;
+import com.vectras.vm.ui.login.VerifyEmailActivity;
 import com.vectras.vm.utils.AppUpdater;
 import com.vectras.qemu.utils.FileInstaller;
 import com.vectras.qemu.utils.RamInfo;
@@ -144,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
         ad = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
         ad.setTitle(title);
         ad.setMessage(body);
+        ad.setCancelable(false);
         ad.setButton(Dialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 return;
@@ -152,8 +159,6 @@ public class MainActivity extends AppCompatActivity {
         ad.show();
     }
 
-    public static ProgressBar loadingPbb;
-
     /**
      * Called when the activity is first created.
      */
@@ -161,7 +166,6 @@ public class MainActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        loadingPbb = findViewById(R.id.loadingPb);
         activity = this;
         clearNotifications();
         setupFolders();
@@ -174,8 +178,38 @@ public class MainActivity extends AppCompatActivity {
         initNavigationMenu();
         FileInstaller.installFiles(activity, false);
         getWindow().setNavigationBarColor(SurfaceColors.SURFACE_2.getColor(this));
+        requestPermissions();
         //updateApp(true);
         //mAuth = FirebaseAuth.getInstance();
+    }
+
+    private void requestPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(this, R.style.MainDialogTheme);
+                alertDialog.setTitle(R.string.permission_title);
+                alertDialog.setMessage(R.string.permission_notification_text);
+                alertDialog.setPositiveButton("ALLOW", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{POST_NOTIFICATIONS}, 11003);
+                    }
+                });
+                alertDialog.create().show();
+            } else {
+                ActivityCompat.shouldShowRequestPermissionRationale(this, POST_NOTIFICATIONS);
+            }
+        }
+        if (ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION}, 11003);
+        } else {
+            ActivityCompat.shouldShowRequestPermissionRationale(this, ACCESS_FINE_LOCATION);
+        }
+        if (ContextCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{ACCESS_COARSE_LOCATION}, 11003);
+        } else {
+            ActivityCompat.shouldShowRequestPermissionRationale(this, ACCESS_COARSE_LOCATION);
+        }
     }
 
     public static PackageInfo getAppInfo(Context context) {
@@ -616,6 +650,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
+        if (!mCurrentUser.isEmailVerified()) {
+            startActivity(new Intent(activity, VerifyEmailActivity.class));
+            activity.finish();
+        }
         try {
             HomeFragment.loadDataVbi();
         } catch (Exception ignored) {
@@ -1091,35 +1129,53 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == 1004 && resultCode == RESULT_OK) {
             Uri content_describer = ReturnedIntent.getData();
             File selectedFilePath = new File(getPath(content_describer));
-            FileInputStream isoFile = null;
-            try {
-                isoFile = (FileInputStream) getContentResolver().openInputStream(content_describer);
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
-            }
+            ProgressBar loading = findViewById(R.id.loading);
             if (selectedFilePath.toString().endsWith(".iso")) {
-                loadingPbb.setVisibility(View.VISIBLE);
-                try {
-                    try {
-                        OutputStream out = new FileOutputStream(new File(AppConfig.maindirpath + "/drive.iso"));
+                loading.setVisibility(View.VISIBLE);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        FileInputStream File = null;
                         try {
-                            // Transfer bytes from in to out
-                            byte[] buf = new byte[1024];
-                            int len;
-                            while ((len = isoFile.read(buf)) > 0) {
-                                out.write(buf, 0, len);
-                            }
-                        } finally {
-                            out.close();
+                            File = (FileInputStream) getContentResolver().openInputStream(content_describer);
+                        } catch (FileNotFoundException e) {
+                            throw new RuntimeException(e);
                         }
-                    } finally {
-                        loadingPbb.setVisibility(View.GONE);
-                        isoFile.close();
+                        try {
+                            try {
+                                OutputStream out = new FileOutputStream(new File(AppConfig.maindirpath + "/drive.iso"));
+                                try {
+                                    // Transfer bytes from in to out
+                                    byte[] buf = new byte[1024];
+                                    int len;
+                                    while ((len = File.read(buf)) > 0) {
+                                        out.write(buf, 0, len);
+                                    }
+                                } finally {
+                                    out.close();
+                                }
+                            } finally {
+                                Runnable runnable = new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        loading.setVisibility(View.GONE);
+                                    }
+                                };
+                                activity.runOnUiThread(runnable);
+                                File.close();
+                            }
+                        } catch (IOException e) {
+                            Runnable runnable = new Runnable() {
+                                @Override
+                                public void run() {
+                                    loading.setVisibility(View.GONE);
+                                }
+                            };
+                            activity.runOnUiThread(runnable);
+                            UIAlert("error", e.toString(), activity);
+                        }
                     }
-                } catch (IOException e) {
-                    loadingPbb.setVisibility(View.GONE);
-                    UIAlert("error", e.toString(), activity);
-                }
+                }).start();
             } else
                 UIAlert("NOT VAILED FILE", "please select iso file", activity);
         }

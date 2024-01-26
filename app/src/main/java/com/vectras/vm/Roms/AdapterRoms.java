@@ -2,8 +2,10 @@ package com.vectras.vm.Roms;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.graphics.Color;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +29,10 @@ import com.vectras.vm.MainActivity;
 import com.vectras.vm.R;
 import com.vectras.vm.utils.FileUtils;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -36,6 +42,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import android.content.DialogInterface;
 import android.app.Dialog;
+import android.widget.Toast;
 
 public class AdapterRoms extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -82,7 +89,7 @@ public class AdapterRoms extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             } else {
                 myHolder.checkBox.setEnabled(true);
                 myHolder.textAvail.setTextColor(Color.GREEN);
-                myHolder.textAvail.setText("availability: available");
+                myHolder.textAvail.setText("available");
             }
             myHolder.checkBox.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -95,10 +102,30 @@ public class AdapterRoms extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     RomsManagerActivity.selectedName = current.itemName + " " + current.itemArch;
                     RomsManagerActivity.selectedLink = current.itemUrl;
                     RomsManagerActivity.selectedIcon = current.itemIcon;
+                    myHolder.ivIcon.buildDrawingCache();
+                    Bitmap bm = myHolder.ivIcon.getDrawingCache();
+                    OutputStream fOut = null;
+                    Uri outputFileUri;
+                    try {
+                        File root = new File(AppConfig.maindirpath + "/icons/");
+                        root.mkdirs();
+                        File sdImageMainDirectory = new File(root, current.itemPath.replace(".IMG", ".jpg"));
+                        outputFileUri = Uri.fromFile(sdImageMainDirectory);
+                        fOut = new FileOutputStream(sdImageMainDirectory);
+                    } catch (FileNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    try {
+                        bm.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+                        fOut.flush();
+                        fOut.close();
+                    } catch (Exception e) {
+                    }
                 }
             });
         } else {
-            myHolder.textAvail.setText("availability: unavailable");
+            myHolder.textAvail.setText("unavailable");
             myHolder.textAvail.setTextColor(Color.RED);
             myHolder.checkBox.setEnabled(false);
         }

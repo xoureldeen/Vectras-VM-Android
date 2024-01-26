@@ -155,8 +155,9 @@ public class StartVM {
             this.libqemu = FileUtils.getNativeLibDir(context) + "/libqemu-system-x86_64.so";
             this.arch = "x86_64";
             this.machine_type = "pc";
-            this.cpu = "qemu64";
+            this.cpu = MainSettingsManager.getCpu(MainActivity.activity);
         }
+        bootdevice = MainSettingsManager.getBoot(MainActivity.activity);
         this.sound_card = MainSettingsManager.getSoundCard(MainActivity.activity);
         this.cpuNum = MainSettingsManager.getCpuNum(MainActivity.activity);
 

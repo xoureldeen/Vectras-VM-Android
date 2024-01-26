@@ -161,18 +161,6 @@
                     app:tint="?attr/colorPrimary" />
             </LinearLayout>
 
-            <Button
-                android:id="@+id/ctrlAltDelBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="15dp"
-                android:background="@drawable/controls_button1"
-                android:backgroundTint="?attr/colorPrimary"
-                android:text="Ctrl Alt Del"
-                android:textColor="?attr/colorPrimary"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
@@ -224,7 +212,6 @@
                         android:background="@drawable/controls_button"
                         android:backgroundTint="?attr/colorPrimary"
                         android:src="@drawable/round_settings_24"
-                        android:visibility="gone"
                         app:tint="?attr/colorPrimary" />
 
                     <ImageButton
@@ -306,7 +293,7 @@
         android:clickable="true"
         android:focusable="true"
         android:padding="10dp"
-        android:src="@drawable/visibility_off"
+        android:src="@drawable/round_visibility_off_24"
         app:tint="?attr/colorPrimary" />
 
 </FrameLayout>

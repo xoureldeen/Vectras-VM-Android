@@ -18,6 +18,17 @@
             app:icon="@drawable/ic_arch"
             app:useSimpleSummaryProvider="true" />
 
+        <ListPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="qemu64"
+            android:entries="@array/cpuLabels"
+            android:entryValues="@array/cpuValues"
+            android:key="cpu"
+            android:title="CPU MODEL"
+            app:icon="@drawable/round_memory_24"
+            app:useSimpleSummaryProvider="true" />
+
         <SwitchPreferenceCompat
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -99,13 +110,23 @@
             android:summaryOff="hdd type: ide"
             app:summaryOn="hdd type: virtio"
             app:icon="@drawable/round_dns_24" />
+        <ListPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="c"
+            android:entries="@array/bootLabels"
+            android:entryValues="@array/bootValues"
+            android:key="boot"
+            android:title="BOOT FROM"
+            app:icon="@drawable/ic_b"
+            app:useSimpleSummaryProvider="true" />
         <SwitchPreferenceCompat
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="false"
             android:title="SHARED FOLDER"
             android:key="sharedFolder"
-            android:summary="/data/Vectras/ProgramFiles/"
+            android:summary="/Documents/VectrasVM/SharedFolder/"
             app:icon="@drawable/round_folder_24" />
         <EditTextPreference
             android:layout_width="wrap_content"

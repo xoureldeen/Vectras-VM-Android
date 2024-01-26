@@ -32,6 +32,9 @@ import android.os.Looper;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+
 import com.vectras.vm.MainActivity;
 import com.vectras.vm.AppConfig;
 import java.io.BufferedReader;
@@ -51,6 +54,10 @@ import java.util.HashMap;
  * @author dev
  */
 public class FileUtils {
+	@NonNull
+	public static File getExternalFilesDirectory(Context context) {
+		return new File(Environment.getExternalStorageDirectory(), "Documents/VectrasVM");
+	}
 
 	private static Uri contentUri = null;
 

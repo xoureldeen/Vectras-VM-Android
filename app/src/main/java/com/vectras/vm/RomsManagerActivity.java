@@ -14,6 +14,8 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaScannerConnection;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -42,6 +44,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.AppConfig;
@@ -71,6 +74,7 @@ import java.io.OutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -95,13 +99,11 @@ public class RomsManagerActivity extends AppCompatActivity {
 
     public static MaterialButton goBtn;
 
-    public static CheckBox acceptLiceneseChkBox;
     public static AlertDialog ad;
 
     public static String license;
     public static RecyclerView mRVRoms;
     public static AdapterRoms mAdapter;
-    public static String Data;
     public static List<DataRoms> data;
     public static Boolean selected = false;
     public static String selectedPath = null;
@@ -142,6 +144,29 @@ public class RomsManagerActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    /**
+     * CHECK WHETHER INTERNET CONNECTION IS AVAILABLE OR NOT
+     */
+    public boolean checkConnection(Context context) {
+        final ConnectivityManager connMgr = (ConnectivityManager) context
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if (connMgr != null) {
+            NetworkInfo activeNetworkInfo = connMgr.getActiveNetworkInfo();
+
+            if (activeNetworkInfo != null) { // connected to the internet
+                // connected to the mobile provider's data plan
+                if (activeNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+                    // connected to wifi
+                    return true;
+                } else
+                    return activeNetworkInfo.getType() == ConnectivityManager.TYPE_MOBILE;
+            }
+        }
+        return false;
+    }
+
     /**
      * Called when the activity is first created.
      */
@@ -150,6 +175,10 @@ public class RomsManagerActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         activity = this;
+        SharedPreferences prefs = getSharedPreferences(CREDENTIAL_SHARED_PREF, Context.MODE_PRIVATE);
+        boolean isAccessed = prefs.getBoolean("isFirstLaunch", false);
+        if (!isAccessed && !checkConnection(activity))
+            MainActivity.UIAlert("No internet connection!", "for first time you need internet connection to load app data!", activity);
         setContentView(R.layout.activity_roms_manager);
         loadingPb = findViewById(R.id.loadingPb);
         filterToggle = findViewById(R.id.filterToggle);
@@ -188,7 +217,7 @@ public class RomsManagerActivity extends AppCompatActivity {
                     else
                         filter = null;
                 }
-                new RomsManagerActivity.AsyncLogin().execute();
+                loadData();
             }
         });
 
@@ -198,59 +227,8 @@ public class RomsManagerActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         setTitle("Roms Manager " + MainSettingsManager.getArch(activity));
 
-        new RomsManagerActivity.AsyncLogin().execute();
-        new Thread(new Runnable() {
+        loadData();
 
-            public void run() {
-
-                BufferedReader reader = null;
-                final StringBuilder builder = new StringBuilder();
-
-                try {
-                    // Create a URL for the desired page
-                    URL url = new URL(AppConfig.vectrasTerms); //My text file location
-                    //First open the connection
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    conn.setConnectTimeout(60000); // timing out in a minute
-
-                    BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-
-                    //t=(TextView)findViewById(R.id.TextView1); // ideally do this in onCreate()
-                    String str;
-                    while ((str = in.readLine()) != null) {
-                        builder.append(str);
-                    }
-                    in.close();
-                } catch (Exception e) {
-                    acceptLiceneseChkBox.setEnabled(false);
-                    UIUtils.toastLong(activity, "no internet connection " + e.toString());
-                }
-
-                //since we are in background thread, to post results we have to go back to ui thread. do the following for that
-
-                activity.runOnUiThread(new Runnable() {
-                    public void run() {
-                        license = builder.toString(); // My TextFile has 3 lines
-                        acceptLiceneseChkBox.setEnabled(true);
-                    }
-                });
-
-            }
-        }).start();
-
-        acceptLiceneseChkBox = findViewById(R.id.acceptLiceneseChkBox);
-
-        acceptLiceneseChkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    UIAlertLicense("Terms&Conditions", license, activity);
-                } else {
-                    goBtn.setEnabled(false);
-                }
-            }
-        });
         goBtn = (MaterialButton) findViewById(R.id.goBtn);
 
         goBtn.setOnClickListener(new View.OnClickListener() {
@@ -272,147 +250,49 @@ public class RomsManagerActivity extends AppCompatActivity {
         });
     }
 
-    public static void UIAlertLicense(String title, String html, final Activity activity) {
-        AlertDialog alertDialog;
-        alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
-        alertDialog.setTitle(title);
-        alertDialog.setCancelable(true);
+    private void loadData() {
+        data = new ArrayList<>();
 
-        alertDialog.setMessage(Html.fromHtml(html));
+        try {
+            JSONArray jArray = new JSONArray(FileUtils.readFromFile(activity, new File(AppConfig.maindirpath + "roms.json")));
 
-        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "I Acknowledge", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                acceptLiceneseChkBox.setChecked(true);
-                goBtn.setEnabled(true);
-                return;
+            // Extract data from json and store into ArrayList as class objects
+            for (int i = 0; i < jArray.length(); i++) {
+                JSONObject json_data = jArray.getJSONObject(i);
+                DataRoms romsData = new DataRoms();
+                romsData.itemName = json_data.getString("rom_name");
+                romsData.itemIcon = json_data.getString("rom_icon");
+                romsData.itemUrl = json_data.getString("rom_url");
+                romsData.itemPath = json_data.getString("rom_path");
+                romsData.itemAvail = json_data.getBoolean("rom_avail");
+                romsData.itemSize = json_data.getString("rom_size");
+                romsData.itemArch = json_data.getString("rom_arch");
+                romsData.itemKernel = json_data.getString("rom_kernel");
+                romsData.itemExtra = json_data.getString("rom_extra");
+                if (filter != null) {
+                    if (romsData.itemKernel.toLowerCase().contains(filter.toLowerCase())) {
+                        data.add(romsData);
+                    }
+                } else {
+                    data.add(romsData);
+                }
             }
-        });
-        alertDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                acceptLiceneseChkBox.setChecked(false);
-                goBtn.setEnabled(false);
-            }
-        });
-        alertDialog.show();
+
+            // Setup and Handover data to recyclerview
+
+        } catch (JSONException e) {
+            UIUtils.toastLong(activity, e.toString());
+        }
+        mRVRoms = (RecyclerView) activity.findViewById(R.id.romsRv);
+        mAdapter = new AdapterRoms(activity, data);
+        mRVRoms.setAdapter(mAdapter);
+        mRVRoms.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
     }
+
 
     public static String filter = null;
 
-    public static class AsyncLogin extends AsyncTask<String, String, String> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            //this method will be running on UI thread
-
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            HttpsURLConnection con = null;
-            try {
-                URL u = new URL(AppConfig.romsJson(activity));
-                con = (HttpsURLConnection) u.openConnection();
-
-                con.connect();
-
-                BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-                StringBuilder sb = new StringBuilder();
-                String line;
-                while ((line = br.readLine()) != null) {
-                    sb.append(line + "\n");
-                }
-                br.close();
-                Data = sb.toString();
-
-                return (Data);
-
-            } catch (MalformedURLException ex) {
-                ex.printStackTrace();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            } finally {
-                if (con != null) {
-                    try {
-                        con.disconnect();
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-                return ("unsuccessful!");
-            }
-
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-
-            //this method will be running on UI thread
-            data = new ArrayList<>();
-
-            try {
-
-                JSONArray jArray = new JSONArray(Data);
-
-                // Extract data from json and store into ArrayList as class objects
-                for (int i = 0; i < jArray.length(); i++) {
-                    JSONObject json_data = jArray.getJSONObject(i);
-                    DataRoms romsData = new DataRoms();
-                    romsData.itemName = json_data.getString("rom_name");
-                    romsData.itemIcon = json_data.getString("rom_icon");
-                    romsData.itemUrl = json_data.getString("rom_url");
-                    romsData.itemPath = json_data.getString("rom_path");
-                    romsData.itemAvail = json_data.getBoolean("rom_avail");
-                    romsData.itemSize = json_data.getString("rom_size");
-                    romsData.itemArch = json_data.getString("rom_arch");
-                    romsData.itemKernel = json_data.getString("rom_kernel");
-                    romsData.itemExtra = json_data.getString("rom_extra");
-                    if (filter != null) {
-                        if (romsData.itemKernel.toLowerCase().contains(filter.toLowerCase())) {
-                            data.add(romsData);
-                        }
-                    } else {
-                        data.add(romsData);
-                    }
-                }
-
-                // Setup and Handover data to recyclerview
-
-            } catch (JSONException e) {
-                UIUtils.toastLong(activity, e.toString());
-            }
-            mRVRoms = (RecyclerView) activity.findViewById(R.id.romsRv);
-            mAdapter = new AdapterRoms(activity, data);
-            mRVRoms.setAdapter(mAdapter);
-            mRVRoms.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
-
-        }
-
-    }
-
     public static class RomsJso extends JSONObject {
-
-        public JSONObject makeJSONObject(String imgName, String imgIcon, String imgArch, String imgPath, String imgExtra) {
-
-            JSONObject obj = new JSONObject();
-
-            try {
-                obj.put("imgName", imgName);
-                obj.put("imgIcon", imgIcon);
-                obj.put("imgArch", imgArch);
-                obj.put("imgPath", imgPath);
-                obj.put("imgExtra", imgExtra);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            return obj;
-        }
-    }
-
-    public static class RomsJso2 extends JSONObject {
 
         public JSONObject makeJSONObject(String imgName, String imgIcon, String imgArch, String imgPath, String imgExtra) {
 
@@ -435,7 +315,7 @@ public class RomsManagerActivity extends AppCompatActivity {
     public static final String CREDENTIAL_SHARED_PREF = "settings_prefs";
 
     private void startIconDownload() {
-        new DownloadsImage().execute(selectedIcon);
+
     }
 
     public void onFirstStartup() {
@@ -582,7 +462,6 @@ public class RomsManagerActivity extends AppCompatActivity {
                 try {
                     loadingPb.setVisibility(View.VISIBLE);
                     goBtn.setEnabled(false);
-                    acceptLiceneseChkBox.setEnabled(false);
                     mRVRoms.setVisibility(View.GONE);
                     Thread t = new Thread() {
                         public void run() {
@@ -627,7 +506,6 @@ public class RomsManagerActivity extends AppCompatActivity {
                                     public void run() {
                                         loadingPb.setVisibility(View.GONE);
                                         goBtn.setEnabled(true);
-                                        acceptLiceneseChkBox.setEnabled(true);
                                         mRVRoms.setVisibility(View.VISIBLE);
                                         onFirstStartup();
                                     }
@@ -646,7 +524,6 @@ public class RomsManagerActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     loadingPb.setVisibility(View.GONE);
                     goBtn.setEnabled(true);
-                    acceptLiceneseChkBox.setEnabled(true);
                     mRVRoms.setVisibility(View.VISIBLE);
                     UIUtils.toastLong(activity, e.toString());
                     throw new RuntimeException(e);
@@ -659,7 +536,7 @@ public class RomsManagerActivity extends AppCompatActivity {
         }
     }
 
-    static class DownloadsImage extends AsyncTask<String, Void, Void> {
+    public static class DownloadsImage extends AsyncTask<String, Void, Void> {
 
         @Override
         protected Void doInBackground(String... strings) {

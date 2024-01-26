@@ -6,6 +6,7 @@ import android.os.Environment;
 import android.widget.ImageView.ScaleType;
 
 import com.vectras.qemu.MainSettingsManager;
+import com.vectras.vm.utils.FileUtils;
 
 import java.io.File;
 import java.util.Hashtable;
@@ -39,9 +40,17 @@ public class AppConfig {
     }
 
     // App config
-    public static final String datadirpath = SplashActivity.activity.getExternalFilesDir("data") + "/";
-    public static final String sharedFolder = datadirpath + "Vectras/ProgramFiles/";
-    public static final String basefiledir = datadirpath + "Vectras/.qemu/";
-    public static final String maindirpath = datadirpath + "Vectras/";
+    public static final String datadirpath() {
+        File f = new File(SplashActivity.activity.getExternalFilesDir("data") + "/Vectras");
+        if (f.exists())
+            return SplashActivity.activity.getExternalFilesDir("data") + "/Vectras";
+        else
+            return FileUtils.getExternalFilesDirectory(SplashActivity.activity).getPath();
+    }
+
+    ;
+    public static final String sharedFolder = datadirpath() + "/SharedFolder/";
+    public static final String basefiledir = datadirpath() + "/.qemu/";
+    public static final String maindirpath = datadirpath() + "/";
 
 }

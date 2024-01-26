@@ -26,5 +26,13 @@
         android:id="@+id/saveRomBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.Button"
         android:text="@string/save" />
+
+    <Button
+        android:id="@+id/exportRomBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.Button"
+        android:text="@string/export" />
 </LinearLayout>

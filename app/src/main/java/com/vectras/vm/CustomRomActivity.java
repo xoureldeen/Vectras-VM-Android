@@ -2,7 +2,9 @@ package com.vectras.vm;
 
 import static android.content.Intent.ACTION_OPEN_DOCUMENT;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -17,6 +19,8 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.vectras.qemu.MainSettingsManager;
+import com.vectras.vm.Fragment.HomeFragment;
+import com.vectras.vm.MainRoms.AdapterMainRoms;
 import com.vectras.vm.MainRoms.DataMainRoms;
 import com.vectras.vm.logger.VectrasStatus;
 import com.vectras.vm.utils.FileUtils;
@@ -24,10 +28,13 @@ import com.vectras.vm.utils.UIUtils;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,6 +50,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -54,6 +62,8 @@ import java.io.OutputStream;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 public class CustomRomActivity extends AppCompatActivity {
 
@@ -78,6 +88,8 @@ public class CustomRomActivity extends AppCompatActivity {
 
         menu.add(0, 0, 0, "arch").setShortcut('3', 'c').setIcon(R.drawable.ic_arch).setShowAsAction(1);
 
+        menu.add(1, 1, 1, "custom rom").setShortcut('3', 'c').setIcon(R.drawable.input_circle).setShowAsAction(1);
+
         return true;
     }
 
@@ -87,6 +99,19 @@ public class CustomRomActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case 0:
                 startActivity(new Intent(activity, SetArchActivity.class));
+                return true;
+            case 1:
+                Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("*/*");
+
+                // Optionally, specify a URI for the file that should appear in the
+                // system file picker when it loads.
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
+                }
+
+                startActivityForResult(intent, 0);
                 return true;
             case android.R.id.home:
                 finish();
@@ -191,6 +216,11 @@ public class CustomRomActivity extends AppCompatActivity {
         addRomBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String CREDENTIAL_SHARED_PREF = "settings_prefs";
+                SharedPreferences credentials = activity.getSharedPreferences(CREDENTIAL_SHARED_PREF, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = credentials.edit();
+                editor.putBoolean("isFirstLaunch", Boolean.TRUE);
+                editor.apply();
                 loadingPb.setVisibility(View.VISIBLE);
                 final File jsonFile = new File(AppConfig.maindirpath + "roms-data" + ".json");
                 RomsJso obj = new RomsJso();
@@ -245,7 +275,6 @@ public class CustomRomActivity extends AppCompatActivity {
                     }
                     VectrasStatus.logInfo("Welcome to Vectras ♡");
                 }
-                MainActivity.activity.finish();
                 finish();
                 activity.startActivity(new Intent(activity, SplashActivity.class));
             }
@@ -419,8 +448,94 @@ public class CustomRomActivity extends AppCompatActivity {
                     }
                 }
             }).start();
-        }
-        if (requestCode == 1000 && resultCode == RESULT_CANCELED) {
+        } else if (requestCode == 0 && resultCode == RESULT_OK) {
+            Uri content_describer = ReturnedIntent.getData();
+            File selectedFilePath = new File(getPath(content_describer));
+            if (selectedFilePath.getName().endsWith(".cvbi")) {
+
+                loadingPb.setVisibility(View.VISIBLE);
+                custom.setVisibility(View.GONE);
+                Thread t = new Thread() {
+                    public void run() {
+                        FileInputStream zipFile = null;
+                        try {
+                            zipFile = (FileInputStream) getContentResolver().openInputStream(content_describer);
+                            File targetDirectory = new File(AppConfig.maindirpath + selectedFilePath.getName().replace(".cvbi", ""));
+                            ZipInputStream zis = null;
+                            zis = new ZipInputStream(
+                                    new BufferedInputStream(zipFile));
+                            try {
+                                ZipEntry ze;
+                                int count;
+                                byte[] buffer = new byte[8192];
+                                while ((ze = zis.getNextEntry()) != null) {
+                                    File file = new File(targetDirectory, ze.getName());
+                                    File dir = ze.isDirectory() ? file : file.getParentFile();
+                                    if (!dir.isDirectory() && !dir.mkdirs())
+                                        throw new FileNotFoundException("Failed to ensure directory: " +
+                                                dir.getAbsolutePath());
+                                    if (ze.isDirectory())
+                                        continue;
+                                    try (FileOutputStream fout = new FileOutputStream(file)) {
+                                        while ((count = zis.read(buffer)) != -1)
+                                            fout.write(buffer, 0, count);
+                                    }
+                        /* if time should be restored as well
+                        long time = ze.getTime();
+                        if (time > 0)
+                            file.setLastModified(time);
+                        */
+                                }
+                            } catch (IOException e) {
+                                UIUtils.toastLong(activity, e.toString());
+                                throw new RuntimeException(e);
+                            } finally {
+                                Runnable runnable = new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        loadingPb.setVisibility(View.GONE);
+                                        custom.setVisibility(View.VISIBLE);
+                                        try {
+
+                                            JSONObject jObj = new JSONObject(FileUtils.readFromFile(MainActivity.activity, new File(AppConfig.maindirpath
+                                                    + selectedFilePath.getName().replace(".cvbi", "") + "/rom-data.json")));
+
+                                            title.setText(jObj.getString("title"));
+                                            icon.setText(AppConfig.maindirpath
+                                                    + selectedFilePath.getName().replace(".cvbi", "") + "/" + jObj.getString("icon"));
+                                            drive.setText(AppConfig.maindirpath
+                                                    + selectedFilePath.getName().replace(".cvbi", "") + "/" + jObj.getString("drive"));
+                                            qemu.setText(jObj.getString("qemu"));
+                                            ImageView ivIcon = findViewById(R.id.ivIcon);
+                                            Bitmap bmImg = BitmapFactory.decodeFile(AppConfig.maindirpath
+                                                    + selectedFilePath.getName().replace(".cvbi", "") + "/" + jObj.getString("icon"));
+                                            ivIcon.setImageBitmap(bmImg);
+                                            MainActivity.UIAlert("DESCRIPTION", "rom by:\n" + jObj.getString("author") + "\n\n" + Html.fromHtml(jObj.getString("desc")), activity);
+                                        } catch (JSONException e) {
+                                            throw new RuntimeException(e);
+                                        }
+                                    }
+                                };
+                                activity.runOnUiThread(runnable);
+                                try {
+                                    zis.close();
+                                } catch (IOException e) {
+                                    UIUtils.toastLong(activity, e.toString());
+                                    throw new RuntimeException(e);
+                                }
+                            }
+                        } catch (FileNotFoundException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                };
+                t.start();
+
+            } else {
+                MainActivity.UIAlert("File not supported", "please select cvbi vailed file to continue.", activity);
+            }
+
+        } else if (requestCode == 1000 && resultCode == RESULT_CANCELED) {
             finish();
         }
     }

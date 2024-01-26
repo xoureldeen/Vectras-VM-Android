@@ -5,11 +5,15 @@
     android:layout_height="match_parent"
     tools:context=".Fragment.UiSettingsFragment">
 
-    <com.google.android.material.materialswitch.MaterialSwitch
-        android:padding="8dp"
-        android:id="@+id/hideControllerSwitch"
+    <TextView
+        android:id="@+id/btnMouseMode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/hide_controller"
-        tools:ignore="UseSwitchCompatOrMaterialXml" />
+        android:padding="10dp"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:textColor="?attr/colorControlNormal"
+        android:drawableStart="@drawable/round_mouse_24"
+        android:gravity="center_vertical"
+        android:text="@string/mouse_mode" />
 </FrameLayout>

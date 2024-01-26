@@ -755,6 +755,32 @@ public class MainSettingsManager extends AppCompatActivity
         return prefs.getString("TbSize", "2048");
     }
 
+    public static void setBoot(Activity activity, String boot) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putString("boot", boot);
+        edit.apply();
+    }
+
+    public static String getBoot(Activity activity) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        return prefs.getString("boot", "c");
+    }
+
+
+    public static void setCpu(Activity activity, String cpu) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putString("cpu", cpu);
+        edit.apply();
+    }
+
+    public static String getCpu(Activity activity) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        return prefs.getString("cpu", "qemu64");
+    }
+
+
     public static void setVmUi(Activity activity, String vmUi) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         SharedPreferences.Editor edit = prefs.edit();

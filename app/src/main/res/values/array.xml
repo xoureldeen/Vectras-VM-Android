@@ -32,6 +32,14 @@
         <item>X86_64</item>
         <!--<item>ARM</item>-->
     </string-array>
+    <string-array name="bootLabels">
+        <item>HARDDISK</item>
+        <item>CDROM</item>
+    </string-array>
+    <string-array name="bootValues">
+        <item>c</item>
+        <item>d</item>
+    </string-array>
     <string-array name="soundCardLabels">
         <item>NONE</item>
         <item>ALL SOUNDCARD</item>
@@ -47,5 +55,49 @@
         <item>sb16</item>
         <item>adlib</item>
         <item>pcspk</item>
+    </string-array>
+    <string-array name="cpuLabels">
+        <item>QEMU Virtual CPU version 2.3.0</item>
+        <item>Common KVM processor</item>
+        <item>Common KVM processor (HOST)</item>
+        <item>AMD Phenom(tm) 9550 Quad-Core Processor</item>
+        <item>Intel(R) Core(TM)2 Duo CPU T7700 @2.40GHz</item>
+        <item>Intel Celeron_4x0 (Conroe/Merom Class Core 2)</item>
+        <item>Intel Core 2 Duo P9xxx (Penryn Class Core 2)</item>
+        <item>Intel Core i7 9xx (Nehalem Class Core i7)</item>
+        <item>Westmere E56xx/L56xx/X56xx (Nehalem-C)</item>
+        <item>Intel Xeon E312xx (Sandy Bridge)</item>
+        <item>Intel Xeon E3–12xx v2 (Ivy Bridge)</item>
+        <item>Intel Core Processor (Haswell, noTSX)</item>
+        <item>Intel Core Processor (Haswell)</item>
+        <item>Intel Core Processor (Haswell, noTSX)</item>
+        <item>Intel Core Processor (Broadwell)</item>
+        <item>AMD Opteron 240 (Gen 1 Class Opteron)</item>
+        <item>AMD Opteron 22xx (Gen 2 Class Opteron)</item>
+        <item>AMD Opteron 23xx (Gen 3 Class Opteron)</item>
+        <item>AMD Opteron 62xx class CPU</item>
+        <item>AMD Opteron 63xx class CPU</item>
+    </string-array>
+    <string-array name="cpuValues">
+        <item>qemu64</item>
+        <item>kvm64</item>
+        <item>host</item>
+        <item>phenom</item>
+        <item>core2duo</item>
+        <item>Conroe</item>
+        <item>Penryn</item>
+        <item>Nehalem</item>
+        <item>Westmere</item>
+        <item>SandyBridge</item>
+        <item>IvyBridge</item>
+        <item>Haswell-noTSX</item>
+        <item>Haswell</item>
+        <item>Broadwell-noTSX</item>
+        <item>Broadwell</item>
+        <item>Opteron_G1</item>
+        <item>Opteron_G2</item>
+        <item>Opteron_G3</item>
+        <item>Opteron_G4</item>
+        <item>Opteron_G5</item>
     </string-array>
 </resources>

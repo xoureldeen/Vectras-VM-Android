@@ -122,7 +122,7 @@
                 android:background="?attr/colorSurface" />
 
             <ProgressBar
-                android:id="@+id/loadingPbb"
+                android:id="@+id/loading"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

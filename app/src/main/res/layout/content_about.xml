@@ -8,16 +8,16 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/card_yagiz"
+            style="@style/CardViewStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:padding="15dp"
             android:visibility="visible"
-            style="@style/CardViewStyle"
             app:cardCornerRadius="12dp">
 
             <LinearLayout
@@ -28,22 +28,24 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="8dp"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:padding="8dp">
 
                     <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/animation_view"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
-                        android:id="@+id/animation_view"
-                        app:lottie_rawRes="@raw/logo2"
                         app:lottie_autoPlay="true"
-                        app:lottie_loop="true"/>
+                        app:lottie_loop="true"
+                        app:lottie_rawRes="@raw/logo2" />
+
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="8dp"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:padding="8dp">
+
                         <TextView
                             style="@android:style/Widget.TextView"
                             android:layout_width="wrap_content"
@@ -52,79 +54,81 @@
                             android:textSize="18sp"
                             android:textStyle="bold" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/app_version"
-                            android:textSize="14sp" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/app_version"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/qemu_version"
+                                android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
 
                 <Button
                     android:id="@+id/btn_github"
+                    style="@style/Widget.Material3.Button.TextButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    app:icon="@drawable/ic_github"
                     android:padding="8dp"
                     android:text="Repository"
-                    style="@style/Widget.Material3.Button.TextButton" />
+                    app:icon="@drawable/ic_github" />
 
                 <Button
                     android:id="@+id/btn_telegram"
+                    style="@style/Widget.Material3.Button.TextButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    app:icon="@drawable/ic_telegram"
                     android:padding="8dp"
                     android:text="Telegram Channel"
-                    style="@style/Widget.Material3.Button.TextButton"
-                     />
+                    app:icon="@drawable/ic_telegram" />
 
                 <Button
                     android:id="@+id/btn_youtube"
+                    style="@style/Widget.Material3.Button.TextButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    app:icon="@drawable/ic_youtube"
-                    style="@style/Widget.Material3.Button.TextButton"
                     android:padding="8dp"
                     android:text="Youtube"
-                     />
+                    app:icon="@drawable/ic_youtube" />
 
                 <Button
                     android:id="@+id/btn_instagram"
+                    style="@style/Widget.Material3.Button.TextButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    app:icon="@drawable/ic_instagram"
-                    style="@style/Widget.Material3.Button.TextButton"
                     android:padding="8dp"
                     android:text="Instagram"
-                    />
+                    app:icon="@drawable/ic_instagram" />
 
                 <Button
                     android:id="@+id/btn_facebook"
+                    style="@style/Widget.Material3.Button.TextButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    app:icon="@drawable/ic_facebook"
-                    style="@style/Widget.Material3.Button.TextButton"
                     android:padding="8dp"
                     android:text="Facebook"
-                    />
+                    app:icon="@drawable/ic_facebook" />
 
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
+            style="@style/CardViewStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
             android:padding="4dp"
             android:visibility="visible"
-            style="@style/CardViewStyle"
             app:cardCornerRadius="12dp">
 
             <LinearLayout
@@ -133,25 +137,25 @@
                 android:orientation="vertical">
 
                 <Button
-                    android:visibility="gone"
                     android:id="@+id/btn_changelog"
+                    style="@style/Widget.Material3.Button.TextButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    app:icon="@drawable/round_info_24"
                     android:padding="8dp"
-                    style="@style/Widget.Material3.Button.TextButton"
-                    android:text="Change Log" />
+                    android:text="Change Log"
+                    android:visibility="gone"
+                    app:icon="@drawable/round_info_24" />
 
                 <Button
                     android:id="@+id/btn_osl"
+                    style="@style/Widget.Material3.Button.TextButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    app:icon="@drawable/round_info_24"
-                    style="@style/Widget.Material3.Button.TextButton"
                     android:padding="8dp"
-                    android:text="Info" />
+                    android:text="Info"
+                    app:icon="@drawable/round_info_24" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 

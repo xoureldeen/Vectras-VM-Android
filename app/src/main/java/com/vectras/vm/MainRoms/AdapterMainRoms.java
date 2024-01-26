@@ -1,13 +1,17 @@
 package com.vectras.vm.MainRoms;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.text.InputType;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +28,9 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
 import com.vectras.qemu.Config;
 import com.vectras.vm.AppConfig;
 import com.vectras.vm.Fragment.HomeFragment;
@@ -34,14 +41,23 @@ import com.vectras.vm.utils.UIUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.zeroturnaround.zip.FileSource;
+import org.zeroturnaround.zip.ZipEntrySource;
+import org.zeroturnaround.zip.ZipUtil;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Collections;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -65,6 +81,8 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
         MyHolder holder = new MyHolder(view);
         return holder;
     }
+
+    public static final String CREDENTIAL_SHARED_PREF = "settings_prefs";
 
     // Bind data
     @Override
@@ -108,6 +126,90 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         } finally {
                             d.dismiss();
                         }
+                    }
+                });
+                Button exportRomBtn = d.findViewById(R.id.exportRomBtn);
+                exportRomBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final File jsonFile = new File(MainActivity.activity.getExternalFilesDir("data") + "/rom-data.json");
+                        AlertDialog ad;
+                        ad = new AlertDialog.Builder(MainActivity.activity).create();
+                        ad.setTitle("Export Rom");
+                        ad.setMessage("Are you sure?");
+                        final TextInputLayout Description = new TextInputLayout(MainActivity.activity);
+                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.MATCH_PARENT);
+                        Description.setHint("DESCRIPTION (html supported)");
+                        Description.setLayoutParams(lp);
+                        Description.setPadding(10, 10, 10, 10);
+                        final TextInputEditText DescriptionET = new TextInputEditText(MainActivity.activity);
+                        LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.MATCH_PARENT);
+                        DescriptionET.setLayoutParams(lp2);
+                        Description.addView(DescriptionET);
+                        DescriptionET.setText("null");
+                        DescriptionET.setInputType(InputType.TYPE_CLASS_TEXT);
+                        DescriptionET.setSelectAllOnFocus(true);
+                        ad.setView(Description);
+                        ad.setButton(Dialog.BUTTON_POSITIVE, "EXPORT", (dialog, which) -> {
+                            RomJson obj = new RomJson();
+                            JSONObject jsonObject = obj.makeJSONObject(current.itemName, current.itemArch, FirebaseAuth.getInstance().getCurrentUser().getDisplayName(), DescriptionET.getText().toString(), new File(current.itemIcon).getName(), new File(current.itemPath).getName(), qemu.getText().toString());
+
+                            try {
+                                Writer output = null;
+                                output = new BufferedWriter(new FileWriter(jsonFile));
+                                output.write(jsonObject.toString().replace("\\", "").replace("//", "/"));
+                                output.close();
+                            } catch (Exception e) {
+                            }
+                            SharedPreferences credentials = MainActivity.activity.getSharedPreferences(CREDENTIAL_SHARED_PREF, Context.MODE_PRIVATE);
+
+                            ProgressDialog progressDialog = new ProgressDialog(MainActivity.activity);
+                            progressDialog.setTitle("Compressing CVBI");
+                            progressDialog.setMessage("Please wait...");
+                            progressDialog.setCancelable(false);
+                            progressDialog.show(); // Showing Progress Dialog
+                            Thread t = new Thread() {
+                                public void run() {
+                                    try {
+                                        ZipEntrySource[] addedEntries = new ZipEntrySource[]{
+                                                new FileSource("/" + new File(current.itemPath).getName(), new File(current.itemPath)),
+                                                new FileSource("/" + new File(current.itemIcon).getName(), new File(current.itemIcon)),
+                                                new FileSource("/" + new File(MainActivity.activity.getExternalFilesDir("data") + "/rom-data.json").getName(), new File(MainActivity.activity.getExternalFilesDir("data") + "/rom-data.json"))
+                                        };
+                                        ZipUtil.pack(addedEntries, new File(AppConfig.datadirpath() + "/cvbi/" + current.itemName + ".cvbi"));
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                        Runnable runnable = new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                progressDialog.cancel(); // cancelling Dialog.
+                                                MainActivity.UIAlert("ERROR!", e.toString(), MainActivity.activity);
+                                            }
+                                        };
+                                        MainActivity.activity.runOnUiThread(runnable);
+                                    } finally {
+                                        Runnable runnable = new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                progressDialog.cancel(); // cancelling Dialog.}
+                                                MainActivity.UIAlert("DONE!", AppConfig.datadirpath() + "/cvbi/" + current.itemName + ".cvbi", MainActivity.activity);
+                                            }
+                                        };
+                                        MainActivity.activity.runOnUiThread(runnable);
+                                    }
+                                }
+                            };
+                            t.start();
+                            return;
+                        });
+                        ad.setButton(Dialog.BUTTON_NEGATIVE, "CLOSE", (dialog, which) -> {
+                            return;
+                        });
+                        ad.show();
                     }
                 });
                 d.show();
@@ -175,6 +277,29 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 return false;
             }
         });
+    }
+
+    public class RomJson extends JSONObject {
+
+        public JSONObject makeJSONObject(String imgName, String imgArch, String imgAuthor, String imgDesc, String imgIcon, String imgDrive, String imgQemu) {
+
+            JSONObject obj = new JSONObject();
+
+            try {
+                obj.put("title", imgName);
+                obj.put("arch", imgArch);
+                obj.put("author", imgAuthor);
+                obj.put("desc", imgDesc);
+                obj.put("kernel", "windows");
+                obj.put("icon", imgIcon);
+                obj.put("drive", imgDrive);
+                obj.put("qemu", imgQemu);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return obj;
+        }
     }
 
     private void showDialog(String title, String path, String pathIcon) {

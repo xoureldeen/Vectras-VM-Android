@@ -108,7 +108,7 @@ public class Config {
         return cacheDir.toString();
     }
     public static final String getBasefileDir() {
-        return getCacheDir() + "/vectras/";
+        return AppConfig.basefiledir;
     }
 
     public static String machineFolder = "machines/";

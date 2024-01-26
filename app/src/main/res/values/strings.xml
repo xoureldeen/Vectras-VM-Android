@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name" translatable="false">Vectras VM</string>
-    <string name="app_version" translatable="false">PHANTOM v2.5</string>
+    <string name="app_version" translatable="false">v2.6</string>
+    <string name="qemu_version" translatable="false">qemu-5.0.1</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
     <string name="fab_info">Start Emulation</string>
@@ -13,8 +14,8 @@
     <string name="desktopInstructions">To use External Mouse:\n\tDisable Mouse Acceleration inside the Guest OS.\n\t\tFor DSL use command: xset m 1\n"\t\tFor Other OSes disable \"Enhance pointer Precision\" or choose Mouse \"usb-tablet\" from Vectras main options.\n\tPlug in or Pair your USB/Bluetooth Mouse and press OK\n\tMove your mouse pointer to all desktop sides to calibrate.\n"</string>
     <string name="repeater_caption">Enter the repeater address &lt;b&gt;only if&lt;/b&gt; you are using an&lt;br&gt;&lt;i&gt;UltraVNC&lt;/i&gt;-type repeater</string>
 
-    <string name="navigation_drawer_open">drawer open</string>
-    <string name="navigation_drawer_close">drawer close</string>
+    <string name="navigation_drawer_open" translatable="false">drawer open</string>
+    <string name="navigation_drawer_close" translatable="false">drawer close</string>
     <string name="address_caption">Address</string>
     <string name="alt_check">Alt</string>
     <string name="arrow_down">Down Arrow</string>
@@ -30,19 +31,19 @@
     <string name="color_mode">Color Mode</string>
     <string name="connect_button">Connect</string>
     <string name="connection_caption">Connection</string>
-    <string name="control_check">Ctrl</string>
+    <string name="control_check" translatable="false">Ctrl</string>
     <string name="reset">Reset</string>
     <string name="shutdown">Shutdown</string>
     <string name="copy_list_button">Copy List</string>
-    <string name="ctrl_alt_del">Ctrl-Alt-Del</string>
-    <string name="ctrl_c">Ctrl-c</string>
+    <string name="ctrl_alt_del" translatable="false">Ctrl-Alt-Del</string>
+    <string name="ctrl_c" translatable="false">Ctrl-c</string>
     <string name="delete_connection">Delete Connection</string>
     <string name="delete_key">Delete Selected Key</string>
     <string name="delete_key_list">Delete Key List</string>
     <string name="disconnect">Disconnect</string>
     <string name="devices">Devices</string>
     <string name="external_mouse">External Mouse</string>
-    <string name="monitor">QEMU Monitor</string>
+    <string name="monitor" translatable="false">QEMU Monitor</string>
     <string name="export_settings">Export</string>
     <string name="export_settings_path">Export to file</string>
     <string name="enter_text_title">Enter Text to Send</string>
@@ -76,8 +77,8 @@
     <string name="mouse_follow_pan">Mouse follow pan</string>
     <string name="new_list_button">New List</string>
     <string name="nickname_caption">Nickname</string>
-    <string name="off">Off</string>
-    <string name="on">On</string>
+    <string name="off" translatable="false">Off</string>
+    <string name="on" translatable="false">On</string>
     <string name="one_to_one">Normal (1:1)</string>
     <string name="open_doc">Manual/Wiki</string>
     <string name="pan_follow_mouse">Pan Follows Mouse</string>
@@ -142,12 +143,12 @@
     <string name="memory_usage">Memory Usage</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="linux">linux</string>
-    <string name="windows">windows</string>
-    <string name="apple">apple</string>
-    <string name="external_vnc">EXTERNAL VNC</string>
-    <string name="hosted_successfully">HOSTED SUCCESSFULLY!</string>
-    <string name="ip">IP: 127.0.0.1:1</string>
+    <string name="linux" translatable="false">linux</string>
+    <string name="windows" translatable="false">windows</string>
+    <string name="apple" translatable="false">apple</string>
+    <string name="external_vnc" translatable="false">EXTERNAL VNC</string>
+    <string name="hosted_successfully" translatable="false">HOSTED SUCCESSFULLY!</string>
+    <string name="ip" translatable="false">IP: 127.0.0.1:1</string>
     <string name="install_rom">Install Rom</string>
     <string name="reconnect">Reconnect</string>
     <string name="display">Display</string>
@@ -207,4 +208,14 @@
     <string name="rom_icon">ROM ICON</string>
     <string name="add">ADD</string>
     <string name="import_iso">Import ISO</string>
+    <string name="importRom">IMPORT</string>
+    <string name="privacy_amp_policy"><![CDATA[Privacy & Policy]]></string>
+    <string name="permission_title">Permission Required!</string>
+    <string name="permission_notification_text">Due to android policy, notification permissions are needed, to send vm notifications!</string>
+    <string name="mouse_mode">Mouse Mode</string>
+    <string name="export">EXPORT</string>
+    <string name="email_verification_sent">Email Verification Sent.</string>
+    <string name="sign_out">Sign out</string>
+    <string name="android" translatable="false">android</string>
+    <string name="other" translatable="false">other</string>
 </resources>

@@ -2,7 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
@@ -116,7 +116,7 @@
                     style="@style/Widget.Material3.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="android"
+                    android:text="@string/android"
                     app:icon="@drawable/ic_android"
                     app:strokeColor="?attr/colorPrimary" />
 
@@ -125,7 +125,7 @@
                     style="@style/Widget.Material3.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="other"
+                    android:text="@string/other"
                     app:icon="@drawable/ic_other"
                     app:strokeColor="?attr/colorPrimary" />
             </com.google.android.material.button.MaterialButtonToggleGroup>
@@ -137,45 +137,11 @@
             android:layout_height="wrap_content"
             android:layout_weight="1.0"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <CheckBox
-                android:id="@+id/acceptLiceneseChkBox"
-                style="@style/MyCheckboxTheme"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:enabled="false" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/i_accept_terms_amp_conditions"
-                    android:textSize="10sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/terms_amp_conditions"
-                    android:textSize="10sp" />
-            </LinearLayout>
-        </LinearLayout>
-
         <com.google.android.material.button.MaterialButton
             android:id="@+id/goBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:enabled="false"
-            android:text="@string/go_ahead"
+            android:text="@string/importRom"
             app:backgroundTint="@drawable/btn_state" />
     </LinearLayout>
 

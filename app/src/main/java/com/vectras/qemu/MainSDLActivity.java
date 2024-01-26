@@ -451,13 +451,13 @@ public class MainSDLActivity extends SDLActivity {
     }
 
 
-    private void onMouseMode() {
+    public void onMouseMode() {
 
         String[] items = {"Trackpad Mouse (Phone)",
                 "Bluetooth/USB Mouse (Desktop mode)", //Physical mouse for Chromebook, Android x86 PC, or Bluetooth Mouse
         };
-        final AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
-        mBuilder.setTitle("Mouse");
+        final AlertDialog.Builder mBuilder = new AlertDialog.Builder(this, R.style.MainDialogTheme);
+        mBuilder.setTitle("Mouse Mode");
         mBuilder.setSingleChoiceItems(items, Config.mouseMode.ordinal(), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {
@@ -531,13 +531,6 @@ public class MainSDLActivity extends SDLActivity {
         final AlertDialog alertDialog;
         alertDialog = new AlertDialog.Builder(activity).create();
         alertDialog.setTitle("Desktop Mode");
-
-        LinearLayout mLayout = new LinearLayout(this);
-        mLayout.setPadding(20, 20, 20, 20);
-        mLayout.setOrientation(LinearLayout.VERTICAL);
-
-        TextView textView = new TextView(activity);
-        textView.setVisibility(View.VISIBLE);
         String desktopInstructions = this.getString(R.string.desktopInstructions);
         if (!checkVMResolutionFits()) {
             String resolutionWarning = "Warning: MainActivity.vmexecutor resolution "
@@ -547,17 +540,7 @@ public class MainSDLActivity extends SDLActivity {
                     "Reduce display resolution within the Guest OS for better experience.\n\n";
             desktopInstructions = resolutionWarning + desktopInstructions;
         }
-        textView.setText(desktopInstructions);
-
-        ScrollView scrollView = new ScrollView(this);
-        scrollView.addView(textView);
-
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        mLayout.addView(scrollView, params);
-
-        alertDialog.setView(mLayout);
-
+        alertDialog.setMessage(desktopInstructions);
         alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 setUIModeDesktop();
@@ -934,7 +917,6 @@ public class MainSDLActivity extends SDLActivity {
         ImageButton ctrlBtn = findViewById(R.id.ctrlBtn);
         ImageButton altBtn = findViewById(R.id.altBtn);
         ImageButton delBtn = findViewById(R.id.delBtn);
-        Button ctrlAltDelBtn = findViewById(R.id.ctrlAltDelBtn);
         ImageButton qmpBtn = findViewById(R.id.btnQmp);
         ImageButton btnLogs = findViewById(R.id.btnLogs);
         btnLogs.setOnClickListener(new View.OnClickListener() {
@@ -1049,7 +1031,7 @@ public class MainSDLActivity extends SDLActivity {
                 delayKey(100);
                 SDLActivity.onNativeKeyDown(KeyEvent.KEYCODE_ENTER);
                 delayKey(100);
-                SDLActivity.onNativeKeyDown(KeyEvent.KEYCODE_ENTER);
+                SDLActivity.onNativeKeyUp(KeyEvent.KEYCODE_ENTER);
             }
         });
         ctrlBtn.setOnClickListener(new View.OnClickListener() {
@@ -1089,12 +1071,6 @@ public class MainSDLActivity extends SDLActivity {
                 SDLActivity.onNativeKeyDown(KeyEvent.KEYCODE_DEL);
                 delayKey(100);
                 SDLActivity.onNativeKeyDown(KeyEvent.KEYCODE_DEL);
-            }
-        });
-        ctrlAltDelBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendCtrlAltKey(KeyEvent.KEYCODE_DEL);
             }
         });
         qmpBtn.setVisibility(View.GONE);
@@ -1155,6 +1131,7 @@ public class MainSDLActivity extends SDLActivity {
             }
         });
     }
+
 
     private void createUI(int w, int h) {
         mSurface = new MainSDLSurface(this);

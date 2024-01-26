@@ -14,6 +14,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -148,6 +149,15 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+        Button singoutBtn = findViewById(R.id.signout);
+        singoutBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                MainActivity.activity.finish();
+                startActivity(new Intent(activity, SplashActivity.class));
+            }
+        });
     }
 
     @Override

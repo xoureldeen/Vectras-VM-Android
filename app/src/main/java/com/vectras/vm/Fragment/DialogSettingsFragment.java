@@ -3,6 +3,7 @@ package com.vectras.vm.Fragment;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -36,7 +37,9 @@ public class DialogSettingsFragment extends Fragment {
                 //Check to see which item was being clicked and perform appropriate action
                 int id = menuItem.getItemId();
                 if (id == R.id.uiInterface) {
-
+                    final FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    ft.replace(R.id.fragment, new UiSettingsFragment(), "UiSettingsFragmentTag");
+                    ft.commit();
                 }
                 return false;
             }

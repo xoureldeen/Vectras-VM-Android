@@ -130,6 +130,17 @@
             android:layout_marginTop="64dp"
             android:layout_marginBottom="64dp"
             android:visibility="gone" />
+
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/ppTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:text="@string/terms_amp_conditions"
+        android:textColor="?attr/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
