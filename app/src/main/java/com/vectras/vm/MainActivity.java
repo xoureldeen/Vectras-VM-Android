@@ -44,6 +44,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -123,6 +124,7 @@ import java.util.logging.Logger;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static String curRomName;
     private static Handler MAIN_HANDLER = new Handler(Looper.getMainLooper());
     public static final String TAG = "Main Activity";
     // Static
@@ -183,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
         //mAuth = FirebaseAuth.getInstance();
     }
 
+    //ANDROID 14 FIX BY SENZ
     private void requestPermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
@@ -199,16 +202,16 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 ActivityCompat.shouldShowRequestPermissionRationale(this, POST_NOTIFICATIONS);
             }
-        }
-        if (ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION}, 11003);
-        } else {
-            ActivityCompat.shouldShowRequestPermissionRationale(this, ACCESS_FINE_LOCATION);
-        }
-        if (ContextCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{ACCESS_COARSE_LOCATION}, 11003);
-        } else {
-            ActivityCompat.shouldShowRequestPermissionRationale(this, ACCESS_COARSE_LOCATION);
+            if (ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION}, 11003);
+            } else {
+                ActivityCompat.shouldShowRequestPermissionRationale(this, ACCESS_FINE_LOCATION);
+            }
+            if (ContextCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{ACCESS_COARSE_LOCATION}, 11003);
+            } else {
+                ActivityCompat.shouldShowRequestPermissionRationale(this, ACCESS_COARSE_LOCATION);
+            }
         }
     }
 
@@ -219,34 +222,6 @@ public class MainActivity extends AppCompatActivity {
             throw new RuntimeException(e);
         }
     }
-
-     private void requestPermissions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder(this, R.style.MainDialogTheme);
-                alertDialog.setTitle(R.string.permission_title);
-                alertDialog.setMessage(R.string.permission_notification_text);
-                alertDialog.setPositiveButton("OK!", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 11003);
-                    }
-                });
-                alertDialog.create().show();
-            } else {
-                ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.POST_NOTIFICATIONS);
-            }
-        }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 11003);
-        } else {
-            ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION);
-        }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 11003);
-        } else {
-            ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION);
-        }
 
     public void updateApp(final boolean showDialog) {
         new AppUpdater(this, new AppUpdater.OnUpdateListener() {
@@ -427,6 +402,7 @@ public class MainActivity extends AppCompatActivity {
         navEmail.setText(email);
         TextView viewProfile = (TextView) headerView.findViewById(R.id.viewProfile);
         TextView appNameTxt = (TextView) headerView.findViewById(R.id.appNameTxt);
+
         /*ObjectAnimator rgbAnim=ObjectAnimator.ofObject(navUsername,"textColor",new ArgbEvaluator(), Color.RED,Color.GREEN,Color.BLUE);
         rgbAnim.setDuration(500);
         rgbAnim.setRepeatMode(ValueAnimator.REVERSE);
@@ -510,12 +486,149 @@ public class MainActivity extends AppCompatActivity {
 
                         startActivityForResult(intent, 1004);
                     }
+                } else if (id == R.id.navigation_item_hdd1) {
+                    if (new File(AppConfig.maindirpath + "/hdd1.qcow2").exists()) {
+                        AlertDialog ad;
+                        ad = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
+                        ad.setTitle("REPLACE HDD1");
+                        ad.setMessage("there is hdd1 imported you want to replace it?");
+                        ad.setButton(Dialog.BUTTON_POSITIVE, "REPLACE", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
+                                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                                intent.setType("*/*");
+
+                                // Optionally, specify a URI for the file that should appear in the
+                                // system file picker when it loads.
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
+                                }
+
+                                startActivityForResult(intent, 1006);
+                                return;
+                            }
+                        });
+                        ad.setButton(Dialog.BUTTON_NEGATIVE, "REMOVE", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                File isoFile = new File(AppConfig.maindirpath + "/hdd1.qcow2");
+                                try {
+                                    isoFile.delete();
+                                } catch (Exception e) {
+                                    throw new RuntimeException(e);
+                                }
+                                return;
+                            }
+                        });
+                        ad.setButton(Dialog.BUTTON_NEUTRAL, "SHARE", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intentShareFile = new Intent(Intent.ACTION_SEND);
+                                File fileWithinMyDir = new File(AppConfig.maindirpath + "/hdd1.qcow2");
+
+                                if (fileWithinMyDir.exists()) {
+                                    intentShareFile.setType("*/*");
+                                    intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + AppConfig.maindirpath + "/hdd1.qcow2"));
+
+                                    intentShareFile.putExtra(Intent.EXTRA_SUBJECT,
+                                            "Sharing File...");
+                                    intentShareFile.putExtra(Intent.EXTRA_TEXT, "Sharing File...");
+
+                                    startActivity(Intent.createChooser(intentShareFile, "Share File"));
+                                }
+                            }
+                        });
+                        ad.show();
+                    } else {
+                        Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
+                        intent.addCategory(Intent.CATEGORY_OPENABLE);
+                        intent.setType("*/*");
+
+                        // Optionally, specify a URI for the file that should appear in the
+                        // system file picker when it loads.
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
+                        }
+
+                        startActivityForResult(intent, 1005);
+                    }
+                } else if (id == R.id.navigation_item_hdd2) {
+                    if (new File(AppConfig.maindirpath + "/hdd2.qcow2").exists()) {
+                        AlertDialog ad;
+                        ad = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
+                        ad.setTitle("REPLACE HDD2");
+                        ad.setMessage("there is hdd2 imported you want to replace it?");
+                        ad.setButton(Dialog.BUTTON_POSITIVE, "REPLACE", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
+                                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                                intent.setType("*/*");
+
+                                // Optionally, specify a URI for the file that should appear in the
+                                // system file picker when it loads.
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
+                                }
+
+                                startActivityForResult(intent, 1006);
+                                return;
+                            }
+                        });
+                        ad.setButton(Dialog.BUTTON_NEGATIVE, "REMOVE", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                File isoFile = new File(AppConfig.maindirpath + "/hdd2.qcow2");
+                                try {
+                                    isoFile.delete();
+                                } catch (Exception e) {
+                                    throw new RuntimeException(e);
+                                }
+                                return;
+                            }
+                        });
+                        ad.setButton(Dialog.BUTTON_NEUTRAL, "SHARE", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intentShareFile = new Intent(Intent.ACTION_SEND);
+                                File fileWithinMyDir = new File(AppConfig.maindirpath + "/hdd2.qcow2");
+
+                                if (fileWithinMyDir.exists()) {
+                                    intentShareFile.setType("*/*");
+                                    intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + AppConfig.maindirpath + "/hdd2.qcow2"));
+
+                                    intentShareFile.putExtra(Intent.EXTRA_SUBJECT,
+                                            "Sharing File...");
+                                    intentShareFile.putExtra(Intent.EXTRA_TEXT, "Sharing File...");
+
+                                    startActivity(Intent.createChooser(intentShareFile, "Share File"));
+                                }
+                            }
+                        });
+                        ad.show();
+                    } else {
+                        Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
+                        intent.addCategory(Intent.CATEGORY_OPENABLE);
+                        intent.setType("*/*");
+
+                        // Optionally, specify a URI for the file that should appear in the
+                        // system file picker when it loads.
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
+                        }
+
+                        startActivityForResult(intent, 1006);
+                    }
                 } else if (id == R.id.navigation_item_view_logs) {
                     FileUtils.viewVectrasLog(activity);
                 } else if (id == R.id.navigation_item_settings) {
                     startActivity(new Intent(activity, MainSettingsManager.class));
                 } else if (id == R.id.navigation_item_store) {
                     startActivity(new Intent(activity, StoreActivity.class));
+                } else if (id == R.id.navigation_data_explorer) {
+                    startActivity(new Intent(activity, DataExplorerActivity.class));
+                } else if (id == R.id.navigation_item_donate) {
+                    String tw = "https://www.buymeacoffee.com/vectrasvm/";
+                    Intent w = new Intent(Intent.ACTION_VIEW);
+                    w.setData(Uri.parse(tw));
+                    startActivity(w);
                 }
                 return false;
             }
@@ -678,9 +791,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        if (!mCurrentUser.isEmailVerified()) {
+        if (!mCurrentUser.isEmailVerified() &&
+                !mAuth.getCurrentUser().isAnonymous()) {
             startActivity(new Intent(activity, VerifyEmailActivity.class));
-            activity.finish();
         }
         try {
             HomeFragment.loadDataVbi();
@@ -1197,15 +1310,172 @@ public class MainActivity extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     loading.setVisibility(View.GONE);
+                                    UIAlert("error", e.toString(), activity);
                                 }
                             };
                             activity.runOnUiThread(runnable);
-                            UIAlert("error", e.toString(), activity);
                         }
                     }
                 }).start();
             } else
                 UIAlert("NOT VAILED FILE", "please select iso file", activity);
+        } else if (requestCode == 1005 && resultCode == RESULT_OK) {
+            Uri content_describer = ReturnedIntent.getData();
+            File selectedFilePath = new File(getPath(content_describer));
+            ProgressBar loading = findViewById(R.id.loading);
+            loading.setVisibility(View.VISIBLE);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    FileInputStream File = null;
+                    try {
+                        File = (FileInputStream) getContentResolver().openInputStream(content_describer);
+                    } catch (FileNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                    try {
+                        try {
+                            OutputStream out = new FileOutputStream(new File(AppConfig.maindirpath + "/hdd1.qcow2"));
+                            try {
+                                // Transfer bytes from in to out
+                                byte[] buf = new byte[1024];
+                                int len;
+                                while ((len = File.read(buf)) > 0) {
+                                    out.write(buf, 0, len);
+                                }
+                            } finally {
+                                out.close();
+                            }
+                        } finally {
+                            Runnable runnable = new Runnable() {
+                                @Override
+                                public void run() {
+                                    loading.setVisibility(View.GONE);
+                                }
+                            };
+                            activity.runOnUiThread(runnable);
+                            File.close();
+                        }
+                    } catch (IOException e) {
+                        Runnable runnable = new Runnable() {
+                            @Override
+                            public void run() {
+                                loading.setVisibility(View.GONE);
+                                UIAlert("error", e.toString(), activity);
+                            }
+                        };
+                        activity.runOnUiThread(runnable);
+                    }
+                }
+            }).start();
+        } else if (requestCode == 1006 && resultCode == RESULT_OK) {
+            Uri content_describer = ReturnedIntent.getData();
+            File selectedFilePath = new File(getPath(content_describer));
+            ProgressBar loading = findViewById(R.id.loading);
+            loading.setVisibility(View.VISIBLE);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    FileInputStream File = null;
+                    try {
+                        File = (FileInputStream) getContentResolver().openInputStream(content_describer);
+                    } catch (FileNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                    try {
+                        try {
+                            OutputStream out = new FileOutputStream(new File(AppConfig.maindirpath + "/hdd2.qcow2"));
+                            try {
+                                // Transfer bytes from in to out
+                                byte[] buf = new byte[1024];
+                                int len;
+                                while ((len = File.read(buf)) > 0) {
+                                    out.write(buf, 0, len);
+                                }
+                            } finally {
+                                out.close();
+                            }
+                        } finally {
+                            Runnable runnable = new Runnable() {
+                                @Override
+                                public void run() {
+                                    loading.setVisibility(View.GONE);
+                                }
+                            };
+                            activity.runOnUiThread(runnable);
+                            File.close();
+                        }
+                    } catch (IOException e) {
+                        Runnable runnable = new Runnable() {
+                            @Override
+                            public void run() {
+                                loading.setVisibility(View.GONE);
+                                UIAlert("error", e.toString(), activity);
+                            }
+                        };
+                        activity.runOnUiThread(runnable);
+                    }
+                }
+            }).start();
+        } else if (requestCode == 122 && resultCode == RESULT_OK) {
+            Uri content_describer = ReturnedIntent.getData();
+            File selectedFilePath = new File(getPath(content_describer));
+            ProgressBar loading = findViewById(R.id.loading);
+            TextInputEditText drv1 = AdapterMainRoms.d.findViewById(R.id.drive1);
+            Button saveB = AdapterMainRoms.d.findViewById(R.id.saveRomBtn);
+            loading.setVisibility(View.VISIBLE);
+            saveB.setVisibility(View.GONE);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    FileInputStream File = null;
+                    try {
+                        File = (FileInputStream) getContentResolver().openInputStream(content_describer);
+                    } catch (FileNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                    try {
+                        try {
+                            File romDir = new File(AppConfig.maindirpath + curRomName + "/");
+                            if (!romDir.exists()) {
+                                romDir.mkdirs();
+                            }
+                            OutputStream out = new FileOutputStream(new File(AppConfig.maindirpath + curRomName + "/" + "drv1-" + selectedFilePath.getName()));
+                            try {
+                                // Transfer bytes from in to out
+                                byte[] buf = new byte[1024];
+                                int len;
+                                while ((len = File.read(buf)) > 0) {
+                                    out.write(buf, 0, len);
+                                }
+                            } finally {
+                                out.close();
+                            }
+                        } finally {
+                            Runnable runnable = new Runnable() {
+                                @Override
+                                public void run() {
+                                    loading.setVisibility(View.GONE);
+                                    saveB.setVisibility(View.VISIBLE);
+                                    drv1.setText(AppConfig.maindirpath + curRomName + "/" + "drv1-" + selectedFilePath.getName());
+                                }
+                            };
+                            activity.runOnUiThread(runnable);
+                            File.close();
+                        }
+                    } catch (IOException e) {
+                        Runnable runnable = new Runnable() {
+                            @Override
+                            public void run() {
+                                loading.setVisibility(View.GONE);
+                                saveB.setVisibility(View.VISIBLE);
+                                UIAlert("error", e.toString(), activity);
+                            }
+                        };
+                        activity.runOnUiThread(runnable);
+                    }
+                }
+            }).start();
         }
     }
 

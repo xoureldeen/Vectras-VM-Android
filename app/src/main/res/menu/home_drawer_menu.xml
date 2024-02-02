@@ -13,13 +13,30 @@
         android:icon="@drawable/round_album_24"
         android:title="@string/import_iso"/>
     <item
+        android:id="@+id/navigation_item_hdd1"
+        android:icon="@drawable/round_storage_24"
+        android:title="@string/hdd1"/>
+    <item
+        android:id="@+id/navigation_item_hdd2"
+        android:icon="@drawable/round_storage_24"
+        android:title="@string/hdd2"/>
+    <item
+        android:id="@+id/navigation_data_explorer"
+        android:icon="@drawable/round_folder_24"
+        android:title="@string/data_explorer"/>
+    <item
         android:id="@+id/navigation_item_view_logs"
         android:icon="@drawable/round_adb_24"
+        android:visible="false"
         android:title="@string/view_logs" />
     <item
         android:id="@+id/navigation_item_settings"
         android:icon="@drawable/round_settings_24"
         android:title="@string/settings"/>
+    <item
+        android:id="@+id/navigation_item_donate"
+        android:icon="@drawable/ic_buy_me_a_coffee"
+        android:title="@string/buy_me_a_coffee"/>
     <item
         android:id="@+id/navigation_item_info"
         android:icon="@drawable/round_info_24"

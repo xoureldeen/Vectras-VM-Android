@@ -4,5 +4,6 @@ public class DataMainRoms {
     public String itemName;
     public String itemArch;
     public String itemPath;
+    public String itemDrv1;
     public String itemExtra;
 }

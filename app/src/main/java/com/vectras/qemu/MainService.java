@@ -1,5 +1,7 @@
 package com.vectras.qemu;
 
+import static android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION;
+
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -162,7 +164,11 @@ public class MainService extends Service {
         mNotification.tickerText = text;
         mNotification.flags |= Notification.FLAG_ONGOING_EVENT;
 
-        service.startForeground(notifID, mNotification);
+        if (Build.VERSION.SDK_INT >= 34) {
+            service.startForeground(notifID, mNotification, FOREGROUND_SERVICE_TYPE_LOCATION);
+        } else {
+            service.startForeground(notifID, mNotification);
+        }
 
 
     }

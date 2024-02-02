@@ -178,9 +178,9 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
 
                 int lenghtOfFile = conexion.getContentLength();
                 Log.d(TAG, "Lenght of file: " + lenghtOfFile);
-                String fileName = URLUtil.guessFileName(url.getFile(),null,null);
+                String fileName = "roms.json";
                 InputStream input = new BufferedInputStream(url.openStream());
-                OutputStream output = new FileOutputStream(AppConfig.maindirpath+fileName);
+                OutputStream output = new FileOutputStream(getExternalFilesDir("data")+fileName);
 
                 byte data[] = new byte[1024];
 

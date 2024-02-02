@@ -211,6 +211,10 @@ public class UIUtils {
 
         UIUtils.toastShortTop(activity, "Press Volume Down for Right Click");
 
+        UIUtils.toastShortTop(activity, "Press Volume Up for Left Click");
+
+        UIUtils.toastShortTop(activity, "Press Back Button for Hide/Show Controls UI");
+
 
     }
 

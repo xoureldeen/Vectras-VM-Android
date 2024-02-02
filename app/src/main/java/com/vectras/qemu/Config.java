@@ -169,7 +169,7 @@ public class Config {
     public static MouseMode mouseMode = MouseMode.Trackpad;
 
     //specify hd interface, alternative we don't need it right now
-    public static boolean enable_hd_if = false;
+    public static boolean enable_hd_if = true;
     public static String hd_if_type = "ide";
 
     //Change to true in prod if you want to be notified by default for new versions

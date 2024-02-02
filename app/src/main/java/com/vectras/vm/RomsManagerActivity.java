@@ -38,6 +38,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -254,7 +255,7 @@ public class RomsManagerActivity extends AppCompatActivity {
         data = new ArrayList<>();
 
         try {
-            JSONArray jArray = new JSONArray(FileUtils.readFromFile(activity, new File(AppConfig.maindirpath + "roms.json")));
+            JSONArray jArray = new JSONArray(FileUtils.readFromFile(activity, new File(getExternalFilesDir("data") + "roms.json")));
 
             // Extract data from json and store into ArrayList as class objects
             for (int i = 0; i < jArray.length(); i++) {
@@ -281,7 +282,7 @@ public class RomsManagerActivity extends AppCompatActivity {
             // Setup and Handover data to recyclerview
 
         } catch (JSONException e) {
-            UIUtils.toastLong(activity, e.toString());
+            UIUtils.UIAlert(activity, "ERROR", e.toString());
         }
         mRVRoms = (RecyclerView) activity.findViewById(R.id.romsRv);
         mAdapter = new AdapterRoms(activity, data);
@@ -344,7 +345,7 @@ public class RomsManagerActivity extends AppCompatActivity {
                     throw new RuntimeException(e);
                 } finally {
                     mProgressDialog.dismiss();
-                    final File jsonFile = new File(AppConfig.maindirpath + "roms-data" + ".json");
+                    final File jsonFile = new File(AppConfig.maindirpath + "roms-data.json");
 
                     if (jsonFile.exists()) {
                         try {
@@ -424,11 +425,12 @@ public class RomsManagerActivity extends AppCompatActivity {
                 });
                 ad.setButton(Dialog.BUTTON_NEGATIVE, "DOWNLAOD " + selectedPath.replace(".IMG", ".vbi"), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        String gt = selectedLink;
-                        Intent g = new Intent(Intent.ACTION_VIEW);
-                        g.setData(Uri.parse(gt));
-                        RomsManagerActivity.activity.startActivity(g);
-                        RomsManagerActivity.activity.finish();
+                        if (selectedLink != null) {
+                            String gt = selectedLink;
+                            Intent g = new Intent(Intent.ACTION_VIEW);
+                            g.setData(Uri.parse(gt));
+                            startActivity(g);
+                        }
                     }
                 });
                 ad.show();

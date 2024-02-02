@@ -34,4 +34,10 @@ public class VerifyEmailActivity extends AppCompatActivity {
             }
         });
     }
+    public void onResume() {
+        super.onResume();
+        if (FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()) {
+            finish();
+        }
+    }
 }

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name" translatable="false">Vectras VM</string>
-    <string name="app_version" translatable="false">v2.6</string>
-    <string name="qemu_version" translatable="false">qemu-5.0.1</string>
+    <string name="app_version" translatable="false">v2.7</string>
+    <string name="qemu_version" translatable="false">qemu-5.1.0</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
     <string name="fab_info">Start Emulation</string>
@@ -218,4 +218,12 @@
     <string name="sign_out">Sign out</string>
     <string name="android" translatable="false">android</string>
     <string name="other" translatable="false">other</string>
+    <string name="guest">Guest</string>
+    <string name="hdd1_qcow_img_etc">HDD1 (qcow, img, etc...)</string>
+    <string name="default_configuration">-vga std -net nic,model=ne2k_pci -net user</string>
+    <string name="data_explorer">Data Explorer</string>
+    <string name="forgot_password">forgot password?</string>
+    <string name="buy_me_a_coffee">Buy me a coffee</string>
+    <string name="hdd1">HDD1</string>
+    <string name="hdd2">HDD2</string>
 </resources>

@@ -12,10 +12,10 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
-     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" android:minSdkVersion="34"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" android:minSdkVersion="34"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" android:minSdkVersion="34"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" android:minSdkVersion="34"/>
 
     <uses-feature android:glEsVersion="0x00020000" />
 
@@ -128,6 +128,10 @@
         <activity
             android:name="com.vectras.vm.CustomRomActivity"
             android:label="Custom Rom"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.vectras.vm.DataExplorerActivity"
+            android:label="Data Explorer"
             android:theme="@style/AppTheme" />
 
         <service

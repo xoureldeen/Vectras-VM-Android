@@ -40,17 +40,15 @@ public class AppConfig {
     }
 
     // App config
-    public static final String datadirpath() {
-        File f = new File(SplashActivity.activity.getExternalFilesDir("data") + "/Vectras");
-        if (f.exists())
-            return SplashActivity.activity.getExternalFilesDir("data") + "/Vectras";
-        else
-            return FileUtils.getExternalFilesDirectory(SplashActivity.activity).getPath();
+    public static final String datadirpath(Activity activity) {
+        File f = new File(activity.getExternalFilesDir("data") + "/Vectras");
+        return activity.getExternalFilesDir("data") + "/Vectras";
+        //return FileUtils.getExternalFilesDirectory(activity).getPath();
     }
 
     ;
-    public static final String sharedFolder = datadirpath() + "/SharedFolder/";
-    public static final String basefiledir = datadirpath() + "/.qemu/";
-    public static final String maindirpath = datadirpath() + "/";
+    public static final String sharedFolder = FileUtils.getExternalFilesDirectory(MainActivity.activity).getPath() + "/SharedFolder/";
+    public static final String basefiledir = datadirpath(SplashActivity.activity) + "/.qemu/";
+    public static final String maindirpath = datadirpath(SplashActivity.activity) + "/";
 
 }

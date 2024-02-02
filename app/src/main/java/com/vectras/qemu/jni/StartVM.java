@@ -79,7 +79,7 @@ public class StartVM {
 
     // disks
     public String hda_img_path;
-    public String hdb_img_path;
+    public String hdb_img_path = null;
     public String hdc_img_path;
     public String hdd_img_path;
     public String shared_folder_path = null;
@@ -98,7 +98,7 @@ public class StartVM {
     private String initrd;
 
     //graphics
-    public String vga_type = "std";
+    public String vga_type = "Default";
 
     //audio
     public String sound_card;
@@ -182,10 +182,20 @@ public class StartVM {
         else
             this.mouse = "ps2";
 
-        if (new File(AppConfig.maindirpath + "/drive.iso").exists())
+        if (new File(AppConfig.datadirpath(MainActivity.activity) + "/drive.iso").exists())
             cd_iso_path = AppConfig.maindirpath + "/drive.iso";
         else
             cd_iso_path = null;
+
+        if (new File(AppConfig.datadirpath(MainActivity.activity) + "/hdd1.qcow2").exists())
+            hdc_img_path = AppConfig.maindirpath + "/hdd1.qcow2";
+        else
+            hdc_img_path = null;
+
+        if (new File(AppConfig.datadirpath(MainActivity.activity) + "/hdd2.qcow2").exists())
+            hdd_img_path = AppConfig.maindirpath + "/hdd2.qcow2";
+        else
+            hdd_img_path = null;
     }
 
     public static void onVMResolutionChanged(int width, int height) {
@@ -438,7 +448,7 @@ public class StartVM {
         if (this.cpuNum > 1 &&
                 (enablekvm == 1 || enable_mttcg == 1 || !Config.enableSMPOnlyOnKVM)) {
             paramsList.add("-smp");
-            paramsList.add("sockets=" + "1" + ",cores=" + this.cpuNum + ",threads=" + this.cpuNum + "");
+            paramsList.add("sockets=" + "1" + ",cores=" + this.cpuNum + ",threads=2");
         }
 
         if (machine_type != null && !machine_type.equals("Default")) {
@@ -644,6 +654,7 @@ public class StartVM {
                 driveParams += ",if=";
                 driveParams += Config.hd_if_type;
             }
+
             driveParams += ",format=raw";
             driveParams += ",file=fat:";
             driveParams += "rw:"; //Always Read/Write

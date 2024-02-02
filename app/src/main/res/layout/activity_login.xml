@@ -99,6 +99,18 @@
                 android:singleLine="true" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <TextView
+            android:id="@+id/resetPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/forgot_password"
+            android:padding="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_gravity="right"
+            android:textColor="?attr/colorPrimary"
+            android:visibility="gone"/>
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/signinBtn"
             android:layout_width="match_parent"
@@ -121,6 +133,12 @@
             android:text="@string/action_sign_with_google"
             android:visibility="gone"
             app:icon="@drawable/ic_google" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/guestBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/guest" />
 
         <ProgressBar
             android:id="@+id/loading"

@@ -1,15 +1,21 @@
 package com.vectras.vm.MainRoms;
 
+import static android.content.Intent.ACTION_OPEN_DOCUMENT;
+
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
+import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
@@ -66,6 +72,7 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public List<DataMainRoms> data = Collections.emptyList();
     int currentPos = 0;
     private int mSelectedItem = -1;
+    public static Dialog d;
 
     // create constructor to innitilize context and data sent from MainActivity
     public AdapterMainRoms(Context context, List<DataMainRoms> data) {
@@ -97,20 +104,59 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
         myHolder.ivIcon.setImageBitmap(bmImg);
         myHolder.optionsBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                Dialog d;
                 d = new Dialog(MainActivity.activity);
                 d.setTitle(current.itemName);
                 d.setContentView(R.layout.rom_options_dialog);
+                d.setCancelable(true);
                 TextView qemu = d.findViewById(R.id.qemu);
                 qemu.setText(current.itemExtra);
+                TextInputEditText drv1 = d.findViewById(R.id.drive1);
+                drv1.setText(current.itemDrv1);
+                drv1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
+                        intent.addCategory(Intent.CATEGORY_OPENABLE);
+                        intent.setType("*/*");
+                        MainActivity.curRomName = current.itemName;
+
+                        // Optionally, specify a URI for the file that should appear in the
+                        // system file picker when it loads.
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
+                        }
+
+                        MainActivity.activity.startActivityForResult(intent, 122);
+                    }
+                });
+                TextInputLayout drv1fld = d.findViewById(R.id.drive1Field);
+                drv1fld.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
+                        intent.addCategory(Intent.CATEGORY_OPENABLE);
+                        intent.setType("*/*");
+                        MainActivity.curRomName = current.itemName;
+
+                        // Optionally, specify a URI for the file that should appear in the
+                        // system file picker when it loads.
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
+                        }
+
+                        MainActivity.activity.startActivityForResult(intent, 122);
+                    }
+                });
                 Button saveRomBtn = d.findViewById(R.id.saveRomBtn);
                 saveRomBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         final File jsonFile = new File(AppConfig.maindirpath + "roms-data" + ".json");
+                        current.itemDrv1 = drv1.getText().toString();
                         current.itemExtra = qemu.getText().toString();
                         try {
                             JSONObject jObj = HomeFragment.jArray.getJSONObject(position);
+                            jObj.put("imgDrv1", drv1.getText().toString());
                             jObj.put("imgExtra", qemu.getText().toString());
                             HomeFragment.jArray.put(position, jObj);
                         } catch (JSONException e) {
@@ -125,6 +171,7 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             UIUtils.toastLong(MainActivity.activity, e.toString());
                         } finally {
                             d.dismiss();
+                            HomeFragment.loadDataVbi();
                         }
                     }
                 });
@@ -178,9 +225,10 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                         ZipEntrySource[] addedEntries = new ZipEntrySource[]{
                                                 new FileSource("/" + new File(current.itemPath).getName(), new File(current.itemPath)),
                                                 new FileSource("/" + new File(current.itemIcon).getName(), new File(current.itemIcon)),
+                                                new FileSource("/" + new File(current.itemDrv1).getName(), new File(current.itemDrv1)),
                                                 new FileSource("/" + new File(MainActivity.activity.getExternalFilesDir("data") + "/rom-data.json").getName(), new File(MainActivity.activity.getExternalFilesDir("data") + "/rom-data.json"))
                                         };
-                                        ZipUtil.pack(addedEntries, new File(AppConfig.datadirpath() + "/cvbi/" + current.itemName + ".cvbi"));
+                                        ZipUtil.pack(addedEntries, new File(AppConfig.datadirpath(MainActivity.activity) + "/cvbi/" + current.itemName + ".cvbi"));
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                         Runnable runnable = new Runnable() {
@@ -196,7 +244,7 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                             @Override
                                             public void run() {
                                                 progressDialog.cancel(); // cancelling Dialog.}
-                                                MainActivity.UIAlert("DONE!", AppConfig.datadirpath() + "/cvbi/" + current.itemName + ".cvbi", MainActivity.activity);
+                                                MainActivity.UIAlert("DONE!", AppConfig.datadirpath(MainActivity.activity) + "/cvbi/" + current.itemName + ".cvbi", MainActivity.activity);
                                             }
                                         };
                                         MainActivity.activity.runOnUiThread(runnable);
@@ -244,8 +292,15 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 ad.setButton(Dialog.BUTTON_NEGATIVE, "REMOVE " + current.itemName, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         File file = new File(current.itemPath);
+                        File file2 = new File(current.itemDrv1);
                         try {
                             file.delete();
+                        } catch (Exception e) {
+                            UIUtils.toastLong(MainActivity.activity, e.toString());
+                        } finally {
+                        }
+                        try {
+                            file2.delete();
                         } catch (Exception e) {
                             UIUtils.toastLong(MainActivity.activity, e.toString());
                         } finally {

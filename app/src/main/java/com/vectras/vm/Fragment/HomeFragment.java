@@ -111,6 +111,11 @@ public class HomeFragment extends Fragment {
                     romsMainData.itemArch = "unknown";
                 }
                 romsMainData.itemPath = json_data.getString("imgPath");
+                try {
+                    romsMainData.itemDrv1 = json_data.getString("imgDrv1");
+                } catch (JSONException ignored) {
+                    romsMainData.itemDrv1 = "";
+                }
                 romsMainData.itemExtra = json_data.getString("imgExtra");
                 try {
                     if (json_data.getString("imgArch").equals(MainSettingsManager.getArch(MainActivity.activity)))

@@ -63,8 +63,10 @@ import com.vectras.vm.MainActivity;
 import com.vectras.vm.R;
 import com.vectras.vm.adapter.LogsAdapter;
 import com.vectras.vm.utils.UIUtils;
+import com.vectras.vm.widgets.JoystickView;
 
 import java.io.File;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
@@ -811,10 +813,15 @@ public class MainSDLActivity extends SDLActivity {
         if (event.getAction() == KeyEvent.ACTION_MULTIPLE && event.getKeyCode() == KeyEvent.KEYCODE_UNKNOWN) {
             sendText(event.getCharacters().toString());
             return true;
-        } else /*if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
-            this.onBackPressed();
+        } else if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+            FrameLayout l = findViewById(R.id.mainControl);
+            if (l.getVisibility() == View.VISIBLE) {
+                l.setVisibility(View.GONE);
+            } else {
+                l.setVisibility(View.VISIBLE);
+            }
             return true;
-        }*/ if (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN) {
+        } if (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN) {
             // We emulate right click with volume down
             if (event.getAction() == KeyEvent.ACTION_DOWN) {
                 MotionEvent e = MotionEvent.obtain(1000, 1000, MotionEvent.ACTION_DOWN, 0, 0, 0, 0, 0, 0, 0,
@@ -823,11 +830,11 @@ public class MainSDLActivity extends SDLActivity {
             }
             return true;
         } else if (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP) {
-            // We emulate middle click with volume up
+            // We emulate left click with volume up
             if (event.getAction() == KeyEvent.ACTION_DOWN) {
                 MotionEvent e = MotionEvent.obtain(1000, 1000, MotionEvent.ACTION_DOWN, 0, 0, 0, 0, 0, 0, 0,
                         InputDevice.SOURCE_TOUCHSCREEN, 0);
-                middleClick(e, 0);
+                leftClick(e, 0);
             }
             return true;
         } else {
@@ -866,6 +873,8 @@ public class MainSDLActivity extends SDLActivity {
     private TimerTask t;
     public boolean ctrlClicked = false;
     public boolean altClicked = false;
+    public static LinearLayout desktop;
+    public static LinearLayout gamepad;
 
     // Setup
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -903,6 +912,20 @@ public class MainSDLActivity extends SDLActivity {
         decorView.setSystemUiVisibility(uiOptions);
 
         onFitToScreen();
+        desktop = findViewById(R.id.desktop);
+        gamepad = findViewById(R.id.gamepad);
+
+        if (Objects.equals(MainSettingsManager.getControlMode(activity), "D")) {
+            desktop.setVisibility(View.VISIBLE);
+            gamepad.setVisibility(View.GONE);
+        } else if (Objects.equals(MainSettingsManager.getControlMode(activity), "G")) {
+            desktop.setVisibility(View.GONE);
+            gamepad.setVisibility(View.VISIBLE);
+        } else if (Objects.equals(MainSettingsManager.getControlMode(activity), "H")) {
+            desktop.setVisibility(View.GONE);
+            gamepad.setVisibility(View.GONE);
+        }
+
 
         ImageButton shutdownBtn = findViewById(R.id.shutdownBtn);
         ImageButton settingBtn = findViewById(R.id.btnSettings);
@@ -919,6 +942,215 @@ public class MainSDLActivity extends SDLActivity {
         ImageButton delBtn = findViewById(R.id.delBtn);
         ImageButton qmpBtn = findViewById(R.id.btnQmp);
         ImageButton btnLogs = findViewById(R.id.btnLogs);
+        Button eBtn = findViewById(R.id.eBtn);
+        Button rBtn = findViewById(R.id.rBtn);
+        Button qBtn = findViewById(R.id.qBtn);
+        Button xBtn = findViewById(R.id.xBtn);
+        ImageButton ctrlGameBtn = findViewById(R.id.ctrlGameBtn);
+        Button spaceBtn = findViewById(R.id.spaceBtn);
+        Button tabGameBtn = findViewById(R.id.tabGameBtn);
+        Button tabBtn = findViewById(R.id.tabBtn);
+        ImageButton upGameBtn = findViewById(R.id.upGameBtn);
+        ImageButton downGameBtn = findViewById(R.id.downGameBtn);
+        ImageButton leftGameBtn = findViewById(R.id.leftGameBtn);
+        ImageButton rightGameBtn = findViewById(R.id.rightGameBtn);
+        ImageButton enterGameBtn = findViewById(R.id.enterGameBtn);
+        upGameBtn.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    SDLActivity.onNativeKeyDown(KeyEvent.KEYCODE_DPAD_UP);
+                    v.animate().scaleXBy(-0.2f).setDuration(200).start();
+                    v.animate().scaleYBy(-0.2f).setDuration(200).start();
+                    return true;
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    SDLActivity.onNativeKeyUp(KeyEvent.KEYCODE_DPAD_UP);
+                    v.animate().cancel();
+                    v.animate().scaleX(1f).setDuration(500).start();
+                    v.animate().scaleY(1f).setDuration(200).start();
+                    return true;
+                }
+                return false;
+            }
+        });
+        leftGameBtn.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    SDLActivity.onNativeKeyDown(KeyEvent.KEYCODE_DPAD_LEFT);
+                    v.animate().scaleXBy(-0.2f).setDuration(200).start();
+                    v.animate().scaleYBy(-0.2f).setDuration(200).start();
+                    return true;
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    SDLActivity.onNativeKeyUp(KeyEvent.KEYCODE_DPAD_LEFT);
+                    v.animate().cancel();
+                    v.animate().scaleX(1f).setDuration(500).start();
+                    v.animate().scaleY(1f).setDuration(200).start();
+                    return true;
+                }
+                return false;
+            }
+        });
+        downGameBtn.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    SDLActivity.onNativeKeyDown(KeyEvent.KEYCODE_DPAD_DOWN);
+                    v.animate().scaleXBy(-0.2f).setDuration(200).start();
+                    v.animate().scaleYBy(-0.2f).setDuration(200).start();
+                    return true;
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    SDLActivity.onNativeKeyUp(KeyEvent.KEYCODE_DPAD_DOWN);
+                    v.animate().cancel();
+                    v.animate().scaleX(1f).setDuration(500).start();
+                    v.animate().scaleY(1f).setDuration(200).start();
+                    return true;
+                }
+                return false;
+            }
+        });
+        rightGameBtn.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    SDLActivity.onNativeKeyDown(KeyEvent.KEYCODE_DPAD_RIGHT);
+                    v.animate().scaleXBy(-0.2f).setDuration(200).start();
+                    v.animate().scaleYBy(-0.2f).setDuration(200).start();
+                    return true;
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    SDLActivity.onNativeKeyUp(KeyEvent.KEYCODE_DPAD_RIGHT);
+                    v.animate().cancel();
+                    v.animate().scaleX(1f).setDuration(500).start();
+                    v.animate().scaleY(1f).setDuration(200).start();
+                    return true;
+                }
+                return false;
+            }
+        });
+        int loop =10;
+        JoystickView joystick = (JoystickView) findViewById(R.id.joyStick);
+        joystick.setOnMoveListener(new JoystickView.OnMoveListener() {
+            @Override
+            public void onMove(int angle, int strength) {
+                // do whatever you want
+                if (angle > 0) {
+                    if (angle < 30) {
+                        SDLActivity.onNativeKeyDown(KeyEvent.KEYCODE_DPAD_RIGHT);
+                        SDLActivity.onNativeKeyUp(KeyEvent.KEYCODE_DPAD_RIGHT);
+                    } else if (angle > 30) {
+                        if (angle < 60) {
+                            SDLActivity.onNativeKeyDown(KeyEvent.KEYCODE_DPAD_UP_RIGHT);
+                            SDLActivity.onNativeKeyUp(KeyEvent.KEYCODE_DPAD_UP_RIGHT);
+                        } else if (angle > 60) {
+                            if (angle < 120) {
+                                SDLActivity.onNativeKeyDown(KeyEvent.KEYCODE_DPAD_UP);
+                                SDLActivity.onNativeKeyUp(KeyEvent.KEYCODE_DPAD_UP);
+                            } else if (angle > 120) {
+                                if (angle < 150) {
+                                    SDLActivity.onNativeKeyDown(KeyEvent.KEYCODE_DPAD_UP_LEFT);
+                                    SDLActivity.onNativeKeyUp(KeyEvent.KEYCODE_DPAD_UP_LEFT);
+                                } else if (angle > 150) {
+                                    if (angle < 210) {
+                                        SDLActivity.onNativeKeyDown(KeyEvent.KEYCODE_DPAD_LEFT);
+                                        SDLActivity.onNativeKeyUp(KeyEvent.KEYCODE_DPAD_LEFT);
+                                    } else if (angle > 210) {
+                                        if (angle < 240) {
+                                            SDLActivity.onNativeKeyDown(KeyEvent.KEYCODE_DPAD_DOWN_LEFT);
+                                            SDLActivity.onNativeKeyUp(KeyEvent.KEYCODE_DPAD_DOWN_LEFT);
+                                        } else if (angle > 240) {
+                                            if (angle < 300) {
+                                                SDLActivity.onNativeKeyDown(KeyEvent.KEYCODE_DPAD_DOWN);
+                                                SDLActivity.onNativeKeyUp(KeyEvent.KEYCODE_DPAD_DOWN);
+                                            } else if (angle > 300) {
+                                                if (angle < 330) {
+                                                    SDLActivity.onNativeKeyDown(KeyEvent.KEYCODE_DPAD_DOWN_RIGHT);
+                                                    SDLActivity.onNativeKeyUp(KeyEvent.KEYCODE_DPAD_DOWN_RIGHT);
+                                                } else if (angle > 330) {
+                                                    SDLActivity.onNativeKeyDown(KeyEvent.KEYCODE_DPAD_RIGHT);
+                                                    SDLActivity.onNativeKeyUp(KeyEvent.KEYCODE_DPAD_RIGHT);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }, loop);
+        tabBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                delayKey(100);
+                SDLActivity.onNativeKeyDown(KeyEvent.KEYCODE_TAB);
+                delayKey(100);
+                SDLActivity.onNativeKeyUp(KeyEvent.KEYCODE_TAB);
+            }
+        });
+        tabGameBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                delayKey(100);
+                SDLActivity.onNativeKeyDown(KeyEvent.KEYCODE_TAB);
+                delayKey(100);
+                SDLActivity.onNativeKeyUp(KeyEvent.KEYCODE_TAB);
+            }
+        });
+        eBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                delayKey(100);
+                SDLActivity.onNativeKeyDown(KeyEvent.KEYCODE_E);
+                delayKey(100);
+                SDLActivity.onNativeKeyUp(KeyEvent.KEYCODE_E);
+            }
+        });
+        rBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                delayKey(100);
+                SDLActivity.onNativeKeyDown(KeyEvent.KEYCODE_R);
+                delayKey(100);
+                SDLActivity.onNativeKeyUp(KeyEvent.KEYCODE_R);
+            }
+        });
+        qBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                delayKey(100);
+                SDLActivity.onNativeKeyDown(KeyEvent.KEYCODE_Q);
+                delayKey(100);
+                SDLActivity.onNativeKeyUp(KeyEvent.KEYCODE_Q);
+            }
+        });
+        xBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                delayKey(100);
+                SDLActivity.onNativeKeyDown(KeyEvent.KEYCODE_X);
+                delayKey(100);
+                SDLActivity.onNativeKeyUp(KeyEvent.KEYCODE_X);
+            }
+        });
+        ctrlGameBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                delayKey(100);
+                SDLActivity.onNativeKeyDown(KeyEvent.KEYCODE_CTRL_LEFT);
+                delayKey(100);
+                SDLActivity.onNativeKeyUp(KeyEvent.KEYCODE_CTRL_LEFT);
+            }
+        });
+        spaceBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                delayKey(100);
+                SDLActivity.onNativeKeyDown(KeyEvent.KEYCODE_SPACE);
+                delayKey(100);
+                SDLActivity.onNativeKeyUp(KeyEvent.KEYCODE_SPACE);
+            }
+        });
         btnLogs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -969,9 +1201,14 @@ public class MainSDLActivity extends SDLActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     SDLActivity.onNativeKeyDown(KeyEvent.KEYCODE_DPAD_UP);
+                    v.animate().scaleXBy(-0.2f).setDuration(200).start();
+                    v.animate().scaleYBy(-0.2f).setDuration(200).start();
                     return true;
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
                     SDLActivity.onNativeKeyUp(KeyEvent.KEYCODE_DPAD_UP);
+                    v.animate().cancel();
+                    v.animate().scaleX(1f).setDuration(500).start();
+                    v.animate().scaleY(1f).setDuration(200).start();
                     return true;
                 }
                 return false;
@@ -982,9 +1219,14 @@ public class MainSDLActivity extends SDLActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     SDLActivity.onNativeKeyDown(KeyEvent.KEYCODE_DPAD_LEFT);
+                    v.animate().scaleXBy(-0.2f).setDuration(200).start();
+                    v.animate().scaleYBy(-0.2f).setDuration(200).start();
                     return true;
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
                     SDLActivity.onNativeKeyUp(KeyEvent.KEYCODE_DPAD_LEFT);
+                    v.animate().cancel();
+                    v.animate().scaleX(1f).setDuration(500).start();
+                    v.animate().scaleY(1f).setDuration(200).start();
                     return true;
                 }
                 return false;
@@ -995,9 +1237,14 @@ public class MainSDLActivity extends SDLActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     SDLActivity.onNativeKeyDown(KeyEvent.KEYCODE_DPAD_DOWN);
+                    v.animate().scaleXBy(-0.2f).setDuration(200).start();
+                    v.animate().scaleYBy(-0.2f).setDuration(200).start();
                     return true;
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
                     SDLActivity.onNativeKeyUp(KeyEvent.KEYCODE_DPAD_DOWN);
+                    v.animate().cancel();
+                    v.animate().scaleX(1f).setDuration(500).start();
+                    v.animate().scaleY(1f).setDuration(200).start();
                     return true;
                 }
                 return false;
@@ -1008,9 +1255,14 @@ public class MainSDLActivity extends SDLActivity {
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     SDLActivity.onNativeKeyDown(KeyEvent.KEYCODE_DPAD_RIGHT);
+                    v.animate().scaleXBy(-0.2f).setDuration(200).start();
+                    v.animate().scaleYBy(-0.2f).setDuration(200).start();
                     return true;
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
                     SDLActivity.onNativeKeyUp(KeyEvent.KEYCODE_DPAD_RIGHT);
+                    v.animate().cancel();
+                    v.animate().scaleX(1f).setDuration(500).start();
+                    v.animate().scaleY(1f).setDuration(200).start();
                     return true;
                 }
                 return false;
@@ -1070,7 +1322,7 @@ public class MainSDLActivity extends SDLActivity {
                 delayKey(100);
                 SDLActivity.onNativeKeyDown(KeyEvent.KEYCODE_DEL);
                 delayKey(100);
-                SDLActivity.onNativeKeyDown(KeyEvent.KEYCODE_DEL);
+                SDLActivity.onNativeKeyUp(KeyEvent.KEYCODE_DEL);
             }
         });
         qmpBtn.setVisibility(View.GONE);
@@ -1079,6 +1331,47 @@ public class MainSDLActivity extends SDLActivity {
         } else {
             qmpBtn.setImageDrawable(getResources().getDrawable(R.drawable.round_computer_24));
         }
+        Button rightClickBtn = findViewById(R.id.rightClickBtn);
+        Button middleClickBtn = findViewById(R.id.middleBtn);
+        Button leftClickBtn = findViewById(R.id.leftClickBtn);
+        ImageButton winBtn = findViewById(R.id.winBtn);
+
+        rightClickBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MotionEvent e = MotionEvent.obtain(1000, 1000, MotionEvent.ACTION_DOWN, 0, 0, 0, 0, 0, 0, 0,
+                        InputDevice.SOURCE_TOUCHSCREEN, 0);
+                rightClick(e, 0);
+            }
+        });
+        middleClickBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MotionEvent e = MotionEvent.obtain(1000, 1000, MotionEvent.ACTION_DOWN, 0, 0, 0, 0, 0, 0, 0,
+                        InputDevice.SOURCE_TOUCHSCREEN, 0);
+                middleClick(e, 0);
+            }
+        });
+        leftClickBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MotionEvent e = MotionEvent.obtain(1000, 1000, MotionEvent.ACTION_DOWN, 0, 0, 0, 0, 0, 0, 0,
+                        InputDevice.SOURCE_TOUCHSCREEN, 0);
+                leftClick(e, 0);
+            }
+        });
+        winBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                delayKey(100);
+                SDLActivity.onNativeKeyDown(KeyEvent.KEYCODE_CTRL_LEFT);
+                delayKey(100);
+                SDLActivity.onNativeKeyDown(KeyEvent.KEYCODE_ESCAPE);
+                delayKey(100);
+                SDLActivity.onNativeKeyUp(KeyEvent.KEYCODE_CTRL_LEFT);
+                SDLActivity.onNativeKeyUp(KeyEvent.KEYCODE_ESCAPE);
+            }
+        });
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 R.layout.container_function, functionsArray);
@@ -1116,20 +1409,6 @@ public class MainSDLActivity extends SDLActivity {
             }
         });*/
 
-        ImageButton hideBtn = findViewById(R.id.visibilityButton);
-        hideBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FrameLayout l = findViewById(R.id.mainControl);
-                if (l.getVisibility() == View.VISIBLE) {
-                    l.setVisibility(View.GONE);
-                    hideBtn.setImageResource(R.drawable.round_visibility_24);
-                } else {
-                    l.setVisibility(View.VISIBLE);
-                    hideBtn.setImageResource(R.drawable.round_visibility_off_24);
-                }
-            }
-        });
     }
 
 
@@ -1964,6 +2243,24 @@ public class MainSDLActivity extends SDLActivity {
 //					Log.v("SDLSurface", "Interrupted: " + ex);
                 }
                 MainActivity.vmexecutor.onVectrasMouse(Config.SDL_MOUSE_RIGHT, MotionEvent.ACTION_UP, 1, -1, -1);
+            }
+        });
+        t.start();
+        return true;
+
+    }
+
+    public boolean leftClick(final MotionEvent e, final int i) {
+        Thread t = new Thread(new Runnable() {
+            public void run() {
+                Log.d("SDL", "Mouse Left Click");
+                MainActivity.vmexecutor.onVectrasMouse(Config.SDL_MOUSE_LEFT, MotionEvent.ACTION_DOWN, 1, -1, -1);
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ex) {
+//					Log.v("SDLSurface", "Interrupted: " + ex);
+                }
+                MainActivity.vmexecutor.onVectrasMouse(Config.SDL_MOUSE_LEFT, MotionEvent.ACTION_UP, 1, -1, -1);
             }
         });
         t.start();

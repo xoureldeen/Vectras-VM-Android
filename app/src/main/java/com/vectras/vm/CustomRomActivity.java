@@ -441,10 +441,10 @@ public class CustomRomActivity extends AppCompatActivity {
                                 loadingPb.setVisibility(View.GONE);
                                 custom.setVisibility(View.VISIBLE);
                                 addRomBtn.setEnabled(isFilled(title) && isFilled(icon) && isFilled(drive));
+                                MainActivity.UIAlert("error", e.toString(), activity);
                             }
                         };
                         activity.runOnUiThread(runnable);
-                        MainActivity.UIAlert("error", e.toString(), activity);
                     }
                 }
             }).start();
@@ -487,8 +487,13 @@ public class CustomRomActivity extends AppCompatActivity {
                         */
                                 }
                             } catch (IOException e) {
-                                UIUtils.toastLong(activity, e.toString());
-                                throw new RuntimeException(e);
+                                Runnable runnable = new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        UIUtils.toastLong(activity, e.toString());
+                                    }
+                                };
+                                activity.runOnUiThread(runnable);
                             } finally {
                                 Runnable runnable = new Runnable() {
                                     @Override

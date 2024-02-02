@@ -2,8 +2,10 @@ package com.vectras.vm.ui.login;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -38,6 +40,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.vectras.vm.AppConfig;
+import com.vectras.vm.MainActivity;
 import com.vectras.vm.R;
 import com.vectras.vm.RomsManagerActivity;
 import com.vectras.vm.SplashActivity;
@@ -98,12 +101,15 @@ public class LoginActivity extends AppCompatActivity {
             }
         }).start();
 
+        TextView resetButton = findViewById(R.id.resetPassword);
 
         MaterialButton signinButton = findViewById(R.id.signinBtn);
 
         MaterialButton signupButton = findViewById(R.id.signupBtn);
 
         MaterialButton signwithGoogleButton = findViewById(R.id.signwithGoogleBtn);
+
+        MaterialButton guestButton = findViewById(R.id.guestBtn);
 
         TextInputEditText usernameEditText = findViewById(R.id.username);
 
@@ -137,8 +143,10 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if (usernameEditText.getText().toString().trim().length() > 0) {
+                    resetButton.setVisibility(View.VISIBLE);
                     signinButton.setEnabled(true);
                 } else {
+                    resetButton.setVisibility(View.GONE);
                     signinButton.setEnabled(false);
                 }
                 if (passwordEditText.getText().toString().trim().length() > 0) {
@@ -162,6 +170,35 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         signinButton.setOnClickListener(v -> mAuth.signInWithEmailAndPassword(usernameEditText.getText().toString(), passwordEditText.getText().toString())
+                .addOnCompleteListener(LoginActivity.this, (OnCompleteListener<AuthResult>) task -> {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        updateUI(user);
+                    } else {
+
+                        mStatusTextView.setText(task.getException().toString());
+                        // If sign in fails, display a message to the user.
+                        Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                Toast.LENGTH_SHORT).show();
+                        updateUI(null);
+                    }
+                }));
+
+        resetButton.setOnClickListener(v -> mAuth.sendPasswordResetEmail(usernameEditText.getText().toString())
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(LoginActivity.this, "Reset Password Email Sent!",
+                                    Toast.LENGTH_SHORT).show();
+                        } else {
+                            mStatusTextView.setText(task.getException().toString());
+                        }
+                    }
+                }));
+
+        guestButton.setOnClickListener(v -> mAuth.signInAnonymously()
                 .addOnCompleteListener(LoginActivity.this, (OnCompleteListener<AuthResult>) task -> {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
@@ -213,13 +250,25 @@ public class LoginActivity extends AppCompatActivity {
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
-                                finish();
-                                startActivity(new Intent(LoginActivity.this, SplashActivity.class));
+                                SharedPreferences prefs = getSharedPreferences("settings_prefs", Context.MODE_PRIVATE);
+
+                                boolean isAccessed = prefs.getBoolean("isFirstLaunch", false);
+                                if (FirebaseAuth.getInstance().getCurrentUser().isAnonymous()) {
+                                    if (isAccessed)
+                                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                    else
+                                        startActivity(new Intent(LoginActivity.this, RomsManagerActivity.class));
+                                } else {
+                                    startActivity(new Intent(LoginActivity.this, SplashActivity.class));
+                                    finish();
+                                }
                             }
                         });
             }
-            if (user != null && user.isEmailVerified())
-                startActivity(new Intent(LoginActivity.this, RomsManagerActivity.class));
+            if (user != null && user.isEmailVerified()) {
+                startActivity(new Intent(LoginActivity.this, SplashActivity.class));
+                finish();
+            }
         }
     }
 
