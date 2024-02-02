@@ -1,9 +1,16 @@
+# Vectras-VM-Android (Open Source Code)
+
+
 ![logo](https://raw.githubusercontent.com/epicstudios856/Vectras-VM-Android/master/resources/vectras-logo.png)
 [![Telegram Channel][ico-telegram]][link-telegram]
 [![Latest Version][ico-version]][link-releases]
 [![Software License][ico-license]](LICENSE.md)
 
-# Vectras-VM-Android (Open Source Code)
+
+# Support Project
+<a href="https://www.buymeacoffee.com/vectrasvm" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
+
+# About
 
 It's a Virtual Machine App for Android Which is Based on QEMU
 
@@ -11,9 +18,9 @@ Has The Capbility to Run (ReactOS - Xp - 7 - Kali Linux)
 
 # Minimum System Requirement
 
-* Android 7.0+
+* Android 5.0+
 
-* 4gb Ram (2gb free ram)
+* 3gb Ram (1gb free ram)
 
 * 8-Cores Snapdragon 450 (at Least)
 
@@ -27,6 +34,8 @@ Has The Capbility to Run (ReactOS - Xp - 7 - Kali Linux)
 * 8gb Ram (4gb free ram)
 
 * 8-Cores Snapdragon 720G or better
+
+* compiled kernel with KVM support
 
 # Beta Version
 
