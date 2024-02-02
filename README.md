@@ -35,6 +35,8 @@ Has The Capbility to Run (ReactOS - Xp - 7 - Kali Linux)
 
 * 8-Cores Snapdragon 720G or better
 
+* compiled kernel with KVM support
+
 # Beta Version
 
 * https://vectras.netlify.app/download
