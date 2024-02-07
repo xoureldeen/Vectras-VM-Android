@@ -1,5 +1,6 @@
-# Vectras-VM-Android (Open Source Code)
+# Vectras-VM-Android (Closed Source Code)
 
+currently we are working on rebase the project
 
 ![logo](https://raw.githubusercontent.com/epicstudios856/Vectras-VM-Android/master/resources/vectras-logo.png)
 [![Telegram Channel][ico-telegram]][link-telegram]
