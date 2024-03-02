@@ -1,3 +1,15 @@
+# WARNING ⚠ 
+
+2.8 still in debug and most of features are removed temporarily 
+
+so currently if u are android 14 user use 2.8 debug till we release it
+
+# TODO
+
+□ XSDL X11
+□ MACHINE SYSTEM (LIKE VMWARE)
+□ PPC, AARCH64, I386
+
 # Vectras-VM-Android (Closed Source Code)
 
 currently we are working on rebase the project
