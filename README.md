@@ -31,7 +31,6 @@ It's a Virtual Machine App for Android Which is Based on QEMU
 * compiled kernel with KVM support
 
 ## Beta Version
-
 * https://vectras.netlify.app/download
 
 [ico-telegram]: https://raw.githubusercontent.com/epicstudios856/Vectras-windows-emulator/main/res/images/telegram.svg
@@ -42,5 +41,5 @@ It's a Virtual Machine App for Android Which is Based on QEMU
 [link-repo]: https://github.com/epicstudios856/Vectras-VM-Android/
 [link-releases]: https://github.com/epicstudios856/Vectras-VM-Android/releases/
 
-# Support Project
+## Support Project
 <a href="https://www.buymeacoffee.com/vectrasvm" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
