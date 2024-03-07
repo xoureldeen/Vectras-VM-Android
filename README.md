@@ -58,6 +58,7 @@ Has The Capbility to Run (ReactOS - Xp - 7 - Kali Linux)
  * [QEMU](https://github.com/qemu/qemu)
  * [PROOT](https://proot-me.github.io/)
  * [Android Terminal emulator](https://github.com/jackpal/Android-Terminal-Emulator)
+ * [Alpine Linux](https://www.alpinelinux.org/)
 
 [ico-telegram]: https://raw.githubusercontent.com/epicstudios856/Vectras-windows-emulator/main/res/images/telegram.svg
 [ico-version]: https://raw.githubusercontent.com/epicstudios856/Vectras-windows-emulator/main/res/images/version.svg
