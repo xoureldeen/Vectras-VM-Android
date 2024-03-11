@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="resources/vectras-icon.jpg" style="width: 30%;" />
+  <img src="resources/vectrasvm.png" style="width: 30%;" />
 </p>
 
 # Vectras VM
