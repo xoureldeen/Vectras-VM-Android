@@ -1,64 +1,47 @@
-# WARNING ⚠ 
+<p align="center">
+  <img src="resources/vectrasvm.png" style="width: 30%;" />
+</p>
 
-2.8 still in debug and most of features are removed temporarily 
+# Vectras VM
+[![Ceasefire Now](https://badge.techforpalestine.org/default)](https://techforpalestine.org/learn-more)
 
-so currently if u are android 14 user use 2.8 debug till we release it
-
-### TODO 2.8
-
-- [x] XSDL X11
-- [ ] MACHINE SYSTEM (LIKE VMWARE)
-- [ ] PPC, AARCH64, I386
-
-# Vectras-VM-Android (Closed Source Code)
-
-currently we are working on rebase the project
-
-![logo](https://raw.githubusercontent.com/epicstudios856/Vectras-VM-Android/master/resources/vectras-logo.png)
 [![Telegram Channel][ico-telegram]][link-telegram]
 [![Latest Version][ico-version]][link-releases]
 [![Software License][ico-license]](LICENSE.md)
 
+Welcome to Vectras VM! A virtual machine app for Android based on QEMU that let you emulate various OS including: Windows, MacOS, Linux and Android.
 
-# Support Project
-<a href="https://www.buymeacoffee.com/vectrasvm" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
+We are, currently, working so hard on rebasing the project, thus, we made the project closed source since the rebased project (v2.8) will be almost completely diffrent from the previous version. Don't worry, we will make the project open source again when the rebase finishs :)
 
-# About
+# TODO
+- [x] XSDL X11
+- [ ] Machine system (like VMWARE)
+- [ ] PPC, arch64, i386
 
-It's a Virtual Machine App for Android Which is Based on QEMU
+# Installation
+> [!NOTE]
+> Vectras VM 2.8 is still in alpha stages and its releases are intended for testing only.
 
-Has The Capbility to Run (ReactOS - Xp - 7 - Kali Linux)
+You can either download Vectras VM from [releases](https://github.com/epicstudios856/Vectras-VM-Android/releases) or [official website](https://vectras.netlify.app/download).
 
-# Minimum System Requirement
+If you are Android 14 user, you may use v2.8. Devices running Android 13 and less can use previous versions.
 
-* Android 5.0+
+### Minimum System Requirement
+- Android 5.0 and up
+- 3GB RAM (1GB of free RAM)
+- A good processeur
+> [!TIP]
+> If the OS you are trying to emulate, crashed try with an older version.
 
-* 3gb Ram (1gb free ram)
+# Donate
+Help support the project by funding it.
+<p><a href="https://www.buymeacoffee.com/vectrasvm" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="35" width="168"></a></p>
 
-* 8-Cores Snapdragon 450 (at Least)
-
-* A Phone
-* ![images](https://github.com/ahmedbarakat2007/Vectras-windows-emulator/assets/118398763/8e453927-4235-4489-a100-9c909153bb2f)
-
-# Recommended System Requirement
-
-* Android 11+
-
-* 8gb Ram (4gb free ram)
-
-* 8-Cores Snapdragon 720G or better
-
-* compiled kernel with KVM support
-
-# Beta Version
-
-* https://vectras.netlify.app/download
-
-# Third party apps
- * [QEMU](https://github.com/qemu/qemu)
- * [PROOT](https://proot-me.github.io/)
- * [Android Terminal emulator](https://github.com/jackpal/Android-Terminal-Emulator)
- * [Alpine Linux](https://www.alpinelinux.org/)
+# Thanks to
+- [QEMU](https://github.com/qemu/qemu)
+- [PROOT](https://proot-me.github.io/)
+- [Android Terminal emulator](https://github.com/jackpal/Android-Terminal-Emulator)
+- [Alpine Linux](https://www.alpinelinux.org/)
 
 [ico-telegram]: https://raw.githubusercontent.com/epicstudios856/Vectras-windows-emulator/main/res/images/telegram.svg
 [ico-version]: https://raw.githubusercontent.com/epicstudios856/Vectras-windows-emulator/main/res/images/version.svg
