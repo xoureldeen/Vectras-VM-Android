@@ -1,33 +1,28 @@
-# WARNING ⚠ 
+<p align="center">
+  <img src="resources/vectras-icon.jpg" style="width: 30%;" />
+</p>
 
-2.8 still in debug and most of features are removed temporarily 
-
-so currently if u are android 14 user use 2.8 debug till we release it
-
-### TODO 2.8
-
-- [x] XSDL X11
-- [ ] MACHINE SYSTEM (LIKE VMWARE)
-- [ ] PPC, AARCH64, I386
-
-# Vectras-VM-Android (Closed Source Code)
-
-currently we are working on rebase the project
-
-![logo](https://raw.githubusercontent.com/epicstudios856/Vectras-VM-Android/master/resources/vectras-logo.png)
+# Vectras VM
 [![Telegram Channel][ico-telegram]][link-telegram]
 [![Latest Version][ico-version]][link-releases]
 [![Software License][ico-license]](LICENSE.md)
 
+Welcome to Vectras VM! A virtual machine app for Android based on QEMU that let emulate various OS including: Windows, MacOS, Linux and Android.
+
+We are, currently, working so hard on rebasing the project, thus, we made the project closed source since the rebased project (v2.8) will be almost completely diffrent from the previous verion. Don't worry, we will make the project open source again when the rebase is finished :)
+
+> [!NOTE]
+> Vectras VM 2.8 is still in alpha stages and its releases are intended for testing only.
+
+If you are Android 14 user, you may use v2.8. Devices running Android 13 and less can use previous versions.
+
+# TODO
+- [x] XSDL X11
+- [ ] Machine system (like VMWARE)
+- [ ] PPC, arch64, i386
 
 # Support Project
 <a href="https://www.buymeacoffee.com/vectrasvm" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
-
-# About
-
-It's a Virtual Machine App for Android Which is Based on QEMU
-
-Has The Capbility to Run (ReactOS - Xp - 7 - Kali Linux)
 
 # Minimum System Requirement
 
