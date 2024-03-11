@@ -3,6 +3,8 @@
 </p>
 
 # Vectras VM
+[![Ceasefire Now](https://badge.techforpalestine.org/default)](https://techforpalestine.org/learn-more)
+
 [![Telegram Channel][ico-telegram]][link-telegram]
 [![Latest Version][ico-version]][link-releases]
 [![Software License][ico-license]](LICENSE.md)
