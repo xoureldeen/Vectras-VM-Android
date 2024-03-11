@@ -33,7 +33,7 @@ If you are Android 14 user, you may use v2.8. Devices running Android 13 and les
 
 # Donate
 Help support the project by funding it.
-<a href="https://www.buymeacoffee.com/vectrasvm" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="35" width="168"></a>
+<p><a href="https://www.buymeacoffee.com/vectrasvm" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="35" width="168"></a></p>
 
 # Thanks to
 - [QEMU](https://github.com/qemu/qemu)
