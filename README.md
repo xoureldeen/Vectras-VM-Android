@@ -29,7 +29,7 @@ If you are Android 14 user, you may use v2.8. Devices running Android 13 and les
 ### Minimum System Requirement
 - Android 5.0 and up
 - 3GB RAM (1GB of free RAM)
-- A good processeur
+- A good processor 
 > [!TIP]
 > If the OS you are trying to emulate, crashed try with an older version.
 
