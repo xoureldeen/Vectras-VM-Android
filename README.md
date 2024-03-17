@@ -13,10 +13,7 @@ Welcome to Vectras VM! A virtual machine app for Android based on QEMU that let 
 
 We are, currently, working so hard on rebasing the project, thus, we made the project closed source since the rebased project (v2.8) will be almost completely diffrent from the previous version. Don't worry, we will make the project open source again when the rebase finishs :)
 
-# TODO
-- [x] XSDL X11
-- [ ] Machine system (like VMWARE)
-- [ ] PPC, arch64, i386
+For now, there is no official tutorials for Vectras VM until v2.8 is released. However, you ask for help in our [Telegram group](https://t.me/vectras_vm_discussion) anytime.  
 
 # Installation
 > [!NOTE]
