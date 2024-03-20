@@ -11,7 +11,7 @@
 
 Welcome to Vectras VM! A virtual machine app for Android based on QEMU that let you emulate various OS including: Windows, MacOS, Linux and Android.
 
-We are currently, working so hard on rebasing the project, thus, we made the project closed source since the rebased project (v2.8) will be almost completely diffrent from the previous version. Don't worry, we will make the project open source again when the rebase is finished :)
+We are currently working very hard on rebasing the project, thus, we made the project closed source since the rebased project (v2.8) will be almost completely diffrent from the previous version. Don't worry, we will make the project open source again when the rebase is finished :)
 
 For now, there is no official tutorials for Vectras VM, and there won't be until v2.8 is released. However, you can ask for help in our [Telegram group](https://t.me/vectras_vm_discussion) anytime.  
 
