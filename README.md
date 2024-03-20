@@ -11,9 +11,9 @@
 
 Welcome to Vectras VM! A virtual machine app for Android based on QEMU that let you emulate various OS including: Windows, MacOS, Linux and Android.
 
-We are, currently, working so hard on rebasing the project, thus, we made the project closed source since the rebased project (v2.8) will be almost completely diffrent from the previous version. Don't worry, we will make the project open source again when the rebase finishs :)
+We are currently working very hard on rebasing the project, thus, we made the project closed source since the rebased project (v2.8) will be almost completely diffrent from the previous version. Don't worry, we will make the project open source again when the rebase is finished :)
 
-For now, there is no official tutorials for Vectras VM until v2.8 is released. However, you ask for help in our [Telegram group](https://t.me/vectras_vm_discussion) anytime.  
+For now, there is no official tutorials for Vectras VM, and there won't be until v2.8 is released. However, you can ask for help in our [Telegram group](https://t.me/vectras_vm_discussion) anytime.  
 
 # Installation
 > [!NOTE]
@@ -21,14 +21,14 @@ For now, there is no official tutorials for Vectras VM until v2.8 is released. H
 
 You can either download Vectras VM from [releases](https://github.com/epicstudios856/Vectras-VM-Android/releases) or [official website](https://vectras.netlify.app/download).
 
-If you are Android 14 user, you may use v2.8. Devices running Android 13 and less can use previous versions.
+If you are using Android 14, you can use v2.8. Devices running Android 13 or less can use previous versions.
 
 ### Minimum System Requirement
 - Android 5.0 and up
 - 3GB RAM (1GB of free RAM)
 - A good processor 
 > [!TIP]
-> If the OS you are trying to emulate, crashed try with an older version.
+> If the OS you are trying to emulate crashed, try with an older version.
 
 # Donate
 Help support the project by funding it.
