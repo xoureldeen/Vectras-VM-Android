@@ -37,7 +37,6 @@ Help support the project by funding it.
 # Thanks to
 - [QEMU](https://github.com/qemu/qemu)
 - [PROOT](https://proot-me.github.io/)
-- [Android Terminal emulator](https://github.com/jackpal/Android-Terminal-Emulator)
 - [Alpine Linux](https://www.alpinelinux.org/)
 
 [ico-telegram]: https://raw.githubusercontent.com/epicstudios856/Vectras-windows-emulator/main/res/images/telegram.svg
