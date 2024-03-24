@@ -65,7 +65,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btnDownload) {
-            String qe = AppConfig.vectrasPkg;
+            String qe = AppConfig.getSetupFiles();
             Intent q = new Intent(Intent.ACTION_VIEW);
             q.setData(Uri.parse(qe));
             startActivity(q);
@@ -93,8 +93,6 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                 progressBar.setVisibility(View.VISIBLE);
 
                 String setupFilesUrl = AppConfig.getSetupFiles();
-
-                tvSelectedPath.setText(setupFilesUrl);
 
                 String filesDir = activity.getFilesDir().getAbsolutePath();
                 if (!com.vectras.vm.utils.FileUtils.readFromFile(activity, new File(filesDir + "/distro/etc/apk/repositories")).contains("http://dl-cdn.alpinelinux.org/alpine/edge/testing"))
