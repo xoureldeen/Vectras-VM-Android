@@ -1,0 +1,15 @@
+--- src/channel-display.c.orig	2021-03-21 21:27:36.734579378 -0400
++++ src/channel-display.c	2021-03-21 21:26:04.898816927 -0400
+@@ -188,9 +188,9 @@
+     g_return_if_fail(c->palettes != NULL);
+ 
+     c->monitors = g_array_new(FALSE, TRUE, sizeof(SpiceDisplayMonitorConfig));
+-    spice_g_signal_connect_object(s, "mm-time-reset",
+-                                  G_CALLBACK(display_session_mm_time_reset_cb),
+-                                  SPICE_CHANNEL(object), 0);
++    //spice_g_signal_connect_object(s, "mm-time-reset",
++    //                              G_CALLBACK(display_session_mm_time_reset_cb),
++    //                              SPICE_CHANNEL(object), 0);
+ 
+     spice_display_channel_set_capabilities(SPICE_CHANNEL(object));
+ 

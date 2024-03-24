@@ -1,0 +1,859 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="audio_will_be_initialized">音频将在大约15秒后初始化，请在这之前停止任何正在运行的视频或音频播放。</string>
+    <string name="audio_initialized">音频初始化</string>
+    <string name="action_import_settings">导入设定</string>
+    <string name="action_new_connection">新连接</string>
+    <string name="action_edit_default_settings">编辑默认设定</string>
+    <string name="action_export_settings">导出设定</string>
+    <string name="action_delete_connection">删除连接设定</string>
+    <string name="opaque_app_name">Opaque</string>
+    <string name="opaque_app_name_beta">Opaque Beta</string>
+    <string name="advanced_settings">进阶设定</string>
+    <string name="audio">音频</string>
+    <string name="auto_rotation">连接时画面回转</string>
+    <string name="auto_request_new_res">远程与显示器分辨率同步</string>
+    <string name="custom_ca_subject">可选的证书主题。如果证书CN与主机名匹配，就不需要</string>
+    <string name="custom_ca_import">或者，输入您的CA的完整路径并点击导入</string>
+    <string name="custom_ca_paste">如果不导入，就在此粘贴CA</string>
+    <string name="ca_ovirt_use_custom">自定义RHEV/oVirt CA</string>
+    <string name="ca_spice_use_ovirt">將RHEV/oVirt用於SPICE</string>
+    <string name="ca_ovirt_manage">管理RHEV/oVirt CA</string>
+    <string name="ca_spice_manage">管理SPICE CA</string>
+    <string name="ca_file_not_found">没有找到文件。请在文本字段中输入一个有效的文件名（如：/sdcard/ca.crt）。</string>
+    <string name="ca_file_error_reading">读取CA文件时出错。请确认它是否可读取的。</string>
+    <string name="ca_new_or_changed">新增或变更服务器证书</string>
+    <string name="connection_type_text">虚拟化环境（RHEV/oVirt或Proxmox）</string>
+    <string name="connection_type_ovirt">oVirt/RHEV</string>
+    <string name="connection_type_pve">Proxmox虚拟环境</string>
+    <string-array name="connection_types">
+        <item>@string/connection_type_ovirt</item>
+        <item>@string/connection_type_pve</item>
+    </string-array>
+    <string name="connection_setup_vm_name">虚拟机名（可选）</string>
+    <string name="connection_setup_host_name">服务器地址</string>
+    <string name="connection_setup_user">用户@域名</string>
+    <string name="connection_setup_password">密码</string>
+    <string name="enter_password">请输入密码</string>
+    <string name="enter_password_auth_failed">认证失败了。请重新输入您的凭证。</string>
+    <string name="enter_otp_code">请输入OTP码</string>
+    <string name="hide_toolbar">隐藏工具栏</string>
+    <string name="manage_custom_ca_title">管理自定义CA</string>
+    <string name="save_button">保存</string>
+    <string name="select_vm_title">选择虚拟机</string>
+    <string name="vv_file_not_found">找不到.vv文件</string>
+    <string name="vv_file_error">.vv文件不是丢失了就是损坏了!</string>
+    <string name="info_cert">你是否接受这个新的或变更的主机证书？\n\nFingerprints:\nMD5: %1$s\nSHA1: %2$s\nSHA256: %3$s\n\nIssued to: %4$s\nIssued by: %5$s\n\nValid from: %6$s\nValid until: %7$s\n</string>
+    <string name="toggle_keyboard">切换式键盘</string>
+    <string name="show_keyboard">显示键盘</string>
+
+    <string name="input_method_help">输入方式帮助</string>
+
+    <string name="ok">OK</string>
+
+    <string name="input_methods">输入方式</string>
+    <string name="error_failed_to_download_vv_http">通过HTTP下载.vv文件失败了。 该服务器可能无法访问。</string>
+    <string name="error_failed_to_download_vv_https">通过HTTPS下载.vv文件失败了。 服务器证书可能不受信任（过期或自签），或者无法到达服务器。</string>
+    <string name="error_failed_to_obtain_vv_content">获取.vv文件失败了。请再次下载它。这次从文件管理器中的下载文件夹里迅速地打开它。</string>
+    <string name="error_failed_to_obtain_vv_file">找不到.vv文件。请再次下载。这次如果可能的话，请尝试从通知区或直接从浏览器中打开它。</string>
+    <string name="error_dialog_title">错误</string>
+    <string name="info_dialog_title">信息</string>
+    <string name="info_vm_launched_on_stand_by">您的虚拟机已关闭电源并正在重新启动。请在几分钟后再试。如果由于您过早地尝试而连接失败，请稍后再试。</string>
+    <string name="error_no_vm_found_for_user">没有给定的用户可用的虚拟机。</string>
+    <string name="error_no_such_vm_found_for_user">找不到有给定的用户ID的虚拟机。请删除该ID，并获取虚拟机列表。</string>
+    <string name="error_no_vnc_support_yet">目前还没支持VNC显示类型，今后会支持，谢谢您的理解!</string>
+    <string name="error_not_connected_to_network">您似乎没有连接到互联网。没有连接就不能继续！</string>
+    <string name="error_ovirt_timeout">与虚拟机的连接超时了。请确认如下：运行虚拟机的节点地址是否正确、是否可以从当前网络访问它、防火墙是否阻止连接。</string>
+    <string name="error_ovirt_auth_failure">认证失败了。请确认输入的用户与密码是否正确。</string>
+    <string name="error_ovirt_ssl_handshake_failure">SSL握手失败了。服务器的SSL证书有问题。如果您使用的是自签名证书，就需要（重新）导入证书授权。</string>
+    <string name="error_pve_failed_to_authenticate">对Proxmox虚拟环境的认证失败了。请按照user@realm的格式输入您的用户名，并确认您的密码是否正确。</string>
+    <string name="error_pve_failed_to_parse_json">解析从Proxmox虚拟环境来的响应失败了。</string>
+    <string name="error_pve_vmid_not_numeric">VM ID不是数字。请输入数字的VM ID。如果要从列表选择的话，就请留空。</string>
+    <string name="error_pve_api_unexpected_code">来自Proxmox虚拟环境的意外响应：</string>
+    <string name="error_pve_api_io_error">与Proxmox虚拟环境连接失败了：</string>
+    <string name="error_pve_null_data">Proxmox虚拟环境返回了Null。</string>
+    <string name="error_pve_timeout_communicating">与Proxmox虚拟环境的通信超时了。</string>
+    <string name="error_vm_lookup_failed">无法找到分配给您用户的具有指定名称的虚拟机。请删除指定的虚拟机名称，並查看分配给该用户的虚拟机列表。</string>
+    <string name="error_vv_download_timeout">下载vv文件超时了。</string>
+    <string name="message_please_wait">请稍候</string>
+    <string name="message_please_install_bvnc">请从谷歌商店安装<a href="market://details?id=com.iiordanov.bVNC">bVNC</a>，以便连接到该虚拟机的VNC控制台。</string>
+    <string name="ssl_strict">要求通用名称与证书相符（建议）。</string>
+    <string name="usb">USB（先插上OTG线）</string>
+
+    <string name="ad_donate_text0">Pro版本对应于多重身份验证。为了防止违法使用，也对应于主密码功能。加上为了防盗包含密码与SSH键的所有连接设定都是加密的。这些都在主菜单内进行设定。如果主菜单按钮不见，请按住在菜单上的应用按钮。</string>
+    <string name="ad_donate_text1">如果您购买Pro版本并且同意捐赠我们的话，请点击这里。</string>
+    <string name="ad_donate_text2">使用Pro版本时，可以将这个对话框设定为无效，也可以存取追加功能。</string>
+    <string name="ad_donate_text3">项目的详细请参照以下客户端应用用链接：</string>
+    <string name="ad_donate_text_rdp">Pro版本的aRDP已对应声音重定向！</string>
+    <string name="ad_donate_text_spice">Pro版本的aSPICE已对应USB重定向！只要在连接之前安装OTG电缆就行了。</string>
+    <string name="address_caption">VNC服务器</string>
+    <string name="address_caption_hint">VNC服务器</string>
+    <string name="address_caption_hint_tunneled">VNC服务器</string>
+    <string name="address_caption_ssh">SSH服务器</string>
+    <string name="address_caption_ssh_hint">SSH服务器</string>
+    <string name="alt_check">Alt</string>
+    <string name="ardp_app_name">aRDP Pro</string>
+    <string name="arrow_down">向下箭头</string>
+    <string name="arrow_left">向左箭头</string>
+    <string name="arrow_right">向右箭头</string>
+    <string name="arrow_up">向上箭头</string>
+    <string name="aspice_app_name">aSPICE Pro</string>
+    <string name="auto">自动</string>
+    <string name="auto_x_cancel">取消</string>
+    <string name="auto_x_caption">bVNC在Linux/UNIX系统（类似于NX）上自动搜索现有的并创建新的X会话。搜索需要x11vnc，创建会话需要Xvfb、Xvnc或Xdummy。如果连接有问题，请尝试在AutoX高级设置中选择特定的远程会话类型。</string>
+    <string name="auto_x_confirm">确认</string>
+    <string name="auto_x_descript_geom">远程桌面大小（WxH）</string>
+    <string name="auto_x_descript_session">远程会话类型</string>
+    <string name="auto_x_disabled">无效</string>
+    <string name="auto_x_disabled_selection">AutoX无效</string>
+    <string name="auto_x_enabled">有效</string>
+    <string name="auto_x_find">只搜索，不创建</string>
+    <string name="auto_x_find_login">搜索X登录名（需要sudo）</string>
+    <string name="auto_x_geom_custom">自订</string>
+    <string name="auto_x_geom_native">原创</string>
+    <string-array name="auto_x_geometry">
+        <item>@string/auto_x_geom_native</item>
+        <item>@string/auto_x_geom_custom</item>
+    </string-array>
+    <string-array name="auto_x_session">
+        <item>@string/auto_x_session_auto</item>
+        <item>@string/auto_x_session_custom</item>
+        <item>@string/auto_x_session_kde</item>
+        <item>@string/auto_x_session_unity</item>
+        <item>@string/auto_x_session_unity_2d</item>
+        <item>@string/auto_x_session_xfce</item>
+        <item>@string/auto_x_session_gnome</item>
+        <item>@string/auto_x_session_gnome_cl</item>
+        <item>@string/auto_x_session_trinity</item>
+        <item>@string/auto_x_session_mate</item>
+    </string-array>
+    <string name="auto_x_session_auto">自动</string>
+    <string name="auto_x_session_custom">自订</string>
+    <string name="auto_x_session_gnome">GNOME</string>
+    <string name="auto_x_session_gnome_cl">GNOME经典</string>
+    <string name="auto_x_session_kde">KDE</string>
+    <string name="auto_x_session_mate">MATE</string>
+    <string name="auto_x_session_trinity">Trinity</string>
+    <string name="auto_x_session_unity">Unity</string>
+    <string name="auto_x_session_unity_2d">Unity2D</string>
+    <string name="auto_x_session_xfce">Xfce</string>
+    <string name="auto_x_title">AutoX设定</string>
+    <string-array name="auto_x_type">
+        <!-- If adding selections, they need to be in sync with values
+            declared in VncConstants for conversion bet. selection and commands
+            to work properly. -->
+        <item>@string/auto_x_disabled_selection</item>
+        <item>@string/auto_x_xvfb</item>
+        <item>@string/auto_x_xvnc</item>
+        <item>@string/auto_x_xdummy</item>
+        <item>@string/auto_x_find</item>
+        <item>@string/auto_x_find_login</item>
+    </string-array>
+    <string name="auto_x_unix_auth">自动使用给定的SSH用户名／密码进行身份验证（进入黑色的登录画面）</string>
+    <string name="auto_x_unixpw">使用UNIX凭据代替内置的安全性机制。用户必须能够运行/bin/su。</string>
+    <string name="auto_x_xdummy">使用Xdummy搜索或创建</string>
+    <string name="auto_x_xvfb">使用Xvfb搜索或创建</string>
+    <string name="auto_x_xvnc">使用Xvnc搜索或创建</string>
+    <string name="button_send_text">发送文字</string>
+    <string name="button_send_without_saving">发送文字/不保存</string>
+    <string name="bvnc_app_name">bVNC Pro</string>
+    <string name="center_mouse">鼠标@</string>
+    <string name="close">关闭</string>
+    <string name="color_format_caption">彩色模式</string>
+    <string name="color_mode">彩色模式</string>
+
+    <string name="connect_button">连接</string>
+    <string name="back_button">返回</string>
+    <string name="update_button">更新</string>
+
+    <string name="connection_caption">连接</string>
+    <string-array name="connection_type">
+        <item>@string/connection_type_vnc</item>
+        <item>@string/connection_type_vnc_over_ssh</item>
+        <item>@string/connection_type_ultravnc</item>
+        <item>@string/connection_type_vnc_over_ssl</item>
+        <item>@string/connection_type_vnc_over_vencrypt</item>
+        <item>@string/connection_type_vnc_over_stunnel</item>
+    </string-array>
+    <string name="connection_type_caption">连接类型</string>
+    <string name="connection_type_rdp">RDP</string>
+    <string name="connection_type_rdp_over_ssh">通过SSH的RDP</string>
+    <string name="connection_type_spice">SPICE</string>
+    <string name="connection_type_spice_over_ssh">通过SSH的SPICE</string>
+    <string name="connection_type_ultravnc">UltraVNC</string>
+    <string name="connection_type_vnc">基本VNC</string>
+    <string name="connection_type_vnc_over_ssh">通过SSH的安全VNC</string>
+    <string name="connection_type_vnc_over_ssl">通过AnonTLS的安全VNC</string>
+    <string name="connection_type_vnc_over_stunnel">通过SSL隧道的安全VNC</string>
+    <string name="connection_type_vnc_over_vencrypt">通过VeNCrypt的安全VNC</string>
+    <string name="connection_edit_delete_prompt">你想编辑或删除连接吗？</string>
+    <string name="connection_edit">编辑</string>
+    <string name="connection_delete">删除</string>
+
+    <string name="control_check">Ctrl</string>
+    <string name="copy_list_button">复制列表</string>
+    <string name="ctrl_alt_del">Ctrl-Alt-Del</string>
+    <string name="default_input_mode">默认输入模式</string>
+    <string name="delete_connection">删除连接设定</string>
+    <string name="delete_key">删除所选密钥</string>
+    <string name="delete_key_list">删除密钥列表</string>
+    <string name="disconnect">切断</string>
+    <string name="dpad_as_arrows">将D-Pad用于箭头键，将D-Pad单击用于Ctrl。</string>
+    <string name="enable_recording">使录像有效</string>
+    <string name="enable_sound">使声音有效</string>
+    <string name="enter_text">发送文字</string>
+    <string name="enter_text_title">输入发送用文字</string>
+    <string name="error_anon_dh_unsupported">VNC服务器正在尝试使用匿名Diffie Hellman密码，但您的Android设备不支持的。如果使用GNOME的Vino VNC服务器，就可以通过在终端中运行以下命令然后重新启动来禁用AnonTLS：\" gsettings set org.gnome.Vino require-encryption false \"。如果运行x11vnc，就可以添加以下选项：\"-vencrypt nodh：only -ssl \"。</string>
+    <string name="error_connection_failed">连接失败了。</string>
+    <string name="error_connection_interrupted">连接被中断了。</string>
+    <string name="error_no_user_hostname">请输入用户名，以及主机名或IP地址。</string>
+    <string name="error_out_of_memory">无法将足够的内存分配给远程屏幕的绘制。请尝试重新启动应用或者设备。您也可以尝试通过应用设置来缩小远程桌面的大小。</string>
+    <string name="error_ovirt_unable_to_connect">无法连接或认证，请确认服务器地址，用户名，密码以及CA与主题。</string>
+    <string name="error_pick_correct_item">请确认您在\"连接类型\"中选择了正确的项目。</string>
+    <string name="error_rdp_authentication_failed">RDP验证失败了！ 请先确认RDP用户名和密码再重试。</string>
+    <string name="error_rdp_connection_failed">RDP连接失败了！网络连接被中断或RDP服务器已停止／无效。或者将会话切换到另外用户了。</string>
+    <string name="error_rdp_unable_to_connect">无法连接到RDP服务器！请确认RDP服务器设置正确，服务器已上电，RDP已有效以及服务器与该设备位于同一网络上。</string>
+    <string name="error_security_type">服务器无法提供对应的安全类型。</string>
+    <string name="error_spice_unable_to_connect">无法连接或认证。请确认服务器地址、密码以及CA与主题。</string>
+    <string name="error_ssh_could_not_exec_command">没能执行远程命令。</string>
+    <string name="error_ssh_could_not_send_sudo_pwd">没能发送sudo密码。</string>
+    <string name="error_ssh_hostkey_changed">ERROR！服务器主机密钥已更改。如果有意这样做，请删除并重试连接。否则，这可能是中间人的攻击，不能继续。</string>
+    <string name="error_ssh_kbd_auth_method_unavail">SSH服务器都不支持\"password\"与\"keyboard-interactive\"这两种认证方式，或者先要执行\"publickey\"方式。请设定为允许这两种方式中的至少一种。或者重新设定本App。有效的认证方式：</string>
+    <string name="error_ssh_key_auth_fail">通过密钥对来向SSH服务器认证失败了。请确认SSH用户名，并确认您的公钥在远程端的authorized_keys文件中。</string>
+    <string name="error_ssh_keypair_decryption_failure">解密密钥对失败了。请确认您在主画面的\'SSH Passphrase\'字段中正确输入了密码。</string>
+    <string name="error_ssh_keypair_missing">尚未创建SSH密钥对！ 请创建它并将它（公钥）放入SSH服务器上的authorized_keys中。</string>
+    <string name="error_ssh_passphrase_but_keypair_unencrypted">已创建了密码短语，但密钥对未加密。请删除密码短语。</string>
+    <string name="error_ssh_port_forwarding_failure">无法设置为通过SSH隧道连接VNC的端口转发。请确认SSH服务器设置为允许端口转发，然后重试。</string>
+    <string name="error_ssh_pubkey_auth_method_unavail">SSH服务器不支持\" publickey \"身份验证方法，我们正在尝试使用密钥对进行身份验证。请设置为允许公钥身份验证，然后重试。可用的身份验证方法：</string>
+    <string name="error_ssh_pwd_auth_fail">使用密码对SSH服务器进行身份验证失败了。请确认您的SSH用户名和SSH密码。</string>
+    <string name="error_ssh_unable_to_connect">连接SSH服务器失败了。请确认网络连接以及SSH服务器地址和端口。</string>
+    <string name="error_ssh_x11vnc_no_port_failure">无法从x11vnc获取远程VNC端口。请确认是否已安装x11vnc。为慎重起见，请尝试在命令行上手动运行x11vnc。</string>
+    <string name="error_uri_noinfo_nosave">用于连接的信息不足。</string>
+    <string name="error_vnc_authentication">VNC验证失败了！请确认VNC密码和用户名。</string>
+    <string name="error_vnc_unable_to_connect">"与VNC服务器的连接失败了，原因如下："</string>
+    <string name="error_x509_could_not_generate_encoding">无法生成证书编码。</string>
+    <string name="error_x509_could_not_generate_signature">无法生成证书的SHA1或MD5签名。找不到SHA1 / MD5算法。</string>
+    <string name="export_settings">导出</string>
+    <string name="export_settings_path" />
+    <string name="extra_keys_disable">使特殊键无效</string>
+    <string name="extra_keys_enable">使特殊键有效</string>
+    <string name="fit_to_screen">适应于屏幕</string>
+    <string name="force">全屏位图</string>
+    <string name="freeardp_app_name">aRDP Free</string>
+    <string name="freeaspice_app_name">aSPICE Free</string>
+    <string name="freebvnc_app_name">bVNC Free</string>
+    <string name="immersive_mode_disable">禁用沉浸模式</string>
+    <string name="import_export_settings">导入／导出设定</string>
+    <string name="import_settings">导入</string>
+    <string name="import_settings_file_url" />
+    <string name="info">信息</string>
+    <string name="info_cert_signatures">"证书信息是："</string>
+    <string name="info_cert_signatures_identical">\n\n您可以确认信息与服务器证书匹配，以防止中间人攻击。</string>
+    <string name="info_cert_tunnel">是否要连接以下证书标识的主机？\n\nFingerprint: %1$s\n\nIssued to:\n%2$s\n\nIssued by:\n%3$s\n\nValid from:\n%4$s\n\nValid until:\n%5$s\n\nNote: The application does not verify certificate authorities or check for certificate revocation.</string>
+    <string name="info_continue_connecting">"继续连接到："</string>
+    <string name="info_encoding">"编码"</string>
+    <string name="info_progress_dialog_aborted">连接被中止了！</string>
+    <string name="info_progress_dialog_connecting">正在连接…</string>
+    <string name="info_progress_dialog_downloading" tools:ignore="TypographyEllipsis">正在下载第一帧。\n请稍候...</string>
+    <string name="info_progress_dialog_establishing" tools:ignore="TypographyEllipsis">正在建立握手。\n请稍候...</string>
+    <string name="info_ssh_initializing_hostkey">尝试初始化SSH HostKey。</string>
+    <string name="info_ssh_key_fingerprint">"主机密钥指纹是："</string>
+    <string name="info_ssh_key_fingerprint_identical">\n\n您可以确认它与服务器证书的已知指纹相同，以防止中间人攻击。</string>
+    <string name="info_update_color_model_to">"将颜色模型更新为"</string>
+    <string name="input_method_direct_drag_pan_description">直接、按住并平移：滑动并拖曳下拉。 一根手指单击相当于鼠标左击，用两根手指单击相当于鼠标右击，再用三根手指单击相当于鼠标中击。 用两根手指滑动即可滚动。 长按即可开始平移。</string>
+    <string name="input_method_direct_swipe_pan_description">直接、滑动平移：滑动即可随意平移。 一根手指单击相当于鼠标左击，用两根手指单击相当于鼠标右击，再用三根手指单击相当于鼠标中击。 用两根手指滑动即可滚动。 长按即可拖曳下拉。</string>
+    <string name="input_method_single_handed_description">单手操作：滑动即可随意平移。 一根手指单击相当于鼠标左击。长按可选择左击/右击/中击/拖动/滚动/缩放模式。 通常的多点触摸操作也可以使用。</string>
+    <string name="input_method_touchpad_description">模拟模拟板：滑动即可移动指针。一根手指单击相当于鼠标左击，用两根手指单击相当于鼠标右击，再用三根手指单击相当于鼠标中击。 用两根手指滑动即可滚动。 长按即可拖曳下拉。</string>
+    <string name="input_mode">输入模式</string>
+
+    <string name="input_mode_fit_to_screen">无平移：轨迹球鼠标</string>
+    <string name="input_mode_panning">桌面平移模式</string>
+    <string name="input_method_mouse">鼠标指针控制</string>
+
+    <string name="input_method_direct_swipe_pan">直接、滑动平移</string>
+    <string name="input_method_direct_drag_pan">直接、按住并平移</string>
+    <string name="input_method_single_handed">单手</string>
+    <string name="input_method_touchpad">模拟触摸板</string>
+
+    <string name="input_mode_help">输入模式操作帮助</string>
+    <string name="input_mode_help_text">"
+在所有输入模式下都可以通过点击键盘图标来显示屏上键盘。键盘的显示方法因使用的机器而异。
+
+使用直接输入模式可以更直观地控制触摸屏。 使用模拟触摸板模式可以更好地控制鼠标。
+
+直接、滑动平移模式：
+  -通过触摸直接控制鼠标。
+  -滑动即可平移。
+  -点击即可鼠标单击。
+  -在两个手指开始滑动时在两个手指之间发送滚动事件。
+
+直接、按住并平移模式：
+  -通过触摸直接控制鼠标。
+  -长按即可平移。
+  -点击即可鼠标单击。
+  -在两个手指开始滑动时在两个手指之间发送滚动事件。
+
+模拟触摸板模式：
+  -像触摸板一样使用屏幕。
+  -滑动即可移动鼠标指针。
+  -将鼠标移到屏幕边缘之外即可进行平移。
+  -点击相当于鼠标单击指针所在的位置。
+  -滚动事件发送到鼠标指针所在的位置。
+
+单手模式：
+  -与直接、滑动平移模式相同，不同之处在于长按可打开菜单并选择模式。
+  -选择模式后，在屏幕上滑动手指即可执行选定的手势。
+  -抬起手指即可完成手势。
+
+所有输入模式：
+  -左击：点击一次
+  -双击：双击
+  -右击：按住并用另一根手指点击屏幕上其他任何地方
+  -备用右击：使用设备的\"Back\"按钮或手势。
+  -中击：按住并用另外两个手指点击屏幕上其他任何地方
+  -拖动鼠标：长按并滑动
+  -滚轮：两根手指上下/左右拖动。快速拖动滚动更快
+  -放大/缩小：缩放即可控制显示的大小
+  -Ctrl / Alt键：菜单-&gt; Ctrl / Alt按钮。完成后请不要忘记关闭！
+  -按键组合：菜单-&gt;更多-&gt;发送按键
+  -发送文字：在屏幕键盘上输入文字，或使用菜单-&gt;更多-&gt;发送文字"</string>
+    <string name="intro_close">关闭</string>
+    <string name="intro_dont_show">不再显示</string>
+    <string name="intro_header" />
+    <string name="intro_text">
+bVNC对应的功能如下：
+&lt;br&gt;
+- Plain VNC／基于SSH的安全VNC／AnonTLS／VeNCrypt／UltraVNC Windows登录（带有可选中继器）
+&lt;br&gt;
+- AutoX模式：使用x11vnc来可以自动搜索现有的或者创建新的X会话（经过SSH的VNC模式）！像NX客户端一样的动作！
+&lt;br&gt;
+- 自动画面回转支持（ 如果不需要，就可以使用操作系统来更改设定）。
+&lt;br&gt;
+- SSH公钥/私钥对的生成和导出。
+&lt;br&gt;
+- 所有标准VNC编码，包括Tight、ZRLE和CopyRect。
+&lt;br&gt;
+- 自动保存会话。
+&lt;br&gt;
+- 缩放模式：适合屏幕以及一对一缩放模式。
+&lt;br&gt;
+- 可使用远程鼠标来进行多点触摸控制（直接／模拟触摸板模式）
+&lt;br&gt;
+- 可使用远程鼠标来进行完全单手控制（单手输入模式）
+&lt;br&gt;
+- 多点触控鼠标单击：点击即可鼠标左击，两指点击即可鼠标右击，三指点击即可鼠标中击。
+&lt;br&gt;
+- 多点触控滚动：两根手指向上／向下／向左／右拖动即可滚动操作。
+&lt;br&gt;
+- 屏幕上的meta／箭头键：可以从菜单中完全禁用它，也可以通过隐藏按钮来隐藏它们。
+&lt;br&gt;
+- 连接时发送文本和任意组合键。
+&lt;br&gt;
+- 在连接画面上有创建连接的帮助(\"Menu-&gt;Connection Help\")。
+&lt;br&gt;
+- 连接时有输入模式的帮助（\"Menu-&gt;More-&gt;Input Mode Help\"）
+&lt;br&gt;
+- 触控板可代替鼠标操作箭头，单击触控板可代替按Ctrl。
+&lt;br&gt;
+- 连接时切换到纵向模式，D-pad／触摸板旋转为蓝牙键盘。
+&lt;br&gt;
+- 支持多语言，只要VNC服务器已启用必要的语言布局即可。
+&lt;br&gt;
+- 复制/粘贴整合
+&lt;br&gt;
+- 远程机器分辨率更改
+&lt;br&gt;
+-  在Android 4.0以上版本的设备支持完整鼠标，包括右键、中键以及滚轮。
+&lt;br&gt;
+&lt;br&gt;
+已知的问题：
+&lt;br&gt;
+  </string>
+    <string name="intro_title">bVNC：又直观又安全的VNC客户端</string>
+    <string name="intro_version_text" />
+    <string name="keep_password_button">保存</string>
+    <string name="keep_screen_awake_enable">使休眠模式无效</string>
+    <string name="keys_caption">键</string>
+    <string name="landscape_force">强行横放设定</string>
+    <string name="left_handed_mode">左手模式</string>
+    <string name="list_caption">一览表</string>
+    <string name="list_name_caption">一览表名</string>
+    <string name="local_mouse_check">本地鼠标指针（指针不可见时选择）</string>
+    <string name="main_screen_help">连接操作帮助</string>
+    <string name="vnc_connection_screen_help_text" tools:ignore="TypographyOther">"
+新建或编辑连接时连接设定画面会显示出来。在此可以设置新的VNC连接设定或选择现有的连接。顶部有保存连接的按钮，下面可设定连接。
+
+如果要快速提高性能，请尝试将“色彩”模式设置为较低的值。另外，请尝试删除VNC服务器上的所有桌面背景图像。最后，请确认您的设备具有良好的网络连接性，并避免由于覆盖其天线而降低信号强度。
+
+-连接类型：在此处选择VNC连接类型。可用的连接类型如下：
+  （a）普通VNC：所有VNC服务器都支持，但缺乏加密，并且由于密码限制为8个字符，因此容易受到蛮力攻击。
+  （b）通过SSH的安全VNC：它通过加密的SSH隧道连接。您需要运行SSHD服务以及VNC服务器。只要VNC服务器不直接连接到因特网，此连接类型就不会遭受任何已知的漏洞。在首次连接时需要验证服务器证书签名。
+  （c）UltraVNC：它为您提供Windows登录和UltraVNC转发器选项。使用Windows登录不受8个字符的密码限制，但是此模式不提供加密，因此您的会话很容易被嗅探。
+ （d）通过AnonTLS的安全VNC：这是通过相当于Stunnel连接的常规VNC。您要么需要运行Stunnel，要么使用像对应AnonTLS的Vino等VNC服务器。此模式为您提供会话加密，但受到8个字符的密码限制，因此有可能受到中间人攻击。
+ （e）通过VeNCrypt的安全VNC：它使用x509证书以及会话加密，密码根据服务器设定，可以使用不受到8个字符限制的用户/密码凭据。此模式可防止中间人攻击，以及提供会话隐私。 x11vnc和TigerVNC等服务器支持此模式，与通过SSH的VNC一样安全。
+
+-标题：您创建的每个连接都可以有一个昵称，以便在列表中轻松识别它。
+
+-SSH隧道设置：在SSH模式的VNC中可用。
+ （a）SSH服务器/端口：将通过隧道建立连接的SSH服务器的地址和端口。 默认端口是22。
+ （b）用户名/密码：SSH服务器上帐户的用户名和密码。未退出应用程序，密码就保留在画面上。
+ （c）管理密钥/使用密钥：用于管理公钥／密钥的按钮，以及验证方法是否从密码改为密钥的选项。如果在生成密钥对后使用“复制到剪贴板”按钮的话，连接到VNC服务器后可以粘贴公钥（剪贴板同步到服务器）。
+
+-设置AutoX：仅在SSH模式下的VNC中可用。应用程序可以在UNIX系统（例如NX客户端）上自动发现现有的X会话，并可以选择创建新的X会话。您需要x11vnc来查找，并且需要在远程系统上安装Xvfb、Xvnc或Xdummy来创建会话。如果您的桌面看起来不正确或您仅获得xterm窗口，则可能必须移走.dmrc文件并在主目录中添加.xinit文件。
+
+-VNC连接设置：
+ （a）VNC服务器／端口：在此输入运行VNC服务器的计算机的主机名或IP地址与端口号。在通过SSH模式的VNC中，SSH服务器也可以看到此IP地址。如果SSH服务器与VNC服务器在同一台计算机上，就可以使用localhost。VNC服务器通常从端口5900开始侦听（第一个VNC屏幕，屏幕：0）。
+（b）VNC用户：在具有Windows登录模式的UltraVNC中可用，或通过VeNCrypt的安全VNC中可用。在此输入Windows / UNIX帐户用户名。
+（c）VNC密码：如果您的VNC服务器设置需要密码，在此输入该密码。具有Windows登录或VeNCrypt模式的UltraVNC的话，在此输入Windows / UNIX帐户密码。 密码不使用安全存储，只有选中“保持”选项，才会存储密码。未退出应用程序，密码就保留在画面上。
+
+-颜色模式：客户端支持几种颜色模式。如果选用具有更多颜色的模式，就可以提供更好的视觉体验，但在设备上需要更大的带宽和更多的CPU计算。 某些VNC服务器不支持所有颜色深度（例如OS / X远程桌面需要24位颜色）。如果连接时遇到问题，请尝试其他颜色深度。
+
+-D-Pad用于箭头：想要将箭头发送到VNC服务器时，可以使用蓝牙键盘的D-Pad或屏幕键盘上的箭头。
+
+-旋转D-Pad：与蓝牙键盘配对的装置可能需要逆时针旋转键盘的D-pad，才能将正确的方向发送到服务器。
+
+-本地鼠标指针：某些VNC服务器（例如OS / X远程桌面）不会在客户端上绘制鼠标指针。 选中此选项将使应用程序在鼠标位置绘制一个鼠标指针。
+
+-自动/全屏位图：VNC客户端使用位图表示远程显示。对于非常大的远程显示器，尤其是在适合于屏幕的模式下，由于每个进程的内存限制，您可能会遇到奇怪的视觉伪像。如果发生这种情况，请尝试勾选此选项。请记住，勾选该选项可能会导致应用程序中断连接。
+
+-中继器：仅在UltraVNC模式下可用。重要信息：如果您有UltraVNC中继器，请在“UltraVNC中继器”对话框之外输入其地址和端口，并在“UltraVNC中继器”对话框中输入实际VNC服务器的地址和端口。用冒号分隔VNC服务器的地址和端口，例如 192.168.0.100:5900。"</string>
+
+    <string name="main_screen_help_text">"
+当应用程序启动时会显示的画面是保存的连接的。
+
+如果没有保存的连接，画面的下半部分是空的，请您按+按钮来创建新的连接。
+也可以通过点击画面上边有的其他工具条或菜单选项等来进行默认设定的编辑、设定的导入／导出等的设定操作。
+
+保存设定后再点击就可以与远程服务器连接。也可以通过长按来进行连接目标的删除或编辑。
+
+使用“搜寻连接”字段的话，就可以通过过滤器来快速查找连接。"
+  </string>
+    <string name="master_password_enable">使主密码有效</string>
+    <string name="master_password_error_failed_to_disable">无法使主密码无效。 请确认设备上的可用空间，然后重试。</string>
+    <string name="master_password_error_failed_to_enable">无法使主密码有效。 请确认设备上的可用空间，然后重试。</string>
+    <string name="master_password_error_intents_not_supported">主密码有效时尚未支持连接意图。</string>
+    <string name="master_password_error_password_necessary">有主密码才能继续。</string>
+    <string name="master_password_error_password_not_set">设置主密码被取消了。</string>
+    <string name="master_password_error_shortcuts_not_supported">主密码有效时尚未对应快捷。</string>
+    <string name="master_password_error_wrong_password">无法使用提供的主密码进行身份验证。</string>
+    <string name="master_password_hint_once">输入密码</string>
+    <string name="master_password_hint_twice">再输入密码</string>
+    <string name="master_password_set">设置主密码</string>
+    <string name="master_password_set_error">密码不匹配，请确认一下！</string>
+    <string name="master_password_set_message">请输入并记住主密码。您的密码越长，破解的难度就越大。如果密码输入错误或忘记密码，将丢失所有设置！推荐您导出并备份已有的设置。因为导出的设置未加密，请将它保存在安全的地方。</string>
+    <string name="master_password_verify">确认主密码</string>
+    <string name="master_password_verify_message">请输入正确的主密码，以便继续。</string>
+    <string name="meta_key_title">发送特殊密钥</string>
+
+    <string name="mouse_follow_pan">鼠标跟随平移</string>
+
+    <string name="new_connection">新连接</string>
+    <string name="new_list_button">新一览表</string>
+    <string name="nickname_caption">昵称</string>
+    <string name="nickname_caption_hint">标题（可选）</string>
+
+    <string name="off">Off</string>
+
+    <string name="one_to_one">1对1</string>
+    <string name="open_doc">操作手册/Wiki</string>
+
+    <string name="pan_follow_mouse">平移跟随鼠标</string>
+
+    <string name="password_caption">VNC验证</string>
+    <string name="password_caption_hint">VNC密码</string>
+    <string name="password_caption_ssh">SSH验证</string>
+    <string name="password_hint_ssh">SSH密码</string>
+    <string name="port_caption">VNC端口</string>
+    <string name="port_caption_ssh">SSH端口</string>
+    <string name="port_hint">端口</string>
+    <string name="port_ssh_hint">端口</string>
+    <string name="portrait_mode">连接后切换到纵放模式</string>
+    <string name="position_toolbar_last_used">工具栏位置初始化</string>
+    <string name="applies_to_new_connections_only">仅限适用到新建连接</string>
+    <string name="pro_feature_mfa">看来您的服务器已启用多因素身份验证。请购买支持此功能的Pro版本。在开始对话框中有Pro版本的链接。</string>
+    <string name="rdp_address_caption_hint">RDP服务器</string>
+    <string name="rdp_adv_console_mode">控制台模式</string>
+    <string name="rdp_adv_desktop_background">显示桌面背景</string>
+    <string name="rdp_adv_desktop_composition">启用桌面合成</string>
+    <string name="rdp_adv_font_smoothing">执行字体平滑</string>
+    <string name="rdp_adv_menu_animation">显示菜单动画</string>
+    <string name="rdp_adv_redirect_sdcard">重定向SD卡</string>
+    <string name="rdp_adv_remotefx">启用RemoteFX</string>
+    <string name="rdp_adv_visual_styles">启用视觉样式</string>
+    <string name="rdp_adv_window_contents">拖动时显示窗口内容</string>
+    <string-array name="rdp_connection_type">
+        <item>@string/connection_type_rdp</item>
+        <item>@string/connection_type_rdp_over_ssh</item>
+    </string-array>
+    <string name="rdp_descript_geom">远程桌面大小（WxH）</string>
+    <string name="rdp_domain_hint">RDP域</string>
+    <string name="rdp_geom_automatic">自动</string>
+    <string name="rdp_geom_checkbox_enable">启用自定义分辨率</string>
+    <string name="rdp_geom_custom">自定义</string>
+    <string name="rdp_geom_description_hint">服务器需要支持ExtendedDesktopSize</string>
+    <string name="rdp_geom_disabled">无效</string>
+    <string name="rdp_geom_native_landscape">源设备横向</string>
+    <string name="rdp_geom_native_portrait">源设备纵向</string>
+    <string-array name="rdp_geometry">
+        <item>@string/rdp_geom_native_landscape</item>
+        <item>@string/rdp_geom_native_portrait</item>
+        <item>@string/rdp_geom_custom</item>
+    </string-array>
+    <string-array name="vnc_geometry">
+        <item>@string/rdp_geom_disabled</item>
+        <item>@string/rdp_geom_automatic</item>
+        <item>@string/rdp_geom_native_landscape</item>
+        <item>@string/rdp_geom_native_portrait</item>
+        <item>@string/rdp_geom_custom</item>
+    </string-array>
+    <string name="rdp_intro_text">
+感谢您支援aRDP以及开源软件！关于aRDP的用法，请参照菜单中的帮助项目以及应用的说明。
+&lt;br&gt;
+&lt;br&gt;
+aRDP对应的功能如下：
+&lt;br&gt;
+- Plain RDP／经过SSH隧道的RDP
+&lt;br&gt;
+- 自动画面回转支持（ 如果不需要，就可以使用操作系统来更改设定）。
+&lt;br&gt;
+-可设置在横向和纵向模式的远程分辨率以及原始分辨率。
+&lt;br&gt;
+- SSH公钥/私钥对的生成和导出。
+&lt;br&gt;
+- 自动保存会话。
+&lt;br&gt;
+- 缩放模式：适合屏幕以及一对一缩放模式。
+&lt;br&gt;
+- 可使用远程鼠标来进行多点触摸控制（直接／模拟触摸板模式）
+&lt;br&gt;
+- 可使用远程鼠标来进行完全单手控制（单手输入模式）
+&lt;br&gt;
+- 多点触控鼠标单击：点击即可鼠标左击，两指点击即可鼠标右击，三指点击即可鼠标中击。
+&lt;br&gt;
+- 多点触控滚动：两根手指向上／向下／向左／右拖动即可滚动操作。
+&lt;br&gt;
+- 屏幕上的meta／箭头键：可以从菜单中完全禁用它，也可以通过隐藏按钮来隐藏它们。
+&lt;br&gt;
+- 在连接画面上有创建连接的帮助(\"Menu-&gt;Connection Help\")。
+&lt;br&gt;
+- 连接时有输入模式的帮助（\"Menu-&gt;More-&gt;Input Mode Help\"）
+&lt;br&gt;
+- 触控板可代替鼠标操作箭头，单击触控板可代替按Ctrl。
+&lt;br&gt;
+- 支持多语言，只要RDP服务器已启用必要的语言布局即可。
+&lt;br&gt;
+-无缝的远程机器分辨率更改
+&lt;br&gt;
+- 在Android 4.0以上版本的设备支持完整鼠标，包括右键、中键以及滚轮。
+&lt;br&gt;
+&lt;br&gt;
+aRDP对应预定的功能：
+&lt;br&gt;
+- 彩色模式选择
+&lt;br&gt;
+- 复制/粘贴整合
+&lt;br&gt;
+- 设定的导出
+&lt;br&gt;
+-  声音
+&lt;br&gt;
+&lt;br&gt;
+已知的问题：
+&lt;br&gt;</string>
+    <string name="rdp_intro_title">aRDP：又直观又安全的RDP客户端</string>
+    <string name="rdp_connection_screen_help_text" tools:ignore="TypographyOther">"
+新建或编辑连接时连接设定画面会显示出来。在此可以设置新的RDP连接设定或选择现有的连接。顶部有保存连接的按钮，下面可设定连接。
+
+-连接类型：在此处选择RDP连接类型。可用的连接类型如下：
+ （a）RDP：通过RDP通讯协议直接连接计算机。
+ （b）通过SSH的RDP：通过运行SSH服务器的计算机进行隧道连接。
+
+-标题：您创建的每个连接都可以有一个昵称，以便在列表中轻松识别它。
+
+-SSH隧道设置：在SSH模式的RDP中可用。
+ （a）SSH服务器/端口：将通过隧道建立连接的SSH服务器的地址和端口。 默认端口是22。
+ （b）用户名/密码：SSH服务器上帐户的用户名和密码。未退出应用程序，密码就保留在画面上。
+ （c）管理密钥/使用密钥：用于管理公钥／密钥的按钮，以及验证方法是否从密码改为密钥的选项。如果在生成密钥对后使用“复制到剪贴板”按钮的话，连接到RDP服务器后可以粘贴公钥（剪贴板同步到服务器）。
+
+-RDP连接设置：
+ （a）RDP服务器／端口：在此输入运行RDP服务器的计算机的主机名或IP地址与端口号。在通过SSH模式的RDP中，SSH服务器也可以看到此IP地址。如果SSH服务器与RDP服务器在同一台计算机上，就可以使用localhost。RDP服务器通常用端口3389侦听（第一个RDP屏幕，屏幕：0）。
+（b）RDP用户：在具有Windows登录模式的UltraRDP中可用，或通过VeNCrypt的安全RDP中可用。在此输入Windows / UNIX帐户用户名。
+（c）RDP密码：如果您的RDP服务器设置需要密码，在此输入该密码。具有Windows登录或VeNCrypt模式的UltraRDP的话，在此输入Windows / UNIX帐户密码。 密码不使用安全存储，只有选中“保持”选项，才会存储密码。未退出应用程序，密码就保留在画面上。
+
+-详细设定：在此进行桌面分辨率的自定义设定或者RDP性能微调。
+
+-本地设备调整：在此调整应用程序在您的设备上的动作。
+ （a）D-Pad用于箭头：想要将箭头发送到RDP服务器时，可以使用蓝牙键盘的D-Pad或屏幕键盘上的箭头。
+
+ （b）旋转D-Pad：与蓝牙键盘配对的手机可能需要逆时针旋转键盘的D-pad，才能将正确的方向发送到服务器。
+
+ （c）本地鼠标指针：如果鼠标指针隐藏的话，勾选此选项将使应用程序显示鼠标位置。"</string>
+    <string name="rdp_main_screen_help_text">
+"首次启动aRDP时连接设定画面会显示出来。在此可以设置新的RDP连接设定或选择现有的RDP连接。该页面分为2个部分，顶部有下拉菜单显示之前创建的连接设定。首次启动aRDP时只能创建新的连接。下拉菜单旁边有连接按钮，按下它就按照当前的设定启动RDP客户端。在连接按钮之下可设定连接。
+
+-连接类型：在此处选择RDP连接类型。可用的连接类型如下：
+  （a）RDP：通过RDP通讯协议直接连接计算机。
+  （b）通过SSH的RDP：通过运行SSH服务器的计算机进行隧道连接。
+
+-标题：您创建的每个连接都可以有一个昵称，以便在列表中轻松识别它。
+
+-SSH隧道设置：在SSH模式的RDP中可用。
+  （a）SSH服务器/端口：将通过隧道建立连接的SSH服务器的地址和端口。 默认端口是22。
+  （b）用户名/密码：SSH服务器上帐户的用户名和密码。 未退出aRDP，密码就保留在画面上。
+  （c）管理密钥/使用密钥：用于管理公钥／密钥的按钮，以及验证方法是否从密码改为密钥的选项。如果在生成密钥对后使用\"复制到剪贴板\"按钮的话，连接到RDP服务器后可以粘贴公钥（剪贴板同步到服务器）。
+
+-RDP连接设置：
+  （a）RDP服务器／端口：在此输入运行RDP服务器的计算机的主机名或IP地址与端口号。在通过SSH模式的RDP中，SSH服务器也咖已看到此IP地址。如果SSH服务器与RDP服务器在同一台计算机上，就可以使用localhost。RDP服务器通常用端口3389侦听（第一个RDP屏幕，屏幕：0）。
+  （b）RDP用户：在具有Windows登录模式的UltraRDP中可用，或通过VeNCrypt的安全RDP中可用。在此输入Windows / UNIX帐户用户名。
+  （c）RDP密码：如果您的RDP服务器设置需要密码，在此输入该密码。具有Windows登录或VeNCrypt模式的UltraRDP的话，在此输入Windows / UNIX帐户密码。 密码不使用安全存储，只有选中\"保持\"选项，才会存储密码。未退出aRDP，密码就保留在画面上。
+
+-详细设定：在此进行桌面分辨率的自定义设定或者RDP性能微调。
+
+-本地设备调整：在此调整aRDP在您的设备上的动作。
+  （a）D-Pad用于箭头：想要将箭头发送到RDP服务器时，可以使用蓝牙键盘的D-Pad或屏幕键盘上的箭头。
+  （b）旋转D-Pad：与Bluetooth键盘配对的手机可能需要逆时针旋转键盘的D-pad，才能将正确的方向发送到服务器。
+  （c）本地鼠标指针：如果鼠标指针隐藏的话，勾选此选项将使aRDP显示鼠标位置。"
+  </string>
+    <string name="rdp_password_hint">RDP密码</string>
+    <string name="rdp_server_empty">RDP服务器或端口是空着。无法连接！</string>
+    <string name="rdp_username_hint">RDP用户名</string>
+    <string name="remote_sound_disabled">声音已禁用</string>
+    <string name="remote_sound_on_device">设备上的声音</string>
+    <string name="remote_sound_on_server">服务器上的声音</string>
+    <string name="repeater_button">UltraVNC中继器</string>
+    <string name="repeater_caption">重要信息：如果使用UltraVNC中继器，请在此对话框外部输入其地址和端口号。在此输入实际VNC服务器的地址和端口号。用冒号分隔VNC服务器的地址和端口号，例如 192.168.0.100:5900。</string>
+    <string name="repeater_caption_hint">UltraVNC中继器</string>
+    <string name="repeater_clear">请勿使用</string>
+    <string name="repeater_dialog_title">中继器后面的VNC服务器</string>
+    <string name="repeater_empty_text">没有中继器</string>
+    <string name="repeater_save">使用</string>
+    <string name="right_alt_as_iso_l3_shift">R-Alt作为ISO L3移位（仅限VNC）</string>
+    <string name="rotate_dpad">旋转蓝牙或软件D-Pad</string>
+    <string name="save_as_copy">另存为副本</string>
+    <string name="scaling">缩放</string>
+    <string name="scaling_zoomable">可缩放</string>
+    <!-- Send selected metakey -->
+    <string name="send_button">发送</string>
+    <string name="send_key_again">再次发送键</string>
+    <string name="shift_check">Shift</string>
+    <string name="shortcut_label_vnc">VNC连接</string>
+    <string name="shortcut_label_rdp">RDP连接</string>
+    <string name="shortcut_label_spice">SPICE连接</string>
+    <string name="showkbd_label">键盘</string>
+    <string name="single_cancel">单手模式取消了</string>
+    <string name="single_choose">选择单手模式或取消</string>
+    <string name="single_left">左拖动模式-滑动即可拖动/选择，抬起手指即可停止</string>
+    <string name="single_middle">中央拖动模式-滑动即可拖动/选择，抬起手指即可停止</string>
+    <string name="single_reposition">鼠标指针重新定位（用于单手模式）</string>
+    <string name="single_right">右拖动模式-滑动即可拖动/选择，抬起手指即可停止</string>
+    <string name="single_scroll">滚动模式-向上／向下滑动即可滚动，抬起手指即可停止</string>
+    <string name="single_zoom">缩放模式-向上／向下滑动即可滚动，抬起手指即可停止</string>
+    <string name="snap_one_to_one">捕捉到1对1缩放</string>
+    <string name="special_keys">发送键</string>
+    <string name="spice_address_caption_hint">SPICE服务器</string>
+    <string name="spice_button_import_ca">导入CA</string>
+    <string name="spice_ca_cert_path_hint">证书颁发机构文件的路径</string>
+    <string name="spice_ca_file_error_reading">读取CA文件时出错。请确认它是可读取的。</string>
+    <string name="spice_ca_file_not_found">找不到文件。请在文本字段中输入有效的文件名（例如：/sdcard/ca-cert.pem）。</string>
+    <string name="cert_subject">证书科目</string>
+    <string-array name="spice_connection_type">
+        <item>@string/connection_type_spice</item>
+        <item>@string/connection_type_spice_over_ssh</item>
+    </string-array>
+    <string name="spice_intro_text">
+感谢您支援aSPICE以及开源软件！关于aSPICE的用法，请参照菜单中的帮助项目以及应用的说明。
+&lt;br&gt;
+&lt;br&gt;
+aSPICE对应的功能如下：
+&lt;br&gt;
+- Plain SPICE／经过SSH隧道的SPICE
+&lt;br&gt;
+- 自动画面回转支持（ 如果不需要，就可以使用操作系统来更改设定）。
+&lt;br&gt;
+- SSH公钥/私钥对的生成和导出。
+&lt;br&gt;
+- 自动保存会话。
+&lt;br&gt;
+- 缩放模式：适合屏幕以及一对一缩放模式。
+&lt;br&gt;
+- 可使用远程鼠标来进行多点触摸控制（直接／模拟触摸板模式）
+&lt;br&gt;
+- 可使用远程鼠标来进行完全单手控制（单手输入模式）
+&lt;br&gt;
+- 多点触控鼠标单击：点击即可鼠标左击，两指点击即可鼠标右击，三指点击即可鼠标中击。
+&lt;br&gt;
+- 多点触控滚动：两根手指向上／向下／向左／右拖动即可滚动操作。
+&lt;br&gt;
+- 屏幕上的meta／箭头键：可以从菜单中完全禁用它，也可以通过隐藏按钮来隐藏它们。
+&lt;br&gt;
+- 在连接画面上有创建连接的帮助(\"Menu-&gt;Connection Help\")。
+&lt;br&gt;
+- 连接时有输入模式的帮助（\"Menu-&gt;More-&gt;Input Mode Help\"）
+&lt;br&gt;
+- 触控板可代替鼠标操作箭头，单击触控板可代替按Ctrl。
+&lt;br&gt;
+- 支持多语言，只要SPICE服务器已启用必要的语言布局即可。
+&lt;br&gt;
+-无缝的远程机器分辨率更改
+&lt;br&gt;
+- 在Android 4.0以上版本的设备支持完整鼠标，包括右键、中键以及滚轮。
+&lt;br&gt;
+&lt;br&gt;
+对应预定的功能：
+&lt;br&gt;
+- 复制/粘贴整合
+&lt;br&gt;
+-  声音
+&lt;br&gt;
+- 性能提升
+&lt;br&gt;
+已知的问题：
+&lt;br&gt;
+- 有非对应文本发送
+&lt;br&gt;
+  </string>
+    <string name="spice_intro_title">aSPICE：又直观又安全的SPICE客户端</string>
+    <string name="spice_connection_screen_help_text" tools:ignore="TypographyOther">"
+新建或编辑连接时连接设定画面会显示出来。在此可以设置新的SPICE连接设定或选择现有的连接。顶部有保存连接的按钮，下面可设定连接。
+
+-连接类型：在此处选择SPICE连接类型。可用的连接类型如下：
+ （a）SPICE：通过SPICE通讯协议直接连接计算机。
+ （b）通过SSH的SPICE：通过运行SSH服务器的计算机进行隧道连接。
+
+-标题：您创建的每个连接都可以有一个昵称，以便在列表中轻松识别它。
+
+-SSH隧道设置：在SSH模式的SPICE中可用。
+ （a）SSH服务器/端口：将通过隧道建立连接的SSH服务器的地址和端口。 默认端口是22。
+ （b）用户名/密码：SSH服务器上帐户的用户名和密码。未退出应用程序，密码就保留在画面上。
+ （c）管理密钥/使用密钥：用于管理公钥／密钥的按钮，以及验证方法是否从密码改为密钥的选项。如果在生成密钥对后使用“复制到剪贴板”按钮的话，连接到SPICE服务器后可以粘贴公钥（剪贴板同步到服务器）。
+
+-SPICE连接设置：
+ （a）SPICE服务器／端口：在此输入运行SPICE服务器的计算机的主机名或IP地址与端口号。在通过SSH模式的SPICE中，SSH服务器也可以看到此IP地址。如果SSH服务器与SPICE服务器在同一台计算机上，就可以使用localhost。SPICE服务器通常用端口5900侦听（第一个SPICE屏幕，屏幕：0）。
+（c）SPICE密码：为了保护SPICE会话设定密码。密码不使用安全存储（储存在数据库里），只有选中“保持”选项，才会存储密码。未退出应用程序，密码就保留在画面上。
+
+-详细设定：在此进行桌面分辨率的自定义设定或者SPICE性能微调。
+
+-本地设备调整：在此调整应用程序在您的设备上的动作。
+ （a）D-Pad用于箭头：想要将箭头发送到SPICE服务器时，可以使用蓝牙键盘的D-Pad或屏幕键盘上的箭头。
+
+ （b）旋转D-Pad：与蓝牙键盘配对的装置可能需要逆时针旋转键盘的D-pad，才能将正确的方向发送到服务器。
+
+ （c）本地鼠标指针：如果鼠标指针隐藏的话，勾选此选项将使应用程序显示鼠标位置。"</string>
+    <string name="spice_main_screen_help_text">
+"首次启动aSPICE时连接设定画面会显示出来。在此可以设置新的SPICE连接设定或选择现有的SPICE连接。该页面分为2个部分，顶部有下拉菜单显示之前创建的连接设定。首次启动aSPICE时只能创建新的连接。下拉菜单旁边有连接按钮，按下它就按照当前的设定启动SPICE客户端。在连接按钮之下可设定连接。
+
+-连接类型：在此处选择SPICE连接类型。可用的连接类型如下：
+  （a）SPICE：通过SPICE通讯协议直接连接计算机。
+  （b）通过SSH的SPICE：通过运行SSH服务器的计算机进行隧道连接。
+
+-标题：您创建的每个连接都可以有一个昵称，以便在列表中轻松识别它。
+
+-SSH隧道设置：在SSH模式的SPICE中可用。
+  （a）SSH服务器/端口：将通过隧道建立连接的SSH服务器的地址和端口。 默认端口是22。
+  （b）用户名/密码：SSH服务器上帐户的用户名和密码。 未退出aSPICE，密码就保留在画面上。
+  （c）管理密钥/使用密钥：用于管理公钥／密钥的按钮，以及验证方法是否从密码改为密钥的选项。如果在生成密钥对后使用\"复制到剪贴板\"按钮的话，连接到SPICE服务器后可以粘贴公钥（剪贴板同步到服务器）。
+
+-SPICE连接设置：
+  （a）SPICE服务器／端口：在此输入运行SPICE服务器的计算机的主机名或IP地址与端口号。在通过SSH模式的SPICE中，SSH服务器也咖已看到此IP地址。如果SSH服务器与SPICE服务器在同一台计算机上，就可以使用localhost。SPICE服务器通常用端口5900侦听（第一个SPICE屏幕，屏幕：0）。
+  （c）SPICE密码：为了保护SPICE会话设定密码。密码不使用安全存储（储存在数据库里），只有选中\"保持\"选项，才会存储密码。未退出aSPICE，密码就保留在画面上。
+
+-详细设定：在此进行桌面分辨率的自定义设定或者SPICE性能微调。
+
+-本地设备调整：在此调整aSPICE在您的设备上的动作。
+  （a）D-Pad用于箭头：想要将箭头发送到SPICE服务器时，可以使用蓝牙键盘的D-Pad或屏幕键盘上的箭头。
+  （b）旋转D-Pad：与Bluetooth键盘配对的装置可能需要逆时针旋转键盘的D-pad，才能将正确的方向发送到服务器。
+  （c）本地鼠标指针：如果鼠标指针隐藏的话，勾选此选项将使aSPICE显示鼠标位置。"
+  </string>
+    <string name="spice_password_hint">SPICE密码</string>
+    <string name="spice_server_empty">SPICE服务器或端口是空着。无法连接！</string>
+    <string name="spice_tls_port_hint">TLS端口</string>
+    <string name="spice_username_hint">SPICE用户名</string>
+    <string name="ssh_passphrase_hint">SSH密码短语</string>
+    <string name="ssh_pubkey_button">管理密钥</string>
+    <string name="ssh_use_pubkey">使用密钥</string>
+    <string name="ssh_use_x11vnc">自动桌面</string>
+    <string name="ssh_x11vnc_customize">设定AutoX</string>
+    <string name="super_check">Super</string>
+    <string name="tap_disable">无效</string>
+    <string name="tap_enable">有效</string>
+    <string name="username_caption">VNC用户</string>
+    <string name="username_hint">UltraVNC MS登录用户名</string>
+    <string name="username_hint_optional">VNC用户名（可选）</string>
+    <string name="username_hint_ssh">SSH用户名</string>
+    <string name="username_hint_vencrypt">VNC用户名</string>
+    <string name="verification_code">验证码</string>
+    <string name="verification_code_message">请输入多因素身份验证验证码</string>
+    <string name="view_only">仅查看模式</string>
+    <string name="vnc_server_empty">VNC服务器或端口是空着。无法连接！</string>
+    <string name="vnc_server_empty_no_save">VNC服务器或端口为空。无法保存连接！</string>
+
+    <string name="warning_cert_does_not_match">警告：保存的x509证书或传入的签名与当前服务器证书不匹配！ 这可能是中间人攻击。 如果您知道密钥更改，可以继续进行。</string>
+    <string name="copy_logcat">复制Logcat</string>
+    <string name="log_copied">Logcat已复制到剪贴板。您可以将它粘贴到电子邮件中或在支持论坛上。发布之前，请仔细确认是否有任何个人数据。</string>
+    <string name="info_set_touchpad_input_mode">服务器不支持客户端模式的鼠标输入，因此当前的鼠标输入无法正常工作。请确认SPICE工具已安装在虚拟机中。或者从菜单上切换到模拟触摸板输入模式。</string>
+    <string name="vnc_connection_settings">VNC连接设定</string>
+    <string name="show_advanced_settings">显示详细设定</string>
+    <string name="use_no_compression_for_local_connections">无压缩（本地连接，Hextile编码）</string>
+    <string name="rdp_connection_settings">RDP连接设定</string>
+    <string name="local_device_tweaks">本地设备调整</string>
+    <string name="spice_connection_settings">SPICE连接设定</string>
+    <string name="ca_subject">在此输入证书主题名称。 如果证书公用名（CN）与服务器主机名匹配的话，就有可能不需要。</string>
+    <string name="path_to_ca">输入文件路径（例如/sdcard/ca-cert.pem），然后点击导入，以便加载您的证书颁发机构。</string>
+    <string name="paste_ca">如果您不将它作为文件导入的话，请在此输入证书颁发机构。</string>
+    <string name="cert_issuer">证书颁发行人</string>
+    <string name="cert_fingerprint">证书指纹</string>
+    <string name="error">错误</string>
+    <string name="panning">平移屏幕</string>
+    <string name="copy_of">复制</string>
+    <string name="ssh_key_generated">成功生成或导入新密钥。 您可以点击\'Generate/Export Key\'按钮来共享、复制到剪贴板或导出公钥。</string>
+    <string name="ssh_tunnel_settings">SSH隧道设定</string>
+    <string name="cursor_force_local">"本地"</string>
+    <string name="cursor_force_disable">"无效"</string>
+    <string name="cursor_mode">"光标模式："</string>
+    <string name="rendering_mode">"渲染模式："</string>
+    <string name="color_24_bit">"24位彩色（24 bpp）"</string>
+    <string name="color_256">"256色（8 bpp）"</string>
+    <string name="color_64">"64色（4 bpp）"</string>
+    <string name="color_8">"8色（2 bpp）"</string>
+    <string name="color_greyscale">"灰度（1 bpp）"</string>
+    <string name="color_black_and_white">"黑白（1 bpp）"</string>
+    <string name="show">"显示"</string>
+    <string name="hide">"隐藏"</string>
+    <string name="search_connections">搜索连接</string>
+    <string name="user_not_specified">未指定用户</string>
+    <string name="enter_ssh_credentials">请输入SSH凭证</string>
+    <string name="enter_vnc_credentials">请输入VNC凭证</string>
+    <string name="enter_vnc_password">请输入VNC密码</string>
+    <string name="enter_rdp_credentials">请输入RDP凭证</string>
+    <string name="enter_spice_password">请输入SPICE密码</string>
+    <string name="enter_passphrase_title">输入密钥密码</string>
+    <string name="enter_passphrase">请输入密钥密码</string>
+    <string name="ssh_server_needs_password_in_addition_to_key">您的服务器除了密钥认证外，还需要密码认证。</string>
+    <string name="opaque_connection_screen_help_text" tools:ignore="TypographyOther">"
+新建或编辑连接时连接设定画面会显示出来。在此可以设置新的OPAQUE连接设定或选择现有的连接。顶部有保存连接的按钮，下面可设定连接。
+
+-连接类型：在此处选择要连接的VE。
+
+-服务器地址：服务器的主机名或IP。如果在一个非标准的端口上监听，就用冒号分割来添加端口。
+
+- 虚拟机名称：指定要在虚拟化平台上显示的虚拟机的名称，或将此字段留空，获得可选择的虚拟机或容器的列表。
+
+- 用户：输入用户名来验证虚拟化框架。
+
+- 密码：如果你想保存密码，请在此输入。或者将该字段留空，每次都被查问到密码。
+
+- 高级设置：在此有本地设备、协议和性能的调整。"
+    </string>
+    <string name="help">帮助</string>
+    <string name="support_forum">支持论坛</string>
+    <string name="report_bug">报告错误</string>
+    <string name="download_from_server">从服务器下载</string>
+    <string name="import_from_file">从文件导入</string>
+    <string name="please_grant_permission_from_prefs">你可能需要通过设置向应用程序授予权限。</string>
+    <string name="rdp_adv_gfx">RDP Gfx</string>
+    <string name="rdp_adv_gfxh264">RDP Gfx H264</string>
+    <string name="more_debug_logging">更多调试记录</string>
+    <string name="prefer_sending_unicode">Unicode输入(仅限Windows)</string>
+    <string name="hide_connection_thumbnails">隐藏缩略图</string>
+    <string name="show_only_connection_nicknames">只显示昵称</string>
+</resources>

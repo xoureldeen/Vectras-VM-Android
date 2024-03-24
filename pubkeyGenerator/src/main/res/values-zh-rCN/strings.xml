@@ -1,0 +1,20 @@
+<resources>
+    <string name="prompt_file_name">"要保存在下在目录中的文件名"</string>
+    <string name="prompt_file_will_be_saved">"文件保存到下载目录中，并从此读出来"</string>
+    <string name="prompt_passphrase">"密码短语"</string>
+    <string name="prompt_type">"类型"</string>
+    <string name="prompt_password_can_be_blank">"密码短语可以为空，但密钥不加密"</string>
+    <string name="prompt_bits">"位元"</string>
+    <string name="gather_entropy">"改善随机性"</string>
+    <string name="generating">"正在创建密钥对…"</string>
+    <string name="generated">"成功创建密钥"</string>
+    <string name="generate">"创建新的密钥"</string>
+    <string name="copy">"复制到剪贴板"</string>
+    <string name="save">"将公钥保存到文件"</string>
+    <string name="share">"共享公钥"</string>
+    <string name="decrypt">"解密当前密钥"</string>
+    <string name="key_import">"导入"</string>
+    <string name="touch_prompt">"触摸此框以收集随机性：%1$d%%完成"</string>
+    <string name="touch_hint">"为了确保密钥创建过程中的随机性，请在下面的框中随意移动手指。"</string>
+    <string name="menu_settings">"设定"</string>
+</resources>

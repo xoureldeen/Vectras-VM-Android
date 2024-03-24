@@ -1,0 +1,10 @@
+rootProject.name = "Vectras VM"
+
+include ':app', ':vterm'
+
+include ':remoteClientLib'
+include ':remoteClientLib:jni:libs:deps:FreeRDP:client:Android:Studio:freeRDPCore'
+include ':pubkeyGenerator'
+include ':bVNC'
+include ':common'
+

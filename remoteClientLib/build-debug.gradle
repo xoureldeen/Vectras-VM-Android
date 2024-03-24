@@ -1,0 +1,99 @@
+//apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
+
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    repositories {
+        jcenter()
+        google()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:4.1.3'
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+        google()
+    }
+}
+
+android {
+    compileSdkVersion compileApi
+
+    defaultConfig {
+        externalNativeBuild {
+            ndkBuild {
+                targets "spice"
+            }
+        }
+        targetSdkVersion targetApi
+        minSdkVersion project.getProperties().get("SDK_VERSION")
+        ndk.abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86' ,'x86_64'
+        multiDexEnabled true
+    }
+    useLibrary 'org.apache.http.legacy'
+
+    buildTypes {
+        debug {
+            debuggable true
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+
+    sourceSets.main {
+        java.srcDirs += 'src/main/java'
+        java.srcDirs += 'java'
+        jni.srcDirs += 'src/main/cpp'
+        jni.srcDirs += 'jni/libs/cerbero/build/sources/android_universal/armv7/spice-gtk-0.39/src'
+        jni.srcDirs += 'jni/libs/cerbero/build/sources/android_universal/arm64/spice-gtk-0.39/src'
+        jni.srcDirs += 'jni/libs/cerbero/build/sources/android_universal/x86/spice-gtk-0.39/src'
+        jni.srcDirs += 'jni/libs/cerbero/build/sources/android_universal/x86_64/spice-gtk-0.39/src'
+        jni.srcDirs += 'jni/libs/cerbero/build/sources/android_universal/armv7/gst-plugins-base-1.0-1.18.4/'
+        jni.srcDirs += 'jni/libs/cerbero/build/sources/android_universal/arm64/gst-plugins-base-1.0-1.18.4/'
+        jni.srcDirs += 'jni/libs/cerbero/build/sources/android_universal/x86/gst-plugins-base-1.0-1.18.4/'
+        jni.srcDirs += 'jni/libs/cerbero/build/sources/android_universal/x86_64/gst-plugins-base-1.0-1.18.4/'
+        jniLibs.srcDirs += 'src/main/jniLibs'
+    }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        doNotStrip "*/arm64-v8a/*.so"
+        doNotStrip "*/armeabi-v7a/*.so"
+        doNotStrip "*/x86/*.so"
+        doNotStrip "*/x86_64/*.so"
+
+        doNotStrip "gst-build-arm64-v8a/*.so"
+        doNotStrip "gst-build-armeabi-v7a/*.so"
+        doNotStrip "gst-build-x86/*.so"
+        doNotStrip "gst-build-x86_64/*.so"
+
+        doNotStrip "**/*.so"
+        pickFirst '**/*.so'
+    }
+
+    externalNativeBuild {
+        ndkBuild {
+            path file('jni/Application.mk')
+            path file('jni/Android.mk')
+            buildStagingDirectory 'src/main/jniLibs'
+        }
+    }
+
+}
+tasks.all { task ->
+    if (task.name.startsWith('compile') && task.name.endsWith('Ndk')) {
+        task.enabled = false
+    }
+}
+dependencies {
+    implementation project(':remoteClientLib:jni:libs:deps:FreeRDP:client:Android:Studio:freeRDPCore')
+    api 'com.android.support:multidex:1.0.3'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'org.apache.httpcomponents:httpcore:4.4.10'
+}
+

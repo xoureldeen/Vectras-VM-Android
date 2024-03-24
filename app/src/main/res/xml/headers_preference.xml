@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
+        android:fragment="com.vectras.qemu.MainSettingsManager$AppPreferencesFragment"
+        android:key="app"
+        android:summary="main app settings."
+        android:title="APP SETTINGS"
+        app:iconSpaceReserved="false" />
+    <Preference
+        android:key="userinterface"
+        android:fragment="com.vectras.qemu.MainSettingsManager$UserInterfacePreferencesFragment"
+        android:title="USER INTERFACE"
+        android:summary="themes and ui."
+        app:iconSpaceReserved="false" />
+    <Preference
+        android:key="qemu"
+        android:fragment="com.vectras.qemu.MainSettingsManager$QemuPreferencesFragment"
+        android:title="QEMU"
+        android:summary="emulation settings."
+        app:iconSpaceReserved="false" />
+    <Preference
+        android:key="vnc"
+        android:fragment="com.vectras.qemu.MainSettingsManager$VncPreferencesFragment"
+        android:title="VNC"
+        android:summary="vnc ui environment."
+        app:iconSpaceReserved="false"
+        app:isPreferenceVisible="false" />
+<!--    <header-->
+<!--        android:fragment="com.vectras.qemu.MainSettingsManager$SourceCodesPreferencesFragment"-->
+<!--        android:title="SOURCE CODES"-->
+<!--        android:summary="vectras source codes." />-->
+</PreferenceScreen>

@@ -1,0 +1,173 @@
+v5.2.9
+- Touch input workaround for Android 6 and older
+v5.2.6
+- Improved connection failure detection and reporting
+v5.2.5
+- Bugfix for visual artifacts when moving pointer or panning
+- Removal of non-functional Color Mode menu item while connected
+- Significant code cleanup
+v5.2.4
+- oVirt SSO support including keycloak integration
+- Automatic download of oVirt CA upon Self-Signed SSL Cert acceptance
+v5.2.1
+- Improvements for input responsiveness
+- Fix for connecting to VNC consoles
+v5.2.0
+- Fixed the More Apps button again
+v5.1.9
+- Fix for ActionBar visibility in SimulatedTouchpad input mode
+v5.1.7
+- Fix for USB handling on Android 14
+v5.1.5
+- Fixed the More Apps button
+v5.1.4
+- Stability fixes
+- Performance improvements
+- Security upates
+- Vector icons
+- Fixes for ANRs
+- Android SDK Update
+- Icon bugfix for old Android SDKs
+v5.1.3
+- Fix for mouse pointer drift due to rounding errors
+- Fix for login issues on Proxmox upgraded from 7 to 8
+- Fix for exceptions encountered during import of settings
+- Fix for potential crash caused by large clipboard copies
+- Offload input processing to a background thread for performance
+v5.1.2
+- New Software Keyboard Type Global Preference
+- Completely dark background for better image on OLED screens
+- Convenient buttons to get help, rate, share, etc
+- Improved debug logging
+- Fixes for extended software keyboards not showing when hardware keyboard is present
+- Fixes for typing certain unicode characters with software keyboards
+- Android API Update
+v5.1.1
+- Bugfix for single-click with certain trackpads
+- Bugfix for Simulated Touchpad Drag&Drop
+- Feedback on CA download success/failure
+- New file picker for import CA from file
+- Clipboard copy/paste integration with remote VM
+v5.1.0
+- Stability during reconnection improvements
+- Bugfix for cursor visibility setting
+- Support for app resizing
+- Fix for drag&drop bug in Direct Drag Pan Mode
+- Improvement to Direct Drag Pan Mode in Fit-To-Screen mode
+v5.0.9
+- Android localization: Updated translatations for ko, ja, zh-rCN, and zh-rTW
+- Primary and Secondary Button Stylus / S-Pen Support
+- Fix for Chromebook touchpad scrolling
+- Single-finger scroll in fit-to-screen mode
+- Fix for sending right-click via Back button in certain apps 
+- Fix for 32-bit x86 Chromebooks
+v5.0.8
+- Security library upgrade
+- Thumbnail bugfix 
+v5.0.7
+- Finer-grained permissions requests
+v5.0.6
+- Updated Target API to 31
+- USB Redirection Support
+- Keyboard layout fixes
+- Ignore all config changes to prevent connection interruptions
+- Capture modifier keys on Samsung devices
+- Theme visual improvements
+- Fix for Chromebook when app is on external display
+v5.0.5
+- Added Portuguese translation
+- Disabled highlighting of canvasing when focused so colors are not washed out
+- Moved to AndroidX libraries
+- Toolbar position is now remembered by default
+- Custom resolution setting
+- Fix for 32-bit x86 Chromebooks
+- Updated Target API to 30
+- New file picker for Import/Export Settings and Import/Export SSH Key
+v5.0.4
+- Fix for sending enter key
+- Keyboard Layout additions and fixes
+- SPICE library update
+- Master password fix
+- SQLCipher library update
+- Fix for washed out colors
+v5.0.3
+- Mandatory Android API target update
+- Usability fixes
+- Password entry retry
+- Castillian Spanish localization
+- Android TV support improvements
+- Feature to turn on/off debug logging
+v5.0.2
+- Samsung DEX fixes
+- Better handling of Extra Keys visibility 
+- Debug logging of files in app directory
+- Main grid activity fixes.
+v5.0.1
+- Fix for annoying permissions request loop
+- Performance improvements
+- Security updates
+- Improved vibration for gestures and on-screen keys 
+- Deadlock in SPICE library fix
+- Many other bugfixes 
+v5.0.0
+- Many improvements and fixes
+- Improved UX and error messaging
+- Improved settings import/export functionality
+- Updated help
+- Bufixes and UX improvements for on-screen buttons 
+v4.3.0
+- Fix for SSH key generation instructions.
+- Fixes for devices with curved screens
+- Fixes to allow no overlap of on-screen buttons with remote desktop.
+- Fixes for erratic pointer behavior around screen edges.
+- Fixes for devices with a notch.
+v1.5.2
+- Security updates
+- Stability fixes for Android 10
+v1.5.1
+- 64-bit support
+- Bugfixes
+v1.5.0
+- Ability to specify custom port for PVE
+- Support for SPICE server mouse mode
+v1.4.9
+- Bugfixes
+v1.4.8
+- Ability to copy logcat
+v1.4.7
+- Fix for scrolling in Single Handed mode
+- Bugfixes for Proxmox 
+v1.4.6
+- Fix for Menu + immersive mode live-lock on some devices
+- Updated spice library
+v1.4.5
+- Input mode bugfixes
+- Security and protocol library updates
+v1.4.4
+- New, relocatable toolbar
+- Import/Export settings
+- VNC console support via URI intent and bVNC
+- Numerous bugfixes
+- Library upgrades
+v1.4.3
+- TFA/OTP support for Proxmox
+- Several bugfixes
+v1.4.2
+- Security updates
+- Native library updates
+v1.4.1
+- Security update
+- Update to gstreamer 1.x
+- Update to libspice
+- Improved error reporting
+- Fixes for API changed in oVirt 4.x
+v1.4.0
+- Immersive mode!
+v1.3.8
+- Fix for crash on Android 6 with Chrome and .vv files.
+v1.3.6
+- Fix for on-screen menu button
+- Fix for crash when no network
+- Text improvements
+v1.3.5
+- Security update

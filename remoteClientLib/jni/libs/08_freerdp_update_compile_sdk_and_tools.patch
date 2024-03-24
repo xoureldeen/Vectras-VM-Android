@@ -1,0 +1,18 @@
+diff --git a/client/Android/Studio/build.gradle b/client/Android/Studio/build.gradle
+index 81ae37c3e..e995a1258 100644
+--- a/client/Android/Studio/build.gradle
++++ b/client/Android/Studio/build.gradle
+@@ -19,10 +19,10 @@ if (!hasProperty('RELEASE_KEY_PASSWORD')) {
+ }
+ 
+ ext {
+-    compileApi = properties.get('COMPILE_API', 31)
+-    targetApi = properties.get('TARGET_API', 31)
++    compileApi = properties.get('COMPILE_API', 34)
++    targetApi = properties.get('TARGET_API', 34)
+     minApi = properties.get('MIN_API', 23)
+-    toolsVersion = properties.get('TOOLS_VERSION', '31.0.0')
++    toolsVersion = properties.get('TOOLS_VERSION', '34.0.0')
+ 
+     println '----------------- Project configuration -------------------'
+     println 'RELEASE_STORE_FILE: ' + RELEASE_STORE_FILE

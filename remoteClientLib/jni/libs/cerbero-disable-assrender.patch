@@ -1,0 +1,31 @@
+diff --git a/recipes/gst-plugins-bad-1.0.recipe b/recipes/gst-plugins-bad-1.0.recipe
+index 1a00bee2..bcb3aa44 100644
+--- a/recipes/gst-plugins-bad-1.0.recipe
++++ b/recipes/gst-plugins-bad-1.0.recipe
+@@ -8,7 +8,7 @@ class Recipe(custom.GStreamer):
+     # Explicitly enable plugins that we provide dependencies for to ensure that
+     # we error out if they weren't found.
+     meson_options = {# enabled plugins
+-                     'assrender': 'enabled',
++                     'assrender': 'disabled',
+                      'bz2': 'enabled',
+                      'closedcaption': 'enabled',
+                      'dash': 'enabled',
+@@ -67,7 +67,7 @@ class Recipe(custom.GStreamer):
+                      'voamrwbenc': 'disabled',
+                      'wildmidi': 'disabled',
+                     }
+-    deps = ['gstreamer-1.0', 'gst-plugins-base-1.0', 'bzip2', 'libass',
++    deps = ['gstreamer-1.0', 'gst-plugins-base-1.0', 'bzip2',
+             'libkate', 'zlib', 'openh264', 'opus', 'librtmp', 'libxml2',
+             'libsrtp', 'libdca', 'libmms', 'libdvdnav', 'libnice',
+             'soundtouch', 'vo-aacenc', 'librsvg', 'openjpeg',
+@@ -545,6 +545,8 @@ class Recipe(custom.GStreamer):
+         if self.config.variants.nodebug:
+             self.append_env('CFLAGS', '-DGST_LEVEL_MAX=GST_LEVEL_FIXME')
+ 
++        self.disable_plugin('assrender', 'codecs_gpl', dep='libass')
++
+     def post_install(self):
+         LibtoolLibrary('gsturidownloader-1.0', None, None, None, self.config.libdir,
+                 self.config.target_platform, deps=['gstreamer-1.0', 'gstbase-1.0']).save()

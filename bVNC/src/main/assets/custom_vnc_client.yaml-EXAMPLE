@@ -1,0 +1,9 @@
+mainConfiguration:
+  visibility:
+    connectionTypeLabel: 8
+  title:
+    default: "Default Alternate Title"
+    en: "Override of Title for English Language"
+  subtitle:
+    default: "Default Alternate SubTitle"
+    en: "Override of Sub Title for English Language"

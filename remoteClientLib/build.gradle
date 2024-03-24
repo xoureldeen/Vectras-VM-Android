@@ -1,0 +1,74 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    repositories {
+        jcenter()
+        google()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.4.2'
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+        google()
+    }
+}
+
+android {
+    namespace 'com.undatech.remoteClientLib'
+    compileSdkVersion compileApi
+
+    defaultConfig {
+        targetSdkVersion targetApi
+        minSdkVersion project.getProperties().get("SDK_VERSION")
+        ndk.abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86' ,'x86_64'
+        multiDexEnabled true
+    }
+    useLibrary 'org.apache.http.legacy'
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+
+    sourceSets.main {
+        java.srcDirs += 'src/main/java'
+        java.srcDirs += 'java'
+        jni.srcDirs += 'src/main/cpp'
+        jniLibs.srcDirs += 'src/main/jniLibs'
+    }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+    }
+    /*
+    externalNativeBuild {
+        ndkBuild {
+            path file('jni/Application.mk')
+            path file('jni/Android.mk')
+        }
+    }
+    */
+
+}
+tasks.all { task ->
+    if (task.name.startsWith('compile') && task.name.endsWith('Ndk')) {
+        task.enabled = false
+    }
+}
+dependencies {
+    implementation project(':remoteClientLib:jni:libs:deps:FreeRDP:client:Android:Studio:freeRDPCore')
+    api 'com.android.support:multidex:1.0.3'
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'org.apache.httpcomponents:httpcore:4.4.10'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation group: 'commons-validator', name: 'commons-validator', version: '1.7'
+}
+

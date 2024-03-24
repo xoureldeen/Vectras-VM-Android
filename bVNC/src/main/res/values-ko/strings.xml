@@ -1,0 +1,860 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="audio_will_be_initialized">오디오는 약 15초로 초기화됩니다. 그때까지 실행 중인 비디오 또는 오디오 재생을 중지하십시오.</string>
+    <string name="audio_initialized">오디오가 초기화되었습니다.</string>
+    <string name="action_import_settings">설정 가져오기</string>
+    <string name="action_new_connection">새로운 연결</string>
+    <string name="action_edit_default_settings">기본 설정 편집</string>
+    <string name="action_export_settings">내보내기 설정</string>
+    <string name="action_delete_connection">연결 삭제</string>
+    <string name="opaque_app_name">불투명</string>
+    <string name="opaque_app_name_beta">불투명한 베타</string>
+    <string name="advanced_settings">고급 설정</string>
+    <string name="audio">오디오</string>
+    <string name="auto_rotation">연결 중 화면 회전</string>
+    <string name="auto_request_new_res">리모트를 동기화하여 해상도 표시</string>
+    <string name="custom_ca_subject">Option 인증서의 제목. 인증서 CN이 호스트 이름과 일치하면 필요 없음</string>
+    <string name="custom_ca_import">또는 CA에 풀패스를 입력하고 가져오기를 탭합니다.</string>
+    <string name="custom_ca_paste">여기에 CA를 붙여넣습니다(가져오지 않는 경우).</string>
+    <string name="ca_ovirt_use_custom">커스텀 RHEV/oVirt CA</string>
+    <string name="ca_spice_use_ovirt">SPICE에는 RHEV/oVirtCA를 사용</string>
+    <string name="ca_ovirt_manage">RHEV /oVirt CA 관리</string>
+    <string name="ca_spice_manage">SPICE CA 관리</string>
+    <string name="ca_file_not_found">파일을 찾을 수 없습니다. 텍스트 필드에 올바른 파일 이름을 입력하십시오(예: /sdcard/ca.crt).</string>
+    <string name="ca_file_error_reading">CA 파일을 읽는 중 오류가 발생했습니다. 읽을 수 있는지 확인합니다.</string>
+    <string name="ca_new_or_changed">신규 또는 변경된 서버 인증서</string>
+    <string name="connection_type_text">가상화 환경(RHEV/oVirt 또는 Proxmox)</string>
+    <string name="connection_type_ovirt">oVirt/RHEV</string>
+    <string name="connection_type_pve">Proxmox VE</string>
+    <string-array name="connection_types">
+        <item>@string/connection_type_ovirt</item>
+        <item>@string/connection_type_pve</item>
+    </string-array>
+    <string name="connection_setup_vm_name">가상 머신 이름(Option)</string>
+    <string name="connection_setup_host_name">서버 주소</string>
+    <string name="connection_setup_user">User@Domain</string>
+    <string name="connection_setup_password">비밀번호</string>
+    <string name="enter_password">비밀번호를 입력 해주세요</string>
+    <string name="enter_password_auth_failed">인증 실패. Credentials(자격 증명)을 다시 입력하십시오.</string>
+    <string name="enter_otp_code">OTP 코드를 입력하세요</string>
+    <string name="hide_toolbar">툴바 비표시</string>
+    <string name="manage_custom_ca_title">커스텀 CA 관리</string>
+    <string name="save_button">저장</string>
+    <string name="select_vm_title">가상 머신 선택</string>
+    <string name="vv_file_not_found">.vv 파일을 찾을 수 없습니다!</string>
+    <string name="vv_file_error">.vv 파일을 찾을 수 없거나 파손되었습니다!</string>
+    <string name="info_cert">이 새로운 또는 변경된 호스트 인증서를 수락하시겠습니까?
+\n\nFingerprints:\nMD5: %1$s\nSHA1: %2$s\nSHA256: %3$s\n\nIssued to: %4$s\nIssued by: %5$s\n\nValid from: %6$s\nValid until: %7$s\n</string>
+
+    <string name="toggle_keyboard">키보드 전환</string>
+    <string name="show_keyboard">키보드 표시</string>
+
+    <string name="input_method_help">입력 방법 도움말</string>
+
+    <string name="ok">Ok</string>
+
+    <string name="input_methods">입력 방식</string>
+    <string name="error_failed_to_download_vv_http">HTTP를 통해 .vv 파일을 다운로드할 수 없습니다. 아마도 서버에 연결할 수 없습니다.</string>
+    <string name="error_failed_to_download_vv_https">HTTPS를 통해 .vv 파일을 다운로드할 수 없습니다. 서버 인증서가 신뢰되지 않거나(만료되었거나 자체 서명된) 서버에 도달하지 못할 수 있습니다.</string>
+    <string name="error_failed_to_obtain_vv_content">.vv 파일을 가져오는 데 실패했습니다. 다시 다운로드하십시오. 그러나 이번에는 파일 관리자의 다운로드 폴더에서 빠르게 열립니다.</string>
+    <string name="error_failed_to_obtain_vv_file">.vv 파일을 찾을 수 없습니다. 다시 다운로드하십시오. 하지만 이번에는 알림 영역에서 열거나 가능한 경우 브라우저에서 직접 열어보세요.</string>
+    <string name="error_dialog_title">오류</string>
+    <string name="info_dialog_title">정보</string>
+    <string name="info_vm_launched_on_stand_by">VM의 전원이 꺼져 있음을 감지하고 기동했습니다. 몇 분 후에 다시 시도하십시오. 너무 일찍 연결이 실패하면 나중에 다시 시도하십시오.</string>
+    <string name="error_no_vm_found_for_user">특정 사용자가 사용할 수 있는 가상 머신이 없습니다.</string>
+    <string name="error_no_such_vm_found_for_user">지정한 사용자에 대해 제공된 ID가 있는 가상 머신을 찾을 수 없습니다. ID를 지우고 VM 목록을 가져옵니다.</string>
+    <string name="error_no_vnc_support_yet">VNC 디스플레이 타입은 아직 지원되지 않지만 앞으로의 기능입니다. 이해해 주셔서 감사합니다!</string>
+    <string name="error_not_connected_to_network">인터넷에 연결되지 않은 것 같습니다. 연결하지 않고 계속할 수 없습니다!</string>
+    <string name="error_ovirt_timeout">VM에 대한 연결이 Time-Out되었습니다. VM을 실행하는 노드의 주소가 올바른지, 현재 네트워크에서 액세스할 수 있는지, Firewall이 연결을 차단하지 않는지 확인합니다.</string>
+    <string name="error_ovirt_auth_failure">인증 실패. 제공된 사용자와 비밀번호를 확인하십시오.</string>
+    <string name="error_ovirt_ssl_handshake_failure">SSL 핸드셰이크 실패. 서버의 SSL 인증서에 문제가 있습니다. 자체 서명 인증서를 사용하는 경우 인증 기관을 (다시) 가져와야 합니다.</string>
+    <string name="error_pve_failed_to_authenticate">Proxmox 가상 환경에 대한 인증에 실패했습니다. 사용자 이름을 user@realm 형식으로 입력하고 비밀번호가 올바른지 확인하십시오.</string>
+    <string name="error_pve_failed_to_parse_json">Proxmox 가상 환경에서 응답 분석에 실패했습니다.</string>
+    <string name="error_pve_vmid_not_numeric">VM ID는 숫자가 아닙니다. 숫자 VM ID를 입력하거나 비워두고 목록에서 VM을 선택합니다.</string>
+    <string name="error_pve_api_unexpected_code">Proxmox 가상 환경에서 예기치 않은 응답: </string>
+    <string name="error_pve_api_io_error">Proxmox 가상 환경에 대한 연결에 실패했습니다: </string>
+    <string name="error_pve_null_data">Proxmox 가상 환경이 null 데이터를 반환했습니다.</string>
+    <string name="error_pve_timeout_communicating">Proxmox 가상 환경과의 통신이 Time-Out되었습니다.</string>
+    <string name="error_vm_lookup_failed">지정한 이름이 사용자에게 할당된 가상 머신을 찾을 수 없습니다. 지정한 VM 이름을 지우고 사용자에게 할당된 VM 목록을 표시하십시오.</string>
+    <string name="error_vv_download_timeout">vv 파일 다운로드가 Time-Out되었습니다.</string>
+    <string name="message_please_wait">기다려주세요.</string>
+    <string name="message_please_install_bvnc">이 VM의 VNC 콘솔에 연결하려면 Google Play에서 아래를 설치하십시오. <a href="market://details?id=com.iiordanov.bVNC">bVNC</a></string>
+    <string name="ssl_strict">인증서와 일치하는 일반 이름 요청(권장)</string>
+    <string name="usb">USB(먼저 OTG 케이블을 연결합니다)</string>
+
+    <string name="ad_donate_text0">Pro 버전은 다단계 인증에 지원하고 있습니다.무단 사용 방지를 위해 마스터 Password 기능도 지원하고 있습니다.또한 Password/SSH키를 포함한 모든 연결 설정이 암호화가 되어 있기 때문에 도난 방지에도 도움이됩니다.</string>
+    <string name="ad_donate_text1">Pro 버전 구입시 소액 기부에 동의하시는 분은 여기를 눌러주세요.</string>
+    <string name="ad_donate_text2">Pro 버전 사용시 이 다이얼로그는 무효로 설정 가능합니다. 또한 추가 기능에 액세스 할 수 있습니다.</string>
+    <string name="ad_donate_text3">프로젝트에 대한 자세한 내용은 아래 클라이언트 애플리케이션용 링크를 참조하십시오:</string>
+    <string name="ad_donate_text_rdp">Pro 버전의 aRDP는 사운드 리다이렉션에 지원 완료!</string>
+    <string name="ad_donate_text_spice">Pro 버전의 aSPICE는 USB 리다이렉션에 지원 완료! 접속 전에 OTG 케이블을 연결하는것만으로 간단설정</string>
+    <string name="address_caption">VNC서버</string>
+    <string name="address_caption_hint">VNC서버</string>
+    <string name="address_caption_hint_tunneled">VNC서버</string>
+    <string name="address_caption_ssh">SSH서버</string>
+    <string name="address_caption_ssh_hint">SSH서버</string>
+    <string name="alt_check">Alt</string>
+    <string name="ardp_app_name">aRDP Pro</string>
+    <string name="arrow_down">아래쪽 화살표</string>
+    <string name="arrow_left">왼쪽 화살표</string>
+    <string name="arrow_right">오른쪽 화살표</string>
+    <string name="arrow_up">위쪽 화살표</string>
+    <string name="aspice_app_name">aSPICE Pro</string>
+    <string name="auto">자동</string>
+    <string name="auto_x_cancel">취소</string>
+    <string name="auto_x_caption">bVNC은 기존내용을 자동 검색하고 Linux/UNIX 시스템상에서 X세션을 신규 작성합니다(NX와 유사).검색은 x11vnc세션 작성은 XvfbXvncXdummy가 필요합니다.연결에 문제가있을 경우 AutoX 상세 설정에서 특정 리모트 세션 타입을 선택하십시오.</string>
+    <string name="auto_x_confirm">확인</string>
+    <string name="auto_x_descript_geom">리모트 데스크톱 크기 (WxH)</string>
+    <string name="auto_x_descript_session">리모트 세션 타입</string>
+    <string name="auto_x_disabled">무효</string>
+    <string name="auto_x_disabled_selection">AutoX 무효</string>
+    <string name="auto_x_enabled">유효</string>
+    <string name="auto_x_find">검색만, 작성하지 않음</string>
+    <string name="auto_x_find_login">X로그인 검색 (sudo필요)</string>
+    <string name="auto_x_geom_custom">커스텀</string>
+    <string name="auto_x_geom_native">오리지널</string>
+    <string-array name="auto_x_geometry">
+        <item>@string/auto_x_geom_native</item>
+        <item>@string/auto_x_geom_custom</item>
+    </string-array>
+    <string-array name="auto_x_session">
+        <item>@string/auto_x_session_auto</item>
+        <item>@string/auto_x_session_custom</item>
+        <item>@string/auto_x_session_kde</item>
+        <item>@string/auto_x_session_unity</item>
+        <item>@string/auto_x_session_unity_2d</item>
+        <item>@string/auto_x_session_xfce</item>
+        <item>@string/auto_x_session_gnome</item>
+        <item>@string/auto_x_session_gnome_cl</item>
+        <item>@string/auto_x_session_trinity</item>
+        <item>@string/auto_x_session_mate</item>
+    </string-array>
+    <string name="auto_x_session_auto">자동</string>
+    <string name="auto_x_session_custom">커스텀</string>
+    <string name="auto_x_session_gnome">GNOME</string>
+    <string name="auto_x_session_gnome_cl">GNOME 클래식</string>
+    <string name="auto_x_session_kde">KDE</string>
+    <string name="auto_x_session_mate">MATE</string>
+    <string name="auto_x_session_trinity">Trinity</string>
+    <string name="auto_x_session_unity">Unity</string>
+    <string name="auto_x_session_unity_2d">Unity2D</string>
+    <string name="auto_x_session_xfce">Xfce</string>
+    <string name="auto_x_title">AutoX설정</string>
+    <string-array name="auto_x_type">
+        <!-- If adding selections, they need to be in sync with values
+            declared in VncConstants for conversion bet. selection and commands
+            to work properly. -->
+        <item>@string/auto_x_disabled_selection</item>
+        <item>@string/auto_x_xvfb</item>
+        <item>@string/auto_x_xvnc</item>
+        <item>@string/auto_x_xdummy</item>
+        <item>@string/auto_x_find</item>
+        <item>@string/auto_x_find_login</item>
+    </string-array>
+    <string name="auto_x_unix_auth">주어진 SSH 사용자 이름/Password를 사용하여 자동으로 인증 (검정색 로그인 화면)</string>
+    <string name="auto_x_unixpw">내장 시큐리티 기능 대신 UNIX 자격 정보을 사용한다. 사용자는 /bin/su 명령을 사용할 것을 조건으로한다.</string>
+    <string name="auto_x_xdummy">Xdummy로 검색 혹은 작성</string>
+    <string name="auto_x_xvfb">Xvfb로 검색 혹은 작성</string>
+    <string name="auto_x_xvnc">Xvnc로 검색 혹은 작성</string>
+    <string name="button_send_text">텍스트 전송</string>
+    <string name="button_send_without_saving">텍스트 전송/저장 안함</string>
+    <string name="bvnc_app_name">bVNC Pro</string>
+    <string name="center_mouse">마우스@</string>
+    <string name="close">닫기</string>
+    <string name="color_format_caption">컬러 모드</string>
+    <string name="color_mode">컬러 모드</string>
+
+    <string name="connect_button">연결</string>
+    <string name="back_button">돌아가기</string>
+    <string name="update_button">업데이트</string>
+
+    <string name="connection_caption">연결</string>
+    <string-array name="connection_type">
+        <item>@string/connection_type_vnc</item>
+        <item>@string/connection_type_vnc_over_ssh</item>
+        <item>@string/connection_type_ultravnc</item>
+        <item>@string/connection_type_vnc_over_ssl</item>
+        <item>@string/connection_type_vnc_over_vencrypt</item>
+        <item>@string/connection_type_vnc_over_stunnel</item>
+    </string-array>
+    <string name="connection_type_caption">연결 타입</string>
+    <string name="connection_type_rdp">RDP</string>
+    <string name="connection_type_rdp_over_ssh">SSH경유 RDP</string>
+    <string name="connection_type_spice">SPICE</string>
+    <string name="connection_type_spice_over_ssh">SSH경유 SPICE</string>
+    <string name="connection_type_ultravnc">UltraVNC</string>
+    <string name="connection_type_vnc">베이직VNC</string>
+    <string name="connection_type_vnc_over_ssh">SSH를 경유한 안전한 VNC</string>
+    <string name="connection_type_vnc_over_ssl">AnonTLS를 경유한 안전한 VNC</string>
+    <string name="connection_type_vnc_over_stunnel">SSL 터널을 경유한 안전한 VNC</string>
+    <string name="connection_type_vnc_over_vencrypt">VeNCrypt를 경유한 안전한 VNC</string>
+    <string name="connection_edit_delete_prompt">연결을 수정하거나 삭제하시겠습니까?</string>
+    <string name="connection_edit">편집</string>
+    <string name="connection_delete">삭제</string>
+
+    <string name="control_check">Ctrl</string>
+    <string name="copy_list_button">복사 목록</string>
+    <string name="ctrl_alt_del">Ctrl-Alt-Del</string>
+    <string name="default_input_mode">기본 입력 모드</string>
+    <string name="delete_connection">연결을 삭제</string>
+    <string name="delete_key">선택한 키를 삭제</string>
+    <string name="delete_key_list">키 리스트를 삭제</string>
+    <string name="disconnect">절단</string>
+    <string name="dpad_as_arrows">화살표 키는 D-Pad를, Ctrl키는 D-Pad 클릭을 사용한다.</string>
+    <string name="enable_recording">녹화를 활성화하기</string>
+    <string name="enable_sound">사운드를 활성화하기</string>
+    <string name="enter_text">텍스트 전송</string>
+    <string name="enter_text_title">전송용 텍스트 입력</string>
+
+    <string name="error_anon_dh_unsupported">VNC서버가 Anonymous Diffie Hellman 암호 사용을 시도하고 있습니다 만,사용중인 Android 단말 기기는 지원하지 않습니다.GNOME\'s Vino VNC 서버를 사용하는 경우 명령 \"gsettings set org.gnome.Vino require-encryption false\" 를 실행하고 재시동시킴으로써,AnonTLS을 비활성화 할 수 있습니다. x11vnc 가동시는 \"- vencrypt nodh:only -ssl\" 를 추가하십시오.</string>
+    <string name="error_connection_failed">연결에 실패했습니다.</string>
+    <string name="error_connection_interrupted">연결이 중단되었습니다.</string>
+    <string name="error_no_user_hostname">사용자 이름과 호스트 이름 (또는 IP 주소)를 입력하십시오.</string>
+    <string name="error_out_of_memory">리모트 화면표시에 충분한 메모리 할당을 할 수 없습니다. 애플리케이션 재시동/디바이스 재시동을 시도하십시오.또는 응용 프로그램 설정에서 리모트 데스크톱 크기 축소를 하여주십시요</string>
+    <string name="error_ovirt_unable_to_connect">연결/인증 수 없습니다. 서버 주소, 사용자 이름, Password 인증 기관 과 서브젝트를 확인하십시오.</string>
+    <string name="error_pick_correct_item">연결 타입에 올바른 아이템이 선택되어 있는지 확인하십시오.</string>
+    <string name="error_rdp_authentication_failed">RDP 인증에 실패했습니다! RDP 사용자 이름과 Password를 확인 후 다시 시도하십시오.</string>
+    <string name="error_rdp_connection_failed">RDP 연결에 실패했습니다! 네트워크 연결이 중단되었거나 RDP 서버가 중지/비활성화합니다. 또는 다른 사용자 세션이 변경되었습니다.</string>
+    <string name="error_rdp_unable_to_connect">RDP서버에 연결할 수 없습니다. RDP서버가 올바르게 설정되어 있는지/서버의 전원이 켜져 있는지/RDP가 활성화되어 있는지/서버가 동일한 네트워크에 있는지 확인하십시오.</string>
+    <string name="error_security_type">지원되는 시큐리티 타입을 서버가 인식 할 수 없습니다.</string>
+    <string name="error_spice_unable_to_connect">연결/인증 수 없습니다. 서버 주소, Password, 인증 기관 과 서브젝트를 확인하십시오.</string>
+    <string name="error_ssh_could_not_exec_command">리모트 명령을 실행할 수 없습니다.</string>
+    <string name="error_ssh_could_not_send_sudo_pwd">sudo Password를 전송할 수 없습니다.</string>
+    <string name="error_ssh_hostkey_changed">에러! 서버 호스트 키가 변경되었습니다.의도적으로 변경된 경우는 한번 연결을 제거하고 재시행하십시오.그렇지 않은 경우 중간자 공격의 가능성이 있습니다.</string>
+    <string name="error_ssh_kbd_auth_method_unavail">SSH 서버는 \"password\" 과 \"keyboard-interactive\" 양쪽의 인증 방식으로 대응하지 않습니다. 혹은 \"publickey \" 방식을 먼저 실행해야합니다. 적어도 어느 하나를 허용하도록 설정하십시오. 또는 본  애플리케이션측을 재 설정하십시오. 유효한 인증 방식:</string>
+    <string name="error_ssh_key_auth_fail">key-pair(공개 키와 비밀 키)에 의한 SSH서버에 인증에 실패했습니다.SSH 사용자 이름을 확인하십시오.또한 공개 키가 리모트의 "인증 된 키 파일"에 들어 있는지 확인하십시오.</string>
+    <string name="error_ssh_keypair_decryption_failure">key-pair(공개 키와 비밀 키)의 해독에 실패했습니다.메인 화면의 \'SSH Passphrase\' 필드에 passphrase(암호 문구)를 올바르게 입력되어 있는지 확인하십시오.</string>
+    <string name="error_ssh_keypair_missing">SSH key-pair(공개 키와 개인 키)가 생성되지 않습니다! 생성 후 SSH서버의 인증 키(공개 키)를 설치하십시오.</string>
+    <string name="error_ssh_passphrase_but_keypair_unencrypted">passphrase(암호 문구)가 생성되었지만 key-pair(공개 키와 개인 키)가 암호화되어 있지 않습니다. passphrase(암호 문구)를 제거하십시오.</string>
+    <string name="error_ssh_port_forwarding_failure">SSH를 통해 VNC를하기위한 port forwarding(포트 포워딩) 설정을 할 수 없습니다.port forwarding(포트 포워딩)이 SSH서버로 허가되어 있는지 확인하고 다시 실행하십시오.</string>
+    <string name="error_ssh_pubkey_auth_method_unavail">\"publickey\" 인증 방식이 SSH서버에서 지원되지 않기 때문에 인증하기 위해 key-pair(공개 키와 비밀 키)를 시도 중입니다. 설정을 공개 키 인증을 허가하기에 변경하고 다시 실행하십시오. 사용 가능한 인증 방식은:</string>
+    <string name="error_ssh_pwd_auth_fail">Password에 의한 SSH서버의 인증에 실패했습니다.SSH 사용자 이름과 SSH Password를 확인하십시오.</string>
+    <string name="error_ssh_unable_to_connect">SSH서버 연결에 실패했습니다.네트워크 연결성 및 SSH서버 주소,포트를 확인하십시오.</string>
+    <string name="error_ssh_x11vnc_no_port_failure">x11vnc에서 리모트 VNC 포트를 취득할 수 없습니다.x11vnc가 설치되어 있는지 확인하십시오. 만약을 위해 커맨드 라인으로 x11vnc를 가동시켜주십시오.</string>
+    <string name="error_uri_noinfo_nosave">연결을 위한 정보가 충분하지 않습니다.</string>
+    <string name="error_vnc_authentication">VNC 인증에 실패했습니다!VNC Password와 사용자 이름이 맞는지 확인하십시오.</string>
+    <string name="error_vnc_unable_to_connect">"VNC서버 연결에 실패했습니다. 이유:"</string>
+    <string name="error_x509_could_not_generate_encoding">인증서의 암호화가 할 수 없습니다.</string>
+    <string name="error_x509_could_not_generate_signature">SHA1/MDS 서명 인증서를 생성 할 수 없습니다.SHA1/MDS 알고리즘을 찾을 수 없습니다.</string>
+    <string name="export_settings">Export</string>
+    <string name="export_settings_path" />
+    <string name="extra_keys_disable">특수 키를 비활성화</string>
+    <string name="extra_keys_enable">특수 키를 활성화</string>
+    <string name="fit_to_screen">화면 크기에 맞추기</string>
+    <string name="force">전체 화면 비트 맵</string>
+    <string name="freeardp_app_name">aRDP Free</string>
+    <string name="freeaspice_app_name">aSPICE Free</string>
+    <string name="freebvnc_app_name">bVNC Free</string>
+    <string name="immersive_mode_disable">Immersive 모드를 비활성화</string>
+    <string name="import_export_settings">Import/Export</string>
+    <string name="import_settings">Import</string>
+    <string name="import_settings_file_url" />
+    <string name="info">정보</string>
+    <string name="info_cert_signatures">"인증서 정보:"</string>
+    <string name="info_cert_signatures_identical">\n\n 중간자 공격 대책으로 서버 인증서와 정보가 일치하는지 확인 가능합니다.</string>
+    <string name="info_cert_tunnel">다음 인증서에 의해 특정 된 호스트에 연결 하시겠습니까?: %1$s\n\nIssued to:\n%2$s\n\nIssued by:\n%3$s\n\nValid from:\n%4$s\n\nValid until:\n%5$s\n\nNote: The application does not verify certificate authorities or check for certificate revocation.</string>
+    <string name="info_continue_connecting">"연결을 계속하기："</string>
+    <string name="info_encoding">"암호화"</string>
+    <string name="info_progress_dialog_aborted">연결이 중단되었습니다!</string>
+    <string name="info_progress_dialog_connecting" tools:ignore="TypographyEllipsis">연결 중 ...</string>
+    <string name="info_progress_dialog_downloading" tools:ignore="TypographyEllipsis">초기 프레임을 다운로드 중. \n 잠시 기다려주십시오 ...</string>
+    <string name="info_progress_dialog_establishing" tools:ignore="TypographyEllipsis">핸드 셰이크 구축 중입니다. \n 잠시 기다려주십시오 ...</string>
+    <string name="info_ssh_initializing_hostkey">SSH 호스트 키를 초기화하고 있습니다.</string>
+    <string name="info_ssh_key_fingerprint">"호스트 키 지문:"</string>
+    <string name="info_ssh_key_fingerprint_identical">\n\n 중간자 공격 방지용으로 알려진 된 서버 인증서 지문과 일치하는지 확인 가능합니다.</string>
+    <string name="info_update_color_model_to">"컬러 모델 업데이트"</string>
+    <string name="input_method_direct_drag_pan_description">직접,길게 누르고 평행 이동: 스와이프하고 드래그 앤 드롭.왼쪽 클릭은 한 손가락으로 화면을 터치.오른쪽 클릭은 손가락 2개.중간 클릭은 손가락 3개.두 손가락으로 스 와이프하여 스크롤.길게으로 평행 이동 시작.</string>
+    <string name="input_method_direct_swipe_pan_description">직접,스와이프 평행 이동: 스와이프하고 자유 자재로 평행 이동.왼쪽 클릭은 한 손가락으로 화면을 터치.오른쪽 클릭은 손가락 2개.중간 클릭은 손가락 3개.두 손가락으로 스와이프하여 스크롤.길게 눌러 드래그 앤 드롭.</string>
+    <string name="input_method_single_handed_description">한손 조작: 스와이프하고 자유 자재로 평행 이동.왼쪽 클릭은 한 손가락으로 화면을 터치.길게하여 클릭(왼쪽/오른쪽/중간) 모드(드래그/스크롤/줌)을 선택합니다.멀티 터치 조작도 가능하다.</string>
+    <string name="input_method_touchpad_description">터치 패드 시뮬레이션: 스와이프하면 포인터 이동.왼쪽 클릭은 한 손가락으로 화면을 터치.오른쪽 클릭은 손가락 2개.중간 클릭은 손가락 3개.두 손가락으로 스 와이프하여 스크롤.길게 눌러 드래그 앤 드롭.</string>
+    <string name="input_mode">입력 모드</string>
+
+    <string name="input_mode_fit_to_screen">평행 이동 없음; 트랙볼 마우스</string>
+    <string name="input_method_mouse">마우스 포인터 제어</string>
+    <string name="input_mode_panning">데스크톱 패닝 모드</string>
+
+    <string name="input_method_direct_swipe_pan">다이렉트, 스와이프팬</string>
+    <string name="input_method_direct_drag_pan">다이렉트, 홀드팬</string>
+    <string name="input_method_single_handed">한손</string>
+    <string name="input_method_touchpad">터치패드 시뮬레이션</string>
+
+    <string name="input_mode_help">입력 모드 HELP</string>
+    <string name="input_mode_help_text">"
+키보드 아이콘을 탭하여 온 스크린 키보드를 표시(모든 입력 모드에 대응). 사용 기기에 따라 키보드 표시 방법은 다릅니다.
+
+직접 입력 모드 사용하면 더 직관적 인 터치 스크린 조작이 가능합니다. 터치 패드 시뮬레이션 모드로하면 마우스를 사용한 손가락 조작이 가능합니다.
+
+직접 스 와이프하고 평행 이동 모드 :
+･터치에서 직접적인 마우스 조작
+･스와이프하고 평행 이동
+･탭하여 마우스 클릭 조작
+･2개의 손가락 스와이프 시작 위치로 스크롤 이벤트 전송
+
+직접, 길게 누르고 평행 이동 모드 :
+･터치에서 직접적인 마우스 조작
+･길게 누르면 평행 이동 시작
+･탭하여 마우스 클릭 조작
+･2개의 손가락 스와이프 시작 위치로 스크롤 이벤트 전송
+
+터치 - 패드 시뮬레이션 모드 :
+･화면을 터치 패드 조작
+･스와이프하여 마우스 포인터 이동
+･화면 밖에 커서 이동하고 평행 이동
+･탭하여 마우스 클릭 조작
+･마우스 포인터 위치에 스크롤 이벤트 전송
+
+한손 조작 모드 :
+･길게 누르면 모드 설정 화면을 제외하고는 ""직접, 스와이프하고 평행 이동""과 같은 사양
+･모드 선택 후, 스와이한 손가락으로 선택 제스처를 실행
+･손가락을 올려 제스처 종료
+
+모든 입력 모드 :
+･왼쪽 클릭 : 탭 1번
+･더블 클릭 : 탭 2번
+･오른쪽 클릭 : 길게 누르면서 다른 한 손가락으로 화면를 탭.
+･대체 오른쪽 클릭 : \""Back\""스위치 혹은 제스처를 사용
+･중간 클릭 : 길게 누르면서 다른 손가락 2개로 화면을 탭
+･마우스 드래그 : 길게 누르면서 스와이프
+･스크롤 휠 : 두 손가락으로 상하 좌우로 드래그, 스크롤 속도는 드래그 속도로 가변
+･확대/축소 : 핀치 인 /아웃에서 표시 크기 제어
+･Ctrl/Alt 키 : 메뉴&gt; Ctrl/Alt 스위치 종료 후 해제하는 것을 잊지 마세요!
+･키 콤보 : 메뉴&gt; 상세&gt; 키를 전송
+･텍스트 전송 : 온 스크린 키보드로 입력하거나 메뉴&gt; 상세&gt; 텍스트 전송에서 입력"</string>
+    <string name="intro_close">닫기</string>
+    <string name="intro_dont_show">다음부터 비표시</string>
+    <string name="intro_header" />
+    <string name="intro_text">
+bVNC의 대응 기능는 이하와 같습니다 :
+
+&lt;br&gt;
+･Plain VNC/SSH를 통해 안전한 VNC/AnonTLS/VeNCrypt/UltraVNC (리피터있는 Windows 로그온)
+&lt;br&gt;
+･AutoX 모드 : x11vnc의 사용으로 기존 자동 검색/X세션 의 신규 작성가 가능 (SSH를 통해 VNC를 모드)! NX 클라이언트처럼 작동합니다.
+
+&lt;br&gt;
+･자동 화면 회전 지원 (필요없는 경우 OS에서 설정 변경)
+&lt;br&gt;
+･Tight, ZRLE, CopyRect 포함한 모든 표준 VNC 인코딩
+&lt;br&gt;
+･자동 세션 저장 기능
+&lt;br&gt;
+･스케일링 모드 : 확대 / 축소, 화면 크기에 맞춤 1 대 1
+&lt;br&gt;
+･리모트 마우스 멀티 터치 컨트롤 (다이렉트 / 터치 패드 시뮬레이션 입력 모드)
+&lt;br&gt;
+･리모트 마우스로 풀 한손 컨트롤 (한손 입력 모드)
+&lt;br&gt;
+･멀티 터치 마우스 클릭 : 손가락 1개로 탭에서 왼쪽 클릭, 두 손가락 탭을 오른쪽 클릭 한 손가락 3개 탭에서 중간 클릭
+&lt;br&gt;
+･멀티 터치 스크롤 : 두 손가락을 상하 좌우로 드래그하여 스크롤 조작
+&lt;br&gt;
+･온 스크린 메타 키/화살표 키 : 메뉴에서 비활성화에 설정 가능 / 온 스크린 스위치 삽입 가능
+
+&lt;br&gt;
+･연결시 텍스트 / 임의의 키 조합 전송
+&lt;br&gt;
+･연결 화면에서 연결 작성 도움말 (\Menu-&amp;gt;Connection Help\")
+&lt;br&gt;
+・연결시 입력 모드 도움말（\"Menu-&gt;More-&gt;Input Mode Help\"）
+&lt;br&gt;
+・마우스 대신 트랙 패드에서 화살표 조작, 트랙 패드 클릭에서 Ctrl
+&lt;br&gt;
+・접속시 세로 모드로 변경 D-pad/트랙 패드 회전에서 Bluetooth 키보드 조작
+&lt;br&gt;
+・다국어(필요한 언어 레이아웃 VNC서버 측에서 활성화되어있는 경우)
+&lt;br&gt;
+・복사 / 붙여넣기 임베디드
+&lt;br&gt;
+・리모트 머신 해상도 변경
+&lt;br&gt;
+・오른쪽/중간 클릭, 스크롤 휠 포함한 Android 4.0+ 단말기의 풀 마우스 서포트
+&lt;br&gt;
+&lt;br&gt;
+문제:
+&lt;br&gt;</string>
+    <string name="intro_title">bVNC: 직관적이고 안전한 VNC 클라이언트</string>
+    <string name="intro_version_text" />
+    <string name="keep_password_button">저장</string>
+    <string name="keep_screen_awake_enable">Sleep 모드를 비활성화하는</string>
+    <string name="keys_caption">키</string>
+    <string name="landscape_force">강제 가로 설정</string>
+    <string name="left_handed_mode">왼손 모드</string>
+    <string name="list_caption">리스트</string>
+    <string name="list_name_caption">리스트 이름</string>
+    <string name="local_mouse_check">로컬 마우스 포인터(포인터가 가시가능한 경우는 선택)</string>
+    <string name="main_screen_help">연결 도움</string>
+    <string name="vnc_connection_screen_help_text" tools:ignore="TypographyOther">"
+연결을 추가하거나 수정하면 연결 구성 페이지가 표시됩니다. 여기에서 설정할 수 있습니다.
+새 VNC 연결을 설정하거나 기존 연결을 선택합니다. 상단에는 다음을 수행할 수 있는 버튼이 있습니다.
+연결을 저장합니다. 그 아래에 연결을 구성합니다.
+
+성능을 빠르게 향상시키려면 컬러 모드를 낮은 값으로 설정해 보십시오. 또한 VNC 서버에서 데스크톱 배경 이미지를 삭제해 보십시오. 마지막으로 장치의 네트워크 연결이 양호한지 확인하여 안테나를 덮거나 신호 강도를 떨어뜨리지 않도록 합니다.
+
+- 연결 유형: 여기에서는 VNC 연결 유형을 선택합니다. 사용 가능한 연결 유형은 다음과 같습니다.
+ (a) 일반 VNC. 모든 VNC 서버에서 지원되지만 암호화가 수행되지 않고 8자 암호 제한으로 인해 무차별 공격에 취약합니다.
+ (b) 암호화된 SSH 터널을 통해 연결하는 SSH를 통한 보안 VNC. SSHD 서비스와 VNC 서버를 실행해야 합니다. VNC 서버가 인터넷에서 직접 연결을 수락하지 않는 한 처음 연결할 때 서버 인증서 서명을 확인하는 한 이 연결 유형에는 알려진 취약점이 없습니다.
+ (c) UltraVNC. Windows 로그온 및 UltraVNC repeater 옵션을 제공합니다. Windows Logon을 사용해도 8자 암호 제한은 없지만 이 모드에서는 암호화가 제공되지 않으므로 세션이 스니핑에 취약합니다.
+ (d) AnonTLS를 통한 보안 VNC. 이것은 stunnel과 동등한 연결을 통한 일반적인 VNC입니다. stunnel을 실행하거나 AnonTLS를 즉시 지원하는 Vino와 같은 VNC 서버를 사용해야합니다. 이 모드에서는 세션을 암호화할 수 있지만 8자 암호 제한이 있으므로 man-in-the-middle 공격을 방지할 수 없습니다.
+ (e) x509 인증서 및 세션 암호화를 사용하는 VeNCrypt를 통한 보안 VNC. 서버 구성에 따라 8자 제한 없이 사용자/비밀번호 자격 증명을 사용할 수 있습니다. 이 모드는 man-in-the-middle 공격을 방지합니다. 세션의 프라이버시를 제공 할뿐만 아니라. x11vnc 및 TigerVNC와 같은 서버는 이 모드를 지원하며 SSH를 통한 VNC만큼 안전합니다.
+
+ - 제목 : 생성하는 각 연결에는 목록에서 쉽게 식별할 수 있는 닉네임을 지정할 수 있습니다.
+
+ -SSH 터널 설정: VNCoverSSH 모드에서 사용할 수 있습니다.
+ (a) SSH 서버/포트: 연결이 터널링되는 SSH 서버의 주소와 포트. 기본적으로 SSH는 포트 22에서 수신 대기합니다.
+ (b) 사용자 이름/암호: SSH 서버의 계정 사용자 이름과 암호. 마지막으로 입력한 후 애플리케이션을 종료하지 않은 경우 이 페이지에 암호가 입력됩니다.
+ (c) 키 관리/키 사용: 공개 키/개인 키를 관리하는 버튼과 인증에 암호가 아닌 키를 사용할지 여부를 나타내는 확인란. 키 쌍을 생성한 후 클립보드로 복사 버튼을 사용하면 VNC 서버에 연결할 때 공개 키를 붙여넣을 수 있습니다(클립보드가 서버에 동기화됨).
+
+ -AutoX 구성: VNCoverSSH 모드에서만 사용할 수 있습니다. 응용 프로그램은 UNIX 시스템(예: NX 클라이언트)에서 기존 X 세션을 자동으로 감지하고 선택적으로 새 X 세션을 만들 수 있습니다. 검색하려면 x11vnc가 필요하며 세션을 만들려면 원격 시스템에 Xvfb, Xvnc 또는 Xdummy가 설치되어 있어야 합니다. 데스크탑이 제대로 표시되지 않거나 xterm 창만 표시되는 경우 .dmrc 파일을 이동하여 홈 디렉토리에 .xinit 파일을 추가해야 합니다.
+
+ -VNC 연결 설정:
+ (a) VNC 서버/포트: 여기에 연결할 VNC 서버를 실행하는 컴퓨터의 호스트 이름 또는 IP 주소와 포트를 입력합니다. VNC over SSH 모드에서 이 주소는 SSH 서버에서 본 것입니다. SSH 서버와 VNC 서버가 동일한 컴퓨터인 경우 localhost를 사용할 수 있습니다. VNC 서버는 일반적으로 포트 5900(첫 번째 VNC 화면, 화면: 0)에서 수신합니다.
+ (b) VNC 사용자: Windows 로그온 모드의 UltraVNC 또는 VeNCrypt를 통한 Secure VNC에서 사용할 수 있습니다. 여기에서 Windows/UNIX 계정의 사용자 이름을 입력합니다.
+ (c) VNC 암호: VNC 서버 구성에 암호가 필요한 경우 여기에 암호를 입력합니다. Windows 로그온/VeNCrypt 모드의 UltraVNC에서 Windows/UNIX 계정의 암호를 여기에 입력합니다. 비밀번호는 안전한 스토리지를 사용하지 않습니다. 암호는 보존 확인란을 선택한 경우에만 저장됩니다. 마지막으로 입력한 후 애플리케이션을 종료하지 않은 경우 이 페이지에 암호가 입력됩니다.
+
+ - 컬러 모드: 클라이언트는 여러 가지 컬러 모드를 지원합니다. 더 많은 색상 모드는 더 넓은 대역폭과 장치에서 더 많은 CPU 계산을 희생하여 더 나은 시각적 경험을 제공합니다. 일부 VNC 서버는 모든 색상 깊이를 지원하지 않습니다(예: OS/X 원격 데스크톱에는 24비트 색상이 필요함). 연결에 문제가 있는 경우 다른 색상 심도를 사용해 보십시오.
+
+ - 화살표에 십자 키 사용: 필요한 경우 Bluetooth 키보드의 십자 키 또는 화면 키보드의 화살표를 사용하여 화살표를 VNC 서버로 보낼 수 있습니다.
+
+ - 십자 키 회전: 블루투스 키보드와 페어링된 전화기에서는 서버에 올바른 방향을 보내려면 키보드의 십자 키를 반시계 방향으로 회전해야 할 수 있습니다."</string>
+
+    <string name="main_screen_help_text" tools:ignore="TypographyOther">"
+애플리케이션을 기동하면, 보존된 접속의 스크린 화면이 표시됩니다.
+
+보존되고 있는 접속이 없을 경우는, 화면의 하부가 공란이 되고 있기 때문에, +버튼을 눌러서 신규접속을 작성해 주세요.
+또, 화면위로 있는 타툴바나, 화면상부의 menu option을 탭 하는 것에 의해, 디폴트 설정의 편집이나, 설정의 임포트, 익스포트 등, 다른 설정 조작이 가능합니다.
+
+접속의 보존후, 탭 하는 것에 의해, 리모트 서버에의 접속이 가능합니다. 또, 롱 탭을 해서 접속처의 삭제혹은 편집을 선택하는 것도 가능합니다.
+
+[접속의 검색]필드를 사용하면, 표시되어 있는 접속을 필터링해서 접속을 신속하게 찾을 수 있습니다."
+  </string>
+    <string name="master_password_enable">마스터 Password를 활성화하는</string>
+    <string name="master_password_error_failed_to_disable">마스터 Password를 비활성화 할 수 없습니다.기기의 가능한 용량을 확인하고 다시 실행하십시오.</string>
+    <string name="master_password_error_failed_to_enable">마스터 Password를 활성화 할 수 없습니다.기기의 가능한 용량을 확인하고 다시 실행하십시오.</string>
+    <string name="master_password_error_intents_not_supported">마스터 Password활성화 된 경우 연결 취지가 지원되지 않습니다.</string>
+    <string name="master_password_error_password_necessary">계속하려면 마스터 Password가 필요합니다.</string>
+    <string name="master_password_error_password_not_set">설정 마스터 Password가 취소되었습니다.</string>
+    <string name="master_password_error_shortcuts_not_supported">마스터 Password를 활성화 시켰을 때 단축키는 지원되지 않습니다.</string>
+    <string name="master_password_error_wrong_password">공급 된 마스터 Password로 인증 할 수 없습니다.</string>
+    <string name="master_password_hint_once">Password 입력.</string>
+    <string name="master_password_hint_twice">Password 재 입력.</string>
+    <string name="master_password_set">마스터 Password 설정</string>
+    <string name="master_password_set_error">Password가 일치하지 않습니다. 확인하십시오.</string>
+    <string name="master_password_set_message">마스터 Password를 입력하고 잊지 않도록하십시오.Password 자릿수가 길수록 분석 된 어렵습니다.잘못된 설정을하거나 잊어 버린 경우 모든 설정이 손상됩니다!! 기존 설정을 백업로 Export 할 것을 권장합니다(메뉴에서 가능).Export 된 데이터는 암호화되지 않습니다.안전한 장소에 보관하십시오.</string>
+    <string name="master_password_verify">마스터 Password 를 확인하기</string>
+    <string name="master_password_verify_message">계속을 위해 마스터 Password를 정확하게 입력하십시오.</string>
+    <string name="meta_key_title">특수 키를 보내기</string>
+
+    <string name="mouse_follow_pan">마우스가 팬을 따라갑니다</string>
+
+    <string name="new_connection">새 연결</string>
+    <string name="new_list_button">새 리스트</string>
+    <string name="nickname_caption">별명</string>
+    <string name="nickname_caption_hint">제목 (임의)</string>
+
+    <string name="off">Off</string>
+
+    <string name="one_to_one">１：１</string>
+    <string name="open_doc">매뉴얼/Wiki</string>
+
+    <string name="pan_follow_mouse">팬이 마우스를 따라갑니다.</string>
+
+    <string name="password_caption">VNC 인증</string>
+    <string name="password_caption_hint">VNC Password</string>
+    <string name="password_caption_ssh">SSH 인증</string>
+    <string name="password_hint_ssh">SSH Password</string>
+    <string name="port_caption">VNC 포트</string>
+    <string name="port_caption_ssh">SSH 포트</string>
+    <string name="port_hint">포트</string>
+    <string name="port_ssh_hint">포트</string>
+    <string name="portrait_mode">연결될 때 세로 표시에 전환</string>
+    <string name="position_toolbar_last_used">Toolbar 위치 초기화</string>
+    <string name="applies_to_new_connections_only">새 연결만 적용</string>
+    <string name="pro_feature_mfa">서버의 다단계 인증이 활성화되어 있습니다.다단계 인증을 지원하고있는 Pro버전을 구입하십시오.Pro버전의 링크가 시작할 때 표시되는 화면에 있습니다</string>
+    <string name="rdp_address_caption_hint">RDP 서버</string>
+    <string name="rdp_adv_console_mode">콘솔 모드</string>
+    <string name="rdp_adv_desktop_background">데스크탑 배경을 표시</string>
+    <string name="rdp_adv_desktop_composition">데스크탑 컴포지션을 활성화하는</string>
+    <string name="rdp_adv_font_smoothing">글꼴 다듬기 수행</string>
+    <string name="rdp_adv_menu_animation">메뉴 애니메이션을 표시</string>
+    <string name="rdp_adv_redirect_sdcard">SD카드를 리디렉션</string>
+    <string name="rdp_adv_remotefx">RemoteFX를 활성화</string>
+    <string name="rdp_adv_visual_styles">Visual Styles를 활성화</string>
+    <string name="rdp_adv_window_contents">드래그중에 윈도우 컨텐츠을 표시</string>
+    <string-array name="rdp_connection_type">
+        <item>@string/connection_type_rdp</item>
+        <item>@string/connection_type_rdp_over_ssh</item>
+    </string-array>
+    <string name="rdp_descript_geom">리모트 데스크탑 크기(WxH)</string>
+    <string name="rdp_domain_hint">RDP도메인</string>
+    <string name="rdp_geom_automatic">자동</string>
+    <string name="rdp_geom_checkbox_enable">사용자 지정 해상도를 활성화</string>
+    <string name="rdp_geom_custom">사용자 지정</string>
+    <string name="rdp_geom_description_hint">서버 측에서 ExtendedDesktopSize의 대응이 필요</string>
+    <string name="rdp_geom_disabled">무효</string>
+    <string name="rdp_geom_native_landscape">원래 디바이스 가로 방향</string>
+    <string name="rdp_geom_native_portrait">원래 디바이스 세로 방향</string>
+    <string-array name="rdp_geometry">
+        <item>@string/rdp_geom_native_landscape</item>
+        <item>@string/rdp_geom_native_portrait</item>
+        <item>@string/rdp_geom_custom</item>
+    </string-array>
+    <string-array name="vnc_geometry">
+        <item>@string/rdp_geom_disabled</item>
+        <item>@string/rdp_geom_automatic</item>
+        <item>@string/rdp_geom_native_landscape</item>
+        <item>@string/rdp_geom_native_portrait</item>
+        <item>@string/rdp_geom_custom</item>
+    </string-array>
+    <string name="rdp_intro_text">
+aRDP 및 범용 오픈 소스 소프트웨어에 대한 지원에 감사합니다! aRDP의 사용에 관해서는 메뉴의 도움말 항목 애플리케이션 설명을 참조하십시오.
+&lt;br&gt;
+&lt;br&gt;
+aRDP의 대응 기능는 이하와 같다:
+&lt;br&gt;
+･Plain RDP,SSH 터널을 통해 RDP
+&lt;br&gt;
+･자동 화면 회전 지원(필요없는 경우 OS에서 설정 변경)
+&lt;br&gt;
+･가로/세로 모드의 리모트 해상도 오리지날 해상도 설정
+&lt;br&gt;
+･SSH key-pair(공개 키와 비밀 키) 생성 및 내보내기 (공개 키/비밀 키)
+&lt;br&gt;
+･자동 세션 저장 기능
+&lt;br&gt;
+･스케일링 모드: 확대/축소, 화면 크기에 맞춤 1대1
+&lt;br&gt;
+･리모트 마우스 멀티 터치 컨트롤 (다이렉트/터치 패드 시뮬레이션 입력 모드)
+&lt;br&gt;
+･리모트 마우스로 풀 한손 컨트롤 (한손 입력 모드)
+&lt;br&gt;
+･멀티 터치 마우스 클릭: 손가락 1개로 탭에서 왼쪽 클릭, 두 손가락 탭을 오른쪽 클릭 한 손가락 3개 탭에서 중간 클릭
+&lt;br&gt;
+･멀티 터치 스크롤: 두 손가락을 상하 좌우로 드래그하여 스크롤 조작
+&lt;br&gt;
+･온 스크린 메타 키/화살표 키 : 메뉴에서 비활성화에 설정 가능 / 온 스크린 스위치 삽입 가능
+&lt;br&gt;
+･연결시 텍스트/임의의 키 조합 전송
+&lt;br&gt;
+･연결 화면에서 연결 작성 도움말(\"Menu-&gt;Connection Help\")
+&lt;br&gt;
+･연결시 입력 모드 도움말（\"Menu-&gt;More-&gt;Input Mode Help\"）
+&lt;br&gt;
+･마우스 대신 트랙 패드에서 화살표 조작,트랙 패드 클릭에서 Ctrl, D-pad/트랙 패드 회전에서 Bluetooth 키보드 조작
+&lt;br&gt;
+･다국어 (필요한 언어 레이아웃 RDP 서버 측에서 활성화되어있는 경우)
+&lt;br&gt;
+･Seamless 리모트 머신의 해상도 변경
+&lt;br&gt;
+･오른쪽/중간 클릭, 스크롤 휠 포함한 Android 4.0+ 단말기의 풀 마우스 서포트
+&lt;br&gt;
+&lt;br&gt;
+aRDP지원 예정 기능:
+&lt;br&gt;
+･컬러 모드 선택
+&lt;br&gt;
+･복사/붙여 임베디드
+&lt;br&gt;
+･설정 Export
+&lt;br&gt;
+･사운드
+&lt;br&gt;
+&lt;br&gt;
+문제:
+  </string>
+    <string name="rdp_intro_title">aRDP: 직관적이고 안전한 RDP 클라이언트</string>
+    <string name="rdp_connection_screen_help_text" tools:ignore="TypographyOther">"
+연결을 추가하거나 편집하면 연결 구성 페이지가 표시됩니다. 여기에서 새 RDP 연결을 설정하거나 기존 연결을 선택할 수 있습니다. 상단에는 연결을 저장하는 버튼이 있습니다. 여기에 연결을 구성합니다.
+
+ - 연결 유형: 여기에서는 RDP 연결 유형을 선택합니다. 사용 가능한 연결 유형은 다음과 같습니다.
+ (a) RDP. RDP 프로토콜을 통해 컴퓨터에 직접 연결합니다.
+ (b) RDP over SSH. 먼저 SSH 서버를 실행하는 컴퓨터를 통해 연결을 터널링합니다.
+
+ - 제목 : 생성하는 각 연결에는 목록에서 쉽게 식별할 수 있는 닉네임을 지정할 수 있습니다.
+
+ -SSH 터널 설정: RDP over SSH 모드에서 사용할 수 있습니다.
+ (a) SSH 서버/포트: 연결이 터널링되는 SSH 서버의 주소와 포트. 기본적으로 SSH는 포트 22에서 수신 대기합니다.
+ (b) 사용자 이름/암호: SSH 서버의 계정 사용자 이름과 암호. 마지막으로 앱을 입력한 후 앱을 종료하지 않은 경우 이 페이지에 비밀번호가 입력됩니다.
+ (c) 키 관리/키 사용: 공개 키/개인 키를 관리하는 버튼과 인증에 암호가 아닌 키를 사용할지 여부를 나타내는 확인란. 키 쌍을 생성한 후 클립보드로 복사 버튼을 사용하면 RDP 서버에 연결할 때 공개 키를 붙여넣을 수 있습니다(클립보드는 서버와 동기화됩니다).
+
+ -RDP 연결 설정:
+ (a) RDP 서버/포트: 여기에 연결할 RDP 서버를 실행하는 컴퓨터의 호스트 이름 또는 IP 주소와 포트를 입력합니다. RDP over SSH 모드에서 이 주소는 SSH 서버에서 본 것입니다. SSH 서버와 RDP 서버가 동일한 물리적 컴퓨터인 경우 localhost를 사용할 수 있습니다. RDP 서버는 일반적으로 포트 3389에서 수신 대기합니다.
+ (b) RDP 사용자: 여기에 Windows/UNIX 계정의 사용자 이름을 입력합니다.
+ (c) RDP 도메인: 계정이 속한 도메인을 입력합니다.
+ (d) RDP 암호: 이것은 Windows/UNIX 계정의 암호를 입력하는 곳입니다. 암호에는 보안 저장소가 사용되지 않습니다(암호는 데이터베이스에 있습니다). 암호는 보존 확인란을 선택한 경우에만 저장됩니다. 마지막으로 앱을 입력한 후 앱을 종료하지 않은 경우 이 페이지에 비밀번호가 입력됩니다.
+
+ - 고급 설정: 이 섹션에서는 데스크톱 해상도를 사용자 지정하는 방법과 다양한 RDP 성능 조정에 대해 설명합니다.
+
+ - 로컬 기기 미세 조정: 이들은 기기의 앱 동작을 조정합니다.
+ (a) 화살표에 십자 키 사용: 필요한 경우 Bluetooth 키보드의 십자 키 또는 화면 키보드의 화살표를 사용하여 화살표를 RDP 서버로 보낼 수 있습니다.
+ (b) 십자 키 회전: 블루투스 키보드와 페어링된 전화기에서는 서버에 올바른 방향을 전송하기 위해 키보드의 십자 키를 반시계 방향으로 회전시켜야 할 수 있습니다.
+ (c) 로컬 마우스 포인터: 포인터가 표시되지 않으면 이를 선택하여 앱에 강제로 그립니다. "</string>
+    <string name="rdp_main_screen_help_text" tools:ignore="TypographyOther">
+"aRDP 시작할 때 연결 설정 화면이 표시됩니다. 여기에서는 새 RDP 연결 설정하거나 기존 연결 선택이 가능합니다. 페이지는 2개의 섹션으로 나누어 져 있으며,화면 상단에서는 과거의 연결 설정이 풀다운 메뉴에서 표시됩니다.aRDP를 처음 실행할 때 새 설정 화면 만 표시됩니다.풀다운 메뉴 옆에있는 연결 스위치를 누르면,선택한 설정에 RDP 클라이언트가 시작됩니다.연결 스위치 아래에서 연결 설정을합니다.
+
+・연결 타입: 사용 RDP 연결 타입을 이하에서 선택하십시오.
+   (a) RDP：RDP프로토콜로 컴퓨터에 직접 연결한다.
+   (b) SSH를 통해 RDP: SSH 서버를 실행하는 컴퓨터를 통해 터널 연결한다.
+
+･제목: 작성한 연결에 이름을 붙일 수 있습니다.
+
+･SSH 터널 설정: SSH를 통한 RDP 모드 한정
+    (a) SSH 서버/포트 : SSH서버 IP주소와 포트 번호. 기본 포트 번호는 22.
+    (b) 사용자 이름 / Password : SSH 서버 계정 정보 (사용자 이름 / Password). aRDP을 중단하지 않으면 입력 한 Password 입력 된 상태로됩니다.
+    (c) 키 관리 / 키의 사용 : 공개 키 / 비밀 키 관리 용 스위치. 인증 방법 Password 대신 키 사용 여부 체크 박스. key-pair (공개 키와 비밀 키) 생성 후 클립포드에 복사를 실행하면 RDP 서버에 연결 한 후 공개 키 붙여 넣기가 가능합니다. (클립 보드는 서버에 동기화되는)
+
+・RDP연결 설정:
+    (a) RDP 서버 / 포트 : RDP 서버를 가동하는 컴퓨터의 호스트 이름 혹은 IP 주소와 포트 번호를 입력합니다. SSH를 통한 RDP 모드의 경우이 IP 주소는 SSH 서버에서도 볼 수있습니다. SSH 서버와 RDP 서버가 동일한 컴퓨터 인 경우 localhost를 사용할 수 있습니다. RDP 서버는 일반적으로 포트 3389에서 시작합니다.
+    (b) RDP 사용자: Windows/UNIX 계정의 사용자 이름을 입력합니다.
+    (c) RDP도메인: 계정의 도메인 이름을 입력합니다.
+    (d) RDPPassword : Windows / UNIX 계정의 Password를 입력합니다. Password 용 시큐어 스토리지는 사용되지 않는 (데이터베이스에 저장된다). "저장"에 체크 한 경우에만 Password 저장된다. aRDP을 중단하지 않으면 입력 한 Password 입력 된 상태로 됩니다.
+
+・상세 설정 : 여기에서는 데스크탑 해상도의 사용자 설정 또는 RDP 성능의 미세 조정을 실시합니다.
+
+･로컬 기기 조정: 사용 단말기에서 aRDP 동작 조정한다.
+    (a) 화살표 D-Pad를 사용: RDP서버에 화살표를 전송하는 경우,Bluetooth 키보드의 D-Pad 혹은 온 스크린 키보드의 화살표가 사용 가능.
+    (b) D-Pad의 회전 : Bluetooth 키보드와 페어링 된 스마트 폰의 경우,올바른 방향을 서버로 전송하기 위해 키보드의 D-Pad를 반 시계 방향으로 회전시킬 필요가 있습니다.
+    (c)　로컬 마우스 포인터: 마우스 포인터가 표시되지 않는 경우이 기능을 사용하여 aRDP 따라 마우스 위치 표시가 가능."
+  </string>
+    <string name="rdp_password_hint">RDP Password</string>
+    <string name="rdp_server_empty">RDP서버 혹은 포트가 비어 있습니다. 연결할 수 없습니다!</string>
+    <string name="rdp_username_hint">RDP 사용자 이름</string>
+    <string name="remote_sound_disabled">사운드 무효</string>
+    <string name="remote_sound_on_device">사운드 온 디바이스</string>
+    <string name="remote_sound_on_server">사운드 온 서버</string>
+    <string name="repeater_button">UltraVNC 리피터</string>
+    <string name="repeater_caption">중요: UltraVNC 리피터 사용시 IP주소와 포트 번호는이 다이얼로그 외에서 입력하십시오.여기에서는 실제 VNC서버의 IP주소와 포트 번호를 입력하십시오. VNC서버의 IP주소와 포트 번호는 콜론으로 구분합니다. 예:192.168.0.100:5900</string>
+    <string name="repeater_caption_hint">UltraVNC 리피터</string>
+    <string name="repeater_clear">사용하지 마십시오.</string>
+    <string name="repeater_dialog_title">리피터 기능의 뒤에서 VNC서버</string>
+    <string name="repeater_empty_text">리피터 기능 없음</string>
+    <string name="repeater_save">사용</string>
+    <string name="right_alt_as_iso_l3_shift">SO L3 시프트용으로 오른쪽 Alt(VNC한정)</string>
+    <string name="rotate_dpad">Bluetooth 혹은 소프트 D-Pad를 회전</string>
+    <string name="save_as_copy">복사본을 저장</string>
+    <string name="scaling">스케일링</string>
+    <string name="scaling_zoomable">확대 축소 가능</string>
+    <!-- Send selected metakey -->
+    <string name="send_button">전송</string>
+    <string name="send_key_again">키를 다시 전송</string>
+    <string name="shift_check">Shift</string>
+    <string name="shortcut_label_vnc">VNC 연결</string>
+    <string name="shortcut_label_rdp">RDP 연결</string>
+    <string name="shortcut_label_spice">SPICE 연결</string>
+    <string name="showkbd_label">키바도</string>
+    <string name="single_cancel">한손 모드 취소</string>
+    <string name="single_choose">한손 모드 혹은 취소를 선택</string>
+    <string name="single_left">왼쪽 드래그 모드 - 스와이프하고 드래그/선택 손을 떼고 정지</string>
+    <string name="single_middle">중앙 드래그 모드 - 스와이프하고 드래그/선택 손을 떼고 정지</string>
+    <string name="single_reposition">마우스 포인터 재배치 (한손 조작 모드용)</string>
+    <string name="single_right">오른쪽 드래그 모드 - 스와이프하고 드래그/선택 손을 떼고 정지</string>
+    <string name="single_scroll">스크롤 모드 - 위아래로 스와이프하고 스크롤 손가락을 떼고 정지</string>
+    <string name="single_zoom">줌 모드 - 위아래로 스와이프하고 스크롤 손가락을 떼고 정지</string>
+    <string name="snap_one_to_one">1:1확대 표시에 스냅</string>
+    <string name="special_keys">키를 전송</string>
+    <string name="spice_address_caption_hint">SPICE 서버</string>
+    <string name="spice_button_import_ca">CA를 import</string>
+    <string name="spice_ca_cert_path_hint">인증 기관 파일의 경로</string>
+    <string name="spice_ca_file_error_reading">인증 기관 파일 읽기 오류. 읽기 가능한지 확인하십시오.</string>
+    <string name="spice_ca_file_not_found">파일을 찾을 수 없습니다. 유효한 파일 이름을 텍스트 영역에 입력하십시오.(예: /sdcard/ca-cert.pem)</string>
+    <string name="cert_subject">인증서 제목</string>
+    <string-array name="spice_connection_type">
+        <item>@string/connection_type_spice</item>
+        <item>@string/connection_type_spice_over_ssh</item>
+    </string-array>
+    <string name="spice_intro_text">
+aSPICE 및 범용 오픈 소스 소프트웨어에 대한 지원 감사합니다! 메뉴의 도움말 아이템 애플리케이션 설명을 참조하십시오.
+&lt;br&gt;
+&lt;br&gt;  
+aSPICEで의 대응 기능는 이하와 같다 :
+&lt;br&gt;
+・Plain SPICE、SSH터널을 통해 SPICE
+&lt;br&gt;
+・자동 화면 회전 지원 (필요없는 경우 OS에서 설정 변경)
+&lt;br&gt;
+・SSH key-pair(공개 키와 비밀 키) 생성 및 내보내기 (공개 키 / 비밀 키)
+&lt;br&gt;
+・자동 세션 저장 기능
+&lt;br&gt;
+・스케일링 모드 : 확대 / 축소, 화면 크기에 맞춤 1 대 1
+&lt;br&gt;
+・리모트 마우스 멀티 터치 컨트롤 (다이렉트 / 터치 패드 시뮬레이션 입력 모드)
+&lt;br&gt;
+・리모트 마우스로 풀 한손 컨트롤 (한손 입력 모드)
+&lt;br&gt;
+・멀티 터치 마우스 클릭 : 손가락 1개로 탭에서 왼쪽 클릭, 두 손가락 탭을 오른쪽 클릭 한 손가락 3개 탭에서 중간 클릭
+&lt;br&gt;
+・멀티 터치 스크롤 : 두 손가락을 상하 좌우로 드래그하여 스크롤 조작
+&lt;br&gt;
+・온 스크린 메타 키/화살표 키 : 메뉴에서 비활성화에 설정 가능 / 온 스크린 스위치 버려 분류 가능
+&lt;br&gt;
+・연결시 텍스트 / 임의의 키 조합 전송
+&lt;br&gt;
+・연결 화면에서 연결 작성 도움말 (\"Menu-&gt;Connection Help\")
+&lt;br&gt;
+・연결시 입력 모드 도움말（\"Menu-&gt;More-&gt;Input Mode Help\"）
+&lt;br&gt;
+・마우스 대신 트랙 패드에서 화살표 조작, 트랙 패드 클릭에서 Ctrl, D-pad/트랙 패드 회전에서 Bluetooth 키보드 조작
+&lt;br&gt;
+・다국어 (필요한 언어 레이아웃 SPICE 서버 측에서 활성화되어있는 경우)
+&lt;br&gt;
+・Seamless 리모트 머신의 해상도 변경
+&lt;br&gt;
+・오른쪽 / 중간 클릭, 스크롤 휠 포함한 Android 4.0+ 단말기의 풀 마우스 서포트
+&lt;br&gt;
+&lt;br&gt;
+지원 예정 기능：
+&lt;br&gt;
+・복사 / 붙여 임베디드
+&lt;br&gt;
+・사운드
+&lt;br&gt;
+・성능 개선
+&lt;br&gt;
+문제 :
+&lt;br&gt;
+・"텍스트 전송 "비 대응의 기호 있다
+&lt;br&gt;</string>
+    <string name="spice_intro_title">aSPICE: 직관적이고 안전한 SPICE 클라이언트</string>
+    <string name="spice_connection_screen_help_text" tools:ignore="TypographyOther">"
+연결을 추가하거나 편집하면 연결 구성 페이지가 표시됩니다. 여기에서 새 SPICE 연결을 설정하거나 기존 연결을 선택할 수 있습니다. 상단에는 연결을 저장하는 버튼이 있습니다. 여기에 연결을 구성합니다.
+
+ - 연결 유형: 여기에서는 SPICE 연결 유형을 선택합니다. 사용 가능한 연결 유형은 다음과 같습니다.
+ (a) SPICE. SPICE 프로토콜을 통해 컴퓨터에 직접 연결합니다.
+ (b) SPICE over SSH는 먼저 SSH 서버를 실행하는 컴퓨터를 통해 연결을 터널링합니다.
+
+ - 제목 : 생성하는 각 연결에는 목록에서 쉽게 식별할 수 있는 닉네임을 지정할 수 있습니다.
+
+ -SSH 터널 설정: SPICEoverSSH 모드에서 사용할 수 있습니다.
+ (a) SSH 서버/포트: 연결이 터널링되는 SSH 서버의 주소와 포트. 기본적으로 SSH는 포트 22에서 수신 대기합니다.
+ (b) 사용자 이름/암호: SSH 서버의 계정 사용자 이름과 암호. 마지막으로 앱을 입력한 후 앱을 종료하지 않은 경우 이 페이지에 비밀번호가 입력됩니다.
+ (c) 키 관리/키 사용: 공개 키/개인 키를 관리하는 버튼과 인증에 암호가 아닌 키를 사용할지 여부를 나타내는 확인란. 키 쌍을 생성한 후 클립보드에 복사 버튼을 사용하면 SPICE 서버에 연결할 때 공개 키를 붙여넣을 수 있습니다(클립보드는 서버에 동기화됩니다).
+
+ -SPICE 연결 설정:
+ (a) SPICE 서버/포트: 여기에 연결할 SPICE 서버를 실행하는 컴퓨터의 호스트 이름 또는 IP 주소와 포트를 입력합니다. SPICE over SSH 모드에서 이 주소는 SSH 서버에서 본 것입니다. SSH 서버와 SPICE 서버가 동일한 물리적 컴퓨터인 경우 localhost를 사용할 수 있습니다. SPICE 서버는 일반적으로 포트 5900 이상에서 수신 대기합니다.
+ (d) SPICE 암호: 여기에 SPICE 세션을 보호하기 위해 설정된 암호를 입력합니다. 암호에는 보안 저장소가 사용되지 않습니다(암호는 데이터베이스에 있습니다). 암호는 보존 확인란을 선택한 경우에만 저장됩니다. 마지막으로 앱을 입력한 후 앱을 종료하지 않은 경우 이 페이지에 비밀번호가 입력됩니다.
+
+ - 고급 설정: 이 섹션에서는 로컬 장치 또는 SPICE의 성능 미세 조정을 확인할 수 있습니다.
+ - 로컬 기기 미세 조정: 이들은 기기의 앱 동작을 조정합니다.
+ (a) 화살표에 십자 키 사용: 필요한 경우 Bluetooth 키보드의 십자 키 또는 화면 키보드의 화살표를 사용하여 화살표를 SPICE 서버로 보낼 수 있습니다.
+ (b) 십자 키 회전: 블루투스 키보드와 페어링된 전화기에서는 서버에 올바른 방향을 전송하기 위해 키보드의 십자 키를 반시계 방향으로 회전시켜야 할 수 있습니다.
+ (c) 로컬 마우스 포인터: 포인터가 표시되지 않으면 이를 선택하여 앱에 강제로 그립니다. "</string>
+    <string name="spice_main_screen_help_text" tools:ignore="TypographyOther">
+"aSPICE 시작할 때 연결 설정 화면이 표시됩니다.여기에서는 새 SPICE 연결 설정하거나 기존 연결 선택이 가능합니다.페이지는 2개의 섹션으로 나누어 져 있으며,화면 상단에서는 과거의 연결 설정이 풀다운 메뉴에서 표시됩니다.aSPICE를 처음 실행할 때 새 설정 화면 만 표시됩니다.풀다운 메뉴 옆에있는 연결 스위치를 누르면,선택한 설정에 SPICE클라이언트가 시작됩니다.연결 스위치 아래에서 연결 설정을합니다.
+
+・연결 타입: 사용 SPICE 연결 타입을 이하에서 선택하십시오.
+　　(a) SPICE：SPICE프로토콜로 컴퓨터에 직접 연결한다.
+　　(b) SSH를 통해 SPICE: SSH서버를 실행하는 컴퓨터를 통해 터널 연결한다.
+
+･제목: 작성한 연결에 이름을 붙일 수 있습니다.
+
+・SSH 터널 설정: SSH를 통한 SPICE 모드 한정
+　　(a) SSH 서버/포트: SSH 서버 IP주소와 포트 번호. 기본 포트 번호는 22.
+　　(b) 사용자 이름/Password  SSH서버 계정 정보(사용자 이름/Password).aRDP을 중단하지 않으면 입력 한 Password 입력 된 상태로된다.
+　　(c) 키 관리/키의 사용 : 공개 키/비밀 키 관리 용 스위치. 인증 방법 Password 대신 키 사용 여부 체크 박스. key-pair(공개 키와 비밀 키) 생성 후 클립포드에 복사를 실행하면 SPICE 서버에 연결 한 후 공개 키 붙여 넣기가 가능합니다.(클립 보드는 서버에 동기화되는)
+ 
+・SPICE연결 설정:
+　　(a)SPICE 서버 / 포트 : SPICE 서버를 가동하는 컴퓨터의 호스트 이름 혹은 IP 주소와 포트 번호를 입력합니다. SSH를 통한 SPICE 모드의 경우이 IP 주소는 SSH 서버에서도 볼 수 있습니다. SSH 서버와 SPICE 서버가 동일한 컴퓨터 인 경우 localhost를 사용할 수 있습니다. SPICE 서버는 일반적으로 포트 5900에서 시작합니다.
+　　(d) SPICE Password : SPICE 세션의 보호를 위해 Password를 입력합니다. Password 용 시큐어 스토리지는 사용되지 않는 (데이터베이스에 저장된다.) "저장"에 체크 한 경우에만 Password 저장됩니다. aSPICE을 중단하지 않으면 입력 한 Password 입력 된 상태로됩니다.
+ 
+・상세 설정: 여기에서는 데스크탑 해상도의 사용자 설정 또는 SPICE 성능의 미세 조정을 실시한다.
+
+・로컬 기기 조정: 사용 단말기에서 aSPICE 동작 조정한다.
+　　(a) 화살표 D-Pad를 사용: SPICE서버에 화살표를 전송하는 경우,Bluetooth 키보드의 D-Pad 혹은 온 스크린 키보드의 화살표가 사용 가능.
+　　(b) D-Pad의 회전: Bluetooth 키보드와 페어링 된 스마트 폰의 경우,올바른 방향을 서버로 전송하기 위해 키보드의 D-Pad를 반 시계 방향으로 회전시킬 필요가있다.
+　　(c)　로컬 마우스 포인터: 마우스 포인터가 표시되지 않는 경우이 기능을 사용하여 aSPICE따라 마우스 위치 표시가 가능."
+  </string>
+    <string name="spice_password_hint">SPICE Password</string>
+    <string name="spice_server_empty">SPICE서버 혹은 포트가 비어 있습니다. 연결할 수 없습니다!</string>
+    <string name="spice_tls_port_hint">TLS 포트</string>
+    <string name="spice_username_hint">SPICE 사용자 이름</string>
+    <string name="ssh_passphrase_hint">SSH 암호 문구</string>
+    <string name="ssh_pubkey_button">키를 관리</string>
+    <string name="ssh_use_pubkey">키를 사용</string>
+    <string name="ssh_use_x11vnc">자동　데스크탑</string>
+    <string name="ssh_x11vnc_customize">AutoX을 설정</string>
+    <string name="super_check">Super</string>
+    <string name="tap_disable">무효</string>
+    <string name="tap_enable">유효</string>
+    <string name="username_caption">VNC 사용자</string>
+    <string name="username_hint">UltraVNC MS 로그온 사용자 이름</string>
+    <string name="username_hint_optional">VNC 사용자 이름(임의)</string>
+    <string name="username_hint_ssh">SSH 사용자 이름</string>
+    <string name="username_hint_vencrypt">VNC 사용자 이름</string>
+    <string name="verification_code">매칭 코드</string>
+    <string name="verification_code_message">다단계 인증 매칭 코드를 입력하십시오.</string>
+    <string name="view_only">열람 제한 모드</string>
+    <string name="vnc_server_empty">VNC서버 혹은 포트가 비어 있습니다. 연결할 수 없습니다!</string>
+    <string name="vnc_server_empty_no_save">VNC 서버 또는 포트가 비어 있습니다. 연결을 저장할 수 없습니다!</string>
+
+    <string name="warning_cert_does_not_match">경고: 서명에 저장되는 x509 인증서를 사용하는 서버 인증서와 일치하지 않습니다! 중간자 공격의 가능성이 있습니다. 키의 변경을 알고있는 경우 진행합니다.</string>
+    <string name="copy_logcat">Logcat 복사</string>
+    <string name="log_copied">Logcat가 클립 보드에 복사되었습니다. E-mail 혹은 지원 포럼 붙여 넣기 가능합니다. 개인 정보는 게재 전에 내용을 확인하시기 바랍니다.</string>
+    <string name="info_set_touchpad_input_mode">클라이언트 모드의 마우스 입력이 서버 비 대응을위해 기존의 마우스 입력이 제대로되지 않습니다.가상 머신에 SPICE 도구가 설치되어 있는지 확인하십시오. 혹은 메뉴에서 시뮬레이션 터치 패드 입력 모드로 전환하십시오.</string>
+    <string name="vnc_connection_settings">VNC 연결 설정</string>
+    <string name="show_advanced_settings">상세 설정 표시</string>
+    <string name="use_no_compression_for_local_connections">압축 없음 (로컬 연결, Hextile 인코딩)</string>
+    <string name="rdp_connection_settings">RDP 연결 설정</string>
+    <string name="local_device_tweaks">로컬 디바이스 조정</string>
+    <string name="spice_connection_settings">SPICE 연결 설정</string>
+    <string name="ca_subject">인증서 Subject명을 여기에 기입한다. 인증서 공통 명(CN)이 서버 호스트 명과 동일한 경우, 필요없는 경우 있음.</string>
+    <string name="path_to_ca">파일 경로 (예 /sdcard/ca-cert.pem)를 입력 한 후 가져 오기를 탭하여 인증 기관을 로드한다.</string>
+    <string name="paste_ca">파일로 가져 오기하지 않는 경우, 인증 기관을 여기에 입력한다.</string>
+    <string name="cert_issuer">인증서 발급자</string>
+    <string name="cert_fingerprint">인증서 지문</string>
+    <string name="error">오류</string>
+    <string name="panning">패닝 화면</string>
+    <string name="copy_of">복사</string>
+    <string name="ssh_key_generated">새 키가 성공적으로 작성 혹은 가져 오는되었습니다. \'Generate/Export Key\'스위치를 탭하고 공유 클립 보드로 복사, 공개 키 내보내기 가능합니다.</string>
+    <string name="ssh_tunnel_settings">SSH 터널 설정</string>
+    <string name="cursor_force_local">"로컬"</string>
+    <string name="cursor_force_disable">"무효"</string>
+    <string name="cursor_mode">"커서 모드 :"</string>
+    <string name="rendering_mode">"렌더링 모드 :"</string>
+    <string name="color_24_bit">"24비트 컬러(24 bpp)"</string>
+    <string name="color_256">"256컬러(8 bpp)"</string>
+    <string name="color_64">"64컬러(4 bpp)"</string>
+    <string name="color_8">"8컬러(2 bpp)"</string>
+    <string name="color_greyscale">"그레이 스케일(1 bpp)"</string>
+    <string name="color_black_and_white">"흑백(1 bpp)"</string>
+    <string name="show">"표시"</string>
+    <string name="hide">"비표시"</string>
+    <string name="search_connections">연결 검색</string>
+    <string name="user_not_specified">사용자가 지정되지 않았습니다.</string>
+    <string name="enter_ssh_credentials">SSH credentials(자격 증명)을 입력하세요.</string>
+    <string name="enter_vnc_credentials">VNC credentials(자격 증명)을 입력하세요.</string>
+    <string name="enter_vnc_password">VNC 비밀번호를 입력하세요.</string>
+    <string name="enter_rdp_credentials">RDP credentials(자격 증명)을 입력하세요.</string>
+    <string name="enter_spice_password">SPICE 비밀번호를 입력하세요.</string>
+    <string name="enter_passphrase_title">키 패스프레이즈를 입력하세요.</string>
+    <string name="enter_passphrase">키 패스프레이즈를 입력하세요.</string>
+    <string name="ssh_server_needs_password_in_addition_to_key">서버는 키 인증 외에도 비밀번호 인증이 필요합니다.</string>
+    <string name="opaque_connection_screen_help_text" tools:ignore="TypographyOther">
+"연결을 추가하거나 편집하면 연결 구성 페이지가 표시됩니다.
+여기에서 새 Opaque 연결을 구성하거나 기존 연결을 선택할 수 있습니다.
+상단에는 연결을 저장하는 버튼이 있습니다.
+그 아래에 연결을 구성합니다.
+
+  - 연결 유형: 여기에서는 연결할 가상화 환경을 선택합니다.
+
+  - 서버 주소: 서버의 호스트 이름 또는 IP. 비표준 포트에서 수신 대기하는 경우 콜론으로 구분하여 포트를 추가할 수 있습니다.
+
+  - 가상 머신 이름: 가상화 플랫폼에 표시되는 VM의 이름을 지정하거나 이 필드를 비워두면 선택할 VM 또는 컨테이너 목록을 얻을 수 있습니다.
+
+  - 사용자: 가상화 프레임워크에 대해 인증할 사용자 이름을 입력합니다.
+
+  - 비밀번호: 비밀번호를 저장하려면 여기에 입력하거나 필드를 비워두고 매번 조회합니다.
+
+  - 고급 설정: 이 섹션에서는 로컬 장치, 프로토콜 및 성능의 미세 조정을 확인할 수 있습니다."</string>
+    <string name="help">도움</string>
+    <string name="support_forum">지원 포럼</string>
+    <string name="report_bug">버그보고</string>
+    <string name="download_from_server">서버에서 다운로드</string>
+    <string name="import_from_file">파일에서 가져오기</string>
+    <string name="please_grant_permission_from_prefs">설정을 통해 애플리케이션에 권한을 부여해야 할 수 있습니다.</string>
+    <string name="rdp_adv_gfx">RDP Gfx</string>
+    <string name="rdp_adv_gfxh264">RDP Gfx H264</string>
+    <string name="more_debug_logging">기타 디버그 로그</string>
+    <string name="prefer_sending_unicode">유니코드 입력(Windows만 해당)</string>
+    <string name="hide_connection_thumbnails">썸네일 비표시</string>
+    <string name="show_only_connection_nicknames">닉네임 표시</string>
+</resources>

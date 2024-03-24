@@ -1,0 +1,25 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/itemInputMode"
+        android:icon="@android:drawable/ic_input_get"
+        android:title="@string/default_input_mode">
+        <menu>
+            <group
+                android:id="@+id/itemInputModeGroup"
+                android:checkableBehavior="single">
+                <item
+                    android:id="@+id/itemInputTouchpad"
+                    android:title="@string/input_method_touchpad" />
+                <item
+                    android:id="@+id/itemInputTouchPanZoomMouse"
+                    android:title="@string/input_method_direct_swipe_pan" />
+                <item
+                    android:id="@+id/itemInputDragPanZoomMouse"
+                    android:title="@string/input_method_direct_drag_pan" />
+                <item
+                    android:id="@+id/itemInputSingleHanded"
+                    android:title="@string/input_method_single_handed" />
+            </group>
+        </menu>
+    </item>
+</menu>

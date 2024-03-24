@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <SwitchPreferenceCompat
+        android:defaultValue="true"
+        android:key="rAltAsIsoL3Shift"
+        android:title="@string/right_alt_as_iso_l3_shift" />
+    <PreferenceCategory android:title="@string/applies_to_new_connections_only">
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="preferSendingUnicode"
+            android:title="@string/prefer_sending_unicode" />
+    </PreferenceCategory>
+</PreferenceScreen>

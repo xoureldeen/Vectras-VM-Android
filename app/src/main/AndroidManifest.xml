@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.vectras.vm">
+
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.microphone"
+        android:required="false" />
+
+    <application
+        android:name=".VectrasApp"
+        android:allowBackup="true"
+        android:banner="@mipmap/tv_banner"
+        android:hardwareAccelerated="true"
+        android:icon="@mipmap/ic_launcher"
+        android:requestLegacyExternalStorage="true"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:supportsRtl="false"
+        android:theme="@style/AppTheme"
+        android:extractNativeLibs="true">
+        <activity
+            android:name=".SplashActivity"
+            android:exported="true"
+            android:hardwareAccelerated="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:hardwareAccelerated="true"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".SetupQemuActivity"
+            android:exported="true"
+            android:hardwareAccelerated="true"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".RomsManagerActivity"
+            android:exported="true"
+            android:hardwareAccelerated="true"
+            android:label="Roms" />
+        <activity
+            android:name=".AboutActivity"
+            android:exported="true"
+            android:hardwareAccelerated="true"
+            android:label="About App" />
+        <activity
+            android:name=".StoreActivity"
+            android:exported="true"
+            android:hardwareAccelerated="true"
+            android:label="Apps &amp; Games" />
+        <activity
+            android:name=".StoreItemActivity"
+            android:exported="true"
+            android:hardwareAccelerated="true"
+            android:label="Download" />
+        <activity
+            android:name=".ImagePrvActivity"
+            android:exported="true"
+            android:hardwareAccelerated="true" />
+        <activity
+            android:name=".PostActivity"
+            android:exported="true"
+            android:hardwareAccelerated="true" />
+        <activity
+            android:name=".VectrasApp$CrashActivity"
+            android:exported="true"
+            android:hardwareAccelerated="true"
+            android:label="App Crash" />
+        <activity
+            android:name="com.vectras.qemu.MainVNCActivity"
+            android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|screenLayout|fontScale|uiMode|orientation|screenSize|smallestScreenSize"
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.FullScreen"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name="com.vectras.qemu.MainSettingsManager"
+            android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|screenLayout|fontScale|uiMode|orientation|screenSize|smallestScreenSize"
+            android:label="Settings"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.vectras.vm.CustomRomActivity"
+            android:label="Custom Rom"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.vectras.vm.DataExplorerActivity"
+            android:label="Data Explorer"
+            android:theme="@style/AppTheme" />
+
+        <service
+            android:name=".MainService"
+            android:exported="false"/>
+
+        <!-- This (or rather, value 2.1 or higher) is needed to make the Samsung Galaxy S8 mark the
+        app with "This app is optimized to run in full screen." -->
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="10.0" />
+        <meta-data
+            android:name="com.sec.android.support.multiwindow"
+            android:value="true" />
+        <meta-data
+            android:name="com.samsung.android.multidisplay.keep_process_alive"
+            android:value="true" />
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-3568137780412047~1296857222"/>
+        <!--VSPICE-->
+        <activity
+            android:name="com.iiordanov.bVNC.aSPICE"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/freeaspice_app_name"
+            android:resizeableActivity="true"
+            android:screenOrientation="unspecified"
+            android:theme="@android:style/Theme.DeviceDefault"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity
+            android:name="com.iiordanov.bVNC.RemoteCanvasActivity"
+            android:configChanges="colorMode|density|fontScale|fontWeightAdjustment|keyboard|keyboardHidden|layoutDirection|locale|mcc|mnc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|touchscreen|uiMode"
+            android:exported="true"
+            android:resizeableActivity="true"
+            android:screenOrientation="unspecified"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
+        <activity
+            android:name="com.iiordanov.bVNC.ConnectionListActivity"
+            android:exported="true"
+            android:label="@string/shortcut_label_spice"
+            android:resizeableActivity="true"
+            android:theme="@android:style/Theme.DeviceDefault"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
+    </application>
+
+</manifest>

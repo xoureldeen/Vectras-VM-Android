@@ -1,0 +1,4 @@
+<resources>
+    <dimen name="screen_border_horizontal">0dp</dimen>
+    <dimen name="screen_border_vertical">0dp</dimen>
+</resources>

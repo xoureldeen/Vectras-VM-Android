@@ -1,0 +1,171 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.Material3.Light.NoActionBar">
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowMinWidthMinor">100%</item>
+        <item name="android:windowMinWidthMajor">100%</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:enforceNavigationBarContrast" tools:ignore="NewApi">false</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">?attr/colorSurface</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
+        <!-- Customize your theme here. -->
+        <item name="checkboxStyle">@style/MyCheckBoxStyle</item>
+        <item name="android:windowAnimationStyle">@style/ActivityAnimation</item>
+        <item name="actionOverflowButtonStyle">@style/AppTheme.Toolbar.OverflowButton</item>
+        <item name="fontFamily">@font/josefin_sans</item>
+        <item name="chipStyle">@style/AppTheme.WidgetGroupChip</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="windowActionBarOverlay">true</item>
+        <item name="android:fontFamily">@font/josefin_sans</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+    </style>
+    <!-- See https://developer.android.com/training/material/theme.html for how to customize the Material theme. -->
+    <!-- NOTE: Cannot use "Light." since it hides the terminal scrollbar on the default black background. -->
+    <style name="Theme.Vterm.Black" parent="Theme.Material3.Light.NoActionBar">
+
+        <!-- Avoid action mode toolbar pushing down terminal content when
+             selecting text on pre-6.0 (non-floating toolbar). -->
+        <item name="android:windowActionModeOverlay">true</item>
+
+        <!-- https://developer.android.com/training/tv/start/start.html#transition-color -->
+        <item name="android:windowAllowReturnTransitionOverlap">true</item>
+        <item name="android:windowAllowEnterTransitionOverlap">true</item>
+    </style>
+
+
+    <style name="VtermAlertDialogStyle" parent="MainDialogTheme">
+    </style>
+    <style name="CardViewStyle" parent="CardView">
+        <item name="cardBackgroundColor">#FDFCFF</item>
+        <item name="cardCornerRadius">8dp</item>
+    </style>
+
+    <style name="AppTheme.WidgetGroupChip" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="chipStrokeWidth">1dp</item>
+    </style>
+
+    <style name="AppTheme.Toolbar.OverflowButton" parent="@style/Widget.AppCompat.ActionButton.Overflow" />
+
+    <style name="AppTheme.MaterialToggleButton" parent="" />
+
+    <style name="AppTheme.TabLayout.Title" parent="TextAppearance.Design.Tab">
+        <item name="textAllCaps">false</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="AppTheme.TextInput" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox"></style>
+
+    <style name="PopupAnimation">
+        <item name="android:windowEnterAnimation">@anim/popup_in</item>
+        <item name="android:windowExitAnimation">@anim/popup_out</item>
+    </style>
+
+    <style name="AppTheme.SheetAboveKeyboard" parent="Theme.MaterialComponents.DayNight.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowSoftInputMode">adjustResize</item>
+    </style>
+
+    <style name="PopupMenuStyle" parent="Theme.Material3.Light">
+
+    </style>
+
+    <style name="ActivityAnimation" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/popup_in</item>
+        <item name="android:activityOpenExitAnimation">@anim/popup_out</item>
+        <item name="android:activityCloseEnterAnimation">@anim/popup_in</item>
+        <item name="android:activityCloseExitAnimation">@anim/popup_out</item>
+    </style>
+
+    <style name="Theme.FullScreen" parent="AppTheme">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="titleTextColor">@android:color/white</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="ThemeEditText" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="colorPrimary">@android:color/white</item>
+        <item name="colorPrimaryDark">@android:color/white</item>
+        <item name="boxStrokeColor">#ffffff</item>
+        <item name="boxStrokeWidth">2dp</item>
+    </style>
+
+    <style name="MyCheckBoxStyle" parent="Widget.Material3.CompoundButton.CheckBox">
+        <item name="android:theme">@style/MyCheckboxTheme</item>
+    </style>
+
+    <style name="MyCheckboxTheme">
+
+    </style>
+
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_in_bottom</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_bottom</item>
+    </style>
+    <style name="MainDialogTheme" parent="AppTheme.MaterialAlertDialog"></style>
+    <!--  Alert Dialog  -->
+    <style name="AppTheme.MaterialAlertDialog" parent="@style/ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="shapeAppearanceOverlay">@style/MaterialDialog.ShapeAppearance</item>
+        <item name="materialAlertDialogTitleTextStyle">@style/MaterialDialog.Title.Text</item>
+        <item name="materialAlertDialogBodyTextStyle">@style/MaterialDialog.Body.Text</item>
+        <item name="buttonBarPositiveButtonStyle">@style/MaterialAlertDialog.PositiveButtonStyle
+        </item>
+        <item name="buttonBarNegativeButtonStyle">@style/MaterialAlertDialog.NegativeButtonStyle
+        </item>
+        <item name="buttonBarNeutralButtonStyle">@style/MaterialAlertDialog.NeutralButtonStyle
+        </item>
+        <item name="android:windowEnterAnimation">@animator/dialog_in</item>
+        <item name="android:windowExitAnimation">@animator/dialog_out</item>
+        <!--<item name="background">?attr/colorSurface</item>-->
+        <item name="dialogCornerRadius">28dp</item>
+    </style>
+
+    <style name="MaterialDialog.ShapeAppearance" parent="">
+        <item name="cornerSize">10dp</item>
+    </style>
+
+    <style name="MaterialDialog.Title.Text" parent="@style/MaterialAlertDialog.Material3.Title.Text">
+        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">@font/josefin_sans</item>
+    </style>
+
+    <style name="MaterialDialog.Body.Text" parent="@style/MaterialAlertDialog.Material3.Body.Text">
+        <item name="fontFamily">@font/josefin_sans</item>
+    </style>
+
+    <style name="MaterialAlertDialog.PositiveButtonStyle" parent="@style/Widget.Material3.Button.TextButton.Dialog">
+        <item name="backgroundTint">@android:color/transparent</item>
+        <item name="fontFamily">@font/josefin_sans</item>
+    </style>
+
+    <style name="MaterialAlertDialog.NegativeButtonStyle" parent="@style/Widget.Material3.Button.TextButton.Dialog">
+        <item name="backgroundTint">@android:color/transparent</item>
+        <item name="fontFamily">@font/josefin_sans</item>
+    </style>
+
+    <style name="MaterialAlertDialog.NeutralButtonStyle" parent="@style/Widget.Material3.Button.TextButton.Dialog">
+        <item name="backgroundTint">@android:color/transparent</item>
+        <item name="fontFamily">@font/josefin_sans</item>
+    </style>
+
+    <style name="Theme.AppCompat.VtermReportActivity" parent="Theme.AppCompat.Light.NoActionBar">
+    </style>
+
+    <style name="Theme.AppCompat.VtermTextIOActivity" parent="Theme.AppCompat.Light.NoActionBar">
+    </style>
+
+    <style name="ViewDivider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_marginTop">@dimen/activity_vertical_margin</item>
+        <item name="android:layout_marginBottom">@dimen/activity_vertical_margin</item>
+        <item name="android:background">?android:attr/listDivider</item>
+    </style>
+
+</resources>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/something"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="top|center"
+    android:orientation="vertical"
+    android:stretchMode="columnWidth">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/search"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.90"
+            android:hint="@string/search_connections"
+            android:padding="10dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"></EditText>
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/addNewConnection"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.10"
+            android:contentDescription="@string/action_new_connection"
+            android:title="@string/action_new_connection"
+            app:srcCompat="@drawable/ic_add_connection_48"></androidx.appcompat.widget.AppCompatImageButton>
+    </LinearLayout>
+
+    <GridView
+        android:id="@+id/gridView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="top|center"
+        android:numColumns="2"
+        android:stretchMode="columnWidth"></GridView>
+</LinearLayout>

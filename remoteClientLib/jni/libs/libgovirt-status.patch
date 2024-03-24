@@ -1,0 +1,27 @@
+--- govirt/ovirt-resource.c	2016-04-13 10:13:41.000000000 -0400
++++ govirt/ovirt-resource.c.patched	2017-04-19 09:48:56.381388953 -0400
+@@ -677,6 +677,8 @@
+                                                     GError **error)
+ {
+     RestXmlNode *node;
++    RestXmlNode *prev_node;
++
+     const char *status_key = g_intern_string("status");
+     const char *state_key = g_intern_string("state");
+ 
+@@ -691,11 +693,11 @@
+                     _("Could not find 'status' node"));
+         g_return_val_if_reached(OVIRT_RESPONSE_UNKNOWN);
+     }
++    prev_node = node;
+     node = g_hash_table_lookup(node->children, state_key);
+     if (node == NULL) {
+-        g_set_error(error, OVIRT_ERROR, OVIRT_ERROR_PARSING_FAILED,
+-                    _("Could not find 'state' node"));
+-        g_return_val_if_reached(OVIRT_RESPONSE_UNKNOWN);
++        g_warning("Could not find 'state' node, using parent 'status' node directly instead.");
++        node = prev_node;
+     }
+     g_debug("State: %s\n", node->content);
+     if (g_strcmp0(node->content, "complete") == 0) {
+

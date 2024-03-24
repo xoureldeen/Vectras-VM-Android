@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical">
+
+  <ScrollView
+    android:id="@+id/delete_scroll_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentTop="true"
+    android:gravity="top">
+
+    <TextView
+      android:id="@+id/delete_list"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:padding="2dp"/>
+
+  </ScrollView>
+
+  <Button
+    android:id="@+id/delete_delete"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/delete_scroll_view"
+    android:text="delete"
+    android:textSize="20sp"
+    tools:ignore="HardcodedText" />
+
+  <Button
+    android:id="@+id/delete_cancel"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/delete_delete"
+    android:text="cancel"
+    android:textSize="20sp"
+    tools:ignore="HardcodedText" />
+
+</RelativeLayout>
