@@ -36,8 +36,10 @@ Help support the project by funding it.
 
 # Thanks to
 - [QEMU](https://github.com/qemu/qemu)
+- [3DFX QEMU PATCH](https://github.com/kjliew/qemu-3dfx)
 - [PROOT](https://proot-me.github.io/)
 - [Alpine Linux](https://www.alpinelinux.org/)
+- [Spice Viewer](https://github.com/iiordanov/remote-desktop-clients)
 
 [ico-telegram]: https://raw.githubusercontent.com/epicstudios856/Vectras-windows-emulator/main/res/images/telegram.svg
 [ico-version]: https://raw.githubusercontent.com/epicstudios856/Vectras-windows-emulator/main/res/images/version.svg
