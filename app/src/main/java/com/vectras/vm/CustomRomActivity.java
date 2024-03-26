@@ -129,8 +129,8 @@ public class CustomRomActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custom_rom);
         activity = this;
-        
-        if (!modify)
+
+        if (modify)
             setTitle("Rom Options");
 
         loadingPb = findViewById(R.id.loadingPb);
