@@ -93,7 +93,8 @@ public class CustomRomActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
 
-        menu.add(1, 1, 1, "custom rom").setShortcut('3', 'c').setIcon(R.drawable.input_circle).setShowAsAction(1);
+        if (!modify)
+            menu.add(1, 1, 1, "custom rom").setShortcut('3', 'c').setIcon(R.drawable.input_circle).setShowAsAction(1);
 
         return true;
     }
@@ -243,7 +244,7 @@ public class CustomRomActivity extends AppCompatActivity {
                     ad.setButton(Dialog.BUTTON_NEGATIVE, "REMOVE", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             File isoFile = new File(cdrom.getText().toString());
-                            if(isoFile.exists()) {
+                            if (isoFile.exists()) {
                                 isoFile.delete();
                             }
                             cdrom.setText("");
