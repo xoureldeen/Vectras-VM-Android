@@ -129,6 +129,10 @@ public class CustomRomActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custom_rom);
         activity = this;
+        
+        if (!modify)
+            setTitle("Rom Options");
+
         loadingPb = findViewById(R.id.loadingPb);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
