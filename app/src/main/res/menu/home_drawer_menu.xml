@@ -12,7 +12,8 @@
     <item
         android:id="@+id/navigation_item_import_iso"
         android:icon="@drawable/round_album_24"
-        android:title="@string/import_iso"/>
+        android:title="@string/import_iso"
+        android:visible="false"/>
     <item
         android:id="@+id/navigation_item_hdd1"
         android:icon="@drawable/round_storage_24"

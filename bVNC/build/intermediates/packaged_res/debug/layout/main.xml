@@ -1,0 +1,532 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <LinearLayout
+        android:id="@+id/mainLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="0dip">
+
+        <TableLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dip">
+
+            <TableRow>
+
+                <TextView
+                    android:id="@+id/connectionTypeLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/connection_type_caption"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            </TableRow>
+
+            <TableRow>
+
+                <Spinner
+                    android:id="@+id/connectionType"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:entries="@array/connection_type"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            </TableRow>
+
+            <TableRow>
+
+                <EditText
+                    android:id="@+id/textNickname"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/nickname_caption_hint"
+                    android:singleLine="true"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:id="@+id/sshCaption"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ssh_tunnel_settings"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            </TableRow>
+
+            <TableRow>
+
+                <LinearLayout
+                    android:id="@+id/sshServerEntry"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <EditText
+                        android:id="@+id/sshServer"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="@string/address_caption_ssh_hint"
+                        android:inputType="textNoSuggestions|textVisiblePassword"
+                        android:nextFocusDown="@+id/sshPort"
+                        android:singleLine="true"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <EditText
+                        android:id="@+id/sshPort"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0"
+                        android:hint="@string/port_ssh_hint"
+                        android:inputType="textNoSuggestions|textVisiblePassword"
+                        android:nextFocusDown="@+id/sshUser"
+                        android:singleLine="true"
+                        android:text="22"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                </LinearLayout>
+            </TableRow>
+
+            <TableRow>
+
+                <LinearLayout
+                    android:id="@+id/sshCredentials"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="0dp"
+                        android:singleLine="true">
+
+                        <EditText
+                            android:id="@+id/sshUser"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:hint="@string/username_hint_ssh"
+                            android:inputType="textNoSuggestions|textVisiblePassword"
+                            android:nextFocusDown="@+id/sshPassword"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                        <EditText
+                            android:id="@+id/sshPassword"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0"
+                            android:hint="@string/password_hint_ssh"
+                            android:inputType="textNoSuggestions|textPassword"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/sshPassphrase"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/ssh_passphrase_hint"
+                        android:inputType="textNoSuggestions|textPassword"
+                        android:singleLine="true"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                </LinearLayout>
+            </TableRow>
+
+            <TableRow>
+
+                <LinearLayout
+                    android:id="@+id/layoutUseSshPubkey"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <CheckBox
+                            android:id="@+id/checkboxUseSshPubkey"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".5"
+                            android:checked="false"
+                            android:singleLine="true"
+                            android:text="@string/ssh_use_pubkey"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                        <CheckBox
+                            android:id="@+id/checkboxKeepSshPass"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".5"
+                            android:checked="false"
+                            android:singleLine="true"
+                            android:text="@string/keep_password_button"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+                    </LinearLayout>
+
+                    <Button
+                        android:id="@+id/buttonGeneratePubkey"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="true"
+                        android:text="@string/ssh_pubkey_button"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                </LinearLayout>
+            </TableRow>
+
+            <TableRow>
+
+                <LinearLayout
+                    android:id="@+id/layoutUseX11Vnc"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <Button
+                        android:id="@+id/buttonCustomizeX11Vnc"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".4"
+                        android:enabled="true"
+                        android:text="@string/ssh_x11vnc_customize"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/autoXStatus"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight=".6"
+                        android:gravity="left"
+                        android:padding="4dip"
+                        android:singleLine="true"
+                        android:text="@string/auto_x_disabled"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                </LinearLayout>
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/vnc_connection_settings"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            </TableRow>
+
+            <TableRow>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/textIP"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="@string/address_caption_hint"
+                        android:inputType="textNoSuggestions|textVisiblePassword"
+                        android:nextFocusDown="@+id/textPORT"
+                        android:singleLine="true"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <EditText
+                        android:id="@+id/textPORT"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0"
+                        android:hint="@string/port_hint"
+                        android:inputType="textNoSuggestions|textVisiblePassword"
+                        android:singleLine="true"
+                        android:text="5900"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                </LinearLayout>
+            </TableRow>
+
+            <TableRow>
+
+                <EditText
+                    android:id="@+id/textUsername"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/username_hint_optional"
+                    android:inputType="textNoSuggestions|textVisiblePassword"
+                    android:singleLine="true"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            </TableRow>
+
+            <TableRow>
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/textPASSWORD"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="@string/password_caption_hint"
+                        android:inputType="textNoSuggestions|textPassword"
+                        android:singleLine="true"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <CheckBox
+                        android:id="@+id/checkboxKeepPassword"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0"
+                        android:singleLine="true"
+                        android:text="@string/keep_password_button"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                </LinearLayout>
+            </TableRow>
+        </TableLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dip">
+
+            <ToggleButton
+                android:id="@+id/toggleAdvancedSettings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textOff="@string/show"
+                android:textOn="@string/hide" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/show_advanced_settings"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutAdvancedSettings"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="5dip"
+            android:visibility="gone">
+
+            <Spinner
+                android:id="@+id/colorformat"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <CheckBox
+                android:id="@+id/checkboxViewOnly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left|center_vertical"
+                android:text="@string/view_only"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <CheckBox
+                android:id="@+id/checkboxUseDpadAsArrows"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left|center_vertical"
+                android:text="@string/dpad_as_arrows"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <CheckBox
+                android:id="@+id/checkboxRotateDpad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left|center_vertical"
+                android:text="@string/rotate_dpad"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <CheckBox
+                android:id="@+id/checkboxUseLastPositionToolbar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left|center_vertical"
+                android:text="@string/position_toolbar_last_used"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cursor_mode"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <RadioGroup
+                android:id="@+id/radioCursor"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radioCursorAuto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/auto"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <RadioButton
+                    android:id="@+id/radioCursorForceLocal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cursor_force_local"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <RadioButton
+                    android:id="@+id/radioCursorForceDisable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cursor_force_disable"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            </RadioGroup>
+
+            <CheckBox
+                android:id="@+id/checkboxPreferHextile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left|center_vertical"
+                android:text="@string/use_no_compression_for_local_connections"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/rendering_mode"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <RadioGroup
+                android:id="@+id/groupForceFullScreen"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radioForceFullScreenAuto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/auto"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <RadioButton
+                    android:id="@+id/radioForceFullScreenOn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/force"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/textDescriptGeom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/rdp_descript_geom"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/rdp_geom_description_hint"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <LinearLayout
+                android:id="@+id/layoutVncGeometry"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="5dp">
+
+                <Spinner
+                    android:id="@+id/spinnerVncGeometry"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.4"
+                    android:entries="@array/vnc_geometry"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <EditText
+                    android:id="@+id/rdpWidth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.3"
+                    android:singleLine="true"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="x"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <EditText
+                    android:id="@+id/rdpHeight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.3"
+                    android:singleLine="true"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/versionAndCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/repeaterEntry"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <Button
+                android:id="@+id/buttonRepeater"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/repeater_button"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <TextView
+                android:id="@+id/textRepeaterId"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left|center_vertical"
+                android:text="@string/repeater_empty_text"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/copyLogcat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/copy_logcat"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </LinearLayout>
+</ScrollView>

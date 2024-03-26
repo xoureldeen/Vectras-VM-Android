@@ -1,0 +1,33 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.undatech.remoteClientLib" >
+4
+5    <uses-sdk android:minSdkVersion="21" />
+6
+7    <uses-permission android:name="android.permission.INTERNET" />
+7-->D:\Vectras-VM-Android\remoteClientLib\src\main\AndroidManifest.xml:4:5-67
+7-->D:\Vectras-VM-Android\remoteClientLib\src\main\AndroidManifest.xml:4:22-64
+8    <uses-permission android:name="android.permission.VIBRATE" />
+8-->D:\Vectras-VM-Android\remoteClientLib\src\main\AndroidManifest.xml:5:5-66
+8-->D:\Vectras-VM-Android\remoteClientLib\src\main\AndroidManifest.xml:5:22-63
+9    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+9-->D:\Vectras-VM-Android\remoteClientLib\src\main\AndroidManifest.xml:6:5-79
+9-->D:\Vectras-VM-Android\remoteClientLib\src\main\AndroidManifest.xml:6:22-76
+10    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+10-->D:\Vectras-VM-Android\remoteClientLib\src\main\AndroidManifest.xml:7:5-71
+10-->D:\Vectras-VM-Android\remoteClientLib\src\main\AndroidManifest.xml:7:22-68
+11
+12    <uses-feature
+12-->D:\Vectras-VM-Android\remoteClientLib\src\main\AndroidManifest.xml:9:5-11:36
+13        android:name="android.hardware.touchscreen"
+13-->D:\Vectras-VM-Android\remoteClientLib\src\main\AndroidManifest.xml:10:9-52
+14        android:required="false" />
+14-->D:\Vectras-VM-Android\remoteClientLib\src\main\AndroidManifest.xml:11:9-33
+15    <uses-feature
+15-->D:\Vectras-VM-Android\remoteClientLib\src\main\AndroidManifest.xml:12:5-14:36
+16        android:name="android.hardware.microphone"
+16-->D:\Vectras-VM-Android\remoteClientLib\src\main\AndroidManifest.xml:13:9-51
+17        android:required="false" />
+17-->D:\Vectras-VM-Android\remoteClientLib\src\main\AndroidManifest.xml:14:9-33
+18
+19</manifest>

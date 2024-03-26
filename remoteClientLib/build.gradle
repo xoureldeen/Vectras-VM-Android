@@ -45,9 +45,6 @@ android {
         jniLibs.srcDirs += 'src/main/jniLibs'
     }
 
-    packagingOptions {
-        exclude 'META-INF/DEPENDENCIES'
-    }
     /*
     externalNativeBuild {
         ndkBuild {

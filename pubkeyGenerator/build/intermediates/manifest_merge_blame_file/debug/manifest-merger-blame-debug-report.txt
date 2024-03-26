@@ -1,0 +1,23 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.iiordanov.pubkeygenerator"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk android:minSdkVersion="8" />
+8
+9    <application>
+9-->D:\Vectras-VM-Android\pubkeyGenerator\src\main\AndroidManifest.xml:5:5-11:19
+10        <activity
+10-->D:\Vectras-VM-Android\pubkeyGenerator\src\main\AndroidManifest.xml:6:9-10:79
+11            android:name="com.iiordanov.pubkeygenerator.GeneratePubkeyActivity"
+11-->D:\Vectras-VM-Android\pubkeyGenerator\src\main\AndroidManifest.xml:7:13-51
+12            android:label="@string/title_activity_pubkey_generator"
+12-->D:\Vectras-VM-Android\pubkeyGenerator\src\main\AndroidManifest.xml:8:13-68
+13            android:screenOrientation="landscape"
+13-->D:\Vectras-VM-Android\pubkeyGenerator\src\main\AndroidManifest.xml:9:13-50
+14            android:windowSoftInputMode="stateHidden|adjustResize" />
+14-->D:\Vectras-VM-Android\pubkeyGenerator\src\main\AndroidManifest.xml:10:13-67
+15    </application>
+16
+17</manifest>

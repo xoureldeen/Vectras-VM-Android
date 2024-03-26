@@ -58,6 +58,9 @@ import java.io.FileWriter;
 import java.io.Writer;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -101,72 +104,13 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 d = new Dialog(MainActivity.activity);
                 d.setTitle(current.itemName);
                 d.setContentView(R.layout.rom_options_dialog);
-                d.setCancelable(true);
-                TextView qemu = d.findViewById(R.id.qemu);
-                qemu.setText(current.itemExtra);
-                TextInputEditText drv1 = d.findViewById(R.id.drive1);
-                drv1.setText(current.itemDrv1);
-                drv1.setOnClickListener(new View.OnClickListener() {
+                Button modifyRomBtn = d.findViewById(R.id.modifyRomBtn);
+                modifyRomBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
-                        intent.addCategory(Intent.CATEGORY_OPENABLE);
-                        intent.setType("*/*");
-                        MainActivity.curRomName = current.itemName;
-
-                        // Optionally, specify a URI for the file that should appear in the
-                        // system file picker when it loads.
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
-                        }
-
-                        MainActivity.activity.startActivityForResult(intent, 122);
-                    }
-                });
-                TextInputLayout drv1fld = d.findViewById(R.id.drive1Field);
-                drv1fld.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
-                        intent.addCategory(Intent.CATEGORY_OPENABLE);
-                        intent.setType("*/*");
-                        MainActivity.curRomName = current.itemName;
-
-                        // Optionally, specify a URI for the file that should appear in the
-                        // system file picker when it loads.
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
-                        }
-
-                        MainActivity.activity.startActivityForResult(intent, 122);
-                    }
-                });
-                Button saveRomBtn = d.findViewById(R.id.saveRomBtn);
-                saveRomBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        final File jsonFile = new File(AppConfig.maindirpath + "roms-data" + ".json");
-                        current.itemDrv1 = drv1.getText().toString();
-                        current.itemExtra = qemu.getText().toString();
-                        try {
-                            JSONObject jObj = MainActivity.jArray.getJSONObject(position);
-                            jObj.put("imgDrv1", drv1.getText().toString());
-                            jObj.put("imgExtra", qemu.getText().toString());
-                            MainActivity.jArray.put(position, jObj);
-                        } catch (JSONException e) {
-                            throw new RuntimeException(e);
-                        }
-                        try {
-                            Writer output = null;
-                            output = new BufferedWriter(new FileWriter(jsonFile));
-                            output.write(MainActivity.jArray.toString());
-                            output.close();
-                        } catch (Exception e) {
-                            UIUtils.toastLong(MainActivity.activity, e.toString());
-                        } finally {
-                            d.dismiss();
-                            MainActivity.loadDataVbi();
-                        }
+                        com.vectras.vm.CustomRomActivity.current = data.get(position);
+                        MainActivity.activity.startActivity(new Intent(MainActivity.activity, com.vectras.vm.CustomRomActivity.class).putExtra("POS", position).putExtra("MODIFY", true));
+                        d.dismiss();
                     }
                 });
                 Button exportRomBtn = d.findViewById(R.id.exportRomBtn);
@@ -197,7 +141,7 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         ad.setView(Description);
                         ad.setButton(Dialog.BUTTON_POSITIVE, "EXPORT", (dialog, which) -> {
                             RomJson obj = new RomJson();//TODO:UPDATE AUTHOR NAME
-                            JSONObject jsonObject = obj.makeJSONObject(current.itemName, current.itemArch, "UNKNOWN", DescriptionET.getText().toString(), new File(current.itemIcon).getName(), new File(current.itemPath).getName(), qemu.getText().toString());
+                            JSONObject jsonObject = obj.makeJSONObject(current.itemName, current.itemArch, "UNKNOWN", DescriptionET.getText().toString(), new File(current.itemIcon).getName(), new File(current.itemPath).getName(), current.itemExtra);
 
                             try {
                                 Writer output = null;
@@ -252,6 +196,7 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             return;
                         });
                         ad.show();
+                        d.dismiss();
                     }
                 });
                 d.show();
@@ -275,6 +220,28 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     public void onClick(DialogInterface dialog, int which) {
                         File file = new File(current.itemPath);
                         File file2 = new File(current.itemDrv1);
+
+                        Pattern pattern = Pattern.compile("-drive index=1,media=cdrom,file='([^']*)'");
+                        Matcher matcher = pattern.matcher(current.itemExtra);
+
+                        if (matcher.find()) {
+                            // We found the -drive pattern and its file path.
+                            File cdrom = new File(matcher.group(1));
+
+                            try {
+                                boolean deleted = cdrom.delete();
+                                if(!deleted) {
+                                    // The file wasn't successfully deleted.
+                                    // Handle this case, maybe the file didn't exist or was read only.
+                                }
+                            } catch (Exception e) {
+                                UIUtils.toastLong(MainActivity.activity, e.toString());
+                            }
+                        } else {
+                            // The pattern wasn't found in the current item's extra text.
+                            // Handle the case where the -drive pattern doesn't match.
+                        }
+
                         try {
                             file.delete();
                         } catch (Exception e) {
@@ -287,6 +254,7 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             UIUtils.toastLong(MainActivity.activity, e.toString());
                         } finally {
                         }
+
                         MainActivity.mMainAdapter = new AdapterMainRoms(MainActivity.activity, MainActivity.data);
                         MainActivity.data.remove(position);
                         MainActivity.mRVMainRoms.setAdapter(MainActivity.mMainAdapter);

@@ -4,12 +4,12 @@ plugins {
 
 android {
     namespace 'com.vectras.vm'
-    compileSdk 34
+    compileSdk compileApi
 
     defaultConfig {
         applicationId "com.vectras.vm"
-        minSdk 24
-        targetSdk 33
+        minSdk minApi
+        targetSdk targetApi
         versionCode 14
         versionName "v2.8-debug-build-4"
 	    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -29,7 +29,6 @@ android {
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
-    buildFeatures.aidl true
     buildFeatures.buildConfig true
     splits {
         abi {
@@ -50,13 +49,6 @@ android {
 
     packagingOptions {
         exclude 'META-INF/DEPENDENCIES'
-        // exclude 'META-INF/LICENSE'
-        // exclude 'META-INF/LICENSE.txt'
-        // exclude 'META-INF/license.txt'
-        // exclude 'META-INF/NOTICE'
-        // exclude 'META-INF/NOTICE.txt'
-        // exclude 'META-INF/notice.txt'
-        // exclude 'META-INF/ASL2.0'
     }
 }
 
@@ -79,7 +71,7 @@ dependencies {
     implementation("com.google.firebase:firebase-crashlytics")
     implementation 'com.google.android.gms:play-services-ads:22.6.0'
     implementation 'com.github.bumptech.glide:glide:4.16.0'
-    implementation "com.google.guava:guava:+"
+    implementation 'com.google.guava:guava:33.1.0-jre'
 
     // Do not increment version higher than 1.0.0-alpha09 since it will break ViewUtils and needs to be looked into
     // noinspection GradleDependency

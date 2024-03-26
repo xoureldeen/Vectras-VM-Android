@@ -275,5 +275,6 @@
     <string name="install">INSTALL</string>
     <string name="select_tar">SELECT (.TAR.GZ)</string>
     <string name="not_selected_yet">not selected yet.</string>
+    <string name="modify">MODIFY</string>
 
 </resources>

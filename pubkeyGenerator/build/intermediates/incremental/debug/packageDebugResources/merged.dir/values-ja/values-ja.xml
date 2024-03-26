@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="copy">"クリップボードのコピー"</string>
+    <string name="decrypt">"既存の鍵の解読"</string>
+    <string name="gather_entropy">"乱数性の向上"</string>
+    <string name="generate">"新しい鍵を作る"</string>
+    <string name="generated">"正常に鍵が生成されました"</string>
+    <string name="generating">"鍵ペア生成中・・・"</string>
+    <string name="key_import">"インポート"</string>
+    <string name="menu_settings">"設定"</string>
+    <string name="prompt_bits">"ビット"</string>
+    <string name="prompt_file_name">"ダウンロードディレクトリへ保存するファイル名"</string>
+    <string name="prompt_file_will_be_saved">"ファイルはダウンロードディレクトリに保存され、そこから読み出されます。"</string>
+    <string name="prompt_passphrase">"パスフレーズ"</string>
+    <string name="prompt_password_can_be_blank">"パスフレーズが空欄のこともありますが、鍵は暗号化されません"</string>
+    <string name="prompt_type">"タイプ"</string>
+    <string name="save">"公開鍵をファイルに保存"</string>
+    <string name="share">"公開鍵のシェア"</string>
+    <string name="touch_hint">"鍵の生成中に乱数性を保証するため、下記ボックス周辺をランダムに指を動かしてください。"</string>
+    <string name="touch_prompt">"ボックスをタッチして乱数性を収集する： %1$d%% 完了"</string>
+</resources>

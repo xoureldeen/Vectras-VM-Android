@@ -1,0 +1,37 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <item
+        android:id="@+id/itemSave"
+        android:alphabeticShortcut="s"
+        android:icon="@android:drawable/ic_menu_save"
+        android:numericShortcut="1"
+        android:onClick="save"
+        android:showAsAction="always"
+        android:title="@string/save_button"
+        app:showAsAction="always"
+        tools:ignore="AppCompatResource" />
+
+    <item
+        android:id="@+id/itemSaveAsCopy"
+        android:alphabeticShortcut="c"
+        android:icon="@android:drawable/ic_menu_save"
+        android:numericShortcut="2"
+        android:onClick="saveAsCopy"
+        android:showAsAction="never"
+        android:title="@string/save_as_copy"
+        app:showAsAction="never"
+        tools:ignore="AppCompatResource" />
+
+    <item
+        android:id="@+id/actionHelp"
+        android:alphabeticShortcut="h"
+        android:icon="@android:drawable/ic_menu_info_details"
+        android:numericShortcut="3"
+        android:onClick="showConnectionScreenHelp"
+        android:showAsAction="always"
+        android:title="@string/help"
+        app:showAsAction="always"
+        tools:ignore="AppCompatResource" />
+</menu>

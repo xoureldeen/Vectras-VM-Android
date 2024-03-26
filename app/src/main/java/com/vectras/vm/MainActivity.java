@@ -821,10 +821,7 @@ public class MainActivity extends AppCompatActivity {
             Uri content_describer = ReturnedIntent.getData();
             File selectedFilePath = new File(getPath(content_describer));
             ProgressBar loading = findViewById(R.id.progressBar);
-            TextInputEditText drv1 = AdapterMainRoms.d.findViewById(R.id.drive1);
-            Button saveB = AdapterMainRoms.d.findViewById(R.id.saveRomBtn);
             loading.setVisibility(View.VISIBLE);
-            saveB.setVisibility(View.GONE);
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -856,8 +853,6 @@ public class MainActivity extends AppCompatActivity {
                                 @Override
                                 public void run() {
                                     loading.setVisibility(View.GONE);
-                                    saveB.setVisibility(View.VISIBLE);
-                                    drv1.setText(AppConfig.maindirpath + curRomName + "/" + "drv1-" + selectedFilePath.getName());
                                 }
                             };
                             activity.runOnUiThread(runnable);
@@ -868,7 +863,6 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 loading.setVisibility(View.GONE);
-                                saveB.setVisibility(View.VISIBLE);
                                 UIAlert(activity, e.toString(), "error");
                             }
                         };

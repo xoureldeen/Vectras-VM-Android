@@ -1,0 +1,131 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    xmlns:tools="http://schemas.android.com/tools"
+4    package="com.undatech.remoteClientUi" >
+5
+6    <uses-sdk
+6-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:17:5-63
+7        android:minSdkVersion="21"
+8        tools:overrideLibrary="com.github.luben.zstd" />
+8-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:17:15-60
+9
+10    <uses-permission android:name="android.permission.INTERNET" />
+10-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:5:5-67
+10-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:5:22-64
+11    <uses-permission android:name="android.permission.VIBRATE" />
+11-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:6:5-66
+11-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:6:22-63
+12    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+12-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:7:5-79
+12-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:7:22-76
+13    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+13-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:8:5-71
+13-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:8:22-68
+14
+15    <uses-feature
+15-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:10:5-12:36
+16        android:name="android.hardware.touchscreen"
+16-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:11:9-52
+17        android:required="false" />
+17-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:12:9-33
+18    <uses-feature
+18-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:13:5-15:36
+19        android:name="android.hardware.microphone"
+19-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:14:9-51
+20        android:required="false" />
+20-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:15:9-33
+21
+22    <supports-screens
+22-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:19:5-25:40
+23        android:anyDensity="true"
+23-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:20:9-34
+24        android:largeScreens="true"
+24-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:21:9-36
+25        android:normalScreens="true"
+25-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:22:9-37
+26        android:resizeable="true"
+26-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:23:9-34
+27        android:smallScreens="true"
+27-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:24:9-36
+28        android:xlargeScreens="true" />
+28-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:25:9-37
+29
+30    <application>
+30-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:27:5-67:19
+31        <activity
+31-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:28:9-35:57
+32            android:name="com.iiordanov.pubkeygenerator.GeneratePubkeyActivity"
+32-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:29:13-80
+33            android:configChanges="keyboardHidden|orientation"
+33-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:30:13-63
+34            android:resizeableActivity="true"
+34-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:31:13-46
+35            android:screenOrientation="unspecified"
+35-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:32:13-52
+36            android:theme="@android:style/Theme.DeviceDefault"
+36-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:33:13-63
+37            android:windowSoftInputMode="stateHidden|adjustResize"
+37-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:34:13-67
+38            tools:replace="android:screenOrientation" />
+38-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:35:13-54
+39
+40        <uses-library
+40-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:36:9-38:40
+41            android:name="com.sec.android.app.multiwindow"
+41-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:37:13-59
+42            android:required="false" />
+42-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:38:13-37
+43
+44        <meta-data
+44-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:40:9-42:36
+45            android:name="com.sec.android.support.multiwindow"
+45-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:41:13-63
+46            android:value="true" />
+46-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:42:13-33
+47        <meta-data
+47-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:43:9-45:59
+48            android:name="com.sec.android.multiwindow.DEFAULT_SIZE_W"
+48-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:44:13-70
+49            android:resource="@dimen/app_defaultsize_w" />
+49-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:45:13-56
+50        <meta-data
+50-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:46:9-48:59
+51            android:name="com.sec.android.multiwindow.DEFAULT_SIZE_H"
+51-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:47:13-70
+52            android:resource="@dimen/app_defaultsize_h" />
+52-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:48:13-56
+53        <meta-data
+53-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:49:9-51:59
+54            android:name="com.sec.android.multiwindow.MINIMUM_SIZE_W"
+54-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:50:13-70
+55            android:resource="@dimen/app_minimumsize_w" />
+55-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:51:13-56
+56        <meta-data
+56-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:52:9-54:59
+57            android:name="com.sec.android.multiwindow.MINIMUM_SIZE_H"
+57-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:53:13-70
+58            android:resource="@dimen/app_minimumsize_h" />
+58-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:54:13-56
+59
+60        <activity
+60-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:56:9-58:35
+61            android:name="com.undatech.remoteClientUi.presentation.ShortcutsActivity"
+61-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:57:13-59
+62            tools:node="remove" />
+62-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:58:13-32
+63        <activity
+63-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:60:9-62:54
+64            android:name="com.iiordanov.bVNC.GlobalPreferencesActivity"
+64-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:61:13-72
+65            android:theme="@style/Theme.AppCompat" />
+65-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:62:13-51
+66
+67        <meta-data
+67-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:64:9-66:36
+68            android:name="com.samsung.android.keepalive.density"
+68-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:65:13-65
+69            android:value="true" />
+69-->D:\Vectras-VM-Android\bVNC\src\main\AndroidManifest.xml:66:13-33
+70    </application>
+71
+72</manifest>

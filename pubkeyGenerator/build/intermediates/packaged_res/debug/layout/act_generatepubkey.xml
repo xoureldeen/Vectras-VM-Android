@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+/*
+ * ConnectBot: simple, powerful, open-source SSH client for Android
+ * Copyright 2007 Kenny Root, Jeffrey Sharkey
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:scrollbars="vertical">
+
+    <TableLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="10dip"
+        android:paddingRight="10dip"
+        android:scrollbars="vertical">
+
+        <Button
+            android:id="@+id/generate"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:enabled="true"
+            android:text="@string/generate" />
+
+        <Button
+            android:id="@+id/importKey"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:enabled="true"
+            android:text="@string/key_import" />
+
+        <Button
+            android:id="@+id/decrypt"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="@string/decrypt" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="@string/prompt_password_can_be_blank" />
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/prompt_passphrase"
+            android:inputType="textPassword"
+            android:password="true"
+            android:singleLine="true" />
+
+        <TableRow>
+
+            <TextView
+                android:layout_gravity="center_vertical"
+                android:gravity="left"
+                android:paddingRight="10dip"
+                android:text="@string/prompt_type"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <RadioGroup
+                android:id="@+id/key_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkedButton="@+id/rsa"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rsa"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="30dip"
+                    android:text="RSA" />
+
+                <RadioButton
+                    android:id="@+id/dsa"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DSA" />
+            </RadioGroup>
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:gravity="left"
+                android:paddingRight="10dip"
+                android:text="@string/prompt_bits"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <EditText
+                android:id="@+id/bits"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:inputType="number"
+                android:singleLine="true"
+                android:text="2048" />
+        </TableRow>
+
+        <SeekBar
+            android:id="@+id/bits_slider"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:max="3328"
+            android:paddingBottom="10dip"
+            android:progress="1280" />
+
+        <Button
+            android:id="@+id/share"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="@string/share" />
+
+        <Button
+            android:id="@+id/copy"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="@string/copy" />
+
+        <Button
+            android:id="@+id/save"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="@string/save" />
+    </TableLayout>
+</ScrollView>
