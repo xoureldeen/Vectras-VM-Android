@@ -111,7 +111,6 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name="com.vectras.vm.CustomRomActivity"
-            android:label="Custom Rom"
             android:theme="@style/AppTheme" />
         <activity
             android:name="com.vectras.vm.DataExplorerActivity"

@@ -129,22 +129,19 @@ public class CustomRomActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custom_rom);
         activity = this;
-
-        if (modify)
-            setTitle("Rom Options");
-
+        Toolbar toolbar = findViewById(R.id.toolbar);
         loadingPb = findViewById(R.id.loadingPb);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        toolbar.setTitle("Custom Rom");
+        setTitle("Rom Options");
         AdView mAdView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
+
             }
         });
         title = findViewById(R.id.title);
