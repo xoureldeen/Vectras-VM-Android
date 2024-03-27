@@ -1,15 +1,11 @@
 package com.vectras.vm;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
-import android.os.Build;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.DocumentsContract;
 import android.view.View;
-import android.webkit.MimeTypeMap;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -23,20 +19,20 @@ import com.vectras.vterm.view.ZoomableTextView;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class SetupQemuActivity extends AppCompatActivity implements View.OnClickListener {
     SetupQemuActivity activity;
     private final String TAG = "SetupQemuActivity";
     ZoomableTextView vterm;
-    MaterialButton dlBtn, hpBtn, slBtn, inBtn;
-    TextView tvSelectedPath;
+    MaterialButton inBtn;
     ProgressBar progressBar;
 
     @Override
@@ -49,143 +45,32 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
 
         vterm = findViewById(R.id.tvTerminalOutput);
 
-        dlBtn = findViewById(R.id.btnDownload);
-        hpBtn = findViewById(R.id.btnHelp);
-        slBtn = findViewById(R.id.btnSelect);
         inBtn = findViewById(R.id.btnInstall);
-
-        dlBtn.setOnClickListener(activity);
-        hpBtn.setOnClickListener(activity);
-        slBtn.setOnClickListener(activity);
         inBtn.setOnClickListener(activity);
 
-        tvSelectedPath = findViewById(R.id.tarPath);
+        tarPath = getExternalFilesDir("data") + "/data.tar.gz";
+
+        File tarGZ = new File(tarPath);
+        if (tarGZ.exists()) {
+            setupVectras();
+        } else {
+            startDownload();
+        }
     }
 
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.btnDownload) {
-            String qe = AppConfig.getSetupFiles();
-            Intent q = new Intent(Intent.ACTION_VIEW);
-            q.setData(Uri.parse(qe));
-            startActivity(q);
-        } else if (id == R.id.btnHelp) {
-            String qe = AppConfig.vectrasHelp;
-            Intent q = new Intent(Intent.ACTION_VIEW);
-            q.setData(Uri.parse(qe));
-            startActivity(q);
-        } else if (id == R.id.btnSelect) {
-            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            intent.setType("*/*");  // Allow the user to select any file type
-
-            // Optionally, specify a URI for the file that should appear in the system file picker when it loads
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                // Use the Downloads folder as the starting path
-                Uri downloadsUri = Uri.parse(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString());
-                intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, downloadsUri);
-            }
-
-            startActivityForResult(intent, 0);
-        } else if (id == R.id.btnInstall) {
-            if (tarPath != null) {
-                inBtn.setEnabled(false);
-                progressBar.setVisibility(View.VISIBLE);
-
-                String setupFilesUrl = AppConfig.getSetupFiles();
-
-                String filesDir = activity.getFilesDir().getAbsolutePath();
-                if (!com.vectras.vm.utils.FileUtils.readFromFile(activity, new File(filesDir + "/distro/etc/apk/repositories")).contains("http://dl-cdn.alpinelinux.org/alpine/edge/testing"))
-                    executeShellCommand("echo \"http://dl-cdn.alpinelinux.org/alpine/edge/testing\" >> /etc/apk/repositories");
-                executeShellCommand("set -e;" +
-                        " apk update;" +
-                        " apk add libslirp libslirp-dev pulseaudio-dev glib-dev pixman-dev zlib-dev spice-dev libusbredirparser usbredir-dev libiscsi-dev  sdl2 sdl2-dev libepoxy-dev virglrenderer-dev tar;" +
-                        " tar -xvzf " + tarPath.getAbsolutePath() + " -C " + filesDir + "/distro;" +
-                        " rm " + tarPath.getAbsolutePath() + ";" +
-                        " echo \"installation done! xssFjnj58Id\"");
-            }
-        }
-    }
-
-    File tarPath;
-
-    public String getPath(Uri uri) {
-        return com.vectras.vm.utils.FileUtils.getPath(this, uri);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent ReturnedIntent) {
-        super.onActivityResult(requestCode, resultCode, ReturnedIntent);
-
-        if (requestCode == 0 && resultCode == RESULT_OK) {
-            Uri content_describer = ReturnedIntent.getData();
-
-            // Get the file extension from the URI
-            String fileExtension = MimeTypeMap.getFileExtensionFromUrl(content_describer.toString());
-
-            File selectedFilePath = new File(getPath(content_describer));
-            progressBar.setVisibility(View.VISIBLE);
-            String abi = Build.SUPPORTED_ABIS[0];
-            if (selectedFilePath.getName().endsWith("tar.gz")) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        FileInputStream File = null;
-                        try {
-                            File = (FileInputStream) getContentResolver().openInputStream(content_describer);
-                        } catch (FileNotFoundException e) {
-                            throw new RuntimeException(e);
-                        }
-                        try {
-                            try {
-                                OutputStream out = new FileOutputStream(new File(com.vectras.vm.AppConfig.maindirpath + selectedFilePath.getName()));
-                                try {
-                                    // Transfer bytes from in to out
-                                    byte[] buf = new byte[1024];
-                                    int len;
-                                    while ((len = File.read(buf)) > 0) {
-                                        out.write(buf, 0, len);
-                                    }
-                                } finally {
-                                    out.close();
-                                }
-                            } finally {
-                                Runnable runnable = new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        progressBar.setVisibility(View.GONE);
-                                        inBtn.setEnabled(selectedFilePath.exists());
-                                        tarPath = new File(com.vectras.vm.AppConfig.maindirpath + selectedFilePath.getName());
-
-                                        tvSelectedPath.setText(tarPath.getAbsolutePath());
-
-                                        tarPath.deleteOnExit();
-                                    }
-                                };
-                                activity.runOnUiThread(runnable);
-                                File.close();
-                            }
-                        } catch (IOException e) {
-                            Runnable runnable = new Runnable() {
-                                @Override
-                                public void run() {
-                                    progressBar.setVisibility(View.GONE);
-                                    inBtn.setEnabled(true);
-                                    com.vectras.vm.utils.UIUtils.UIAlert(activity, "error", e.toString());
-                                }
-                            };
-                            activity.runOnUiThread(runnable);
-                        }
-                    }
-                }).start();
+        if (id == R.id.btnInstall) {
+            File tarGZ = new File(tarPath);
+            if (tarGZ.exists()) {
+                setupVectras();
             } else {
-                com.vectras.vm.utils.UIUtils.UIAlert(activity, "File not supported", "please select supported tar.gz to continue.<br><br>required files:<br>vectras.tar<br><br>please download the required files from our official website.");
-                progressBar.setVisibility(View.GONE);
+                startDownload();
             }
-        } else if (requestCode == 1000 && resultCode == RESULT_CANCELED) {
-            finish();
         }
     }
+
+    String tarPath;
 
     // Function to append text and automatically scroll to bottom
     private void appendTextAndScroll(String textToAdd) {
@@ -194,7 +79,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         // Update the text
         vterm.append(textToAdd);
 
-        if (textToAdd.contains("installation done! xssFjnj58Id")) {
+        if (textToAdd.contains("installation successful! xssFjnj58Id")) {
             //finish();
             startActivity(new Intent(this, SplashActivity.class));
         }
@@ -295,6 +180,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                     // If exit value is not zero, display a toast message
                     String toastMessage = "Command failed with exit code: " + exitValue;
                     activity.runOnUiThread(() -> Toast.makeText(activity, toastMessage, Toast.LENGTH_LONG).show());
+                    inBtn.setVisibility(View.VISIBLE);
                 }
             } catch (IOException | InterruptedException e) {
                 // Handle exceptions by printing the stack trace in the terminal output
@@ -302,8 +188,126 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                 activity.runOnUiThread(() -> {
                     appendTextAndScroll("Error: " + errorMessage + "n");
                     Toast.makeText(activity, "Error executing command: " + errorMessage, Toast.LENGTH_LONG).show();
+                    inBtn.setVisibility(View.VISIBLE);
                 });
             }
         }).start(); // Execute the command in a separate thread to prevent blocking the UI thread
     }
+
+    private void startDownload() {
+        new DownloadFileTask(activity).execute(AppConfig.getSetupFiles());
+    }
+
+    private class DownloadFileTask extends AsyncTask<String, Integer, String> {
+
+        private Context context;
+        private ProgressDialog progressDialog;
+        private int fileLength;
+
+        public DownloadFileTask(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            progressDialog = new ProgressDialog(context, R.style.MainDialogTheme);
+            progressDialog.setTitle("Downloading \"data.tar.gz\"...");
+            progressDialog.setMessage(null);
+            progressDialog.setIndeterminate(true);
+            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progressDialog.setCancelable(false); // Allow canceling with back button
+            progressDialog.show();
+        }
+
+        @Override
+        protected String doInBackground(String... sUrl) {
+            InputStream input = null;
+            OutputStream output = null;
+            HttpURLConnection connection = null;
+            try {
+                URL url = new URL(sUrl[0]);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+
+                if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                    return "Server returned HTTP " + connection.getResponseCode()
+                            + " " + connection.getResponseMessage();
+                }
+
+                fileLength = connection.getContentLength();
+                input = connection.getInputStream();
+                output = new FileOutputStream(tarPath);
+                byte data[] = new byte[4096];
+                long total = 0;
+                int count;
+                while ((count = input.read(data)) != -1) {
+                    if (isCancelled()) {
+                        input.close();
+                        return null;
+                    }
+                    total += count;
+                    if (fileLength > 0) {
+                        publishProgress((int) (total * 100 / fileLength));
+                    }
+                    output.write(data, 0, count);
+                }
+            } catch (Exception e) {
+                return e.toString();
+            } finally {
+                try {
+                    if (output != null)
+                        output.close();
+                    if (input != null)
+                        input.close();
+                } catch (IOException ignored) {
+                }
+
+                if (connection != null)
+                    connection.disconnect();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... progress) {
+            super.onProgressUpdate(progress);
+
+            // If you get here, the length of the file is known.
+            progressDialog.setIndeterminate(false);
+            progressDialog.setMax(100);
+            progressDialog.setProgress(progress[0]);
+
+            // Convert the bytes downloaded to MB and update the dialog message accordingly.
+            int progressMB = (int) ((progress[0] / 100.0) * fileLength / (1024 * 1024));
+            progressDialog.setMessage(progressMB + " MB/" + fileLength / (1024 * 1024) + " MB");
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            progressDialog.dismiss(); // Dismiss the progress dialog
+
+            if (result != null) {
+                Toast.makeText(context, "Download error: " + result, Toast.LENGTH_LONG).show();
+                inBtn.setVisibility(View.VISIBLE);
+            } else
+                setupVectras();
+        }
+
+    }
+
+    private void setupVectras() {
+        inBtn.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+        String filesDir = activity.getFilesDir().getAbsolutePath();
+        String cmd = "";
+        cmd += "echo \"http://dl-cdn.alpinelinux.org/alpine/edge/testing\" >> /etc/apk/repositories;";
+        executeShellCommand(cmd);
+        executeShellCommand("set -e;" +
+                " apk update;" +
+                " apk add libslirp libslirp-dev pulseaudio-dev glib-dev pixman-dev zlib-dev spice-dev libusbredirparser usbredir-dev libiscsi-dev  sdl2 sdl2-dev libepoxy-dev virglrenderer-dev tar;" +
+                " tar -xvzf " + tarPath + " -C " + filesDir + "/distro;" +
+                " rm " + tarPath + ";" +
+                " echo \"installation successful! xssFjnj58Id\"");
+    }
+
 }

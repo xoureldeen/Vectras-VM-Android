@@ -89,9 +89,6 @@ dependencies {
     implementation 'org.apache.commons:commons-compress:1.25.0'
     implementation 'com.google.firebase:firebase-crashlytics-buildtools:2.9.9'
 
-    //vterm
-    implementation project (':vterm')
-
     //vspice
     api 'com.android.support:multidex:1.0.3'
     implementation project(':bVNC')

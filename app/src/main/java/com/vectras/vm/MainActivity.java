@@ -355,7 +355,8 @@ public class MainActivity extends AppCompatActivity {
                         startActivityForResult(intent, 1006);
                     }
                 } else if (id == R.id.navigation_terminal) {
-                    startActivity(new Intent(activity, ConnectionSettings.class));
+                    com.vectras.vterm.TerminalBottomSheetDialog VTERM = new com.vectras.vterm.TerminalBottomSheetDialog(activity);
+                    VTERM.showVterm();
                 } else if (id == R.id.navigation_item_settings) {
                     startActivity(new Intent(activity, MainSettingsManager.class));
                 } else if (id == R.id.navigation_item_store) {

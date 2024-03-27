@@ -39,7 +39,7 @@ public class MainService extends Service {
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle("Vectras VM")
                 .setContentText(MACHINE_NAME + " running in background.")
-                .setSmallIcon(R.mipmap.ic_launcher_foreground)
+                .setSmallIcon(R.mipmap.ic_launcher)
                 .addAction(R.drawable.round_logout_24, "Stop", pStopSelf)
                 .build();
 

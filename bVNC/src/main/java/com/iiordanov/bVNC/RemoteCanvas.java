@@ -727,7 +727,7 @@ public class RemoteCanvas extends AppCompatImageView implements Viewable {
      * Initializes the data structure which holds the remote pointer data.
      */
     void initializeSoftCursor() {
-        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.cursor);
+        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.pointer);
         int w = bm.getWidth();
         int h = bm.getHeight();
         int[] tempPixels = new int[w * h];

@@ -6,17 +6,14 @@
     android:orientation="vertical"
     android:fitsSystemWindows="true">
 
-    <com.airbnb.lottie.LottieAnimationView
+    <ImageView
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:id="@+id/animation_view"
+        android:src="@mipmap/ic_launcher"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:lottie_rawRes="@raw/loading"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"/>
+        app:layout_constraintRight_toRightOf="parent"/>
 
     <TextView
         android:layout_width="wrap_content"

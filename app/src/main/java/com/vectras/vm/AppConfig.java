@@ -27,13 +27,13 @@ public class AppConfig {
     public static final String vectrasPrivacy = vectrasRaw + "PRIVACYANDPOLICY.md";
     public static final String vectrasTerms = vectrasRaw + "TERMSOFSERVICE.md";
     public static final String vectrasInfo = vectrasRaw + "info.md";
-    public static final String vectrasRepo = "https://github.com/epicstudios856/Vectras-windows-emulator/tree/main/";
+    public static final String vectrasRepo = "https://github.com/epicstudios856/Vectras-VM-Android";
     public static final String updateJson = vectrasRaw + "UpdateConfig.json";
     public static final String blogJson = vectrasRaw + "news_list.json";
     public static final String storeJson = vectrasRaw + "store_list.json";
     public static final String vectrasPkg = vectrasWebsite + "download";
 
-    public static final String serverIP = "http://135.181.166.39:1234/";
+    public static final String serverIP = "https://vectrasvm.blackstorm.cc/";
 
     public static String getSetupFiles() {
         String abi = Build.SUPPORTED_ABIS[0];

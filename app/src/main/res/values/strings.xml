@@ -240,8 +240,6 @@
 
     <string name="msg_directory_absolute_path">%1$s Directory Absolute Path: \"%2$s\"</string>
 
-    <string name="input">input</string>
-    <string name="tiny_vterm">Tiny vterm</string>
     <!-- TermuxX11Activity -->
     <string name="msg_storage_permission_not_granted_warning">The storage permission must be granted
         to Vectras VM app to...</string>
@@ -277,4 +275,7 @@
     <string name="not_selected_yet">not selected yet.</string>
     <string name="modify">MODIFY</string>
 
+    <string name="input">input</string>
+    <string name="tiny_vterm">Tiny vterm</string>
+    <string name="try_again">TRY AGAIN</string>
 </resources>

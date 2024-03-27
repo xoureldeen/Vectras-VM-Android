@@ -36,6 +36,7 @@ import com.vectras.qemu.MainSettingsManager;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -93,6 +94,24 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
         if (!distroDir.exists()) {
             distroDir.mkdirs();
         }
+
+        File jsonFile = new File(AppConfig.maindirpath
+                + "roms-data.json");
+        if (!jsonFile.exists())
+            try {
+
+                if (!jsonFile.exists()) {
+                    jsonFile.createNewFile();
+                }
+
+                FileWriter writer = new FileWriter(jsonFile);
+                writer.write("[]");
+                writer.flush();
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         File binDir = new File(distroDir + "/bin");
         if (!binDir.exists()) {
             String CHANNEL_ID = "vectras";
@@ -108,7 +127,7 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
                 Notification notification = new NotificationCompat.Builder(activity, CHANNEL_ID) // Replace YOUR_CHANNEL_ID with your actual channel ID
                         .setContentTitle("Extract Bootstrap")
                         .setContentText("Error during file extraction.")
-                        .setSmallIcon(com.vectras.vterm.R.drawable.cursor) // Replace this with your notification icon.
+                        .setSmallIcon(R.mipmap.ic_launcher) // Replace this with your notification icon.
                         .setAutoCancel(true)
                         .setContentIntent(pendingIntent)
                         .build();

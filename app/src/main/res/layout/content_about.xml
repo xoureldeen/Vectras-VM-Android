@@ -32,14 +32,6 @@
                     android:orientation="horizontal"
                     android:padding="8dp">
 
-                    <com.airbnb.lottie.LottieAnimationView
-                        android:id="@+id/animation_view"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        app:lottie_autoPlay="true"
-                        app:lottie_loop="true"
-                        app:lottie_rawRes="@raw/loading" />
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

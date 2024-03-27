@@ -37,7 +37,6 @@ drawable bvnc_icon
 drawable bvnc_icon_future
 drawable ctrloff
 drawable ctrlon
-drawable cursor
 drawable downoff
 drawable downon
 drawable escoff
@@ -59,6 +58,7 @@ drawable mouse_icon
 drawable no_screenshot
 drawable opaque_icon
 drawable opaque_icon_future
+drawable pointer
 drawable rightoff
 drawable righton
 drawable shiftoff

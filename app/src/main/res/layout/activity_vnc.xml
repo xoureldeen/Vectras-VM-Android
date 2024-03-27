@@ -20,18 +20,6 @@
             android:layout_centerVertical="true"
             android:orientation="vertical">
 
-
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/animation_view"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                app:lottie_speed="0.5"
-                app:lottie_autoPlay="true"
-                app:lottie_loop="true"
-                app:lottie_rawRes="@raw/logo2" />
-
             <android.androidVNC.VncCanvas
                 android:id="@+id/vnc_canvas"
                 android:layout_width="wrap_content"
