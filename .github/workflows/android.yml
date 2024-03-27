@@ -13,10 +13,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    
     - name: set up JDK 17
       uses: actions/setup-java@v3
       with:
-        java-version: '17' # Set JDK version to 17
+        java-version: '17'
         distribution: 'temurin'
         cache: gradle
 
@@ -25,3 +26,10 @@ jobs:
 
     - name: Build with Gradle
       run: ./gradlew build
+
+    # This step will upload all files in the debug directory
+    - name: Upload Debug APKs
+      uses: actions/upload-artifact@v3
+      with:
+        name: debug-apks 
+        path: app/build/outputs/apk/debug/**
