@@ -25,13 +25,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.multidex.MultiDex;
-import androidx.multidex.MultiDexApplication;
 
 import com.google.android.material.color.DynamicColors;
-import com.iiordanov.bVNC.Constants;
-import com.iiordanov.bVNC.Database;
-import com.iiordanov.bVNC.Utils;
 import com.vectras.qemu.MainSettingsManager;
 
 import java.io.ByteArrayInputStream;
@@ -52,20 +47,13 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class VectrasApp extends MultiDexApplication {
+public class VectrasApp extends Application {
 	public static VectrasApp vectrasapp;
 	public static boolean debugLog = false;
 	private static WeakReference<Context> context;
-	private Database database;
 
 	public static Context getContext() {
 		return context.get();
-	}
-
-	@Override
-	protected void attachBaseContext(Context base) {
-		super.attachBaseContext(base);
-		MultiDex.install(getBaseContext());
 	}
 
 	private static Handler MAIN_HANDLER = new Handler(Looper.getMainLooper());
@@ -83,23 +71,6 @@ public class VectrasApp extends MultiDexApplication {
 		}
 		setModeNight(this);
 		DynamicColors.applyToActivitiesIfAvailable(this);
-
-		//spice
-		AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-		Constants.DEFAULT_PROTOCOL_PORT = Utils.getDefaultPort(this);
-		database = new Database(this);
-		context = new WeakReference<Context>(this);
-		debugLog = Utils.querySharedPreferenceBoolean(getApplicationContext(), "moreDebugLoggingTag");
-
-		Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-			@Override
-			public void uncaughtException(Thread t, Throwable e) {
-				Log.e("TAG", "An uncaught exception was encountered in thread: " + t.getName(), e);
-			}
-		});
-	}
-	public Database getDatabase() {
-		return database;
 	}
 
 	private void setModeNight(Context context) {

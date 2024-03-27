@@ -1,5 +1,0 @@
-The JNI "glue" code in the android/ directory which is *NOT* directly derived from spice-gtk is licensed
-the same way as Opaque, that is, under the GPL v3.
-
-The rest of the code which is either directly derived or unmodified spice-gtk code is licensed under the
-LGPL as the original spice-gtk project.

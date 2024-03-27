@@ -4,7 +4,7 @@ import static android.content.Intent.ACTION_OPEN_DOCUMENT;
 
 import static com.vectras.vm.utils.UIUtils.UIAlert;
 
-import com.iiordanov.bVNC.RemoteCanvasActivity;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.vectras.qemu.*;
 
 import android.app.ActivityManager;
@@ -31,6 +31,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -41,6 +42,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -57,8 +59,6 @@ import com.google.android.material.elevation.SurfaceColors;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.textfield.TextInputEditText;
-import com.undatech.opaque.AdvancedSettingsActivity;
-import com.undatech.opaque.ConnectionSettings;
 import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.qemu.utils.RamInfo;
@@ -69,20 +69,25 @@ import com.vectras.vm.utils.AppUpdater;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.UIUtils;
 import com.vectras.vterm.Terminal;
+import com.vectras.vm.adapter.LogsAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
     public static String curRomName;
@@ -354,9 +359,58 @@ public class MainActivity extends AppCompatActivity {
 
                         startActivityForResult(intent, 1006);
                     }
-                } else if (id == R.id.navigation_terminal) {
+                } else if (id == R.id.navigation_item_terminal) {
                     com.vectras.vterm.TerminalBottomSheetDialog VTERM = new com.vectras.vterm.TerminalBottomSheetDialog(activity);
                     VTERM.showVterm();
+                } else if (id == R.id.navigation_item_view_logs) {
+                    BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(activity);
+                    View view = activity.getLayoutInflater().inflate(R.layout.bottomsheetdialog_logger, null);
+                    bottomSheetDialog.setContentView(view);
+                    bottomSheetDialog.show();
+
+                    final String CREDENTIAL_SHARED_PREF = "settings_prefs";
+                    Timer _timer = new Timer();
+                    TimerTask t;
+
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(VectrasApp.getApp());
+                    LogsAdapter mLogAdapter = new LogsAdapter(layoutManager, VectrasApp.getApp());
+                    RecyclerView logList = (RecyclerView) view.findViewById(R.id.recyclerLog);
+                    logList.setAdapter(mLogAdapter);
+                    logList.setLayoutManager(layoutManager);
+                    mLogAdapter.scrollToLastPosition();
+                    try {
+                        Process process = Runtime.getRuntime().exec("logcat -e");
+                        BufferedReader bufferedReader = new BufferedReader(
+                                new InputStreamReader(process.getInputStream()));
+                        Process process2 = Runtime.getRuntime().exec("logcat -w");
+                        BufferedReader bufferedReader2 = new BufferedReader(
+                                new InputStreamReader(process2.getInputStream()));
+
+                        t = new TimerTask() {
+                            @Override
+                            public void run() {
+                                activity.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            if (bufferedReader.readLine() != null || bufferedReader2.readLine() != null) {
+                                                String logLine = bufferedReader.readLine();
+                                                String logLine2 = bufferedReader2.readLine();
+                                                VectrasStatus.logError("<font color='red'>[E] "+logLine+"</font>");
+                                                VectrasStatus.logError("<font color='yellow'>[W] "+logLine2+"</font>");
+                                            }
+                                        } catch (IOException e) {
+                                            throw new RuntimeException(e);
+                                        }
+                                    }
+                                });
+                            }
+                        };
+                        _timer.scheduleAtFixedRate(t, (int) (0), (int) (100));
+                    } catch (IOException e) {
+                        Toast.makeText(activity, "There was an error: " + Log.getStackTraceString(e), Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                    }
                 } else if (id == R.id.navigation_item_settings) {
                     startActivity(new Intent(activity, MainSettingsManager.class));
                 } else if (id == R.id.navigation_item_store) {
@@ -587,7 +641,7 @@ public class MainActivity extends AppCompatActivity {
         if (MainSettingsManager.getVmUi(activity).equals("VNC")) {
             activity.startActivity(new Intent(activity, MainVNCActivity.class));
         } else if (MainSettingsManager.getVmUi(activity).equals("SPICE")) {
-            activity.startActivity(new Intent(activity, RemoteCanvasActivity.class));
+            //activity.startActivity(new Intent(activity, RemoteCanvasActivity.class));
         }
         String[] params = env.split("\\s+");
         VectrasStatus.logInfo("Params:");

@@ -27,13 +27,12 @@
         android:icon="@drawable/round_folder_24"
         android:title="@string/data_explorer"/>
     <item
-        android:id="@+id/navigation_terminal"
+        android:id="@+id/navigation_item_terminal"
         android:icon="@drawable/round_terminal_24"
         android:title="@string/terminal"/>
     <item
         android:id="@+id/navigation_item_view_logs"
         android:icon="@drawable/round_adb_24"
-        android:visible="false"
         android:title="@string/view_logs" />
     <item
         android:id="@+id/navigation_item_settings"

@@ -625,7 +625,7 @@ public class MainSettingsManager extends AppCompatActivity
 
     public static int getCpuNum(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        int cpuNum = Integer.parseInt(prefs.getString("cpuNum", "1"));
+        int cpuNum = Integer.parseInt(prefs.getString("cpuNum", "2"));
         return cpuNum;
     }
 

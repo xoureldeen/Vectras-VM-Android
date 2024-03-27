@@ -135,30 +135,6 @@
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3568137780412047~1296857222"/>
-        <!--VSPICE-->
-        <activity
-            android:name="com.iiordanov.bVNC.aSPICE"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="@string/freeaspice_app_name"
-            android:resizeableActivity="true"
-            android:screenOrientation="unspecified"
-            android:theme="@android:style/Theme.DeviceDefault"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity
-            android:name="com.iiordanov.bVNC.RemoteCanvasActivity"
-            android:configChanges="colorMode|density|fontScale|fontWeightAdjustment|keyboard|keyboardHidden|layoutDirection|locale|mcc|mnc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|touchscreen|uiMode"
-            android:exported="true"
-            android:resizeableActivity="true"
-            android:screenOrientation="unspecified"
-            android:theme="@style/AppTheme"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
-        <activity
-            android:name="com.iiordanov.bVNC.ConnectionListActivity"
-            android:exported="true"
-            android:label="@string/shortcut_label_spice"
-            android:resizeableActivity="true"
-            android:theme="@android:style/Theme.DeviceDefault"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
     </application>
 
 </manifest>

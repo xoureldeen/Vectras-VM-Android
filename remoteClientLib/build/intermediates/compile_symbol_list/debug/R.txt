@@ -1,1 +1,0 @@
-int xml device_filter 0x0

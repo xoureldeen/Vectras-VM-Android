@@ -46,10 +46,6 @@ android {
             abortOnError false
         }
     }
-
-    packagingOptions {
-        exclude 'META-INF/DEPENDENCIES'
-    }
 }
 
 dependencies {
@@ -88,11 +84,6 @@ dependencies {
     // https://mvnrepository.com/artifact/org.apache.commons/commons-compress
     implementation 'org.apache.commons:commons-compress:1.25.0'
     implementation 'com.google.firebase:firebase-crashlytics-buildtools:2.9.9'
-
-    //vspice
-    api 'com.android.support:multidex:1.0.3'
-    implementation project(':bVNC')
-    implementation project(':pubkeyGenerator')
 
     //test
     testImplementation 'junit:junit:4.13.2'

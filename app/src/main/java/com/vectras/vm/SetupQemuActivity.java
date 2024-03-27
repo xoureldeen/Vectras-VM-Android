@@ -79,7 +79,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         // Update the text
         vterm.append(textToAdd);
 
-        if (textToAdd.contains("installation successful! xssFjnj58Id")) {
+        if (textToAdd.contains("xssFjnj58Id")) {
             //finish();
             startActivity(new Intent(this, SplashActivity.class));
         }
@@ -303,10 +303,13 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         cmd += "echo \"http://dl-cdn.alpinelinux.org/alpine/edge/testing\" >> /etc/apk/repositories;";
         executeShellCommand(cmd);
         executeShellCommand("set -e;" +
+                " echo 'Starting setup...';" +
                 " apk update;" +
                 " apk add libslirp libslirp-dev pulseaudio-dev glib-dev pixman-dev zlib-dev spice-dev libusbredirparser usbredir-dev libiscsi-dev  sdl2 sdl2-dev libepoxy-dev virglrenderer-dev tar;" +
+                " clear;" +
                 " tar -xvzf " + tarPath + " -C " + filesDir + "/distro;" +
                 " rm " + tarPath + ";" +
+                " clear;" +
                 " echo \"installation successful! xssFjnj58Id\"");
     }
 
