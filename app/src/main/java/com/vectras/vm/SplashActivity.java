@@ -95,7 +95,7 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
             distroDir.mkdirs();
         }
 
-        File cvbiDir = new File(AppConfig.datadirpath(MainActivity.activity) + "/cvbi");
+        File cvbiDir = new File(AppConfig.datadirpath(activity) + "/cvbi");
         if (!cvbiDir.exists()) {
             cvbiDir.mkdirs();
         }
