@@ -287,6 +287,12 @@ public class CustomRomActivity extends AppCompatActivity {
         addRomBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                File isoFile = new File(cdrom.getText().toString());
+                if (isoFile.exists() && !qemu.getText().toString().contains("-drive index=1,media=cdrom,file=")) {
+                    isoFile.delete();
+                }
+
                 if (modify) {
 
                     int position = getIntent().getIntExtra("POS", 0);
@@ -295,8 +301,9 @@ public class CustomRomActivity extends AppCompatActivity {
                     current.itemExtra = qemu.getText().toString();
                     try {
                         JSONObject jObj = MainActivity.jArray.getJSONObject(position);
-                        jObj.put("imgDrv1", drive.getText().toString());
-
+                        jObj.put("imgName", title.getText().toString());
+                        jObj.put("imgIcon", icon.getText().toString());
+                        jObj.put("imgPath", drive.getText().toString());
                         jObj.put("imgExtra", qemu.getText().toString());
 
                         MainActivity.jArray.put(position, jObj);
@@ -499,7 +506,7 @@ public class CustomRomActivity extends AppCompatActivity {
                     } finally {
                         try {
                             try {
-                                SaveImage(selectedImage, new File(AppConfig.maindirpath + "icons"), selectedFilePath.getName());
+                                SaveImage(selectedImage, new File(AppConfig.maindirpath + "icons"), title.getText().toString() + "-" + selectedFilePath.getName());
                             } finally {
                                 Runnable runnable = new Runnable() {
                                     @Override

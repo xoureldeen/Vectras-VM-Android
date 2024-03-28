@@ -44,6 +44,32 @@
         <item>c</item>
         <item>d</item>
     </string-array>
+    <string-array name="iftypeLabels">
+        <item>IDE</item>
+        <item>VIRTIO</item>
+    </string-array>
+    <string-array name="iftypeValues">
+        <item>ide</item>
+        <item>virtio</item>
+    </string-array>
+    <string-array name="keyboardLabels">
+        <item>USB KEYBOARD</item>
+        <item>PS2 KEYBOARD</item>
+    </string-array>
+    <string-array name="keyboardValues">
+        <item>usb-kbd</item>
+        <item>ps2-kbd</item>
+    </string-array>
+    <string-array name="mouseLabels">
+        <item>USB</item>
+        <item>PS2</item>
+        <item>USB TABLET</item>
+    </string-array>
+    <string-array name="mouseValues">
+        <item>usb-mouse</item>
+        <item>ps2-mouse</item>
+        <item>usb-tablet</item>
+    </string-array>
     <string-array name="soundCardLabels">
         <item>NONE</item>
         <item>ALL SOUNDCARD</item>

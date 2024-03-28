@@ -102,24 +102,24 @@
             android:title="CPU CORES"
             app:useSimpleSummaryProvider="true"
             app:icon="@drawable/round_hub_24" />
-        <SwitchPreferenceCompat
+        <ListPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:defaultValue="true"
-            android:title="VIRTIO HARDDISK"
-            android:key="virtio"
-            android:summaryOff="hdd type: ide"
-            app:isPreferenceVisible="false"
-            app:summaryOn="hdd type: virtio"
+            android:defaultValue="ide"
+            android:entries="@array/iftypeLabels"
+            android:entryValues="@array/iftypeValues"
+            android:title="HARDDISK TYPE"
+            android:key="ifType"
+            app:useSimpleSummaryProvider="true"
             app:icon="@drawable/round_dns_24" />
         <ListPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:defaultValue="c"
-            android:entries="@array/bootLabels"
-            android:entryValues="@array/bootValues"
             android:key="boot"
             android:title="BOOT FROM"
+            android:entries="@array/bootLabels"
+            android:entryValues="@array/bootValues"
+            android:defaultValue="c"
             app:icon="@drawable/ic_b"
             app:useSimpleSummaryProvider="true" />
         <SwitchPreferenceCompat
@@ -147,7 +147,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:title="VM UI ENVIRONMENT"
-        app:isPreferenceVisible="false"
         app:iconSpaceReserved="false">
 
         <ListPreference
@@ -161,15 +160,25 @@
             app:isPreferenceVisible="false"
             app:useSimpleSummaryProvider="true"
             app:icon="@drawable/computer"/>
-        <SwitchPreferenceCompat
+        <ListPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:defaultValue="false"
-            android:key="UsbTablet"
-            android:title="USB TABLET"
-            app:summaryOn="mouse: usb tablet"
-            app:summaryOff="mouse: ps2"
+            android:key="mouse"
+            android:title="MOUSE"
+            android:defaultValue="usb-mouse"
+            android:entries="@array/mouseLabels"
+            android:entryValues="@array/mouseValues"
             app:icon="@drawable/round_mouse_24"
-            app:isPreferenceVisible="false" />
+            app:useSimpleSummaryProvider="true" />
+        <ListPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:key="keyboard"
+            android:title="KEYBOARD"
+            android:defaultValue="usb-kbd"
+            android:entries="@array/keyboardLabels"
+            android:entryValues="@array/keyboardValues"
+            app:icon="@drawable/round_keyboard_24"
+            app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
 </PreferenceScreen>

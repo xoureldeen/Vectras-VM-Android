@@ -2,7 +2,8 @@ package com.vectras.vm;
 
 import android.app.Activity;
 
-import com.vectras.qemu.*;
+import com.vectras.qemu.Config;
+import com.vectras.qemu.MainSettingsManager;
 import com.vectras.qemu.utils.RamInfo;
 
 import java.io.File;
@@ -20,6 +21,8 @@ public class StartVM {
 
         ArrayList<String> params = new ArrayList<>(Arrays.asList(qemu));
 
+        String ifType = MainSettingsManager.getIfType(activity);
+
         String cdrom;
         String hdd1;
         String hdd2;
@@ -27,7 +30,8 @@ public class StartVM {
         String hdd0 = "-drive";
         hdd0 += " index=0";
         hdd0 += ",media=disk";
-        hdd0 += ",file=" + img;
+        hdd0 += ",if=" + ifType;
+        hdd0 += ",file='" + img + "'";
 
         params.add(hdd0);
 
@@ -37,7 +41,7 @@ public class StartVM {
             cdrom = "-drive";
             cdrom += " index=1";
             cdrom += ",media=cdrom";
-            cdrom += ",file=" + cdromFile.getPath();
+            cdrom += ",file='" + cdromFile.getPath() + "'";
             params.add(cdrom);
         }
 
@@ -47,7 +51,8 @@ public class StartVM {
             hdd1 = "-drive";
             hdd1 += " index=2";
             hdd1 += ",media=disk";
-            hdd1 += ",file=" + hdd1File.getPath();
+            hdd1 += ",if=" + ifType;
+            hdd1 += ",file='" + hdd1File.getPath() + "'";
             params.add(hdd1);
         }
 
@@ -57,7 +62,8 @@ public class StartVM {
             hdd2 = "-drive";
             hdd2 += " index=3";
             hdd2 += ",media=disk";
-            hdd2 += ",file=" + hdd2File.getPath();
+            hdd2 += ",if=" + ifType;
+            hdd2 += ",file='" + hdd2File.getPath() + "'";
             params.add(hdd2);
         }
 
@@ -94,6 +100,19 @@ public class StartVM {
         String bios = "-bios ";
         bios += AppConfig.basefiledir + "/bios-vectras.bin";
 
+        String machine = "-M ";
+        machine += "pc";
+
+        params.add(machine);
+
+        params.add("-overcommit");
+        params.add("mem-lock=off");
+
+        params.add("-rtc");
+        params.add("base=localtime");
+
+        params.add("-nodefaults");
+
         params.add(bios);
 
         params.add(boot);
@@ -112,14 +131,39 @@ public class StartVM {
             String vncStr = "-vnc ";
             params.add(vncStr);
             // Allow connections only from localhost using localsocket without a password
-            //paramsList.add(Config.defaultVNCHost+":" + Config.defaultVNCPort);
+            //params.add(Config.defaultVNCHost+":" + Config.defaultVNCPort);
             String qmpParams = "unix:";
             qmpParams += Config.getLocalVNCSocketPath();
             params.add(qmpParams);
-            params.add("-monitor");
-            params.add("vc");
         } else if (MainSettingsManager.getVmUi(activity).equals("SPICE"))
             params.add(spiceStr);
+
+        params.add("-monitor");
+        params.add("vc");
+        //XXX: monitor, serial, and parallel display crashes cause SDL doesn't support more than 1 window
+        params.add("-monitor");
+        params.add("none");
+
+        params.add("-serial");
+        params.add("none");
+
+        params.add("-parallel");
+        params.add("none");
+
+        params.add("-k");
+        params.add("en-us");
+
+        params.add("-usb");
+
+        if (!MainSettingsManager.getMouse(activity).equals("ps2-mouse")) {
+            params.add("-device");
+            params.add(MainSettingsManager.getMouse(activity));
+        }
+
+        if (!MainSettingsManager.getKeyboard(activity).equals("ps2-kbd")) {
+            params.add("-device");
+            params.add(MainSettingsManager.getKeyboard(activity));
+        }
 
         params.add(extras);
 

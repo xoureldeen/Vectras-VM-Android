@@ -162,7 +162,6 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                         ZipEntrySource[] addedEntries = new ZipEntrySource[]{
                                                 new FileSource("/" + new File(current.itemPath).getName(), new File(current.itemPath)),
                                                 new FileSource("/" + new File(current.itemIcon).getName(), new File(current.itemIcon)),
-                                                new FileSource("/" + new File(current.itemDrv1).getName(), new File(current.itemDrv1)),
                                                 new FileSource("/" + new File(MainActivity.activity.getExternalFilesDir("data") + "/rom-data.json").getName(), new File(MainActivity.activity.getExternalFilesDir("data") + "/rom-data.json"))
                                         };
                                         ZipUtil.pack(addedEntries, new File(AppConfig.datadirpath(MainActivity.activity) + "/cvbi/" + current.itemName + ".cvbi"));
@@ -181,7 +180,7 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                             @Override
                                             public void run() {
                                                 progressDialog.cancel(); // cancelling Dialog.}
-                                                UIUtils.UIAlert(MainActivity.activity, AppConfig.datadirpath(MainActivity.activity) + "/cvbi/" + current.itemName + ".cvbi", "DONE!");
+                                                UIUtils.UIAlert(MainActivity.activity, "DONE!", AppConfig.datadirpath(MainActivity.activity) + "/cvbi/" + current.itemName + ".cvbi");
                                             }
                                         };
                                         MainActivity.activity.runOnUiThread(runnable);

@@ -674,16 +674,40 @@ public class MainSettingsManager extends AppCompatActivity
         return prefs.getBoolean("customMemory", false);
     }
 
-    public static void setVirtio(Activity activity, Boolean virtio) {
+    public static void setIfType(Activity activity, String type) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         SharedPreferences.Editor edit = prefs.edit();
-        edit.putBoolean("virtio", virtio);
+        edit.putString("ifType", type);
         edit.apply();
     }
 
-    public static boolean getVirtio(Activity activity) {
+    public static String getIfType(Activity activity) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        return prefs.getBoolean("virtio", false);
+        return prefs.getString("ifType", "ide");
+    }
+
+    public static void setMouse(Activity activity, String type) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putString("mouse", type);
+        edit.apply();
+    }
+
+    public static String getMouse(Activity activity) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        return prefs.getString("mouse", "usb-mouse");
+    }
+
+    public static void setKeyboard(Activity activity, String type) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putString("keyboard", type);
+        edit.apply();
+    }
+
+    public static String getKeyboard(Activity activity) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        return prefs.getString("keyboard", "usb-kbd");
     }
 
     public static void setAvx(Activity activity, boolean AVX) {

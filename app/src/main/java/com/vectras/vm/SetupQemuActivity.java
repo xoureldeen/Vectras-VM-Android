@@ -179,14 +179,17 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                 if (exitValue != 0) {
                     // If exit value is not zero, display a toast message
                     String toastMessage = "Command failed with exit code: " + exitValue;
-                    activity.runOnUiThread(() -> Toast.makeText(activity, toastMessage, Toast.LENGTH_LONG).show());
-                    inBtn.setVisibility(View.VISIBLE);
+                    activity.runOnUiThread(() -> {
+                        appendTextAndScroll("Error: " + toastMessage + "\n");
+                        Toast.makeText(activity, toastMessage, Toast.LENGTH_LONG).show();
+                        inBtn.setVisibility(View.VISIBLE);
+                    });
                 }
             } catch (IOException | InterruptedException e) {
                 // Handle exceptions by printing the stack trace in the terminal output
                 final String errorMessage = e.getMessage();
                 activity.runOnUiThread(() -> {
-                    appendTextAndScroll("Error: " + errorMessage + "n");
+                    appendTextAndScroll("Error: " + errorMessage + "\n");
                     Toast.makeText(activity, "Error executing command: " + errorMessage, Toast.LENGTH_LONG).show();
                     inBtn.setVisibility(View.VISIBLE);
                 });
