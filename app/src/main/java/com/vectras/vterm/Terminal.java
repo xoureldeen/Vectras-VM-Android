@@ -142,7 +142,7 @@ public class Terminal {
                 // Handle exceptions by printing the stack trace in the terminal output
                 final String errorMessage = e.getMessage();
                 Log.e("Vterm ERROR:", errorMessage);
-                com.vectras.vm.logger.VectrasStatus.logError("<font color='red'>Vterm ERROR: >"+ errorMessage+"</font>");
+                //com.vectras.vm.logger.VectrasStatus.logError("<font color='red'>Vterm ERROR: >"+ errorMessage+"</font>");
             }
         }).start(); // Execute the command in a separate thread to prevent blocking the UI thread
     }

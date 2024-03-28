@@ -32,6 +32,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
 import com.vectras.qemu.MainSettingsManager;
+import com.vectras.vm.utils.FileUtils;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -95,7 +96,7 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
             distroDir.mkdirs();
         }
 
-        File cvbiDir = new File(AppConfig.datadirpath(activity) + "/cvbi");
+        File cvbiDir = new File(FileUtils.getExternalFilesDirectory(activity).getPath() + "/cvbi");
         if (!cvbiDir.exists()) {
             cvbiDir.mkdirs();
         }

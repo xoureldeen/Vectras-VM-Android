@@ -43,6 +43,7 @@ import com.vectras.vm.MainService;
 import com.vectras.vm.R;
 import com.vectras.vm.StartVM;
 import com.vectras.vm.logger.VectrasStatus;
+import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.UIUtils;
 
 import org.json.JSONException;
@@ -164,7 +165,7 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                                 new FileSource("/" + new File(current.itemIcon).getName(), new File(current.itemIcon)),
                                                 new FileSource("/" + new File(MainActivity.activity.getExternalFilesDir("data") + "/rom-data.json").getName(), new File(MainActivity.activity.getExternalFilesDir("data") + "/rom-data.json"))
                                         };
-                                        ZipUtil.pack(addedEntries, new File(AppConfig.datadirpath(MainActivity.activity) + "/cvbi/" + current.itemName + ".cvbi"));
+                                        ZipUtil.pack(addedEntries, new File(FileUtils.getExternalFilesDirectory(MainActivity.activity).getPath() + "/cvbi/" + current.itemName + ".cvbi"));
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                         Runnable runnable = new Runnable() {
@@ -180,7 +181,7 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                             @Override
                                             public void run() {
                                                 progressDialog.cancel(); // cancelling Dialog.}
-                                                UIUtils.UIAlert(MainActivity.activity, "DONE!", AppConfig.datadirpath(MainActivity.activity) + "/cvbi/" + current.itemName + ".cvbi");
+                                                UIUtils.UIAlert(MainActivity.activity, "DONE!", FileUtils.getExternalFilesDirectory(MainActivity.activity).getPath() + "/cvbi/" + current.itemName + ".cvbi");
                                             }
                                         };
                                         MainActivity.activity.runOnUiThread(runnable);
