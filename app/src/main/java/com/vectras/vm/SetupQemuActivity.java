@@ -80,8 +80,8 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         vterm.append(textToAdd);
 
         if (textToAdd.contains("xssFjnj58Id")) {
-            //finish();
             startActivity(new Intent(this, SplashActivity.class));
+            finish();
         }
 
         // Scroll to the bottom
