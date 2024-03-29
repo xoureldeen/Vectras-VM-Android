@@ -101,6 +101,11 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
             cvbiDir.mkdirs();
         }
 
+        File sharedDir = new File(FileUtils.getExternalFilesDirectory(activity).getPath() + "/SharedFolder");
+        if (!sharedDir.exists()) {
+            sharedDir.mkdirs();
+        }
+
         File jsonFile = new File(AppConfig.maindirpath
                 + "roms-data.json");
         if (!jsonFile.exists())

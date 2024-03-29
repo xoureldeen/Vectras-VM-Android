@@ -33,6 +33,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.vectras.qemu.MainSettingsManager;
@@ -69,7 +70,6 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public List<DataMainRoms> data = Collections.emptyList();
     int currentPos = 0;
     private int mSelectedItem = -1;
-    public static Dialog d;
 
     // create constructor to innitilize context and data sent from MainActivity
     public AdapterMainRoms(Context context, List<DataMainRoms> data) {
@@ -101,19 +101,20 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
         myHolder.ivIcon.setImageBitmap(bmImg);
         myHolder.optionsBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                d = new Dialog(MainActivity.activity);
-                d.setTitle(current.itemName);
-                d.setContentView(R.layout.rom_options_dialog);
-                Button modifyRomBtn = d.findViewById(R.id.modifyRomBtn);
+                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(MainActivity.activity);
+                View v = MainActivity.activity.getLayoutInflater().inflate(R.layout.rom_options_dialog, null);
+                bottomSheetDialog.setContentView(v);
+
+                Button modifyRomBtn = v.findViewById(R.id.modifyRomBtn);
                 modifyRomBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         com.vectras.vm.CustomRomActivity.current = data.get(position);
                         MainActivity.activity.startActivity(new Intent(MainActivity.activity, com.vectras.vm.CustomRomActivity.class).putExtra("POS", position).putExtra("MODIFY", true));
-                        d.dismiss();
+                        bottomSheetDialog.cancel();
                     }
                 });
-                Button exportRomBtn = d.findViewById(R.id.exportRomBtn);
+                Button exportRomBtn = v.findViewById(R.id.exportRomBtn);
                 exportRomBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -195,10 +196,10 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             return;
                         });
                         ad.show();
-                        d.dismiss();
+                        bottomSheetDialog.cancel();
                     }
                 });
-                d.show();
+                bottomSheetDialog.show();
             }
         });
 

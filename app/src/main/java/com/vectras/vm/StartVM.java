@@ -5,6 +5,7 @@ import android.app.Activity;
 import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.qemu.utils.RamInfo;
+import com.vectras.vm.utils.FileUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -65,6 +66,11 @@ public class StartVM {
             hdd2 += ",if=" + ifType;
             hdd2 += ",file='" + hdd2File.getPath() + "'";
             params.add(hdd2);
+        }
+
+        if (MainSettingsManager.getSharedFolder(activity)) {
+            params.add("-net user,smb='" + FileUtils.getExternalFilesDirectory(activity).getPath() + "/SharedFolder" + "'");
+            params.add("-net nic,model=virtio");
         }
 
         boolean kvm = MainSettingsManager.getKvm(activity);

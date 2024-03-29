@@ -448,8 +448,8 @@ public class MainActivity extends AppCompatActivity {
                     "<a href=\"https://github.com/epicstudios856/Vectras-VM-Android/issues\">github issues page</a><br>");
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         if (!prefs.getBoolean("tgDialog", false)) {
-            android.app.AlertDialog alertDialog;
-            alertDialog = new android.app.AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
+            AlertDialog alertDialog;
+            alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
             alertDialog.setTitle("JOIN US ON TELEGRAM");
             alertDialog.setMessage("Join us on Telegram where we publish all the news and updates and receive your opinions and bugs");
             alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "JOIN", new DialogInterface.OnClickListener() {

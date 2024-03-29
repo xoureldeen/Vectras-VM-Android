@@ -4,19 +4,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:padding="15dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/options"
+        android:padding="8dp"
+        android:textSize="22sp" />
 
     <Button
         android:id="@+id/modifyRomBtn"
+        style="@style/MaterialAlertDialog.NeutralButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.Button"
         android:text="@string/modify" />
 
     <Button
         android:id="@+id/exportRomBtn"
+        style="@style/MaterialAlertDialog.NegativeButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/Widget.MaterialComponents.Button"
         android:text="@string/export" />
+
 </LinearLayout>
