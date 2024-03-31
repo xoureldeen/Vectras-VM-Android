@@ -1,1 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">Vectras VM</string>
+    <string name="app_version" translatable="false">v2.8-debug-build-4</string>
+    <string name="qemu_version" translatable="false">qemu-8.2.1-3dfx</string>
+    <string name="str_home">الرئيسية</string>
+    <string name="str_logger">السجل</string>
+    <string name="fab_info">بدء التقليد</string>
+    <!-- logger -->
+    <string name="startvm">تم بدء الآلة الإفتراضية!</string>
+    <string name="stopvm">تم إيقاف الإفتراضية!</string>
+    <string name="noproccesses">لا توجد عمليات!</string>
+    <string name="unknownstate">حالة غير معروفة!</string>
 
+    <string name="desktopInstructions">لإستخدام الفأرة الخارجية:\n\tعطل تسارع الفأرة داخل نظام التشغيل الضيف.\n\t\tلـ DSL استخدم الأمر: xset m 1\n"\t\tللأنظمة الأخرى، عطل "تحسين دقة النقطة" أو اختر فأرة "usb-tablet" من الخيارات الرئيسية لـ Vectras.\n\tوصل أو قم بإقران فأرتك عبر USB/Bluetooth واضغط على OK\n\tحرك مؤشر الفأرة إلى جميع جوانب سطح المكتب للمعايرة.\n"</string>
+
+    <string name="navigation_drawer_open" translatable="false">drawer open</string>
+    <string name="navigation_drawer_close" translatable="false">drawer close</string>
+    <string name="address_caption">العنوان</string>
+    <string name="alt_check">Alt</string>
+    <string name="reset">إعادة تعيين</string>
+    <string name="shutdown">إغلاق</string>
+    <string name="ctrl_c" translatable="false">Ctrl-c</string>
+    <string name="devices">الأجهزة</string>
+    <string name="external_mouse">الفأرة الخارجية</string>
+    <string name="monitor" translatable="false">QEMU Monitor</string>
+    <string name="stretch_to_screen">ملء الشاشة</string>
+    <string name="full_screen">ملء الشاشة</string>
+    <string name="toggle_full_screen">تبديل وضع ملء الشاشة</string>
+    <string name="zoom_in">تكبير</string>
+    <string name="zoom_out">تصغير</string>
+    <string name="right_click">نقرة الفأرة اليمنى</string>
+    <string name="help">مساعدة</string>
+    <string name="drives">الأقراص</string>
+    <string name="volume">الصوت</string>
+    <string name="hide_toolbar">إخفاء شريط الأدوات</string>
+    <string name="view_log">عرض السجل</string>
+    <string name="mode">الوضع</string>
+    <string name="keyboard">لوحة المفاتيح</string>
+    <string name="name">الاسم</string>
+    <string name="size">الحجم:</string>
+    <string name="availablity">التوفر:</string>
+    <string name="hide">إخفاء</string>
+    <string name="title_activity_login">نشاط الدخول</string>
+    <string name="prompt_email">البريد الإلكتروني</string>
+    <string name="prompt_password">كلمة المرور</string>
+    <string name="action_sign_in">تسجيل الدخول</string>
+    <string name="action_sign_up">تسجيل جديد</string>
+    <string name="action_sign_with_google">تسجيل الدخول بواسطة Google</string>
+    <string name="welcome">"مرحبًا !"</string>
+    <string name="invalid_username">اسم المستخدم غير صالح</string>
+    <string name="invalid_password">يجب أن تكون كلمة المرور أكثر من 5 أحرف</string>
+    <string name="login_failed">"فشل الدخول"</string>
+    <string name="profile">الملف الشخصي</string>
+    <string name="apps_amp_games"><![CDATA[التطبيقات & الألعاب]]></string>
+    <string name="vectras_website">موقع Vectras</string>
+    <string name="about">حول</string>
+    <string name="emulation_information">معلومات التقليد</string>
+    <string name="full_name">الاسم الكامل</string>
+    <string name="terms_amp_conditions"><![CDATA[الشروط & الأحكام]]></string>
+    <string name="i_accept_terms_amp_conditions"><![CDATA[أوافق على الشروط & الأحكام]]></string>
+    <string name="settings">الإعدادات</string>
+    <string name="go_ahead">تقدم</string>
+    <string name="download">تحميل</string>
+    <string name="view_profile" translatable="false"><u><![CDATA[عرض الملف الشخصي >>]]></u></string>
+    <string name="username">اسم المستخدم</string>
+    <string name="save">حفظ</string>
+    <string name="memory_usage">استخدام الذاكرة</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">مرحبًا بك في الجزء الفارغ</string>
+    <string name="linux" translatable="false">linux</string>
+    <string name="windows" translatable="false">windows</string>
+    <string name="apple" translatable="false">apple</string>
+    <string name="external_vnc" translatable="false">EXTERNAL VNC</string>
+    <string name="hosted_successfully" translatable="false">تم الاستضافة بنجاح!</string>
+    <string name="ip" translatable="false">IP: 127.0.0.1:9</string>
+    <string name="install_rom">تثبيت روم</string>
+    <string name="reconnect">إعادة الاتصال</string>
+    <string name="display">العرض</string>
+    <string name="calibrate_mouse">معايرة الفأرة</string>
+    <string name="hide_controller">إخفاء التحكم</string>
+    <string name="remove">إزالة</string>
+    <string name="view_logs">عرض السجلات</string>
+    <string name="title_activity_set_arch">نشاط تعيين البنية</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">الجزء الأول</string>
+    <string name="second_fragment_label">الجزء الثاني</string>
+    <string name="next">التالي</string>
+    <string name="previous">السابق</string>
+
+    <string name="lorem_ipsum" translatable="false">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
+        volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus
+        dui nec risus. Maecenas non sodales nisi, vel dictum dolor. Class aptent taciti sociosqu ad
+        litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse blandit eleifend
+        diam, vel rutrum tellus vulputate quis. Aliquam eget libero aliquet, imperdiet nisl a,
+        ornare ex. Sed rhoncus est ut libero porta lobortis. Fusce in dictum tellus.\n\n
+        Suspendisse interdum ornare ante. Aliquam nec cursus lorem. Morbi id magna felis. Vivamus
+        egestas, est a condimentum egestas, turpis nisl iaculis ipsum, in dictum tellus dolor sed
+        neque. Morbi tellus erat, dapibus ut sem a, iaculis tincidunt dui. Interdum et malesuada
+        fames ac ante ipsum primis in faucibus. Curabitur et eros porttitor, ultricies urna vitae,
+        molestie nibh. Phasellus at commodo eros, non aliquet metus. Sed maximus nisl nec dolor
+        bibendum, vel congue leo egestas.\n\n
+        Sed interdum tortor nibh, in sagittis risus mollis quis. Curabitur mi odio, condimentum sit
+        amet auctor at, mollis non turpis. Nullam pretium libero vestibulum, finibus orci vel,
+        molestie quam. Fusce blandit tincidunt nulla, quis sollicitudin libero facilisis et. Integer
+        interdum nunc ligula, et fermentum metus hendrerit id. Vestibulum lectus felis, dictum at
+        lacinia sit amet, tristique id quam. Cras eu consequat dui. Suspendisse sodales nunc ligula,
+        in lobortis sem porta sed. Integer id ultrices magna, in luctus elit. Sed a pellentesque
+        est.\n\n
+        Aenean nunc velit, lacinia sed dolor sed, ultrices viverra nulla. Etiam a venenatis nibh.
+        Morbi laoreet, tortor sed facilisis varius, nibh orci rhoncus nulla, id elementum leo dui
+        non lorem. Nam mollis ipsum quis auctor varius. Quisque elementum eu libero sed commodo. In
+        eros nisl, imperdiet vel imperdiet et, scelerisque a mauris. Pellentesque varius ex nunc,
+        quis imperdiet eros placerat ac. Duis finibus orci et est auctor tincidunt. Sed non viverra
+        ipsum. Nunc quis augue egestas, cursus lorem at, molestie sem. Morbi a consectetur ipsum, a
+        placerat diam. Etiam vulputate dignissim convallis. Integer faucibus mauris sit amet finibus
+        convallis.\n\n
+        Phasellus in aliquet mi. Pellentesque habitant morbi tristique senectus et netus et
+        malesuada fames ac turpis egestas. In volutpat arcu ut felis sagittis, in finibus massa
+        gravida. Pellentesque id tellus orci. Integer dictum, lorem sed efficitur ullamcorper,
+        libero justo consectetur ipsum, in mollis nisl ex sed nisl. Donec maximus ullamcorper
+        sodales. Praesent bibendum rhoncus tellus nec feugiat. In a ornare nulla. Donec rhoncus
+        libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
+        vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
+    </string>
+    <string name="input_mode_hardware_mouse">وضع الفأرة العتادي</string>
+    <string name="previous_entry">المدخل السابق</string>
+    <string name="next_entry">المدخل التالي</string>
+    <string name="choose_qemu_architicture">اختر بنية qemu:</string>
+    <string name="choose_qemu_architecture">اختر بنية qemu:</string>
+    <string name="import_custom_rom_cvbi">استيراد روم مخصص \".CVBI\"</string>
+    <string name="rom_name">اسم الروم</string>
+    <string name="rom_drive_qcow2_img_etc">قرص الروم (qcow2، img، إلخ…)</string>
+    <string name="qemu_params">معاملات QEMU</string>
+    <string name="rom_icon">أيقونة الروم</string>
+    <string name="add">إضافة</string>
+    <string name="import_iso">استيراد ISO</string>
+    <string name="importRom">استيراد</string>
+    <string name="privacy_amp_policy"><![CDATA[الخصوصية & السياسة]]></string>
+    <string name="permission_title">مطلوب إذن!</string>
+    <string name="permission_notification_text">وفقًا لسياسة الأندرويد، تحتاج إذونات الإشعارات لإرسال إشعارات الإفتراضية!</string>
+    <string name="mouse_mode">وضع الفأرة</string>
+    <string name="export">تصدير</string>
+    <string name="email_verification_sent">تم إرسال التحقق من البريد الإلكتروني.</string>
+    <string name="sign_out">تسجيل الخروج</string>
+    <string name="android" translatable="false">android</string>
+    <string name="other" translatable="false">other</string>
+    <string name="guest">ضيف</string>
+    <string name="hdd1_qcow_img_etc">HDD1 (qcow, img, إلخ…)</string>
+    <string name="default_configuration">-vga std -net nic,model=ne2k_pci -net user</string>
+    <string name="data_explorer">مستكشف البيانات</string>
+    <string name="forgot_password">نسيت كلمة المرور؟</string>
+    <string name="buy_me_a_coffee">اشترِ لي قهوة</string>
+    <string name="hdd1">HDD1</string>
+    <string name="hdd2">HDD2</string>
+
+    <string name="echo_nameserver_8_8_8_8">echo \'nameserver 8.8.8.8\' </string>
+    <string name="etc_resolv_conf"> /etc/resolv.conf</string>
+    <string name="create_a_machine">إنشاء آلة</string>
+
+    <string name="arrow_down">سهم للأسفل</string>
+    <string name="arrow_left">سهم لليسار</string>
+    <string name="arrow_right">سهم لليمين</string>
+    <string name="arrow_up">سهم للأعلى</string>
+    <string name="auto">تلقائي</string>
+    <string name="button_send_text">إرسال نص</string>
+    <string name="button_send_without_saving">إرسال نص/لا تحفظه</string>
+    <string name="center_mouse">الفأرة @</string>
+    <string name="close">إغلاق</string>
+    <string name="color_format_caption">تنسيق اللون</string>
+    <string name="color_mode">وضع اللون</string>
+    <string name="connect_button">اتصال</string>
+    <string name="connection_caption">الاتصال</string>
+    <string name="control_check">Ctrl</string>
+    <string name="copy_list_button">نسخ القائمة</string>
+    <string name="ctrl_alt_del">Ctrl-Alt-Del</string>
+    <string name="delete_connection">حذف الاتصال</string>
+    <string name="delete_key">حذف المفتاح المختار</string>
+    <string name="delete_key_list">حذف قائمة المفاتيح</string>
+    <string name="disconnect">قطع الاتصال</string>
+    <string name="export_settings">تصدير</string>
+    <string name="export_settings_path">التصدير إلى ملف</string>
+    <string name="enter_text_title">أدخل النص للإرسال</string>
+    <string name="enter_text">إرسال نص</string>
+    <string name="fit_to_screen">تناسب مع الشاشة</string>
+    <string name="force_full_check">فرض وضع الشاشة الكامل للبتماب</string>
+    <string name="import_export_settings">استيراد/تصدير الإعدادات</string>
+    <string name="import_settings">استيراد</string>
+    <string name="import_settings_file_url">الاستيراد من ملف أو URL</string>
+    <string name="info">معلومات</string>
+    <string name="intro_text">إذا كنت بحاجة إلى مساعدة، يرجى التحقق من &lt;a href="http://code.google.com/p/android-vnc-viewer/wiki/Documentation"&gt;الدليل&lt;/a&gt; (اضغط على زر القائمة في هاتفك للوصول إلى الدليل وغيره من عناصر القائمة)، أو &lt;a href="http://code.google.com/p/android-vnc-viewer/wiki/faq"&gt;الأسئلة المتكررة&lt;/a&gt;.&lt;br&gt;</string>
+    <string name="intro_title">مرحبًا</string>
+    <string name="intro_version_text">&lt;br&gt;--يتم تذكر النص المرسل عبر الجلسات (اختياري)&lt;br&gt;--استيراد/تصدير الإعدادات إلى ملف&lt;br&gt;--زر بتحكمات التكبير لإظهار لوحة المفاتيح&lt;br&gt;--يمكن فرض وضع التبليط (للشاشات الكبيرة جدًا)</string>
+    <string name="input_mode">وضع الإدخال</string>
+    <string name="input_mode_fit_to_screen">بدون تحريك؛ فأرة Trackball</string>
+    <string name="input_mode_mouse">وضع تحكم مؤشر الفأرة</string>
+    <string name="input_mode_panning">وضع تحريك سطح المكتب</string>
+    <string name="input_mode_touchpad_pan_trackball_mouse">تحريك باللمس؛ فأرة Trackball</string>
+    <string name="input_mode_dpad_pan_touchpad_mouse">فأرة اللمس؛ تحريك D-Pad</string>
+    <string name="input_mode_touch_pan_zoom_mouse">فأرة اللمس وتحريك وتكبير</string>
+    <string name="input_mode_touchpad">لوحة اللمس</string>
+    <string name="keep_password_button">الاحتفاظ</string>
+    <string name="intro_dont_show">لا تظهر مرة أخرى</string>
+    <string name="keys_caption">المفاتيح</string>
+    <string name="list_caption">القائمة</string>
+    <string name="list_name_caption">اسم القائمة</string>
+    <string name="local_mouse_check">مؤشر الفأرة المحلي</string>
+    <string name="meta_key_title">إرسال مفاتيح خاصة</string>
+    <string name="mouse_follow_pan">الفأرة تتبع التحريك</string>
+    <string name="new_list_button">قائمة جديدة</string>
+    <string name="nickname_caption">الاسم المستعار</string>
+    <string name="off">إيقاف</string>
+    <string name="on">تشغيل</string>
+    <string name="one_to_one">1:1</string>
+    <string name="open_doc">الدليل/الويكي</string>
+    <string name="pan_follow_mouse">التحريك يتبع الفأرة</string>
+    <string name="password_caption">كلمة المرور</string>
+    <string name="port_caption">المنفذ</string>
+    <string name="repeater_button">المكرر</string>
+    <string name="repeater_caption">أدخل عنوان المكرر &lt;b&gt;فقط إذا&lt;/b&gt; كنت تستخدم مكرر من نوع &lt;br&gt;&lt;i&gt;UltraVNC&lt;/i&gt;</string>
+    <string name="repeater_clear">لا تستخدم مكرر</string>
+    <string name="repeater_dialog_title">معلومات المكرر</string>
+    <string name="repeater_empty_text">لا مكرر</string>
+    <string name="repeater_save">استخدم عنوان هذا المكرر</string>
+    <string name="save_as_copy">حفظ كنسخة</string>
+    <string name="scaling">التحجيم</string>
+    <string name="scaling_zoomable">قابل للتكبير</string>
+
+    <!-- Send selected metakey -->
+    <string name="send_button">إرسال</string>
+    <string name="send_key_again">إرسال المفتاح مرة أخرى</string>
+    <string name="shift_check">Shift</string>
+    <string name="shortcut_label">اتصال VNC</string>
+    <string name="showkbd_label">لوحة المفاتيح</string>
+    <string name="special_keys">إرسال مفاتيح</string>
+    <string name="username_caption">اسم المستخدم</string>
+    <string name="username_hint">للمصادقة على Windows</string>
+    <string name="permdesc_open_vnc_conn">إطلاق اتصالات VNC مخصصة</string>
+    <string name="terminal">الطرفية</string>
+
+    <string name="msg_directory_absolute_path">%1$s المسار المطلق للدليل: \"%2$s\"</string>
+
+    <!-- TermuxX11Activity -->
+    <string name="msg_storage_permission_not_granted_warning">يجب منح إذن التخزين
+        لتطبيق Vectras VMلـ...</string>
+    <string name="action_grant_storage_permission">منح إذن التخزين</string>
+
+    <string name="msg_battery_optimization_not_disabled_warning">يجب تعطيل تحسينات بطارية الأندرويد
+        لتطبيق Vectras VM حتى...
+        اطلع على https://developer.android.com/about/versions/oreo/background للمزيد من المعلومات و
+        https://developer.android.com/guide/components/foreground-services#background-start-restrictions
+        للمزيد من المعلومات.
+
+        \n\nكذلك اطلع على https://dontkillmyapp.com للمعلومات حول قتلة التطبيقات المحددة من الشركة المصنعة.
+        بناءً على الشركة المصنعة، قد تحتاج إلى القيام بأمور مثل تفعيل AutoStart، تعطيل DuraSpeed،
+        تفعيل `عرض النوافذ المنبثقة أثناء التشغيل في الخلفية` للتطبيق.</string>
+    <string name="action_disable_battery_optimizations">تعطيل تحسينات البطارية</string>
+
+    <string name="msg_display_over_other_apps_permission_not_granted_warning">يجب منح إذن العرض فوق تطبيقات أخرى
+        لتطبيق Vectras VM لبدء
+        الأنشطة الأمامية من الخلفية. اطلع على https://developer.android.com/guide/components/activities/background-starts
+        للمزيد من المعلومات.
+    </string>
+    <string name="action_grant_display_over_other_apps_permission">منح إذن العرض فوق التطبيقات</string>
+
+    <string name="action_already_granted">مُمنح مسبقًا</string>
+    <string name="action_already_disabled">مُعطل مسبقًا</string>
+    <string name="not_connected">غير متصل</string>
+    <string name="help_button_text">   مساعدة   </string>
+    <string name="preferences_button_text">   التفضيلات   </string>
+    <string name="extra_keys_config_desc">هنا يمكنك ضبط قيمة متغير extra-keys مثل في تطبيق Termux (اقرأ <a href="http://wiki.termux.com/wiki/Touch_Keyboard#Extra_Keys_Row">هذا</a>) والمزيد (مثلاً، META).
+    ضع سلسلة فارغة للقيمة الافتراضية.</string>
+    <string name="install">تثبيت</string>
+    <string name="select_tar">اختر (.TAR.GZ)</string>
+    <string name="not_selected_yet">لم يتم الاختيار بعد.</string>
+    <string name="modify">تعديل</string>
+
+    <string name="input">إدخال</string>
+    <string name="tiny_vterm">vterm صغير</string>
+    <string name="try_again">حاول مرة أخرى</string>
+    <string name="logs">السجلات</string>
+    <string name="options">الخيارات</string>
+</resources>
