@@ -81,7 +81,7 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
         String filesDir = activity.getFilesDir().getAbsolutePath();
         String nativeLibDir = activity.getApplicationInfo().nativeLibraryDir;
 
-        File tmpDir = new File(context.getFilesDir(), "tmp");
+        File tmpDir = new File(activity.getFilesDir(), "tmp");
         if (!tmpDir.isDirectory()) {
             tmpDir.mkdirs();
             FileUtils.chmod(tmpDir, 0771);

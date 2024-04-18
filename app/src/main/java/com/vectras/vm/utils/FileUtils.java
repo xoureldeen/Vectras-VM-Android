@@ -11,6 +11,8 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.OpenableColumns;
+import android.system.ErrnoException;
+import android.system.Os;
 import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
@@ -57,6 +59,13 @@ public class FileUtils {
 	@NonNull
 	public static File getExternalFilesDirectory(Context context) {
 		return new File(Environment.getExternalStorageDirectory(), "Documents/VectrasVM");
+	}
+
+	public static void chmod(File file, int mode) {
+		try {
+			Os.chmod(file.getAbsolutePath(), mode);
+		}
+		catch (ErrnoException e) {}
 	}
 
 	private static Uri contentUri = null;
