@@ -102,7 +102,7 @@ public class TerminalBottomSheetDialog {
         new Thread(() -> {
             String username = null;
             // Update the prompt on the UI thread
-            String finalUsername = username != null ? username : "user";
+            String finalUsername = username != null ? username : "root";
             activity.runOnUiThread(() -> {
                 promptView.setText(finalUsername + "@localhost:~$ ");
             });
@@ -154,8 +154,10 @@ public class TerminalBottomSheetDialog {
                     String filesDir = activity.getFilesDir().getAbsolutePath();
                     String nativeLibDir = activity.getApplicationInfo().nativeLibraryDir;
 
+                    File tmpDir = new File(activity.getFilesDir(), "tmp");
+
                     // Setup environment for the PRoot process
-                    processBuilder.environment().put("PROOT_TMP_DIR", filesDir + "/tmp");
+                    processBuilder.environment().put("PROOT_TMP_DIR", tmpDir.getAbsolutePath());
                     processBuilder.environment().put("PROOT_LOADER", nativeLibDir + "/libproot-loader.so");
                     processBuilder.environment().put("PROOT_LOADER_32", nativeLibDir + "/libproot-loader32.so");
 
@@ -163,9 +165,13 @@ public class TerminalBottomSheetDialog {
                     processBuilder.environment().put("USER", "root");
                     processBuilder.environment().put("PATH", "/bin:/usr/bin:/sbin:/usr/sbin");
                     processBuilder.environment().put("TERM", "xterm-256color");
-                    processBuilder.environment().put("TMPDIR", "/tmp");
+                    processBuilder.environment().put("TMPDIR", tmpDir.getAbsolutePath());
                     processBuilder.environment().put("SHELL", "/bin/sh");
-                    processBuilder.environment().put("DISPLAY", getLocalIpAddress()+":0");
+                    processBuilder.environment().put("DISPLAY", getLocalIpAddress()+":1");
+                    processBuilder.environment().put("PULSE_SERVER", "/run/pulse/native");
+                    processBuilder.environment().put("XDG_RUNTIME_DIR", "/run");
+                    processBuilder.environment().put("QEMU_AUDIO_DRV", "sdl");
+                    processBuilder.environment().put("SDL_VIDEODRIVER", "x11");
 
                     // Example PRoot command; replace 'libproot.so' and other paths as needed
                     String[] prootCommand = {

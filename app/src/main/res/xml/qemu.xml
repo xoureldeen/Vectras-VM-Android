@@ -156,9 +156,20 @@
             android:entryValues="@array/vmUiValues"
             android:key="vmUi"
             android:title="UI"
-            app:isPreferenceVisible="false"
             app:useSimpleSummaryProvider="true"
             app:icon="@drawable/computer"/>
+
+        <ListPreference
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="800x600x32"
+            android:entries="@array/displayResolutionLabels"
+            android:entryValues="@array/displayResolutionValues"
+            android:key="RESOLUTION"
+            android:title="X11 Resolution"
+            app:useSimpleSummaryProvider="true"
+            app:icon="@drawable/round_aspect_ratio_24"/>
+
         <ListPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -169,6 +180,7 @@
             android:entryValues="@array/mouseValues"
             app:icon="@drawable/round_mouse_24"
             app:useSimpleSummaryProvider="true" />
+
         <ListPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

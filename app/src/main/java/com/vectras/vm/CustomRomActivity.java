@@ -432,6 +432,7 @@ public class CustomRomActivity extends AppCompatActivity {
             title.setText(current.itemName);
             icon.setText(current.itemIcon);
             drive.setText(current.itemPath);
+
             Pattern pattern = Pattern.compile("-drive index=1,media=cdrom,file='([^']*)'");
             Matcher matcher = pattern.matcher(current.itemExtra);
 
@@ -439,7 +440,18 @@ public class CustomRomActivity extends AppCompatActivity {
                 String cdromPath = matcher.group(1);
                 cdrom.setText(cdromPath);
             }
+
             qemu.setText(current.itemExtra);
+
+            File imgFile = new  File(icon.getText().toString());
+
+            if(imgFile.exists()){
+                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+
+                ImageView ivIcon = findViewById(R.id.ivIcon);
+
+                ivIcon.setImageBitmap(myBitmap);
+            }
         }
     }
 

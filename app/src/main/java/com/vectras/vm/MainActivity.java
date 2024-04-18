@@ -1,11 +1,7 @@
 package com.vectras.vm;
 
 import static android.content.Intent.ACTION_OPEN_DOCUMENT;
-
 import static com.vectras.vm.utils.UIUtils.UIAlert;
-
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.vectras.qemu.*;
 
 import android.app.ActivityManager;
 import android.app.Dialog;
@@ -22,13 +18,13 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.DocumentsContract;
 import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -55,21 +51,21 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.elevation.SurfaceColors;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.textfield.TextInputEditText;
 import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
+import com.vectras.qemu.MainVNCActivity;
 import com.vectras.qemu.utils.RamInfo;
 import com.vectras.vm.MainRoms.AdapterMainRoms;
 import com.vectras.vm.MainRoms.DataMainRoms;
+import com.vectras.vm.adapter.LogsAdapter;
 import com.vectras.vm.logger.VectrasStatus;
 import com.vectras.vm.utils.AppUpdater;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.UIUtils;
-import com.vectras.vterm.Terminal;
-import com.vectras.vm.adapter.LogsAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -85,7 +81,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -396,8 +391,8 @@ public class MainActivity extends AppCompatActivity {
                                             if (bufferedReader.readLine() != null || bufferedReader2.readLine() != null) {
                                                 String logLine = bufferedReader.readLine();
                                                 String logLine2 = bufferedReader2.readLine();
-                                                VectrasStatus.logError("<font color='red'>[E] "+logLine+"</font>");
-                                                VectrasStatus.logError("<font color='yellow'>[W] "+logLine2+"</font>");
+                                                VectrasStatus.logError("<font color='red'>[E] " + logLine + "</font>");
+                                                VectrasStatus.logError("<font color='yellow'>[W] " + logLine2 + "</font>");
                                             }
                                         } catch (IOException e) {
                                             throw new RuntimeException(e);
@@ -525,6 +520,7 @@ public class MainActivity extends AppCompatActivity {
     private void errorUpdateDialog(String error) {
         VectrasStatus.logInfo(String.format(error));
     }
+
     public static void loadDataVbi() {
         data = new ArrayList<>();
 
@@ -627,21 +623,30 @@ public class MainActivity extends AppCompatActivity {
 
     public static void startVM(String vmName, String env) {
         boolean isRunning = isMyServiceRunning(MainService.class);
-
-        if (!isRunning) {
-            Intent serviceIntent = new Intent(activity, MainService.class);
-            MainService.env = env;
-            MainService.CHANNEL_ID = vmName;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                activity.startForegroundService(serviceIntent);
-            } else {
-                activity.startService(serviceIntent);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                if (!isRunning) {
+                    Intent serviceIntent = new Intent(activity, MainService.class);
+                    if (MainSettingsManager.getVmUi(activity).equals("X11"))
+                        MainService.env = "dwm; " + env;
+                    else
+                        MainService.env = env;
+                    MainService.CHANNEL_ID = vmName;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        activity.startForegroundService(serviceIntent);
+                    } else {
+                        activity.startService(serviceIntent);
+                    }
+                }
             }
-        }
+        }, 5000);
         if (MainSettingsManager.getVmUi(activity).equals("VNC")) {
             activity.startActivity(new Intent(activity, MainVNCActivity.class));
         } else if (MainSettingsManager.getVmUi(activity).equals("SPICE")) {
             //activity.startActivity(new Intent(activity, RemoteCanvasActivity.class));
+        } else if (MainSettingsManager.getVmUi(activity).equals("X11")) {
+            //activity.startActivity(new Intent(activity, X11Activity.class));
         }
         String[] params = env.split("\\s+");
         VectrasStatus.logInfo("Params:");
@@ -709,6 +714,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d("TAG", "The interstitial ad wasn't ready yet.");
         }
     }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

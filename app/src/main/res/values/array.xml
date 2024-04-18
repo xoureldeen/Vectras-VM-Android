@@ -22,11 +22,13 @@
     </string-array>
     <string-array name="vmUiLabels">
         <item>VNC</item>
-        <item>SPICE</item>
+        <!--<item>SPICE</item>-->
+        <item>X11 (XSDL)</item>
     </string-array>
     <string-array name="vmUiValues">
         <item>VNC</item>
-        <item>SPICE</item>
+        <!--<item>SPICE</item>-->
+        <item>X11</item>
     </string-array>
     <string-array name="vmArchLabels">
         <item>X86_64 QEMU</item>
@@ -146,7 +148,7 @@
         <item>exact</item>
         <item>custom</item>
     </string-array>
-    <string-array name="displayResolution">
+    <string-array name="displayResolutionLabels">
         <item>320x200</item>
         <item>320x240</item>
         <item>352x288</item>
@@ -171,5 +173,31 @@
         <item>2560x2048</item>
         <item>3840x2160</item>
         <item>7680x4320</item>
+    </string-array>
+    <string-array name="displayResolutionValues">
+        <item>320x200x32</item>
+        <item>320x240x32</item>
+        <item>352x288x32</item>
+        <item>400x240x32</item>
+        <item>640x350x32</item>
+        <item>640x480x32</item>
+        <item>800x480x32</item>
+        <item>800x600x32</item>
+        <item>1024x768x32</item>
+        <item>1280x720x32</item>
+        <item>1280x960x32</item>
+        <item>1280x1024x32</item>
+        <item>1400x1050x32</item>
+        <item>1600x1024x32</item>
+        <item>1600x1200x32</item>
+        <item>1366x768x32</item>
+        <item>1680x1050x32</item>
+        <item>1920x1080x32</item>
+        <item>1920x1200x32</item>
+        <item>2048x1536x32</item>
+        <item>2560x1600x32</item>
+        <item>2560x2048x32</item>
+        <item>3840x2160x32</item>
+        <item>7680x4320x32</item>
     </string-array>
 </resources>

@@ -753,6 +753,16 @@ public class MainSettingsManager extends AppCompatActivity
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         return prefs.getString("vmUi", "VNC");
     }
+    public static void setResolution(Activity activity, String RESOLUTION) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putString("RESOLUTION", RESOLUTION);
+        edit.apply();
+    }
+    public static String getResolution(Activity activity) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        return prefs.getString("RESOLUTION", "800x600x32");
+    }
     public static void setSoundCard(Activity activity, String soundCard) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         SharedPreferences.Editor edit = prefs.edit();

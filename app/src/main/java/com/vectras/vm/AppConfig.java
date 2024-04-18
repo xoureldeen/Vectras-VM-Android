@@ -19,7 +19,7 @@ import java.util.Objects;
 public class AppConfig {
 
     // App Config
-    public static final String vectrasVersion = "v2.8";
+    public static final String vectrasVersion = "2.9.1";
     public static final String vectrasWebsite = "https://vectras.netlify.com/";
     public static final String vectrasHelp = "https://vectras.netlify.app/how";
     public static final String vectrasRaw = "https://raw.githubusercontent.com/epicstudios856/Vectras-windows-emulator/main/";
@@ -33,11 +33,11 @@ public class AppConfig {
     public static final String storeJson = vectrasRaw + "store_list.json";
     public static final String vectrasPkg = vectrasWebsite + "download";
 
-    public static final String serverIP = "https://github.com/epicstudios856/Vectras-VM-Android";
+    public static final String releaseUrl = "https://vectrasvm.blackstorm.cc/vectras-vm/Releases/";
 
     public static String getSetupFiles() {
         String abi = Build.SUPPORTED_ABIS[0];
-        return serverIP + "/releases/download/" + vectrasVersion + "/" + abi + "-vectras.tar.gz";
+        return releaseUrl + vectrasVersion + "/packages/vectras-vm-" + abi + ".tar.gz";
     }
 
     public static final String romsJson(Activity activity) {

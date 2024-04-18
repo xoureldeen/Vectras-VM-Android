@@ -1,17 +1,30 @@
 package com.vectras.vm;
 
+import static android.content.Intent.ACTION_OPEN_DOCUMENT;
+
+import static com.vectras.vm.utils.UIUtils.UIAlert;
+
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.button.MaterialButton;
 import com.vectras.vterm.view.ZoomableTextView;
@@ -19,6 +32,8 @@ import com.vectras.vterm.view.ZoomableTextView;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,11 +44,12 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class SetupQemuActivity extends AppCompatActivity implements View.OnClickListener {
-    SetupQemuActivity activity;
+    Activity activity;
     private final String TAG = "SetupQemuActivity";
     ZoomableTextView vterm;
     MaterialButton inBtn;
     ProgressBar progressBar;
+    AlertDialog alertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,15 +62,41 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         vterm = findViewById(R.id.tvTerminalOutput);
 
         inBtn = findViewById(R.id.btnInstall);
-        inBtn.setOnClickListener(activity);
+        inBtn.setOnClickListener(this);
 
         tarPath = getExternalFilesDir("data") + "/data.tar.gz";
+
+        alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
+        alertDialog.setTitle("BOOTSTRAP REQUIRED!");
+        alertDialog.setMessage("U can choose between auto download and setup or manual setup by choosing bootstrap file.");
+        alertDialog.setCancelable(false);
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "AUTO SETUP", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                startDownload();
+                return;
+            }
+        });
+        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "MANUAL SETUP", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("*/*");
+
+                // Optionally, specify a URI for the file that should appear in the
+                // system file picker when it loads.
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
+                }
+
+                startActivityForResult(intent, 1001);
+            }
+        });
 
         File tarGZ = new File(tarPath);
         if (tarGZ.exists()) {
             setupVectras();
         } else {
-            startDownload();
+            alertDialog.show();
         }
     }
 
@@ -63,10 +105,9 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         if (id == R.id.btnInstall) {
             File tarGZ = new File(tarPath);
             if (tarGZ.exists()) {
-                setupVectras();
-            } else {
-                startDownload();
+                tarGZ.delete();
             }
+            alertDialog.show();
         }
     }
 
@@ -109,8 +150,10 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                 String filesDir = activity.getFilesDir().getAbsolutePath();
                 String nativeLibDir = activity.getApplicationInfo().nativeLibraryDir;
 
+                File tmpDir = new File(activity.getFilesDir(), "tmp");
+
                 // Setup environment for the PRoot process
-                processBuilder.environment().put("PROOT_TMP_DIR", filesDir + "/tmp");
+                processBuilder.environment().put("PROOT_TMP_DIR", tmpDir.getAbsolutePath());
                 processBuilder.environment().put("PROOT_LOADER", nativeLibDir + "/libproot-loader.so");
                 processBuilder.environment().put("PROOT_LOADER_32", nativeLibDir + "/libproot-loader32.so");
 
@@ -118,7 +161,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                 processBuilder.environment().put("USER", "root");
                 processBuilder.environment().put("PATH", "/bin:/usr/bin:/sbin:/usr/sbin");
                 processBuilder.environment().put("TERM", "xterm-256color");
-                processBuilder.environment().put("TMPDIR", "/tmp");
+                processBuilder.environment().put("TMPDIR", tmpDir.getAbsolutePath());
                 processBuilder.environment().put("SHELL", "/bin/sh");
 
                 // Example PRoot command; replace 'libproot.so' and other paths as needed
@@ -308,12 +351,80 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         executeShellCommand("set -e;" +
                 " echo 'Starting setup...';" +
                 " apk update;" +
-                " apk add libslirp libslirp-dev pulseaudio-dev glib-dev pixman-dev zlib-dev spice-dev libusbredirparser usbredir-dev libiscsi-dev  sdl2 sdl2-dev libepoxy-dev virglrenderer-dev tar;" +
-                " clear;" +
-                " tar -xvzf " + tarPath + " -C " + filesDir + "/distro;" +
+                " apk add tar tigervnc dwm libslirp libslirp-dev pulseaudio-dev glib-dev pixman-dev zlib-dev spice-dev" +
+                " libusbredirparser usbredir-dev libiscsi-dev  sdl2 sdl2-dev libepoxy-dev virglrenderer-dev rdma-core" +
+                " libusb ncurses-libs curl libnfs sdl2 gtk+3.0 fuse libpulse libseccomp libjack pipewire liburing;" +
+                " tar -xzvf " + tarPath + " -C /;" +
                 " rm " + tarPath + ";" +
-                " clear;" +
+                " mkdir -p ~/.vnc && echo -e \"555555\\n555555\" | vncpasswd -f > ~/.vnc/passwd && chmod 0600 ~/.vnc/passwd" +
                 " echo \"installation successful! xssFjnj58Id\"");
     }
 
+    public String getPath(Uri uri) {
+        return com.vectras.vm.utils.FileUtils.getPath(this, uri);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent ReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, ReturnedIntent);
+        if (requestCode == 1001 && resultCode == RESULT_OK) {
+            Uri content_describer = ReturnedIntent.getData();
+            File selectedFilePath = new File(getPath(content_describer));
+            ProgressBar loading = progressBar;
+            String abi = Build.SUPPORTED_ABIS[0];
+            if (selectedFilePath.toString().endsWith(abi+".tar.gz")) {
+                loading.setVisibility(View.VISIBLE);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        FileInputStream File = null;
+                        try {
+                            File = (FileInputStream) getContentResolver().openInputStream(content_describer);
+                        } catch (FileNotFoundException e) {
+                            throw new RuntimeException(e);
+                        }
+                        try {
+                            try {
+                                OutputStream out = new FileOutputStream(new File(tarPath));
+                                try {
+                                    // Transfer bytes from in to out
+                                    byte[] buf = new byte[1024];
+                                    int len;
+                                    while ((len = File.read(buf)) > 0) {
+                                        out.write(buf, 0, len);
+                                    }
+                                } finally {
+                                    out.close();
+                                }
+                            } finally {
+                                Runnable runnable = new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        loading.setVisibility(View.GONE);
+                                        alertDialog.dismiss();
+                                        setupVectras();
+                                    }
+                                };
+                                activity.runOnUiThread(runnable);
+                                File.close();
+                            }
+                        } catch (IOException e) {
+                            Runnable runnable = new Runnable() {
+                                @Override
+                                public void run() {
+                                    loading.setVisibility(View.GONE);
+                                    UIAlert(activity, e.toString(), "error");
+                                }
+                            };
+                            activity.runOnUiThread(runnable);
+                        }
+                    }
+                }).start();
+            } else {
+                alertDialog.show();
+                UIAlert(activity, "NOT VAILED FILE", "please select vectras-vm-" + abi + ".tar.gz file");
+            }
+        } else
+            alertDialog.show();
+    }
 }

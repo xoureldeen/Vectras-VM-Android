@@ -280,4 +280,207 @@
     <string name="try_again">TRY AGAIN</string>
     <string name="logs">Logs</string>
     <string name="options">Options</string>
+    <!--======================XServer XSDL STRINGS====================-->
+
+    <string name="init">Initializing</string>
+    <string name="please_wait">Please wait while data is being downloaded</string>
+
+    <string name="device_config">Device configuration</string>
+    <string name="device_change_cfg">Change device configuration</string>
+
+    <string name="download_unneeded">No need to download</string>
+    <string name="connecting_to">Connecting to %s</string>
+    <string name="failed_connecting_to">Failed connecting to %s</string>
+    <string name="error_connecting_to">Error connecting to %s</string>
+    <string name="dl_from">Downloading data from %s</string>
+    <string name="error_dl_from">Error downloading data from %s</string>
+    <string name="error_write">Error writing to %s</string>
+    <string name="dl_progress">%1$.0f%% done: file %2$s</string>
+    <string name="dl_finished">Finished</string>
+
+    <string name="storage_phone">Internal storage - %d MB free</string>
+    <string name="storage_sd">SD card storage - %d MB free</string>
+    <string name="storage_custom">Specify directory</string>
+    <string name="storage_commandline">Command line parameters, one argument per line</string>
+    <string name="storage_question">Data installation location</string>
+    <string name="storage_access">Permission to write to SD card</string>
+    <string name="optional_downloads">Downloads</string>
+    <string name="downloads">Downloads</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="controls_arrows">Arrows / joystick / dpad</string>
+    <string name="controls_trackball">Trackball</string>
+    <string name="controls_accel">Accelerometer</string>
+    <string name="controls_touch">Touchscreen only</string>
+    <string name="controls_question">What kind of navigation keys does your device have?</string>
+
+    <string name="controls_additional">Additional controls</string>
+    <string name="controls_screenkb">On-screen keyboard</string>
+    <string name="controls_accelnav">Accelerometer</string>
+
+    <string name="controls_screenkb_size">On-screen keyboard size</string>
+    <string name="controls_screenkb_drawsize">Size of button images</string>
+    <string name="controls_screenkb_large">Large</string>
+    <string name="controls_screenkb_medium">Medium</string>
+    <string name="controls_screenkb_small">Small</string>
+    <string name="controls_screenkb_tiny">Tiny</string>
+    <string name="controls_screenkb_custom">Custom</string>
+    <string name="controls_screenkb_theme">On-screen keyboard theme</string>
+    <string name="controls_screenkb_by">%1$s by %2$s</string>
+    <string name="controls_screenkb_transparency">On-screen keyboard transparency</string>
+    <string name="controls_screenkb_trans_0">Invisible</string>
+    <string name="controls_screenkb_trans_1">Almost invisible</string>
+    <string name="controls_screenkb_trans_2">Transparent</string>
+    <string name="controls_screenkb_trans_3">Semi-transparent</string>
+    <string name="controls_screenkb_trans_4">Non-transparent</string>
+
+    <string name="trackball_no_dampening">No dampening</string>
+    <string name="trackball_fast">Fast</string>
+    <string name="trackball_medium">Medium</string>
+    <string name="trackball_slow">Slow</string>
+    <string name="trackball_question">Trackball dampening</string>
+
+    <string name="accel_veryfast">Very fast</string>
+    <string name="accel_fast">Fast</string>
+    <string name="accel_medium">Medium</string>
+    <string name="accel_slow">Slow</string>
+    <string name="accel_veryslow">Very slow</string>
+    <string name="accel_question">Accelerometer sensitivity</string>
+
+    <string name="accel_floating">Floating</string>
+    <string name="accel_fixed_start">Fixed when application starts</string>
+    <string name="accel_fixed_horiz">Fixed to table desk orientation</string>
+    <string name="accel_question_center">Accelerometer center position</string>
+
+    <string name="mouse_emulation">Mouse emulation</string>
+    <string name="rightclick_question">Right mouse click</string>
+    <string name="rightclick_menu">Menu key</string>
+    <string name="rightclick_key">Physical key</string>
+    <string name="rightclick_multitouch">Touch screen with second finger</string>
+    <string name="rightclick_pressure">Touch screen with force</string>
+    <string name="rightclick_none">Disable right mouse click</string>
+
+    <string name="leftclick_question">Left mouse click</string>
+    <string name="leftclick_normal">Normal</string>
+    <string name="leftclick_near_cursor">Touch near mouse cursor</string>
+    <string name="leftclick_multitouch">Touch screen with second finger</string>
+    <string name="leftclick_pressure">Touch screen with force</string>
+    <string name="leftclick_dpadcenter">Trackball click / joystick center</string>
+    <string name="leftclick_timeout">Hold at the same spot</string>
+    <string name="leftclick_tap">Tap</string>
+    <string name="leftclick_tap_or_timeout">Tap or hold</string>
+    <string name="leftclick_timeout_time">Holding timeout</string>
+    <string name="leftclick_timeout_time_0">0.3 sec</string>
+    <string name="leftclick_timeout_time_1">0.5 sec</string>
+    <string name="leftclick_timeout_time_2">0.7 sec</string>
+    <string name="leftclick_timeout_time_3">1 sec</string>
+    <string name="leftclick_timeout_time_4">1.5 sec</string>
+    <string name="click_with_dpadcenter">Left mouse click with trackball / joystick center</string>
+
+    <string name="advanced">Advanced features</string>
+    <string name="mouse_keepaspectratio">Keep 4:3 screen aspect ratio</string>
+    <string name="mouse_showcreenunderfinger">Show screen under finger in separate window</string>
+    <string name="mouse_showcreenunderfinger2">On-screen magnifying glass</string>
+    <string name="mouse_joystickmouse">Move mouse with joystick or trackball</string>
+    <string name="mouse_joystickmousespeed">Move mouse with joystick speed</string>
+    <string name="mouse_joystickmouseaccel">Move mouse with joystick acceleration</string>
+    <string name="mouse_relative">Relative mouse movement (laptop mode)</string>
+    <string name="mouse_relative_speed">Relative mouse movement speed</string>
+    <string name="mouse_relative_accel">Relative mouse movement acceleration</string>
+    <string name="mouse_hover_jitter_filter">Filter jitter for stylus/finger hover</string>
+    <string name="mouse_gyroscope_mouse">Control mouse with gyroscope</string>
+    <string name="mouse_gyroscope_mouse_sensitivity">Gyroscope sensitivity</string>
+    <string name="mouse_finger_hover">Finger hover</string>
+    <string name="mouse_subframe_touch_events">Multiple touch events per video frame</string>
+
+    <string name="none">None</string>
+
+    <string name="measurepressure">Calibrate touchscreen pressure</string>
+    <string name="measurepressure_touchplease">Please slide finger across the screen for two seconds</string>
+    <string name="measurepressure_response">Pressure %1$03d radius %2$03d</string>
+
+    <string name="audiobuf_verysmall">Very small (fast devices, less lag)</string>
+    <string name="audiobuf_small">Small</string>
+    <string name="audiobuf_medium">Medium</string>
+    <string name="audiobuf_large">Large (older devices, if sound is choppy)</string>
+    <string name="audiobuf_question">Size of audio buffer</string>
+
+    <string name="remap_hwkeys">Remap physical keys</string>
+    <string name="remap_hwkeys_press">Press any key except HOME and POWER, you may use volume keys</string>
+    <string name="remap_hwkeys_select">Select SDL keycode</string>
+    <string name="remap_hwkeys_select_simple">Select action</string>
+    <string name="remap_hwkeys_select_more_keys">Show all keycodes</string>
+
+    <string name="remap_screenkb">Remap on-screen controls</string>
+    <string name="remap_screenkb_joystick">Joystick</string>
+    <string name="remap_screenkb_button">Button</string>
+    <string name="remap_screenkb_button_text">Text input button</string>
+    <string name="remap_screenkb_button_gestures">Two-finger screen gestures</string>
+    <string name="remap_screenkb_button_gestures_sensitivity">Two-finger screen gestures sensitivity</string>
+    <string name="remap_screenkb_button_zoomin">Zoom in two-finger gesture</string>
+    <string name="remap_screenkb_button_zoomout">Zoom out two-finger gesture</string>
+    <string name="remap_screenkb_button_rotateleft">Rotate left two-finger gesture</string>
+    <string name="remap_screenkb_button_rotateright">Rotate right two-finger gesture</string>
+
+    <string name="screenkb_custom_layout">Customize on-screen keyboard layout</string>
+    <string name="screenkb_custom_layout_help">Press BACK when done. Resize buttons by sliding on empty space.</string>
+    <string name="screenkb_floating_joystick">Floating joystick</string>
+
+    <string name="calibrate_touchscreen">Calibrate touchscreen</string>
+    <string name="calibrate_touchscreen_touch">Touch all edges of the screen, press BACK when done</string>
+
+    <string name="video">Video settings</string>
+    <string name="video_smooth">Linear video filtering</string>
+    <string name="video_separatethread">Separate thread for video, it can increase FPS, it also can crash the app</string>
+    <string name="video_orientation_vertical">Portrait/vertical screen orientation</string>
+    <string name="video_orientation_autodetect">Auto-detect screen orientation</string>
+    <string name="video_bpp_24">24 bpp screen color depth</string>
+    <string name="video_immersive">Hide system navigation buttons / immersive mode</string>
+    <string name="tv_borders">TV borders</string>
+
+    <string name="text_edit_click_here">Tap to start typing, press Back when done</string>
+
+    <string name="display_size_mouse">Mouse emulation mode</string>
+    <string name="display_size">Display size for mouse emulation</string>
+    <string name="display_size_desktop">Desktop, no emulation</string>
+    <string name="display_size_large">Large (tablets)</string>
+    <string name="display_size_small">Small, magnifying glass</string>
+    <string name="display_size_small_touchpad">Small, touchpad mode</string>
+    <string name="display_size_tiny">Tiny</string>
+    <string name="display_size_tiny_touchpad">Tiny, touchpad mode</string>
+
+    <string name="show_more_options">Show more options</string>
+
+    <string name="hardware_mouse_detected">Hardware mouse detected, disabling mouse emulation</string>
+
+    <string name="not_enough_ram">Not enough RAM</string>
+    <string name="not_enough_ram_size">This app needs %1$d Mb RAM, your device has %2$d Mb</string>
+    <string name="ignore">Ignore</string>
+
+    <string name="calibrate_gyroscope">Calibrate gyroscope</string>
+    <string name="calibrate_gyroscope_text">Put your device on a flat surface</string>
+    <string name="calibrate_gyroscope_not_supported">Your device does not have gyroscope</string>
+
+    <string name="reset_config">Reset config to defaults</string>
+    <string name="reset_config_ask">Reset all options to default values?</string>
+
+    <string name="cancel_download">Cancel data downloading?</string>
+    <string name="cancel_download_resume">You can resume it later, the data will not be downloaded twice.</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
+    <!-- Play Game Services strings -->
+    <string name="gamehelper_sign_in_failed">Failed to sign in. Please check your network connection and try again.</string>
+    <string name="gamehelper_app_misconfigured">The application is incorrectly configured. Check that the package name and signing certificate match the client ID created in Developer Console. Also, if the application is not yet published, check that the account you are trying to sign in with is listed as a tester account. See logs for more information.</string>
+    <string name="gamehelper_license_failed">License check failed.</string>
+    <string name="gamehelper_unknown_error">Unknown error.</string>
+    <string name="accessing_network">Accessing network, please wait</string>
+
+    <string name="google_play_game_services_app_id" translatable="false">==GOOGLEPLAYGAMESERVICES_APP_ID==</string>
+
+    <string name="restarting_please_wait">Restarting, please wait.</string>
+
+    <string name="notification_app_is_running">%s is running</string>
+    <string name="notification_stop">Stop</string>
 </resources>

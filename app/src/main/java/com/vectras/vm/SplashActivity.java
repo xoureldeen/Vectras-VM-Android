@@ -81,9 +81,10 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
         String filesDir = activity.getFilesDir().getAbsolutePath();
         String nativeLibDir = activity.getApplicationInfo().nativeLibraryDir;
 
-        File tmpDir = new File(filesDir + "/tmp/xdg");
-        if (!tmpDir.exists()) {
+        File tmpDir = new File(context.getFilesDir(), "tmp");
+        if (!tmpDir.isDirectory()) {
             tmpDir.mkdirs();
+            FileUtils.chmod(tmpDir, 0771);
         }
 
         File vDir = new File(com.vectras.vm.AppConfig.maindirpath);

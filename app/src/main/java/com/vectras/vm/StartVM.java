@@ -1,6 +1,7 @@
 package com.vectras.vm;
 
 import android.app.Activity;
+import android.content.Intent;
 
 import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
@@ -93,9 +94,6 @@ public class StartVM {
             acclerationStr = "-accel tcg,thread=multi";
         acclerationStr += ",tb-size=" + MainSettingsManager.getTbSize(activity);
 
-        String spiceStr = "-spice ";
-        spiceStr += "port=6999,disable-ticketing=on";
-
         String boot = "-boot ";
         boot += MainSettingsManager.getBoot(activity);
 
@@ -135,14 +133,19 @@ public class StartVM {
 
         if (MainSettingsManager.getVmUi(activity).equals("VNC")) {
             String vncStr = "-vnc ";
-            params.add(vncStr);
+            //params.add(vncStr);
             // Allow connections only from localhost using localsocket without a password
             //params.add(Config.defaultVNCHost+":" + Config.defaultVNCPort);
             String qmpParams = "unix:";
             qmpParams += Config.getLocalVNCSocketPath();
-            params.add(qmpParams);
-        } else if (MainSettingsManager.getVmUi(activity).equals("SPICE"))
+            //params.add(qmpParams);
+        } else if (MainSettingsManager.getVmUi(activity).equals("SPICE")) {
+            String spiceStr = "-spice ";
+            spiceStr += "port=6999,disable-ticketing=on";
             params.add(spiceStr);
+        } else if (MainSettingsManager.getVmUi(activity).equals("X11")) {
+
+        }
 
         params.add("-monitor");
         params.add("vc");

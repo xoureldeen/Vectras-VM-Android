@@ -39,7 +39,8 @@ public class Terminal {
     private String user = "root";
 
     public static Process qemuProcess;
-    
+    public static String DISPLAY = ":1";
+
     public Terminal(Context context) {
         this.context = context;
     }
@@ -73,8 +74,10 @@ public class Terminal {
                 String filesDir = context.getFilesDir().getAbsolutePath();
                 String nativeLibDir = context.getApplicationInfo().nativeLibraryDir;
 
+                File tmpDir = new File(context.getFilesDir(), "tmp");
+
                 // Setup environment for the PRoot qemuProcess
-                processBuilder.environment().put("PROOT_TMP_DIR", filesDir + "/tmp");
+                processBuilder.environment().put("PROOT_TMP_DIR", tmpDir.getAbsolutePath());
                 processBuilder.environment().put("PROOT_LOADER", nativeLibDir + "/libproot-loader.so");
                 processBuilder.environment().put("PROOT_LOADER_32", nativeLibDir + "/libproot-loader32.so");
 
@@ -82,10 +85,13 @@ public class Terminal {
                 processBuilder.environment().put("USER", user);
                 processBuilder.environment().put("PATH", "/bin:/usr/bin:/sbin:/usr/sbin");
                 processBuilder.environment().put("TERM", "xterm-256color");
-                processBuilder.environment().put("TMPDIR", filesDir + "/tmp");
+                processBuilder.environment().put("TMPDIR", tmpDir.getAbsolutePath());
                 processBuilder.environment().put("SHELL", "/bin/sh");
+                processBuilder.environment().put("DISPLAY", DISPLAY);
                 processBuilder.environment().put("PULSE_SERVER", "/run/pulse/native");
                 processBuilder.environment().put("XDG_RUNTIME_DIR", "/run");
+                processBuilder.environment().put("QEMU_AUDIO_DRV", "sdl");
+                processBuilder.environment().put("SDL_VIDEODRIVER", "x11");
 
                 // Example PRoot command; replace 'libproot.so' and other paths as needed
                 String[] prootCommand = {
