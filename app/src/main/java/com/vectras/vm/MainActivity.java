@@ -628,10 +628,7 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 if (!isRunning) {
                     Intent serviceIntent = new Intent(activity, MainService.class);
-                    if (MainSettingsManager.getVmUi(activity).equals("X11"))
-                        MainService.env = "dwm; " + env;
-                    else
-                        MainService.env = env;
+                    MainService.env = env;
                     MainService.CHANNEL_ID = vmName;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                         activity.startForegroundService(serviceIntent);

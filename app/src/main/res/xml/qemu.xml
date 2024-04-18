@@ -129,6 +129,7 @@
             android:title="SHARED FOLDER"
             android:key="sharedFolder"
             android:summary="/Documents/VectrasVM/SharedFolder/"
+            app:isPreferenceVisible="false"
             app:icon="@drawable/round_folder_24" />
         <EditTextPreference
             android:layout_width="wrap_content"
@@ -156,6 +157,7 @@
             android:entryValues="@array/vmUiValues"
             android:key="vmUi"
             android:title="UI"
+            app:isPreferenceVisible="false"
             app:useSimpleSummaryProvider="true"
             app:icon="@drawable/computer"/>
 
@@ -167,6 +169,7 @@
             android:entryValues="@array/displayResolutionValues"
             android:key="RESOLUTION"
             android:title="X11 Resolution"
+            app:isPreferenceVisible="false"
             app:useSimpleSummaryProvider="true"
             app:icon="@drawable/round_aspect_ratio_24"/>
 

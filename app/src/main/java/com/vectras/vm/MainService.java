@@ -49,7 +49,6 @@ public class MainService extends Service {
                 Terminal vterm = new Terminal(this);
                 //vterm.executeShellCommand("chmod 770 /run/pulse -R");
                 //vterm.executeShellCommand("pulseaudio --system --disallow-exit --disallow-module-loading --daemonize --log-level=debug --log-time=1");
-                vterm.executeShellCommand("vncserver :1");
                 vterm.executeShellCommand(env);
             }
         } else

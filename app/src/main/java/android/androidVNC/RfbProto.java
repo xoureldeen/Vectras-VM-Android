@@ -314,7 +314,7 @@ public class RfbProto {
   //
 
     LocalSocket localSocket = null;
-    public static boolean allow_external = true;
+    public static boolean allow_external = false;
 
   //-RfbProto(String h, int p, VncViewer v) throws IOException {
   RfbProto(String h, int p) throws IOException{

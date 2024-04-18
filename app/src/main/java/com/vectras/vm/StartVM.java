@@ -69,10 +69,10 @@ public class StartVM {
             params.add(hdd2);
         }
 
-        if (MainSettingsManager.getSharedFolder(activity)) {
+        /*if (MainSettingsManager.getSharedFolder(activity)) {
             params.add("-net user,smb='" + FileUtils.getExternalFilesDirectory(activity).getPath() + "/SharedFolder" + "'");
             params.add("-net nic,model=virtio");
-        }
+        }*/
 
         boolean kvm = MainSettingsManager.getKvm(activity);
         boolean avx = MainSettingsManager.getAvx(activity);
@@ -133,12 +133,25 @@ public class StartVM {
 
         if (MainSettingsManager.getVmUi(activity).equals("VNC")) {
             String vncStr = "-vnc ";
-            //params.add(vncStr);
+            params.add(vncStr);
             // Allow connections only from localhost using localsocket without a password
             //params.add(Config.defaultVNCHost+":" + Config.defaultVNCPort);
             String qmpParams = "unix:";
             qmpParams += Config.getLocalVNCSocketPath();
-            //params.add(qmpParams);
+            params.add(qmpParams);
+            params.add("-monitor");
+            params.add("vc");
+
+            //XXX: monitor, serial, and parallel display crashes cause SDL doesn't support more than 1 window
+            params.add("-monitor");
+            params.add("none");
+
+            params.add("-serial");
+            params.add("none");
+
+            params.add("-parallel");
+            params.add("none");
+
         } else if (MainSettingsManager.getVmUi(activity).equals("SPICE")) {
             String spiceStr = "-spice ";
             spiceStr += "port=6999,disable-ticketing=on";
@@ -146,19 +159,6 @@ public class StartVM {
         } else if (MainSettingsManager.getVmUi(activity).equals("X11")) {
 
         }
-
-        params.add("-monitor");
-        params.add("vc");
-        //XXX: monitor, serial, and parallel display crashes cause SDL doesn't support more than 1 window
-        params.add("-monitor");
-        params.add("none");
-
-        params.add("-serial");
-        params.add("none");
-
-        params.add("-parallel");
-        params.add("none");
-
         params.add("-k");
         params.add("en-us");
 
