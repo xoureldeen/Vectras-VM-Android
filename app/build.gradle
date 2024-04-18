@@ -10,8 +10,8 @@ android {
         applicationId "com.vectras.vm"
         minSdk minApi
         targetSdk targetApi
-        versionCode 14
-        versionName "v2.8-debug-build-4"
+        versionCode 15
+        versionName "v2.8-debug-build-5"
 	    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }

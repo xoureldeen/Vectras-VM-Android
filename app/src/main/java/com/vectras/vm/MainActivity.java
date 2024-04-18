@@ -436,7 +436,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         if (Config.debug)
-            UIUtils.UIAlert(activity, "DEBUG TESTING BUILD 4", "welcome to debug build of vectras vm :)<br>" +
+            UIUtils.UIAlert(activity, "DEBUG TESTING BUILD 5", "welcome to debug build of vectras vm :)<br>" +
                     "this version unstable and has alot of bugs<br>" +
                     "don't forget to tell us on github issues or telegram bot<br>" +
                     "<a href=\"https://t.me/vectras_protect_bot\">telegram report bot</a><br>" +
