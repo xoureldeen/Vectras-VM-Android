@@ -418,7 +418,7 @@ public class RomsManagerActivity extends AppCompatActivity {
 
                     startActivityForResult(intent, 0);
                 });
-                ad.setButton(Dialog.BUTTON_NEGATIVE, "DOWNLAOD " + selectedPath.replace(".IMG", ".vbi"), new DialogInterface.OnClickListener() {
+                ad.setButton(Dialog.BUTTON_NEGATIVE, "DOWNLOAD " + selectedPath.replace(".IMG", ".vbi"), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         if (selectedLink != null) {
                             String gt = selectedLink;
