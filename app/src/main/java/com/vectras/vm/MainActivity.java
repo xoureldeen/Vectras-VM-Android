@@ -776,7 +776,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }).start();
             } else
-                UIAlert(activity, "please select iso file", "NOT VAILED FILE");
+                UIAlert(activity, "please select iso file", "INVALID FILE");
         } else if (requestCode == 1005 && resultCode == RESULT_OK) {
             Uri content_describer = ReturnedIntent.getData();
             File selectedFilePath = new File(getPath(content_describer));
