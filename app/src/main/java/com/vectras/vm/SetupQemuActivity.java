@@ -422,7 +422,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                 }).start();
             } else {
                 alertDialog.show();
-                UIAlert(activity, "NOT VAILED FILE", "please select vectras-vm-" + abi + ".tar.gz file");
+                UIAlert(activity, "INVALID FILE", "please select vectras-vm-" + abi + ".tar.gz file");
             }
         } else
             alertDialog.show();
