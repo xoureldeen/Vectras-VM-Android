@@ -760,7 +760,7 @@ public class CustomRomActivity extends AppCompatActivity {
                 t.start();
 
             } else {
-                UIUtils.UIAlert(activity, "please select cvbi vailed file to continue.", "File not supported");
+                UIUtils.UIAlert(activity, "please select cvbi file to continue.", "File not supported");
             }
 
         } else if (requestCode == 1000 && resultCode == RESULT_CANCELED) {
