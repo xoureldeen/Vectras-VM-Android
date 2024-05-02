@@ -356,7 +356,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                 " libusb ncurses-libs curl libnfs sdl2 gtk+3.0 fuse libpulse libseccomp jack pipewire liburing;" +
                 " tar -xzvf " + tarPath + " -C /;" +
                 " rm " + tarPath + ";" +
-                " mkdir -p ~/.vnc && echo -e \"555555\\n555555\" | vncpasswd -f > ~/.vnc/passwd && chmod 0600 ~/.vnc/passwd" +
+                " mkdir -p ~/.vnc && echo -e \"555555\\n555555\" | vncpasswd -f > ~/.vnc/passwd && chmod 0600 ~/.vnc/passwd;" +
                 " echo \"installation successful! xssFjnj58Id\"");
     }
 
