@@ -19,10 +19,10 @@ import java.util.Objects;
 public class AppConfig {
 
     // App Config
-    public static final String vectrasVersion = "2.9.1";
-    public static final String vectrasWebsite = "https://vectras.netlify.com/";
-    public static final String vectrasHelp = "https://vectras.netlify.app/how";
-    public static final String vectrasRaw = "https://raw.githubusercontent.com/epicstudios856/Vectras-windows-emulator/main/";
+    public static final String vectrasVersion = "2.9.0";
+    public static final String vectrasWebsite = "https://vectrasvm.blackstorm.cc/";
+    public static final String vectrasHelp = "https://vectrasvm.blackstorm.cc/how.html";
+    public static final String vectrasRaw = "https://vectrasvm.blackstorm.cc/vectras-vm/data/";
     public static final String vectrasLicense = vectrasRaw + "LICENSE.md";
     public static final String vectrasPrivacy = vectrasRaw + "PRIVACYANDPOLICY.md";
     public static final String vectrasTerms = vectrasRaw + "TERMSOFSERVICE.md";
@@ -31,7 +31,6 @@ public class AppConfig {
     public static final String updateJson = vectrasRaw + "UpdateConfig.json";
     public static final String blogJson = vectrasRaw + "news_list.json";
     public static final String storeJson = vectrasRaw + "store_list.json";
-    public static final String vectrasPkg = vectrasWebsite + "download";
 
     public static final String releaseUrl = "https://vectrasvm.blackstorm.cc/vectras-vm/Releases/";
 
@@ -45,7 +44,7 @@ public class AppConfig {
             return vectrasRaw + "roms-x86_64.json";
         } else if (Objects.equals(MainSettingsManager.getArch(activity), "I386")) {
             return vectrasRaw + "roms-i386.json";
-        } else if (Objects.equals(MainSettingsManager.getArch(activity), "ARM")) {
+        } else if (Objects.equals(MainSettingsManager.getArch(activity), "ARM64")) {
             return vectrasRaw + "roms-aarch64.json";
         } else if (Objects.equals(MainSettingsManager.getArch(activity), "PPC")) {
             return vectrasRaw + "roms-ppc.json";
@@ -60,10 +59,9 @@ public class AppConfig {
         return activity.getExternalFilesDir("data") + "/Vectras";
         //return FileUtils.getExternalFilesDirectory(activity).getPath();
     }
-
-    ;
-    public static final String sharedFolder = FileUtils.getExternalFilesDirectory(MainActivity.activity).getPath() + "/SharedFolder/";
     public static final String basefiledir = datadirpath(SplashActivity.activity) + "/.qemu/";
-    public static final String maindirpath = datadirpath(SplashActivity.activity) + "/";
+    public static final String maindirpath = FileUtils.getExternalFilesDirectory(SplashActivity.activity).getPath() + "/";
+    public static final String sharedFolder = maindirpath + "SharedFolder/";
+    public static final String downloadsFolder = maindirpath + "Downloads/";
 
 }

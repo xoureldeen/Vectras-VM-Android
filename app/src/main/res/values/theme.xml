@@ -8,20 +8,31 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:enforceNavigationBarContrast" tools:ignore="NewApi">false</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:statusBarColor">?attr/colorSurface</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
         <!-- Customize your theme here. -->
         <item name="checkboxStyle">@style/MyCheckBoxStyle</item>
         <item name="android:windowAnimationStyle">@style/ActivityAnimation</item>
         <item name="actionOverflowButtonStyle">@style/AppTheme.Toolbar.OverflowButton</item>
-        <item name="fontFamily">@font/josefin_sans</item>
+        <!--<item name="fontFamily">@font/josefin_sans</item>-->
         <item name="chipStyle">@style/AppTheme.WidgetGroupChip</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="windowActionBarOverlay">true</item>
-        <item name="android:fontFamily">@font/josefin_sans</item>
+        <item name="android:fontFamily">@font/quicksand</item>
+        <item name="alertDialogTheme">@style/MainDialogTheme</item>
+        <item name="android:alertDialogTheme">@style/MainDialogTheme</item>
+        <item name="android:dialogPreferenceStyle">@style/MainDialogTheme</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
     </style>
+
+    <style name="SwitchStyle" parent="Widget.Material3.CompoundButton.MaterialSwitch" />
+
+    <style name="Preference.SwitchPreferenceCompat" parent="@style/Preference.SwitchPreferenceCompat.Material"
+        tools:ignore="ResourceCycle">
+        <item name="widgetLayout">@layout/switch_mui3</item>
+    </style>
+
     <!-- See https://developer.android.com/training/material/theme.html for how to customize the Material theme. -->
     <!-- NOTE: Cannot use "Light." since it hides the terminal scrollbar on the default black background. -->
     <style name="Theme.Vterm.Black" parent="Theme.Material3.Light.NoActionBar">

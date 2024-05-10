@@ -83,9 +83,12 @@ public class TerminalBottomSheetDialog {
                 // If the event is a key-down event on the "enter" button
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
                         (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    activity.runOnUiThread(() -> appendTextAndScroll(commandInput.getText().toString() + "\n"));
                     executeShellCommand(commandInput.getText().toString());
                     commandInput.setText("");
-                    commandInput.requestFocus();
+                    activity.runOnUiThread(() -> {
+                        commandInput.requestFocus(); // Request focus again
+                    });
                     return true;
                 }
                 return false;
@@ -173,22 +176,19 @@ public class TerminalBottomSheetDialog {
                     processBuilder.environment().put("QEMU_AUDIO_DRV", "sdl");
                     processBuilder.environment().put("SDL_VIDEODRIVER", "x11");
 
-                    // Example PRoot command; replace 'libproot.so' and other paths as needed
                     String[] prootCommand = {
                             nativeLibDir + "/libproot.so", // PRoot binary path
                             "--kill-on-exit",
-                            "--link2symlink",
-                            "-0",
-                            "-r", filesDir + "/distro", // Path to the rootfs
-                            "-b", "/dev",
-                            "-b", "/proc",
-                            "-b", "/sys",
-                            "-b", "/sdcard",
-                            "-b", "/storage",
-                            "-b", "/data",
-                            "-w", "/root",
+                            "--rootfs=" + filesDir + "/distro", // Path to the rootfs
+                            "--bind=/dev",
+                            "--bind=/proc",
+                            "--bind=/sys",
+                            "--bind=/sdcard",
+                            "--bind=/storage",
+                            "--bind=/data",
+                            "--cwd=/root",
                             "/bin/sh",
-                            "--login"// The shell to execute inside PRoot
+                            "--login" // The shell to execute inside PRoot
                     };
 
                     processBuilder.command(prootCommand);
@@ -231,7 +231,7 @@ public class TerminalBottomSheetDialog {
                 }
             }).start(); // Execute the command in a separate thread to prevent blocking the UI thread
         else
-            new AlertDialog.Builder(activity)
+            new AlertDialog.Builder(activity, R.style.MainDialogTheme)
                     .setTitle("Error!")
                     .setMessage("Verify that \"setupFiles()\" is working properly in onCreate().")
                     .setCancelable(false)

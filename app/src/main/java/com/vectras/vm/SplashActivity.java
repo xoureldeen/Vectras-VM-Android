@@ -57,10 +57,7 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
         SharedPreferences prefs = getSharedPreferences(CREDENTIAL_SHARED_PREF, Context.MODE_PRIVATE);
 
         try {
-            if (checkConnection(activity))
-                new DownloadFileAsync().execute(AppConfig.romsJson(activity));
-            else
-                new Handler().postDelayed(activity, 3000);
+            new Handler().postDelayed(activity, 3000);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }/*
@@ -102,9 +99,19 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
             cvbiDir.mkdirs();
         }
 
-        File sharedDir = new File(FileUtils.getExternalFilesDirectory(activity).getPath() + "/SharedFolder");
+        File sharedDir = new File(AppConfig.sharedFolder);
         if (!sharedDir.exists()) {
             sharedDir.mkdirs();
+        }
+
+        File downloadsDir = new File(AppConfig.downloadsFolder);
+        if (!downloadsDir.exists()) {
+            downloadsDir.mkdirs();
+        }
+
+        File qcow2Dir = new File(FileUtils.getExternalFilesDirectory(activity).getPath() + "/QCOW2");
+        if (!qcow2Dir.exists()) {
+            qcow2Dir.mkdirs();
         }
 
         File jsonFile = new File(AppConfig.maindirpath
@@ -163,7 +170,7 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
 
         }
 
-        com.vectras.qemu.utils.FileInstaller.installFiles(activity, false);
+        com.vectras.qemu.utils.FileInstaller.installFiles(activity, true);
     }
 
     public void onStart() {
@@ -240,9 +247,9 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
 
                 int lenghtOfFile = conexion.getContentLength();
                 Log.d(TAG, "Lenght of file: " + lenghtOfFile);
-                String fileName = "roms.json";
+                String fileName = "roms-" + MainSettingsManager.getArch(activity) + ".json";
                 InputStream input = new BufferedInputStream(url.openStream());
-                OutputStream output = new FileOutputStream(getExternalFilesDir("data") + fileName);
+                OutputStream output = new FileOutputStream(getExternalFilesDir("data") + "/" + fileName);
 
                 byte data[] = new byte[1024];
 

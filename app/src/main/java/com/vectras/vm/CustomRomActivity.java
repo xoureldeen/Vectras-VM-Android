@@ -39,6 +39,7 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.vectras.qemu.MainSettingsManager;
+import com.vectras.vm.Fragment.CreateImageDialogFragment;
 import com.vectras.vm.MainRoms.DataMainRoms;
 import com.vectras.vm.logger.VectrasStatus;
 import com.vectras.vm.utils.FileUtils;
@@ -67,7 +68,11 @@ import java.util.zip.ZipInputStream;
 
 public class CustomRomActivity extends AppCompatActivity {
 
-    public TextInputEditText title, icon, drive, cdrom, qemu;
+    public static TextInputEditText title;
+    public TextInputEditText icon;
+    public static TextInputEditText drive;
+    public TextInputEditText cdrom;
+    public TextInputEditText qemu;
     public Button addRomBtn;
 
     public ProgressBar loadingPb;
@@ -218,6 +223,16 @@ public class CustomRomActivity extends AppCompatActivity {
                 startActivityForResult(intent, 1002);
             }
         });
+
+        driveLayout.setEndIconOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CreateImageDialogFragment dialogFragment = new CreateImageDialogFragment();
+                dialogFragment.customRom = true;
+                dialogFragment.show(getSupportFragmentManager(), "CreateImageDialogFragment");
+            }
+        });
+
         View.OnClickListener cdromClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -42,7 +42,7 @@
         android:requestLegacyExternalStorage="true"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:supportsRtl="false"
+        android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:extractNativeLibs="true">
         <activity
@@ -115,6 +115,10 @@
         <activity
             android:name="com.vectras.vm.DataExplorerActivity"
             android:label="Data Explorer"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="com.vectras.vm.SetArchActivity"
+            android:label="Set Qemu Version"
             android:theme="@style/AppTheme" />
 
         <service

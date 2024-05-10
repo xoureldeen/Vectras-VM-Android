@@ -1,11 +1,13 @@
 package com.vectras.vm;
 
 import static android.content.Intent.ACTION_OPEN_DOCUMENT;
+import static android.os.Build.VERSION.SDK_INT;
 import static com.vectras.vm.utils.UIUtils.UIAlert;
 
 import android.app.ActivityManager;
 import android.app.Dialog;
 import android.app.NotificationManager;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,8 +27,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -50,6 +54,7 @@ import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.elevation.SurfaceColors;
@@ -66,6 +71,7 @@ import com.vectras.vm.logger.VectrasStatus;
 import com.vectras.vm.utils.AppUpdater;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.UIUtils;
+import com.vectras.vterm.Terminal;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -97,6 +103,12 @@ public class MainActivity extends AppCompatActivity {
     private AdRequest adRequest;
     public DrawerLayout mainDrawer;
     private String TAG = "MainActivity";
+    public static /**/LinearLayout extVncLayout;
+    public static AppBarLayout appbar;
+    public TextView totalRam;
+    public TextView usedRam;
+    public TextView freeRam;
+    private final Timer _timer = new Timer();
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -104,6 +116,9 @@ public class MainActivity extends AppCompatActivity {
         activity = this;
         RamInfo.activity = this;
         setContentView(R.layout.activity_main);
+
+        if (!MainSettingsManager.getVncExternal(activity))
+            clearNotifications();
 
         setupFolders();
 
@@ -117,6 +132,29 @@ public class MainActivity extends AppCompatActivity {
 
         SwipeRefreshLayout refreshRoms = findViewById(R.id.refreshRoms);
 
+        appbar = findViewById(R.id.appbar);
+        appbar.setExpanded(false);
+
+        extVncLayout = findViewById(R.id.extVnc);
+
+        TextView tvLogin = findViewById(R.id.tvLogin);
+        tvLogin.setText("LOGIN --> " + Config.defaultVNCHost + ":" + (5900 + Config.defaultVNCPort)/* + "\nPASSWORD --> " + Config.defaultVNCPasswd*/);
+
+        Button stopBtn = findViewById(R.id.stopBtn);
+        stopBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Stop the service
+                MainService.stopService();
+
+                Terminal vterm = new Terminal(activity);
+                vterm.executeShellCommand("killall qemu-system-*", false, activity);
+
+                extVncLayout.setVisibility(View.GONE);
+                appbar.setExpanded(false);
+            }
+        });
+
         refreshRoms.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -125,8 +163,7 @@ public class MainActivity extends AppCompatActivity {
                 refreshRoms.setRefreshing(false);
             }
         });
-        BottomAppBar bottomAppBar = findViewById(R.id.bottomAppBar_AppBarBottomActivity);
-        bottomAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+        /*bottomAppBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
 
@@ -140,13 +177,13 @@ public class MainActivity extends AppCompatActivity {
 
                 return false;
             }
-        });
+        });*/
 
         FloatingActionButton fabAdd = findViewById(R.id.fabAdd_AppBarBottomActivity);
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(activity, RomsManagerActivity.class));
+                startActivity(new Intent(activity, CustomRomActivity.class));
             }
         });
         Toolbar mainToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -172,8 +209,13 @@ public class MainActivity extends AppCompatActivity {
                 int id = menuItem.getItemId();
                 if (id == R.id.navigation_item_info) {
                     startActivity(new Intent(activity, AboutActivity.class));
-                } else if (id == R.id.navigation_item_website) {
+                } if (id == R.id.navigation_item_help) {
                     String tw = AppConfig.vectrasWebsite;
+                    Intent w = new Intent(Intent.ACTION_VIEW);
+                    w.setData(Uri.parse(tw));
+                    startActivity(w);
+                } else if (id == R.id.navigation_item_website) {
+                    String tw = AppConfig.vectrasHelp;
                     Intent w = new Intent(Intent.ACTION_VIEW);
                     w.setData(Uri.parse(tw));
                     startActivity(w);
@@ -191,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 // Optionally, specify a URI for the file that should appear in the
                                 // system file picker when it loads.
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                if (SDK_INT >= Build.VERSION_CODES.O) {
                                     intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
                                 }
 
@@ -218,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
 
                         // Optionally, specify a URI for the file that should appear in the
                         // system file picker when it loads.
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        if (SDK_INT >= Build.VERSION_CODES.O) {
                             intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
                         }
 
@@ -238,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 // Optionally, specify a URI for the file that should appear in the
                                 // system file picker when it loads.
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                if (SDK_INT >= Build.VERSION_CODES.O) {
                                     intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
                                 }
 
@@ -283,7 +325,7 @@ public class MainActivity extends AppCompatActivity {
 
                         // Optionally, specify a URI for the file that should appear in the
                         // system file picker when it loads.
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        if (SDK_INT >= Build.VERSION_CODES.O) {
                             intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
                         }
 
@@ -303,7 +345,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 // Optionally, specify a URI for the file that should appear in the
                                 // system file picker when it loads.
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                if (SDK_INT >= Build.VERSION_CODES.O) {
                                     intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
                                 }
 
@@ -348,7 +390,7 @@ public class MainActivity extends AppCompatActivity {
 
                         // Optionally, specify a URI for the file that should appear in the
                         // system file picker when it loads.
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        if (SDK_INT >= Build.VERSION_CODES.O) {
                             intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
                         }
 
@@ -472,6 +514,66 @@ public class MainActivity extends AppCompatActivity {
             });
             alertDialog.show();
         }
+
+        totalRam = findViewById(R.id.totalRam);
+        usedRam = findViewById(R.id.usedRam);
+        freeRam = findViewById(R.id.freeRam);
+
+        ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
+        ActivityManager activityManager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        activityManager.getMemoryInfo(mi);
+
+        long freeMem = mi.availMem / 1048576L;
+        long totalMem = mi.totalMem / 1048576L;
+        long usedMem = totalMem - freeMem;
+        int freeRamInt = safeLongToInt(freeMem);
+        int totalRamInt = safeLongToInt(totalMem);
+
+        totalRam = findViewById(R.id.totalRam);
+        usedRam = findViewById(R.id.usedRam);
+        freeRam = findViewById(R.id.freeRam);
+
+        String vectrasMemory = String.valueOf(RamInfo.vectrasMemory());
+        TimerTask t = new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ActivityManager.MemoryInfo miI = new ActivityManager.MemoryInfo();
+                        ActivityManager activityManagerr = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+                        activityManagerr.getMemoryInfo(miI);
+                        long freeMemory = miI.availMem / 1048576L;
+                        long totalMemory = miI.totalMem / 1048576L;
+                        long usedMemory = totalMemory - freeMemory;
+
+                        totalRam.setText("Total Memory: " + totalMemory + " MB");
+                        usedRam.setText("Used Memory: " + usedMemory + " MB");
+                        freeRam.setText("Free Memory: " + freeMemory + " MB (" + vectrasMemory + " used)");
+                        ProgressBar progressBar = findViewById(R.id.progressBar);
+                        progressBar.setMax((int) totalMemory);
+                        if (SDK_INT >= Build.VERSION_CODES.N) {
+                            progressBar.setProgress((int) usedMemory, true);
+                        } else {
+                            progressBar.setProgress((int) usedMemory);
+                        }
+                    }
+                });
+            }
+        };
+        _timer.scheduleAtFixedRate(t, (int) (0), (int) (1000));
+    }
+
+    public static void clearNotifications() {
+        NotificationManager notificationManager = (NotificationManager) activity.getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancelAll();
+    }
+
+    public static int safeLongToInt(long l) {
+        if (l < Integer.MIN_VALUE || l > Integer.MAX_VALUE) {
+            throw new IllegalArgumentException(l + " cannot be cast to int without changing its value.");
+        }
+        return (int) l;
     }
 
     public static PackageInfo getAppInfo(Context context) {
@@ -578,8 +680,13 @@ public class MainActivity extends AppCompatActivity {
 
         // Menu items
         int id = item.getItemId();
-        if (id == R.id.installRoms) {
-            startActivity(new Intent(activity, RomsManagerActivity.class));
+        if (id == R.id.info) {
+            appbar = findViewById(R.id.appbar);
+            if (appbar.getTop() < 0)
+                appbar.setExpanded(true);
+            else
+                appbar.setExpanded(false);
+
         } else if (id == R.id.arch) {
             startActivity(new Intent(activity, SetArchActivity.class));
         }
@@ -621,8 +728,38 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
+    public static boolean checkSharedFolder() { //TODO: not work idk why
+        File folder = new File(AppConfig.sharedFolder);
+        File[] listOfFiles = folder.listFiles();
+
+        if (listOfFiles != null) {
+            for (File file : listOfFiles) {
+                if (file.isFile() && file.length() > 500 * 1024 * 1024) { // 500MB
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public static void startVM(String vmName, String env) {
+        if (checkSharedFolder()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+            builder.setTitle("Large File Detected");
+            builder.setMessage("One or more files in this folder are larger than 500MB, " +
+                    "due qemu limits you can't use shared folder that's contains files larger than 500mb, " +
+                    "please disable shared folder Settings>qemu or free some files from shared folder.");
+            builder.setPositiveButton("OK", (dialogInterface, i) -> dialogInterface.dismiss());
+            builder.create().show();
+            return;
+        }
+
         boolean isRunning = isMyServiceRunning(MainService.class);
+
+        ProgressDialog progressDialog = new ProgressDialog(activity, R.style.MainDialogTheme);
+        progressDialog.setMessage("Booting up...");
+        progressDialog.setCancelable(false); // Make the dialog non-cancellable if you like
+        progressDialog.show();
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
@@ -630,21 +767,29 @@ public class MainActivity extends AppCompatActivity {
                     Intent serviceIntent = new Intent(activity, MainService.class);
                     MainService.env = env;
                     MainService.CHANNEL_ID = vmName;
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    if (SDK_INT >= Build.VERSION_CODES.O) {
                         activity.startForegroundService(serviceIntent);
                     } else {
                         activity.startService(serviceIntent);
                     }
+
+                    if (MainSettingsManager.getVmUi(activity).equals("VNC")) {
+                        if (MainSettingsManager.getVncExternal(MainActivity.activity)) {
+                            extVncLayout.setVisibility(View.VISIBLE);
+                            appbar.setExpanded(true);
+                        } else {
+                            activity.startActivity(new Intent(activity, MainVNCActivity.class));
+                        }
+                    } else if (MainSettingsManager.getVmUi(activity).equals("SPICE")) {
+                        //activity.startActivity(new Intent(activity, RemoteCanvasActivity.class));
+                    } else if (MainSettingsManager.getVmUi(activity).equals("X11")) {
+                        //activity.startActivity(new Intent(activity, X11Activity.class));
+                    }
+
+                    progressDialog.dismiss();
                 }
             }
         }, 5000);
-        if (MainSettingsManager.getVmUi(activity).equals("VNC")) {
-            activity.startActivity(new Intent(activity, MainVNCActivity.class));
-        } else if (MainSettingsManager.getVmUi(activity).equals("SPICE")) {
-            //activity.startActivity(new Intent(activity, RemoteCanvasActivity.class));
-        } else if (MainSettingsManager.getVmUi(activity).equals("X11")) {
-            //activity.startActivity(new Intent(activity, X11Activity.class));
-        }
         String[] params = env.split("\\s+");
         VectrasStatus.logInfo("Params:");
         Log.d("StartVM", "Params:");
@@ -652,6 +797,7 @@ public class MainActivity extends AppCompatActivity {
             VectrasStatus.logInfo(i + ": " + params[i]);
             Log.d("StartVM", i + ": " + params[i]);
         }
+
     }
 
     private void setupFolders() {
@@ -677,11 +823,34 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(activity, MainVNCActivity.class));
     }
 
+    public static boolean isServiceRunning(Class<?> serviceClass, Context context) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        if (manager != null) {
+            for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+                if (serviceClass.getName().equals(service.service.getClassName())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public void onStart() {
         super.onStart();
         Log.d(TAG, "onStart");
         loadDataVbi();
         Config.ui = MainSettingsManager.getVmUi(activity);
+
+        TextView tvQemuArch = findViewById(R.id.qemuArch);
+        tvQemuArch.setText(MainSettingsManager.getArch(activity));
+
+        TextView tvIsRunning = findViewById(R.id.tvIsRunning);
+        boolean isMainServiceRunning = isServiceRunning(MainService.class, activity);
+        if (isMainServiceRunning)
+            tvIsRunning.setText(R.string.running);
+        else
+            tvIsRunning.setText(R.string.stopped);
+
 
         //TEMPORARY FIX FOR VNC CLOSES
         //TODO: FIND FIX FOR CRASHING
@@ -728,7 +897,7 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == 1004 && resultCode == RESULT_OK) {
             Uri content_describer = ReturnedIntent.getData();
             File selectedFilePath = new File(getPath(content_describer));
-            ProgressBar loading = findViewById(R.id.progressBar);
+            ProgressBar loading = findViewById(R.id.loading);
             if (selectedFilePath.toString().endsWith(".iso")) {
                 loading.setVisibility(View.VISIBLE);
                 new Thread(new Runnable() {
@@ -780,7 +949,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (requestCode == 1005 && resultCode == RESULT_OK) {
             Uri content_describer = ReturnedIntent.getData();
             File selectedFilePath = new File(getPath(content_describer));
-            ProgressBar loading = findViewById(R.id.progressBar);
+            ProgressBar loading = findViewById(R.id.loading);
             loading.setVisibility(View.VISIBLE);
             new Thread(new Runnable() {
                 @Override
@@ -829,7 +998,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (requestCode == 1006 && resultCode == RESULT_OK) {
             Uri content_describer = ReturnedIntent.getData();
             File selectedFilePath = new File(getPath(content_describer));
-            ProgressBar loading = findViewById(R.id.progressBar);
+            ProgressBar loading = findViewById(R.id.loading);
             loading.setVisibility(View.VISIBLE);
             new Thread(new Runnable() {
                 @Override
@@ -878,7 +1047,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (requestCode == 122 && resultCode == RESULT_OK) {
             Uri content_describer = ReturnedIntent.getData();
             File selectedFilePath = new File(getPath(content_describer));
-            ProgressBar loading = findViewById(R.id.progressBar);
+            ProgressBar loading = findViewById(R.id.loading);
             loading.setVisibility(View.VISIBLE);
             new Thread(new Runnable() {
                 @Override

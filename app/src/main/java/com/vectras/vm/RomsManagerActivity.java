@@ -129,9 +129,9 @@ public class RomsManagerActivity extends AppCompatActivity {
         return true;
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
@@ -250,7 +250,8 @@ public class RomsManagerActivity extends AppCompatActivity {
         data = new ArrayList<>();
 
         try {
-            JSONArray jArray = new JSONArray(FileUtils.readFromFile(activity, new File(getExternalFilesDir("data") + "roms.json")));
+            String fileName = "roms-" + MainSettingsManager.getArch(activity) + ".json";
+            JSONArray jArray = new JSONArray(FileUtils.readFromFile(activity, new File(getExternalFilesDir("data") + "/" + fileName)));
 
             // Extract data from json and store into ArrayList as class objects
             for (int i = 0; i < jArray.length(); i++) {

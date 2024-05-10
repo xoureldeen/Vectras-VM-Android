@@ -1,26 +1,11 @@
 package com.vectras.vterm;
 
 import android.app.Activity;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
+import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.ScrollView;
-import android.widget.TextView;
-
-import androidx.core.app.NotificationCompat;
-
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.vectras.vterm.view.ZoomableTextView;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -32,6 +17,9 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
+
+import com.vectras.vm.MainActivity;
+import com.vectras.vm.R;
 
 public class Terminal {
     private static final String TAG = "Vterm";
@@ -63,8 +51,22 @@ public class Terminal {
         return null;
     }
 
+    private void showDialog(String message, Activity activity) {
+        AlertDialog dialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme)
+                .setTitle("Execution Result")
+                .setMessage(message)
+                .setPositiveButton("OK", (dialogInterface, i) -> dialogInterface.dismiss())
+                .create();
+
+        dialog.show();
+    }
+
     // Method to execute the shell command
-    public void executeShellCommand(String userCommand) {
+    public void executeShellCommand(String userCommand, boolean showResultDialog, Activity dialogActivity) {
+        StringBuilder output = new StringBuilder();
+        StringBuilder errors = new StringBuilder();
+        Log.d(TAG, userCommand);
+        com.vectras.vm.logger.VectrasStatus.logError("<font color='yellow'>VTERM: >"+ userCommand+"</font>");
         new Thread(() -> {
             try {
                 // Setup the qemuProcess builder to start PRoot with environmental variables and commands
@@ -93,20 +95,17 @@ public class Terminal {
                 processBuilder.environment().put("QEMU_AUDIO_DRV", "sdl");
                 processBuilder.environment().put("SDL_VIDEODRIVER", "x11");
 
-                // Example PRoot command; replace 'libproot.so' and other paths as needed
                 String[] prootCommand = {
                         nativeLibDir + "/libproot.so", // PRoot binary path
                         "--kill-on-exit",
-                        "--link2symlink",
-                        "-0",
-                        "-r", filesDir + "/distro", // Path to the rootfs
-                        "-b", "/dev",
-                        "-b", "/proc",
-                        "-b", "/sys",
-                        "-b", "/sdcard",
-                        "-b", "/storage",
-                        "-b", "/data",
-                        "-w", "/root",
+                        "--rootfs=" + filesDir + "/distro", // Path to the rootfs
+                        "--bind=/dev",
+                        "--bind=/proc",
+                        "--bind=/sys",
+                        "--bind=/sdcard",
+                        "--bind=/storage",
+                        "--bind=/data",
+                        "--cwd=/root",
                         "/bin/sh",
                         "--login" // The shell to execute inside PRoot
                 };
@@ -128,29 +127,47 @@ public class Terminal {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     Log.d(TAG, line);
-                    com.vectras.vm.logger.VectrasStatus.logError("<font color='red'>Vterm ERROR: >"+ line+"</font>");
+                    com.vectras.vm.logger.VectrasStatus.logError("<font color='yellow'>VTERM: >"+ line+"</font>");
+                    output.append(line).append("\n");
                 }
 
                 // Read any errors from the error stream
                 while ((line = errorReader.readLine()) != null) {
                     Log.w(TAG, line);
-                    com.vectras.vm.logger.VectrasStatus.logError("<font color='red'>Vterm ERROR: >"+ line+"</font>");
+                    com.vectras.vm.logger.VectrasStatus.logError("<font color='red'>VTERM ERROR: >"+ line+"</font>");
+                    output.append(line).append("\n");
                 }
 
                 // Clean up
                 reader.close();
                 errorReader.close();
 
-                // Wait for the qemuProcess to finish
-                qemuProcess.waitFor();
-
+                int exitCode = qemuProcess.waitFor(); // Wait for the process to finish
+                if (exitCode == 0) {
+                    output.append("Execution finished successfully.\n");
+                    output.append(reader.readLine()).append("\n");
+                    Log.i(TAG, reader.readLine());
+                } else {
+                    output.append("Execution finished with exit code: ").append(exitCode).append("\n");
+                    output.append(reader.readLine()).append("\n");
+                    Log.i(TAG, reader.readLine());
+                }
             } catch (IOException | InterruptedException e) {
-                // Handle exceptions by printing the stack trace in the terminal output
-                final String errorMessage = e.getMessage();
-                Log.e("Vterm ERROR:", errorMessage);
-                //com.vectras.vm.logger.VectrasStatus.logError("<font color='red'>Vterm ERROR: >"+ errorMessage+"</font>");
+                output.append(e.getMessage());
+                errors.append(Log.getStackTraceString(e));
+                MainActivity.clearNotifications();
+            } finally {
+                // Switch to main thread after execution
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    // If showResultDialog is enabled, show the dialog with the result or errors
+                    if (showResultDialog) {
+                        String finalOutput = output.toString();
+                        String finalErrors = errors.toString();
+                        showDialog(finalOutput.isEmpty() ? finalErrors : finalOutput, dialogActivity);
+                    }
+                });
             }
-        }).start(); // Execute the command in a separate thread to prevent blocking the UI thread
+        }).start();
     }
 
     private boolean checkInstallation() {

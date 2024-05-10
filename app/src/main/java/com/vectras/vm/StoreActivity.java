@@ -219,7 +219,7 @@ public class StoreActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
 
-        menu.add(0, 0, 0, "IMPORT FILES").setShortcut('3', 'c').setIcon(R.drawable.input_circle).setShowAsAction(1);
+        //menu.add(0, 0, 0, "IMPORT FILES").setShortcut('3', 'c').setIcon(R.drawable.input_circle).setShowAsAction(1);
 
         return true;
     }

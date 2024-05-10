@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">Vectras VM</string>
-    <string name="app_version" translatable="false">v2.8-debug-build-4</string>
-    <string name="qemu_version" translatable="false">qemu-8.2.1-3dfx</string>
+    <string name="app_name">فيكترا</string>
     <string name="str_home">الرئيسية</string>
     <string name="str_logger">السجل</string>
     <string name="fab_info">بدء التقليد</string>
@@ -147,13 +145,13 @@
     <string name="android" translatable="false">android</string>
     <string name="other" translatable="false">other</string>
     <string name="guest">ضيف</string>
-    <string name="hdd1_qcow_img_etc">HDD1 (qcow, img, إلخ…)</string>
+    <string name="hdd1_qcow_img_etc">قرص 1 (qcow, img, إلخ…)</string>
     <string name="default_configuration">-vga std -net nic,model=ne2k_pci -net user</string>
     <string name="data_explorer">مستكشف البيانات</string>
     <string name="forgot_password">نسيت كلمة المرور؟</string>
     <string name="buy_me_a_coffee">اشترِ لي قهوة</string>
-    <string name="hdd1">HDD1</string>
-    <string name="hdd2">HDD2</string>
+    <string name="hdd1">قرص 1</string>
+    <string name="hdd2">قرص 2</string>
 
     <string name="echo_nameserver_8_8_8_8">echo \'nameserver 8.8.8.8\' </string>
     <string name="etc_resolv_conf"> /etc/resolv.conf</string>
@@ -277,8 +275,9 @@
     <string name="modify">تعديل</string>
 
     <string name="input">إدخال</string>
-    <string name="tiny_vterm">vterm صغير</string>
+    <string name="tiny_vterm">Tiny vterm</string>
     <string name="try_again">حاول مرة أخرى</string>
     <string name="logs">السجلات</string>
     <string name="options">الخيارات</string>
+    <string name="free_palestine">فلسطين حره</string>
 </resources>

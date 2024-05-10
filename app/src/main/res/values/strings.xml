@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">Vectras VM</string>
-    <string name="app_version" translatable="false">v2.8-debug-build-5</string>
+    <string name="app_name">Vectras VM</string>
+    <string name="app_version" translatable="false">v2.9.0</string>
     <string name="qemu_version" translatable="false">qemu-8.2.1-3dfx</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -36,7 +36,7 @@
     <string name="hide_toolbar">Hide Toolbar</string>
     <string name="view_log">View Log</string>
     <string name="mode">Mode</string>
-    <string name="keyboard">Keyboard</string>
+    <string name="keyboard">KEYBOARD</string>
     <string name="name">name</string>
     <string name="size">size:</string>
     <string name="availablity">availability:</string>
@@ -483,4 +483,73 @@
 
     <string name="notification_app_is_running">%s is running</string>
     <string name="notification_stop">Stop</string>
+    <string name="create_virtual_harddisk">Create virtual harddisk</string>
+    <string name="size_in_gb">SIZE IN GB</string>
+    <string name="create_qcow2">CREATE QCOW2</string>
+    <string name="image_name">IMAGE NAME</string>
+    <string name="make_image">MAKE IMAGE</string>
+    <string name="imported_roms_will_be_shown_here">IMPORTED ROMS WILL BE SHOWN HERE</string>
+    <string name="version">VERSION:</string>
+    <string name="qemu">QEMU</string>
+    <string name="arch">ARCH:</string>
+    <string name="running">Running</string>
+    <string name="stopped">Stopped</string>
+    <string name="service">SERVICE:</string>
+    <string name="free_palistine">FREE PALISTINE</string>
+    <string name="store">Store</string>
+    <string name="no_internet_connection">no internet connection</string>
+    <string name="check_your_internet_connection">check your internet connection</string>
+    <string name="downloading_file">Downloading file..</string>
+    <string name="lenght_of_file">"Lenght of file: "</string>
+    <string name="downloaded_to_path">"Downloaded to path: "</string>
+    <string name="downloaded_successfully">Downloaded Successfully!</string>
+    <string name="app_settings">APP SETTINGS</string>
+    <string name="main_app_settings">main app settings.</string>
+    <string name="user_interface">USER INTERFACE</string>
+    <string name="themes_and_ui">themes and ui.</string>
+    <string name="emulation_settings">emulation settings.</string>
+    <string name="vnc">VNC</string>
+    <string name="vnc_ui_environment">vnc ui environment.</string>
+    <string name="vm_arch">VM ARCH</string>
+    <string name="cpu_model">CPU MODEL</string>
+    <string name="custom_memory">CUSTOM MEMORY</string>
+    <string name="memory_mb">MEMORY (MB)</string>
+    <string name="sound_card">SOUND CARD</string>
+    <string name="tb_size_kb">TB SIZE (KB)</string>
+    <string name="avx">AVX</string>
+    <string name="mttcg">MTTCG</string>
+    <string name="kvm_acceleration">kvm acceleration</string>
+    <string name="kvm">KVM</string>
+    <string name="cpu_cores">CPU CORES</string>
+    <string name="harddisk_type">HARDDISK TYPE</string>
+    <string name="boot_from">BOOT FROM</string>
+    <string name="shared_folder">SHARED FOLDER</string>
+    <string name="custom_params">CUSTOM PARAMS</string>
+    <string name="vm_ui_environment">VM UI ENVIRONMENT</string>
+    <string name="x11_resolution">X11 Resolution</string>
+    <string name="mouse">MOUSE</string>
+    <string name="check_for_software_updates_on_startup">CHECK FOR SOFTWARE UPDATES ON STARTUP</string>
+    <string name="check_for_software_updates">CHECK FOR SOFTWARE UPDATES</string>
+    <string name="night_mode">NIGHT MODE</string>
+    <string name="description">Description</string>
+    <string name="qemu_website">QEMU WEBSITE</string>
+    <string name="powerpc_qemu">POWERPC QEMU</string>
+    <string name="arm64_qemu">ARM64 QEMU</string>
+    <string name="x86_64_qemu_recommended">x86_64 QEMU (RECOMMENDED)</string>
+    <string name="i386_qemu">I386 QEMU</string>
+    <string name="export_rom">Export Rom</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="description_html_supported">DESCRIPTION (html supported)</string>
+    <string name="compressing_cvbi">Compressing CVBI</string>
+    <string name="please_wait_dialog">Please wait...</string>
+    <string name="error">ERROR!</string>
+    <string name="done">DONE!</string>
+    <string name="are_removed_successfully">" are removed successfully!"</string>
+    <string name="free_palestine">FREE PALESTINE</string>
+    <string name="repository">Repository</string>
+    <string name="telegram_channel">Telegram Channel</string>
+    <string name="youtube">Youtube</string>
+    <string name="instagram">Instagram</string>
+    <string name="facebook">Facebook</string>
+    <string name="change_log">Change Log</string>
 </resources>

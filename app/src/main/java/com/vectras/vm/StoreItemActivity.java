@@ -168,8 +168,8 @@ public class StoreItemActivity extends AppCompatActivity {
 					}
 					in.close();
 				} catch (Exception e) {
-					itemDesc.setText("no internet connection");
-					UIUtils.toastLong(StoreItemActivity.this, "check your internet connection");
+					itemDesc.setText(R.string.no_internet_connection);
+					UIUtils.toastLong(StoreItemActivity.this, getString(R.string.check_your_internet_connection));
 					Log.d("VECTRAS", e.toString());
 				}
 
@@ -220,7 +220,7 @@ public class StoreItemActivity extends AppCompatActivity {
 		switch (id) {
 		case DIALOG_DOWNLOAD_PROGRESS:
 			mProgressDialog = new ProgressDialog(this, R.style.MainDialogTheme);
-			mProgressDialog.setMessage("Downloading file..");
+			mProgressDialog.setMessage(getString(R.string.downloading_file));
 			mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 			mProgressDialog.setCancelable(false);
 			mProgressDialog.show();
@@ -248,10 +248,10 @@ public class StoreItemActivity extends AppCompatActivity {
 				conexion.connect();
 
 				int lenghtOfFile = conexion.getContentLength();
-				Log.d(TAG, "Lenght of file: " + lenghtOfFile);
+				Log.d(TAG, getString(R.string.lenght_of_file) + lenghtOfFile);
 				String fileName = URLUtil.guessFileName(link,null,null);
 				InputStream input = new BufferedInputStream(url.openStream());
-				OutputStream output = new FileOutputStream(AppConfig.sharedFolder+fileName);
+				OutputStream output = new FileOutputStream(AppConfig.downloadsFolder+fileName);
 
 				byte data[] = new byte[1024];
 
@@ -282,9 +282,9 @@ public class StoreItemActivity extends AppCompatActivity {
 			dismissDialog(DIALOG_DOWNLOAD_PROGRESS);
 			AlertDialog ad;
 			ad = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
-			ad.setTitle("Downloaded Successfully!");
+			ad.setTitle(getString(R.string.downloaded_successfully));
 			String fileName = URLUtil.guessFileName(link,null,null);
-			ad.setMessage("Downloaded to path: "+AppConfig.sharedFolder+fileName+" boot vectras to check your downloads in QEMU VFAT partition.");
+			ad.setMessage(getString(R.string.downloaded_to_path)+AppConfig.downloadsFolder+fileName);
 			ad.setButton(Dialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
 					return;

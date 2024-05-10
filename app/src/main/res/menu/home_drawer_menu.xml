@@ -3,8 +3,7 @@
     <item
         android:id="@+id/navigation_item_store"
         android:icon="@drawable/round_shop_24"
-        android:visible="false"
-        android:title="@string/apps_amp_games" />
+        android:title="@string/store" />
     <item
         android:id="@+id/navigation_item_website"
         android:icon="@drawable/round_public_24"
@@ -21,7 +20,8 @@
     <item
         android:id="@+id/navigation_item_hdd2"
         android:icon="@drawable/round_storage_24"
-        android:title="@string/hdd2"/>
+        android:title="@string/hdd2"
+        android:visible="false"/>
     <item
         android:id="@+id/navigation_data_explorer"
         android:icon="@drawable/round_folder_24"
@@ -38,6 +38,10 @@
         android:id="@+id/navigation_item_settings"
         android:icon="@drawable/round_settings_24"
         android:title="@string/settings"/>
+    <item
+        android:id="@+id/navigation_item_help"
+        android:icon="@drawable/round_help_24"
+        android:title="@string/help"/>
     <item
         android:id="@+id/navigation_item_donate"
         android:icon="@drawable/ic_buy_me_a_coffee"

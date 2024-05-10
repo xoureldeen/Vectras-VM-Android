@@ -2,17 +2,15 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto">
 
 	<item
+		android:id="@+id/info"
+		android:icon="@drawable/round_info_24"
+		app:showAsAction="always"
+		android:title="@string/info"/>
+
+	<item
 		android:id="@+id/arch"
 		android:icon="@drawable/ic_arch"
 		app:showAsAction="always"
-		android:visible="false"
 		android:title="@string/title_activity_set_arch"/>
-
-	<item
-		android:id="@+id/installRoms"
-		android:icon="@drawable/round_browser_updated_24"
-		app:showAsAction="always"
-		android:visible="false"
-		android:title="@string/install_rom"/>
 
 </menu>

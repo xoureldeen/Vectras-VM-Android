@@ -35,21 +35,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 switch (key) {
 
                     case "modeNight":
-                        mHandler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                Intent startActivity = new Intent(getContext(), SplashActivity.class);
-                                int pendingIntentId = 123456;
-                                PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), pendingIntentId, startActivity, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-
-                                AlarmManager mgr = (AlarmManager) MainSettingsManager.activity.getSystemService(Context.ALARM_SERVICE);
-                                mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 500, pendingIntent);
-
-                                System.exit(0);
-                            }
-                        }, 300);
-
                         getActivity().finish();
+                        startActivity(new Intent(getActivity(), SplashActivity.class));
                         break;
                     case "customMemory":
                         if (prefs.getBoolean("customMemory", false))

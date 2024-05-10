@@ -53,7 +53,7 @@ public class AdapterStore extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 		MyHolder myHolder = (MyHolder) holder;
 		final DataStore current = data.get(position);
 		myHolder.textName.setText(current.itemName);
-		myHolder.textSize.setText("Size: " + current.itemSize);
+		myHolder.textSize.setText(MainActivity.activity.getString(R.string.size) + current.itemSize);
 		Glide.with(StoreActivity.activity).load(current.itemIcon).into(myHolder.ivIcon);
 		Animation animation;
 		animation = AnimationUtils.loadAnimation(MainActivity.activity, android.R.anim.slide_in_left);

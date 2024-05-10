@@ -129,11 +129,11 @@ public class Config {
     // VNC Defaults
     public static String defaultVNCHost = "localhost";
     public static final String defaultVNCUsername = "vectras";
-    public static final String defaultVNCPasswd = "";
+    public static final String defaultVNCPasswd = "vectras";
 
-    //It seems that for new veersion of qemu it expectes a relative number
+    //It seems that for new version of qemu it expects a relative number
     //  so we stop using absolute port numbers
-    public static final int defaultVNCPort = 0;
+    public static final int defaultVNCPort = 1;
 
     //Keyboard Layout
     public static String defaultKeyboardLayout = "en-us";
@@ -141,7 +141,7 @@ public class Config {
 
     public static boolean enableToggleKeyboard = false;
     // Debug
-    public static final boolean debug = true;
+    public static final boolean debug = false;
     public static boolean debugQmp = false;
 
     //remove in production
@@ -171,7 +171,6 @@ public class Config {
 
     // App config
     public static final String datadirpath = VectrasApp.getApp().getExternalFilesDir("data")+"/";
-    public static final String sharedFolder = datadirpath + "Vectras/ProgramFiles/";
 
 	public static String machinename = "VECTRAS";
 	public static int paused = 0;

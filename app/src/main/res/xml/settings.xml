@@ -12,8 +12,8 @@
             android:layout_height="wrap_content"
             android:defaultValue="true"
             android:key="updateVersionPrompt"
-            android:summary="CHECK FOR SOFTWARE UPDATES ON STARTUP"
-            android:title="CHECK FOR SOFTWARE UPDATES"
+            android:summary="@string/check_for_software_updates_on_startup"
+            android:title="@string/check_for_software_updates"
             app:icon="@drawable/round_update_24" />
     </PreferenceCategory>
 </PreferenceScreen>

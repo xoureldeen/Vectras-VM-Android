@@ -30,41 +30,64 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
                     android:padding="8dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
                         android:orientation="vertical"
-                        android:padding="8dp"
-                        android:gravity="center">
+                        android:padding="8dp">
 
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@mipmap/ic_launcher"/>
+                            android:src="@mipmap/ic_launcher" />
 
                         <TextView
                             style="@android:style/Widget.TextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:gravity="center"
                             android:text="@string/app_name"
                             android:textSize="26sp"
-                            android:textStyle="bold"
-                            android:gravity="center" />
+                            android:textStyle="bold" />
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/app_version"
-                                android:textSize="12sp" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/qemu_version"
+                            android:textSize="12sp" />
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/qemu_version"
-                                android:textSize="12sp" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/app_version"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            app:srcCompat="@drawable/free_palestine" />
+
+                        <TextView
+                            android:id="@+id/textView2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="4dp"
+                            android:text="@string/free_palestine"
+                            android:textSize="16sp"
+                            android:textStyle="italic" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -75,7 +98,8 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:padding="8dp"
-                    android:text="Repository"
+                    android:text="@string/repository"
+                    android:textAlignment="textStart"
                     app:icon="@drawable/ic_github" />
 
                 <Button
@@ -85,7 +109,8 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:padding="8dp"
-                    android:text="Telegram Channel"
+                    android:text="@string/telegram_channel"
+                    android:textAlignment="textStart"
                     app:icon="@drawable/ic_telegram" />
 
                 <Button
@@ -95,7 +120,8 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:padding="8dp"
-                    android:text="Youtube"
+                    android:text="@string/youtube"
+                    android:textAlignment="textStart"
                     app:icon="@drawable/ic_youtube" />
 
                 <Button
@@ -105,7 +131,8 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:padding="8dp"
-                    android:text="Instagram"
+                    android:text="@string/instagram"
+                    android:textAlignment="textStart"
                     app:icon="@drawable/ic_instagram" />
 
                 <Button
@@ -115,7 +142,8 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:padding="8dp"
-                    android:text="Facebook"
+                    android:text="@string/facebook"
+                    android:textAlignment="textStart"
                     app:icon="@drawable/ic_facebook" />
 
             </LinearLayout>
@@ -143,8 +171,9 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:padding="8dp"
-                    android:text="Change Log"
+                    android:text="@string/change_log"
                     android:visibility="gone"
+                    android:textAlignment="textStart"
                     app:icon="@drawable/round_info_24" />
 
                 <Button
@@ -154,7 +183,8 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:padding="8dp"
-                    android:text="Info"
+                    android:text="@string/info"
+                    android:textAlignment="textStart"
                     app:icon="@drawable/round_info_24" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>

@@ -9,7 +9,7 @@ import android.widget.ImageView.ScaleType;
 
 /**
  * @author Michael A. MacDonald
- * 
+ *
  */
 public class ConnectionBean {
 
@@ -30,7 +30,7 @@ public class ConnectionBean {
 		setAddress(Config.defaultVNCHost);
 		setUserName(Config.defaultVNCUsername);
 		setPassword("555555");
-		setPort(Config.defaultVNCPort + 5901);
+		setPort(Config.defaultVNCPort + 5900);
 		setColorModel(Config.defaultVNCColorMode);
 		if (Config.enable_qemu_fullScreen)
 			setScaleMode(Config.defaultFullscreenScaleMode);
@@ -40,40 +40,40 @@ public class ConnectionBean {
 	}
 
 	private void setUserName(String string) {
-		
+
 		this.userName = string;
 
 	}
 
 	public void setInputMode(String touchZoomMode) {
-		
+
 		this.InputMode = touchZoomMode;
 
 	}
 
 	void setPort(int i) {
-		
+
 		this.port = i;
 	}
 
 	void setColorModel(String nameString) {
-		
+
 		this.colorModel = nameString;
 
 	}
 
 	void setAddress(String string) {
-		
+
 		this.address = string;
 	}
 
 	void setPassword(String string) {
-		
+
 		this.password = string;
 	}
 
 	public long get_Id() {
-		
+
 		return 0;
 	}
 
@@ -82,7 +82,7 @@ public class ConnectionBean {
 	}
 
 	private String getScaleModeAsString() {
-		
+
 		return scaleMode;
 	}
 
@@ -91,90 +91,90 @@ public class ConnectionBean {
 	}
 
 	private void setScaleModeAsString(String string) {
-		
+
 		this.scaleMode = string;
 
 	}
 
 	public String getAddress() {
-		
+
 		return this.address;
 	}
 
 	public void setNickname(String address2) {
-		
+
 		this.nickname = address2;
 	}
 
 	public int getPort() {
-		
+
 		return port;
 	}
 
 	public String getInputMode() {
-		
+
 		return this.InputMode;
 	}
 
 	public String getPassword() {
-		
+
 		return this.password;
 	}
 
 	public long getForceFull() {
-		
+
 		return this.forceFull;
 	}
 
 	public boolean getUseLocalCursor() {
-		
+
 		return this.useLocalCursor;
 	}
 
 	public String getNickname() {
-		
+
 		return nickname;
 	}
 
 	public String getColorModel() {
-		
+
 		return this.colorModel;
 	}
 
 	public void setForceFull(long l) {
-		
+
 		this.forceFull = l;
 	}
 
 	public void setUseLocalCursor(boolean checked) {
-		
+
 		this.setUseLocalCursor(checked);
 	}
 
 	public void setFollowMouse(boolean b) {
-		
+
 		this.followMouse = b;
 
 	}
 
 	public boolean getFollowMouse() {
-		
+
 		return this.followMouse;
 	}
 
 	public String getUserName() {
-		
+
 		return userName;
 	}
 
 	public void setConnectionId(long get_Id) {
-		
+
 		this.id = get_Id;
 
 	}
 
 	public boolean getFollowPan() {
-		
+
 		return false;
 	}
 

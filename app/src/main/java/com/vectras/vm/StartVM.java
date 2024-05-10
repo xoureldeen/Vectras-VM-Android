@@ -11,23 +11,33 @@ import com.vectras.vm.utils.FileUtils;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class StartVM {
     public static String cache;
-
-    static String[] qemu = new String[]{"qemu-system-x86_64"};
 
     public static String env(Activity activity, String extras, String img) {
 
         String filesDir = activity.getFilesDir().getAbsolutePath();
 
+        String[] qemu = new String[0];
+
+
         ArrayList<String> params = new ArrayList<>(Arrays.asList(qemu));
+
+        if (MainSettingsManager.getArch(activity).equals("I386"))
+            params.add("qemu-system-i386");
+        else if (MainSettingsManager.getArch(activity).equals("X86_64"))
+            params.add("qemu-system-x86_64");
+        else if (MainSettingsManager.getArch(activity).equals("ARM64"))
+            params.add("qemu-system-aarch64");
+        else if (MainSettingsManager.getArch(activity).equals("PPC"))
+            params.add("qemu-system-ppc");
 
         String ifType = MainSettingsManager.getIfType(activity);
 
         String cdrom;
         String hdd1;
-        String hdd2;
 
         String hdd0 = "-drive";
         hdd0 += " index=0";
@@ -58,21 +68,14 @@ public class StartVM {
             params.add(hdd1);
         }
 
-        File hdd2File = new File(filesDir + "/data/Vectras/hdd2.qcow2");
 
-        if (hdd2File.exists()) {
-            hdd2 = "-drive";
-            hdd2 += " index=3";
-            hdd2 += ",media=disk";
-            hdd2 += ",if=" + ifType;
-            hdd2 += ",file='" + hdd2File.getPath() + "'";
-            params.add(hdd2);
+        if (MainSettingsManager.getSharedFolder(activity)) {
+            String driveParams = "-drive ";
+            driveParams += "index=3,media=disk,file=fat:";
+            driveParams += "rw:"; //Disk Drives are always Read/Write
+            driveParams += FileUtils.getExternalFilesDirectory(activity).getPath() + "/SharedFolder,format=raw";
+            params.add(driveParams);
         }
-
-        /*if (MainSettingsManager.getSharedFolder(activity)) {
-            params.add("-net user,smb='" + FileUtils.getExternalFilesDirectory(activity).getPath() + "/SharedFolder" + "'");
-            params.add("-net nic,model=virtio");
-        }*/
 
         boolean kvm = MainSettingsManager.getKvm(activity);
         boolean avx = MainSettingsManager.getAvx(activity);
@@ -102,12 +105,16 @@ public class StartVM {
         //params.add(soundDevice);
 
         String bios = "-bios ";
-        bios += AppConfig.basefiledir + "/bios-vectras.bin";
+        bios += AppConfig.basefiledir + "bios-vectras.bin";
 
         String machine = "-M ";
-        machine += "pc";
-
-        params.add(machine);
+        if (Objects.equals(MainSettingsManager.getArch(activity), "X86_64")) {
+            machine += "pc";
+            params.add(machine);
+        } else if (Objects.equals(MainSettingsManager.getArch(activity), "ARM64")) {
+            machine += "virt";
+            params.add(machine);
+        }
 
         params.add("-overcommit");
         params.add("mem-lock=off");
@@ -135,23 +142,16 @@ public class StartVM {
             String vncStr = "-vnc ";
             params.add(vncStr);
             // Allow connections only from localhost using localsocket without a password
-            //params.add(Config.defaultVNCHost+":" + Config.defaultVNCPort);
-            String qmpParams = "unix:";
-            qmpParams += Config.getLocalVNCSocketPath();
-            params.add(qmpParams);
+            if (MainSettingsManager.getVncExternal(activity))
+                params.add(Config.defaultVNCHost + ":" + Config.defaultVNCPort);
+            else {
+                String qmpParams = "unix:";
+                qmpParams += Config.getLocalVNCSocketPath();
+                params.add(qmpParams);
+            }
+
             params.add("-monitor");
             params.add("vc");
-
-            //XXX: monitor, serial, and parallel display crashes cause SDL doesn't support more than 1 window
-            params.add("-monitor");
-            params.add("none");
-
-            params.add("-serial");
-            params.add("none");
-
-            params.add("-parallel");
-            params.add("none");
-
         } else if (MainSettingsManager.getVmUi(activity).equals("SPICE")) {
             String spiceStr = "-spice ";
             spiceStr += "port=6999,disable-ticketing=on";

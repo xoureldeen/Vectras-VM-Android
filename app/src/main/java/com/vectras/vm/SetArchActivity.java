@@ -24,48 +24,40 @@ public class SetArchActivity extends AppCompatActivity implements View.OnClickLi
         mHandler = new Handler();
         setContentView(R.layout.activity_set_arch);
         activity = this;
-        Button arch86 = findViewById(R.id.archx86);
-        Button archarm = findViewById(R.id.archarm);
+        Button archi386 = findViewById(R.id.archi386);
+        Button archx86_64 = findViewById(R.id.archx86_64);
+        Button archarm64 = findViewById(R.id.archarm64);
+        Button archppc = findViewById(R.id.archppc);
         Button web = findViewById(R.id.webBtn);
-        arch86.setOnClickListener(this);
-        archarm.setOnClickListener(this);
+        archi386.setOnClickListener(this);
+        archx86_64.setOnClickListener(this);
+        archarm64.setOnClickListener(this);
+        archppc.setOnClickListener(this);
         web.setOnClickListener(this);
     }
 
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.archx86) {
+        if (id == R.id.archi386) {
+            MainSettingsManager.setArch(this, "I386");
+
+            finish();
+            startActivity(new Intent(this, SplashActivity.class));
+        } else if (id == R.id.archx86_64) {
             MainSettingsManager.setArch(this, "X86_64");
 
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Intent startActivity = new Intent(activity, SplashActivity.class);
-                    int pendingIntentId = 123456;
-                    PendingIntent pendingIntent = PendingIntent.getActivity(activity, pendingIntentId, startActivity, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+            finish();
+            startActivity(new Intent(this, SplashActivity.class));
+        } else if (id == R.id.archarm64) {
+            MainSettingsManager.setArch(this, "ARM64");
 
-                    AlarmManager mgr = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
-                    mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 500, pendingIntent);
+            finish();
+            startActivity(new Intent(this, SplashActivity.class));
+        } else if (id == R.id.archppc) {
+            MainSettingsManager.setArch(this, "PPC");
 
-                    System.exit(0);
-                }
-            }, 300);
-        } else if (id == R.id.archarm) {
-            MainSettingsManager.setArch(this, "ARM");
-
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Intent startActivity = new Intent(activity, SplashActivity.class);
-                    int pendingIntentId = 123456;
-                    PendingIntent pendingIntent = PendingIntent.getActivity(activity, pendingIntentId, startActivity, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-
-                    AlarmManager mgr = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
-                    mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 500, pendingIntent);
-
-                    System.exit(0);
-                }
-            }, 300);
+            finish();
+            startActivity(new Intent(this, SplashActivity.class));
         } else if (id == R.id.webBtn) {
             String qe = "https://www.qemu.org/";
             Intent q = new Intent(Intent.ACTION_VIEW);

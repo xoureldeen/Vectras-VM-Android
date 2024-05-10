@@ -39,7 +39,8 @@
                 android:text="EMU"
                 android:textColor="?attr/colorControlNormal"
                 android:textSize="24sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:ignore="HardcodedText" />
 
         </LinearLayout>
 
@@ -59,20 +60,35 @@
             android:textSize="16sp" />
 
         <Button
-            android:id="@+id/archx86"
+            android:id="@+id/archi386"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="x86_64 QEMU (RECOMMENDED)"
+            android:text="@string/i386_qemu"
             android:textAlignment="textStart"
             app:icon="@drawable/round_memory_24" />
 
         <Button
-            android:id="@+id/archarm"
+            android:id="@+id/archx86_64"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="ARM QEMU"
+            android:text="@string/x86_64_qemu_recommended"
             android:textAlignment="textStart"
-            android:visibility="gone"
+            app:icon="@drawable/round_memory_24" />
+
+        <Button
+            android:id="@+id/archarm64"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/arm64_qemu"
+            android:textAlignment="textStart"
+            app:icon="@drawable/round_memory_24" />
+
+        <Button
+            android:id="@+id/archppc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/powerpc_qemu"
+            android:textAlignment="textStart"
             app:icon="@drawable/round_memory_24" />
 
         <Button
@@ -80,7 +96,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="QEMU WEBSITE"
+            android:text="@string/qemu_website"
             android:textAlignment="textStart"
             app:icon="@drawable/round_public_24" />
     </LinearLayout>

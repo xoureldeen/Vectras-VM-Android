@@ -10,8 +10,8 @@ android {
         applicationId "com.vectras.vm"
         minSdk minApi
         targetSdk targetApi
-        versionCode 15
-        versionName "v2.8-debug-build-5"
+        versionCode 16
+        versionName "v2.9.0"
 	    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -44,6 +44,15 @@ android {
             // Or, if you prefer, you can continue to check for errors in release builds,
             // but continue the build even when errors are found:
             abortOnError false
+        }
+    }
+
+    ndkVersion '22.1.7171670'
+
+    externalNativeBuild {
+        cmake {
+            version '3.22.1'
+            path 'src/main/cpp/CMakeLists.txt'
         }
     }
 }

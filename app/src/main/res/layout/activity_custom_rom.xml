@@ -65,6 +65,7 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:hint="@string/rom_icon"
+                    android:enabled="false"
                     android:theme="@style/AppTheme.TextInput"
                     app:startIconDrawable="@drawable/round_image_24">
 
@@ -85,9 +86,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="true"
+                    android:enabled="false"
                     android:hint="@string/rom_drive_qcow2_img_etc"
                     android:theme="@style/AppTheme.TextInput"
-                    app:startIconDrawable="@drawable/round_storage_24">
+                    app:endIconMode="custom"
+                    app:startIconDrawable="@drawable/round_storage_24"
+                    app:endIconDrawable="@drawable/round_edit_24"
+                    app:endIconContentDescription="@string/make_image">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/drive"
@@ -106,6 +111,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="true"
+                    android:enabled="false"
                     android:hint="CDROM (iso only)"
                     android:theme="@style/AppTheme.TextInput"
                     app:startIconDrawable="@drawable/round_album_24">

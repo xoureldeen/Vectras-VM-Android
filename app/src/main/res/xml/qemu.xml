@@ -14,7 +14,7 @@
             android:entries="@array/vmArchLabels"
             android:entryValues="@array/vmArchValues"
             android:key="vmArch"
-            android:title="VM ARCH"
+            android:title="@string/vm_arch"
             app:icon="@drawable/ic_arch"
             app:useSimpleSummaryProvider="true" />
 
@@ -22,10 +22,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="qemu64"
-            android:entries="@array/cpuLabels"
-            android:entryValues="@array/cpuValues"
             android:key="cpu"
-            android:title="CPU MODEL"
+            android:title="@string/cpu_model"
             app:icon="@drawable/round_memory_24"
             app:useSimpleSummaryProvider="true" />
 
@@ -34,7 +32,7 @@
             android:layout_height="wrap_content"
             android:defaultValue="false"
             android:key="customMemory"
-            android:title="CUSTOM MEMORY"
+            android:title="@string/custom_memory"
             app:icon="@drawable/round_build_24" />
         <EditTextPreference
             android:layout_width="wrap_content"
@@ -44,7 +42,7 @@
             android:key="memory"
             android:selectAllOnFocus="true"
             android:singleLine="true"
-            android:title="MEMORY (MB)"
+            android:title="@string/memory_mb"
             app:useSimpleSummaryProvider="true"
             app:icon="@drawable/round_memory_24" />
         <ListPreference
@@ -54,7 +52,7 @@
             android:entries="@array/soundCardLabels"
             android:entryValues="@array/soundCardValues"
             android:key="soundCard"
-            android:title="SOUND CARD"
+            android:title="@string/sound_card"
             app:isPreferenceVisible="false"
             app:icon="@drawable/round_volume_up_24"
             app:useSimpleSummaryProvider="true" />
@@ -66,7 +64,7 @@
             android:key="TbSize"
             android:selectAllOnFocus="true"
             android:singleLine="true"
-            android:title="TB SIZE (KB)"
+            android:title="@string/tb_size_kb"
             app:useSimpleSummaryProvider="true"
             app:icon="@drawable/ic_t" />
         <SwitchPreferenceCompat
@@ -74,14 +72,14 @@
             android:layout_height="wrap_content"
             android:defaultValue="true"
             android:key="AVX"
-            android:title="AVX"
+            android:title="@string/avx"
             app:icon="@drawable/ic_a" />
         <SwitchPreferenceCompat
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="true"
             android:key="MTTCG"
-            android:title="MTTCG"
+            android:title="@string/mttcg"
             android:summary="multi tcg acceleration"
             app:icon="@drawable/ic_mttcg" />
         <SwitchPreferenceCompat
@@ -89,8 +87,8 @@
             android:layout_height="wrap_content"
             android:defaultValue="false"
             android:key="kvm"
-            android:summary="kvm acceleration"
-            android:title="KVM"
+            android:summary="@string/kvm_acceleration"
+            android:title="@string/kvm"
             app:icon="@drawable/ic_kvm" />
         <ListPreference
             android:layout_width="wrap_content"
@@ -99,7 +97,7 @@
             android:entries="@array/cpuCoresLabels"
             android:entryValues="@array/cpuCoresValues"
             android:key="cpuNum"
-            android:title="CPU CORES"
+            android:title="@string/cpu_cores"
             app:useSimpleSummaryProvider="true"
             app:icon="@drawable/round_hub_24" />
         <ListPreference
@@ -108,7 +106,7 @@
             android:defaultValue="ide"
             android:entries="@array/iftypeLabels"
             android:entryValues="@array/iftypeValues"
-            android:title="HARDDISK TYPE"
+            android:title="@string/harddisk_type"
             android:key="ifType"
             app:useSimpleSummaryProvider="true"
             app:icon="@drawable/round_dns_24" />
@@ -116,7 +114,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:key="boot"
-            android:title="BOOT FROM"
+            android:title="@string/boot_from"
             android:entries="@array/bootLabels"
             android:entryValues="@array/bootValues"
             android:defaultValue="c"
@@ -126,10 +124,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="false"
-            android:title="SHARED FOLDER"
+            android:title="@string/shared_folder"
             android:key="sharedFolder"
             android:summary="/Documents/VectrasVM/SharedFolder/"
-            app:isPreferenceVisible="false"
             app:icon="@drawable/round_folder_24" />
         <EditTextPreference
             android:layout_width="wrap_content"
@@ -139,14 +136,14 @@
             android:key="customParams"
             android:selectAllOnFocus="true"
             android:singleLine="true"
-            android:title="CUSTOM PARAMS"
+            android:title="@string/custom_params"
             app:useSimpleSummaryProvider="true"
             app:icon="@drawable/round_terminal_24" />
     </PreferenceCategory>
     <PreferenceCategory
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:title="VM UI ENVIRONMENT"
+        android:title="@string/vm_ui_environment"
         app:iconSpaceReserved="false">
 
         <ListPreference
@@ -168,7 +165,7 @@
             android:entries="@array/displayResolutionLabels"
             android:entryValues="@array/displayResolutionValues"
             android:key="RESOLUTION"
-            android:title="X11 Resolution"
+            android:title="@string/x11_resolution"
             app:isPreferenceVisible="false"
             app:useSimpleSummaryProvider="true"
             app:icon="@drawable/round_aspect_ratio_24"/>
@@ -177,7 +174,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:key="mouse"
-            android:title="MOUSE"
+            android:title="@string/mouse"
             android:defaultValue="usb-mouse"
             android:entries="@array/mouseLabels"
             android:entryValues="@array/mouseValues"
@@ -188,7 +185,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:key="keyboard"
-            android:title="KEYBOARD"
+            android:title="@string/keyboard"
             android:defaultValue="usb-kbd"
             android:entries="@array/keyboardLabels"
             android:entryValues="@array/keyboardValues"

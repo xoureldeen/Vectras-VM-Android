@@ -19,9 +19,9 @@
         android:text="@string/hosted_successfully" />
 
     <TextView
+        android:id="@+id/tvLogin"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/ip" />
+        android:layout_height="wrap_content" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/stopBtn"

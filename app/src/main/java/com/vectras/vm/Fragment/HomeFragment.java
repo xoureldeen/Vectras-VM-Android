@@ -69,12 +69,13 @@ public class HomeFragment extends Fragment {
     public MainActivity activity;
     public static JSONArray jArray;
     public static List<DataMainRoms> data;
+    private SwipeRefreshLayout refreshRoms;
 
-    /*private ImageButton mStop;
-    private ImageButton mRestart;*/
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // TODO Auto-generated method stub
+
+        // TODO show the text view in @layout/home_fragment if list empty
 
         activity = MainActivity.activity;
 
@@ -82,7 +83,7 @@ public class HomeFragment extends Fragment {
 
         romsLayout = view.findViewById(R.id.romsLayout);
 
-        SwipeRefreshLayout refreshRoms = view.findViewById(R.id.refreshRoms);
+        refreshRoms = view.findViewById(R.id.refreshRoms);
 
         refreshRoms.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -136,7 +137,6 @@ public class HomeFragment extends Fragment {
             mMainAdapter = new AdapterMainRoms(MainActivity.activity, data);
             mRVMainRoms.setAdapter(mMainAdapter);
             mRVMainRoms.setLayoutManager(new GridLayoutManager(MainActivity.activity, 2));
-
         } catch (JSONException e) {
             Toast.makeText(MainActivity.activity, e.toString(), Toast.LENGTH_LONG).show();
         }

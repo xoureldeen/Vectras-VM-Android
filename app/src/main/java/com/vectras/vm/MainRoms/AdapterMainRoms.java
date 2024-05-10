@@ -121,13 +121,13 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         final File jsonFile = new File(MainActivity.activity.getExternalFilesDir("data") + "/rom-data.json");
                         AlertDialog ad;
                         ad = new AlertDialog.Builder(MainActivity.activity).create();
-                        ad.setTitle("Export Rom");
-                        ad.setMessage("Are you sure?");
+                        ad.setTitle(MainActivity.activity.getString(R.string.export_rom));
+                        ad.setMessage(MainActivity.activity.getString(R.string.are_you_sure));
                         final TextInputLayout Description = new TextInputLayout(MainActivity.activity);
                         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                                 LinearLayout.LayoutParams.MATCH_PARENT,
                                 LinearLayout.LayoutParams.MATCH_PARENT);
-                        Description.setHint("DESCRIPTION (html supported)");
+                        Description.setHint(R.string.description_html_supported);
                         Description.setLayoutParams(lp);
                         Description.setPadding(10, 10, 10, 10);
                         final TextInputEditText DescriptionET = new TextInputEditText(MainActivity.activity);
@@ -136,7 +136,7 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                 LinearLayout.LayoutParams.MATCH_PARENT);
                         DescriptionET.setLayoutParams(lp2);
                         Description.addView(DescriptionET);
-                        DescriptionET.setText("null");
+                        DescriptionET.setText("");
                         DescriptionET.setInputType(InputType.TYPE_CLASS_TEXT);
                         DescriptionET.setSelectAllOnFocus(true);
                         ad.setView(Description);
@@ -154,8 +154,8 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             SharedPreferences credentials = MainActivity.activity.getSharedPreferences(CREDENTIAL_SHARED_PREF, Context.MODE_PRIVATE);
 
                             ProgressDialog progressDialog = new ProgressDialog(MainActivity.activity);
-                            progressDialog.setTitle("Compressing CVBI");
-                            progressDialog.setMessage("Please wait...");
+                            progressDialog.setTitle(MainActivity.activity.getString(R.string.compressing_cvbi));
+                            progressDialog.setMessage(MainActivity.activity.getString(R.string.please_wait_dialog));
                             progressDialog.setCancelable(false);
                             progressDialog.show(); // Showing Progress Dialog
                             Thread t = new Thread() {
@@ -173,7 +173,7 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                             @Override
                                             public void run() {
                                                 progressDialog.cancel(); // cancelling Dialog.
-                                                UIUtils.UIAlert(MainActivity.activity, "ERROR!", e.toString());
+                                                UIUtils.UIAlert(MainActivity.activity, MainActivity.activity.getString(R.string.error), e.toString());
                                             }
                                         };
                                         MainActivity.activity.runOnUiThread(runnable);
@@ -182,7 +182,7 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                             @Override
                                             public void run() {
                                                 progressDialog.cancel(); // cancelling Dialog.}
-                                                UIUtils.UIAlert(MainActivity.activity, "DONE!", FileUtils.getExternalFilesDirectory(MainActivity.activity).getPath() + "/cvbi/" + current.itemName + ".cvbi");
+                                                UIUtils.UIAlert(MainActivity.activity, MainActivity.activity.getString(R.string.done), FileUtils.getExternalFilesDirectory(MainActivity.activity).getPath() + "/cvbi/" + current.itemName + ".cvbi");
                                             }
                                         };
                                         MainActivity.activity.runOnUiThread(runnable);
@@ -192,7 +192,7 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             t.start();
                             return;
                         });
-                        ad.setButton(Dialog.BUTTON_NEGATIVE, "CLOSE", (dialog, which) -> {
+                        ad.setButton(Dialog.BUTTON_NEGATIVE, MainActivity.activity.getString(R.string.close), (dialog, which) -> {
                             return;
                         });
                         ad.show();
@@ -214,9 +214,9 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
             public boolean onLongClick(View v) {
                 AlertDialog ad;
                 ad = new AlertDialog.Builder(MainActivity.activity, R.style.MainDialogTheme).create();
-                ad.setTitle("Remove " + current.itemName);
-                ad.setMessage("Are you sure?");
-                ad.setButton(Dialog.BUTTON_NEGATIVE, "REMOVE " + current.itemName, new DialogInterface.OnClickListener() {
+                ad.setTitle(MainActivity.activity.getString(R.string.remove)+ " " + current.itemName);
+                ad.setMessage(MainActivity.activity.getString(R.string.are_you_sure));
+                ad.setButton(Dialog.BUTTON_NEGATIVE, MainActivity.activity.getString(R.string.remove) + " " + current.itemName, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         File file = new File(current.itemPath);
                         File file2 = new File(current.itemDrv1);
@@ -269,11 +269,11 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         } catch (Exception e) {
                             UIUtils.toastLong(MainActivity.activity, e.toString());
                         }
-                        UIUtils.toastLong(MainActivity.activity, current.itemName + " are removed successfully!");
+                        UIUtils.toastLong(MainActivity.activity, current.itemName + context.getString(R.string.are_removed_successfully));
                         return;
                     }
                 });
-                ad.setButton(Dialog.BUTTON_POSITIVE, "CANCEL", new DialogInterface.OnClickListener() {
+                ad.setButton(Dialog.BUTTON_POSITIVE, MainActivity.activity.getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         return;
                     }
@@ -320,9 +320,9 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
             public void onClick(View v) {
                 AlertDialog ad;
                 ad = new AlertDialog.Builder(MainActivity.activity, R.style.MainDialogTheme).create();
-                ad.setTitle("Remove " + title);
-                ad.setMessage("Are you sure?");
-                ad.setButton(Dialog.BUTTON_NEGATIVE, "REMOVE " + title, new DialogInterface.OnClickListener() {
+                ad.setTitle(MainActivity.activity.getString(R.string.remove) + " " + title);
+                ad.setMessage(MainActivity.activity.getString(R.string.are_you_sure));
+                ad.setButton(Dialog.BUTTON_NEGATIVE, MainActivity.activity.getString(R.string.remove) + " " + title, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         File file = new File(path);
                         try {
@@ -345,11 +345,11 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         } catch (Exception e) {
                             UIUtils.toastLong(MainActivity.activity, e.toString());
                         }
-                        UIUtils.toastLong(MainActivity.activity, title + " are removed successfully!");
+                        UIUtils.toastLong(MainActivity.activity, title + MainActivity.activity.getString(R.string.are_removed_successfully));
                         return;
                     }
                 });
-                ad.setButton(Dialog.BUTTON_POSITIVE, "CANCEL", new DialogInterface.OnClickListener() {
+                ad.setButton(Dialog.BUTTON_POSITIVE, MainActivity.activity.getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         return;
                     }

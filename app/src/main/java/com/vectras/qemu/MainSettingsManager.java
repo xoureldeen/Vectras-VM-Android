@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -20,12 +21,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.SwitchPreference;
+import androidx.preference.SwitchPreferenceCompat;
 
 import com.vectras.vm.R;
 import com.vectras.vm.SplashActivity;
 import com.vectras.vm.VectrasApp;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 public class MainSettingsManager extends AppCompatActivity
         implements PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
@@ -224,8 +232,6 @@ public class MainSettingsManager extends AppCompatActivity
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            if (SDK_INT > 33)
-                findPreference("sharedFolder").setEnabled(false);
 
             mHandler = new Handler();
             Preference pref = findPreference("vmArch");
@@ -268,7 +274,14 @@ public class MainSettingsManager extends AppCompatActivity
 
                 });
             }
-            Preference pref3 = findPreference("MTTCG");
+            if (Objects.equals(getArch(activity), "I386")) { // I386 DOES NOT SUPPORT SHARED FOLDER
+                SwitchPreferenceCompat sharedPref = findPreference("sharedFolder");
+                sharedPref.setEnabled(false);
+                sharedPref.setChecked(false);
+                setSharedFolder(activity, false);
+
+            }
+            SwitchPreferenceCompat pref3 = findPreference("MTTCG");
             if (pref3 != null) {
                 pref3.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 
@@ -294,6 +307,77 @@ public class MainSettingsManager extends AppCompatActivity
                     }
 
                 });
+                String ABI = Build.SUPPORTED_ABIS[0];
+                if (ABI.contains("x86") && (Objects.equals(getArch(activity), "X86_64") || Objects.equals(getArch(activity), "I386"))) {
+                    assert pref2 != null;
+                    pref2.setVisible(true);
+                } else if (Objects.equals(ABI, "arm64-v8a") && Objects.equals(getArch(activity), "ARM64")) {
+                    assert pref2 != null;
+                    pref2.setVisible(true);
+                } else {
+                    assert pref2 != null;
+                    pref2.setVisible(false);
+                    pref3.setEnabled(false);
+                    pref3.setChecked(true);
+                    setMTTCG(activity, true);
+                }
+            }
+            ListPreference cpuListPreference = (ListPreference) findPreference("cpu");
+            if (cpuListPreference != null) {
+                String arch = getArch(activity);
+                String[] cpuValues_i386 = getResources().getStringArray(R.array.cpuValues_i386);
+                List<String> cpuValuesList_i386 = Arrays.asList(cpuValues_i386);
+
+                String[] cpuLabels_i386 = getResources().getStringArray(R.array.cpuLabels_i386);
+                List<String> cpuLabels_list_i386 = Arrays.asList(cpuLabels_i386);
+
+                String[] cpuValues_x86_64 = getResources().getStringArray(R.array.cpuValues_x86_64);
+                List<String> cpuValuesList_x86_64 = Arrays.asList(cpuValues_x86_64);
+
+                String[] cpuLabels_x86_64 = getResources().getStringArray(R.array.cpuLabels_x86_64);
+                List<String> cpuLabels_list_x86_64 = Arrays.asList(cpuLabels_x86_64);
+
+                String[] cpuValues_arm64 = getResources().getStringArray(R.array.cpuValues_arm64);
+                List<String> cpuValuesList_arm64 = Arrays.asList(cpuValues_arm64);
+
+                String[] cpuLabels_arm64 = getResources().getStringArray(R.array.cpuLabels_arm64);
+                List<String> cpuLabels_list_arm64 = Arrays.asList(cpuLabels_arm64);
+
+                String[] cpuValues_ppc = getResources().getStringArray(R.array.cpuValues_ppc);
+                List<String> cpuValuesList_ppc = Arrays.asList(cpuValues_ppc);
+
+                String[] cpuLabels_ppc = getResources().getStringArray(R.array.cpuLabels_ppc);
+                List<String> cpuLabels_list_ppc = Arrays.asList(cpuLabels_ppc);
+
+                if (Objects.equals(arch, "I386")) {
+                    cpuListPreference.setEntries(R.array.cpuLabels_i386);
+                    cpuListPreference.setEntryValues(R.array.cpuValues_i386);
+
+                    // Optionally, if you want to set a default value programmatically
+                    cpuListPreference.setValue("qemu32"); // You can set this to whatever default you need
+                    cpuListPreference.setSummaryProvider(ListPreference.SimpleSummaryProvider.getInstance());
+                } else if (Objects.equals(arch, "X86_64")) {
+                    cpuListPreference.setEntries(R.array.cpuLabels_x86_64);
+                    cpuListPreference.setEntryValues(R.array.cpuValues_x86_64);
+
+                    // Optionally, if you want to set a default value programmatically
+                    cpuListPreference.setValue("qemu64"); // You can set this to whatever default you need
+                    cpuListPreference.setSummaryProvider(ListPreference.SimpleSummaryProvider.getInstance());
+                } else if (Objects.equals(arch, "ARM64")) {
+                    cpuListPreference.setEntries(R.array.cpuLabels_arm64);
+                    cpuListPreference.setEntryValues(R.array.cpuValues_arm64);
+
+                    // Optionally, if you want to set a default value programmatically
+                    cpuListPreference.setValue("arm926"); // You can set this to whatever default you need
+                    cpuListPreference.setSummaryProvider(ListPreference.SimpleSummaryProvider.getInstance());
+                } else if (Objects.equals(arch, "POWERPC")) {
+                    cpuListPreference.setEntries(R.array.cpuLabels_ppc);
+                    cpuListPreference.setEntryValues(R.array.cpuValues_ppc);
+
+                    // Optionally, if you want to set a default value programmatically
+                    cpuListPreference.setValue("601_v1"); // You can set this to whatever default you need
+                    cpuListPreference.setSummaryProvider(ListPreference.SimpleSummaryProvider.getInstance());
+                }
             }
             /*Preference pref = findPreference("customMemory");
             if (pref != null) {
@@ -335,30 +419,20 @@ public class MainSettingsManager extends AppCompatActivity
         public void onResume() {
             super.onResume();
             onMemory();
-            if (SDK_INT > 33)
-                findPreference("sharedFolder").setEnabled(false);
         }
 
         @Override
         public void onPause() {
             super.onPause();
             onMemory();
-            if (SDK_INT > 33)
-                findPreference("sharedFolder").setEnabled(false);
         }
 
         private void onArch() {
             mHandler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Intent startActivity = new Intent(getContext(), SplashActivity.class);
-                    int pendingIntentId = 123456;
-                    PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), pendingIntentId, startActivity, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-
-                    AlarmManager mgr = (AlarmManager) MainSettingsManager.activity.getSystemService(Context.ALARM_SERVICE);
-                    mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 500, pendingIntent);
-
-                    System.exit(0);
+                    activity.finish();
+                    startActivity(new Intent(activity, SplashActivity.class));
                 }
             }, 300);
         }
@@ -367,8 +441,6 @@ public class MainSettingsManager extends AppCompatActivity
         public void onCreatePreferences(Bundle bundle, String root_key) {
             // Load the Preferences from the XML file
             setPreferencesFromResource(R.xml.qemu, root_key);
-            if (SDK_INT > 33)
-                findPreference("sharedFolder").setEnabled(false);
         }
 
         @Override
@@ -799,10 +871,10 @@ public class MainSettingsManager extends AppCompatActivity
         return prefs.getString("customParams", "");
     }
 
-    public static void setSharedFolder(Activity activity, boolean customParams) {
+    public static void setSharedFolder(Activity activity, boolean enable) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         SharedPreferences.Editor edit = prefs.edit();
-        edit.putBoolean("customParams", customParams);
+        edit.putBoolean("sharedFolder", enable);
         edit.apply();
     }
 

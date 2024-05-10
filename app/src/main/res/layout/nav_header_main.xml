@@ -4,122 +4,24 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="bottom|center_vertical"
-    android:orientation="vertical">
+    android:orientation="horizontal"
+    android:layout_marginTop="20dp"
+    android:padding="12dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="bottom"
-        android:orientation="vertical">
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:contentDescription="@string/free_palistine"
+        android:scaleType="centerInside"
+        app:srcCompat="@drawable/free_palestine" />
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="36dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.0"
-                android:gravity="center_vertical"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="left|center_vertical"
-                    android:orientation="horizontal"
-                    android:visibility="gone"
-                    android:padding="4dp">
-
-                    <androidx.cardview.widget.CardView
-                        style="@style/CardViewStyle"
-                        android:layout_width="56dp"
-                        android:layout_height="56dp"
-                        android:layout_margin="8dp"
-                        android:clipToPadding="false"
-                        android:visibility="gone"
-                        app:cardCornerRadius="360dp"
-                        app:cardPreventCornerOverlap="true">
-
-                        <ImageView
-                            android:id="@+id/profilePic2"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:scaleType="centerCrop"
-                            app:srcCompat="@drawable/person_24" />
-
-                    </androidx.cardview.widget.CardView>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1.0"
-                        android:gravity="center_vertical"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/usernameTxt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:singleLine="true"
-                            android:text="@string/username_caption"
-                            android:textSize="16sp"
-                            android:typeface="serif" />
-
-                        <TextView
-                            android:id="@+id/emailTxt"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:singleLine="true"
-                            android:textSize="12sp"
-                            android:typeface="serif" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/viewProfile"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:autoLink="all"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:foreground="?android:attr/selectableItemBackground"
-                        android:gravity="right|center_vertical"
-                        android:linksClickable="false"
-                        android:selectAllOnFocus="false"
-                        android:singleLine="true"
-                        android:text="@string/view_profile"
-                        android:textAlignment="textEnd"
-                        android:textSize="12sp"
-                        tools:targetApi="m" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="bottom"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/appNameTxt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="8dp"
-                        android:paddingTop="8dp"
-                        android:paddingBottom="8dp"
-                        android:singleLine="true"
-                        android:text="@string/app_name"
-                        android:textSize="20sp" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-        </FrameLayout>
-    </LinearLayout>
+    <TextView
+        android:id="@+id/appNameTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:singleLine="true"
+        android:text="@string/app_name"
+        android:textSize="20sp" />
 
 </LinearLayout>

@@ -9,7 +9,7 @@
         <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="vncExternal"
-            android:title="EXTERNAL VNC"
+            android:title="@string/external_vnc"
             app:icon="@drawable/round_build_24" />
     </PreferenceCategory>
 </PreferenceScreen>

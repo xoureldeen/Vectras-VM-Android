@@ -25,6 +25,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.google.android.material.color.DynamicColors;
 import com.vectras.qemu.MainSettingsManager;
@@ -40,11 +41,13 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class VectrasApp extends Application {
@@ -71,6 +74,28 @@ public class VectrasApp extends Application {
 		}
 		setModeNight(this);
 		DynamicColors.applyToActivitiesIfAvailable(this);
+
+		Locale locale = Locale.getDefault();
+		String language = locale.getLanguage();
+
+		if (language.contains("ar")) {
+			overrideFont("DEFAULT", R.font.cairo_regular);
+		} else {
+			overrideFont("DEFAULT", R.font.josefin_sans);
+		}
+
+	}
+
+	public void overrideFont(String defaultFontNameToOverride, int customFontResourceId) {
+		try {
+			Typeface customFontTypeface = ResourcesCompat.getFont(getApplicationContext(), customFontResourceId);
+
+			final Field defaultFontTypefaceField = Typeface.class.getDeclaredField(defaultFontNameToOverride);
+			defaultFontTypefaceField.setAccessible(true);
+			defaultFontTypefaceField.set(null, customFontTypeface);
+		} catch (Exception e) {
+			Log.e("overrideFont", "Failed to override font", e);
+		}
 	}
 
 	private void setModeNight(Context context) {

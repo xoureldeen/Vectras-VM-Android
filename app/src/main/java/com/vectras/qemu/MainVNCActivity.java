@@ -314,7 +314,7 @@ public class MainVNCActivity extends VncCanvasActivity {
                                 MainService.stopService();
 
                                 Terminal vterm = new Terminal(activity);
-                                vterm.executeShellCommand("killall qemu-system-x86_64");
+                                vterm.executeShellCommand("killall qemu-system-*", false, activity);
 
                                 // Finish the activity
                                 activity.finish();

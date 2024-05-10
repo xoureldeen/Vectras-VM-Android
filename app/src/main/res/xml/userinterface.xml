@@ -10,7 +10,7 @@
         <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="modeNight"
-            android:title="NIGHT MODE"
+            android:title="@string/night_mode"
             app:icon="@drawable/round_dark_mode_24" />
 
     </PreferenceCategory>
