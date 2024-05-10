@@ -18,7 +18,8 @@ For now, there is no official tutorials for Vectras VM, and there won't be until
 > Vectras VM 2.8 is still in alpha stages and its releases are intended for testing only.
 
 You can either download Vectras VM from [releases](https://github.com/epicstudios856/Vectras-VM-Android/releases) or [official website](https://vectrasvm.blackstorm.cc/download.html).
-or u can download daily builds from [workflow](https://github.com/epicstudios856/Vectras-VM-Android/actions).
+
+If you are using Android 14, you can use v2.8. Devices running Android 13 or less can use previous versions.
 
 ### Minimum System Requirement
 - Android 5.0 and up
