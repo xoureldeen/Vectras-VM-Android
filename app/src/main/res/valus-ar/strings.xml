@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Vectras VM</string>
+    <string name="app_version" translatable="false">v2.9.0</string>
+    <string name="qemu_version" translatable="false">qemu-8.2.1-3dfx</string>
+    <string name="str_home">Home</string>
+    <string name="str_logger">Logger</string>
+    <string name="fab_info">Start Emulation</string>
+    <!-- logger -->
+    <string name="startvm">VM STARTED!</string>
+    <string name="stopvm">VM STOPPED!</string>
+    <string name="noproccesses">NO PROCCESSES!</string>
+    <string name="unknownstate">UNKNOWN STATE!</string>
+
+    <string name="desktopInstructions">To use External Mouse:\n\tDisable Mouse Acceleration inside the Guest OS.\n\t\tFor DSL use command: xset m 1\n"\t\tFor Other OSes disable \"Enhance pointer Precision\" or choose Mouse \"usb-tablet\" from Vectras main options.\n\tPlug in or Pair your USB/Bluetooth Mouse and press OK\n\tMove your mouse pointer to all desktop sides to calibrate.\n"</string>
+
+    <string name="navigation_drawer_open" translatable="false">drawer open</string>
+    <string name="navigation_drawer_close" translatable="false">drawer close</string>
+    <string name="address_caption">Address</string>
+    <string name="alt_check">Alt</string>
+    <string name="reset">Reset</string>
+    <string name="shutdown">Shutdown</string>
+    <string name="ctrl_c" translatable="false">Ctrl-c</string>
+    <string name="devices">Devices</string>
+    <string name="external_mouse">External Mouse</string>
+    <string name="monitor" translatable="false">QEMU Monitor</string>
+    <string name="stretch_to_screen">Stretch to Screen</string>
+    <string name="full_screen">Fullscreen</string>
+    <string name="toggle_full_screen">Toggle Fullscreen</string>
+    <string name="zoom_in">Zoom In</string>
+    <string name="zoom_out">Zoom Out</string>
+    <string name="right_click">Mouse Right Click</string>
+    <string name="help">Help</string>
+    <string name="drives">Drives</string>
+    <string name="volume">Volume</string>
+    <string name="hide_toolbar">Hide Toolbar</string>
+    <string name="view_log">View Log</string>
+    <string name="mode">Mode</string>
+    <string name="keyboard">KEYBOARD</string>
+    <string name="name">name</string>
+    <string name="size">size:</string>
+    <string name="availablity">availability:</string>
+    <string name="hide">Hide</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_up">Sign up</string>
+    <string name="action_sign_with_google">Sign in with google</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="profile">Profile</string>
+    <string name="apps_amp_games"><![CDATA[Apps & Games]]></string>
+    <string name="vectras_website">Vectras Website</string>
+    <string name="about">About</string>
+    <string name="emulation_information">Emulation Information</string>
+    <string name="full_name">Full Name</string>
+    <string name="terms_amp_conditions"><![CDATA[Terms&Conditions]]></string>
+    <string name="i_accept_terms_amp_conditions"><![CDATA[I Accept Terms&Conditions]]></string>
+    <string name="settings">Settings</string>
+    <string name="go_ahead">Go ahead</string>
+    <string name="download">Download</string>
+    <string name="view_profile" translatable="false"><u><![CDATA[View Profile>>]]></u></string>
+    <string name="username">USERNAME</string>
+    <string name="save">SAVE</string>
+    <string name="memory_usage">Memory Usage</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="linux" translatable="false">linux</string>
+    <string name="windows" translatable="false">windows</string>
+    <string name="apple" translatable="false">apple</string>
+    <string name="external_vnc" translatable="false">EXTERNAL VNC</string>
+    <string name="hosted_successfully" translatable="false">HOSTED SUCCESSFULLY!</string>
+    <string name="ip" translatable="false">IP: 127.0.0.1:9</string>
+    <string name="install_rom">Install Rom</string>
+    <string name="reconnect">Reconnect</string>
+    <string name="display">Display</string>
+    <string name="calibrate_mouse">Calibrate Mouse</string>
+    <string name="hide_controller">HIDE CONTROLLER</string>
+    <string name="remove">Remove</string>
+    <string name="view_logs">View Logs</string>
+    <string name="title_activity_set_arch">SetArchActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="input_mode_hardware_mouse">Hardware Mouse Mode</string>
+    <string name="previous_entry">Previous entry</string>
+    <string name="next_entry">Next entry</string>
+    <string name="choose_qemu_architicture">Choose qemu architicture:</string>
+    <string name="choose_qemu_architecture">Choose qemu architecture:</string>
+    <string name="import_custom_rom_cvbi">IMPORT CUSTOM ROM \".CVBI\"</string>
+    <string name="rom_name">ROM NAME</string>
+    <string name="rom_drive_qcow2_img_etc">ROM DRIVE (qcow2, img, etc…)</string>
+    <string name="qemu_params">QEMU PARAMS</string>
+    <string name="rom_icon">ROM ICON</string>
+    <string name="add">ADD</string>
+    <string name="import_iso">Import ISO</string>
+    <string name="importRom">IMPORT</string>
+    <string name="privacy_amp_policy"><![CDATA[Privacy & Policy]]></string>
+    <string name="permission_title">Permission Required!</string>
+    <string name="permission_notification_text">Due to android policy, notification permissions are needed, to send vm notifications!</string>
+    <string name="mouse_mode">Mouse Mode</string>
+    <string name="export">EXPORT</string>
+    <string name="email_verification_sent">Email Verification Sent.</string>
+    <string name="sign_out">Sign out</string>
+    <string name="android" translatable="false">android</string>
+    <string name="other" translatable="false">other</string>
+    <string name="guest">Guest</string>
+    <string name="hdd1_qcow_img_etc">HDD1 (qcow, img, etc…)</string>
+    <string name="default_configuration">-vga std -net nic,model=ne2k_pci -net user</string>
+    <string name="data_explorer">Data Explorer</string>
+    <string name="forgot_password">forgot password?</string>
+    <string name="buy_me_a_coffee">Buy me a coffee</string>
+    <string name="hdd1">HDD1</string>
+    <string name="hdd2">HDD2</string>
+
+    <string name="echo_nameserver_8_8_8_8">echo \'nameserver 8.8.8.8\' </string>
+    <string name="etc_resolv_conf"> /etc/resolv.conf</string>
+    <string name="create_a_machine">Create a Machine</string>
+
+    <string name="arrow_down">Down Arrow</string>
+    <string name="arrow_left">Left Arrow</string>
+    <string name="arrow_right">Right Arrow</string>
+    <string name="arrow_up">Up Arrow</string>
+    <string name="auto">Auto</string>
+    <string name="button_send_text">Send Text</string>
+    <string name="button_send_without_saving">Send Text/Don\'t Save It</string>
+    <string name="center_mouse">Mouse @</string>
+    <string name="close">Close</string>
+    <string name="color_format_caption">Color Format</string>
+    <string name="color_mode">Color Mode</string>
+    <string name="connect_button">Connect</string>
+    <string name="connection_caption">Connection</string>
+    <string name="control_check">Ctrl</string>
+    <string name="copy_list_button">Copy List</string>
+    <string name="ctrl_alt_del">Ctrl-Alt-Del</string>
+    <string name="delete_connection">Delete Connection</string>
+    <string name="delete_key">Delete Selected Key</string>
+    <string name="delete_key_list">Delete Key List</string>
+    <string name="disconnect">Disconnect</string>
+    <string name="export_settings">Export</string>
+    <string name="export_settings_path">Export to file</string>
+    <string name="enter_text_title">Enter Text to Send</string>
+    <string name="enter_text">Send text</string>
+    <string name="fit_to_screen">Fit to Screen</string>
+    <string name="force_full_check">Force full-screen bitmap</string>
+    <string name="import_export_settings">Import/Export Settings</string>
+    <string name="import_settings">Import</string>
+    <string name="import_settings_file_url">Import from file or URL</string>
+    <string name="info">Info</string>
+    <string name="intro_text">If you need help, please check the &lt;a href="http://code.google.com/p/android-vnc-viewer/wiki/Documentation"&gt;manual&lt;/a&gt; (press phone\'s Menu button to access manual and other menu items), or the &lt;a href="http://code.google.com/p/android-vnc-viewer/wiki/faq"&gt;FAQ&lt;/a&gt;.&lt;br&gt;</string>
+    <string name="intro_title">Welcome</string>
+    <string name="intro_version_text">&lt;br&gt;--Sent text is remembered across sessions (optionally)&lt;br&gt;--Import/Export settings to file&lt;br&gt;--Button with zoom controls to bring up keyboard&lt;br&gt;--Can force tiling mode (very large screens)</string>
+    <string name="input_mode">Input Mode</string>
+    <string name="input_mode_fit_to_screen">No Pan; Trackball Mouse</string>
+    <string name="input_mode_mouse">Mouse Pointer Control Mode</string>
+    <string name="input_mode_panning">Desktop Panning Mode</string>
+    <string name="input_mode_touchpad_pan_trackball_mouse">Touch Pan; Trackball Mouse</string>
+    <string name="input_mode_dpad_pan_touchpad_mouse">Touch Mouse; D-Pad Pan</string>
+    <string name="input_mode_touch_pan_zoom_mouse">Touch Mouse Pan and Zoom</string>
+    <string name="input_mode_touchpad">Touchpad</string><string name="keep_password_button">Keep</string>
+    <string name="intro_dont_show">Don\'t show again</string>
+    <string name="keys_caption">Keys</string>
+    <string name="list_caption">List</string>
+    <string name="list_name_caption">List Name</string>
+    <string name="local_mouse_check">Local mouse pointer</string>
+    <string name="meta_key_title">Send Special Keys</string>
+    <string name="mouse_follow_pan">Mouse follow pan</string>
+    <string name="new_list_button">New List</string>
+    <string name="nickname_caption">Nickname</string>
+    <string name="off">Off</string>
+    <string name="on">On</string>
+    <string name="one_to_one">1:1</string>
+    <string name="open_doc">Manual/Wiki</string>
+    <string name="pan_follow_mouse">Pan Follows Mouse</string>
+    <string name="password_caption">Password</string>
+    <string name="port_caption">Port</string>
+    <string name="repeater_button">Repeater</string>
+    <string name="repeater_caption">Enter the repeater address &lt;b&gt;only if&lt;/b&gt; you are using an&lt;br&gt;&lt;i&gt;UltraVNC&lt;/i&gt;-type repeater</string>
+    <string name="repeater_clear">Don\'t use repeater</string>
+    <string name="repeater_dialog_title">Repeater Information</string>
+    <string name="repeater_empty_text">No repeater</string>
+    <string name="repeater_save">Use this repeater address</string>
+    <string name="save_as_copy">Save as Copy</string>
+    <string name="scaling">Scaling</string>
+    <string name="scaling_zoomable">Zoomable</string>
+
+    <!-- Send selected metakey -->
+    <string name="send_button">Send</string>
+    <string name="send_key_again">Send Key Again</string>
+    <string name="shift_check">Shift</string>
+    <string name="shortcut_label">VNC Connection</string>
+    <string name="showkbd_label">Keyboard</string>
+    <string name="special_keys">Send Keys</string>
+    <string name="username_caption">Username</string>
+    <string name="username_hint">For Windows Authentication</string>
+    <string name="permdesc_open_vnc_conn">Launch custom VNC connections</string>
+    <string name="terminal">Terminal</string>
+
+    <string name="msg_directory_absolute_path">%1$s Directory Absolute Path: \"%2$s\"</string>
+
+    <!-- TermuxX11Activity -->
+    <string name="msg_storage_permission_not_granted_warning">The storage permission must be granted
+        to Vectras VM app to...</string>
+    <string name="action_grant_storage_permission">Grant Storage Permission</string>
+
+    <string name="msg_battery_optimization_not_disabled_warning">Android battery optimizations
+        should be disabled for the Vectras VM app so that…
+        Check https://developer.android.com/about/versions/oreo/background for more info and
+        https://developer.android.com/guide/components/foreground-services#background-start-restrictions
+        for more info.
+
+        \n\nAlso check https://dontkillmyapp.com for info on vendor specific app killers.
+        Depending on vendor you may need to do things like enable AutoStart, disable DuraSpeed,
+        enable `Display pop-up windows while running in the background` for the app.</string>
+    <string name="action_disable_battery_optimizations">Disable Battery Optimizations</string>
+
+    <string name="msg_display_over_other_apps_permission_not_granted_warning">The display over other
+        apps permission should be granted to Vectras VM app for starting foreground
+        activities from background. Check https://developer.android.com/guide/components/activities/background-starts
+        for more info.
+    </string>
+    <string name="action_grant_display_over_other_apps_permission">Grant Draw Over Apps Permission</string>
+
+    <string name="action_already_granted">Already Granted</string>
+    <string name="action_already_disabled">Already Disabled</string>
+    <string name="not_connected">Not connected</string>
+    <string name="help_button_text">   Help   </string>
+    <string name="preferences_button_text">   Preferences   </string>
+    <string name="extra_keys_config_desc">Here you can set value of extra-keys variable like in Termux app (read <a href="http://wiki.termux.com/wiki/Touch_Keyboard#Extra_Keys_Row">this</a>) and more (e.g. META).
+    Put empty string for the default value.</string>
+    <string name="install">INSTALL</string>
+    <string name="select_tar">SELECT (.TAR.GZ)</string>
+    <string name="not_selected_yet">not selected yet.</string>
+    <string name="modify">MODIFY</string>
+
+    <string name="input">input</string>
+    <string name="tiny_vterm">Tiny vterm</string>
+    <string name="try_again">TRY AGAIN</string>
+    <string name="logs">Logs</string>
+    <string name="options">Options</string>
+    <!--======================XServer XSDL STRINGS====================-->
+
+    <string name="init">Initializing</string>
+    <string name="please_wait">Please wait while data is being downloaded</string>
+
+    <string name="device_config">Device configuration</string>
+    <string name="device_change_cfg">Change device configuration</string>
+
+    <string name="download_unneeded">No need to download</string>
+    <string name="connecting_to">Connecting to %s</string>
+    <string name="failed_connecting_to">Failed connecting to %s</string>
+    <string name="error_connecting_to">Error connecting to %s</string>
+    <string name="dl_from">Downloading data from %s</string>
+    <string name="error_dl_from">Error downloading data from %s</string>
+    <string name="error_write">Error writing to %s</string>
+    <string name="dl_progress">%1$.0f%% done: file %2$s</string>
+    <string name="dl_finished">Finished</string>
+
+    <string name="storage_phone">Internal storage - %d MB free</string>
+    <string name="storage_sd">SD card storage - %d MB free</string>
+    <string name="storage_custom">Specify directory</string>
+    <string name="storage_commandline">Command line parameters, one argument per line</string>
+    <string name="storage_question">Data installation location</string>
+    <string name="storage_access">Permission to write to SD card</string>
+    <string name="optional_downloads">Downloads</string>
+    <string name="downloads">Downloads</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="controls_arrows">Arrows / joystick / dpad</string>
+    <string name="controls_trackball">Trackball</string>
+    <string name="controls_accel">Accelerometer</string>
+    <string name="controls_touch">Touchscreen only</string>
+    <string name="controls_question">What kind of navigation keys does your device have?</string>
+
+    <string name="controls_additional">Additional controls</string>
+    <string name="controls_screenkb">On-screen keyboard</string>
+    <string name="controls_accelnav">Accelerometer</string>
+
+    <string name="controls_screenkb_size">On-screen keyboard size</string>
+    <string name="controls_screenkb_drawsize">Size of button images</string>
+    <string name="controls_screenkb_large">Large</string>
+    <string name="controls_screenkb_medium">Medium</string>
+    <string name="controls_screenkb_small">Small</string>
+    <string name="controls_screenkb_tiny">Tiny</string>
+    <string name="controls_screenkb_custom">Custom</string>
+    <string name="controls_screenkb_theme">On-screen keyboard theme</string>
+    <string name="controls_screenkb_by">%1$s by %2$s</string>
+    <string name="controls_screenkb_transparency">On-screen keyboard transparency</string>
+    <string name="controls_screenkb_trans_0">Invisible</string>
+    <string name="controls_screenkb_trans_1">Almost invisible</string>
+    <string name="controls_screenkb_trans_2">Transparent</string>
+    <string name="controls_screenkb_trans_3">Semi-transparent</string>
+    <string name="controls_screenkb_trans_4">Non-transparent</string>
+
+    <string name="trackball_no_dampening">No dampening</string>
+    <string name="trackball_fast">Fast</string>
+    <string name="trackball_medium">Medium</string>
+    <string name="trackball_slow">Slow</string>
+    <string name="trackball_question">Trackball dampening</string>
+
+    <string name="accel_veryfast">Very fast</string>
+    <string name="accel_fast">Fast</string>
+    <string name="accel_medium">Medium</string>
+    <string name="accel_slow">Slow</string>
+    <string name="accel_veryslow">Very slow</string>
+    <string name="accel_question">Accelerometer sensitivity</string>
+
+    <string name="accel_floating">Floating</string>
+    <string name="accel_fixed_start">Fixed when application starts</string>
+    <string name="accel_fixed_horiz">Fixed to table desk orientation</string>
+    <string name="accel_question_center">Accelerometer center position</string>
+
+    <string name="mouse_emulation">Mouse emulation</string>
+    <string name="rightclick_question">Right mouse click</string>
+    <string name="rightclick_menu">Menu key</string>
+    <string name="rightclick_key">Physical key</string>
+    <string name="rightclick_multitouch">Touch screen with second finger</string>
+    <string name="rightclick_pressure">Touch screen with force</string>
+    <string name="rightclick_none">Disable right mouse click</string>
+
+    <string name="leftclick_question">Left mouse click</string>
+    <string name="leftclick_normal">Normal</string>
+    <string name="leftclick_near_cursor">Touch near mouse cursor</string>
+    <string name="leftclick_multitouch">Touch screen with second finger</string>
+    <string name="leftclick_pressure">Touch screen with force</string>
+    <string name="leftclick_dpadcenter">Trackball click / joystick center</string>
+    <string name="leftclick_timeout">Hold at the same spot</string>
+    <string name="leftclick_tap">Tap</string>
+    <string name="leftclick_tap_or_timeout">Tap or hold</string>
+    <string name="leftclick_timeout_time">Holding timeout</string>
+    <string name="leftclick_timeout_time_0">0.3 sec</string>
+    <string name="leftclick_timeout_time_1">0.5 sec</string>
+    <string name="leftclick_timeout_time_2">0.7 sec</string>
+    <string name="leftclick_timeout_time_3">1 sec</string>
+    <string name="leftclick_timeout_time_4">1.5 sec</string>
+    <string name="click_with_dpadcenter">Left mouse click with trackball / joystick center</string>
+
+    <string name="advanced">Advanced features</string>
+    <string name="mouse_keepaspectratio">Keep 4:3 screen aspect ratio</string>
+    <string name="mouse_showcreenunderfinger">Show screen under finger in separate window</string>
+    <string name="mouse_showcreenunderfinger2">On-screen magnifying glass</string>
+    <string name="mouse_joystickmouse">Move mouse with joystick or trackball</string>
+    <string name="mouse_joystickmousespeed">Move mouse with joystick speed</string>
+    <string name="mouse_joystickmouseaccel">Move mouse with joystick acceleration</string>
+    <string name="mouse_relative">Relative mouse movement (laptop mode)</string>
+    <string name="mouse_relative_speed">Relative mouse movement speed</string>
+    <string name="mouse_relative_accel">Relative mouse movement acceleration</string>
+    <string name="mouse_hover_jitter_filter">Filter jitter for stylus/finger hover</string>
+    <string name="mouse_gyroscope_mouse">Control mouse with gyroscope</string>
+    <string name="mouse_gyroscope_mouse_sensitivity">Gyroscope sensitivity</string>
+    <string name="mouse_finger_hover">Finger hover</string>
+    <string name="mouse_subframe_touch_events">Multiple touch events per video frame</string>
+
+    <string name="none">None</string>
+
+    <string name="measurepressure">Calibrate touchscreen pressure</string>
+    <string name="measurepressure_touchplease">Please slide finger across the screen for two seconds</string>
+    <string name="measurepressure_response">Pressure %1$03d radius %2$03d</string>
+
+    <string name="audiobuf_verysmall">Very small (fast devices, less lag)</string>
+    <string name="audiobuf_small">Small</string>
+    <string name="audiobuf_medium">Medium</string>
+    <string name="audiobuf_large">Large (older devices, if sound is choppy)</string>
+    <string name="audiobuf_question">Size of audio buffer</string>
+
+    <string name="remap_hwkeys">Remap physical keys</string>
+    <string name="remap_hwkeys_press">Press any key except HOME and POWER, you may use volume keys</string>
+    <string name="remap_hwkeys_select">Select SDL keycode</string>
+    <string name="remap_hwkeys_select_simple">Select action</string>
+    <string name="remap_hwkeys_select_more_keys">Show all keycodes</string>
+
+    <string name="remap_screenkb">Remap on-screen controls</string>
+    <string name="remap_screenkb_joystick">Joystick</string>
+    <string name="remap_screenkb_button">Button</string>
+    <string name="remap_screenkb_button_text">Text input button</string>
+    <string name="remap_screenkb_button_gestures">Two-finger screen gestures</string>
+    <string name="remap_screenkb_button_gestures_sensitivity">Two-finger screen gestures sensitivity</string>
+    <string name="remap_screenkb_button_zoomin">Zoom in two-finger gesture</string>
+    <string name="remap_screenkb_button_zoomout">Zoom out two-finger gesture</string>
+    <string name="remap_screenkb_button_rotateleft">Rotate left two-finger gesture</string>
+    <string name="remap_screenkb_button_rotateright">Rotate right two-finger gesture</string>
+
+    <string name="screenkb_custom_layout">Customize on-screen keyboard layout</string>
+    <string name="screenkb_custom_layout_help">Press BACK when done. Resize buttons by sliding on empty space.</string>
+    <string name="screenkb_floating_joystick">Floating joystick</string>
+
+    <string name="calibrate_touchscreen">Calibrate touchscreen</string>
+    <string name="calibrate_touchscreen_touch">Touch all edges of the screen, press BACK when done</string>
+
+    <string name="video">Video settings</string>
+    <string name="video_smooth">Linear video filtering</string>
+    <string name="video_separatethread">Separate thread for video, it can increase FPS, it also can crash the app</string>
+    <string name="video_orientation_vertical">Portrait/vertical screen orientation</string>
+    <string name="video_orientation_autodetect">Auto-detect screen orientation</string>
+    <string name="video_bpp_24">24 bpp screen color depth</string>
+    <string name="video_immersive">Hide system navigation buttons / immersive mode</string>
+    <string name="tv_borders">TV borders</string>
+
+    <string name="text_edit_click_here">Tap to start typing, press Back when done</string>
+
+    <string name="display_size_mouse">Mouse emulation mode</string>
+    <string name="display_size">Display size for mouse emulation</string>
+    <string name="display_size_desktop">Desktop, no emulation</string>
+    <string name="display_size_large">Large (tablets)</string>
+    <string name="display_size_small">Small, magnifying glass</string>
+    <string name="display_size_small_touchpad">Small, touchpad mode</string>
+    <string name="display_size_tiny">Tiny</string>
+    <string name="display_size_tiny_touchpad">Tiny, touchpad mode</string>
+
+    <string name="show_more_options">Show more options</string>
+
+    <string name="hardware_mouse_detected">Hardware mouse detected, disabling mouse emulation</string>
+
+    <string name="not_enough_ram">Not enough RAM</string>
+    <string name="not_enough_ram_size">This app needs %1$d Mb RAM, your device has %2$d Mb</string>
+    <string name="ignore">Ignore</string>
+
+    <string name="calibrate_gyroscope">Calibrate gyroscope</string>
+    <string name="calibrate_gyroscope_text">Put your device on a flat surface</string>
+    <string name="calibrate_gyroscope_not_supported">Your device does not have gyroscope</string>
+
+    <string name="reset_config">Reset config to defaults</string>
+    <string name="reset_config_ask">Reset all options to default values?</string>
+
+    <string name="cancel_download">Cancel data downloading?</string>
+    <string name="cancel_download_resume">You can resume it later, the data will not be downloaded twice.</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
+    <!-- Play Game Services strings -->
+    <string name="gamehelper_sign_in_failed">Failed to sign in. Please check your network connection and try again.</string>
+    <string name="gamehelper_app_misconfigured">The application is incorrectly configured. Check that the package name and signing certificate match the client ID created in Developer Console. Also, if the application is not yet published, check that the account you are trying to sign in with is listed as a tester account. See logs for more information.</string>
+    <string name="gamehelper_license_failed">License check failed.</string>
+    <string name="gamehelper_unknown_error">Unknown error.</string>
+    <string name="accessing_network">Accessing network, please wait</string>
+
+    <string name="google_play_game_services_app_id" translatable="false">==GOOGLEPLAYGAMESERVICES_APP_ID==</string>
+
+    <string name="restarting_please_wait">Restarting, please wait.</string>
+
+    <string name="notification_app_is_running">%s is running</string>
+    <string name="notification_stop">Stop</string>
+    <string name="create_virtual_harddisk">Create virtual harddisk</string>
+    <string name="size_in_gb">SIZE IN GB</string>
+    <string name="create_qcow2">CREATE QCOW2</string>
+    <string name="image_name">IMAGE NAME</string>
+    <string name="make_image">MAKE IMAGE</string>
+    <string name="imported_roms_will_be_shown_here">IMPORTED ROMS WILL BE SHOWN HERE</string>
+    <string name="version">VERSION:</string>
+    <string name="qemu">QEMU</string>
+    <string name="arch">ARCH:</string>
+    <string name="running">Running</string>
+    <string name="stopped">Stopped</string>
+    <string name="service">SERVICE:</string>
+    <string name="free_palistine">FREE PALISTINE</string>
+    <string name="store">Store</string>
+    <string name="no_internet_connection">no internet connection</string>
+    <string name="check_your_internet_connection">check your internet connection</string>
+    <string name="downloading_file">Downloading file..</string>
+    <string name="lenght_of_file">"Lenght of file: "</string>
+    <string name="downloaded_to_path">"Downloaded to path: "</string>
+    <string name="downloaded_successfully">Downloaded Successfully!</string>
+    <string name="app_settings">APP SETTINGS</string>
+    <string name="main_app_settings">main app settings.</string>
+    <string name="user_interface">USER INTERFACE</string>
+    <string name="themes_and_ui">themes and ui.</string>
+    <string name="emulation_settings">emulation settings.</string>
+    <string name="vnc">VNC</string>
+    <string name="vnc_ui_environment">vnc ui environment.</string>
+    <string name="vm_arch">VM ARCH</string>
+    <string name="cpu_model">CPU MODEL</string>
+    <string name="custom_memory">CUSTOM MEMORY</string>
+    <string name="memory_mb">MEMORY (MB)</string>
+    <string name="sound_card">SOUND CARD</string>
+    <string name="tb_size_kb">TB SIZE (KB)</string>
+    <string name="avx">AVX</string>
+    <string name="mttcg">MTTCG</string>
+    <string name="kvm_acceleration">kvm acceleration</string>
+    <string name="kvm">KVM</string>
+    <string name="cpu_cores">CPU CORES</string>
+    <string name="harddisk_type">HARDDISK TYPE</string>
+    <string name="boot_from">BOOT FROM</string>
+    <string name="shared_folder">SHARED FOLDER</string>
+    <string name="custom_params">CUSTOM PARAMS</string>
+    <string name="vm_ui_environment">VM UI ENVIRONMENT</string>
+    <string name="x11_resolution">X11 Resolution</string>
+    <string name="mouse">MOUSE</string>
+    <string name="check_for_software_updates_on_startup">CHECK FOR SOFTWARE UPDATES ON STARTUP</string>
+    <string name="check_for_software_updates">CHECK FOR SOFTWARE UPDATES</string>
+    <string name="night_mode">NIGHT MODE</string>
+    <string name="description">Description</string>
+    <string name="qemu_website">QEMU WEBSITE</string>
+    <string name="powerpc_qemu">POWERPC QEMU</string>
+    <string name="arm64_qemu">ARM64 QEMU</string>
+    <string name="x86_64_qemu_recommended">x86_64 QEMU (RECOMMENDED)</string>
+    <string name="i386_qemu">I386 QEMU</string>
+    <string name="export_rom">Export Rom</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="description_html_supported">DESCRIPTION (html supported)</string>
+    <string name="compressing_cvbi">Compressing CVBI</string>
+    <string name="please_wait_dialog">Please wait...</string>
+    <string name="error">ERROR!</string>
+    <string name="done">DONE!</string>
+    <string name="are_removed_successfully">" are removed successfully!"</string>
+    <string name="free_palestine">FREE PALESTINE</string>
+    <string name="repository">Repository</string>
+    <string name="telegram_channel">Telegram Channel</string>
+    <string name="youtube">Youtube</string>
+    <string name="instagram">Instagram</string>
+    <string name="facebook">Facebook</string>
+    <string name="change_log">Change Log</string>
+    <string name="language">LANGUAGE</string>
+    <string name="set">SET</string>
+    <string name="change_app_locale">CHANGE APP LOCALE</string>
+    <string name="are_you_sure_you_want_to_shutdown_vm">Are you sure you want to shutdown vm?</string>
+</resources>
