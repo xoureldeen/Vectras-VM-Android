@@ -177,7 +177,8 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                         "-b", "/storage",
                         "-b", "/data",
                         "-w", "/root",
-                        "--login" // The shell to execute inside PRoot
+                        "/bin/sh",
+                        "--login"// The shell to execute inside PRoot
                 };
 
                 processBuilder.command(prootCommand);
@@ -349,8 +350,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         executeShellCommand("set -e;" +
                 " echo 'Starting setup...';" +
                 " apk update;" +
-                " apk add sudo;" +
-                " sudo apk add tar libslirp libslirp-dev pulseaudio-dev glib-dev pixman-dev zlib-dev spice-dev" +
+                " apk add tar libslirp libslirp-dev pulseaudio-dev glib-dev pixman-dev zlib-dev spice-dev" +
                 " libusbredirparser usbredir-dev libiscsi-dev  sdl2 sdl2-dev libepoxy-dev virglrenderer-dev rdma-core" +
                 " libusb ncurses-libs curl libnfs sdl2 gtk+3.0 fuse libpulse libseccomp jack pipewire liburing;" +
                 " tar -xzvf " + tarPath + " -C /;" +

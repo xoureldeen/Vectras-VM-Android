@@ -189,7 +189,8 @@ public class TerminalBottomSheetDialog {
                         "-b", "/storage",
                         "-b", "/data",
                         "-w", "/root",
-                            "--login" // The shell to execute inside PRoot
+                        "/bin/sh",
+                        "--login"// The shell to execute inside PRoot
                     };
 
                     processBuilder.command(prootCommand);
