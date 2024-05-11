@@ -176,18 +176,19 @@ public class TerminalBottomSheetDialog {
                     processBuilder.environment().put("QEMU_AUDIO_DRV", "sdl");
                     processBuilder.environment().put("SDL_VIDEODRIVER", "x11");
 
-                    String[] prootCommand = {
-                            nativeLibDir + "/libproot.so", // PRoot binary path
-                            "--kill-on-exit",
-                            "--rootfs=" + filesDir + "/distro", // Path to the rootfs
-                            "--bind=/dev",
-                            "--bind=/proc",
-                            "--bind=/sys",
-                            "--bind=/sdcard",
-                            "--bind=/storage",
-                            "--bind=/data",
-                            "--cwd=/root",
-                            "/bin/sh",
+                String[] prootCommand = {
+                        nativeLibDir + "/libproot.so", // PRoot binary path
+                        "--kill-on-exit",
+                        "--link2symlink",
+                        "-0",
+                        "-r", filesDir + "/distro", // Path to the rootfs
+                        "-b", "/dev",
+                        "-b", "/proc",
+                        "-b", "/sys",
+                        "-b", "/sdcard",
+                        "-b", "/storage",
+                        "-b", "/data",
+                        "-w", "/root",
                             "--login" // The shell to execute inside PRoot
                     };
 

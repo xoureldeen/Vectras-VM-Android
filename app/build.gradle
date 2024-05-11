@@ -34,7 +34,7 @@ android {
         abi {
             enable true
             reset()
-            include 'armeabi-v7a', 'arm64-v8a'
+            include 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a'
             universalApk true
         }
     }
@@ -47,14 +47,6 @@ android {
         }
     }
 
-    ndkVersion '22.1.7171670'
-
-    externalNativeBuild {
-        cmake {
-            version '3.22.1'
-            path 'src/main/cpp/CMakeLists.txt'
-        }
-    }
 }
 
 dependencies {
