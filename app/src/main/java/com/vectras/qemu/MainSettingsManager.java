@@ -23,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -399,36 +400,6 @@ public class MainSettingsManager extends AppCompatActivity
                     cpuListPreference.setSummaryProvider(ListPreference.SimpleSummaryProvider.getInstance());
                 }
             }
-            /*Preference pref = findPreference("customMemory");
-            if (pref != null) {
-                pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-
-                    @Override
-                    public boolean onPreferenceChange(@NonNull Preference preference,
-                                                      Object newValue) {
-                        findPreference("memory").setEnabled(!sp.getBoolean("customMemory", false));
-                        return true;
-                    }
-
-                });
-            }
-            Preference pref2 = findPreference("customMemory");
-            if (pref2 != null) {
-                pref2.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-
-                    @Override
-                    public boolean onPreferenceChange(@NonNull Preference preference,
-                                                      Object newValue) {
-                        if (MainSettingsManager.getVirtio(activity)) {
-                            Config.hd_if_type = "virtio";
-                        } else {
-                            Config.hd_if_type = "ide";
-                        }
-                        return true;
-                    }
-
-                });
-            }*/
         }
 
         private void onMemory() {
