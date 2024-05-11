@@ -533,6 +533,10 @@ public class MainActivity extends AppCompatActivity {
         usedRam = findViewById(R.id.usedRam);
         freeRam = findViewById(R.id.freeRam);
 
+
+        TextView tvIsRunning = findViewById(R.id.tvIsRunning);
+
+
         String vectrasMemory = String.valueOf(RamInfo.vectrasMemory());
         TimerTask t = new TimerTask() {
             @Override
@@ -540,6 +544,12 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        boolean isMainServiceRunning = isServiceRunning(MainService.class, activity);
+                        if (isMainServiceRunning)
+                            tvIsRunning.setText(R.string.running);
+                        else
+                            tvIsRunning.setText(R.string.stopped);
+
                         ActivityManager.MemoryInfo miI = new ActivityManager.MemoryInfo();
                         ActivityManager activityManagerr = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
                         activityManagerr.getMemoryInfo(miI);
@@ -843,14 +853,6 @@ public class MainActivity extends AppCompatActivity {
 
         TextView tvQemuArch = findViewById(R.id.qemuArch);
         tvQemuArch.setText(MainSettingsManager.getArch(activity));
-
-        TextView tvIsRunning = findViewById(R.id.tvIsRunning);
-        boolean isMainServiceRunning = isServiceRunning(MainService.class, activity);
-        if (isMainServiceRunning)
-            tvIsRunning.setText(R.string.running);
-        else
-            tvIsRunning.setText(R.string.stopped);
-
 
         //TEMPORARY FIX FOR VNC CLOSES
         //TODO: FIND FIX FOR CRASHING
