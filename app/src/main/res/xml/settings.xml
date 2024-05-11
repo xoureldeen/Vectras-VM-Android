@@ -15,5 +15,16 @@
             android:summary="@string/check_for_software_updates_on_startup"
             android:title="@string/check_for_software_updates"
             app:icon="@drawable/round_update_24" />
+
+        <ListPreference
+            android:key="language"
+            android:title="@string/language"
+            android:entries="@array/languageLabels"
+            android:entryValues="@array/languageValues"
+            android:defaultValue="en"
+            android:summary="@string/change_app_locale"
+            app:isPreferenceVisible="false"
+            app:icon="@drawable/round_language_24" />
+
     </PreferenceCategory>
 </PreferenceScreen>

@@ -303,9 +303,9 @@ public class MainVNCActivity extends VncCanvasActivity {
             @Override
             public void onClick(View v) {
                 new AlertDialog.Builder(activity, R.style.MainDialogTheme)
-                        .setTitle("Shutdown")
-                        .setMessage("Are you sure you want to shutdown vm?")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                        .setTitle(getString(R.string.shutdown))
+                        .setMessage(getString(R.string.are_you_sure_you_want_to_shutdown_vm))
+                        .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener()
                         {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -321,7 +321,7 @@ public class MainVNCActivity extends VncCanvasActivity {
                             }
 
                         })
-                        .setNegativeButton("No", null)
+                        .setNegativeButton(getString(R.string.no), null)
                         .show();
             }
         });
@@ -864,11 +864,8 @@ public class MainVNCActivity extends VncCanvasActivity {
     }
 
     public boolean checkVMResolutionFits() {
-        if (vncCanvas.rfb.framebufferWidth < vncCanvas.getWidth()
-                && vncCanvas.rfb.framebufferHeight < vncCanvas.getHeight())
-            return true;
-
-        return false;
+        return vncCanvas.rfb.framebufferWidth < vncCanvas.getWidth()
+                && vncCanvas.rfb.framebufferHeight < vncCanvas.getHeight();
     }
 
     private void onDisplayMode() {

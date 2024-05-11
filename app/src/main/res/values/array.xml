@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string-array name="languageLabels">
+        <item>English</item>
+        <item>العربيه</item>
+    </string-array>
+    <string-array name="languageValues">
+        <item>en</item>
+        <item>ar</item>
+    </string-array>
     <string-array name="cpuCoresLabels">
         <item>1 core</item>
         <item>2 core</item>
@@ -976,6 +984,7 @@
         <item>g2lels</item>
     </string-array>
     <string-array name="cpuLabels_arm64">
+        <item>cortex-a57</item>
         <item>arm926</item>
         <item>arm946</item>
         <item>arm1026</item>
@@ -990,6 +999,7 @@
         <item>cortex-a15</item>
     </string-array>
     <string-array name="cpuValues_arm64">
+        <item>cortex-a57</item>
         <item>arm926</item>
         <item>arm946</item>
         <item>arm1026</item>

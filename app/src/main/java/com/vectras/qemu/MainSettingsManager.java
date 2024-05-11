@@ -10,6 +10,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -33,6 +35,7 @@ import com.vectras.vm.VectrasApp;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 public class MainSettingsManager extends AppCompatActivity
@@ -133,7 +136,23 @@ public class MainSettingsManager extends AppCompatActivity
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
+        }
 
+        public static void updateLanguage(Context context, String selectedLanguage) {
+            if (!"".equals(selectedLanguage)) {
+                Locale locale = new Locale(selectedLanguage);
+                Locale.setDefault(locale);
+                Configuration config = new Configuration();
+                config.locale = locale;
+                context.getResources().updateConfiguration(config, null);
+
+                // Persist user's language preference
+                SharedPreferences sharedPreferences =
+                        PreferenceManager.getDefaultSharedPreferences(context);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("language", selectedLanguage);
+                editor.apply();
+            }
         }
 
         @Override
@@ -196,6 +215,7 @@ public class MainSettingsManager extends AppCompatActivity
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                 VectrasApp.getApp().setTheme(R.style.AppTheme);
             }
+
             activity.finish();
             startActivity(new Intent(activity, SplashActivity.class));
         }
@@ -825,16 +845,19 @@ public class MainSettingsManager extends AppCompatActivity
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         return prefs.getString("vmUi", "VNC");
     }
+
     public static void setResolution(Activity activity, String RESOLUTION) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putString("RESOLUTION", RESOLUTION);
         edit.apply();
     }
+
     public static String getResolution(Activity activity) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         return prefs.getString("RESOLUTION", "800x600x32");
     }
+
     public static void setSoundCard(Activity activity, String soundCard) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         SharedPreferences.Editor edit = prefs.edit();
