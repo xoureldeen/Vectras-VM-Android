@@ -81,7 +81,7 @@ public class VectrasApp extends Application {
 		if (language.contains("ar")) {
 			overrideFont("DEFAULT", R.font.cairo_regular);
 		} else {
-			overrideFont("DEFAULT", R.font.josefin_sans);
+			overrideFont("DEFAULT", R.font.quicksand);
 		}
 
 	}
