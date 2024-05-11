@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string name="app_name">Vectras VM</string>
+<string name="app_name">فيكتراس</string>
 <string name="app_version">v2.9.0</string>
 <string name="qemu_version">qemu-8.2.1-3dfx</string>
 <string name="str_home">الرئيسية</string>
