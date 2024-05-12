@@ -11,6 +11,8 @@
 
 Welcome to Vectras VM! A virtual machine app for Android based on QEMU that let you emulate various OS including: Windows, MacOS, Linux and Android.
 
+If you want help you can go through [our documention](https://vectrasvm.blackstorm.cc/how.html). If you are short in time, you could get a straight to the point answer in [Vectras Telegram group](http://t.me/vectras_vm_discussion)
+
 # Installation
 > [!NOTE]
 > Starting from 2.8, there will be no official support for ARMv7 devices.
