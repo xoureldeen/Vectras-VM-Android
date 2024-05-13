@@ -134,14 +134,16 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/qemu_params"
                     android:theme="@style/AppTheme.TextInput"
-                    app:startIconDrawable="@drawable/ic_qemu">
+                    app:startIconDrawable="@drawable/ic_qemu"
+                    app:endIconMode="custom"
+                    app:endIconDrawable="@drawable/round_edit_24"
+                    app:endIconContentDescription="@string/qemu_create_cmd">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/qemu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="text"
-                        android:text="@string/default_configuration"
                         android:selectAllOnFocus="true"
                         android:singleLine="true" />
                 </com.google.android.material.textfield.TextInputLayout>

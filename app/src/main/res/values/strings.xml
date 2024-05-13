@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Vectras VM</string>
-    <string name="app_version" translatable="false">v2.9.0</string>
+    <string name="app_version" translatable="false">v2.9.1</string>
     <string name="qemu_version" translatable="false">qemu-8.2.1-3dfx</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -520,4 +520,7 @@
     <string name="set">SET</string>
     <string name="change_app_locale">CHANGE APP LOCALE</string>
     <string name="are_you_sure_you_want_to_shutdown_vm">Are you sure you want to shutdown vm?</string>
+    <string name="cpu">CPU</string>
+    <string name="save_changes">SAVE CHANGES</string>
+    <string name="qemu_create_cmd">QEMU CREATE CMD</string>
 </resources>

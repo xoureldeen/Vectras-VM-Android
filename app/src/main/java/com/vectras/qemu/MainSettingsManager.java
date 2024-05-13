@@ -268,137 +268,19 @@ public class MainSettingsManager extends AppCompatActivity
 
                 });
             }
-            Preference pref2 = findPreference("kvm");
-            if (pref2 != null) {
-                pref2.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
 
-                    @Override
-                    public boolean onPreferenceChange(@NonNull Preference preference,
-                                                      Object newValue) {
-                        onKvm();
-                        return true;
-                    }
+            Preference prefAVX = findPreference("AVX");
+            if (!getArch(activity).equals("X86_64"))
+                if (prefAVX != null) {
+                    prefAVX.setVisible(false);
+                }
 
-                    private void onKvm() {
-                        if (getKvm(activity))
-                            setMTTCG(activity, true);
-                        else
-                            setMTTCG(activity, false);
-                        mHandler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                activity.finish();
-                                startActivity(new Intent(activity, SplashActivity.class));
-                            }
-                        }, 300);
-                    }
-
-                });
-            }
             if (Objects.equals(getArch(activity), "I386")) { // I386 DOES NOT SUPPORT SHARED FOLDER
                 SwitchPreferenceCompat sharedPref = findPreference("sharedFolder");
                 sharedPref.setEnabled(false);
                 sharedPref.setChecked(false);
                 setSharedFolder(activity, false);
 
-            }
-            SwitchPreferenceCompat pref3 = findPreference("MTTCG");
-            if (pref3 != null) {
-                pref3.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-
-                    @Override
-                    public boolean onPreferenceChange(@NonNull Preference preference,
-                                                      Object newValue) {
-                        onMttcg();
-                        return true;
-                    }
-
-                    private void onMttcg() {
-                        if (getMTTCG(activity))
-                            setKvm(activity, true);
-                        else
-                            setKvm(activity, false);
-                        mHandler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                activity.finish();
-                                startActivity(new Intent(activity, SplashActivity.class));
-                            }
-                        }, 300);
-                    }
-
-                });
-                String ABI = Build.SUPPORTED_ABIS[0];
-                if (ABI.contains("x86") && (Objects.equals(getArch(activity), "X86_64") || Objects.equals(getArch(activity), "I386"))) {
-                    assert pref2 != null;
-                    pref2.setVisible(true);
-                } else if (Objects.equals(ABI, "arm64-v8a") && Objects.equals(getArch(activity), "ARM64")) {
-                    assert pref2 != null;
-                    pref2.setVisible(true);
-                } else {
-                    assert pref2 != null;
-                    pref2.setVisible(false);
-                    pref3.setEnabled(false);
-                    pref3.setChecked(true);
-                    setMTTCG(activity, true);
-                }
-            }
-            ListPreference cpuListPreference = (ListPreference) findPreference("cpu");
-            if (cpuListPreference != null) {
-                String arch = getArch(activity);
-                String[] cpuValues_i386 = getResources().getStringArray(R.array.cpuValues_i386);
-                List<String> cpuValuesList_i386 = Arrays.asList(cpuValues_i386);
-
-                String[] cpuLabels_i386 = getResources().getStringArray(R.array.cpuLabels_i386);
-                List<String> cpuLabels_list_i386 = Arrays.asList(cpuLabels_i386);
-
-                String[] cpuValues_x86_64 = getResources().getStringArray(R.array.cpuValues_x86_64);
-                List<String> cpuValuesList_x86_64 = Arrays.asList(cpuValues_x86_64);
-
-                String[] cpuLabels_x86_64 = getResources().getStringArray(R.array.cpuLabels_x86_64);
-                List<String> cpuLabels_list_x86_64 = Arrays.asList(cpuLabels_x86_64);
-
-                String[] cpuValues_arm64 = getResources().getStringArray(R.array.cpuValues_arm64);
-                List<String> cpuValuesList_arm64 = Arrays.asList(cpuValues_arm64);
-
-                String[] cpuLabels_arm64 = getResources().getStringArray(R.array.cpuLabels_arm64);
-                List<String> cpuLabels_list_arm64 = Arrays.asList(cpuLabels_arm64);
-
-                String[] cpuValues_ppc = getResources().getStringArray(R.array.cpuValues_ppc);
-                List<String> cpuValuesList_ppc = Arrays.asList(cpuValues_ppc);
-
-                String[] cpuLabels_ppc = getResources().getStringArray(R.array.cpuLabels_ppc);
-                List<String> cpuLabels_list_ppc = Arrays.asList(cpuLabels_ppc);
-
-                if (Objects.equals(arch, "I386")) {
-                    cpuListPreference.setEntries(R.array.cpuLabels_i386);
-                    cpuListPreference.setEntryValues(R.array.cpuValues_i386);
-
-                    // Optionally, if you want to set a default value programmatically
-                    cpuListPreference.setValue("qemu32"); // You can set this to whatever default you need
-                    cpuListPreference.setSummaryProvider(ListPreference.SimpleSummaryProvider.getInstance());
-                } else if (Objects.equals(arch, "X86_64")) {
-                    cpuListPreference.setEntries(R.array.cpuLabels_x86_64);
-                    cpuListPreference.setEntryValues(R.array.cpuValues_x86_64);
-
-                    // Optionally, if you want to set a default value programmatically
-                    cpuListPreference.setValue("qemu64"); // You can set this to whatever default you need
-                    cpuListPreference.setSummaryProvider(ListPreference.SimpleSummaryProvider.getInstance());
-                } else if (Objects.equals(arch, "ARM64")) {
-                    cpuListPreference.setEntries(R.array.cpuLabels_arm64);
-                    cpuListPreference.setEntryValues(R.array.cpuValues_arm64);
-
-                    // Optionally, if you want to set a default value programmatically
-                    cpuListPreference.setValue("arm926"); // You can set this to whatever default you need
-                    cpuListPreference.setSummaryProvider(ListPreference.SimpleSummaryProvider.getInstance());
-                } else if (Objects.equals(arch, "POWERPC")) {
-                    cpuListPreference.setEntries(R.array.cpuLabels_ppc);
-                    cpuListPreference.setEntryValues(R.array.cpuValues_ppc);
-
-                    // Optionally, if you want to set a default value programmatically
-                    cpuListPreference.setValue("601_v1"); // You can set this to whatever default you need
-                    cpuListPreference.setSummaryProvider(ListPreference.SimpleSummaryProvider.getInstance());
-                }
             }
         }
 
@@ -628,33 +510,6 @@ public class MainSettingsManager extends AppCompatActivity
         // UIUtils.log("Setting First time: ");
     }
 
-
-    public static Boolean getMTTCG(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        Boolean MTTCG = prefs.getBoolean("MTTCG", true);
-        return MTTCG;
-    }
-
-    public static void setMTTCG(Context context, Boolean MTTCG) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor edit = prefs.edit();
-        edit.putBoolean("MTTCG", MTTCG);
-        edit.commit();
-    }
-
-    public static int getCpuCores(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        int cpuCores = prefs.getInt("cpuCores", 1);
-        return cpuCores;
-    }
-
-    public static void setCpuCores(Context context, int cpuCores) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor edit = prefs.edit();
-        edit.putInt("cpuCores", cpuCores);
-        edit.commit();
-    }
-
     public static int getExitCode(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         int exitCode = prefs.getInt("exitCode", 1);
@@ -665,19 +520,6 @@ public class MainSettingsManager extends AppCompatActivity
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putInt("exitCode", exitCode);
-        edit.commit();
-    }
-
-    public static int getCpuNum(Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        int cpuNum = Integer.parseInt(prefs.getString("cpuNum", "2"));
-        return cpuNum;
-    }
-
-    public static void setCpuNum(Context context, String cpuNum) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor edit = prefs.edit();
-        edit.putString("cpuNum", cpuNum);
         edit.commit();
     }
 
@@ -731,54 +573,6 @@ public class MainSettingsManager extends AppCompatActivity
         return prefs.getString("ifType", "ide");
     }
 
-    public static void setMouse(Activity activity, String type) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        SharedPreferences.Editor edit = prefs.edit();
-        edit.putString("mouse", type);
-        edit.apply();
-    }
-
-    public static String getMouse(Activity activity) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        return prefs.getString("mouse", "ps2-mouse");
-    }
-
-    public static void setKeyboard(Activity activity, String type) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        SharedPreferences.Editor edit = prefs.edit();
-        edit.putString("keyboard", type);
-        edit.apply();
-    }
-
-    public static String getKeyboard(Activity activity) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        return prefs.getString("keyboard", "ps2-kbd");
-    }
-
-    public static void setAvx(Activity activity, boolean AVX) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        SharedPreferences.Editor edit = prefs.edit();
-        edit.putBoolean("AVX", AVX);
-        edit.apply();
-    }
-
-    public static boolean getAvx(Activity activity) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        return prefs.getBoolean("AVX", false);
-    }
-
-    public static void setTbSize(Activity activity, String TbSize) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        SharedPreferences.Editor edit = prefs.edit();
-        edit.putString("TbSize", TbSize);
-        edit.apply();
-    }
-
-    public static String getTbSize(Activity activity) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        return prefs.getString("TbSize", "2048");
-    }
-
     public static void setBoot(Activity activity, String boot) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         SharedPreferences.Editor edit = prefs.edit();
@@ -790,20 +584,6 @@ public class MainSettingsManager extends AppCompatActivity
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         return prefs.getString("boot", "c");
     }
-
-
-    public static void setCpu(Activity activity, String cpu) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        SharedPreferences.Editor edit = prefs.edit();
-        edit.putString("cpu", cpu);
-        edit.apply();
-    }
-
-    public static String getCpu(Activity activity) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        return prefs.getString("cpu", "qemu64");
-    }
-
 
     public static void setVmUi(Activity activity, String vmUi) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
@@ -853,18 +633,6 @@ public class MainSettingsManager extends AppCompatActivity
         return prefs.getBoolean("UsbTablet", false);
     }
 
-    public static void setCustomParams(Activity activity, String customParams) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        SharedPreferences.Editor edit = prefs.edit();
-        edit.putString("customParams", customParams);
-        edit.apply();
-    }
-
-    public static String getCustomParams(Activity activity) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        return prefs.getString("customParams", "");
-    }
-
     public static void setSharedFolder(Activity activity, boolean enable) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         SharedPreferences.Editor edit = prefs.edit();
@@ -887,18 +655,6 @@ public class MainSettingsManager extends AppCompatActivity
     public static String getArch(Activity activity) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         return prefs.getString("vmArch", "X86_64");
-    }
-
-    public static void setKvm(Activity activity, boolean kvm) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        SharedPreferences.Editor edit = prefs.edit();
-        edit.putBoolean("kvm", kvm);
-        edit.apply();
-    }
-
-    public static boolean getKvm(Activity activity) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        return prefs.getBoolean("kvm", false);
     }
 
     public static boolean isFirstLaunch(Activity activity) {

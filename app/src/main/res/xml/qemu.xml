@@ -18,15 +18,6 @@
             app:icon="@drawable/ic_arch"
             app:useSimpleSummaryProvider="true" />
 
-        <ListPreference
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:defaultValue="qemu64"
-            android:key="cpu"
-            android:title="@string/cpu_model"
-            app:icon="@drawable/round_memory_24"
-            app:useSimpleSummaryProvider="true" />
-
         <SwitchPreferenceCompat
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -56,50 +47,6 @@
             app:isPreferenceVisible="false"
             app:icon="@drawable/round_volume_up_24"
             app:useSimpleSummaryProvider="true" />
-        <EditTextPreference
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:defaultValue="2048"
-            android:inputType="number"
-            android:key="TbSize"
-            android:selectAllOnFocus="true"
-            android:singleLine="true"
-            android:title="@string/tb_size_kb"
-            app:useSimpleSummaryProvider="true"
-            app:icon="@drawable/ic_t" />
-        <SwitchPreferenceCompat
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:defaultValue="true"
-            android:key="AVX"
-            android:title="@string/avx"
-            app:icon="@drawable/ic_a" />
-        <SwitchPreferenceCompat
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:defaultValue="true"
-            android:key="MTTCG"
-            android:title="@string/mttcg"
-            android:summary="multi tcg acceleration"
-            app:icon="@drawable/ic_mttcg" />
-        <SwitchPreferenceCompat
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:defaultValue="false"
-            android:key="kvm"
-            android:summary="@string/kvm_acceleration"
-            android:title="@string/kvm"
-            app:icon="@drawable/ic_kvm" />
-        <ListPreference
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:defaultValue="2"
-            android:entries="@array/cpuCoresLabels"
-            android:entryValues="@array/cpuCoresValues"
-            android:key="cpuNum"
-            android:title="@string/cpu_cores"
-            app:useSimpleSummaryProvider="true"
-            app:icon="@drawable/round_hub_24" />
         <ListPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -144,6 +91,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:title="@string/vm_ui_environment"
+        app:isPreferenceVisible="false"
         app:iconSpaceReserved="false">
 
         <ListPreference
@@ -170,26 +118,5 @@
             app:useSimpleSummaryProvider="true"
             app:icon="@drawable/round_aspect_ratio_24"/>
 
-        <ListPreference
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:key="mouse"
-            android:title="@string/mouse"
-            android:defaultValue="usb-mouse"
-            android:entries="@array/mouseLabels"
-            android:entryValues="@array/mouseValues"
-            app:icon="@drawable/round_mouse_24"
-            app:useSimpleSummaryProvider="true" />
-
-        <ListPreference
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:key="keyboard"
-            android:title="@string/keyboard"
-            android:defaultValue="usb-kbd"
-            android:entries="@array/keyboardLabels"
-            android:entryValues="@array/keyboardValues"
-            app:icon="@drawable/round_keyboard_24"
-            app:useSimpleSummaryProvider="true" />
     </PreferenceCategory>
 </PreferenceScreen>

@@ -39,6 +39,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.qemu.MainVNCActivity;
 import com.vectras.vm.AppConfig;
+import com.vectras.vm.CustomRomActivity;
 import com.vectras.vm.MainActivity;
 import com.vectras.vm.MainService;
 import com.vectras.vm.R;
@@ -110,7 +111,7 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     @Override
                     public void onClick(View v) {
                         com.vectras.vm.CustomRomActivity.current = data.get(position);
-                        MainActivity.activity.startActivity(new Intent(MainActivity.activity, com.vectras.vm.CustomRomActivity.class).putExtra("POS", position).putExtra("MODIFY", true));
+                        MainActivity.activity.startActivity(new Intent(MainActivity.activity, CustomRomActivity.class).putExtra("POS", position).putExtra("MODIFY", true));
                         bottomSheetDialog.cancel();
                     }
                 });
@@ -205,7 +206,7 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         myHolder.cdRoms.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                String env = StartVM.env(MainActivity.activity, current.itemExtra, current.itemPath);
+                String env = StartVM.env(MainActivity.activity, current.itemExtra, current.itemPath, current.itemCpu);
                 MainActivity.startVM(current.itemName, env);
             }
         });

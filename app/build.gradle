@@ -10,8 +10,8 @@ android {
         applicationId "com.vectras.vm"
         minSdk minApi
         targetSdk targetApi
-        versionCode 16
-        versionName "v2.9.0"
+        versionCode 17
+        versionName "v2.9.1"
 	    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -34,7 +34,7 @@ android {
         abi {
             enable true
             reset()
-            include 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a'
+            include 'x86_64', 'arm64-v8a'
             universalApk true
         }
     }

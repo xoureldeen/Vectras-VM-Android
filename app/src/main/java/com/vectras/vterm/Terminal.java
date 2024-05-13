@@ -2,6 +2,7 @@ package com.vectras.vterm;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -19,6 +20,7 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
 
+import com.vectras.qemu.MainVNCActivity;
 import com.vectras.vm.MainActivity;
 import com.vectras.vm.R;
 
@@ -67,7 +69,7 @@ public class Terminal {
         StringBuilder output = new StringBuilder();
         StringBuilder errors = new StringBuilder();
         Log.d(TAG, userCommand);
-        com.vectras.vm.logger.VectrasStatus.logError("<font color='yellow'>VTERM: >"+ userCommand+"</font>");
+        com.vectras.vm.logger.VectrasStatus.logError("<font color='yellow'>VTERM: >" + userCommand + "</font>");
         new Thread(() -> {
             try {
                 // Setup the qemuProcess builder to start PRoot with environmental variables and commands
@@ -130,14 +132,14 @@ public class Terminal {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     Log.d(TAG, line);
-                    com.vectras.vm.logger.VectrasStatus.logError("<font color='yellow'>VTERM: >"+ line+"</font>");
+                    com.vectras.vm.logger.VectrasStatus.logError("<font color='yellow'>VTERM: >" + line + "</font>");
                     output.append(line).append("\n");
                 }
 
                 // Read any errors from the error stream
                 while ((line = errorReader.readLine()) != null) {
                     Log.w(TAG, line);
-                    com.vectras.vm.logger.VectrasStatus.logError("<font color='red'>VTERM ERROR: >"+ line+"</font>");
+                    com.vectras.vm.logger.VectrasStatus.logError("<font color='red'>VTERM ERROR: >" + line + "</font>");
                     output.append(line).append("\n");
                 }
 
@@ -166,7 +168,8 @@ public class Terminal {
                     if (showResultDialog) {
                         String finalOutput = output.toString();
                         String finalErrors = errors.toString();
-                        showDialog(finalOutput.isEmpty() ? finalErrors : finalOutput, dialogActivity);
+                        // bcuz there is dumb users bruh
+                        showDialog(finalOutput.isEmpty() ? finalErrors : finalOutput.replace("read interrupted", "Done!"), dialogActivity);
                     }
                 });
             }
@@ -181,8 +184,16 @@ public class Terminal {
 
     public static void killQemuProcess() {
         if (qemuProcess != null) {
-            qemuProcess.destroy();
-            qemuProcess = null;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                qemuProcess.destroyForcibly();
+            else
+                qemuProcess.destroy();
+            MainVNCActivity.activity.finish();
+            MainVNCActivity.started = false;
+            qemuProcess = null; // Set it to null after destroying it
+            Log.d(TAG, "QEMU process destroyed.");
+        } else {
+            Log.d(TAG, "QEMU process was null.");
         }
     }
 }

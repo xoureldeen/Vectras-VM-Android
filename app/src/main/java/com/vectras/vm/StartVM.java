@@ -16,7 +16,7 @@ import java.util.Objects;
 public class StartVM {
     public static String cache;
 
-    public static String env(Activity activity, String extras, String img) {
+    public static String env(Activity activity, String extras, String img, String cpu) {
 
         String filesDir = activity.getFilesDir().getAbsolutePath();
 
@@ -77,25 +77,8 @@ public class StartVM {
             params.add(driveParams);
         }
 
-        boolean kvm = MainSettingsManager.getKvm(activity);
-        boolean avx = MainSettingsManager.getAvx(activity);
-
-        String cpuStr = "-cpu " + MainSettingsManager.getCpu(activity);
-        if (avx)
-            cpuStr += ",+avx";
-
-        String smpCores = "-smp ";
-        smpCores += MainSettingsManager.getCpuCores(activity);
-
         String memoryStr = "-m ";
         memoryStr += RamInfo.vectrasMemory();
-
-        String acclerationStr;
-        if (kvm)
-            acclerationStr = "-accel kvm";
-        else
-            acclerationStr = "-accel tcg,thread=multi";
-        acclerationStr += ",tb-size=" + MainSettingsManager.getTbSize(activity);
 
         String boot = "-boot ";
         boot += MainSettingsManager.getBoot(activity);
@@ -132,14 +115,6 @@ public class StartVM {
 
         params.add(memoryStr);
 
-        params.add(cpuStr);
-
-        params.add(smpCores);
-
-        params.add(acclerationStr);
-
-        params.add(MainSettingsManager.getCustomParams(activity));
-
         if (MainSettingsManager.getVmUi(activity).equals("VNC")) {
             String vncStr = "-vnc ";
             params.add(vncStr);
@@ -153,7 +128,10 @@ public class StartVM {
             }
 
             params.add("-monitor");
-            params.add("vc");
+            if (MainSettingsManager.getArch(activity).equals("X86_64"))
+                params.add("vc");
+            else if (MainSettingsManager.getArch(activity).equals("ARM64"))
+                params.add("stdio");
         } else if (MainSettingsManager.getVmUi(activity).equals("SPICE")) {
             String spiceStr = "-spice ";
             spiceStr += "port=6999,disable-ticketing=on";
@@ -161,24 +139,8 @@ public class StartVM {
         } else if (MainSettingsManager.getVmUi(activity).equals("X11")) {
 
         }
-        params.add("-k");
-        params.add("en-us");
-
-        params.add("-usb");
-
-        if (!MainSettingsManager.getMouse(activity).equals("ps2-mouse")) {
-            params.add("-device");
-            params.add(MainSettingsManager.getMouse(activity));
-        }
-
-        if (!MainSettingsManager.getKeyboard(activity).equals("ps2-kbd")) {
-            params.add("-device");
-            params.add(MainSettingsManager.getKeyboard(activity));
-        }
 
         params.add(extras);
-
-        params.add(MainSettingsManager.getCustomParams(activity));
 
         return String.join(" ", params);
     }

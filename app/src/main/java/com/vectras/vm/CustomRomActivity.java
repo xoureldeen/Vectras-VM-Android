@@ -20,6 +20,9 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -243,7 +246,7 @@ public class CustomRomActivity extends AppCompatActivity {
                     ad.setMessage("there is iso imported you want to replace it?");
                     ad.setButton(Dialog.BUTTON_POSITIVE, "REPLACE", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                            Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
                             intent.addCategory(Intent.CATEGORY_OPENABLE);
                             intent.setType("*/*");
 
@@ -280,7 +283,7 @@ public class CustomRomActivity extends AppCompatActivity {
                     });
                     ad.show();
                 } else {
-                    Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                    Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
                     intent.addCategory(Intent.CATEGORY_OPENABLE);
                     intent.setType("*/*");
 
@@ -441,9 +444,20 @@ public class CustomRomActivity extends AppCompatActivity {
         qemu.addTextChangedListener(afterTextChangedListener);
 
 
+        TextInputLayout tIQemu = findViewById(R.id.qemuField);
+        tIQemu.setEndIconOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String qcc = "https://play.google.com/store/apps/details?id=com.anbui.cqcm.app";
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(qcc));
+                startActivity(i);
+            }
+        });
+
         modify = getIntent().getBooleanExtra("MODIFY", false);
         if (modify) {
-            addRomBtn.setText("SAVE CHANGES");
+            addRomBtn.setText(R.string.save_changes);
             title.setText(current.itemName);
             icon.setText(current.itemIcon);
             drive.setText(current.itemPath);
@@ -467,6 +481,23 @@ public class CustomRomActivity extends AppCompatActivity {
 
                 ivIcon.setImageBitmap(myBitmap);
             }
+        } else {
+            String defQemuParams;
+            switch (MainSettingsManager.getArch(MainActivity.activity)) {
+                case "ARM64":
+                    defQemuParams = "-M virt -cpu cortex-a57 -smp 4 -netdev user,id=usernet -device virtio-net,netdev=usernet -nographic";
+                    break;
+                case "PPC":
+                    defQemuParams = "-M mac99 -cpu g3 -smp 4 -net nic -net user";
+                    break;
+                case "I386":
+                    defQemuParams = "-M pc -cpu qemu32 -smp 4 -vga std -netdev user,id=usernet -device e1000,netdev=usernet";
+                    break;
+                default:
+                    defQemuParams = "-M pc -cpu qemu64 -smp 4 -vga std -netdev user,id=usernet -device e1000,netdev=usernet";
+                    break;
+            }
+            qemu.setText(defQemuParams);
         }
     }
 

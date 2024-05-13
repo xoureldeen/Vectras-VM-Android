@@ -12,6 +12,7 @@ import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
+import com.vectras.qemu.MainVNCActivity;
 import com.vectras.vterm.Terminal;
 
 import java.io.File;
@@ -30,10 +31,10 @@ public class MainService extends Service {
         super.onCreate();
         service = this;
         createNotificationChannel();
-        Intent stopSelf = new Intent(this, MainActivity.class);
+        Intent stopSelf = new Intent(this, MainService.class);
         stopSelf.setAction("STOP");
         PendingIntent pStopSelf = PendingIntent.getService(
-                this, 0, stopSelf, PendingIntent.FLAG_IMMUTABLE
+                this, 0, stopSelf, PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
         );
 
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
@@ -82,6 +83,7 @@ public class MainService extends Service {
 
             //TODO: Not Work
             Terminal.killQemuProcess();
+
             return START_NOT_STICKY;
         }
         return START_NOT_STICKY;

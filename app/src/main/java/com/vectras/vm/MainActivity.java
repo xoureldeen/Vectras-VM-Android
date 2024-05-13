@@ -117,9 +117,6 @@ public class MainActivity extends AppCompatActivity {
         RamInfo.activity = this;
         setContentView(R.layout.activity_main);
 
-        if (!MainSettingsManager.getVncExternal(activity))
-            clearNotifications();
-
         setupFolders();
 
         NotificationManager notificationManager = (NotificationManager) activity.getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
@@ -797,6 +794,8 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     progressDialog.dismiss();
+                } else {
+                    progressDialog.dismiss();
                 }
             }
         }, 5000);
@@ -848,6 +847,8 @@ public class MainActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         Log.d(TAG, "onStart");
+        if (!MainSettingsManager.getVncExternal(activity))
+            clearNotifications();
         loadDataVbi();
         Config.ui = MainSettingsManager.getVmUi(activity);
 
