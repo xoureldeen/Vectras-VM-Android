@@ -765,7 +765,7 @@ public class MainActivity extends AppCompatActivity {
 
         ProgressDialog progressDialog = new ProgressDialog(activity, R.style.MainDialogTheme);
         progressDialog.setMessage("Booting up...");
-        progressDialog.setCancelable(false); // Make the dialog non-cancellable if you like
+        progressDialog.setCancelable(false);
         progressDialog.show();
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -796,6 +796,12 @@ public class MainActivity extends AppCompatActivity {
                     progressDialog.dismiss();
                 } else {
                     progressDialog.dismiss();
+                    if (MainSettingsManager.getVncExternal(MainActivity.activity)) {
+                        extVncLayout.setVisibility(View.VISIBLE);
+                        appbar.setExpanded(true);
+                    } else {
+                        activity.startActivity(new Intent(activity, MainVNCActivity.class));
+                    }
                 }
             }
         }, 5000);

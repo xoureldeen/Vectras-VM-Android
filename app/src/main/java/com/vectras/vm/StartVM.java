@@ -107,7 +107,7 @@ public class StartVM {
 
         params.add("-nodefaults");
 
-        if (Objects.equals(MainSettingsManager.getArch(activity), "ARM64")) {
+        if (!Objects.equals(MainSettingsManager.getArch(activity), "ARM64")) {
             params.add(bios);
         }
 

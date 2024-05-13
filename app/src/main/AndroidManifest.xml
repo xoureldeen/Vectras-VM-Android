@@ -63,7 +63,9 @@
             android:name=".SetupQemuActivity"
             android:exported="true"
             android:hardwareAccelerated="true"
-            android:launchMode="singleTask" />
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"
+            tools:ignore="DiscouragedApi,LockedOrientationActivity" /> <!--stupid android issue-->
         <activity
             android:name=".RomsManagerActivity"
             android:exported="true"

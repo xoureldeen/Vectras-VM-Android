@@ -485,16 +485,16 @@ public class CustomRomActivity extends AppCompatActivity {
             String defQemuParams;
             switch (MainSettingsManager.getArch(MainActivity.activity)) {
                 case "ARM64":
-                    defQemuParams = "-M virt -cpu cortex-a57 -smp 4 -netdev user,id=usernet -device virtio-net,netdev=usernet -nographic";
+                    defQemuParams = "-M virt -cpu cortex-a57 -smp 4 -netdev user,id=usernet -device virtio-net,netdev=usernet";
                     break;
                 case "PPC":
                     defQemuParams = "-M mac99 -cpu g3 -smp 4 -net nic -net user";
                     break;
                 case "I386":
-                    defQemuParams = "-M pc -cpu qemu32 -smp 4 -vga std -netdev user,id=usernet -device e1000,netdev=usernet";
+                    defQemuParams = "-M pc -cpu qemu32,avx -accel tcg,thread=multi -smp 4 -vga std -netdev user,id=usernet -device e1000,netdev=usernet";
                     break;
                 default:
-                    defQemuParams = "-M pc -cpu qemu64 -smp 4 -vga std -netdev user,id=usernet -device e1000,netdev=usernet";
+                    defQemuParams = "-M pc -cpu qemu64,avx -accel tcg,thread=multi -smp 4 -vga std -netdev user,id=usernet -device e1000,netdev=usernet";
                     break;
             }
             qemu.setText(defQemuParams);
