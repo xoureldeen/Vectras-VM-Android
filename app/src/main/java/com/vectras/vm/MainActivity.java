@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
     private AdRequest adRequest;
     public DrawerLayout mainDrawer;
     private String TAG = "MainActivity";
-    public static /**/LinearLayout extVncLayout;
+    public static /**/ LinearLayout extVncLayout;
     public static AppBarLayout appbar;
     public TextView totalRam;
     public TextView usedRam;
@@ -206,7 +206,8 @@ public class MainActivity extends AppCompatActivity {
                 int id = menuItem.getItemId();
                 if (id == R.id.navigation_item_info) {
                     startActivity(new Intent(activity, AboutActivity.class));
-                } if (id == R.id.navigation_item_help) {
+                }
+                if (id == R.id.navigation_item_help) {
                     String tw = AppConfig.vectrasWebsite;
                     Intent w = new Intent(Intent.ACTION_VIEW);
                     w.setData(Uri.parse(tw));
@@ -750,17 +751,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void startVM(String vmName, String env) {
-        if (checkSharedFolder()) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-            builder.setTitle("Large File Detected");
-            builder.setMessage("One or more files in this folder are larger than 500MB, " +
-                    "due qemu limits you can't use shared folder that's contains files larger than 500mb, " +
-                    "please disable shared folder Settings>qemu or free some files from shared folder.");
-            builder.setPositiveButton("OK", (dialogInterface, i) -> dialogInterface.dismiss());
-            builder.create().show();
-            return;
-        }
-
         boolean isRunning = isMyServiceRunning(MainService.class);
 
         ProgressDialog progressDialog = new ProgressDialog(activity, R.style.MainDialogTheme);
@@ -770,41 +760,39 @@ public class MainActivity extends AppCompatActivity {
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
-                if (!isRunning) {
-                    Intent serviceIntent = new Intent(activity, MainService.class);
-                    MainService.env = env;
-                    MainService.CHANNEL_ID = vmName;
-                    if (SDK_INT >= Build.VERSION_CODES.O) {
-                        activity.startForegroundService(serviceIntent);
-                    } else {
-                        activity.startService(serviceIntent);
-                    }
-
-                    if (MainSettingsManager.getVmUi(activity).equals("VNC")) {
-                        if (MainSettingsManager.getVncExternal(MainActivity.activity)) {
-                            extVncLayout.setVisibility(View.VISIBLE);
-                            appbar.setExpanded(true);
-                        } else {
-                            activity.startActivity(new Intent(activity, MainVNCActivity.class));
-                        }
-                    } else if (MainSettingsManager.getVmUi(activity).equals("SPICE")) {
-                        //activity.startActivity(new Intent(activity, RemoteCanvasActivity.class));
-                    } else if (MainSettingsManager.getVmUi(activity).equals("X11")) {
-                        //activity.startActivity(new Intent(activity, X11Activity.class));
-                    }
-
-                    progressDialog.dismiss();
+                Intent serviceIntent = new Intent(activity, MainService.class);
+                MainService.env = env;
+                MainService.CHANNEL_ID = vmName;
+                if (SDK_INT >= Build.VERSION_CODES.O) {
+                    activity.startForegroundService(serviceIntent);
                 } else {
-                    progressDialog.dismiss();
+                    activity.startService(serviceIntent);
+                }
+
+                if (MainSettingsManager.getVmUi(activity).equals("VNC")) {
                     if (MainSettingsManager.getVncExternal(MainActivity.activity)) {
                         extVncLayout.setVisibility(View.VISIBLE);
                         appbar.setExpanded(true);
+                        progressDialog.dismiss();
                     } else {
-                        activity.startActivity(new Intent(activity, MainVNCActivity.class));
+                        progressDialog.show();
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            public void run() {
+                                MainVNCActivity.started = true;
+                                activity.startActivity(new Intent(activity, MainVNCActivity.class));
+                                progressDialog.dismiss();
+                            }
+                        }, 2000);
                     }
+                } else if (MainSettingsManager.getVmUi(activity).equals("SPICE")) {
+                    //activity.startActivity(new Intent(activity, RemoteCanvasActivity.class));
+                } else if (MainSettingsManager.getVmUi(activity).equals("X11")) {
+                    //activity.startActivity(new Intent(activity, X11Activity.class));
                 }
+
             }
-        }, 5000);
+        }, 2000);
         String[] params = env.split("\\s+");
         VectrasStatus.logInfo("Params:");
         Log.d("StartVM", "Params:");

@@ -34,7 +34,11 @@ public class StartVM {
         else if (MainSettingsManager.getArch(activity).equals("PPC"))
             params.add("qemu-system-ppc");
 
-        String ifType = MainSettingsManager.getIfType(activity);
+        String ifType;
+        if (MainSettingsManager.getArch(activity).equals("ARM64"))
+            ifType = "ahci";
+        else
+            ifType= MainSettingsManager.getIfType(activity);
 
         String cdrom;
         String hdd1;
@@ -128,10 +132,10 @@ public class StartVM {
             }
 
             params.add("-monitor");
-            if (MainSettingsManager.getArch(activity).equals("X86_64"))
-                params.add("vc");
-            else if (MainSettingsManager.getArch(activity).equals("ARM64"))
+            if (MainSettingsManager.getArch(activity).equals("ARM64"))
                 params.add("stdio");
+            else
+                params.add("vc");
         } else if (MainSettingsManager.getVmUi(activity).equals("SPICE")) {
             String spiceStr = "-spice ";
             spiceStr += "port=6999,disable-ticketing=on";

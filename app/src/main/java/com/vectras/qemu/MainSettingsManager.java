@@ -255,6 +255,13 @@ public class MainSettingsManager extends AppCompatActivity
             super.onCreate(savedInstanceState);
 
             mHandler = new Handler();
+
+            Preference prefIfType = findPreference("ifType");
+            if (getArch(activity).equals("ARM64"))
+                if (prefIfType != null) {
+                    prefIfType.setVisible(false);
+                }
+
             Preference pref = findPreference("vmArch");
             if (pref != null) {
                 pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {

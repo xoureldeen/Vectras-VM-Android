@@ -95,6 +95,7 @@ public class CreateImageDialogFragment extends DialogFragment {
                         imageSize.getText().toString() + "G", true, getActivity());
                 if (customRom)
                     CustomRomActivity.drive.setText(FileUtils.getExternalFilesDirectory(getActivity()).getPath() + "/QCOW2/" + imageName.getText().toString() + ".qcow2");
+                dismiss();
             }
         });
 
