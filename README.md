@@ -21,6 +21,10 @@ You can either download Vectras VM from [releases](https://github.com/epicstudio
 
 [![OpenAPK](https://www.openapk.net/images/openapk-badge.png)](https://www.openapk.net/vectras-vm/com.vectras.vm/)
 
+# Contribute
+- https://github.com/epicstudios856/vectras-x11
+- https://github.com/mrugendrakul/vectras-pulse-audio
+
 ### Minimum System Requirement
 - Android 5.0 and up
 - 3GB RAM (1GB of free RAM)
