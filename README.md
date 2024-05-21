@@ -25,7 +25,7 @@ You can either download Vectras VM from [releases](https://github.com/epicstudio
 - https://github.com/epicstudios856/vectras-x11
 - https://github.com/mrugendrakul/vectras-pulse-audio
 
-### Minimum System Requirement
+# Minimum System Requirement
 - Android 5.0 and up
 - 3GB RAM (1GB of free RAM)
 - ARM64-v8A or X86_64 devices only
@@ -33,7 +33,7 @@ You can either download Vectras VM from [releases](https://github.com/epicstudio
 > [!TIP]
 > If the OS you are trying to emulate crashed, try with an older version.
 
-## Using
+# Using
 - for `F1, F2, etc...` use [hacker's keyboard](https://play.google.com/store/search?q=hacker%27s+keyboard&c=apps&hl=en_US)
 - for generating X86_64 qemu parameters use [Create Qemu x86_64 Command](https://play.google.com/store/apps/details?id=com.anbui.cqcm.app&hl=en_US&pli=1)
 
