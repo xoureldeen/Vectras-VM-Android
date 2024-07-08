@@ -20,9 +20,9 @@ public class AppConfig {
 
     // App Config
     public static final String vectrasVersion = "2.9.0";
-    public static final String vectrasWebsite = "https://vectrasvm.blackstorm.cc/";
-    public static final String vectrasHelp = "https://vectrasvm.blackstorm.cc/how.html";
-    public static final String vectrasRaw = "https://vectrasvm.blackstorm.cc/vectras-vm/data/";
+    public static final String vectrasWebsite = "https://boxvidra.blackstorm.cc/";
+    public static final String vectrasHelp = "https://boxvidra.blackstorm.cc/how.html";
+    public static final String vectrasRaw = "https://boxvidra.blackstorm.cc/vectras-vm/data/";
     public static final String vectrasLicense = vectrasRaw + "LICENSE.md";
     public static final String vectrasPrivacy = vectrasRaw + "PRIVACYANDPOLICY.md";
     public static final String vectrasTerms = vectrasRaw + "TERMSOFSERVICE.md";
@@ -32,7 +32,7 @@ public class AppConfig {
     public static final String blogJson = vectrasRaw + "news_list.json";
     public static final String storeJson = vectrasRaw + "store_list.json";
 
-    public static final String releaseUrl = "https://vectrasvm.blackstorm.cc/vectras-vm/Releases/";
+    public static final String releaseUrl = "https://boxvidra.blackstorm.cc/vectras-vm/Releases/";
 
     public static String getSetupFiles() {
         String abi = Build.SUPPORTED_ABIS[0];
