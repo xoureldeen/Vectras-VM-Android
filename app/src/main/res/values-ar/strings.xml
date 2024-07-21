@@ -39,6 +39,7 @@
     <string name="keyboard">لوحة المفاتيح</string>
     <string name="name">الاسم</string>
     <string name="size">الحجم:</string>
+    <string name="availability">التوفر:</string>
     <string name="hide">إخفاء</string>
     <string name="title_activity_login">نشاط الدخول</string>
     <string name="prompt_email">البريد الإلكتروني</string>
@@ -54,7 +55,7 @@
     <string name="apps_amp_games"><![CDATA[التطبيقات والألعاب]]></string>
     <string name="vectras_website">موقع Vectras</string>
     <string name="about">حول</string>
-    <string name="emulation_information">معلومات التقليد</string>
+    <string name="emulation_information">معلومات المحاكاة</string>
     <string name="full_name">الاسم الكامل</string>
     <string name="terms_amp_conditions"><![CDATA[الشروط والأحكام]]></string>
     <string name="i_accept_terms_amp_conditions"><![CDATA[أوافق على الشروط والأحكام]]></string>
@@ -118,6 +119,7 @@
     <string name="hdd1">HDD1</string>
     <string name="hdd2">HDD2</string>
 
+    <string name="echo_nameserver_8_8_8_8">echo \'nameserver 8.8.8.8\' </string>
     <string name="etc_resolv_conf">/etc/resolv.conf</string>
     <string name="create_a_machine">إنشاء آلة</string>
 
@@ -139,6 +141,7 @@
     <string name="ctrl_alt_del">Ctrl-Alt-Del</string>
     <string name="delete_connection">حذف الاتصال</string>
     <string name="delete_key">حذف المفتاح المحدد</string>
+    <string name="delete_key_list">حذف قائمة المفتاح</string>
     <string name="disconnect">قطع الإتصال</string>
     <string name="export_settings">تصدير</string>
     <string name="export_settings_path">تصدير إلى ملف</string>
@@ -151,7 +154,8 @@
     <string name="import_settings_file_url">الاستيراد من ملف أو URL</string>
     <string name="info">معلومات</string>
     <string name="intro_text">إذا كنت بحاجة إلى مساعدة، يرجى التحقق من <a href="http://code.google.com/p/android-vnc-viewer/wiki/Documentation">الدليل</a> (اضغط على زر القائمة في الهاتف للوصول إلى الدليل والعناصر الأخرى في القائمة)، أو <a href="http://code.google.com/p/android-vnc-viewer/wiki/faq">الأسئلة الشائعة</a>.</string>
-    <string name="intro_title">مرحبا</string>
+    <string name="intro_title">مرحباً</string>
+    <string name="intro_version_text">&lt;br&gt;--Sent text is remembered across sessions (optionally)&lt;br&gt;--Import/Export settings to file&lt;br&gt;--Button with zoom controls to bring up keyboard&lt;br&gt;--Can force tiling mode (very large screens)</string>
     <string name="input_mode">وضع الإدخال</string>
     <string name="input_mode_fit_to_screen">لا يوجد تحريك؛ فأرة تراكبول</string>
     <string name="input_mode_mouse">وضع التحكم بمؤشر الفأرة</string>
@@ -160,7 +164,6 @@
     <string name="input_mode_dpad_pan_touchpad_mouse">فأرة اللمس؛ تحريك بواسطة D-Pad</string>
     <string name="input_mode_touch_pan_zoom_mouse">فأرة اللمس والتحريك والتكبير</string>
     <string name="input_mode_touchpad">لوحة اللمس</string>
-    <string name="keep_password_button">احتفظ</string>
     <string name="intro_dont_show">لا تظهر مجددا</string>
     <string name="keys_caption">مفاتيح</string>
     <string name="list_caption">قائمة</string>
@@ -225,6 +228,11 @@
     <string name="not_selected_yet">لم يتم اختياره بعد.</string>
     <string name="modify">تعديل</string>
 
+    <string name="input">إدخال</string>
+    <string name="tiny_vterm">Tiny vterm</string>
+    <string name="try_again">حاول مجدداً</string>
+    <string name="logs">سجلات</string>
+    <string name="options">خيارات</string>
     <!-- وحدة التحكم XServer XSDL -->
     <string name="init">جاري التهيئة</string>
     <string name="please_wait">يرجى الانتظار بينما يتم تنزيل البيانات</string>
@@ -414,11 +422,14 @@
     <string name="yes">نعم</string>
     <string name="no">لا</string>
 
+    <!-- Play Game Services strings -->
     <string name="gamehelper_sign_in_failed">فشل في تسجيل الدخول. يرجى التحقق من اتصالك بالشبكة والمحاولة مجدداً.</string>
     <string name="gamehelper_app_misconfigured">التطبيق غير مُعد بشكل صحيح. تحقق من تطابق اسم الحزمة والشهادة التوقيع مع معرف العميل الذي تم إنشاؤه في لوحة التحكم للمطورين. كما يجب التحقق مما إذا كان التطبيق قد تم نشره بالفعل، والتأكد من أن الحساب الذي تحاول تسجيل الدخول به مدرج كحساب اختبار. يُرجى الرجوع إلى السجلات للحصول على مزيد من المعلومات.</string>
     <string name="gamehelper_license_failed">فشلت عملية التحقق من الترخيص.</string>
     <string name="gamehelper_unknown_error">خطأ غير معروف.</string>
     <string name="accessing_network">جاري الوصول إلى الشبكة، يرجى الانتظار</string>
+
+    <string name="google_play_game_services_app_id" translatable="false">==GOOGLEPLAYGAMESERVICES_APP_ID==</string>
 
     <string name="restarting_please_wait">جاري إعادة التشغيل، يرجى الانتظار.</string>
 
@@ -432,7 +443,7 @@
     <string name="imported_roms_will_be_shown_here">سيتم عرض الرومات المستوردة هنا</string>
     <string name="version">الإصدار:</string>
     <string name="qemu">QEMU</string>
-    <string name="arch">الهندسة:</string>
+    <string name="arch">المعمارية:</string>
     <string name="running">يعمل</string>
     <string name="stopped">متوقف</string>
     <string name="service">الخدمة:</string>
@@ -447,13 +458,13 @@
     <string name="app_settings">إعدادات التطبيق</string>
     <string name="main_app_settings">إعدادات التطبيق الرئيسية.</string>
     <string name="user_interface">واجهة المستخدم</string>
-    <string name="themes_and_ui">السمات وواجهة المستخدم.</string>
-    <string name="emulation_settings">إعدادات التقليد.</string>
+    <string name="themes_and_ui">المظهر وواجهة المستخدم.</string>
+    <string name="emulation_settings">إعدادات المحاكاة</string>
     <string name="vnc">VNC</string>
-    <string name="vnc_ui_environment">بيئة واجهة المستخدم لـ VNC.</string>
-    <string name="vm_arch">هندسة الآلة الظاهرية</string>
+    <string name="vnc_ui_environment">بيئة واجهة المستخدم لـVNC.</string>
+    <string name="vm_arch">معمارية الآلة الإفتراضية</string>
     <string name="cpu_model">نموذج المعالج المركزي</string>
-    <string name="custom_memory">الذاكرة المخصصة</string>
+    <string name="custom_memory">ذاكرة المخصصة</string>
     <string name="memory_mb">الذاكرة (ميغابايت)</string>
     <string name="sound_card">بطاقة الصوت</string>
     <string name="tb_size_kb">حجم TB (كيلوبايت)</string>
@@ -468,16 +479,16 @@
     <string name="custom_params">المعلمات المخصصة</string>
     <string name="vm_ui_environment">بيئة واجهة المستخدم الآلة الافتراضية</string>
     <string name="x11_resolution">دقة X11</string>
-    <string name="mouse">الفأرة</string>
+    <string name="mouse">الماوس</string>
     <string name="check_for_software_updates_on_startup">البحث عن تحديثات البرامج عند بدء التشغيل</string>
     <string name="check_for_software_updates">البحث عن تحديثات البرامج</string>
-    <string name="night_mode">وضع الليل</string>
+    <string name="night_mode">الوضع المظلم</string>
     <string name="description">الوصف</string>
     <string name="qemu_website">موقع ويب QEMU</string>
-    <string name="powerpc_qemu">QEMU للباور بي سي</string>
-    <string name="arm64_qemu">QEMU للأذرع 64</string>
-    <string name="x86_64_qemu_recommended">QEMU لـ x86_64 (مُوصى به)</string>
-    <string name="i386_qemu">QEMU لـ i386</string>
+    <string name="powerpc_qemu">QEMU POWER PC</string>
+    <string name="arm64_qemu">QEMU ARM64</string>
+    <string name="x86_64_qemu_recommended">QEMUلـ x86_64 (مُوصى به)</string>
+    <string name="i386_qemu">QEMUلـ i386</string>
     <string name="export_rom">تصدير ROM</string>
     <string name="are_you_sure">هل أنت متأكد؟</string>
     <string name="description_html_supported">الوصف (دعم HTML)</string>
@@ -488,13 +499,16 @@
     <string name="are_removed_successfully">تم الإزالة بنجاح!</string>
     <string name="free_palestine">فلسطين حرة</string>
     <string name="repository">المستودع</string>
-    <string name="telegram_channel">قناة تليجرام</string>
-    <string name="youtube">يوتيوب</string>
-    <string name="instagram">إنستجرام</string>
-    <string name="facebook">فيسبوك</string>
+    <string name="telegram_channel">قناة Telegram</string>
+    <string name="youtube">YouTube</string>
+    <string name="instagram">Instagram</string>
+    <string name="facebook">Facebook</string>
     <string name="change_log">سجل التغييرات</string>
     <string name="language">اللغة</string>
-    <string name="set">ضبط</string>
+    <string name="set">تعيين</string>
     <string name="change_app_locale">تغيير لغة التطبيق</string>
     <string name="are_you_sure_you_want_to_shutdown_vm">هل أنت متأكد أنك تريد إيقاف الآلة الإفتراضية؟</string>
+    <string name="cpu">المعالج</string>
+    <string name="save_changes">حفظ التغييرات</string>
+    <string name="qemu_create_cmd">إنشاء أمر QEMU</string>
 </resources>
