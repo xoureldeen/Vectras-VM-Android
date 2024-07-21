@@ -94,10 +94,6 @@ public class Terminal {
                 processBuilder.environment().put("TMPDIR", tmpDir.getAbsolutePath());
                 processBuilder.environment().put("SHELL", "/bin/sh");
                 processBuilder.environment().put("DISPLAY", DISPLAY);
-                processBuilder.environment().put("PULSE_SERVER", "/run/pulse/native");
-                processBuilder.environment().put("XDG_RUNTIME_DIR", "/run");
-                processBuilder.environment().put("QEMU_AUDIO_DRV", "sdl");
-                processBuilder.environment().put("SDL_VIDEODRIVER", "x11");
 
                 String[] prootCommand = {
                         nativeLibDir + "/libproot.so", // PRoot binary path

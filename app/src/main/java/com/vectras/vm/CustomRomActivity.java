@@ -432,7 +432,7 @@ public class CustomRomActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (isFilled(title) && isFilled(icon) && isFilled(drive))
+                if (isFilled(title))
                     addRomBtn.setEnabled(true);
                 else
                     addRomBtn.setEnabled(false);

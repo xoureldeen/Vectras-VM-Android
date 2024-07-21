@@ -143,6 +143,7 @@
                     android:padding="8dp"
                     android:text="@string/facebook"
                     android:textAlignment="textStart"
+                    android:visibility="gone"
                     app:icon="@drawable/ic_facebook" />
 
             </LinearLayout>
