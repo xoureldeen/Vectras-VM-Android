@@ -19,7 +19,7 @@ public class TermuxX11 {
 
     public static void main(String[] args) throws ErrnoException {
         String filesDir = VectrasApp.vectrasapp.getFilesDir().getAbsolutePath();
-        File xkbConfigRoot = new File(filesDir + "/distro/share/X11/xkb");
+        File xkbConfigRoot = new File(filesDir + "/distro/usr/share/X11/xkb");
         if (!xkbConfigRoot.exists())
             throw new RuntimeException("XKB_CONFIG_ROOT not found: " + xkbConfigRoot);
         Os.setenv("XKB_CONFIG_ROOT", xkbConfigRoot.getAbsolutePath(), true);

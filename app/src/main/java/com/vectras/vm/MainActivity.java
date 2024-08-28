@@ -8,6 +8,7 @@ import android.app.ActivityManager;
 import android.app.Dialog;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,6 +23,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.DocumentsContract;
+import android.system.ErrnoException;
 import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
@@ -67,6 +69,7 @@ import com.vectras.qemu.utils.RamInfo;
 import com.vectras.vm.MainRoms.AdapterMainRoms;
 import com.vectras.vm.MainRoms.DataMainRoms;
 import com.vectras.vm.adapter.LogsAdapter;
+import com.vectras.vm.core.TermuxX11;
 import com.vectras.vm.logger.VectrasStatus;
 import com.vectras.vm.utils.AppUpdater;
 import com.vectras.vm.utils.FileUtils;
@@ -788,7 +791,21 @@ public class MainActivity extends AppCompatActivity {
                 } else if (MainSettingsManager.getVmUi(activity).equals("SPICE")) {
                     //activity.startActivity(new Intent(activity, RemoteCanvasActivity.class));
                 } else if (MainSettingsManager.getVmUi(activity).equals("X11")) {
-                    //activity.startActivity(new Intent(activity, X11Activity.class));
+                    try {
+                        TermuxX11.main(new String[]{":0"});
+                    } catch (ErrnoException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    Intent x11Intent = new Intent();
+                    x11Intent.setClassName("com.termux.x11", "com.termux.x11.MainActivity");
+                    x11Intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                    try {
+                        activity.startActivity(x11Intent);
+                    } catch (ActivityNotFoundException e) {
+                        Log.e("LaunchActivity", "Activity not found: " + e.getMessage());
+                    }
                 }
 
             }

@@ -601,7 +601,7 @@ public class MainSettingsManager extends AppCompatActivity
 
     public static String getVmUi(Activity activity) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        return prefs.getString("vmUi", "VNC");
+        return prefs.getString("vmUi", Config.ui);
     }
 
     public static void setResolution(Activity activity, String RESOLUTION) {

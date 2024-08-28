@@ -31,7 +31,7 @@ public class Terminal {
     private String user = "root";
 
     public static Process qemuProcess;
-    public static String DISPLAY = ":1";
+    public static String DISPLAY = ":0";
 
     public Terminal(Context context) {
         this.context = context;
@@ -108,6 +108,9 @@ public class Terminal {
                         "-b", "/storage",
                         "-b", "/data",
                         "-w", "/root",
+                        "/usr/bin/env", "-i",
+                        "HOME=/root",
+                        "DISPLAY="+DISPLAY,
                         "/bin/sh",
                         "--login"// The shell to execute inside PRoot
                 };

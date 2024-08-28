@@ -25,6 +25,8 @@ public class StartVM {
 
         ArrayList<String> params = new ArrayList<>(Arrays.asList(qemu));
 
+        params.add("awesome;");
+
         if (MainSettingsManager.getArch(activity).equals("I386"))
             params.add("qemu-system-i386");
         else if (MainSettingsManager.getArch(activity).equals("X86_64"))
