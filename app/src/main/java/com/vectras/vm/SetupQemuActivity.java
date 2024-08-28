@@ -1,6 +1,9 @@
 package com.vectras.vm;
 
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static android.content.Intent.ACTION_OPEN_DOCUMENT;
+import static android.os.Build.VERSION.SDK_INT;
 
 import static com.vectras.vm.utils.UIUtils.UIAlert;
 
@@ -10,20 +13,26 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.PowerManager;
 import android.provider.DocumentsContract;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.button.MaterialButton;
@@ -66,6 +75,9 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
 
         tarPath = getExternalFilesDir("data") + "/data.tar.gz";
 
+        if (!checkPermission())
+            requestPermission();
+
         alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
         alertDialog.setTitle("BOOTSTRAP REQUIRED!");
         alertDialog.setMessage("U can choose between auto download and setup or manual setup by choosing bootstrap file.");
@@ -97,7 +109,51 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
             setupVectras();
         } else {
             alertDialog.show();
+
+            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+            if (pm != null && !pm.isIgnoringBatteryOptimizations(getPackageName())) {
+                showDisableBatteryOptimizationDialog();
+            }
         }
+    }
+
+    public static String[] storage_permissions = {
+            WRITE_EXTERNAL_STORAGE,
+            READ_EXTERNAL_STORAGE
+    };
+
+    private boolean checkPermission() {
+        if (SDK_INT >= Build.VERSION_CODES.R) {
+            return Environment.isExternalStorageManager();
+        } else {
+            int result = ContextCompat.checkSelfPermission(this, READ_EXTERNAL_STORAGE);
+            int result1 = ContextCompat.checkSelfPermission(this, WRITE_EXTERNAL_STORAGE);
+            return result == PackageManager.PERMISSION_GRANTED && result1 == PackageManager.PERMISSION_GRANTED;
+        }
+    }
+
+    private void requestPermission() {
+        ActivityCompat.requestPermissions(this,
+                permissions(),
+                1002);
+    }
+
+    public static String[] permissions() {
+        String[] p;
+        p = storage_permissions;
+        return p;
+    }
+
+    private void showDisableBatteryOptimizationDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Disable Battery Optimization")
+                .setMessage("To ensure the app functions correctly, please disable battery optimization for this app.")
+                .setCancelable(false)
+                .setPositiveButton("Disable", (dialog, which) -> {
+                    Intent intent = new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
+                    startActivity(intent);
+                })
+                .show();
     }
 
     public void onClick(View v) {
@@ -352,7 +408,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                 " apk update;" +
                 " apk add tar libslirp libslirp-dev pulseaudio-dev glib-dev pixman-dev zlib-dev spice-dev" +
                 " libusbredirparser usbredir-dev libiscsi-dev  sdl2 sdl2-dev libepoxy-dev virglrenderer-dev rdma-core" +
-                " libusb ncurses-libs curl libnfs sdl2 gtk+3.0 fuse libpulse libseccomp jack pipewire liburing xkeyboard-config;" +
+                " libusb ncurses-libs curl libnfs sdl2 gtk+3.0 fuse libpulse libseccomp jack pipewire liburing awesome lxterminal font-terminus xkeyboard-config;" +
                 " tar -xzvf " + tarPath + " -C /;" +
                 " rm " + tarPath + ";" +
                 " mkdir -p ~/.vnc && echo -e \"555555\\n555555\" | vncpasswd -f > ~/.vnc/passwd && chmod 0600 ~/.vnc/passwd;" +
@@ -371,7 +427,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
             File selectedFilePath = new File(getPath(content_describer));
             ProgressBar loading = progressBar;
             String abi = Build.SUPPORTED_ABIS[0];
-            if (selectedFilePath.toString().endsWith(abi+".tar.gz")) {
+            if (selectedFilePath.toString().endsWith(abi + ".tar.gz")) {
                 loading.setVisibility(View.VISIBLE);
                 new Thread(new Runnable() {
                     @Override
@@ -423,6 +479,14 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                 alertDialog.show();
                 UIAlert(activity, "INVALID FILE", "please select vectras-vm-" + abi + ".tar.gz file");
             }
+
+        } else if (requestCode == 1002 && resultCode == RESULT_OK) {
+
+            if (!checkPermission()) {
+                requestPermission();
+                Toast.makeText(this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
+            }
+
         } else
             alertDialog.show();
     }

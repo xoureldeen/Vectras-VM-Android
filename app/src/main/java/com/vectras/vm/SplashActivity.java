@@ -57,7 +57,7 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
         SharedPreferences prefs = getSharedPreferences(CREDENTIAL_SHARED_PREF, Context.MODE_PRIVATE);
 
         try {
-            new Handler().postDelayed(activity, 3000);
+            new Handler().postDelayed(activity, 1000);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }/*
@@ -67,8 +67,6 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
         } else {
         }
 */
-        if (!checkPermission())
-            requestPermission();
         MainSettingsManager.setOrientationSetting(activity, 1);
 
         setupFiles();

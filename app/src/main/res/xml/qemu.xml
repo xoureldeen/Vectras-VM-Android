@@ -91,7 +91,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:title="@string/vm_ui_environment"
-        app:isPreferenceVisible="false"
+        app:isPreferenceVisible="true"
         app:iconSpaceReserved="false">
 
         <ListPreference
@@ -102,7 +102,7 @@
             android:entryValues="@array/vmUiValues"
             android:key="vmUi"
             android:title="UI"
-            app:isPreferenceVisible="false"
+            app:isPreferenceVisible="true"
             app:useSimpleSummaryProvider="true"
             app:icon="@drawable/computer"/>
 

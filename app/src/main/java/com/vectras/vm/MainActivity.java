@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
     private AdRequest adRequest;
     public DrawerLayout mainDrawer;
     private String TAG = "MainActivity";
-    public static /**/ LinearLayout extVncLayout;
+    public static /**/ LinearLayout extViewerLayout;
     public static AppBarLayout appbar;
     public TextView totalRam;
     public TextView usedRam;
@@ -135,10 +135,16 @@ public class MainActivity extends AppCompatActivity {
         appbar = findViewById(R.id.appbar);
         appbar.setExpanded(false);
 
-        extVncLayout = findViewById(R.id.extVnc);
+        extViewerLayout = findViewById(R.id.extVnc);
 
+        TextView extTitle = findViewById(R.id.extTitle);
         TextView tvLogin = findViewById(R.id.tvLogin);
-        tvLogin.setText("LOGIN --> " + Config.defaultVNCHost + ":" + (5900 + Config.defaultVNCPort)/* + "\nPASSWORD --> " + Config.defaultVNCPasswd*/);
+        if (MainSettingsManager.getVmUi(activity).equals("VNC")) {
+            tvLogin.setText("LOGIN --> " + Config.defaultVNCHost + ":" + (5900 + Config.defaultVNCPort)/* + "\nPASSWORD --> " + Config.defaultVNCPasswd*/);
+        } else {
+            extTitle.setText("EXTERNAL X11");
+            tvLogin.setText("Now Open Termux X11");
+        }
 
         Button stopBtn = findViewById(R.id.stopBtn);
         stopBtn.setOnClickListener(new View.OnClickListener() {
@@ -150,7 +156,7 @@ public class MainActivity extends AppCompatActivity {
                 Terminal vterm = new Terminal(activity);
                 vterm.executeShellCommand("killall qemu-system-*", false, activity);
 
-                extVncLayout.setVisibility(View.GONE);
+                extViewerLayout.setVisibility(View.GONE);
                 appbar.setExpanded(false);
             }
         });
@@ -774,7 +780,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (MainSettingsManager.getVmUi(activity).equals("VNC")) {
                     if (MainSettingsManager.getVncExternal(MainActivity.activity)) {
-                        extVncLayout.setVisibility(View.VISIBLE);
+                        extViewerLayout.setVisibility(View.VISIBLE);
                         appbar.setExpanded(true);
                         progressDialog.dismiss();
                     } else {
@@ -791,11 +797,10 @@ public class MainActivity extends AppCompatActivity {
                 } else if (MainSettingsManager.getVmUi(activity).equals("SPICE")) {
                     //activity.startActivity(new Intent(activity, RemoteCanvasActivity.class));
                 } else if (MainSettingsManager.getVmUi(activity).equals("X11")) {
-                    try {
-                        TermuxX11.main(new String[]{":0"});
-                    } catch (ErrnoException e) {
-                        throw new RuntimeException(e);
-                    }
+
+                    extViewerLayout.setVisibility(View.VISIBLE);
+                    appbar.setExpanded(true);
+                    progressDialog.dismiss();
 
                     Intent x11Intent = new Intent();
                     x11Intent.setClassName("com.termux.x11", "com.termux.x11.MainActivity");
@@ -805,6 +810,12 @@ public class MainActivity extends AppCompatActivity {
                         activity.startActivity(x11Intent);
                     } catch (ActivityNotFoundException e) {
                         Log.e("LaunchActivity", "Activity not found: " + e.getMessage());
+                    }
+
+                    try {
+                        TermuxX11.main(new String[]{":0"});
+                    } catch (ErrnoException e) {
+                        throw new RuntimeException(e);
                     }
                 }
 

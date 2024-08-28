@@ -24,178 +24,107 @@ import com.vectras.qemu.MainSettingsManager;
 import com.vectras.qemu.MainVNCActivity;
 import com.vectras.vm.MainActivity;
 import com.vectras.vm.R;
+import com.vectras.vm.VectrasApp;
 
 public class Terminal {
     private static final String TAG = "Vterm";
     private Context context;
     private String user = "root";
 
-    public static Process qemuProcess;
+    private Process qemuProcess;
+    private BufferedWriter commandWriter;
     public static String DISPLAY = ":0";
 
     public Terminal(Context context) {
         this.context = context;
+        startQemuProcess();
     }
 
-
-    private String getLocalIpAddress() {
+    private void startQemuProcess() {
         try {
-            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
-                NetworkInterface intf = en.nextElement();
-                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
-                    InetAddress inetAddress = enumIpAddr.nextElement();
-                    if (!inetAddress.isLoopbackAddress() && inetAddress.getHostAddress().toString().contains(".")) {
-                        return inetAddress.getHostAddress().toString();
+            ProcessBuilder processBuilder = new ProcessBuilder();
+            String filesDir = context.getFilesDir().getAbsolutePath();
+            String nativeLibDir = context.getApplicationInfo().nativeLibraryDir;
+
+            File tmpDir = new File(context.getFilesDir(), "tmp");
+
+            processBuilder.environment().put("PROOT_TMP_DIR", tmpDir.getAbsolutePath());
+            processBuilder.environment().put("PROOT_LOADER", nativeLibDir + "/libproot-loader.so");
+            processBuilder.environment().put("PROOT_LOADER_32", nativeLibDir + "/libproot-loader32.so");
+
+            processBuilder.environment().put("HOME", "/root");
+            processBuilder.environment().put("USER", user);
+            processBuilder.environment().put("PATH", "/bin:/usr/bin:/sbin:/usr/sbin");
+            processBuilder.environment().put("TERM", "xterm-256color");
+            processBuilder.environment().put("TMPDIR", tmpDir.getAbsolutePath());
+            processBuilder.environment().put("SHELL", "/bin/sh");
+            processBuilder.environment().put("DISPLAY", DISPLAY);
+
+            String[] prootCommand = {
+                    nativeLibDir + "/libproot.so",
+                    "--kill-on-exit",
+                    "--link2symlink",
+                    "-0",
+                    "-r", filesDir + "/distro",
+                    "-b", "/dev",
+                    "-b", "/proc",
+                    "-b", "/sys",
+                    "-b", "/sdcard",
+                    "-b", "/storage",
+                    "-b", "/data",
+                    "-b", filesDir + "/distro/root:/dev/shm",
+                    "-b", tmpDir.getAbsolutePath() + ":/tmp",
+                    "-w", "/root",
+                    "/usr/bin/env", "-i",
+                    "HOME=/root",
+                    "DISPLAY=" + DISPLAY,
+                    "/bin/sh",
+                    "--login"
+            };
+
+            processBuilder.command(prootCommand);
+            qemuProcess = processBuilder.start();
+            commandWriter = new BufferedWriter(new OutputStreamWriter(qemuProcess.getOutputStream()));
+
+            // Thread to read the output from the process
+            new Thread(() -> {
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(qemuProcess.getInputStream()));
+                     BufferedReader errorReader = new BufferedReader(new InputStreamReader(qemuProcess.getErrorStream()))) {
+
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        Log.d(TAG, line);
+                        com.vectras.vm.logger.VectrasStatus.logError("<font color='yellow'>VTERM: >" + line + "</font>");
                     }
+                    while ((line = errorReader.readLine()) != null) {
+                        Log.w(TAG, line);
+                        com.vectras.vm.logger.VectrasStatus.logError("<font color='red'>VTERM ERROR: >" + line + "</font>");
+                    }
+                } catch (IOException e) {
+                    Log.e(TAG, "Error reading from qemuProcess", e);
                 }
-            }
-        } catch (SocketException ex) {
-            ex.printStackTrace();
+            }).start();
+
+        } catch (IOException e) {
+            Log.e(TAG, "Failed to start qemuProcess", e);
         }
-        return null;
     }
 
-    private void showDialog(String message, Activity activity) {
-        AlertDialog dialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme)
-                .setTitle("Execution Result")
-                .setMessage(message)
-                .setPositiveButton("OK", (dialogInterface, i) -> dialogInterface.dismiss())
-                .create();
-
-        dialog.show();
-    }
-
-    // Method to execute the shell command
     public void executeShellCommand(String userCommand, boolean showResultDialog, Activity dialogActivity) {
-        StringBuilder output = new StringBuilder();
-        StringBuilder errors = new StringBuilder();
-        Log.d(TAG, userCommand);
-        com.vectras.vm.logger.VectrasStatus.logError("<font color='yellow'>VTERM: >" + userCommand + "</font>");
         new Thread(() -> {
             try {
-                // Setup the qemuProcess builder to start PRoot with environmental variables and commands
-                ProcessBuilder processBuilder = new ProcessBuilder();
-
-                // Adjust these environment variables as necessary for your app
-                String filesDir = context.getFilesDir().getAbsolutePath();
-                String nativeLibDir = context.getApplicationInfo().nativeLibraryDir;
-
-                File tmpDir = new File(context.getFilesDir(), "tmp");
-
-                // Setup environment for the PRoot qemuProcess
-                processBuilder.environment().put("PROOT_TMP_DIR", tmpDir.getAbsolutePath());
-                processBuilder.environment().put("PROOT_LOADER", nativeLibDir + "/libproot-loader.so");
-                processBuilder.environment().put("PROOT_LOADER_32", nativeLibDir + "/libproot-loader32.so");
-
-                processBuilder.environment().put("HOME", "/root");
-                processBuilder.environment().put("USER", user);
-                processBuilder.environment().put("PATH", "/bin:/usr/bin:/sbin:/usr/sbin");
-                processBuilder.environment().put("TERM", "xterm-256color");
-                processBuilder.environment().put("TMPDIR", tmpDir.getAbsolutePath());
-                processBuilder.environment().put("SHELL", "/bin/sh");
-                processBuilder.environment().put("DISPLAY", DISPLAY);
-
-                String[] prootCommand = {
-                        nativeLibDir + "/libproot.so", // PRoot binary path
-                        "--kill-on-exit",
-                        "--link2symlink",
-                        "-0",
-                        "-r", filesDir + "/distro", // Path to the rootfs
-                        "-b", "/dev",
-                        "-b", "/proc",
-                        "-b", "/sys",
-                        "-b", "/sdcard",
-                        "-b", "/storage",
-                        "-b", "/data",
-                        "-w", "/root",
-                        "/usr/bin/env", "-i",
-                        "HOME=/root",
-                        "DISPLAY="+DISPLAY,
-                        "/bin/sh",
-                        "--login"// The shell to execute inside PRoot
-                };
-
-                processBuilder.command(prootCommand);
-                qemuProcess = processBuilder.start();
-                // Get the input and output streams of the qemuProcess
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(qemuProcess.getOutputStream()));
-                BufferedReader reader = new BufferedReader(new InputStreamReader(qemuProcess.getInputStream()));
-                BufferedReader errorReader = new BufferedReader(new InputStreamReader(qemuProcess.getErrorStream()));
-
-                // Send user command to PRoot
-                writer.write(userCommand);
-                writer.newLine();
-                writer.flush();
-                writer.close();
-
-                // Read the input stream for the output of the command
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    Log.d(TAG, line);
-                    com.vectras.vm.logger.VectrasStatus.logError("<font color='yellow'>VTERM: >" + line + "</font>");
-                    output.append(line).append("\n");
+                if (commandWriter != null) {
+                    commandWriter.write(userCommand);
+                    commandWriter.newLine();
+                    commandWriter.flush();
                 }
-
-                // Read any errors from the error stream
-                while ((line = errorReader.readLine()) != null) {
-                    Log.w(TAG, line);
-                    com.vectras.vm.logger.VectrasStatus.logError("<font color='red'>VTERM ERROR: >" + line + "</font>");
-                    output.append(line).append("\n");
-                }
-
-                // Clean up
-                reader.close();
-                errorReader.close();
-
-                int exitCode = qemuProcess.waitFor(); // Wait for the process to finish
-                if (exitCode == 0) {
-                    output.append("Execution finished successfully.\n");
-                    output.append(reader.readLine()).append("\n");
-                    Log.i(TAG, reader.readLine());
-                } else {
-                    output.append("Execution finished with exit code: ").append(exitCode).append("\n");
-                    output.append(reader.readLine()).append("\n");
-                    Log.i(TAG, reader.readLine());
-                }
-            } catch (IOException | InterruptedException e) {
-                output.append(e.getMessage());
-                errors.append(Log.getStackTraceString(e));
-                MainActivity.clearNotifications();
-            } finally {
-                // Switch to main thread after execution
-                new Handler(Looper.getMainLooper()).post(() -> {
-                    // If showResultDialog is enabled, show the dialog with the result or errors
-                    if (showResultDialog) {
-                        String finalOutput = output.toString();
-                        String finalErrors = errors.toString();
-                        // bcuz there is dumb users bruh
-                        showDialog(finalOutput.isEmpty() ? finalErrors : finalOutput.replace("read interrupted", "Done!"), dialogActivity);
-                    }
-                });
+            } catch (IOException e) {
+                Log.e(TAG, "Error writing to qemuProcess", e);
             }
         }).start();
     }
 
-    private boolean checkInstallation() {
-        String filesDir = context.getFilesDir().getAbsolutePath();
-        File distro = new File(filesDir, "distro");
-        return distro.exists();
-    }
-
     public static void killQemuProcess() {
-        if (qemuProcess != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                qemuProcess.destroyForcibly();
-            else
-                qemuProcess.destroy();
-            if (!MainSettingsManager.getVncExternal(MainActivity.activity)) {
-                MainVNCActivity.activity.finish();
-                MainVNCActivity.started = false;
-            }
-            qemuProcess = null; // Set it to null after destroying it
-            Log.d(TAG, "QEMU process destroyed.");
-        } else {
-            Log.d(TAG, "QEMU process was null.");
-        }
+
     }
 }
