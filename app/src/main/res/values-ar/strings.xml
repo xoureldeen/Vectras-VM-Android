@@ -200,7 +200,7 @@
     <string name="username_caption">اسم المستخدم</string>
     <string name="username_hint">للمصادقة على نظام Windows</string>
     <string name="permdesc_open_vnc_conn">تشغيل اتصالات VNC المخصصة</string>
-    <string name="terminal">طرفية</string>
+    <string name="terminal">الوحدة الطرفية</string>
 
     <string name="msg_directory_absolute_path">مسار الدليل %1$s المطلق: "%2$s"</string>
 
@@ -447,14 +447,19 @@
     <string name="running">يعمل</string>
     <string name="stopped">متوقف</string>
     <string name="service">الخدمة:</string>
+    <string name="about_app_title">حول التطبيق</string>
+    <string name="data_explorer_title">مستكشف البيانات</string>
+    <string name="logs_title">السجلات</string>
     <string name="free_palistine">فلسطين حرة</string>
     <string name="store">المتجر</string>
+    <string name="apps_and_games_title">التطبيقات والألعاب</string>
     <string name="no_internet_connection">لا يوجد اتصال بالإنترنت</string>
     <string name="check_your_internet_connection">يرجى التحقق من اتصالك بالإنترنت</string>
     <string name="downloading_file">جاري تنزيل الملف..</string>
     <string name="lenght_of_file">طول الملف:</string>
     <string name="downloaded_to_path">تم تنزيله إلى المسار:</string>
     <string name="downloaded_successfully">تم التنزيل بنجاح!</string>
+    <string name="settings_title">الإعدادات</string>
     <string name="app_settings">إعدادات التطبيق</string>
     <string name="main_app_settings">إعدادات التطبيق الرئيسية.</string>
     <string name="user_interface">واجهة المستخدم</string>
