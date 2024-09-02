@@ -1,3 +1,17 @@
+# WARNING!
+Due server maintenance you can use this backup repo:
+https://github.com/AnBui2004/Vectras-VM-Android
+
+
+
+
+
+
+
+
+
+
+
 <p align="center">
   <img src="resources/vectrasvm.png" style="width: 30%;" />
 </p>
