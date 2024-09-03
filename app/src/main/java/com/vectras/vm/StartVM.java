@@ -22,6 +22,8 @@ public class StartVM {
 
         String[] qemu = new String[0];
 
+        String bios = "";
+
 
         ArrayList<String> params = new ArrayList<>(Arrays.asList(qemu));
 
@@ -91,8 +93,13 @@ public class StartVM {
 
         //params.add(soundDevice);
 
-        String bios = "-bios ";
-        bios += AppConfig.basefiledir + "bios-vectras.bin";
+        if (MainSettingsManager.getArch(activity).equals("PPC")) {
+            bios = "-L ";
+            bios += "openbios-ppc";
+        } else {
+            bios = "-bios ";
+            bios += AppConfig.basefiledir + "bios-vectras.bin";
+        }
 
         String machine = "-M ";
         if (Objects.equals(MainSettingsManager.getArch(activity), "X86_64")) {
@@ -109,7 +116,9 @@ public class StartVM {
         params.add("-rtc");
         params.add("base=localtime");
 
-        params.add("-nodefaults");
+        if (!MainSettingsManager.getArch(activity).equals("PPC")) {
+            params.add("-nodefaults");
+        }
 
         if (!Objects.equals(MainSettingsManager.getArch(activity), "ARM64")) {
             params.add(bios);
@@ -131,11 +140,15 @@ public class StartVM {
                 params.add(qmpParams);
             }
 
-            params.add("-monitor");
+            if (!MainSettingsManager.getArch(activity).equals("PPC")) {
+                params.add("-monitor");
+            }
             if (MainSettingsManager.getArch(activity).equals("ARM64"))
                 params.add("stdio");
             else
+            if (!MainSettingsManager.getArch(activity).equals("PPC")) {
                 params.add("vc");
+            }
         } else if (MainSettingsManager.getVmUi(activity).equals("SPICE")) {
             String spiceStr = "-spice ";
             spiceStr += "port=6999,disable-ticketing=on";
