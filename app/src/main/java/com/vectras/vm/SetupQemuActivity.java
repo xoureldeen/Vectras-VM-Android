@@ -150,7 +150,8 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                 .setMessage("To ensure the app functions correctly, please disable battery optimization for this app.")
                 .setCancelable(false)
                 .setPositiveButton("Disable", (dialog, which) -> {
-                    Intent intent = new Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
+                    Intent intent = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+                    intent.setData(Uri.parse("package:" + getApplicationContext().getPackageName()));
                     startActivity(intent);
                 })
                 .show();
