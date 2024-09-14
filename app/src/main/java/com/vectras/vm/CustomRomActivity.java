@@ -494,7 +494,7 @@ public class CustomRomActivity extends AppCompatActivity {
             if(imgFile.exists()){
                 Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
 
-                ImageView ivIcon = findViewById(R.id.ivIcon);
+                ivIcon = findViewById(R.id.ivIcon);
 
                 ivIcon.setImageBitmap(myBitmap);
             }
