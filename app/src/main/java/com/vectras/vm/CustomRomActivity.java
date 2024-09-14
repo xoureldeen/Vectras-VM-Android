@@ -162,12 +162,13 @@ public class CustomRomActivity extends AppCompatActivity {
         TextInputLayout cdromLayout = findViewById(R.id.cdromField);
         TextView arch = findViewById(R.id.textArch);
         arch.setText(MainSettingsManager.getArch(this));
+        ImageView ivIcon = findViewById(R.id.ivIcon);
         icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType("image/jpeg");
+                intent.setType("image/*");
 
                 // Optionally, specify a URI for the file that should appear in the
                 // system file picker when it loads.
@@ -183,7 +184,23 @@ public class CustomRomActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType("image/jpeg");
+                intent.setType("image/*");
+
+                // Optionally, specify a URI for the file that should appear in the
+                // system file picker when it loads.
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
+                }
+
+                startActivityForResult(intent, 1001);
+            }
+        });
+        ivIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("image/*");
 
                 // Optionally, specify a URI for the file that should appear in the
                 // system file picker when it loads.
@@ -477,7 +494,7 @@ public class CustomRomActivity extends AppCompatActivity {
             if(imgFile.exists()){
                 Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
 
-                ImageView ivIcon = findViewById(R.id.ivIcon);
+                ivIcon = findViewById(R.id.ivIcon);
 
                 ivIcon.setImageBitmap(myBitmap);
             }
