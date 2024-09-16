@@ -706,6 +706,18 @@ public class MainActivity extends AppCompatActivity {
 
         } else if (id == R.id.arch) {
             startActivity(new Intent(activity, SetArchActivity.class));
+        } else if (id == R.id.shutdown) {
+            AlertDialog alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
+            alertDialog.setTitle("Do you want to kill all Qemu processes?");
+            alertDialog.setMessage("All running VMs will be forcibly shut down.");
+            alertDialog.setCancelable(true);
+            alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Kill all", (dialog, which) -> {
+                VectrasApp.killallqemuprocesses(getApplicationContext());
+            });
+            alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", (dialog, which) -> {
+
+            });
+            alertDialog.show();
         }
 
         return super.onOptionsItemSelected(item);

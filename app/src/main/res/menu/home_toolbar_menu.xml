@@ -13,4 +13,10 @@
 		app:showAsAction="always"
 		android:title="@string/title_activity_set_arch"/>
 
+	<item
+		android:id="@+id/shutdown"
+		android:icon="@drawable/power_settings_new_24px"
+		app:showAsAction="always"
+		android:title="Shut down"/>
+
 </menu>
