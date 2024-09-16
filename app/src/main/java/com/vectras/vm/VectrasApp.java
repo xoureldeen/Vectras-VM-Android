@@ -387,34 +387,6 @@ public class VectrasApp extends Application {
 			return (int) (dpValue * scale + 0.5f);
 		}
 
-		public static void killallqemuprocesses(Context context) {
-			Terminal vterm = new Terminal(context);
-			vterm.executeShellCommand("killall -9 qemu-system-i386", false, MainActivity.activity);
-			vterm.executeShellCommand("killall -9 qemu-system-x86_64", false, MainActivity.activity);
-			vterm.executeShellCommand("killall -9 qemu-system-aarch64", false, MainActivity.activity);
-			vterm.executeShellCommand("killall -9 qemu-system-ppc", false, MainActivity.activity);
-		}
-
-		public static void killcurrentqemuprocess(Context context) {
-			Terminal vterm = new Terminal(context);
-			String env = "killall -9 ";
-			switch (MainSettingsManager.getArch(MainActivity.activity)) {
-				case "ARM64":
-					env += "qemu-system-aarch64";
-					break;
-				case "PPC":
-					env += "qemu-system-ppc";
-					break;
-				case "I386":
-					env += "qemu-system-i386";
-					break;
-				default:
-					env += "qemu-system-x86_64";
-					break;
-			}
-			vterm.executeShellCommand(env, false, MainActivity.activity);
-		}
-
 		@Override
 		public boolean onCreateOptionsMenu(Menu menu) {
 			menu.add(0, android.R.id.copy, 0, android.R.string.copy).setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
@@ -436,5 +408,33 @@ public class VectrasApp extends Application {
 		public void onBackPressed() {
 			restart();
 		}
+	}
+
+	public static void killallqemuprocesses(Context context) {
+		Terminal vterm = new Terminal(context);
+		vterm.executeShellCommand("killall -9 qemu-system-i386", false, MainActivity.activity);
+		vterm.executeShellCommand("killall -9 qemu-system-x86_64", false, MainActivity.activity);
+		vterm.executeShellCommand("killall -9 qemu-system-aarch64", false, MainActivity.activity);
+		vterm.executeShellCommand("killall -9 qemu-system-ppc", false, MainActivity.activity);
+	}
+
+	public static void killcurrentqemuprocess(Context context) {
+		Terminal vterm = new Terminal(context);
+		String env = "killall -9 ";
+		switch (MainSettingsManager.getArch(MainActivity.activity)) {
+			case "ARM64":
+				env += "qemu-system-aarch64";
+				break;
+			case "PPC":
+				env += "qemu-system-ppc";
+				break;
+			case "I386":
+				env += "qemu-system-i386";
+				break;
+			default:
+				env += "qemu-system-x86_64";
+				break;
+		}
+		vterm.executeShellCommand(env, false, MainActivity.activity);
 	}
 }
