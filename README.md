@@ -17,7 +17,7 @@ https://github.com/AnBui2004/Vectras-VM-Android
 </p>
 
 # Vectras VM
-[![Ceasefire Now][ico-ceasefirenow]](https://techforpalestine.org/learn-more)
+[![Ceasefire Now](https://badge.techforpalestine.org/default)](https://techforpalestine.org/learn-more)
 
 [![Telegram Channel][ico-telegram]][link-telegram]
 [![Latest Version][ico-version]][link-releases]
@@ -54,7 +54,6 @@ Help support the project by funding it.
 - [PROOT](https://proot-me.github.io/)
 - [Alpine Linux](https://www.alpinelinux.org/)
 
-[ico-ceasefirenow]: https://raw.githubusercontent.com/AnBui2004/Vectras-VM-Emu-Android/refs/heads/master/web/Ceasefire_Now-techforpalestine.org.svg
 [ico-telegram]: https://raw.githubusercontent.com/AnBui2004/Vectras-VM-Emu-Android/refs/heads/master/web/telegram.svg
 [ico-version]: https://raw.githubusercontent.com/AnBui2004/Vectras-VM-Emu-Android/refs/heads/master/web/version.svg
 [ico-license]: https://raw.githubusercontent.com/AnBui2004/Vectras-VM-Emu-Android/refs/heads/master/web/License-GPL_v2-blue.svg
