@@ -45,6 +45,7 @@ You can either download Vectras VM from [releases](https://github.com/epicstudio
 
 # Donate
 Help support the project by funding it.
+
 [![Buy Me A Coffee][ico-buymeacoffee]][link-buymeacoffee]
 [![Buy Me a Coffee at ko-fi.com][ico-ko-fi]][link-ko-fi]
 
