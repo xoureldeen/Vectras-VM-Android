@@ -21,7 +21,7 @@ https://github.com/AnBui2004/Vectras-VM-Android
 
 [![Telegram Channel][ico-telegram]][link-telegram]
 [![Latest Version][ico-version]][link-releases]
-[![Software License][ico-license]](LICENSE.md)
+[![Software License][ico-license]](LICENSE)
 
 Welcome to Vectras VM! A virtual machine app for Android based on QEMU that let you emulate various OS including: Windows, MacOS, Linux and Android.
 
