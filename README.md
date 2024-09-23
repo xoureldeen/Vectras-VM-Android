@@ -21,7 +21,7 @@ https://github.com/AnBui2004/Vectras-VM-Android
 
 [![Telegram Channel][ico-telegram]][link-telegram]
 [![Latest Version][ico-version]][link-releases]
-[![Software License][ico-license]](LICENSE.md)
+[![Software License][ico-license]](LICENSE)
 
 Welcome to Vectras VM! A virtual machine app for Android based on QEMU that let you emulate various OS including: Windows, MacOS, Linux and Android.
 
@@ -45,7 +45,9 @@ You can either download Vectras VM from [releases](https://github.com/epicstudio
 
 # Donate
 Help support the project by funding it.
-<p><a href="https://www.buymeacoffee.com/vectrasvm" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="35" width="168"></a> <a href='https://ko-fi.com/vectrasvm' target='_blank'><img height='35' style='border:0px;height:46px;' src='https://az743702.vo.msecnd.net/cdn/kofi3.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></p>
+
+[![Buy Me A Coffee][ico-buymeacoffee]][link-buymeacoffee]
+[![Buy Me a Coffee at ko-fi.com][ico-ko-fi]][link-ko-fi]
 
 
 # Thanks to
@@ -54,10 +56,14 @@ Help support the project by funding it.
 - [PROOT](https://proot-me.github.io/)
 - [Alpine Linux](https://www.alpinelinux.org/)
 
-[ico-telegram]: https://raw.githubusercontent.com/epicstudios856/Vectras-windows-emulator/main/res/images/telegram.svg
-[ico-version]: https://raw.githubusercontent.com/epicstudios856/Vectras-windows-emulator/main/res/images/version.svg
+[ico-telegram]: https://img.shields.io/badge/Telegram-2CA5E0?style=flat-squeare&logo=telegram&logoColor=white
+[ico-version]: https://img.shields.io/badge/Android-3DDC84?logo=android&logoColor=white
 [ico-license]: https://img.shields.io/badge/License-GPL_v2-blue.svg
+[ico-buymeacoffee]: https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?&logo=buy-me-a-coffee&logoColor=black
+[ico-ko-fi]: https://img.shields.io/badge/Ko--fi-FF5E5B?logo=ko-fi&logoColor=white
 
 [link-telegram]: https://t.me/vectras_os
 [link-repo]: https://github.com/epicstudios856/Vectras-VM-Android/
 [link-releases]: https://github.com/epicstudios856/Vectras-VM-Android/releases/
+[link-buymeacoffee]: https://www.buymeacoffee.com/vectrasvm
+[link-ko-fi]: https://ko-fi.com/vectrasvm
