@@ -55,7 +55,7 @@ Help support the project by funding it.
 - [Alpine Linux](https://www.alpinelinux.org/)
 
 [ico-telegram]: https://img.shields.io/badge/Telegram-2CA5E0?style=flat-squeare&logo=telegram&logoColor=white
-[ico-version]: https://img.shields.io/badge/Android-3DDC84?logo=android&logoColor=white)
+[ico-version]: https://img.shields.io/badge/Android-3DDC84?logo=android&logoColor=white
 [ico-license]: https://img.shields.io/badge/License-GPL_v2-blue.svg
 
 [link-telegram]: https://t.me/vectras_os
