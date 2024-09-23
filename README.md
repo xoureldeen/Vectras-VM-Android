@@ -54,9 +54,9 @@ Help support the project by funding it.
 - [PROOT](https://proot-me.github.io/)
 - [Alpine Linux](https://www.alpinelinux.org/)
 
-[ico-telegram]: https://raw.githubusercontent.com/AnBui2004/Vectras-VM-Emu-Android/refs/heads/master/web/telegram.svg
-[ico-version]: https://raw.githubusercontent.com/AnBui2004/Vectras-VM-Emu-Android/refs/heads/master/web/version.svg
-[ico-license]: https://raw.githubusercontent.com/AnBui2004/Vectras-VM-Emu-Android/refs/heads/master/web/License-GPL_v2-blue.svg
+[ico-telegram]: https://img.shields.io/badge/Telegram-2CA5E0?style=flat-squeare&logo=telegram&logoColor=white
+[ico-version]: https://img.shields.io/badge/Android-3DDC84?logo=android&logoColor=white)
+[ico-license]: https://img.shields.io/badge/License-GPL_v2-blue.svg
 
 [link-telegram]: https://t.me/vectras_os
 [link-repo]: https://github.com/epicstudios856/Vectras-VM-Android/
