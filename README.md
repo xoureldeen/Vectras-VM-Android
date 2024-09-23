@@ -45,7 +45,7 @@ You can either download Vectras VM from [releases](https://github.com/epicstudio
 
 # Donate
 Help support the project by funding it.
-<p><a href="https://www.buymeacoffee.com/vectrasvm" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="35" width="168"></a> <a href='https://ko-fi.com/vectrasvm' target='_blank'><img height='35' style='border:0px;height:46px;' src='https://az743702.vo.msecnd.net/cdn/kofi3.png?v=0' border='0' alt='Buy Me a Coffee at ko-fi.com' /></p>
+<p><a href="https://www.buymeacoffee.com/vectrasvm" target="_blank"><img src="https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?&logo=buy-me-a-coffee&logoColor=black" alt="Buy Me A Coffee" height="35" width="168"></a> <a href='https://ko-fi.com/vectrasvm' target='_blank'><img height='35' style='border:0px;height:46px;' src='https://img.shields.io/badge/Ko--fi-FF5E5B?logo=ko-fi&logoColor=white' border='0' alt='Buy Me a Coffee at ko-fi.com' /></p>
 
 
 # Thanks to
