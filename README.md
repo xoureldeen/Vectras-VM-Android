@@ -54,9 +54,9 @@ Help support the project by funding it.
 - [PROOT](https://proot-me.github.io/)
 - [Alpine Linux](https://www.alpinelinux.org/)
 
-[ico-telegram]: https://raw.githubusercontent.com/epicstudios856/Vectras-windows-emulator/main/res/images/telegram.svg
-[ico-version]: https://raw.githubusercontent.com/epicstudios856/Vectras-windows-emulator/main/res/images/version.svg
-[ico-license]: https://img.shields.io/badge/License-GPL_v2-blue.svg
+[ico-telegram]: https://raw.githubusercontent.com/AnBui2004/Vectras-VM-Emu-Android/refs/heads/master/telegram.svg
+[ico-version]: https://raw.githubusercontent.com/AnBui2004/Vectras-VM-Emu-Android/refs/heads/master/version.svg
+[ico-license]: https://raw.githubusercontent.com/AnBui2004/Vectras-VM-Emu-Android/refs/heads/master/License-GPL_v2-blue.svg
 
 [link-telegram]: https://t.me/vectras_os
 [link-repo]: https://github.com/epicstudios856/Vectras-VM-Android/
