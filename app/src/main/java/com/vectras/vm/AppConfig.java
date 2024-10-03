@@ -36,7 +36,8 @@ public class AppConfig {
 
     public static String getSetupFiles() {
         String abi = Build.SUPPORTED_ABIS[0];
-        return releaseUrl + vectrasVersion + "/packages/vectras-vm-" + abi + ".tar.gz";
+        //return releaseUrl + vectrasVersion + "/packages/vectras-vm-" + abi + ".tar.gz";
+        return "https://nguyenbaoanbui-f8a71.web.app/vectrasvm/vectras-vm-" + abi + ".tar.gz";
     }
 
     public static final String romsJson(Activity activity) {

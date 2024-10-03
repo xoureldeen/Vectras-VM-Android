@@ -178,6 +178,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         vterm.append(textToAdd);
 
         if (textToAdd.contains("xssFjnj58Id")) {
+            VectrasApp.addrunshtostartup(getApplicationContext());
             startActivity(new Intent(this, SplashActivity.class));
             finish();
         }
@@ -409,7 +410,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                 " apk update;" +
                 " apk add tar libslirp libslirp-dev pulseaudio-dev glib-dev pixman-dev zlib-dev spice-dev" +
                 " libusbredirparser usbredir-dev libiscsi-dev  sdl2 sdl2-dev libepoxy-dev virglrenderer-dev rdma-core" +
-                " libusb ncurses-libs curl libnfs sdl2 gtk+3.0 fuse libpulse libseccomp jack pipewire liburing awesome lxterminal font-terminus xkeyboard-config;" +
+                " libusb ncurses-libs curl libnfs sdl2 gtk+3.0 fuse libpulse libseccomp jack pipewire liburing awesome lxterminal font-terminus xkeyboard-config fluxbox;" +
                 " tar -xzvf " + tarPath + " -C /;" +
                 " rm " + tarPath + ";" +
                 " mkdir -p ~/.vnc && echo -e \"555555\\n555555\" | vncpasswd -f > ~/.vnc/passwd && chmod 0600 ~/.vnc/passwd;" +

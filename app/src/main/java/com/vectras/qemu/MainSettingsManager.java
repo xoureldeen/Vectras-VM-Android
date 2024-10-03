@@ -17,10 +17,12 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.preference.EditTextPreference;
@@ -68,6 +70,21 @@ public class MainSettingsManager extends AppCompatActivity
         Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        SwitchCompat enableuseVNC = (SwitchCompat) findViewById(R.id.useVNC);
+
+        enableuseVNC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    MainSettingsManager.setVmUi(activity, "VNC");
+                } else {
+                    MainSettingsManager.setVmUi(activity, "X11");
+                }
+            }
+        });
+
+        enableuseVNC.setChecked(MainSettingsManager.getVmUi(activity) == "VNC");
     }
 
     @Override
@@ -332,10 +349,10 @@ public class MainSettingsManager extends AppCompatActivity
 
     public static class VncPreferencesFragment extends PreferenceFragmentCompat
             implements Preference.OnPreferenceChangeListener {
+
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-
         }
 
         @Override

@@ -14,6 +14,7 @@ import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
+import com.vectras.qemu.MainSettingsManager;
 import com.vectras.qemu.MainVNCActivity;
 import com.vectras.vterm.Terminal;
 
@@ -60,10 +61,12 @@ public class MainService extends Service {
 
         if (env != null) {
             if (service != null) {
-                Terminal vterm = new Terminal(this);
-                vterm.executeShellCommand("awesome &", false, MainActivity.activity);
-                //vterm.executeShellCommand("pulseaudio --system --disallow-exit --disallow-module-loading --daemonize --log-level=debug --log-time=1");
-                vterm.executeShellCommand(env, true, MainActivity.activity);
+                    Terminal vterm = new Terminal(this);
+                    vterm.executeShellCommand("awesome &", false, MainActivity.activity);
+                    //vterm.executeShellCommand("pulseaudio --system --disallow-exit --disallow-module-loading --daemonize --log-level=debug --log-time=1");
+                if (MainSettingsManager.getVmUi(MainActivity.activity).equals("VNC")) {
+                    vterm.executeShellCommand(env, true, MainActivity.activity);
+                }
             }
         } else
             Log.e(TAG, "env is null");
