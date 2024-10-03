@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -28,6 +29,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.google.android.material.color.DynamicColors;
+import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vterm.Terminal;
 
@@ -50,6 +52,7 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
+import android.content.SharedPreferences;
 
 public class VectrasApp extends Application {
 	public static VectrasApp vectrasapp;
@@ -410,12 +413,23 @@ public class VectrasApp extends Application {
 		}
 	}
 
-	public static void killallqemuprocesses(Context context) {
-		Terminal vterm = new Terminal(context);
-		vterm.executeShellCommand("killall -9 qemu-system-i386", false, MainActivity.activity);
-		vterm.executeShellCommand("killall -9 qemu-system-x86_64", false, MainActivity.activity);
-		vterm.executeShellCommand("killall -9 qemu-system-aarch64", false, MainActivity.activity);
-		vterm.executeShellCommand("killall -9 qemu-system-ppc", false, MainActivity.activity);
+	public static void killallqemuprocesses(Activity activity) {
+		Terminal vterm = new Terminal(activity);
+		if (MainSettingsManager.getVmUi(activity).equals("X11")) {
+			Intent intent = new Intent();
+			intent.setClass(activity, SplashActivity.class);
+			activity.startActivity(intent);
+			vterm.executeShellCommand("killall -9 qemu-system-i386", false, MainActivity.activity);
+			vterm.executeShellCommand("killall -9 qemu-system-x86_64", false, MainActivity.activity);
+			vterm.executeShellCommand("killall -9 qemu-system-aarch64", false, MainActivity.activity);
+			vterm.executeShellCommand("killall -9 qemu-system-ppc", false, MainActivity.activity);
+			activity.finish();
+		} else {
+			vterm.executeShellCommand("killall -9 qemu-system-i386", false, MainActivity.activity);
+			vterm.executeShellCommand("killall -9 qemu-system-x86_64", false, MainActivity.activity);
+			vterm.executeShellCommand("killall -9 qemu-system-aarch64", false, MainActivity.activity);
+			vterm.executeShellCommand("killall -9 qemu-system-ppc", false, MainActivity.activity);
+		}
 	}
 
 	public static void killcurrentqemuprocess(Context context) {
@@ -436,5 +450,43 @@ public class VectrasApp extends Application {
 				break;
 		}
 		vterm.executeShellCommand(env, false, MainActivity.activity);
+	}
+
+	public static void disablerunsh(Context context) {
+		Terminal vterm = new Terminal(context);
+		vterm.executeShellCommand("chmod -x /home/run.sh", false, MainActivity.activity);
+	}
+
+	public static void createrunsh(String env,Context context) {
+		Terminal vterm = new Terminal(context);
+		vterm.executeShellCommand("echo 'fluxbox &' > /home/run.sh && echo 'chmod -x /home/run.sh' >> /home/run.sh &&  echo '"+ env +"' >> /home/run.sh && echo 'pkill -SIGKILL -u root' >> /home/run.sh && chmod +rwx /home/run.sh", true, MainActivity.activity);
+	}
+
+	public static void addrunshtostartup(Context context) {
+		SharedPreferences data = context.getSharedPreferences("addrunshtostartup", context.MODE_PRIVATE);
+		if (!data.getString("isaddedrunshtostartup","").contains("1")) {
+			data.edit().putString("isaddedrunshtostartup", "1").commit();
+			Terminal vterm = new Terminal(context);
+			vterm.executeShellCommand("echo '/home/run.sh' >> /etc/profile", true, MainActivity.activity);
+		}
+	}
+
+	public static void logoutroot(String env,Context context) {
+		Terminal vterm = new Terminal(context);
+		vterm.executeShellCommand("pkill -SIGKILL -u root", true, MainActivity.activity);
+	}
+
+	public static void saveappconfig(Context context) {
+		try {
+			SharedPreferences data = context.getSharedPreferences("appconfig", context.MODE_PRIVATE);
+			data.edit().putString("basefiledir", AppConfig.basefiledir).commit();
+			data.edit().putString("maindirpath", AppConfig.maindirpath).commit();
+			data.edit().putString("sharedFolder", AppConfig.sharedFolder).commit();
+			data.edit().putString("downloadsFolder", AppConfig.downloadsFolder).commit();
+		} catch (ExceptionInInitializerError e) {
+
+		} catch (NoClassDefFoundError e) {
+
+		}
 	}
 }

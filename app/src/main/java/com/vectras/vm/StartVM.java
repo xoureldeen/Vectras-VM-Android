@@ -2,6 +2,7 @@ package com.vectras.vm;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 
 import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
@@ -26,6 +27,8 @@ public class StartVM {
 
 
         ArrayList<String> params = new ArrayList<>(Arrays.asList(qemu));
+
+        SharedPreferences dataAppConfig = activity.getSharedPreferences("appconfig", activity.MODE_PRIVATE);
 
         if (MainSettingsManager.getArch(activity).equals("I386"))
             params.add("qemu-system-i386");
@@ -98,7 +101,7 @@ public class StartVM {
             bios += "openbios-ppc";
         } else {
             bios = "-bios ";
-            bios += AppConfig.basefiledir + "bios-vectras.bin";
+            bios += dataAppConfig.getString("basefiledir","") + "bios-vectras.bin";
         }
 
         String machine = "-M ";

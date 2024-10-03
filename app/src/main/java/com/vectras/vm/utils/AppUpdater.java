@@ -49,6 +49,12 @@ public class AppUpdater extends AsyncTask<String, String, String> {
                 sb.append(response);
             }
 			return sb.toString();
+        } catch (ExceptionInInitializerError e) {
+            e.printStackTrace();
+            return "Error on getting data: " + e.getMessage();
+        } catch (NoClassDefFoundError e) {
+            e.printStackTrace();
+            return "Error on getting data: " + e.getMessage();
         } catch (Exception e) {
             e.printStackTrace();
             return "Error on getting data: " + e.getMessage();

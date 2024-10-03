@@ -70,6 +70,7 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
         MainSettingsManager.setOrientationSetting(activity, 1);
 
         setupFiles();
+        VectrasApp.disablerunsh(getApplicationContext());
     }
 
     public void setupFiles() {

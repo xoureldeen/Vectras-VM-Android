@@ -112,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
     public TextView usedRam;
     public TextView freeRam;
     private final Timer _timer = new Timer();
+    private SharedPreferences getAppConfigData;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -119,6 +120,9 @@ public class MainActivity extends AppCompatActivity {
         activity = this;
         RamInfo.activity = this;
         setContentView(R.layout.activity_main);
+
+        getAppConfigData = getSharedPreferences("appconfig", MODE_PRIVATE);
+        VectrasApp.saveappconfig(getApplicationContext());
 
         setupFolders();
 
@@ -152,9 +156,16 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Stop the service
                 MainService.stopService();
-
-                Terminal vterm = new Terminal(activity);
-                vterm.executeShellCommand("killall qemu-system-*", false, activity);
+                if (MainSettingsManager.getVmUi(activity).equals("X11")) {
+                    Intent intent = new Intent();
+                    intent.setClass(getApplicationContext(),SplashActivity.class);
+                    startActivity(intent);
+                    Terminal vterm = new Terminal(activity);
+                    vterm.executeShellCommand("chmod -x /home/run.sh && pkill -SIGKILL -u root", false, activity);
+                } else {
+                    Terminal vterm = new Terminal(activity);
+                    vterm.executeShellCommand("killall qemu-system-*", false, activity);
+                }
 
                 extViewerLayout.setVisibility(View.GONE);
                 appbar.setExpanded(false);
@@ -641,11 +652,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void loadDataVbi() {
+
         data = new ArrayList<>();
 
         try {
+            SharedPreferences dataAppConfig = activity.getSharedPreferences("appconfig", activity.MODE_PRIVATE);
 
-            jArray = new JSONArray(FileUtils.readFromFile(MainActivity.activity, new File(AppConfig.maindirpath
+            jArray = new JSONArray(FileUtils.readFromFile(MainActivity.activity, new File(dataAppConfig.getString("maindirpath","")
                     + "roms-data.json")));
 
             // Extract data from json and store into ArrayList as class objects
@@ -712,7 +725,7 @@ public class MainActivity extends AppCompatActivity {
             alertDialog.setMessage("All running VMs will be forcibly shut down.");
             alertDialog.setCancelable(true);
             alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Kill all", (dialog, which) -> {
-                VectrasApp.killallqemuprocesses(getApplicationContext());
+                VectrasApp.killallqemuprocesses(activity);
             });
             alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", (dialog, which) -> {
 
@@ -778,6 +791,11 @@ public class MainActivity extends AppCompatActivity {
         progressDialog.setMessage("Booting up...");
         progressDialog.setCancelable(false);
         progressDialog.show();
+        if (MainSettingsManager.getVmUi(activity).equals("X11")) {
+            VectrasApp.createrunsh(env, activity);
+        } else {
+            VectrasApp.disablerunsh(activity);
+        }
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
@@ -830,7 +848,6 @@ public class MainActivity extends AppCompatActivity {
                         throw new RuntimeException(e);
                     }
                 }
-
             }
         }, 2000);
         String[] params = env.split("\\s+");
@@ -840,7 +857,6 @@ public class MainActivity extends AppCompatActivity {
             VectrasStatus.logInfo(i + ": " + params[i]);
             Log.d("StartVM", i + ": " + params[i]);
         }
-
     }
 
     private void setupFolders() {
@@ -916,6 +932,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Log.d("TAG", "The interstitial ad wasn't ready yet.");
         }
+        VectrasApp.disablerunsh(getApplicationContext());
     }
 
     @Override
