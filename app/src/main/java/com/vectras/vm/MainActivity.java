@@ -1,6 +1,7 @@
 package com.vectras.vm;
 
 import static android.content.Intent.ACTION_OPEN_DOCUMENT;
+import static android.content.Intent.ACTION_VIEW;
 import static android.os.Build.VERSION.SDK_INT;
 import static com.vectras.vm.utils.UIUtils.UIAlert;
 
@@ -9,6 +10,8 @@ import android.app.Dialog;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -228,17 +231,17 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(new Intent(activity, AboutActivity.class));
                 }
                 if (id == R.id.navigation_item_help) {
-                    String tw = AppConfig.vectrasWebsite;
-                    Intent w = new Intent(Intent.ACTION_VIEW);
+                    String tw = getAppConfigData.getString("vectrasWebsite","");
+                    Intent w = new Intent(ACTION_VIEW);
                     w.setData(Uri.parse(tw));
                     startActivity(w);
                 } else if (id == R.id.navigation_item_website) {
-                    String tw = AppConfig.vectrasHelp;
-                    Intent w = new Intent(Intent.ACTION_VIEW);
+                    String tw = getAppConfigData.getString("vectrasHelp","");
+                    Intent w = new Intent(ACTION_VIEW);
                     w.setData(Uri.parse(tw));
                     startActivity(w);
                 } else if (id == R.id.navigation_item_import_iso) {
-                    if (new File(AppConfig.maindirpath + "/drive.iso").exists()) {
+                    if (new File(getAppConfigData.getString("maindirpath","") + "/drive.iso").exists()) {
                         AlertDialog ad;
                         ad = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
                         ad.setTitle("REPLACE ISO");
@@ -261,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
                         });
                         ad.setButton(Dialog.BUTTON_NEGATIVE, "REMOVE", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                File isoFile = new File(AppConfig.maindirpath + "/drive.iso");
+                                File isoFile = new File(getAppConfigData.getString("maindirpath","") + "/drive.iso");
                                 try {
                                     isoFile.delete();
                                 } catch (Exception e) {
@@ -285,7 +288,7 @@ public class MainActivity extends AppCompatActivity {
                         startActivityForResult(intent, 1004);
                     }
                 } else if (id == R.id.navigation_item_hdd1) {
-                    if (new File(AppConfig.maindirpath + "/hdd1.qcow2").exists()) {
+                    if (new File(getAppConfigData.getString("maindirpath","") + "/hdd1.qcow2").exists()) {
                         AlertDialog ad;
                         ad = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
                         ad.setTitle("REPLACE HDD1");
@@ -308,7 +311,7 @@ public class MainActivity extends AppCompatActivity {
                         });
                         ad.setButton(Dialog.BUTTON_NEGATIVE, "REMOVE", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                File isoFile = new File(AppConfig.maindirpath + "/hdd1.qcow2");
+                                File isoFile = new File(getAppConfigData.getString("maindirpath","") + "/hdd1.qcow2");
                                 try {
                                     isoFile.delete();
                                 } catch (Exception e) {
@@ -321,11 +324,11 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent intentShareFile = new Intent(Intent.ACTION_SEND);
-                                File fileWithinMyDir = new File(AppConfig.maindirpath + "/hdd1.qcow2");
+                                File fileWithinMyDir = new File(getAppConfigData.getString("maindirpath","") + "/hdd1.qcow2");
 
                                 if (fileWithinMyDir.exists()) {
                                     intentShareFile.setType("*/*");
-                                    intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + AppConfig.maindirpath + "/hdd1.qcow2"));
+                                    intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + getAppConfigData.getString("maindirpath","") + "/hdd1.qcow2"));
 
                                     intentShareFile.putExtra(Intent.EXTRA_SUBJECT,
                                             "Sharing File...");
@@ -350,7 +353,7 @@ public class MainActivity extends AppCompatActivity {
                         startActivityForResult(intent, 1005);
                     }
                 } else if (id == R.id.navigation_item_hdd2) {
-                    if (new File(AppConfig.maindirpath + "/hdd2.qcow2").exists()) {
+                    if (new File(getAppConfigData.getString("maindirpath","") + "/hdd2.qcow2").exists()) {
                         AlertDialog ad;
                         ad = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
                         ad.setTitle("REPLACE HDD2");
@@ -373,7 +376,7 @@ public class MainActivity extends AppCompatActivity {
                         });
                         ad.setButton(Dialog.BUTTON_NEGATIVE, "REMOVE", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                File isoFile = new File(AppConfig.maindirpath + "/hdd2.qcow2");
+                                File isoFile = new File(getAppConfigData.getString("maindirpath","") + "/hdd2.qcow2");
                                 try {
                                     isoFile.delete();
                                 } catch (Exception e) {
@@ -386,11 +389,11 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent intentShareFile = new Intent(Intent.ACTION_SEND);
-                                File fileWithinMyDir = new File(AppConfig.maindirpath + "/hdd2.qcow2");
+                                File fileWithinMyDir = new File(getAppConfigData.getString("maindirpath","") + "/hdd2.qcow2");
 
                                 if (fileWithinMyDir.exists()) {
                                     intentShareFile.setType("*/*");
-                                    intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + AppConfig.maindirpath + "/hdd2.qcow2"));
+                                    intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + getAppConfigData.getString("maindirpath","") + "/hdd2.qcow2"));
 
                                     intentShareFile.putExtra(Intent.EXTRA_SUBJECT,
                                             "Sharing File...");
@@ -474,9 +477,55 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(new Intent(activity, DataExplorerActivity.class));
                 } else if (id == R.id.navigation_item_donate) {
                     String tw = "https://www.buymeacoffee.com/vectrasvm/";
-                    Intent w = new Intent(Intent.ACTION_VIEW);
+                    Intent w = new Intent(ACTION_VIEW);
                     w.setData(Uri.parse(tw));
                     startActivity(w);
+                } else if (id== R.id.setup_sound) {
+                    if (VectrasApp.isAppInstalled("com.termux", getApplicationContext())) {
+                        AlertDialog alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
+                        alertDialog.setTitle(getResources().getString(R.string.setup_sound));
+                        alertDialog.setMessage(getResources().getString(R.string.setup_sound_guide_content));
+                        alertDialog.setCancelable(false);
+                        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.start_setup), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                                ClipData clip = ClipData.newPlainText("Setup", "curl -o setup.sh https://raw.githubusercontent.com/AnBui2004/termux/refs/heads/main/installpulseaudio.sh && chmod +rwx setup.sh && ./setup.sh && rm setup.sh");
+                                clipboard.setPrimaryClip(clip);
+                                Intent intent = new Intent();
+                                intent.setAction(ACTION_VIEW);
+                                intent.setData(Uri.parse("android-app://com.termux"));
+                                startActivity(intent);
+                                Toast.makeText(getApplicationContext(), getResources().getString(R.string.copied), Toast.LENGTH_LONG).show();
+                                return;
+                            }
+                        });
+                        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                alertDialog.dismiss();
+                            }
+                        });
+                        alertDialog.show();
+                    } else {
+                        AlertDialog alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
+                        alertDialog.setTitle(getResources().getString(R.string.termux_is_not_installed));
+                        alertDialog.setMessage(getResources().getString(R.string.you_need_to_install_termux));
+                        alertDialog.setCancelable(false);
+                        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.install), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent();
+                                intent.setAction(ACTION_VIEW);
+                                intent.setData(Uri.parse("https://github.com/termux/termux-app/releases"));
+                                startActivity(intent);
+                                return;
+                            }
+                        });
+                        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                alertDialog.dismiss();
+                            }
+                        });
+                        alertDialog.show();
+                    }
                 }
                 return false;
             }
@@ -510,7 +559,7 @@ public class MainActivity extends AppCompatActivity {
             alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "JOIN", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     String tg = "https://t.me/vectras_os";
-                    Intent f = new Intent(Intent.ACTION_VIEW);
+                    Intent f = new Intent(ACTION_VIEW);
                     f.setData(Uri.parse(tg));
                     startActivity(f);
                     return;
@@ -629,7 +678,7 @@ public class MainActivity extends AppCompatActivity {
                                     .setNegativeButton("Update", new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id) {
                                             try {
-                                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(obj.getString("url"))));
+                                                startActivity(new Intent(ACTION_VIEW, Uri.parse(obj.getString("url"))));
                                             } catch (JSONException e) {
 
                                             }
@@ -657,7 +706,6 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             SharedPreferences dataAppConfig = activity.getSharedPreferences("appconfig", activity.MODE_PRIVATE);
-
             jArray = new JSONArray(FileUtils.readFromFile(MainActivity.activity, new File(dataAppConfig.getString("maindirpath","")
                     + "roms-data.json")));
 
@@ -771,7 +819,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static boolean checkSharedFolder() { //TODO: not work idk why
-        File folder = new File(AppConfig.sharedFolder);
+        SharedPreferences dataAppConfig = activity.getSharedPreferences("appconfig", activity.MODE_PRIVATE);
+        File folder = new File(dataAppConfig.getString("sharedFolder",""));
         File[] listOfFiles = folder.listFiles();
 
         if (listOfFiles != null) {
@@ -965,7 +1014,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                         try {
                             try {
-                                OutputStream out = new FileOutputStream(new File(AppConfig.maindirpath + "/drive.iso"));
+                                OutputStream out = new FileOutputStream(new File(getAppConfigData.getString("maindirpath","") + "/drive.iso"));
                                 try {
                                     // Transfer bytes from in to out
                                     byte[] buf = new byte[1024];
@@ -1016,7 +1065,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     try {
                         try {
-                            OutputStream out = new FileOutputStream(new File(AppConfig.maindirpath + "/hdd1.qcow2"));
+                            OutputStream out = new FileOutputStream(new File(getAppConfigData.getString("maindirpath","") + "/hdd1.qcow2"));
                             try {
                                 // Transfer bytes from in to out
                                 byte[] buf = new byte[1024];
@@ -1065,7 +1114,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     try {
                         try {
-                            OutputStream out = new FileOutputStream(new File(AppConfig.maindirpath + "/hdd2.qcow2"));
+                            OutputStream out = new FileOutputStream(new File(getAppConfigData.getString("maindirpath","") + "/hdd2.qcow2"));
                             try {
                                 // Transfer bytes from in to out
                                 byte[] buf = new byte[1024];
@@ -1114,11 +1163,11 @@ public class MainActivity extends AppCompatActivity {
                     }
                     try {
                         try {
-                            File romDir = new File(AppConfig.maindirpath + curRomName + "/");
+                            File romDir = new File(getAppConfigData.getString("maindirpath","") + curRomName + "/");
                             if (!romDir.exists()) {
                                 romDir.mkdirs();
                             }
-                            OutputStream out = new FileOutputStream(new File(AppConfig.maindirpath + curRomName + "/" + "drv1-" + selectedFilePath.getName()));
+                            OutputStream out = new FileOutputStream(new File(getAppConfigData.getString("maindirpath","") + curRomName + "/" + "drv1-" + selectedFilePath.getName()));
                             try {
                                 // Transfer bytes from in to out
                                 byte[] buf = new byte[1024];

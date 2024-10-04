@@ -39,6 +39,10 @@
         android:icon="@drawable/round_settings_24"
         android:title="@string/settings"/>
     <item
+        android:id="@+id/setup_sound"
+        android:icon="@drawable/volume_up_24px"
+        android:title="@string/setup_sound"/>
+    <item
         android:id="@+id/navigation_item_help"
         android:icon="@drawable/round_help_24"
         android:title="@string/help"/>

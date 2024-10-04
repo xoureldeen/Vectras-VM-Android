@@ -157,7 +157,8 @@ public class StartVM {
             spiceStr += "port=6999,disable-ticketing=on";
             params.add(spiceStr);
         } else if (MainSettingsManager.getVmUi(activity).equals("X11")) {
-
+            params.add("-display");
+            params.add("gtk");
         }
 
         params.add(extras);

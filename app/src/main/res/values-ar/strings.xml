@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">فيكترا</string>
-    <string name="app_version">v2.9.1 (Thunderbird)</string>
-    <string name="qemu_version">qemu-8.2.1-3dfx</string>
+    <string name="app_version">v2.9.1 (Firefox)</string>
+    <string name="qemu_version">مستقر</string>
     <string name="str_home">الرئيسية</string>
     <string name="str_logger">سجل</string>
     <string name="fab_info">بدء المحاكاة</string>
@@ -511,4 +511,10 @@
     <string name="cpu">المعالج</string>
     <string name="save_changes">حفظ التغييرات</string>
     <string name="qemu_create_cmd">إنشاء أمر QEMU</string>
+    <string name="setup_sound">إعداد الصوت لـ Termux</string>
+    <string name="setup_sound_guide_content">تحذير: غير مخصص للاستخدام مع X11! يتيح هذا للآلات الافتراضية التي تعمل على VM Vectras تشغيل الصوت باستخدام Termux. إذا لم تقم بإعداد Termux بعد، فحدد بدء الإعداد، وسيتم نسخ الأمر تلقائيًا إلى الحافظة، تحتاج إلى لصق هذا الأمر وتشغيله في Termux لإكمال الإعداد. في المرة القادمة، تأكد من تشغيل Termux لتشغيل الصوت.</string>
+    <string name="copied">تم نسخها</string>
+    <string name="start_setup">بدء الإعداد</string>
+    <string name="termux_is_not_installed">لم يتم تثبيت Termux</string>
+    <string name="you_need_to_install_termux">تحتاج إلى تثبيت Termux قبل الإعداد.</string>
 </resources>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Vectras VM</string>
-    <string name="app_version" translatable="false">v2.9.1 (Thunderbird)</string>
-    <string name="qemu_version" translatable="false">qemu-8.2.1-3dfx</string>
+    <string name="app_version" translatable="false">v2.9.1 (Firefox)</string>
+    <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
     <string name="fab_info">Start Emulation</string>
@@ -523,4 +523,10 @@
     <string name="cpu">CPU</string>
     <string name="save_changes">SAVE CHANGES</string>
     <string name="qemu_create_cmd">QEMU CREATE CMD</string>
+    <string name="setup_sound">Setup sound for Termux</string>
+    <string name="setup_sound_guide_content">WARNING: NOT FOR USE WITH X11! This enables virtual machines running on the Vectras VM to play audio using Termux. If you have not set up Termux yet, select Start setup, the command will be automatically copied to the clipboard, you need paste that command and run it in Termux to complete the setup. Next times, make sure Termux is running to play sound.</string>
+    <string name="copied">Copied.</string>
+    <string name="start_setup">Start setup</string>
+    <string name="termux_is_not_installed">Termux is not installed</string>
+    <string name="you_need_to_install_termux">You need to install Termux before setting up.</string>
 </resources>

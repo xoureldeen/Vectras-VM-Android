@@ -9,6 +9,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -454,12 +455,12 @@ public class VectrasApp extends Application {
 
 	public static void disablerunsh(Context context) {
 		Terminal vterm = new Terminal(context);
-		vterm.executeShellCommand("chmod -x /home/run.sh", false, MainActivity.activity);
+		vterm.executeShellCommand("sed -i '/run.sh/d' /etc/profile && chmod -x /home/run.sh", false, MainActivity.activity);
 	}
 
 	public static void createrunsh(String env,Context context) {
 		Terminal vterm = new Terminal(context);
-		vterm.executeShellCommand("echo 'fluxbox &' > /home/run.sh && echo 'chmod -x /home/run.sh' >> /home/run.sh &&  echo '"+ env +"' >> /home/run.sh && echo 'pkill -SIGKILL -u root' >> /home/run.sh && chmod +rwx /home/run.sh", true, MainActivity.activity);
+		vterm.executeShellCommand("echo '/home/run.sh' >> /etc/profile && echo 'sed -i '/run.sh/d' /etc/profile' > /home/run.sh && echo 'fluxbox &' >> /home/run.sh && echo 'chmod -x /home/run.sh' >> /home/run.sh &&  echo '"+ env +"' >> /home/run.sh && echo 'pkill -SIGKILL -u root' >> /home/run.sh && chmod +rwx /home/run.sh", true, MainActivity.activity);
 	}
 
 	public static void addrunshtostartup(Context context) {
@@ -483,10 +484,22 @@ public class VectrasApp extends Application {
 			data.edit().putString("maindirpath", AppConfig.maindirpath).commit();
 			data.edit().putString("sharedFolder", AppConfig.sharedFolder).commit();
 			data.edit().putString("downloadsFolder", AppConfig.downloadsFolder).commit();
+			data.edit().putString("sharedFolder", AppConfig.vectrasWebsite).commit();
+			data.edit().putString("downloadsFolder", AppConfig.vectrasHelp).commit();
 		} catch (ExceptionInInitializerError e) {
 
 		} catch (NoClassDefFoundError e) {
 
+		}
+	}
+
+	public static boolean isAppInstalled(String packagename, Context context) {
+		PackageManager pm = context.getPackageManager();
+		try {
+			pm.getPackageInfo(packagename,PackageManager.GET_ACTIVITIES);
+			return true;
+		} catch (PackageManager.NameNotFoundException e) {
+			return  false;
 		}
 	}
 }
