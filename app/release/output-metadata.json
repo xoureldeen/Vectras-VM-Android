@@ -12,7 +12,7 @@
       "filters": [],
       "attributes": [],
       "versionCode": 17,
-      "versionName": "v2.9.1-thunderbird",
+      "versionName": "v2.9.1-firefox",
       "outputFile": "app-universal-release.apk"
     },
     {
@@ -25,7 +25,7 @@
       ],
       "attributes": [],
       "versionCode": 17,
-      "versionName": "v2.9.1-thunderbird",
+      "versionName": "v2.9.1-firefox",
       "outputFile": "app-x86_64-release.apk"
     },
     {
@@ -38,7 +38,7 @@
       ],
       "attributes": [],
       "versionCode": 17,
-      "versionName": "v2.9.1-thunderbird",
+      "versionName": "v2.9.1-firefox",
       "outputFile": "app-arm64-v8a-release.apk"
     }
   ],

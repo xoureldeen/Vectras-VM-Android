@@ -11,7 +11,7 @@ android {
         minSdk minApi
         targetSdk targetApi
         versionCode 17
-        versionName "v2.9.1-thunderbird"
+        versionName "v2.9.1-firefox"
 	    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }

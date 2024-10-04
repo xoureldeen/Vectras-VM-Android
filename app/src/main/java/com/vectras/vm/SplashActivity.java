@@ -363,7 +363,7 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
     public void run() {
         String filesDir = activity.getFilesDir().getAbsolutePath();
         SharedPreferences prefs = getSharedPreferences(CREDENTIAL_SHARED_PREF, Context.MODE_PRIVATE);
-        if (new File(filesDir, "/distro/usr/local/bin/qemu-system-x86_64").exists())
+        if ((new File(filesDir, "/distro/usr/local/bin/qemu-system-x86_64").exists()) || (new File(filesDir, "/distro/usr/bin/qemu-system-x86_64").exists()))
             startActivity(new Intent(this, MainActivity.class));
         else
             startActivity(new Intent(this, SetupQemuActivity.class));

@@ -93,6 +93,8 @@ public class CustomRomActivity extends AppCompatActivity {
 
     public static DataMainRoms current;
 
+    private SharedPreferences getAppConfigData;
+
     public void onStart() {
         super.onStart();
     }
@@ -143,6 +145,7 @@ public class CustomRomActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         setTitle("Rom Options");
+        getAppConfigData = getSharedPreferences("appconfig", MODE_PRIVATE);
         AdView mAdView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
@@ -331,7 +334,7 @@ public class CustomRomActivity extends AppCompatActivity {
                 if (modify) {
 
                     int position = getIntent().getIntExtra("POS", 0);
-                    final File jsonFile = new File(AppConfig.maindirpath + "roms-data" + ".json");
+                    final File jsonFile = new File(getAppConfigData.getString("maindirpath","") + "roms-data" + ".json");
                     current.itemDrv1 = drive.getText().toString();
                     current.itemExtra = qemu.getText().toString();
                     try {
@@ -364,7 +367,7 @@ public class CustomRomActivity extends AppCompatActivity {
                     editor.putBoolean("isFirstLaunch", Boolean.TRUE);
                     editor.apply();
                     loadingPb.setVisibility(View.VISIBLE);
-                    final File jsonFile = new File(AppConfig.maindirpath + "roms-data" + ".json");
+                    final File jsonFile = new File(getAppConfigData.getString("maindirpath","") + "roms-data" + ".json");
                     RomsJso obj = new RomsJso();
                     if (jsonFile.exists()) {
                         try {
@@ -549,7 +552,7 @@ public class CustomRomActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, ReturnedIntent);
 
         if (title.getText().toString().length() > 0) {
-            File romDir = new File(AppConfig.maindirpath + title.getText().toString());
+            File romDir = new File(getAppConfigData.getString("maindirpath","") + title.getText().toString());
             romDir.mkdirs();
         }
 
@@ -581,13 +584,13 @@ public class CustomRomActivity extends AppCompatActivity {
                     } finally {
                         try {
                             try {
-                                SaveImage(selectedImage, new File(AppConfig.maindirpath + "icons"), title.getText().toString() + "-" + selectedFilePath.getName());
+                                SaveImage(selectedImage, new File(getAppConfigData.getString("maindirpath","") + "icons"), title.getText().toString() + "-" + selectedFilePath.getName());
                             } finally {
                                 Runnable runnable = new Runnable() {
                                     @Override
                                     public void run() {
                                         loadingPb.setVisibility(View.GONE);
-                                        icon.setText(AppConfig.maindirpath + "icons" + "/" + title.getText().toString() + "-" + selectedFilePath.getName());
+                                        icon.setText(getAppConfigData.getString("maindirpath","") + "icons" + "/" + title.getText().toString() + "-" + selectedFilePath.getName());
                                     }
                                 };
                                 activity.runOnUiThread(runnable);
@@ -610,7 +613,7 @@ public class CustomRomActivity extends AppCompatActivity {
         } else if (requestCode == 1002 && resultCode == RESULT_OK) {
             Uri content_describer = ReturnedIntent.getData();
             File selectedFilePath = new File(getPath(content_describer));
-            drive.setText(AppConfig.maindirpath + title.getText().toString() + "/" + selectedFilePath.getName());
+            drive.setText(getAppConfigData.getString("maindirpath","") + title.getText().toString() + "/" + selectedFilePath.getName());
             loadingPb.setVisibility(View.VISIBLE);
             custom.setVisibility(View.GONE);
             new Thread(new Runnable() {
@@ -624,7 +627,7 @@ public class CustomRomActivity extends AppCompatActivity {
                     }
                     try {
                         try {
-                            OutputStream out = new FileOutputStream(new File(AppConfig.maindirpath + title.getText().toString() + "/" + selectedFilePath.getName()));
+                            OutputStream out = new FileOutputStream(new File(getAppConfigData.getString("maindirpath","") + title.getText().toString() + "/" + selectedFilePath.getName()));
                             try {
                                 // Transfer bytes from in to out
                                 byte[] buf = new byte[1024];
@@ -665,7 +668,7 @@ public class CustomRomActivity extends AppCompatActivity {
             Uri content_describer = ReturnedIntent.getData();
             File selectedFilePath = new File(getPath(content_describer));
             if (selectedFilePath.getName().endsWith(".iso")) {
-                String cdromPath = AppConfig.maindirpath + title.getText().toString() + "/" + selectedFilePath.getName();
+                String cdromPath = getAppConfigData.getString("maindirpath","") + title.getText().toString() + "/" + selectedFilePath.getName();
                 cdrom.setText(cdromPath);
 
                 String qemuText = qemu.getText().toString();
@@ -695,7 +698,7 @@ public class CustomRomActivity extends AppCompatActivity {
                         }
                         try {
                             try {
-                                OutputStream out = new FileOutputStream(new File(AppConfig.maindirpath + title.getText().toString() + "/" + selectedFilePath.getName()));
+                                OutputStream out = new FileOutputStream(new File(getAppConfigData.getString("maindirpath","") + title.getText().toString() + "/" + selectedFilePath.getName()));
                                 try {
                                     // Transfer bytes from in to out
                                     byte[] buf = new byte[1024];
@@ -746,7 +749,7 @@ public class CustomRomActivity extends AppCompatActivity {
                         FileInputStream zipFile = null;
                         try {
                             zipFile = (FileInputStream) getContentResolver().openInputStream(content_describer);
-                            File targetDirectory = new File(AppConfig.maindirpath + selectedFilePath.getName().replace(".cvbi", ""));
+                            File targetDirectory = new File(getAppConfigData.getString("maindirpath","") + selectedFilePath.getName().replace(".cvbi", ""));
                             ZipInputStream zis = null;
                             zis = new ZipInputStream(
                                     new BufferedInputStream(zipFile));
@@ -788,17 +791,17 @@ public class CustomRomActivity extends AppCompatActivity {
                                         custom.setVisibility(View.VISIBLE);
                                         try {
 
-                                            JSONObject jObj = new JSONObject(FileUtils.readFromFile(MainActivity.activity, new File(AppConfig.maindirpath
+                                            JSONObject jObj = new JSONObject(FileUtils.readFromFile(MainActivity.activity, new File(getAppConfigData.getString("maindirpath","")
                                                     + selectedFilePath.getName().replace(".cvbi", "") + "/rom-data.json")));
 
                                             title.setText(jObj.getString("title"));
-                                            icon.setText(AppConfig.maindirpath
+                                            icon.setText(getAppConfigData.getString("maindirpath","")
                                                     + selectedFilePath.getName().replace(".cvbi", "") + "/" + jObj.getString("icon"));
-                                            drive.setText(AppConfig.maindirpath
+                                            drive.setText(getAppConfigData.getString("maindirpath","")
                                                     + selectedFilePath.getName().replace(".cvbi", "") + "/" + jObj.getString("drive"));
                                             qemu.setText(jObj.getString("qemu"));
                                             ImageView ivIcon = findViewById(R.id.ivIcon);
-                                            Bitmap bmImg = BitmapFactory.decodeFile(AppConfig.maindirpath
+                                            Bitmap bmImg = BitmapFactory.decodeFile(getAppConfigData.getString("maindirpath","")
                                                     + selectedFilePath.getName().replace(".cvbi", "") + "/" + jObj.getString("icon"));
                                             ivIcon.setImageBitmap(bmImg);
                                             UIUtils.UIAlert(activity, "rom by:\n" + jObj.getString("author") + "\n\n" + Html.fromHtml(jObj.getString("desc")), "DESCRIPTION");
@@ -851,7 +854,7 @@ public class CustomRomActivity extends AppCompatActivity {
 
     public void onDestroy() {
         super.onDestroy();
-        File lol = new File(AppConfig.maindirpath + drive.getText().toString());
+        File lol = new File(getAppConfigData.getString("maindirpath","") + drive.getText().toString());
         try {
             lol.delete();
         } catch (Exception e) {
