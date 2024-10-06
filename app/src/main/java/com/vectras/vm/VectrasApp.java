@@ -39,6 +39,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -500,6 +501,20 @@ public class VectrasApp extends Application {
 			return true;
 		} catch (PackageManager.NameNotFoundException e) {
 			return  false;
+		}
+	}
+
+	public static void writeToFile(String filePath, String content) {
+		File file = new File(filePath);
+		FileOutputStream outputStream = null;
+		try {
+			outputStream = new FileOutputStream(file);
+			outputStream.write(content.getBytes());
+			outputStream.close();
+		} catch (FileNotFoundException e) {
+			throw new RuntimeException(e);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
 		}
 	}
 }

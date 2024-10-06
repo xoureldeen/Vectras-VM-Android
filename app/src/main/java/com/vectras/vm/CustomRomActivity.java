@@ -396,7 +396,8 @@ public class CustomRomActivity extends AppCompatActivity {
                             try {
                                 Writer output = null;
                                 output = new BufferedWriter(new FileWriter(jsonFile));
-                                output.write(jArray.toString().replace("\\", "").replace("//", "/"));
+                                //output.write(jArray.toString().replace("\\", "").replace("//", "/"));
+                                output.write(jArray.toString());
                                 output.close();
                             } catch (Exception e) {
                                 UIUtils.toastLong(activity, e.toString());
@@ -404,6 +405,7 @@ public class CustomRomActivity extends AppCompatActivity {
                             }
                         } catch (JSONException e) {
                             loadingPb.setVisibility(View.GONE);
+                            errorjsondialog();
                             throw new RuntimeException(e);
                         }
                     } else {
@@ -413,7 +415,8 @@ public class CustomRomActivity extends AppCompatActivity {
                         try {
                             Writer output = null;
                             output = new BufferedWriter(new FileWriter(jsonFile));
-                            output.write(jsonArray.toString().replace("\\", "").replace("//", "/"));
+                            //output.write(jsonArray.toString().replace("\\", "").replace("//", "/"));
+                            output.write(jsonArray.toString());
                             output.close();
                         } catch (Exception e) {
                             UIUtils.toastLong(activity, e.toString());
@@ -850,6 +853,20 @@ public class CustomRomActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void errorjsondialog() {
+        AlertDialog alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
+        alertDialog.setTitle("Oops!");
+        alertDialog.setMessage("An error occurred with the virtual machine list data and a new virtual machine cannot be created at this time. To create a new virtual machine, you need to delete all virtual machine list data. Do you want to delete all?");
+        alertDialog.setCancelable(true);
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Delete all", (dialog, which) -> {
+            VectrasApp.writeToFile(getAppConfigData.getString("maindirpath","") + "roms-data" + ".json", "[]");
+        });
+        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", (dialog, which) -> {
+
+        });
+        alertDialog.show();
     }
 
     public void onDestroy() {
