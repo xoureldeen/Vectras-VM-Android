@@ -48,13 +48,15 @@ public class StartVM {
         String cdrom;
         String hdd1;
 
-        String hdd0 = "-drive";
-        hdd0 += " index=0";
-        hdd0 += ",media=disk";
-        hdd0 += ",if=" + ifType;
-        hdd0 += ",file='" + img + "'";
+        if (!img.isEmpty()) {
+            String hdd0 = "-drive";
+            hdd0 += " index=0";
+            hdd0 += ",media=disk";
+            hdd0 += ",if=" + ifType;
+            hdd0 += ",file='" + img + "'";
 
-        params.add(hdd0);
+            params.add(hdd0);
+        }
 
         File cdromFile = new File(filesDir + "/data/Vectras/drive.iso");
 
