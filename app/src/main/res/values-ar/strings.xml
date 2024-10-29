@@ -1,0 +1,514 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">فيكترا</string>
+    <string name="app_version">v2.9.0</string>
+    <string name="qemu_version">qemu-8.2.1-3dfx</string>
+    <string name="str_home">الرئيسية</string>
+    <string name="str_logger">سجل</string>
+    <string name="fab_info">بدء المحاكاة</string>
+    <!-- logger -->
+    <string name="startvm">بدأت الآلة الإفتراضية</string>
+    <string name="stopvm">تم إيقاف الآلة الإتفراضية</string>
+    <string name="noproccesses">لا توجد عمليات!</string>
+    <string name="unknownstate">حالة غير معروفة!</string>
+
+    <string name="desktopInstructions">لاستخدام الماوس الخارجي:\n\tقم بتعطيل تسريع الماوس داخل نظام التشغيل الضيف.\n\t\tلنظام DSL استخدم الأمر: xset m 1\n"\t\tلأنظمة التشغيل الأخرى قم بتعطيل "تعزيز دقة المؤشر" أو اختر "usb-tablet" كخيار ماوس من خيارات Vectras الرئيسية.\n\tقم بتوصيل أو إقران ماوس USB/Bluetooth واضغط موافق\n\tحرك مؤشر الماوس إلى جميع جوانب سطح المكتب للمعايرة.\n"</string>
+
+    <string name="navigation_drawer_open">فتح الدرج</string>
+    <string name="navigation_drawer_close">إغلاق الدرج</string>
+    <string name="address_caption">العنوان</string>
+    <string name="alt_check">Alt</string>
+    <string name="reset">إعادة تعيين</string>
+    <string name="shutdown">إيقاف التشغيل</string>
+    <string name="ctrl_c">Ctrl-c</string>
+    <string name="devices">الأجهزة</string>
+    <string name="external_mouse">ماوس خارجي</string>
+    <string name="monitor">شاشة QEMU</string>
+    <string name="stretch_to_screen">ملء الشاشة</string>
+    <string name="full_screen">ملء الشاشة</string>
+    <string name="toggle_full_screen">تبديل وضع ملء الشاشة</string>
+    <string name="zoom_in">تكبير</string>
+    <string name="zoom_out">تصغير</string>
+    <string name="right_click">النقر بالزر الأيمن</string>
+    <string name="help">مساعدة</string>
+    <string name="drives">الأقراص</string>
+    <string name="volume">الصوت</string>
+    <string name="hide_toolbar">إخفاء شريط الأدوات</string>
+    <string name="view_log">عرض السجل</string>
+    <string name="mode">وضع</string>
+    <string name="keyboard">لوحة المفاتيح</string>
+    <string name="name">الاسم</string>
+    <string name="size">الحجم:</string>
+    <string name="availability">التوفر:</string>
+    <string name="hide">إخفاء</string>
+    <string name="title_activity_login">نشاط الدخول</string>
+    <string name="prompt_email">البريد الإلكتروني</string>
+    <string name="prompt_password">كلمة المرور</string>
+    <string name="action_sign_in">تسجيل الدخول</string>
+    <string name="action_sign_up">التسجيل</string>
+    <string name="action_sign_with_google">تسجيل الدخول بواسطة Google</string>
+    <string name="welcome">"مرحباً!"</string>
+    <string name="invalid_username">اسم المستخدم غير صالح</string>
+    <string name="invalid_password">يجبأن تكون كلمة المرور أكبر من 5 أحرف</string>
+    <string name="login_failed">"فشل تسجيل الدخول"</string>
+    <string name="profile">الملف الشخصي</string>
+    <string name="apps_amp_games"><![CDATA[التطبيقات والألعاب]]></string>
+    <string name="vectras_website">موقع Vectras</string>
+    <string name="about">حول</string>
+    <string name="emulation_information">معلومات المحاكاة</string>
+    <string name="full_name">الاسم الكامل</string>
+    <string name="terms_amp_conditions"><![CDATA[الشروط والأحكام]]></string>
+    <string name="i_accept_terms_amp_conditions"><![CDATA[أوافق على الشروط والأحكام]]></string>
+    <string name="settings">الإعدادات</string>
+    <string name="go_ahead">تقدم</string>
+    <string name="download">تحميل</string>
+    <string name="view_profile" translatable="false"><u><![CDATA[عرض الملف الشخصي >>]]></u></string>
+    <string name="username">اسم المستخدم</string>
+    <string name="save">حفظ</string>
+    <string name="memory_usage">استخدام الذاكرة</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">مرحبًا بك!</string>
+    <string name="linux">لينكس</string>
+    <string name="windows">ويندوز</string>
+    <string name="apple">أبل</string>
+    <string name="external_vnc">VNC خارجي</string>
+    <string name="hosted_successfully">تم الاستضافة بنجاح!</string>
+    <string name="ip">IP: 127.0.0.1:9</string>
+    <string name="install_rom">تثبيت ROM</string>
+    <string name="reconnect">إعادة الاتصال</string>
+    <string name="display">العرض</string>
+    <string name="calibrate_mouse">معايرة الماوس</string>
+    <string name="hide_controller">إخفاء وحدة التحكم</string>
+    <string name="remove">إزالة</string>
+    <string name="view_logs">عرض السجلات</string>
+    <string name="title_activity_set_arch">نشاط تعيين المعمارية</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">الشاشة الأولى</string>
+    <string name="second_fragment_label">الشاشة الثانية</string>
+    <string name="next">التالي</string>
+    <string name="previous">السابق</string>
+
+    <string name="input_mode_hardware_mouse">وضع هاردوير الماوس</string>
+    <string name="previous_entry">الإدخال السابق</string>
+    <string name="next_entry">الإدخال التالي</string>
+    <string name="choose_qemu_architicture">اختر معمارية QEMU:</string>
+    <string name="choose_qemu_architecture">اختر معمارية QEMU:</string>
+    <string name="import_custom_rom_cvbi">استيراد روم مخصص ".CVBI"</string>
+    <string name="rom_name">اسم الروم</string>
+    <string name="rom_drive_qcow2_img_etc">محرك الروم (qcow2, img, إلخ…)</string>
+    <string name="qemu_params">معاملات QEMU</string>
+    <string name="rom_icon">أيقونة الروم</string>
+    <string name="add">إضافة</string>
+    <string name="import_iso">استيراد ISO</string>
+    <string name="importRom">استيراد</string>
+    <string name="privacy_amp_policy"><![CDATA[الخصوصية والسياسة]]></string>
+    <string name="permission_title">مطلوب إذن!</string>
+    <string name="permission_notification_text">بسبب سياسات الأندرويد، يتطلب الحصول على إذن الإشعارات لإرسال إشعارات الآلة الافتراضية!</string>
+    <string name="mouse_mode">وضع الماوس</string>
+    <string name="export">تصدير</string>
+    <string name="email_verification_sent">تم إرسال تحقق البريد الإلكتروني.</string>
+    <string name="sign_out">تسجيل الخروج</string>
+    <string name="android">أندرويد</string>
+    <string name="other">أخرى</string>
+    <string name="guest">ضيف</string>
+    <string name="hdd1_qcow_img_etc">HDD1 (qcow, img, إلخ…)</string>
+    <string name="default_configuration">-vga std -net nic, model=ne2k_pci -net user</string>
+    <string name="data_explorer">مستكشف البيانات</string>
+    <string name="forgot_password">هل نسيت كلمة المرور؟</string>
+    <string name="buy_me_a_coffee">اشترِ لي قهوة</string>
+    <string name="hdd1">HDD1</string>
+    <string name="hdd2">HDD2</string>
+
+    <string name="echo_nameserver_8_8_8_8">echo \'nameserver 8.8.8.8\' </string>
+    <string name="etc_resolv_conf">/etc/resolv.conf</string>
+    <string name="create_a_machine">إنشاء آلة</string>
+
+    <string name="arrow_down">سهم لأسفل</string>
+    <string name="arrow_left">سهم لليسار</string>
+    <string name="arrow_right">سهم لليمين</string>
+    <string name="arrow_up">سهم لأعلى</string>
+    <string name="auto">تلقائي</string>
+    <string name="button_send_text">إرسال نص</string>
+    <string name="button_send_without_saving">إرسال النص/لا تحفظه</string>
+    <string name="center_mouse">مركز الماوس</string>
+    <string name="close">إغلاق</string>
+    <string name="color_format_caption">تنسيق اللون</string>
+    <string name="color_mode">وضع اللون</string>
+    <string name="connect_button">اتصل</string>
+    <string name="connection_caption">الاتصال</string>
+    <string name="control_check">Ctrl</string>
+    <string name="copy_list_button">نسخ القائمة</string>
+    <string name="ctrl_alt_del">Ctrl-Alt-Del</string>
+    <string name="delete_connection">حذف الاتصال</string>
+    <string name="delete_key">حذف المفتاح المحدد</string>
+    <string name="delete_key_list">حذف قائمة المفتاح</string>
+    <string name="disconnect">قطع الإتصال</string>
+    <string name="export_settings">تصدير</string>
+    <string name="export_settings_path">تصدير إلى ملف</string>
+    <string name="enter_text_title">أخل نص للإرسال</string>
+    <string name="enter_text">إرسال النص</string>
+    <string name="fit_to_screen">ملاءمة للشاشة</string>
+    <string name="force_full_check">فرض وضع الشاشة الكاملة للصورة النقطية</string>
+    <string name="import_export_settings">استيراد/تصدير الإعدادات</string>
+    <string name="import_settings">استيراد</string>
+    <string name="import_settings_file_url">الاستيراد من ملف أو URL</string>
+    <string name="info">معلومات</string>
+    <string name="intro_text">إذا كنت بحاجة إلى مساعدة، يرجى التحقق من <a href="http://code.google.com/p/android-vnc-viewer/wiki/Documentation">الدليل</a> (اضغط على زر القائمة في الهاتف للوصول إلى الدليل والعناصر الأخرى في القائمة)، أو <a href="http://code.google.com/p/android-vnc-viewer/wiki/faq">الأسئلة الشائعة</a>.</string>
+    <string name="intro_title">مرحباً</string>
+    <string name="intro_version_text">&lt;br&gt;--Sent text is remembered across sessions (optionally)&lt;br&gt;--Import/Export settings to file&lt;br&gt;--Button with zoom controls to bring up keyboard&lt;br&gt;--Can force tiling mode (very large screens)</string>
+    <string name="input_mode">وضع الإدخال</string>
+    <string name="input_mode_fit_to_screen">لا يوجد تحريك؛ فأرة تراكبول</string>
+    <string name="input_mode_mouse">وضع التحكم بمؤشر الفأرة</string>
+    <string name="input_mode_panning">وضع تحريك سطح المكتب</string>
+    <string name="input_mode_touchpad_pan_trackball_mouse">تحريك باللمس؛ فأرة تراكبول</string>
+    <string name="input_mode_dpad_pan_touchpad_mouse">فأرة اللمس؛ تحريك بواسطة D-Pad</string>
+    <string name="input_mode_touch_pan_zoom_mouse">فأرة اللمس والتحريك والتكبير</string>
+    <string name="input_mode_touchpad">لوحة اللمس</string>
+    <string name="intro_dont_show">لا تظهر مجددا</string>
+    <string name="keys_caption">مفاتيح</string>
+    <string name="list_caption">قائمة</string>
+    <string name="list_name_caption">اسم القائمة</string>
+    <string name="local_mouse_check">مؤشر الفأرة المحلي</string>
+    <string name="meta_key_title">إرسال مفاتيح خاصة</string>
+    <string name="mouse_follow_pan">تتبع المؤشر للتحريك</string>
+    <string name="new_list_button">قائمة جديدة</string>
+    <string name="nickname_caption">الاسم المستعار</string>
+    <string name="off">إيقاف</string>
+    <string name="on">تشغيل</string>
+    <string name="one_to_one">1:1</string>
+    <string name="open_doc">الدليل/الويكي</string>
+    <string name="pan_follow_mouse">التحريك يتبع المؤشر</string>
+    <string name="password_caption">كلمة المرور</string>
+    <string name="port_caption">المنفذ</string>
+    <string name="repeater_button">مكرر</string>
+    <string name="repeater_caption">أدخل عنوان المكرر &lt;b&gt;فقط إذا&lt;/b&gt; كنت تستخدم مكررًا من نوع&lt;br&gt;&lt;i&gt;UltraVNC&lt;/i&gt;</string>
+    <string name="repeater_clear">لا تستخدم المكرر</string>
+    <string name="repeater_dialog_title">معلومات المكرر</string>
+    <string name="repeater_empty_text">لا يوجد مكرر</string>
+    <string name="repeater_save">استخدم عنوان المكرر هذا</string>
+    <string name="save_as_copy">حفظ كنسخة</string>
+    <string name="scaling">تغيير الحجم</string>
+    <string name="scaling_zoomable">قابل للتكبير</string>
+
+    <!-- إرسال المفتاح المحدد -->
+    <string name="send_button">إرسال</string>
+    <string name="send_key_again">إرسال المفتاح مرة أخرى</string>
+    <string name="shift_check">Shift</string>
+    <string name="shortcut_label">اتصال VNC</string>
+    <string name="showkbd_label">لوحة المفاتيح</string>
+    <string name="special_keys">إرسال المفاتيح</string>
+    <string name="username_caption">اسم المستخدم</string>
+    <string name="username_hint">للمصادقة على نظام Windows</string>
+    <string name="permdesc_open_vnc_conn">تشغيل اتصالات VNC المخصصة</string>
+    <string name="terminal">طرفية</string>
+
+    <string name="msg_directory_absolute_path">مسار الدليل %1$s المطلق: "%2$s"</string>
+
+    <!-- TermuxX11Activity -->
+    <string name="msg_storage_permission_not_granted_warning">يجب منح إذن التخزين لتطبيق Vectras VM للوصول...</string>
+    <string name="action_grant_storage_permission">منح إذن التخزين</string>
+
+    <string name="msg_battery_optimization_not_disabled_warning">يجب تعطيل تحسينات البطارية على أندرويد لتطبيق Vectras VM حتى يتمكن من…
+        تحقق من https://developer.android.com/about/versions/oreo/background لمزيد من المعلومات و
+        https://developer.android.com/guide/components/foreground-services#background-start-restrictions لمعرفة المزيد.
+        كما يمكنك التحقق من https://dontkillmyapp.com لمعرفة المزيد حول قتل التطبيقات الخاصة بالبائع المحدد.
+        يمكن أن تتطلب بعض البائعين أشياء مثل تمكين التشغيل التلقائي، وتعطيل DuraSpeed، وتمكين `عرض النوافذ المنبثقة أثناء التشغيل في الخلفية` للتطبيق.</string>
+    <string name="action_disable_battery_optimizations">تعطيل تحسينات البطارية</string>
+
+    <string name="msg_display_over_other_apps_permission_not_granted_warning">يجب منح إذن عرض فوق التطبيقات الأخرى لتطبيق Vectras VM لبدء الأنشطة المتقدمة من الخلفية. تحقق من https://developer.android.com/guide/components/activities/background-starts لمزيد من المعلومات.</string>
+    <string name="action_grant_display_over_other_apps_permission">منح إذن عرض فوق التطبيقات</string>
+
+    <string name="action_already_granted">تم الموافقة بالفعل</string>
+    <string name="action_already_disabled">تم التعطيل بالفعل</string>
+    <string name="not_connected">غير متصل</string>
+    <string name="help_button_text">   مساعدة   </string>
+    <string name="preferences_button_text">   التفضيلات   </string>
+    <string name="install">تثبيت</string>
+    <string name="select_tar">اختيار (.TAR.GZ)</string>
+    <string name="not_selected_yet">لم يتم اختياره بعد.</string>
+    <string name="modify">تعديل</string>
+
+    <string name="input">إدخال</string>
+    <string name="tiny_vterm">Tiny vterm</string>
+    <string name="try_again">حاول مجدداً</string>
+    <string name="logs">سجلات</string>
+    <string name="options">خيارات</string>
+    <!-- وحدة التحكم XServer XSDL -->
+    <string name="init">جاري التهيئة</string>
+    <string name="please_wait">يرجى الانتظار بينما يتم تنزيل البيانات</string>
+
+    <string name="device_config">تكوين الجهاز</string>
+    <string name="device_change_cfg">تغيير تكوين الجهاز</string>
+
+    <string name="download_unneeded">لا حاجة للتحميل</string>
+    <string name="connecting_to">جارٍ الاتصال بـ %s</string>
+    <string name="failed_connecting_to">فشل الاتصال بـ %s</string>
+    <string name="error_connecting_to">خطأ في الاتصال بـ %s</string>
+    <string name="dl_from">جارٍ تحميل البيانات من %s</string>
+    <string name="error_dl_from">خطأ في تحميل البيانات من %s</string>
+    <string name="error_write">خطأ في الكتابة إلى %s</string>
+    <string name="dl_progress">%1$.0f%% مكتمل: الملف %2$s</string>
+    <string name="dl_finished">اكتمل</string>
+
+    <string name="storage_phone">التخزين الداخلي - %d ميجابايت متوفر</string>
+    <string name="storage_sd">تخزين بطاقة SD - %d ميجابايت متوفر</string>
+    <string name="storage_custom">حدد المسار</string>
+    <string name="storage_commandline">معاملات سطر الأوامر، وسيطة واحدة في كل سطر</string>
+    <string name="storage_question">موقع تثبيت البيانات</string>
+    <string name="storage_access">إذن الكتابة إلى بطاقة SD</string>
+    <string name="optional_downloads">تحميلات</string>
+    <string name="downloads">تحميلات</string>
+    <string name="ok">موافق</string>
+    <string name="cancel">إلغاء</string>
+
+    <string name="controls_arrows">الأسهم / عصا التحكم / dpad</string>
+    <string name="controls_trackball">كرة التتبع</string>
+    <string name="controls_accel">مقياس التسارع</string>
+    <string name="controls_touch">الشاشة التي تعمل باللمس فقط</string>
+    <string name="controls_question">ما نوع مفاتيح التنقل التي يحتوي عليها جهازك؟</string>
+
+    <string name="controls_additional">أزرار تحكم إضافية</string>
+    <string name="controls_screenkb">لوحة المفاتيح على الشاشة</string>
+    <string name="controls_accelnav">مقياس التسارع</string>
+
+    <string name="controls_screenkb_size">حجم لوحة المفاتيح على الشاشة</string>
+    <string name="controls_screenkb_drawsize">حجم صور الأزرار</string>
+    <string name="controls_screenkb_large">كبير</string>
+    <string name="controls_screenkb_medium">متوسط</string>
+    <string name="controls_screenkb_small">صغير</string>
+    <string name="controls_screenkb_tiny">صغير جدًا</string>
+    <string name="controls_screenkb_custom">مخصص</string>
+    <string name="controls_screenkb_theme">ثيم لوحة المفاتيح على الشاشة</string>
+    <string name="controls_screenkb_by">%1$s من %2$s</string>
+    <string name="controls_screenkb_transparency">شفافية لوحة المفاتيح على الشاشة</string>
+    <string name="controls_screenkb_trans_0">غير مرئي</string>
+    <string name="controls_screenkb_trans_1">شبه غير مرئي</string>
+    <string name="controls_screenkb_trans_2">شفاف</string>
+    <string name="controls_screenkb_trans_3">شفاف جزئيًا</string>
+    <string name="controls_screenkb_trans_4">غير شفاف</string>
+
+    <string name="trackball_no_dampening">لا تخميد</string>
+    <string name="trackball_fast">سريع</string>
+    <string name="trackball_medium">متوسط</string>
+    <string name="trackball_slow">بطيء</string>
+    <string name="trackball_question">تخميد كرة التتبع</string>
+
+    <string name="accel_veryfast">سريع جدًا</string>
+    <string name="accel_fast">سريع</string>
+    <string name="accel_medium">متوسط</string>
+    <string name="accel_slow">بطيء</string>
+    <string name="accel_veryslow">بطيء جدًا</string>
+    <string name="accel_question">حساسية مقياس التسارع</string>
+
+    <string name="accel_floating">عائم</string>
+    <string name="accel_fixed_start">ثابت عند بدء التطبيق</string>
+    <string name="accel_fixed_horiz">ثابت على توجيه طاولة العمل</string>
+    <string name="accel_question_center">موضع مركز مقياس التسارع</string>
+
+    <string name="mouse_emulation">محاكاة الماوس</string>
+    <string name="rightclick_question">نقرة الماوس اليمين</string>
+    <string name="rightclick_menu">مفتاح القائمة</string>
+    <string name="rightclick_key">مفتاح فيزيائي</string>
+    <string name="rightclick_multitouch">الشاشة التي تعمل باللمس بالإصبع الثاني</string>
+    <string name="rightclick_pressure">الشاشة التي تعمل باللمس بالضغط</string>
+    <string name="rightclick_none">تعطيل نقرة الماوس اليمين</string>
+
+    <string name="leftclick_question">نقرة الماوس اليسار</string>
+    <string name="leftclick_normal">عادي</string>
+    <string name="leftclick_near_cursor">اللمس بالقرب من المؤشر</string>
+    <string name="leftclick_multitouch">الشاشة التي تعمل باللمس بالإصبع الثاني</string>
+    <string name="leftclick_pressure">الشاشة التي تعمل باللمس بالضغط</string>
+    <string name="leftclick_dpadcenter">نقرة كرة التتبع / مركز عصا التحكم</string>
+    <string name="leftclick_timeout">استمرار في نفس الموضع</string>
+    <string name="leftclick_tap">النقر</string>
+    <string name="leftclick_tap_or_timeout">النقر أو الاستمرار</string>
+    <string name="leftclick_timeout_time">مهلة الاستمرار</string>
+    <string name="leftclick_timeout_time_0">0.3 ثانية</string>
+    <string name="leftclick_timeout_time_1">0.5 ثانية</string>
+    <string name="leftclick_timeout_time_2">0.7 ثانية</string>
+    <string name="leftclick_timeout_time_3">1 ثانية</string>
+    <string name="leftclick_timeout_time_4">1.5 ثانية</string>
+    <string name="click_with_dpadcenter">نقرة الماوس اليسار بكرة التتبع / مركز عصا التحكم</string>
+
+    <string name="advanced">ميزات متقدمة</string>
+    <string name="mouse_keepaspectratio">الاحتفاظ بنسبة العرض إلى الارتفاع 4:3</string>
+    <string name="mouse_showcreenunderfinger">عرض الشاشة تحت الإصبع في نافذة منفصلة</string>
+    <string name="mouse_showcreenunderfinger2">مكبر الشاشة على الشاشة</string>
+    <string name="mouse_joystickmouse">تحريك الماوس باستخدام عصا التحكم أو كرة التتبع</string>
+    <string name="mouse_joystickmousespeed">سرعة تحريك الماوس باستخدام عصا التحكم</string>
+    <string name="mouse_joystickmouseaccel">تسارع تحريك الماوس باستخدام عصا التحكم</string>
+    <string name="mouse_relative">حركة الماوس النسبية (وضع الكمبيوتر المحمول)</string>
+    <string name="mouse_relative_speed">سرعة حركة الماوس النسبية</string>
+    <string name="mouse_relative_accel">تسارع حركة الماوس النسبية</string>
+    <string name="mouse_hover_jitter_filter">تصفية الاهتزاز لتحسس القلم / الإصبع</string>
+    <string name="mouse_gyroscope_mouse">التحكم في الماوس بواسطة جهاز الدوران</string>
+    <string name="mouse_gyroscope_mouse_sensitivity">حساسية جهاز الدوران</string>
+    <string name="mouse_finger_hover">تحسس الإصبع</string>
+    <string name="mouse_subframe_touch_events">أحداث اللمس متعددة لكل إطار فيديو</string>
+
+    <string name="none">لا شيء</string>
+
+    <string name="measurepressure">معايرة ضغط الشاشة التي تعمل باللمس</string>
+    <string name="measurepressure_touchplease">يرجى تحريك إصبعك على الشاشة لمدة ثانيتين</string>
+    <string name="measurepressure_response">الضغط %1$03d نصف القطر %2$03d</string>
+
+    <string name="audiobuf_verysmall">صغير جدًا (أجهزة سريعة، تأخير أقل)</string>
+    <string name="audiobuf_small">صغير</string>
+    <string name="audiobuf_medium">متوسط</string>
+    <string name="audiobuf_large">كبير (أجهزة أقدم، إذا كان الصوت متقطع)</string>
+    <string name="audiobuf_question">حجم الذاكرة المؤقتة للصوت</string>
+
+    <string name="remap_hwkeys">إعادة تعيين المفاتيح الفعلية</string>
+    <string name="remap_hwkeys_press">اضغط على أي مفتاح باستثناء HOME وPOWER، يمكنك استخدام مفاتيح الصوت</string>
+    <string name="remap_hwkeys_select">اختر رمز SDL</string>
+    <string name="remap_hwkeys_select_simple">اختر الإجراء</string>
+    <string name="remap_hwkeys_select_more_keys">عرض جميع رموز المفاتيح</string>
+
+    <string name="remap_screenkb">إعادة تعيين أزرار التحكم على الشاشة</string>
+    <string name="remap_screenkb_joystick">عصا التحكم</string>
+    <string name="remap_screenkb_button">زر</string>
+    <string name="remap_screenkb_button_text">زر إدخال النص</string>
+    <string name="remap_screenkb_button_gestures">إيماءات الشاشة بإصبعين</string>
+    <string name="remap_screenkb_button_gestures_sensitivity">حساسية إيماءات الشاشة بإصبعين</string>
+    <string name="remap_screenkb_button_zoomin">إيماءة التكبير بإصبعين</string>
+    <string name="remap_screenkb_button_zoomout">إيماءة التصغير بإصبعين</string>
+    <string name="remap_screenkb_button_rotateleft">إيماءة الدوران لليسار بإصبعين</string>
+    <string name="remap_screenkb_button_rotateright">إيماءة الدوران لليمين بإصبعين</string>
+
+    <string name="screenkb_custom_layout">تخصيص تخطيط لوحة المفاتيح على الشاشة</string>
+    <string name="screenkb_custom_layout_help">اضغط على الرجوع عند الانتهاء. غيّر حجم الأزرار بالسحب على المساحة الفارغة.</string>
+    <string name="screenkb_floating_joystick">عصا التحكم العائمة</string>
+
+    <string name="calibrate_touchscreen">معايرة الشاشة التي تعمل باللمس</string>
+    <string name="calibrate_touchscreen_touch">لمس جميع حواف الشاشة، اضغط على الرجوع عند الانتهاء</string>
+
+    <string name="video">إعدادات الفيديو</string>
+    <string name="video_smooth">تصفية الفيديو الخطية</string>
+    <string name="video_separatethread">خيط منفصل للفيديو، قد يزيد من FPS، وقد يتسبب في تعطل التطبيق</string>
+    <string name="video_orientation_vertical">توجيه الشاشة العمودي/البورتريه</string>
+    <string name="video_orientation_autodetect">الكشف التلقائي عن توجيه الشاشة</string>
+    <string name="video_bpp_24">عمق لون الشاشة 24 bpp</string>
+    <string name="video_immersive">إخفاء أزرار التنقل في النظام / الوضع الغامر</string>
+    <string name="tv_borders">حواف التلفزيون</string>
+
+    <string name="text_edit_click_here">انقر للبدء بالكتابة، اضغط على زر الرجوع عند الانتهاء</string>
+
+    <string name="display_size_mouse">وضع محاكاة الماوس</string>
+    <string name="display_size">حجم العرض لمحاكاة الماوس</string>
+    <string name="display_size_desktop">سطح المكتب، بدون محاكاة</string>
+    <string name="display_size_large">كبير (أجهزة اللوحية)</string>
+    <string name="display_size_small">صغير، عدسة مكبرة</string>
+    <string name="display_size_small_touchpad">صغير، وضع لوحة اللمس</string>
+    <string name="display_size_tiny">ضئيل</string>
+    <string name="display_size_tiny_touchpad">ضئيل، وضع لوحة اللمس</string>
+
+    <string name="show_more_options">عرض المزيد من الخيارات</string>
+
+    <string name="hardware_mouse_detected">تم اكتشاف فأرة الأجهزة، تعطيل محاكاة الماوس</string>
+
+    <string name="not_enough_ram">ذاكرة الوصول العشوائي غير كافية</string>
+    <string name="not_enough_ram_size">هذا التطبيق يحتاج إلى %1$d ميغابايت من ذاكرة الوصول العشوائي، جهازك يحتوي على %2$d ميغابايت</string>
+    <string name="ignore">تجاهل</string>
+
+    <string name="calibrate_gyroscope">معايرة الجيروسكوب</string>
+    <string name="calibrate_gyroscope_text">ضع جهازك على سطح مستو</string>
+    <string name="calibrate_gyroscope_not_supported">جهازك لا يحتوي على جيروسكوب</string>
+
+    <string name="reset_config">إعادة ضبط الإعدادات للقيم الافتراضية</string>
+    <string name="reset_config_ask">هل ترغب في إعادة ضبط جميع الخيارات إلى القيم الافتراضية؟</string>
+
+    <string name="cancel_download">هل ترغب في إلغاء تحميل البيانات؟</string>
+    <string name="cancel_download_resume">يمكنك استئناف التحميل لاحقاً، البيانات لن يتم تحميلها مرتين.</string>
+    <string name="yes">نعم</string>
+    <string name="no">لا</string>
+
+    <!-- Play Game Services strings -->
+    <string name="gamehelper_sign_in_failed">فشل في تسجيل الدخول. يرجى التحقق من اتصالك بالشبكة والمحاولة مجدداً.</string>
+    <string name="gamehelper_app_misconfigured">التطبيق غير مُعد بشكل صحيح. تحقق من تطابق اسم الحزمة والشهادة التوقيع مع معرف العميل الذي تم إنشاؤه في لوحة التحكم للمطورين. كما يجب التحقق مما إذا كان التطبيق قد تم نشره بالفعل، والتأكد من أن الحساب الذي تحاول تسجيل الدخول به مدرج كحساب اختبار. يُرجى الرجوع إلى السجلات للحصول على مزيد من المعلومات.</string>
+    <string name="gamehelper_license_failed">فشلت عملية التحقق من الترخيص.</string>
+    <string name="gamehelper_unknown_error">خطأ غير معروف.</string>
+    <string name="accessing_network">جاري الوصول إلى الشبكة، يرجى الانتظار</string>
+
+    <string name="google_play_game_services_app_id" translatable="false">==GOOGLEPLAYGAMESERVICES_APP_ID==</string>
+
+    <string name="restarting_please_wait">جاري إعادة التشغيل، يرجى الانتظار.</string>
+
+    <string name="notification_app_is_running">%s يعمل</string>
+    <string name="notification_stop">إيقاف</string>
+    <string name="create_virtual_harddisk">إنشاء قرص صلب افتراضي</string>
+    <string name="size_in_gb">الحجم بالغيغابايت</string>
+    <string name="create_qcow2">إنشاء ملف QCOW2</string>
+    <string name="image_name">اسم الصورة</string>
+    <string name="make_image">إنشاء الصورة</string>
+    <string name="imported_roms_will_be_shown_here">سيتم عرض الرومات المستوردة هنا</string>
+    <string name="version">الإصدار:</string>
+    <string name="qemu">QEMU</string>
+    <string name="arch">المعمارية:</string>
+    <string name="running">يعمل</string>
+    <string name="stopped">متوقف</string>
+    <string name="service">الخدمة:</string>
+    <string name="free_palistine">فلسطين حرة</string>
+    <string name="store">المتجر</string>
+    <string name="no_internet_connection">لا يوجد اتصال بالإنترنت</string>
+    <string name="check_your_internet_connection">يرجى التحقق من اتصالك بالإنترنت</string>
+    <string name="downloading_file">جاري تنزيل الملف..</string>
+    <string name="lenght_of_file">طول الملف:</string>
+    <string name="downloaded_to_path">تم تنزيله إلى المسار:</string>
+    <string name="downloaded_successfully">تم التنزيل بنجاح!</string>
+    <string name="app_settings">إعدادات التطبيق</string>
+    <string name="main_app_settings">إعدادات التطبيق الرئيسية.</string>
+    <string name="user_interface">واجهة المستخدم</string>
+    <string name="themes_and_ui">المظهر وواجهة المستخدم.</string>
+    <string name="emulation_settings">إعدادات المحاكاة</string>
+    <string name="vnc">VNC</string>
+    <string name="vnc_ui_environment">بيئة واجهة المستخدم لـVNC.</string>
+    <string name="vm_arch">معمارية الآلة الإفتراضية</string>
+    <string name="cpu_model">نموذج المعالج المركزي</string>
+    <string name="custom_memory">ذاكرة المخصصة</string>
+    <string name="memory_mb">الذاكرة (ميغابايت)</string>
+    <string name="sound_card">بطاقة الصوت</string>
+    <string name="tb_size_kb">حجم TB (كيلوبايت)</string>
+    <string name="avx">AVX</string>
+    <string name="mttcg">MTTCG</string>
+    <string name="kvm_acceleration">تسريع KVM</string>
+    <string name="kvm">KVM</string>
+    <string name="cpu_cores">أنوية المعالج</string>
+    <string name="harddisk_type">نوع القرص الصلب</string>
+    <string name="boot_from">التمهيد من</string>
+    <string name="shared_folder">المجلد المشترك</string>
+    <string name="custom_params">المعلمات المخصصة</string>
+    <string name="vm_ui_environment">بيئة واجهة المستخدم الآلة الافتراضية</string>
+    <string name="x11_resolution">دقة X11</string>
+    <string name="mouse">الماوس</string>
+    <string name="check_for_software_updates_on_startup">البحث عن تحديثات البرامج عند بدء التشغيل</string>
+    <string name="check_for_software_updates">البحث عن تحديثات البرامج</string>
+    <string name="night_mode">الوضع المظلم</string>
+    <string name="description">الوصف</string>
+    <string name="qemu_website">موقع ويب QEMU</string>
+    <string name="powerpc_qemu">QEMU POWER PC</string>
+    <string name="arm64_qemu">QEMU ARM64</string>
+    <string name="x86_64_qemu_recommended">QEMUلـ x86_64 (مُوصى به)</string>
+    <string name="i386_qemu">QEMUلـ i386</string>
+    <string name="export_rom">تصدير ROM</string>
+    <string name="are_you_sure">هل أنت متأكد؟</string>
+    <string name="description_html_supported">الوصف (دعم HTML)</string>
+    <string name="compressing_cvbi">ضغط CVBI</string>
+    <string name="please_wait_dialog">يرجى الانتظار...</string>
+    <string name="error">خطأ!</string>
+    <string name="done">تم!</string>
+    <string name="are_removed_successfully">تم الإزالة بنجاح!</string>
+    <string name="free_palestine">فلسطين حرة</string>
+    <string name="repository">المستودع</string>
+    <string name="telegram_channel">قناة Telegram</string>
+    <string name="youtube">YouTube</string>
+    <string name="instagram">Instagram</string>
+    <string name="facebook">Facebook</string>
+    <string name="change_log">سجل التغييرات</string>
+    <string name="language">اللغة</string>
+    <string name="set">تعيين</string>
+    <string name="change_app_locale">تغيير لغة التطبيق</string>
+    <string name="are_you_sure_you_want_to_shutdown_vm">هل أنت متأكد أنك تريد إيقاف الآلة الإفتراضية؟</string>
+    <string name="cpu">المعالج</string>
+    <string name="save_changes">حفظ التغييرات</string>
+    <string name="qemu_create_cmd">إنشاء أمر QEMU</string>
+</resources>
