@@ -17,7 +17,7 @@ If you want help you can go through [our documention](https://vectrasvm.blacksto
 > [!NOTE]
 > Starting from 2.8, there will be no official support for ARMv7 devices.
 
-You can either download Vectras VM from [releases](https://github.com/epicstudios856/Vectras-VM-Android/releases) or [official website](https://vectrasvm.blackstorm.cc/download.html).
+You can either download Vectras VM from [releases](https://github.com/epicstudios856/Vectras-VM-Android/releases) or [official website](https://vectras.vercel.app/download.html).
 
 [![OpenAPK](https://www.openapk.net/images/openapk-badge.png)](https://www.openapk.net/vectras-vm/com.vectras.vm/)
 
