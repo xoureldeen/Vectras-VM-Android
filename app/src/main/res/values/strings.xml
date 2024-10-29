@@ -358,6 +358,10 @@
     <string name="from">From</string>
     <string name="error_CR_CVBI3">An error has occurred and cannot continue. The extraction was successful but the cvbi file does not contain information for this ROM and does not contain any ROM files. Error code: CR_CVBI3.</string>
     <string name="kept_some_files">Some files were retained because some other virtual machine needed them.</string>
+    <string name="clean_up">Clean up</string>
+    <string name="clean_up_content">ROMs, files and folders that are no longer in use will be deleted.</string>
+    <string name="go_to_rom_store">Go to ROM store</string>
+    <string name="want_to_learn_more_about_qemu">Want to learn more about QEMU?</string>
     
     <!--======================TERMUX STRINGS====================-->
     <string name="application_name">Vterm</string>
@@ -457,4 +461,5 @@
     <string name="yes">yes</string>
     <string name="no">cancel</string>
     <string name="cancel">cancel</string>
+    <string name="back_to_the_display">Back to the Display</string>
 </resources>

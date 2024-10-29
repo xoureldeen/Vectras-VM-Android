@@ -154,7 +154,6 @@
         <activity
             android:name="com.vectras.vm.x11.X11Activity"
             android:taskAffinity="com.vectras.vm.x11.X11Activity"
-            android:launchMode="singleInstance"
             android:supportsPictureInPicture="true"
             android:configChanges="fontScale|orientation|screenSize|keyboard|keyboardHidden|layoutDirection|locale|mcc|mnc|navigation|screenLayout|touchscreen|uiMode|smallestScreenSize|density"
             android:resizeableActivity="true"

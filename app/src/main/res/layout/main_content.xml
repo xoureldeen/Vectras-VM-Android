@@ -276,16 +276,16 @@
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginBottom="8dp" />
-            </LinearLayout>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/gotoromstorebutton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:gravity="center_horizontal|center_vertical"
-                app:icon="@drawable/hard_disk_24px"
-                android:text="@string/go_to_rom_store" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/gotoromstorebutton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:gravity="center_horizontal|center_vertical"
+                    app:icon="@drawable/hard_disk_24px"
+                    android:text="@string/go_to_rom_store" />
+            </LinearLayout>
 
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                 android:id="@+id/refreshRoms"

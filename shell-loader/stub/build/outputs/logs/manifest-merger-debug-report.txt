@@ -1,14 +1,14 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /home/ann/Downloads/Vectras-VM-Emu-Android/shell-loader/stub/src/main/AndroidManifest.xml:1:1-13
-INJECTED from /home/ann/Downloads/Vectras-VM-Emu-Android/shell-loader/stub/src/main/AndroidManifest.xml:1:1-13
+ADDED from D:\dev\Vectras-VM-Android\shell-loader\stub\src\main\AndroidManifest.xml:1:1-13
+INJECTED from D:\dev\Vectras-VM-Android\shell-loader\stub\src\main\AndroidManifest.xml:1:1-13
 	package
-		INJECTED from /home/ann/Downloads/Vectras-VM-Emu-Android/shell-loader/stub/src/main/AndroidManifest.xml
+		INJECTED from D:\dev\Vectras-VM-Android\shell-loader\stub\src\main\AndroidManifest.xml
 uses-sdk
-INJECTED from /home/ann/Downloads/Vectras-VM-Emu-Android/shell-loader/stub/src/main/AndroidManifest.xml reason: use-sdk injection requested
-INJECTED from /home/ann/Downloads/Vectras-VM-Emu-Android/shell-loader/stub/src/main/AndroidManifest.xml
-INJECTED from /home/ann/Downloads/Vectras-VM-Emu-Android/shell-loader/stub/src/main/AndroidManifest.xml
+INJECTED from D:\dev\Vectras-VM-Android\shell-loader\stub\src\main\AndroidManifest.xml reason: use-sdk injection requested
+INJECTED from D:\dev\Vectras-VM-Android\shell-loader\stub\src\main\AndroidManifest.xml
+INJECTED from D:\dev\Vectras-VM-Android\shell-loader\stub\src\main\AndroidManifest.xml
 	android:targetSdkVersion
-		INJECTED from /home/ann/Downloads/Vectras-VM-Emu-Android/shell-loader/stub/src/main/AndroidManifest.xml
+		INJECTED from D:\dev\Vectras-VM-Android\shell-loader\stub\src\main\AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from /home/ann/Downloads/Vectras-VM-Emu-Android/shell-loader/stub/src/main/AndroidManifest.xml
+		INJECTED from D:\dev\Vectras-VM-Android\shell-loader\stub\src\main\AndroidManifest.xml

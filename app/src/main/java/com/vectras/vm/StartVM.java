@@ -163,7 +163,9 @@ public class StartVM {
             params.add("-display");
             params.add("sdl");
         }
-        
+
+        params.add("-full-screen");
+
         params.add("-qmp");
         params.add("tcp:localhost:4444,server,nowait");
 

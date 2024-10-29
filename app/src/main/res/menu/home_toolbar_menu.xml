@@ -7,10 +7,10 @@
 		app:showAsAction="always"
 		android:title="@string/info"/>
 	<item
-		android:id="@+id/vncdisplay"
+		android:id="@+id/backtothedisplay"
 		android:icon="@drawable/desktop_windows_24px"
 		app:showAsAction="always"
-		android:title="@string/vncdisplay"/>
+		android:title="@string/back_to_the_display"/>
 	<item
 		android:id="@+id/shutdown"
 		android:icon="@drawable/power_settings_new_24px"

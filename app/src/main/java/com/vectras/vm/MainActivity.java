@@ -829,25 +829,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public static void startCleanUp() {
-        String _romsdata = VectrasApp.readFile(AppConfig.maindirpath + "roms-data.json").replace("\\/", "/");
-        int _startRepeat = 0;
-        ArrayList<String> _filelist = new ArrayList<>();
-        listDir(AppConfig.maindirpath + "roms/", _filelist);
-        if (!_filelist.isEmpty()) {
-            for (int _repeat = 0; _repeat < (int)(_filelist.size()); _repeat++) {
-                if (_startRepeat < _filelist.size()) {
-                    if (!isFileExists(_filelist.get((int)(_startRepeat)) + "/vmID.txt")) {
-                        if (!_romsdata.contains(_filelist.get((int)(_startRepeat)))) {
-                            deleteDirectory(_filelist.get((int)(_startRepeat)));
-                        }
-                    }
-                }
-                _startRepeat++;
-            }
-        }
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -880,9 +861,12 @@ public class MainActivity extends AppCompatActivity {
 
             });
             alertDialog.show();
-        } else if (id == R.id.vncdisplay) {
+        } else if (id == R.id.backtothedisplay) {
             if (VectrasApp.isQemuRunning()) {
-                activity.startActivity(new Intent(activity, MainVNCActivity.class));
+                if (MainSettingsManager.getVmUi(activity).equals("VNC"))
+                    activity.startActivity(new Intent(activity, MainVNCActivity.class));
+                else if (MainSettingsManager.getVmUi(activity).equals("X11"))
+                    activity.startActivity(new Intent(activity, X11Activity.class));
             } else {
                 Toast.makeText(getApplicationContext(), activity.getResources().getString(R.string.there_is_nothing_here_because_there_is_no_vm_running), Toast.LENGTH_LONG).show();
             }

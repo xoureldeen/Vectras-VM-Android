@@ -258,13 +258,13 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                                 || e.isFromSource(InputDevice.SOURCE_MOUSE_RELATIVE)) {
                             if (e.getRepeatCount() != 0) // ignore auto-repeat
                             return true;
-                            if (e.getAction() == KeyEvent.ACTION_UP
-                                    || e.getAction() == KeyEvent.ACTION_DOWN)
+                            if (e.getAction() == ACTION_UP
+                                    || e.getAction() == ACTION_DOWN)
                                 lorieView.sendMouseEvent(
                                         -1,
                                         -1,
                                         InputStub.BUTTON_RIGHT,
-                                        e.getAction() == KeyEvent.ACTION_DOWN,
+                                        e.getAction() == ACTION_DOWN,
                                         true);
                             return true;
                         }
@@ -398,12 +398,12 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    sendKey(KeyEvent.KEYCODE_DPAD_UP, false);
+                    sendKey(KEYCODE_DPAD_UP, false);
                     v.animate().scaleXBy(-0.2f).setDuration(200).start();
                     v.animate().scaleYBy(-0.2f).setDuration(200).start();
                     return true;
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    sendKey(KeyEvent.KEYCODE_DPAD_UP, true);
+                    sendKey(KEYCODE_DPAD_UP, true);
                     v.animate().cancel();
                     v.animate().scaleX(1f).setDuration(200).start();
                     v.animate().scaleY(1f).setDuration(200).start();
@@ -416,12 +416,12 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    sendKey(KeyEvent.KEYCODE_DPAD_LEFT, false);
+                    sendKey(KEYCODE_DPAD_LEFT, false);
                     v.animate().scaleXBy(-0.2f).setDuration(200).start();
                     v.animate().scaleYBy(-0.2f).setDuration(200).start();
                     return true;
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    sendKey(KeyEvent.KEYCODE_DPAD_LEFT, true);
+                    sendKey(KEYCODE_DPAD_LEFT, true);
                     v.animate().cancel();
                     v.animate().scaleX(1f).setDuration(200).start();
                     v.animate().scaleY(1f).setDuration(200).start();
@@ -434,12 +434,12 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    sendKey(KeyEvent.KEYCODE_DPAD_DOWN, false);
+                    sendKey(KEYCODE_DPAD_DOWN, false);
                     v.animate().scaleXBy(-0.2f).setDuration(200).start();
                     v.animate().scaleYBy(-0.2f).setDuration(200).start();
                     return true;
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    sendKey(KeyEvent.KEYCODE_DPAD_DOWN, true);
+                    sendKey(KEYCODE_DPAD_DOWN, true);
                     v.animate().cancel();
                     v.animate().scaleX(1f).setDuration(200).start();
                     v.animate().scaleY(1f).setDuration(200).start();
@@ -452,12 +452,12 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    sendKey(KeyEvent.KEYCODE_DPAD_RIGHT, false);
+                    sendKey(KEYCODE_DPAD_RIGHT, false);
                     v.animate().scaleXBy(-0.2f).setDuration(200).start();
                     v.animate().scaleYBy(-0.2f).setDuration(200).start();
                     return true;
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    sendKey(KeyEvent.KEYCODE_DPAD_RIGHT, true);
+                    sendKey(KEYCODE_DPAD_RIGHT, true);
                     v.animate().cancel();
                     v.animate().scaleX(1f).setDuration(200).start();
                     v.animate().scaleY(1f).setDuration(200).start();
@@ -471,55 +471,55 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
         tabBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                keyDownUp(KeyEvent.KEYCODE_TAB);
+                keyDownUp(KEYCODE_TAB);
             }
         });
         tabGameBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                keyDownUp(KeyEvent.KEYCODE_TAB);
+                keyDownUp(KEYCODE_TAB);
             }
         });
         enterGameBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                keyDownUp(KeyEvent.KEYCODE_ENTER);
+                keyDownUp(KEYCODE_ENTER);
             }
         });
         eBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                keyDownUp(KeyEvent.KEYCODE_E);
+                keyDownUp(KEYCODE_E);
             }
         });
         rBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                keyDownUp(KeyEvent.KEYCODE_R);
+                keyDownUp(KEYCODE_R);
             }
         });
         qBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                keyDownUp(KeyEvent.KEYCODE_Q);
+                keyDownUp(KEYCODE_Q);
             }
         });
         xBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                keyDownUp(KeyEvent.KEYCODE_X);
+                keyDownUp(KEYCODE_X);
             }
         });
         ctrlGameBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                keyDownUp(KeyEvent.KEYCODE_CTRL_LEFT);
+                keyDownUp(KEYCODE_CTRL_LEFT);
             }
         });
         spaceBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                keyDownUp(KeyEvent.KEYCODE_SPACE);
+                keyDownUp(KEYCODE_SPACE);
             }
         });
         btnVterm.setOnClickListener(new View.OnClickListener() {
@@ -591,7 +591,7 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
             public void onClick(View v) {
                 final Dialog alertDialog = new Dialog(activity, R.style.MainDialogTheme);
                 alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 alertDialog.setContentView(R.layout.dialog_setting);
                 alertDialog.show();
             }
@@ -600,12 +600,12 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    sendKey(KeyEvent.KEYCODE_DPAD_UP, false);
+                    sendKey(KEYCODE_DPAD_UP, false);
                     v.animate().scaleXBy(-0.2f).setDuration(200).start();
                     v.animate().scaleYBy(-0.2f).setDuration(200).start();
                     return true;
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    sendKey(KeyEvent.KEYCODE_DPAD_UP, true);
+                    sendKey(KEYCODE_DPAD_UP, true);
                     v.animate().cancel();
                     v.animate().scaleX(1f).setDuration(200).start();
                     v.animate().scaleY(1f).setDuration(200).start();
@@ -618,12 +618,12 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    sendKey(KeyEvent.KEYCODE_DPAD_LEFT, false);
+                    sendKey(KEYCODE_DPAD_LEFT, false);
                     v.animate().scaleXBy(-0.2f).setDuration(200).start();
                     v.animate().scaleYBy(-0.2f).setDuration(200).start();
                     return true;
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    sendKey(KeyEvent.KEYCODE_DPAD_LEFT, true);
+                    sendKey(KEYCODE_DPAD_LEFT, true);
                     v.animate().cancel();
                     v.animate().scaleX(1f).setDuration(200).start();
                     v.animate().scaleY(1f).setDuration(200).start();
@@ -636,12 +636,12 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    sendKey(KeyEvent.KEYCODE_DPAD_DOWN, false);
+                    sendKey(KEYCODE_DPAD_DOWN, false);
                     v.animate().scaleXBy(-0.2f).setDuration(200).start();
                     v.animate().scaleYBy(-0.2f).setDuration(200).start();
                     return true;
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    sendKey(KeyEvent.KEYCODE_DPAD_DOWN, true);
+                    sendKey(KEYCODE_DPAD_DOWN, true);
                     v.animate().cancel();
                     v.animate().scaleX(1f).setDuration(200).start();
                     v.animate().scaleY(1f).setDuration(200).start();
@@ -654,12 +654,12 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    sendKey(KeyEvent.KEYCODE_DPAD_RIGHT, false);
+                    sendKey(KEYCODE_DPAD_RIGHT, false);
                     v.animate().scaleXBy(-0.2f).setDuration(200).start();
                     v.animate().scaleYBy(-0.2f).setDuration(200).start();
                     return true;
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    sendKey(KeyEvent.KEYCODE_DPAD_RIGHT, true);
+                    sendKey(KEYCODE_DPAD_RIGHT, true);
                     v.animate().cancel();
                     v.animate().scaleX(1f).setDuration(200).start();
                     v.animate().scaleY(1f).setDuration(200).start();
@@ -671,13 +671,13 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
         escBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                keyDownUp(KeyEvent.KEYCODE_ESCAPE);
+                keyDownUp(KEYCODE_ESCAPE);
             }
         });
         enterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                keyDownUp(KeyEvent.KEYCODE_ENTER);
+                keyDownUp(KEYCODE_ENTER);
             }
         });
         ctrlBtn.setOnClickListener(new View.OnClickListener() {
@@ -685,11 +685,11 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
             @Override
             public void onClick(View v) {
                 if (!ctrlClicked) {
-                    sendKey(KeyEvent.KEYCODE_CTRL_LEFT, false);
+                    sendKey(KEYCODE_CTRL_LEFT, false);
                     ctrlBtn.setBackground(getResources().getDrawable(R.drawable.controls_button2));
                     ctrlClicked = true;
                 } else {
-                    sendKey(KeyEvent.KEYCODE_CTRL_LEFT, true);
+                    sendKey(KEYCODE_CTRL_LEFT, true);
                     ctrlBtn.setBackground(getResources().getDrawable(R.drawable.controls_button1));
                     ctrlClicked = false;
                 }
@@ -700,11 +700,11 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
             @Override
             public void onClick(View v) {
                 if (!altClicked) {
-                    sendKey(KeyEvent.KEYCODE_ALT_LEFT, false);
+                    sendKey(KEYCODE_ALT_LEFT, false);
                     altBtn.setBackground(getResources().getDrawable(R.drawable.controls_button2));
                     altClicked = true;
                 } else {
-                    sendKey(KeyEvent.KEYCODE_ALT_LEFT, true);
+                    sendKey(KEYCODE_ALT_LEFT, true);
                     altBtn.setBackground(getResources().getDrawable(R.drawable.controls_button1));
                     altClicked = false;
                 }
@@ -713,7 +713,7 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
         delBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                keyDownUp(KeyEvent.KEYCODE_DEL);
+                keyDownUp(KEYCODE_DEL);
             }
         });
         qmpBtn.setVisibility(View.GONE);
@@ -734,37 +734,47 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
         Button leftClickBtn = findViewById(R.id.leftClickBtn);
         ImageButton winBtn = findViewById(R.id.winBtn);
 
-//        rightClickBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                MotionEvent e = MotionEvent.obtain(1000, 1000, MotionEvent.ACTION_DOWN, vncCanvas.mouseX, vncCanvas.mouseY,
-//                        0);
-//                ((TouchpadInputHandler) VncCanvasActivity.inputHandler).rightClick(e);
-//            }
-//        });
-//        middleClickBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                MotionEvent e = MotionEvent.obtain(1000, 1000, MotionEvent.ACTION_DOWN, vncCanvas.mouseX, vncCanvas.mouseY,
-//                        0);
-//                ((TouchpadInputHandler) VncCanvasActivity.inputHandler).middleClick(e);
-//            }
-//        });
-//        leftClickBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                MotionEvent e = MotionEvent.obtain(1000, 1000, MotionEvent.ACTION_DOWN, vncCanvas.mouseX, vncCanvas.mouseY,
-//                        0);
-//                ((TouchpadInputHandler) VncCanvasActivity.inputHandler).leftClick(e);
-//            }
-//        });
+        if (SDK_INT >= VERSION_CODES.N) {
+            Map.of(
+                            leftClickBtn,
+                            InputStub.BUTTON_LEFT,
+                            middleClickBtn,
+                            InputStub.BUTTON_MIDDLE,
+                            rightClickBtn,
+                            InputStub.BUTTON_RIGHT)
+                    .forEach(
+                            (v, b) ->
+                                    v.setOnTouchListener(
+                                            (__, e) -> {
+                                                switch (e.getAction()) {
+                                                    case MotionEvent.ACTION_DOWN:
+                                                    case MotionEvent.ACTION_POINTER_DOWN:
+                                                        getLorieView()
+                                                                .sendMouseEvent(0, 0, b, true, true);
+                                                        v.setPressed(true);
+                                                        break;
+                                                    case MotionEvent.ACTION_UP:
+                                                    case MotionEvent.ACTION_POINTER_UP:
+                                                        getLorieView()
+                                                                .sendMouseEvent(0, 0, b, false, true);
+                                                        v.setPressed(false);
+                                                        break;
+                                                }
+                                                return true;
+                                            }));
+        } else {
+            leftClickBtn.setVisibility(View.GONE);
+            middleClickBtn.setVisibility(View.GONE);
+            rightClickBtn.setVisibility(View.GONE);
+        }
+
         winBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendKey(KeyEvent.KEYCODE_CTRL_LEFT, false);
-                sendKey(KeyEvent.KEYCODE_ESCAPE, false);
-                sendKey(KeyEvent.KEYCODE_CTRL_LEFT, false);
-                sendKey(KeyEvent.KEYCODE_ESCAPE, false);
+                sendKey(KEYCODE_CTRL_LEFT, false);
+                sendKey(KEYCODE_ESCAPE, false);
+                sendKey(KEYCODE_CTRL_LEFT, false);
+                sendKey(KEYCODE_ESCAPE, false);
             }
         });
     }
@@ -802,7 +812,9 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
         overlay.setOnTouchListener((v, e) -> true);
         overlay.setOnHoverListener((v, e) -> true);
         overlay.setOnGenericMotionListener((v, e) -> true);
-        overlay.setOnCapturedPointerListener((v, e) -> true);
+        if (SDK_INT >= VERSION_CODES.O) {
+            overlay.setOnCapturedPointerListener((v, e) -> true);
+        }
         overlay.setVisibility(stylusMenuEnabled ? View.VISIBLE : View.GONE);
         View.OnClickListener listener =
                 view -> {
@@ -860,13 +872,15 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
 
         visibility.setOnLongClickListener(
                 v -> {
-                    v.startDragAndDrop(
-                            ClipData.newPlainText("", ""),
-                            new View.DragShadowBuilder(visibility) {
-                                public void onDrawShadow(@NonNull Canvas canvas) {}
-                            },
-                            null,
-                            View.DRAG_FLAG_GLOBAL);
+                    if (SDK_INT >= VERSION_CODES.N) {
+                        v.startDragAndDrop(
+                                ClipData.newPlainText("", ""),
+                                new View.DragShadowBuilder(visibility) {
+                                    public void onDrawShadow(@NonNull Canvas canvas) {}
+                                },
+                                null,
+                                View.DRAG_FLAG_GLOBAL);
+                    }
 
                     frm.setOnDragListener(
                             (v2, event) -> {
