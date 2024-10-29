@@ -14,7 +14,7 @@
     <string name="noproccesses">لا توجد عمليات!</string>
     <string name="unknownstate">حالة غير معروفة!</string>
 
-    <string name="desktopInstructions">لاستخدام الفأرة الخارجية:\n\tقم بإيقاف تسريع الفأرة داخل نظام التشغيل الضيف.\n\t\tلـ DSL استخدم الأمر: xset m 1\n\t\tلأنظمة التشغيل الأخرى قم بإيقاف "تحسين دقة المؤشر" أو اختر فأرة "usb-tablet" من خيارات فيكتراس الرئيسية.\n\tقم بتوصيل أو اقتران فأرتك USB/Bluetooth واضغط موافق\n\tقم بتحريك مؤشر الفأرة إلى جميع جوانب سطح المكتب للتعيين.\n</string>
+    <string name="desktopInstructions">لاستخدام الماوس الخارجية:\n\tقم بإيقاف تسريع الماوس داخل نظام التشغيل الضيف.\n\t\tلـ DSL استخدم الأمر: xset m 1\n\t\tلأنظمة التشغيل الأخرى قم بإيقاف "تحسين دقة المؤشر" أو اختر ماوس "usb-tablet" من خيارات فيكتراس الرئيسية.\n\tقم بتوصيل أو اقتران فأرتك USB/Bluetooth واضغط موافق\n\tقم بتحريك مؤشر الماوس إلى جميع جوانب سطح المكتب للتعيين.\n</string>
 
     <string name="navigation_drawer_open" translatable="false">drawer open</string>
     <string name="navigation_drawer_close" translatable="false">drawer close</string>
@@ -24,14 +24,14 @@
     <string name="shutdown">إيقاف التشغيل</string>
     <string name="ctrl_c" translatable="false">Ctrl-c</string>
     <string name="devices">الأجهزة</string>
-    <string name="external_mouse">فأرة خارجية</string>
+    <string name="external_mouse">ماوس خارجي</string>
     <string name="monitor" translatable="false">مراقب QEMU</string>
     <string name="stretch_to_screen">تمديد إلى الشاشة</string>
     <string name="full_screen">ملء الشاشة</string>
     <string name="toggle_full_screen">تبديل ملء الشاشة</string>
     <string name="zoom_in">تكبير</string>
     <string name="zoom_out">تصغير</string>
-    <string name="right_click">النقر الأيمن بالفأرة</string>
+    <string name="right_click">النقر الأيمن بالماوس</string>
     <string name="help">مساعدة</string>
     <string name="drives">الأقراص</string>
     <string name="volume">الصوت</string>
@@ -55,7 +55,7 @@
     <string name="login_failed">"فشل تسجيل الدخول"</string>
     <string name="profile">الملف الشخصي</string>
     <string name="apps_amp_games"><![CDATA[التطبيقات والألعاب]]></string>
-    <string name="vectras_website">موقع فيكتراس</string>
+    <string name="vectras_website">موقع Vectras</string>
     <string name="about">حول</string>
     <string name="emulation_information">معلومات المحاكاة</string>
     <string name="full_name">الاسم الكامل</string>
@@ -79,7 +79,7 @@
     <string name="install_rom">تثبيت روم</string>
     <string name="reconnect">إعادة الاتصال</string>
     <string name="display">الشاشة</string>
-    <string name="calibrate_mouse">معايرة الفأرة</string>
+    <string name="calibrate_mouse">معايرة الماوس</string>
     <string name="hide_controller">إخفاء وحدة التحكم</string>
     <string name="remove">إزالة</string>
     <string name="view_logs">عرض السجلات</string>
@@ -90,7 +90,7 @@
     <string name="next">التالي</string>
     <string name="previous">السابق</string>
 
-<string name="input_mode_hardware_mouse">وضع الفأرة الصلبة</string>
+<string name="input_mode_hardware_mouse">وضع ماوس هاردوير</string>
 <string name="previous_entry">الإدخال السابق</string>
 <string name="next_entry">الإدخال التالي</string>
 <string name="choose_qemu_architicture">اختر معمارية QEMU:</string>
@@ -106,7 +106,7 @@
 <string name="privacy_amp_policy"><![CDATA[الخصوصية والسياسة]]></string>
 <string name="permission_title">إذن مطلوب!</string>
 <string name="permission_notification_text">بسبب سياسة أندرويد، تحتاج إلى أذونات الإشعارات لإرسال إشعارات VM!</string>
-<string name="mouse_mode">وضع الفأرة</string>
+<string name="mouse_mode">وضع الماوس</string>
 <string name="export">تصدير</string>
 <string name="email_verification_sent">تم إرسال تحقق البريد الإلكتروني.</string>
 <string name="sign_out">تسجيل الخروج</string>
@@ -132,7 +132,7 @@
 <string name="auto">تلقائي</string>
 <string name="button_send_text">إرسال نص</string>
 <string name="button_send_without_saving">إرسال نص/عدم حفظه</string>
-<string name="center_mouse">مركز الفأرة @</string>
+<string name="center_mouse">مركز الماوس @</string>
 <string name="close">إغلاق</string>
 <string name="color_format_caption">تنسيق اللون</string>
 <string name="color_mode">وضع اللون</string>
@@ -159,28 +159,28 @@
 <string name="intro_title">مرحبًا</string>
 <string name="intro_version_text">&lt;br&gt;-- النص المرسل يتم تذكره عبر الجلسات (اختياري)&lt;br&gt;-- استيراد/تصدير الإعدادات إلى ملف&lt;br&gt;-- زر مع عناصر تحكم التكبير لإظهار لوحة المفاتيح&lt;br&gt;-- يمكن فرض وضع التبليط (شاشات كبيرة جدًا)</string>
 <string name="input_mode">وضع الإدخال</string>
-<string name="input_mode_fit_to_screen">لا يوجد بان؛ فأرة تتبع الكرة</string>
-<string name="input_mode_mouse">وضع تحكم مؤشر الفأرة</string>
+<string name="input_mode_fit_to_screen">لا يوجد بان؛ ماوس تتبع الكرة</string>
+<string name="input_mode_mouse">وضع تحكم مؤشر الماوس</string>
 <string name="input_mode_panning">وضع بان سطح المكتب</string>
-<string name="input_mode_touchpad_pan_trackball_mouse">لمس بان؛ فأرة تتبع الكرة</string>
-<string name="input_mode_dpad_pan_touchpad_mouse">فأرة لمس؛ بان D-Pad</string>
-<string name="input_mode_touch_pan_zoom_mouse">فأرة لمس بان وتكبير</string>
+<string name="input_mode_touchpad_pan_trackball_mouse">لمس بان؛ ماوس تتبع الكرة</string>
+<string name="input_mode_dpad_pan_touchpad_mouse">ماوس لمس؛ بان D-Pad</string>
+<string name="input_mode_touch_pan_zoom_mouse">ماوس لمس بان وتكبير</string>
 <string name="input_mode_touchpad">لوحة اللمس</string>
 <string name="keep_password_button">احتفظ</string>
 <string name="intro_dont_show">لا تظهر مرة أخرى</string>
 <string name="keys_caption">المفاتيح</string>
 <string name="list_caption">قائمة</string>
 <string name="list_name_caption">اسم القائمة</string>
-<string name="local_mouse_check">مؤشر الفأرة المحلي</string>
+<string name="local_mouse_check">مؤشر الماوس المحلي</string>
 <string name="meta_key_title">إرسال مفاتيح خاصة</string>
-<string name="mouse_follow_pan">تتبع الفأرة للباني</string>
+<string name="mouse_follow_pan">تتبع الماوس للباني</string>
 <string name="new_list_button">قائمة جديدة</string>
 <string name="nickname_caption">اسم مستعار</string>
 <string name="off">إيقاف</string>
 <string name="on">تشغيل</string>
 <string name="one_to_one">1:1</string>
 <string name="open_doc">الدليل/ويكي</string>
-<string name="pan_follow_mouse">تحريك يتبع الفأرة</string>
+<string name="pan_follow_mouse">تحريك يتبع الماوس</string>
 <string name="password_caption">كلمة المرور</string>
 <string name="port_caption">المنفذ</string>
 <string name="repeater_button">مكرر</string>
@@ -205,7 +205,7 @@
 <string name="username_caption">اسم المستخدم</string>
 <string name="username_hint">للمصادقة في ويندوز</string>
 <string name="permdesc_open_vnc_conn">تشغيل اتصالات VNC مخصصة</string>
-<string name="terminal">الطرفية</string>
+<string name="terminal">الوحدة الطرفية</string>
 
 <string name="msg_directory_absolute_path">%1$s مسار الدليل المطلق: \"%2$s\"</string>
 
@@ -263,7 +263,7 @@
 <string name="custom_params">معلمات مخصصة</string>
 <string name="vm_ui_environment">بيئة واجهة VM</string>
 <string name="x11_resolution">دقة X11</string>
-<string name="mouse">فأرة</string>
+<string name="mouse">ماوس</string>
 <string name="check_for_software_updates_on_startup">التحقق من تحديثات البرنامج عند بدء التشغيل</string>
 <string name="check_for_software_updates">التحقق من تحديثات البرنامج</string>
 <string name="night_mode">وضع الليل</string>
@@ -273,7 +273,7 @@
     <string name="arm64_qemu">ARM64 QEMU</string>
 <string name="x86_64_qemu_recommended">x86_64 QEMU (موصى به)</string>
 <string name="i386_qemu">I386 QEMU</string>
-<string name="export_rom">تصدير روم</string>
+<string name="export_rom">تصدير الروم</string>
 <string name="are_you_sure">هل أنت متأكد؟</string>
 <string name="description_html_supported">الوصف (يدعم HTML)</string>
 <string name="compressing_cvbi">ضغط CVBI</string>
@@ -296,7 +296,7 @@
 <string name="save_changes">حفظ التغييرات</string>
 <string name="qemu_create_cmd">أمر إنشاء QEMU</string>
 <string name="getit">احصل عليه</string>
-<string name="adddrivenote">تأكد من أنك قد اخترت ROM أو CDROM لتمهيد نظام التشغيل منه. قد لا تحتاج إلى اختياره إذا كنت قد أضفته إلى معلمات QEMU.</string>
+<string name="adddrivenote">تأكد من أنك قد اخترت روم أو CDROM لتمهيد نظام التشغيل منه. قد لا تحتاج إلى اختياره إذا كنت قد أضفته إلى معلمات QEMU.</string>
 <string name="killqemu">إيقاف QEMU</string>
 <string name="installing">جارٍ التثبيت...</string>
 <string name="vncdisplay">عرض VNC</string>
@@ -349,7 +349,7 @@
 <string name="join_our_community">انضم إلى مجتمعنا</string>
 <string name="a_serious_problem_has_occurred">حدثت مشكلة خطيرة! هذه المشكلة ناتجة عن وحدة المعالجة المركزية أو نظام التشغيل Android على جهازك. يمكنك الانضمام إلى مجتمعنا لمعرفة المزيد.</string>
 <string name="keep_files_question_mark">هل تحتفظ بالملفات؟</string>
-<string name="do_you_want_to_keep_this_ROM_file_and_CD_ROM_file">هل تريد الاحتفاظ بهذا الملف ROM وملف CD ROM؟</string>
+<string name="do_you_want_to_keep_this_ROM_file_and_CD_ROM_file">هل تريد الاحتفاظ بهذا الملف الروم وملف CD ROM؟</string>
 <string name="keep">احتفظ</string>
 <string name="remove_all">إزالة الكل</string>
 <string name="format_not_supported_please_select_file_with_format_cvbi">التنسيق غير مدعوم، يرجى اختيار ملف بتنسيق CVBI.</string>
