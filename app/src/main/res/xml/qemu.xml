@@ -97,7 +97,7 @@
         <ListPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:defaultValue="VNC"
+            android:defaultValue="X11"
             android:entries="@array/vmUiLabels"
             android:entryValues="@array/vmUiValues"
             android:key="vmUi"

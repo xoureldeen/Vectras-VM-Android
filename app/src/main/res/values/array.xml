@@ -29,14 +29,14 @@
         <item>8</item>
     </string-array>
     <string-array name="vmUiLabels">
-        <item>VNC</item>
-        <!--<item>SPICE</item>-->
         <item>X11 (TERMUX)</item>
+        <!--<item>SPICE</item>-->
+        <item>VNC</item>
     </string-array>
     <string-array name="vmUiValues">
-        <item>VNC</item>
-        <!--<item>SPICE</item>-->
         <item>X11</item>
+        <!--<item>SPICE</item>-->
+        <item>VNC</item>
     </string-array>
     <string-array name="vmArchLabels">
         <item>I386 QEMU</item>
