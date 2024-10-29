@@ -1,8 +1,8 @@
 {
-    "versionCode":"18",
-    "versionName":"v2.9.2",
+    "versionCode":"19",
+    "versionName":"v2.9.3",
     "size": "60 MB",
     "url": "https://github.com/xoureldeen/Vectras-VM-Android/releases",
-    "Message": "Termux X11 Added.",
+    "Message": "enhancments.",
     "cancellable": true
 }

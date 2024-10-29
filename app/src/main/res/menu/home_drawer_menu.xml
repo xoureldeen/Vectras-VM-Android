@@ -47,6 +47,10 @@
         android:icon="@drawable/volume_up_24px"
         android:title="@string/setup_sound"/>
     <item
+        android:id="@+id/cleanup"
+        android:icon="@drawable/cleaning_services_24px"
+        android:title="@string/clean_up"/>
+    <item
         android:id="@+id/deletealldata"
         android:icon="@drawable/delete_24px"
         android:title="@string/delete_all_vm"/>

@@ -62,43 +62,81 @@
             android:layout_margin="8dp"
             android:gravity="center" />
 
-        <Button
-            android:id="@+id/archi386"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/i386_qemu"
-            android:textAlignment="textStart"
-            app:icon="@drawable/round_memory_24" />
+            android:gravity="center_vertical">
+            <Button
+                android:id="@+id/archx86_64"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/x86_64_qemu_recommended"
+                app:icon="@drawable/round_memory_24"
+                android:layout_marginRight="4dp"
+                android:layout_weight="1"
+                app:iconGravity="textStart" />
+            <Button
+                android:id="@+id/archarm64"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/arm64_qemu"
+                app:icon="@drawable/round_memory_24"
+                android:layout_weight="1"
+                app:iconGravity="textStart" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+            <Button
+                android:id="@+id/archi386"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/i386_qemu"
+                app:icon="@drawable/round_memory_24"
+                android:layout_marginRight="4dp"
+                android:layout_weight="1"
+                app:iconGravity="textStart" />
 
-        <Button
-            android:id="@+id/archx86_64"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/x86_64_qemu_recommended"
-            android:textAlignment="textStart"
-            app:icon="@drawable/round_memory_24" />
+            <Button
+                android:id="@+id/archppc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/powerpc_qemu"
+                app:icon="@drawable/round_memory_24"
+                android:layout_weight="1"
+                app:iconGravity="textStart"/>
+        </LinearLayout>
+    </LinearLayout>
 
-        <Button
-            android:id="@+id/archarm64"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/arm64_qemu"
-            android:textAlignment="textStart"
-            app:icon="@drawable/round_memory_24" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="1dp"
+        android:background="#9e9e9e"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp" />
 
-        <Button
-            android:id="@+id/archppc"
-            android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/powerpc_qemu"
-            android:textAlignment="textStart"
-            app:icon="@drawable/round_memory_24" />
+            android:layout_weight="1"
+            android:padding="8dp"
+            android:text="@string/want_to_learn_more_about_qemu" />
 
         <Button
             android:id="@+id/webBtn"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:text="@string/qemu_website"
             android:textAlignment="textStart"
             app:icon="@drawable/round_public_24" />

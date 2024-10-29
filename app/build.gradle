@@ -11,8 +11,8 @@ android {
         applicationId "com.vectras.vm"
         minSdk minApi
         targetSdk targetApi
-        versionCode 18
-        versionName "v2.9.2-smallricegrains"
+        versionCode 19
+        versionName "v2.9.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }

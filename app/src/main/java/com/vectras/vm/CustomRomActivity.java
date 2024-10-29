@@ -904,7 +904,7 @@ public class CustomRomActivity extends AppCompatActivity {
         } else {
             VectrasApp.writeToFile(AppConfig.maindirpath + "roms/" + title.getText().toString(), "/vmID.txt", VectrasApp.ramdomVMID());
         }
-        if (!secondVMdirectory.isEmpty() && VectrasApp.isFileExists(AppConfig.maindirpath + "roms/" + title.getText().toString() + "/vmID.txt")) {
+        if ((!secondVMdirectory.isEmpty()) && VectrasApp.isFileExists(AppConfig.maindirpath + "roms/" + title.getText().toString() + "/vmID.txt")) {
             if (!(AppConfig.maindirpath + "roms/" + title.getText().toString()).equals(secondVMdirectory)) {
                 VectrasApp.copyAFile(AppConfig.maindirpath + "roms/" + title.getText().toString() + "/vmID.txt", secondVMdirectory + "/vmID.txt");
             }
@@ -1023,7 +1023,7 @@ public class CustomRomActivity extends AppCompatActivity {
                                                         drive.setText(_getDiskFile);
                                                     } else {
                                                         if (getIntent().getStringExtra("romextra").contains(getIntent().getStringExtra("finalromfilename"))) {
-                                                            qemu.setText(getIntent().getStringExtra("romextra").replaceAll(getIntent().getStringExtra("finalromfilename"), _getDiskFile));
+                                                            qemu.setText(getIntent().getStringExtra("romextra").replaceAll(getIntent().getStringExtra("finalromfilename"), "\"" + _getDiskFile + "\""));
                                                         } else {
                                                             drive.setText(_getDiskFile);
                                                             qemu.setText(getIntent().getStringExtra("romextra"));

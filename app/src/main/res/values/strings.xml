@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
     
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">v2.9.2 - Small rice grains</string>
+    <string name="app_version" translatable="false">v2.9.3</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -268,11 +268,11 @@
     <string name="check_for_software_updates">CHECK FOR SOFTWARE UPDATES</string>
     <string name="night_mode">NIGHT MODE</string>
     <string name="description">Description</string>
-    <string name="qemu_website">QEMU WEBSITE</string>
-    <string name="powerpc_qemu">POWERPC QEMU</string>
-    <string name="arm64_qemu">ARM64 QEMU</string>
-    <string name="x86_64_qemu_recommended">x86_64 QEMU (RECOMMENDED)</string>
-    <string name="i386_qemu">I386 QEMU</string>
+    <string name="qemu_website">QEMU website</string>
+    <string name="powerpc_qemu">PowerPC</string>
+    <string name="arm64_qemu">ARM64</string>
+    <string name="x86_64_qemu_recommended">x86_64 (Recommended)</string>
+    <string name="i386_qemu">i386</string>
     <string name="export_rom">Export Rom</string>
     <string name="are_you_sure">Are you sure?</string>
     <string name="description_html_supported">DESCRIPTION (html supported)</string>
@@ -326,7 +326,7 @@
     <string name="create">Create</string>
     <string name="nothing_here">Nothing here</string>
     <string name="create_vm_now">Do you want to create a new virtual machine now?</string>
-    <string name="nothing_here_home">Tap the Create button at the bottom to start creating a new virtual machine.</string>
+    <string name="nothing_here_home">Tap the Create button at the bottom to start creating a new virtual machine. Or…</string>
     <string name="allow_access_to_storage">Allow access to storage</string>
     <string name="you_need_to_allow_access_to_the_storage_to_continue">You need to allow access to the storage to continue.</string>
     <string name="allow">Allow</string>

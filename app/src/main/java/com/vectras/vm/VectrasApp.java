@@ -718,7 +718,7 @@ public class VectrasApp extends Application {
 	}
 
 	public static void prepareDataForAppConfig(Activity _activity) {
-		AppConfig.vectrasVersion = "2.9.2";
+		AppConfig.vectrasVersion = "2.9.3";
 		AppConfig.vectrasWebsite = "https://vectras.vercel.app/";
 		AppConfig.vectrasWebsiteRaw = "https://raw.githubusercontent.com/xoureldeen/Vectras-VM-Android/refs/heads/master/web/";
 		AppConfig.bootstrapfileslink = AppConfig.vectrasWebsiteRaw + "/data/setupfiles.json";

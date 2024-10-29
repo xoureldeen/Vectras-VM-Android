@@ -202,6 +202,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });*/
 
+        Button gotoromstore = findViewById(R.id.gotoromstorebutton);
+        gotoromstore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(getApplicationContext(), RomsManagerActivity.class);
+                startActivity(intent);
+            }
+        });
+
         FloatingActionButton fabAdd = findViewById(R.id.fabAdd_AppBarBottomActivity);
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -550,6 +560,23 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent();
                     intent.setClass(getApplicationContext(), RomsManagerActivity.class);
                     startActivity(intent);
+                } else if (id == R.id.cleanup) {
+                    alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
+                    alertDialog.setTitle(getResources().getString(R.string.clean_up));
+                    alertDialog.setMessage(getResources().getString(R.string.clean_up_content));
+                    alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.clean_up), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            VectrasApp.startCleanUp();
+                            errorjsondialog();
+                            Toast.makeText(getApplicationContext(), activity.getResources().getString(R.string.done), Toast.LENGTH_LONG).show();
+                        }
+                    });
+                    alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            alertDialog.dismiss();
+                        }
+                    });
+                    alertDialog.show();
                 }
                 return false;
             }
@@ -799,6 +826,25 @@ public class MainActivity extends AppCompatActivity {
             mRVMainRoms.setAdapter(mMainAdapter);
             mRVMainRoms.setLayoutManager(new GridLayoutManager(MainActivity.activity, 2));
         } catch (JSONException e) {
+        }
+    }
+
+    public static void startCleanUp() {
+        String _romsdata = VectrasApp.readFile(AppConfig.maindirpath + "roms-data.json").replace("\\/", "/");
+        int _startRepeat = 0;
+        ArrayList<String> _filelist = new ArrayList<>();
+        listDir(AppConfig.maindirpath + "roms/", _filelist);
+        if (!_filelist.isEmpty()) {
+            for (int _repeat = 0; _repeat < (int)(_filelist.size()); _repeat++) {
+                if (_startRepeat < _filelist.size()) {
+                    if (!isFileExists(_filelist.get((int)(_startRepeat)) + "/vmID.txt")) {
+                        if (!_romsdata.contains(_filelist.get((int)(_startRepeat)))) {
+                            deleteDirectory(_filelist.get((int)(_startRepeat)));
+                        }
+                    }
+                }
+                _startRepeat++;
+            }
         }
     }
 
