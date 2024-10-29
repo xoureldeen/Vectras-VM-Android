@@ -671,46 +671,42 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void checkabi() {
-        if (AppConfig.getSetupFiles().contains("arm64-v8a") && Build.SUPPORTED_ABIS.length == 1 ) {
-            VectrasApp.oneDialog(getResources().getString(R.string.oops), getResources().getString(R.string.cpu_does_not_have_the_necessary_instructions), false, true, activity);
-        } else {
-            if (!AppConfig.getSetupFiles().contains("arm64-v8a")) {
-                if (!AppConfig.getSetupFiles().contains("x86_64")) {
-                    VectrasApp.oneDialog(getResources().getString(R.string.warning), getResources().getString(R.string.cpu_not_support_64), true, false, activity);
-                }
+        if (!AppConfig.getSetupFiles().contains("arm64-v8a")) {
+            if (!AppConfig.getSetupFiles().contains("x86_64")) {
+                VectrasApp.oneDialog(getResources().getString(R.string.warning), getResources().getString(R.string.cpu_not_support_64), true, false, activity);
             }
-
-            alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
-            alertDialog.setTitle("BOOTSTRAP REQUIRED!");
-            alertDialog.setMessage("You can choose between auto download and setup or manual setup by choosing bootstrap file.");
-            alertDialog.setCancelable(false);
-            alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "AUTO SETUP", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    //startDownload();
-                    if (AppConfig.getSetupFiles().contains("arm64-v8a") || AppConfig.getSetupFiles().contains("x86_64")) {
-                        setupVectras64();
-                    } else {
-                        setupVectras32();
-                    }
-                    return;
-                }
-            });
-            alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "MANUAL SETUP", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
-                    intent.addCategory(Intent.CATEGORY_OPENABLE);
-                    intent.setType("*/*");
-
-                    // Optionally, specify a URI for the file that should appear in the
-                    // system file picker when it loads.
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
-                    }
-
-                    startActivityForResult(intent, 1001);
-                }
-            });
         }
+
+        alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
+        alertDialog.setTitle("BOOTSTRAP REQUIRED!");
+        alertDialog.setMessage("You can choose between auto download and setup or manual setup by choosing bootstrap file.");
+        alertDialog.setCancelable(false);
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "AUTO SETUP", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                //startDownload();
+                if (AppConfig.getSetupFiles().contains("arm64-v8a") || AppConfig.getSetupFiles().contains("x86_64")) {
+                    setupVectras64();
+                } else {
+                    setupVectras32();
+                }
+                return;
+            }
+        });
+        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "MANUAL SETUP", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("*/*");
+
+                // Optionally, specify a URI for the file that should appear in the
+                // system file picker when it loads.
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
+                }
+
+                startActivityForResult(intent, 1001);
+            }
+        });
     }
 
     private void checkpermissions() {
