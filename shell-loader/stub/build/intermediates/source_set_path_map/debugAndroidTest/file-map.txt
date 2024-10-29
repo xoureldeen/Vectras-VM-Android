@@ -1,5 +1,0 @@
-com.termux.x11.stub.test.stub-androidTest-0 /storage/emulated/0/github/Vectras-VM-Android/shell-loader/stub/build/generated/res/resValues/androidTest/debug
-com.termux.x11.stub.test.stub-mergeDebugAndroidTestResources-1 /storage/emulated/0/github/Vectras-VM-Android/shell-loader/stub/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/merged.dir
-com.termux.x11.stub.test.stub-mergeDebugAndroidTestResources-2 /storage/emulated/0/github/Vectras-VM-Android/shell-loader/stub/build/intermediates/incremental/debugAndroidTest/mergeDebugAndroidTestResources/stripped.dir
-com.termux.x11.stub.test.stub-merged_res-3 /storage/emulated/0/github/Vectras-VM-Android/shell-loader/stub/build/intermediates/merged_res/debugAndroidTest
-com.termux.x11.stub.test.stub-packaged_res-4 /storage/emulated/0/github/Vectras-VM-Android/shell-loader/stub/build/intermediates/packaged_res/debug
