@@ -1,0 +1,4 @@
+{
+    "arm64":"https://github.com/xoureldeen/Vectras-VM-Android/releases/download/v2.9.2/vectras-vm-arm64-v8a.tar.gz",
+    "x86_64": "https://github.com/xoureldeen/Vectras-VM-Android/releases/download/v2.9.2/vectras-vm-x86_64.tar.gz"
+}

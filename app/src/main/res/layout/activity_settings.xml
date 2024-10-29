@@ -17,16 +17,6 @@
             android:layout_height="?attr/actionBarSize"/>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/useVNC"
-        android:text="Use VNC Display"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent" />
-
     <fragment
         android:id="@+id/settingz"
         android:name="com.vectras.qemu.MainSettingsManager$AppPreferencesFragment"

@@ -83,15 +83,15 @@ public class StoreItemActivity extends AppCompatActivity {
 		itemPrv1 = findViewById(R.id.ivPrv1);
 		itemPrv2 = findViewById(R.id.ivPrv2);
 
-		AdView mAdView = findViewById(R.id.adView);
-		AdRequest adRequest = new AdRequest.Builder().build();
-		mAdView.loadAd(adRequest);
+		//AdView mAdView = findViewById(R.id.adView);
+		//AdRequest adRequest = new AdRequest.Builder().build();
+		//mAdView.loadAd(adRequest);
 
 		MobileAds.initialize(this, new OnInitializationCompleteListener() {
 			@Override
 			public void onInitializationComplete(InitializationStatus initializationStatus) {}
 		});
-		InterstitialAd.load(this,"ca-app-pub-3568137780412047/4892595373", adRequest,
+		/*InterstitialAd.load(this,"ca-app-pub-3568137780412047/4892595373", adRequest,
 				new InterstitialAdLoadCallback() {
 					@Override
 					public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
@@ -107,7 +107,7 @@ public class StoreItemActivity extends AppCompatActivity {
 						Log.d(TAG, loadAdError.toString());
 						mInterstitialAd = null;
 					}
-				});
+				});*/
 		if (mInterstitialAd != null) {
 			mInterstitialAd.show(StoreItemActivity.this);
 		} else {
@@ -118,7 +118,7 @@ public class StoreItemActivity extends AppCompatActivity {
 			@Override
 			public void onClick(View view) {
 
-				InterstitialAd.load(activity,"ca-app-pub-3568137780412047/7937545204", adRequest,
+				/*InterstitialAd.load(activity,"ca-app-pub-3568137780412047/7937545204", adRequest,
 						new InterstitialAdLoadCallback() {
 							@Override
 							public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
@@ -134,7 +134,7 @@ public class StoreItemActivity extends AppCompatActivity {
 								Log.d(TAG, loadAdError.toString());
 								mInterstitialAd = null;
 							}
-						});
+						});*/
 				startDownload();
 			}
 		});
@@ -205,14 +205,19 @@ public class StoreItemActivity extends AppCompatActivity {
 				startActivity(new Intent(activity, ImagePrvActivity.class));
 			}
 		});
+		VectrasApp.prepareDataForAppConfig(activity);
 	}
 
 	public static final int DIALOG_DOWNLOAD_PROGRESS = 0;
 	private ProgressDialog mProgressDialog;
 
 	private void startDownload() {
-		String url = link;
-		new DownloadFileAsync().execute(url);
+		//String url = link;
+		//new DownloadFileAsync().execute(url);
+		Intent i = new Intent();
+		i.setAction(Intent.ACTION_VIEW);
+		i.setData(Uri.parse(link));
+		startActivity(i);
 	}
 
 	@Override

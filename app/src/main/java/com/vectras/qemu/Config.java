@@ -64,7 +64,7 @@ public class Config {
     public static boolean enableSMPOnlyOnKVM = false;
 
     //set to true if you need to debug native library loading
-    public static boolean loadNativeLibsEarly = false;
+    public static boolean loadNativeLibsEarly = false; 
 
     //XXX: QEMU 3.1.0 needs the libraries to be loaded from the main thread
     public static boolean loadNativeLibsMainThread = true;
@@ -174,7 +174,7 @@ public class Config {
 
 	public static String machinename = "VECTRAS";
 	public static int paused = 0;
-	public static String ui = "X11";
+	public static String ui = "VNC";
 	public static boolean maxPriority = false;
     public static final String defaultVNCColorMode = COLORMODEL.C24bit.nameString();
     public static final ScaleType defaultFullscreenScaleMode = ScaleType.FIT_CENTER;

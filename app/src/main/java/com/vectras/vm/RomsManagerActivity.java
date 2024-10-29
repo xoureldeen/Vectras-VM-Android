@@ -21,6 +21,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.text.Html;
@@ -29,8 +30,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.URLUtil;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,7 +50,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButtonToggleGroup;
+import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
+import com.vectras.qemu.MainVNCActivity;
 import com.vectras.vm.AppConfig;
 import com.vectras.vm.Fragment.HomeFragment;
 import com.vectras.vm.MainRoms.AdapterMainRoms;
@@ -83,7 +88,9 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.zip.ZipEntry;
@@ -96,6 +103,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class RomsManagerActivity extends AppCompatActivity {
+
+    private RequestNetwork net;
+    private RequestNetwork.RequestListener _net_request_listener;
+    private String contentJSON = "";
+
     public static RomsManagerActivity activity;
 
     public static MaterialButton goBtn;
@@ -112,6 +124,8 @@ public class RomsManagerActivity extends AppCompatActivity {
     public static String selectedLink = null;
     public static String selectedName = null;
     public static String selectedIcon = null;
+    public static String selectedArch = null;
+    public static String selectedFinalRomFileName = null;
 
     public MaterialButtonToggleGroup filterToggle;
     public MaterialButton windowsToggle;
@@ -121,6 +135,15 @@ public class RomsManagerActivity extends AppCompatActivity {
     public MaterialButton otherToggle;
 
     public ProgressBar loadingPb;
+
+    private LinearLayout linearload;
+    private LinearLayout linearnothinghere;
+    private Button buttontryagain;
+
+    public static String sAvailable = "";
+    public static String sUnavailable = "";
+    public static String sInstalled = "";
+    public static boolean isFinishNow = false;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -171,11 +194,20 @@ public class RomsManagerActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         activity = this;
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        VectrasApp.prepareDataForAppConfig(activity);
+        sAvailable = getResources().getString(R.string.available);
+        sUnavailable = getResources().getString(R.string.unavailable);
+        sInstalled = getResources().getString(R.string.installed);
         SharedPreferences prefs = getSharedPreferences(CREDENTIAL_SHARED_PREF, Context.MODE_PRIVATE);
         boolean isAccessed = prefs.getBoolean("isFirstLaunch", false);
-        if (!isAccessed && !checkConnection(activity))
-            UIUtils.UIAlert(activity, "for first time you need internet connection to load app data!", "No internet connection!");
+        //if (!isAccessed && !checkConnection(activity))
+            //UIUtils.UIAlert(activity, "for first time you need internet connection to load app data!", "No internet connection!");
         setContentView(R.layout.activity_roms_manager);
+        linearload = findViewById(R.id.linearload);
+        linearnothinghere = findViewById(R.id.linearnothinghere);
+        buttontryagain = findViewById(R.id.buttontryagain);
         loadingPb = findViewById(R.id.loadingPb);
         filterToggle = findViewById(R.id.filterToggle);
         windowsToggle = findViewById(R.id.windowsToggle);
@@ -221,9 +253,7 @@ public class RomsManagerActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        setTitle("Roms Manager " + MainSettingsManager.getArch(activity));
-
-        loadData();
+        setTitle(getResources().getString(R.string.roms_store));
 
         goBtn = (MaterialButton) findViewById(R.id.goBtn);
 
@@ -244,14 +274,47 @@ public class RomsManagerActivity extends AppCompatActivity {
                 startActivity(new Intent(activity, CustomRomActivity.class));
             }
         });
+
+        net = new RequestNetwork(this);
+        _net_request_listener = new RequestNetwork.RequestListener() {
+            @Override
+            public void onResponse(String tag, String response, HashMap<String, Object> responseHeaders) {
+                contentJSON = response;
+                if (contentJSON.length() == 0)
+                        contentJSON ="[]";
+                loadData();
+                linearload.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onErrorResponse(String tag, String message) {
+                linearload.setVisibility(View.GONE);
+                linearnothinghere.setVisibility(View.VISIBLE);
+            }
+        };
+
+        buttontryagain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                linearload.setVisibility(View.VISIBLE);
+                net.startRequestNetwork(RequestNetworkController.GET,AppConfig.vectrasRaw + "roms-store.json","anbui",_net_request_listener);
+            }
+        });
+
+        net.startRequestNetwork(RequestNetworkController.GET,AppConfig.vectrasRaw + "roms-store.json","anbui",_net_request_listener);
+    }
+
+    public void onResume() {
+        super.onResume();
+        if (isFinishNow)
+            finish();
+        isFinishNow = false;
     }
 
     private void loadData() {
         data = new ArrayList<>();
-
         try {
-            String fileName = "roms-" + MainSettingsManager.getArch(activity) + ".json";
-            JSONArray jArray = new JSONArray(FileUtils.readFromFile(activity, new File(getExternalFilesDir("data") + "/" + fileName)));
+            JSONArray jArray = new JSONArray(contentJSON);
 
             // Extract data from json and store into ArrayList as class objects
             for (int i = 0; i < jArray.length(); i++) {
@@ -261,6 +324,7 @@ public class RomsManagerActivity extends AppCompatActivity {
                 romsData.itemIcon = json_data.getString("rom_icon");
                 romsData.itemUrl = json_data.getString("rom_url");
                 romsData.itemPath = json_data.getString("rom_path");
+                romsData.itemFinalRomFileName = json_data.getString("final_rom_file_name");
                 romsData.itemAvail = json_data.getBoolean("rom_avail");
                 romsData.itemSize = json_data.getString("rom_size");
                 romsData.itemArch = json_data.getString("rom_arch");
@@ -377,7 +441,7 @@ public class RomsManagerActivity extends AppCompatActivity {
                         } catch (JSONException e) {
                             UIUtils.toastLong(activity, e.toString());
                         }
-                        MainActivity.activity.finish();
+                        //MainActivity.activity.finish();
                     } else {
                         JSONObject jsonObject = obj.makeJSONObject(selectedName, AppConfig.maindirpath + "icons/" + selectedPath.replace(".IMG", ".jpg"), MainSettingsManager.getArch(activity), AppConfig.maindirpath + selectedPath, selectedExtra);
                         JSONArray jsonArray = new JSONArray();
@@ -404,9 +468,9 @@ public class RomsManagerActivity extends AppCompatActivity {
             } else {
                 AlertDialog ad;
                 ad = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
-                ad.setTitle(selectedPath.replace(".IMG", ".vbi") + " Needs to import");
-                ad.setMessage("press import button and select " + selectedPath.replace(".IMG", ".vbi") + " file.");
-                ad.setButton(Dialog.BUTTON_POSITIVE, "IMPORT", (dialog, which) -> {
+                ad.setTitle(selectedPath);
+                ad.setMessage("Have you downloaded this file yet? If you have, you will need to select it to continue. If not, you can get it.");
+                ad.setButton(Dialog.BUTTON_POSITIVE, "Select that file now", (dialog, which) -> {
                     Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
                     intent.addCategory(Intent.CATEGORY_OPENABLE);
                     intent.setType("*/*");
@@ -419,7 +483,7 @@ public class RomsManagerActivity extends AppCompatActivity {
 
                     startActivityForResult(intent, 0);
                 });
-                ad.setButton(Dialog.BUTTON_NEGATIVE, "DOWNLOAD " + selectedPath.replace(".IMG", ".vbi"), new DialogInterface.OnClickListener() {
+                ad.setButton(Dialog.BUTTON_NEGATIVE, "Get " + selectedPath.replace(".IMG", ".vbi"), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         if (selectedLink != null) {
                             String gt = selectedLink;
@@ -455,82 +519,38 @@ public class RomsManagerActivity extends AppCompatActivity {
         if (requestCode == 0 && resultCode == RESULT_OK) {
             Uri content_describer = data.getData();
             File selectedFilePath = new File(getPath(content_describer));
-            if (selectedFilePath.getName().equals(selectedPath.replace(".IMG", ".vbi"))) {
-
-                try {
-                    loadingPb.setVisibility(View.VISIBLE);
-                    goBtn.setEnabled(false);
-                    mRVRoms.setVisibility(View.GONE);
-                    Thread t = new Thread() {
-                        public void run() {
-                            FileInputStream zipFile = null;
-                            try {
-                                zipFile = (FileInputStream) getContentResolver().openInputStream(content_describer);
-                            } catch (FileNotFoundException e) {
-                                throw new RuntimeException(e);
-                            }
-                            File targetDirectory = new File(AppConfig.maindirpath);
-                            ZipInputStream zis = null;
-                            zis = new ZipInputStream(
-                                    new BufferedInputStream(zipFile));
-                            try {
-                                ZipEntry ze;
-                                int count;
-                                byte[] buffer = new byte[8192];
-                                while ((ze = zis.getNextEntry()) != null) {
-                                    File file = new File(targetDirectory, ze.getName());
-                                    File dir = ze.isDirectory() ? file : file.getParentFile();
-                                    if (!dir.isDirectory() && !dir.mkdirs())
-                                        throw new FileNotFoundException("Failed to ensure directory: " +
-                                                dir.getAbsolutePath());
-                                    if (ze.isDirectory())
-                                        continue;
-                                    try (FileOutputStream fout = new FileOutputStream(file)) {
-                                        while ((count = zis.read(buffer)) != -1)
-                                            fout.write(buffer, 0, count);
-                                    }
-                        /* if time should be restored as well
-                        long time = ze.getTime();
-                        if (time > 0)
-                            file.setLastModified(time);
-                        */
-                                }
-                            } catch (IOException e) {
-                                UIUtils.toastLong(activity, e.toString());
-                                File file = new File(targetDirectory, selectedPath.replace(".vbi", ".IMG"));
-                                file.delete();
-                                throw new RuntimeException(e);
-                            } finally {
-                                Runnable runnable = new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        loadingPb.setVisibility(View.GONE);
-                                        goBtn.setEnabled(true);
-                                        mRVRoms.setVisibility(View.VISIBLE);
-                                        onFirstStartup();
-                                    }
-                                };
-                                activity.runOnUiThread(runnable);
-                                try {
-                                    zis.close();
-                                } catch (IOException e) {
-                                    UIUtils.toastLong(activity, e.toString());
-                                    throw new RuntimeException(e);
-                                }
-                            }
-                        }
-                    };
-                    t.start();
-                } catch (Exception e) {
-                    loadingPb.setVisibility(View.GONE);
-                    goBtn.setEnabled(true);
-                    mRVRoms.setVisibility(View.VISIBLE);
-                    UIUtils.toastLong(activity, e.toString());
-                    throw new RuntimeException(e);
+            if (selectedFilePath.getName().equals(selectedPath)) {
+                Intent intent = new Intent();
+                intent.setClass(getApplicationContext(), CustomRomActivity.class);
+                intent.putExtra("addromnow", "");
+                intent.putExtra("romname", selectedName);
+                intent.putExtra("romfilename", selectedPath);
+                intent.putExtra("finalromfilename", selectedFinalRomFileName);
+                if (selectedExtra.contains(selectedFilePath.getName())) {
+                    intent.putExtra("rompath", "");
+                    intent.putExtra("romextra", selectedExtra.replace(selectedFilePath.getName(),"\"" + selectedFilePath.getPath() + "\""));
+                } else {
+                    intent.putExtra("rompath", selectedFilePath.getPath());
+                    intent.putExtra("romextra", selectedExtra);
                 }
-
+                intent.putExtra("romicon", AppConfig.maindirpath + "icons/" + selectedPath + ".png");
+                switch (selectedArch) {
+                    case "X86_64":
+                        MainSettingsManager.setArch(this, "X86_64");
+                        break;
+                    case "i386":
+                        MainSettingsManager.setArch(this, "I386");
+                        break;
+                    case "ARM64":
+                        MainSettingsManager.setArch(this, "ARM64");
+                        break;
+                    case "PowerPC":
+                        MainSettingsManager.setArch(this, "PPC");
+                        break;
+                }
+                startActivity(intent);
             } else {
-                UIUtils.UIAlert(activity, "please select " + selectedPath.replace(".IMG", ".vbi") + " file to continue.", "File not supported");
+                UIUtils.UIAlert(activity, "Please select " + selectedPath.replace(".IMG", ".vbi") + " file to continue.", "File not supported");
             }
 
         }
@@ -604,6 +624,35 @@ public class RomsManagerActivity extends AppCompatActivity {
             startActivity(new Intent(this, SetArchActivity.class));
         }
         activity = this;
+    }
+
+    private String getDataFromUrl(String _url) {
+        Log.d("RomsManagerActivity", _url);
+        try {
+            StringBuilder sb = new StringBuilder();
+            URL url = new URL(_url);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setConnectTimeout(30000);
+            conn.setReadTimeout(30000);
+            conn.setRequestMethod("GET");
+            conn.connect();
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String response;
+
+            while ((response = br.readLine()) != null) {
+                sb.append(response);
+            }
+            return sb.toString();
+        } catch (ExceptionInInitializerError ex) {
+            ex.printStackTrace();
+            return "[]";
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "[]";
+
+        }
     }
 
 }

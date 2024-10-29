@@ -3,13 +3,13 @@ package com.vectras.vm;
 import static android.content.Intent.ACTION_OPEN_DOCUMENT;
 import static android.content.Intent.ACTION_VIEW;
 import static android.os.Build.VERSION.SDK_INT;
+import com.termux.app.TermuxService;
 import static com.vectras.vm.utils.UIUtils.UIAlert;
 
 import android.app.ActivityManager;
 import android.app.Dialog;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
-import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -26,7 +26,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.DocumentsContract;
-import android.system.ErrnoException;
+import android.provider.Settings;
 import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
@@ -37,12 +37,15 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.Manifest;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.preference.PreferenceManager;
@@ -65,6 +68,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.elevation.SurfaceColors;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.termux.app.TermuxActivity;
 import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.qemu.MainVNCActivity;
@@ -72,7 +76,6 @@ import com.vectras.qemu.utils.RamInfo;
 import com.vectras.vm.MainRoms.AdapterMainRoms;
 import com.vectras.vm.MainRoms.DataMainRoms;
 import com.vectras.vm.adapter.LogsAdapter;
-import com.vectras.vm.core.TermuxX11;
 import com.vectras.vm.logger.VectrasStatus;
 import com.vectras.vm.utils.AppUpdater;
 import com.vectras.vm.utils.FileUtils;
@@ -92,9 +95,18 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import com.vectras.vm.core.ShellExecutor;
+
+import com.vectras.vm.x11.X11Activity;
+
 
 public class MainActivity extends AppCompatActivity {
     public static String curRomName;
@@ -109,13 +121,16 @@ public class MainActivity extends AppCompatActivity {
     private AdRequest adRequest;
     public DrawerLayout mainDrawer;
     private String TAG = "MainActivity";
-    public static /**/ LinearLayout extViewerLayout;
+    public static /**/ LinearLayout extVncLayout;
     public static AppBarLayout appbar;
     public TextView totalRam;
     public TextView usedRam;
     public TextView freeRam;
+    public static LinearLayout linearnothinghere;
     private final Timer _timer = new Timer();
-    private SharedPreferences getAppConfigData;
+    private AlertDialog alertDialog;
+    private boolean doneonstart = false;
+    public static boolean isActivate = false;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -123,10 +138,8 @@ public class MainActivity extends AppCompatActivity {
         activity = this;
         RamInfo.activity = this;
         setContentView(R.layout.activity_main);
-
-        getAppConfigData = getSharedPreferences("appconfig", MODE_PRIVATE);
-        VectrasApp.saveappconfig(getApplicationContext());
-
+        isActivate = true;
+        VectrasApp.prepareDataForAppConfig(activity);
         setupFolders();
 
         NotificationManager notificationManager = (NotificationManager) activity.getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
@@ -142,16 +155,12 @@ public class MainActivity extends AppCompatActivity {
         appbar = findViewById(R.id.appbar);
         appbar.setExpanded(false);
 
-        extViewerLayout = findViewById(R.id.extVnc);
+        extVncLayout = findViewById(R.id.extVnc);
 
-        TextView extTitle = findViewById(R.id.extTitle);
+        linearnothinghere = findViewById(R.id.linearnothinghere);
+
         TextView tvLogin = findViewById(R.id.tvLogin);
-        if (MainSettingsManager.getVmUi(activity).equals("VNC")) {
-            tvLogin.setText("LOGIN --> " + Config.defaultVNCHost + ":" + (5900 + Config.defaultVNCPort)/* + "\nPASSWORD --> " + Config.defaultVNCPasswd*/);
-        } else {
-            extTitle.setText("EXTERNAL X11");
-            tvLogin.setText("Now Open Termux X11");
-        }
+        tvLogin.setText("LOGIN --> " + Config.defaultVNCHost + ":" + (5900 + Config.defaultVNCPort)/* + "\nPASSWORD --> " + Config.defaultVNCPasswd*/);
 
         Button stopBtn = findViewById(R.id.stopBtn);
         stopBtn.setOnClickListener(new View.OnClickListener() {
@@ -159,18 +168,11 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Stop the service
                 MainService.stopService();
-                if (MainSettingsManager.getVmUi(activity).equals("X11")) {
-                    Intent intent = new Intent();
-                    intent.setClass(getApplicationContext(),SplashActivity.class);
-                    startActivity(intent);
-                    Terminal vterm = new Terminal(activity);
-                    vterm.executeShellCommand("chmod -x /home/run.sh && pkill -SIGKILL -u root", false, activity);
-                } else {
-                    Terminal vterm = new Terminal(activity);
-                    vterm.executeShellCommand("killall qemu-system-*", false, activity);
-                }
 
-                extViewerLayout.setVisibility(View.GONE);
+                Terminal vterm = new Terminal(activity);
+                vterm.executeShellCommand("killall qemu-system-*", false, activity);
+
+                extVncLayout.setVisibility(View.GONE);
                 appbar.setExpanded(false);
             }
         });
@@ -178,6 +180,7 @@ public class MainActivity extends AppCompatActivity {
         refreshRoms.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                errorjsondialog();
                 loadDataVbi();
                 mMainAdapter.notifyItemRangeChanged(0, mMainAdapter.data.size());
                 refreshRoms.setRefreshing(false);
@@ -203,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(activity, CustomRomActivity.class));
+                startActivity(new Intent(activity, SetArchActivity.class));
             }
         });
         Toolbar mainToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -231,17 +234,17 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(new Intent(activity, AboutActivity.class));
                 }
                 if (id == R.id.navigation_item_help) {
-                    String tw = getAppConfigData.getString("vectrasWebsite","");
-                    Intent w = new Intent(ACTION_VIEW);
+                    String tw = AppConfig.vectrasHelp;
+                    Intent w = new Intent(Intent.ACTION_VIEW);
                     w.setData(Uri.parse(tw));
                     startActivity(w);
                 } else if (id == R.id.navigation_item_website) {
-                    String tw = getAppConfigData.getString("vectrasHelp","");
-                    Intent w = new Intent(ACTION_VIEW);
+                    String tw = AppConfig.vectrasWebsite;
+                    Intent w = new Intent(Intent.ACTION_VIEW);
                     w.setData(Uri.parse(tw));
                     startActivity(w);
                 } else if (id == R.id.navigation_item_import_iso) {
-                    if (new File(getAppConfigData.getString("maindirpath","") + "/drive.iso").exists()) {
+                    if (new File(AppConfig.maindirpath + "/drive.iso").exists()) {
                         AlertDialog ad;
                         ad = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
                         ad.setTitle("REPLACE ISO");
@@ -264,7 +267,7 @@ public class MainActivity extends AppCompatActivity {
                         });
                         ad.setButton(Dialog.BUTTON_NEGATIVE, "REMOVE", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                File isoFile = new File(getAppConfigData.getString("maindirpath","") + "/drive.iso");
+                                File isoFile = new File(AppConfig.maindirpath + "/drive.iso");
                                 try {
                                     isoFile.delete();
                                 } catch (Exception e) {
@@ -288,7 +291,7 @@ public class MainActivity extends AppCompatActivity {
                         startActivityForResult(intent, 1004);
                     }
                 } else if (id == R.id.navigation_item_hdd1) {
-                    if (new File(getAppConfigData.getString("maindirpath","") + "/hdd1.qcow2").exists()) {
+                    if (new File(AppConfig.maindirpath + "/hdd1.qcow2").exists()) {
                         AlertDialog ad;
                         ad = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
                         ad.setTitle("REPLACE HDD1");
@@ -311,7 +314,7 @@ public class MainActivity extends AppCompatActivity {
                         });
                         ad.setButton(Dialog.BUTTON_NEGATIVE, "REMOVE", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                File isoFile = new File(getAppConfigData.getString("maindirpath","") + "/hdd1.qcow2");
+                                File isoFile = new File(AppConfig.maindirpath + "/hdd1.qcow2");
                                 try {
                                     isoFile.delete();
                                 } catch (Exception e) {
@@ -324,11 +327,11 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent intentShareFile = new Intent(Intent.ACTION_SEND);
-                                File fileWithinMyDir = new File(getAppConfigData.getString("maindirpath","") + "/hdd1.qcow2");
+                                File fileWithinMyDir = new File(AppConfig.maindirpath + "/hdd1.qcow2");
 
                                 if (fileWithinMyDir.exists()) {
                                     intentShareFile.setType("*/*");
-                                    intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + getAppConfigData.getString("maindirpath","") + "/hdd1.qcow2"));
+                                    intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + AppConfig.maindirpath + "/hdd1.qcow2"));
 
                                     intentShareFile.putExtra(Intent.EXTRA_SUBJECT,
                                             "Sharing File...");
@@ -353,7 +356,7 @@ public class MainActivity extends AppCompatActivity {
                         startActivityForResult(intent, 1005);
                     }
                 } else if (id == R.id.navigation_item_hdd2) {
-                    if (new File(getAppConfigData.getString("maindirpath","") + "/hdd2.qcow2").exists()) {
+                    if (new File(AppConfig.maindirpath + "/hdd2.qcow2").exists()) {
                         AlertDialog ad;
                         ad = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
                         ad.setTitle("REPLACE HDD2");
@@ -376,7 +379,7 @@ public class MainActivity extends AppCompatActivity {
                         });
                         ad.setButton(Dialog.BUTTON_NEGATIVE, "REMOVE", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                File isoFile = new File(getAppConfigData.getString("maindirpath","") + "/hdd2.qcow2");
+                                File isoFile = new File(AppConfig.maindirpath + "/hdd2.qcow2");
                                 try {
                                     isoFile.delete();
                                 } catch (Exception e) {
@@ -389,11 +392,11 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent intentShareFile = new Intent(Intent.ACTION_SEND);
-                                File fileWithinMyDir = new File(getAppConfigData.getString("maindirpath","") + "/hdd2.qcow2");
+                                File fileWithinMyDir = new File(AppConfig.maindirpath + "/hdd2.qcow2");
 
                                 if (fileWithinMyDir.exists()) {
                                     intentShareFile.setType("*/*");
-                                    intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + getAppConfigData.getString("maindirpath","") + "/hdd2.qcow2"));
+                                    intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + AppConfig.maindirpath + "/hdd2.qcow2"));
 
                                     intentShareFile.putExtra(Intent.EXTRA_SUBJECT,
                                             "Sharing File...");
@@ -418,8 +421,9 @@ public class MainActivity extends AppCompatActivity {
                         startActivityForResult(intent, 1006);
                     }
                 } else if (id == R.id.navigation_item_terminal) {
-                    com.vectras.vterm.TerminalBottomSheetDialog VTERM = new com.vectras.vterm.TerminalBottomSheetDialog(activity);
-                    VTERM.showVterm();
+                    /*com.vectras.vterm.TerminalBottomSheetDialog VTERM = new com.vectras.vterm.TerminalBottomSheetDialog(activity);
+                    VTERM.showVterm();*/
+                    startActivity(new Intent(activity, TermuxActivity.class));
                 } else if (id == R.id.navigation_item_view_logs) {
                     BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(activity);
                     View view = activity.getLayoutInflater().inflate(R.layout.bottomsheetdialog_logger, null);
@@ -476,16 +480,15 @@ public class MainActivity extends AppCompatActivity {
                 } else if (id == R.id.navigation_data_explorer) {
                     startActivity(new Intent(activity, DataExplorerActivity.class));
                 } else if (id == R.id.navigation_item_donate) {
-                    String tw = "https://www.buymeacoffee.com/vectrasvm/";
-                    Intent w = new Intent(ACTION_VIEW);
+                    String tw = "https://www.patreon.com/VectrasTeam";
+                    Intent w = new Intent(Intent.ACTION_VIEW);
                     w.setData(Uri.parse(tw));
                     startActivity(w);
                 } else if (id== R.id.setup_sound) {
                     if (VectrasApp.isAppInstalled("com.termux", getApplicationContext())) {
-                        AlertDialog alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
+                        alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
                         alertDialog.setTitle(getResources().getString(R.string.setup_sound));
                         alertDialog.setMessage(getResources().getString(R.string.setup_sound_guide_content));
-                        alertDialog.setCancelable(false);
                         alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.start_setup), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
@@ -504,12 +507,10 @@ public class MainActivity extends AppCompatActivity {
                                 alertDialog.dismiss();
                             }
                         });
-                        alertDialog.show();
                     } else {
-                        AlertDialog alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
+                        alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
                         alertDialog.setTitle(getResources().getString(R.string.termux_is_not_installed));
                         alertDialog.setMessage(getResources().getString(R.string.you_need_to_install_termux));
-                        alertDialog.setCancelable(false);
                         alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.install), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 Intent intent = new Intent();
@@ -524,8 +525,31 @@ public class MainActivity extends AppCompatActivity {
                                 alertDialog.dismiss();
                             }
                         });
-                        alertDialog.show();
                     }
+                    alertDialog.show();
+                } else if (id == R.id.deletealldata) {
+                    alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
+                    alertDialog.setTitle(getResources().getString(R.string.delete_all_vm));
+                    alertDialog.setMessage(getResources().getString(R.string.delete_all_vm_content));
+                    alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.delete_all), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            VectrasApp.killallqemuprocesses(getApplicationContext());
+                            VectrasApp.deleteDirectory(AppConfig.maindirpath);
+                            File vDir = new File(com.vectras.vm.AppConfig.maindirpath);
+                            vDir.mkdirs();
+                            errorjsondialog();
+                        }
+                    });
+                    alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            alertDialog.dismiss();
+                        }
+                    });
+                    alertDialog.show();
+                } else if (id == R.id.navigation_item_get_rom) {
+                    Intent intent = new Intent();
+                    intent.setClass(getApplicationContext(), RomsManagerActivity.class);
+                    startActivity(intent);
                 }
                 return false;
             }
@@ -535,9 +559,9 @@ public class MainActivity extends AppCompatActivity {
 
         adRequest = new AdRequest.Builder().build();
 
-        AdView mAdView = findViewById(R.id.adView);
-        adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+        //AdView mAdView = findViewById(R.id.adView);
+        //adRequest = new AdRequest.Builder().build();
+        //mAdView.loadAd(adRequest);
 
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
@@ -559,7 +583,7 @@ public class MainActivity extends AppCompatActivity {
             alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "JOIN", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     String tg = "https://t.me/vectras_os";
-                    Intent f = new Intent(ACTION_VIEW);
+                    Intent f = new Intent(Intent.ACTION_VIEW);
                     f.setData(Uri.parse(tg));
                     startActivity(f);
                     return;
@@ -605,40 +629,73 @@ public class MainActivity extends AppCompatActivity {
 
 
         String vectrasMemory = String.valueOf(RamInfo.vectrasMemory());
-        TimerTask t = new TimerTask() {
-            @Override
-            public void run() {
-                runOnUiThread(new Runnable() {
+        TimerTask t =
+                new TimerTask() {
                     @Override
                     public void run() {
-                        boolean isMainServiceRunning = isServiceRunning(MainService.class, activity);
-                        if (isMainServiceRunning)
-                            tvIsRunning.setText(R.string.running);
-                        else
-                            tvIsRunning.setText(R.string.stopped);
+                        runOnUiThread(
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        boolean isMainServiceRunning =
+                                                isServiceRunning(MainService.class, activity);
+                                        if (isMainServiceRunning)
+                                            tvIsRunning.setText(R.string.running);
+                                        else tvIsRunning.setText(R.string.stopped);
 
-                        ActivityManager.MemoryInfo miI = new ActivityManager.MemoryInfo();
-                        ActivityManager activityManagerr = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-                        activityManagerr.getMemoryInfo(miI);
-                        long freeMemory = miI.availMem / 1048576L;
-                        long totalMemory = miI.totalMem / 1048576L;
-                        long usedMemory = totalMemory - freeMemory;
+                                        ActivityManager.MemoryInfo miI =
+                                                new ActivityManager.MemoryInfo();
+                                        ActivityManager activityManagerr =
+                                                (ActivityManager)
+                                                        getSystemService(ACTIVITY_SERVICE);
+                                        activityManagerr.getMemoryInfo(miI);
+                                        long freeMemory = miI.availMem / 1048576L;
+                                        long totalMemory = miI.totalMem / 1048576L;
+                                        long usedMemory = totalMemory - freeMemory;
 
-                        totalRam.setText("Total Memory: " + totalMemory + " MB");
-                        usedRam.setText("Used Memory: " + usedMemory + " MB");
-                        freeRam.setText("Free Memory: " + freeMemory + " MB (" + vectrasMemory + " used)");
-                        ProgressBar progressBar = findViewById(R.id.progressBar);
-                        progressBar.setMax((int) totalMemory);
-                        if (SDK_INT >= Build.VERSION_CODES.N) {
-                            progressBar.setProgress((int) usedMemory, true);
-                        } else {
-                            progressBar.setProgress((int) usedMemory);
-                        }
+                                        totalRam.setText(
+                                                activity.getResources()
+                                                                .getString(R.string.total_memory)
+                                                        + " "
+                                                        + totalMemory
+                                                        + " MB");
+                                        usedRam.setText(
+                                                activity.getResources()
+                                                                .getString(R.string.used_memory)
+                                                        + " "
+                                                        + usedMemory
+                                                        + " MB");
+                                        freeRam.setText(
+                                                activity.getResources()
+                                                                .getString(R.string.free_memory)
+                                                        + " "
+                                                        + freeMemory
+                                                        + " MB ("
+                                                        + vectrasMemory
+                                                        + " "
+                                                        + activity.getResources()
+                                                                .getString(R.string.used)
+                                                        + ")");
+                                        ProgressBar progressBar = findViewById(R.id.progressBar);
+                                        progressBar.setMax((int) totalMemory);
+                                        if (SDK_INT >= Build.VERSION_CODES.N) {
+                                            progressBar.setProgress((int) usedMemory, true);
+                                        } else {
+                                            progressBar.setProgress((int) usedMemory);
+                                        }
+                                    }
+                                });
                     }
-                });
-            }
-        };
+                };
         _timer.scheduleAtFixedRate(t, (int) (0), (int) (1000));
+        ShellExecutor shellExec = new ShellExecutor();
+        shellExec.exec(TermuxService.PREFIX_PATH + "/bin/termux-x11 :0");
+    }
+
+    @Override
+    public void onDestroy() {
+        isActivate = false;
+        super.onDestroy();
     }
 
     public static void clearNotifications() {
@@ -670,7 +727,9 @@ public class MainActivity extends AppCompatActivity {
                         final JSONObject obj = new JSONObject(result);
                         PackageInfo pinfo = getAppInfo(getApplicationContext());
                         int versionCode = pinfo.versionCode;
-                        if (versionCode < obj.getInt("versionCode")) {
+                        String versionName = pinfo.versionName;
+
+                        if (versionCode < obj.getInt("versionCode") || !versionName.equals(obj.getString("versionName"))) {
                             AlertDialog.Builder alert = new AlertDialog.Builder(activity, R.style.MainDialogTheme);
                             alert.setTitle("Install the latest version")
                                     .setMessage(Html.fromHtml(obj.getString("Message") + "<br><br>update size:<br>" + obj.getString("size")))
@@ -678,7 +737,7 @@ public class MainActivity extends AppCompatActivity {
                                     .setNegativeButton("Update", new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id) {
                                             try {
-                                                startActivity(new Intent(ACTION_VIEW, Uri.parse(obj.getString("url"))));
+                                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(obj.getString("url"))));
                                             } catch (JSONException e) {
 
                                             }
@@ -701,12 +760,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void loadDataVbi() {
-
         data = new ArrayList<>();
 
         try {
-            SharedPreferences dataAppConfig = activity.getSharedPreferences("appconfig", activity.MODE_PRIVATE);
-            jArray = new JSONArray(FileUtils.readFromFile(MainActivity.activity, new File(dataAppConfig.getString("maindirpath","")
+
+            jArray = new JSONArray(FileUtils.readFromFile(MainActivity.activity, new File(AppConfig.maindirpath
                     + "roms-data.json")));
 
             // Extract data from json and store into ArrayList as class objects
@@ -727,12 +785,12 @@ public class MainActivity extends AppCompatActivity {
                     romsMainData.itemDrv1 = "";
                 }
                 romsMainData.itemExtra = json_data.getString("imgExtra");
-                try {
-                    if (json_data.getString("imgArch").equals(MainSettingsManager.getArch(MainActivity.activity)))
+                //try {
+                    //if (json_data.getString("imgArch").equals(MainSettingsManager.getArch(MainActivity.activity)))
                         data.add(romsMainData);
-                } catch (JSONException ignored) {
-                    data.add(romsMainData);
-                }
+                //} catch (JSONException ignored) {
+                    //data.add(romsMainData);
+                //}
             }
 
             // Setup and Handover data to recyclerview
@@ -740,7 +798,6 @@ public class MainActivity extends AppCompatActivity {
             mMainAdapter = new AdapterMainRoms(MainActivity.activity, data);
             mRVMainRoms.setAdapter(mMainAdapter);
             mRVMainRoms.setLayoutManager(new GridLayoutManager(MainActivity.activity, 2));
-
         } catch (JSONException e) {
         }
     }
@@ -765,20 +822,24 @@ public class MainActivity extends AppCompatActivity {
             else
                 appbar.setExpanded(false);
 
-        } else if (id == R.id.arch) {
-            startActivity(new Intent(activity, SetArchActivity.class));
         } else if (id == R.id.shutdown) {
-            AlertDialog alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
-            alertDialog.setTitle("Do you want to kill all Qemu processes?");
-            alertDialog.setMessage("All running VMs will be forcibly shut down.");
+            alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
+            alertDialog.setTitle(getResources().getString(R.string.do_you_want_to_kill_all_qemu_processes));
+            alertDialog.setMessage(getResources().getString(R.string.all_running_vms_will_be_forcibly_shut_down));
             alertDialog.setCancelable(true);
-            alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Kill all", (dialog, which) -> {
-                VectrasApp.killallqemuprocesses(activity);
+            alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.kill_all), (dialog, which) -> {
+                VectrasApp.killallqemuprocesses(getApplicationContext());
             });
-            alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", (dialog, which) -> {
+            alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), (dialog, which) -> {
 
             });
             alertDialog.show();
+        } else if (id == R.id.vncdisplay) {
+            if (VectrasApp.isQemuRunning()) {
+                activity.startActivity(new Intent(activity, MainVNCActivity.class));
+            } else {
+                Toast.makeText(getApplicationContext(), activity.getResources().getString(R.string.there_is_nothing_here_because_there_is_no_vm_running), Toast.LENGTH_LONG).show();
+            }
         }
 
         return super.onOptionsItemSelected(item);
@@ -819,8 +880,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static boolean checkSharedFolder() { //TODO: not work idk why
-        SharedPreferences dataAppConfig = activity.getSharedPreferences("appconfig", activity.MODE_PRIVATE);
-        File folder = new File(dataAppConfig.getString("sharedFolder",""));
+        File folder = new File(AppConfig.sharedFolder);
         File[] listOfFiles = folder.listFiles();
 
         if (listOfFiles != null) {
@@ -833,72 +893,92 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    public static void startVM(String vmName, String env) {
+    public static void startVM(String vmName, String env, String itemExtra, String itemPath) {
+
+        if (VectrasApp.isThisVMRunning(itemExtra, itemPath)) {
+            Toast.makeText(activity, "This VM is already running.", Toast.LENGTH_LONG).show();
+            activity.startActivity(new Intent(activity, MainVNCActivity.class));
+            return;
+        }
+
+        if (AppConfig.getSetupFiles().contains("arm") && !AppConfig.getSetupFiles().contains("arm64")) {
+            if (env.contains("tcg,thread=multi")) {
+                AlertDialog abiAlertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
+                abiAlertDialog.setTitle(activity.getResources().getString(R.string.oops));
+                abiAlertDialog.setMessage(activity.getResources().getString(R.string.can_not_use_mttcg));
+                abiAlertDialog.setButton(DialogInterface.BUTTON_POSITIVE, activity.getResources().getString(R.string.continuetext), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        startVM(vmName, env.replace("tcg,thread=multi", "tcg,thread=single"), itemExtra, itemPath);
+                    }
+                });
+                abiAlertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, activity.getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                abiAlertDialog.show();
+                return;
+            }
+        }
+
         boolean isRunning = isMyServiceRunning(MainService.class);
 
         ProgressDialog progressDialog = new ProgressDialog(activity, R.style.MainDialogTheme);
         progressDialog.setMessage("Booting up...");
         progressDialog.setCancelable(false);
         progressDialog.show();
-        if (MainSettingsManager.getVmUi(activity).equals("X11")) {
-            VectrasApp.createrunsh(env, activity);
-        } else {
-            VectrasApp.disablerunsh(activity);
-        }
         Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            public void run() {
-                Intent serviceIntent = new Intent(activity, MainService.class);
-                MainService.env = env;
-                MainService.CHANNEL_ID = vmName;
-                if (SDK_INT >= Build.VERSION_CODES.O) {
-                    activity.startForegroundService(serviceIntent);
-                } else {
-                    activity.startService(serviceIntent);
-                }
+        handler.postDelayed(
+                new Runnable() {
+                    public void run() {
+                        Intent serviceIntent = new Intent(activity, MainService.class);
+                        MainService.env = env;
+                        MainService.CHANNEL_ID = vmName;
+                        if (SDK_INT >= Build.VERSION_CODES.O) {
+                            activity.startForegroundService(serviceIntent);
+                        } else {
+                            activity.startService(serviceIntent);
+                        }
 
-                if (MainSettingsManager.getVmUi(activity).equals("VNC")) {
-                    if (MainSettingsManager.getVncExternal(MainActivity.activity)) {
-                        extViewerLayout.setVisibility(View.VISIBLE);
-                        appbar.setExpanded(true);
-                        progressDialog.dismiss();
-                    } else {
-                        progressDialog.show();
-                        Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            public void run() {
-                                MainVNCActivity.started = true;
-                                activity.startActivity(new Intent(activity, MainVNCActivity.class));
+                        if (MainSettingsManager.getVmUi(activity).equals("VNC")) {
+                            if (MainSettingsManager.getVncExternal(MainActivity.activity)) {
+                                extVncLayout.setVisibility(View.VISIBLE);
+                                appbar.setExpanded(true);
                                 progressDialog.dismiss();
+                            } else {
+                                progressDialog.show();
+                                Handler handler = new Handler();
+                                handler.postDelayed(
+                                        new Runnable() {
+                                            public void run() {
+                                                MainVNCActivity.started = true;
+                                                activity.startActivity(
+                                                        new Intent(
+                                                                activity, MainVNCActivity.class));
+                                                progressDialog.dismiss();
+                                            }
+                                        },
+                                        2000);
                             }
-                        }, 2000);
+                        } else if (MainSettingsManager.getVmUi(activity).equals("SPICE")) {
+                            // activity.startActivity(new Intent(activity,
+                            // RemoteCanvasActivity.class));
+                        } else if (MainSettingsManager.getVmUi(activity).equals("X11")) {
+                            progressDialog.show();
+                            Handler handler = new Handler();
+                            handler.postDelayed(
+                                    new Runnable() {
+                                        public void run() {
+                                            activity.startActivity(
+                                                    new Intent(activity, X11Activity.class));
+                                            progressDialog.dismiss();
+                                        }
+                                    },
+                                    3000);
+                        }
                     }
-                } else if (MainSettingsManager.getVmUi(activity).equals("SPICE")) {
-                    //activity.startActivity(new Intent(activity, RemoteCanvasActivity.class));
-                } else if (MainSettingsManager.getVmUi(activity).equals("X11")) {
-
-                    extViewerLayout.setVisibility(View.VISIBLE);
-                    appbar.setExpanded(true);
-                    progressDialog.dismiss();
-
-                    Intent x11Intent = new Intent();
-                    x11Intent.setClassName("com.termux.x11", "com.termux.x11.MainActivity");
-                    x11Intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                    try {
-                        activity.startActivity(x11Intent);
-                    } catch (ActivityNotFoundException e) {
-                        Log.e("LaunchActivity", "Activity not found: " + e.getMessage());
-                    }
-
-                    try {
-                        TermuxX11.main(new String[]{":0"});
-                    } catch (ErrnoException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
-        }, 2000);
+                },
+                2000);
         String[] params = env.split("\\s+");
         VectrasStatus.logInfo("Params:");
         Log.d("StartVM", "Params:");
@@ -906,6 +986,7 @@ public class MainActivity extends AppCompatActivity {
             VectrasStatus.logInfo(i + ": " + params[i]);
             Log.d("StartVM", i + ": " + params[i]);
         }
+
     }
 
     private void setupFolders() {
@@ -922,12 +1003,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void onResume() {
         super.onResume();
+        checkpermissions();
         Log.d(TAG, "onResume");
         Config.ui = MainSettingsManager.getVmUi(activity);
 
         //TEMPORARY FIX FOR VNC CLOSES
         //TODO: FIND FIX FOR CRASHING
-        if (MainSettingsManager.getVmUi(activity).equals("VNC") && MainVNCActivity.started)
+        if (MainSettingsManager.getVmUi(activity).equals("VNC") && MainVNCActivity.started && VectrasApp.isQemuRunning())
             startActivity(new Intent(activity, MainVNCActivity.class));
     }
 
@@ -956,8 +1038,8 @@ public class MainActivity extends AppCompatActivity {
 
         //TEMPORARY FIX FOR VNC CLOSES
         //TODO: FIND FIX FOR CRASHING
-        if (MainSettingsManager.getVmUi(activity).equals("VNC") && MainVNCActivity.started)
-            startActivity(new Intent(activity, MainVNCActivity.class));
+        //if (MainSettingsManager.getVmUi(activity).equals("VNC") && MainVNCActivity.started)
+            //startActivity(new Intent(activity, MainVNCActivity.class));
 
         InterstitialAd.load(this, "ca-app-pub-3568137780412047/7745973511", adRequest,
                 new InterstitialAdLoadCallback() {
@@ -981,7 +1063,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Log.d("TAG", "The interstitial ad wasn't ready yet.");
         }
-        VectrasApp.disablerunsh(getApplicationContext());
+        doneonstart = true;
     }
 
     @Override
@@ -1014,7 +1096,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                         try {
                             try {
-                                OutputStream out = new FileOutputStream(new File(getAppConfigData.getString("maindirpath","") + "/drive.iso"));
+                                OutputStream out = new FileOutputStream(new File(AppConfig.maindirpath + "/drive.iso"));
                                 try {
                                     // Transfer bytes from in to out
                                     byte[] buf = new byte[1024];
@@ -1065,7 +1147,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     try {
                         try {
-                            OutputStream out = new FileOutputStream(new File(getAppConfigData.getString("maindirpath","") + "/hdd1.qcow2"));
+                            OutputStream out = new FileOutputStream(new File(AppConfig.maindirpath + "/hdd1.qcow2"));
                             try {
                                 // Transfer bytes from in to out
                                 byte[] buf = new byte[1024];
@@ -1114,7 +1196,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     try {
                         try {
-                            OutputStream out = new FileOutputStream(new File(getAppConfigData.getString("maindirpath","") + "/hdd2.qcow2"));
+                            OutputStream out = new FileOutputStream(new File(AppConfig.maindirpath + "/hdd2.qcow2"));
                             try {
                                 // Transfer bytes from in to out
                                 byte[] buf = new byte[1024];
@@ -1163,11 +1245,11 @@ public class MainActivity extends AppCompatActivity {
                     }
                     try {
                         try {
-                            File romDir = new File(getAppConfigData.getString("maindirpath","") + curRomName + "/");
+                            File romDir = new File(AppConfig.maindirpath + curRomName + "/");
                             if (!romDir.exists()) {
                                 romDir.mkdirs();
                             }
-                            OutputStream out = new FileOutputStream(new File(getAppConfigData.getString("maindirpath","") + curRomName + "/" + "drv1-" + selectedFilePath.getName()));
+                            OutputStream out = new FileOutputStream(new File(AppConfig.maindirpath + curRomName + "/" + "drv1-" + selectedFilePath.getName()));
                             try {
                                 // Transfer bytes from in to out
                                 byte[] buf = new byte[1024];
@@ -1205,6 +1287,75 @@ public class MainActivity extends AppCompatActivity {
 
     public String getPath(Uri uri) {
         return com.vectras.vm.utils.FileUtils.getPath(this, uri);
+    }
+
+    private void errorjsondialog() {
+        if (VectrasApp.isFileExists(AppConfig.romsdatajson)) {
+            if (!VectrasApp.checkJSONIsNormal(AppConfig.romsdatajson)) {
+                alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
+                alertDialog.setTitle(getResources().getString(R.string.oops));
+                alertDialog.setMessage(getResources().getString(R.string.an_error_occurred_with_the_vm_list_data));
+                alertDialog.setCancelable(true);
+                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.delete_all), (dialog, which) -> {
+                    VectrasApp.writeToFile(AppConfig.maindirpath, "roms-data.json", "[]");
+                    loadDataVbi();
+                    mdatasize();
+                });
+                alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), (dialog, which) -> {
+
+                });
+                alertDialog.show();
+            } else {
+                loadDataVbi();
+                mdatasize();
+            }
+        } else {
+            VectrasApp.writeToFile(AppConfig.maindirpath, "roms-data.json", "[]");
+            loadDataVbi();
+            mdatasize();
+        }
+    }
+
+    private String readFile(String filePath) {
+        StringBuilder content = new StringBuilder();
+        try (FileInputStream inputStream = new FileInputStream(filePath);
+             BufferedReader reader = new BufferedReader(new
+                     InputStreamReader(inputStream))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                content.append(line).append("\n");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return content.toString();
+
+    }
+
+    private void mdatasize() {
+        if (MainActivity.data.isEmpty()) {
+            if (!doneonstart) {
+                alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
+                alertDialog.setTitle(getResources().getString(R.string.nothing_here));
+                alertDialog.setMessage("Do you want to create a new virtual machine now?");
+                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.create), (dialog, which) -> {
+                    startActivity(new Intent(activity, SetArchActivity.class));
+                });
+                alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), (dialog, which) -> {
+
+                });
+                alertDialog.show();
+            }
+            linearnothinghere.setVisibility(View.VISIBLE);
+        } else {
+            linearnothinghere.setVisibility(View.GONE);
+        }
+    }
+
+    private void checkpermissions() {
+        if (VectrasApp.checkpermissionsgranted(activity, true)) {
+            errorjsondialog();
+        }
     }
 
 }

@@ -53,7 +53,7 @@ public class CreateImageDialogFragment extends DialogFragment {
 
         TextView createPath = view.findViewById(R.id.createPath);
 
-        createPath.setText(FileUtils.getExternalFilesDirectory(getActivity()).getPath() + "/QCOW2/");
+        createPath.setText(AppConfig.maindirpath + "IMG/");
 
         if (customRom)
             createPath.append(CustomRomActivity.title.getText().toString() + ".qcow2");
@@ -73,7 +73,7 @@ public class CreateImageDialogFragment extends DialogFragment {
                 } else {
                     createQcow2Btn.setEnabled(false);
                 }
-                createPath.setText(FileUtils.getExternalFilesDirectory(getActivity()).getPath() + "/QCOW2/" + imageName.getText().toString() + ".qcow2");
+                createPath.setText(AppConfig.maindirpath + "IMG/" + imageName.getText().toString() + ".qcow2");
             }
 
             @Override
@@ -91,10 +91,10 @@ public class CreateImageDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 Terminal vterm = new Terminal(getActivity());
-                vterm.executeShellCommand("qemu-img create -f qcow2 " + FileUtils.getExternalFilesDirectory(getActivity()).getPath() + "/QCOW2/" + imageName.getText().toString() + ".qcow2 " +
+                vterm.executeShellCommand("qemu-img create -f qcow2 \"" + AppConfig.maindirpath + "IMG/" + imageName.getText().toString() + ".qcow2\" " +
                         imageSize.getText().toString() + "G", true, getActivity());
                 if (customRom)
-                    CustomRomActivity.drive.setText(FileUtils.getExternalFilesDirectory(getActivity()).getPath() + "/QCOW2/" + imageName.getText().toString() + ".qcow2");
+                    CustomRomActivity.drive.setText(AppConfig.maindirpath + "IMG/" + imageName.getText().toString() + ".qcow2");
                 dismiss();
             }
         });

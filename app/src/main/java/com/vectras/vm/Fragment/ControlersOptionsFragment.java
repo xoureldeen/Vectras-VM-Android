@@ -12,6 +12,7 @@ import android.view.Window;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.qemu.MainVNCActivity;
 import com.vectras.vm.R;
+import com.vectras.vm.x11.X11Activity;
 
 public class ControlersOptionsFragment extends DialogFragment {
 
@@ -25,9 +26,9 @@ public class ControlersOptionsFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 MainSettingsManager.setControlMode(getActivity(), "G");
-                if (MainSettingsManager.getVmUi(getActivity()).equals("SDL")) {
-                    //MainSDLActivity.desktop.setVisibility(View.GONE);
-                    //MainSDLActivity.gamepad.setVisibility(View.VISIBLE);
+                if (MainSettingsManager.getVmUi(getActivity()).equals("X11")) {
+                    X11Activity.desktop.setVisibility(View.GONE);
+                    X11Activity.gamepad.setVisibility(View.VISIBLE);
                 } else if (MainSettingsManager.getVmUi(getActivity()).equals("VNC")) {
                     MainVNCActivity.desktop.setVisibility(View.GONE);
                     MainVNCActivity.gamepad.setVisibility(View.VISIBLE);
@@ -39,9 +40,9 @@ public class ControlersOptionsFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 MainSettingsManager.setControlMode(getActivity(), "D");
-                if (MainSettingsManager.getVmUi(getActivity()).equals("SDL")) {
-                    //MainSDLActivity.desktop.setVisibility(View.VISIBLE);
-                    //MainSDLActivity.gamepad.setVisibility(View.GONE);
+                if (MainSettingsManager.getVmUi(getActivity()).equals("X11")) {
+                    X11Activity.desktop.setVisibility(View.VISIBLE);
+                    X11Activity.gamepad.setVisibility(View.GONE);
                 } else if (MainSettingsManager.getVmUi(getActivity()).equals("VNC")) {
                     MainVNCActivity.desktop.setVisibility(View.VISIBLE);
                     MainVNCActivity.gamepad.setVisibility(View.GONE);
@@ -53,9 +54,9 @@ public class ControlersOptionsFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 MainSettingsManager.setControlMode(getActivity(), "H");
-                if (MainSettingsManager.getVmUi(getActivity()).equals("SDL")) {
-                    //MainSDLActivity.desktop.setVisibility(View.GONE);
-                    //MainSDLActivity.gamepad.setVisibility(View.GONE);
+                if (MainSettingsManager.getVmUi(getActivity()).equals("X11")) {
+                    X11Activity.desktop.setVisibility(View.GONE);
+                    X11Activity.gamepad.setVisibility(View.GONE);
                 } else if (MainSettingsManager.getVmUi(getActivity()).equals("VNC")) {
                     MainVNCActivity.desktop.setVisibility(View.GONE);
                     MainVNCActivity.gamepad.setVisibility(View.GONE);

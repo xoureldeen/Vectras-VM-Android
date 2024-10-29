@@ -3,10 +3,15 @@ package com.vectras.vm;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.LoadAdError;
@@ -15,6 +20,7 @@ import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
+import com.vectras.vm.adapters.GithubUserAdapter;
 import com.vectras.vm.utils.UIUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -28,6 +34,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.vectras.vm.R;
@@ -52,7 +59,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        toolbar.setTitle("About");
+        toolbar.setTitle(getResources().getString(R.string.about));
         //btn
         btn_telegram = (Button) findViewById(R.id.btn_telegram);
         btn_youtube = (Button) findViewById(R.id.btn_youtube);
@@ -70,9 +77,10 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
         btn_osl.setOnClickListener(this);
         btn_clog.setOnClickListener(this);
 
-        AdView mAdView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+        //AdView mAdView = findViewById(R.id.adView);
+        //AdRequest adRequest = new AdRequest.Builder().build();
+        //mAdView.loadAd(adRequest);
+        VectrasApp.prepareDataForAppConfig(this);
         new Thread(new Runnable(){
 
             public void run(){
@@ -117,7 +125,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
             public void onClick(View view) {
                 Intent i = new Intent(Intent.ACTION_SEND);
                 i.setType("message/rfc822");
-                i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"noureldeenelsayed856@gmail.com"});
+                i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"anbuigo2004@gmail.com"});
                 i.putExtra(Intent.EXTRA_SUBJECT, "Vectras User: " + Build.BRAND);
                 i.putExtra(Intent.EXTRA_TEXT   , "Device Model: \n" + Build.MODEL + "\n");
                 try {
@@ -134,7 +142,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {}
         });
-        InterstitialAd.load(this,"ca-app-pub-3568137780412047/4892595373", adRequest,
+        /*InterstitialAd.load(this,"ca-app-pub-3568137780412047/4892595373", adRequest,
                 new InterstitialAdLoadCallback() {
                     @Override
                     public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
@@ -150,12 +158,23 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
                         Log.d(TAG, loadAdError.toString());
                         mInterstitialAd = null;
                     }
-                });
+                });*/
         if (mInterstitialAd != null) {
             mInterstitialAd.show(AboutActivity.this);
         } else {
             Log.d("TAG", "The interstitial ad wasn't ready yet.");
         }
+
+        TextView textversionname = findViewById(R.id.versionname);
+        PackageInfo pinfo = MainActivity.activity.getAppInfo(getApplicationContext());
+        textversionname.setText(pinfo.versionName);
+        
+        RecyclerView recyclerView = findViewById(R.id.github_users_recycler_view);
+        String[] usernames = {"vectras-team", "xoureldeen", "ahmedbarakat2007", "anbui2004"};
+
+        GithubUserAdapter adapter = new GithubUserAdapter(this, usernames);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
@@ -181,7 +200,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
                 f.setData(Uri.parse(tg));
                 startActivity(f);
             } else if (id == YT) {
-                String tw = "https://www.youtube.com/@XOURELDEEN";
+                String tw = "https://youtube.com/@xoureldeen";
                 Intent w = new Intent(Intent.ACTION_VIEW);
                 w.setData(Uri.parse(tw));
                 startActivity(w);
@@ -191,12 +210,12 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
                 g.setData(Uri.parse(gt));
                 startActivity(g);
             } else if (id == IG) {
-                String ig = "https://www.instagram.com/beatsbydabsh";
+                String ig = "https://vectras.vercel.app";
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(ig));
                 startActivity(i);
             } else if (id == FB) {
-                String fb = "https://www.facebook.com/profile.php?id=61555122773211";
+                String fb = AppConfig.vectrasWebsite + "community.html";
                 Intent f = new Intent(Intent.ACTION_VIEW);
                 f.setData(Uri.parse(fb));
                 startActivity(f);
@@ -217,7 +236,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
                 alertDialog.show();
             } else if (id == OSL) {
                 AlertDialog.Builder alertDialogOSL = new AlertDialog.Builder(this, R.style.MainDialogTheme);
-                alertDialogOSL.setTitle("APP INFO");
+                alertDialogOSL.setTitle(getResources().getString(R.string.info));
                 alertDialogOSL
                         .setMessage(appInfo)
                         .setCancelable(true)

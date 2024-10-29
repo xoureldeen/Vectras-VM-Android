@@ -53,6 +53,7 @@ import com.vectras.qemu.Config;
 import com.vectras.qemu.MainVNCActivity;
 import com.vectras.vm.R;
 import com.vectras.vm.utils.UIUtils;
+import com.vectras.vterm.Terminal;
 
 import java.io.IOException;
 import java.util.zip.Inflater;
@@ -498,8 +499,10 @@ public class VncCanvas extends AppCompatImageView {
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			Log.v(TAG, "Closing VNC Connection");
-			rfb.close();
+			if (!com.vectras.vm.VectrasApp.isQemuRunning()) {
+				Log.v(TAG, "Closing VNC Connection");
+				rfb.close();
+			}
 		}
 	}
 

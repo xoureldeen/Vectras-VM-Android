@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Vectras VM</string>
-    <string name="app_version" translatable="false">v2.9.1 (Firefox)</string>
+    
+    <!--======================VECTRAS STRINGS====================-->
+    <string name="app_version" translatable="false">v2.9.2</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -19,7 +21,7 @@
     <string name="address_caption">Address</string>
     <string name="alt_check">Alt</string>
     <string name="reset">Reset</string>
-    <string name="shutdown">Shutdown</string>
+    <string name="shutdown">Shut down</string>
     <string name="ctrl_c" translatable="false">Ctrl-c</string>
     <string name="devices">Devices</string>
     <string name="external_mouse">External Mouse</string>
@@ -68,9 +70,9 @@
     <string name="memory_usage">Memory Usage</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="linux" translatable="false">linux</string>
-    <string name="windows" translatable="false">windows</string>
-    <string name="apple" translatable="false">apple</string>
+    <string name="linux" translatable="false">Linux</string>
+    <string name="windows" translatable="false">Windows</string>
+    <string name="apple" translatable="false">Apple</string>
     <string name="external_vnc" translatable="false">EXTERNAL VNC</string>
     <string name="hosted_successfully" translatable="false">HOSTED SUCCESSFULLY!</string>
     <string name="ip" translatable="false">IP: 127.0.0.1:9</string>
@@ -108,8 +110,8 @@
     <string name="export">EXPORT</string>
     <string name="email_verification_sent">Email Verification Sent.</string>
     <string name="sign_out">Sign out</string>
-    <string name="android" translatable="false">android</string>
-    <string name="other" translatable="false">other</string>
+    <string name="android" translatable="false">Android</string>
+    <string name="other" translatable="false">Other</string>
     <string name="guest">Guest</string>
     <string name="hdd1_qcow_img_etc">HDD1 (qcow, img, etc…)</string>
     <string name="default_configuration">-vga std -net nic,model=ne2k_pci -net user</string>
@@ -163,7 +165,8 @@
     <string name="input_mode_touchpad_pan_trackball_mouse">Touch Pan; Trackball Mouse</string>
     <string name="input_mode_dpad_pan_touchpad_mouse">Touch Mouse; D-Pad Pan</string>
     <string name="input_mode_touch_pan_zoom_mouse">Touch Mouse Pan and Zoom</string>
-    <string name="input_mode_touchpad">Touchpad</string><string name="keep_password_button">Keep</string>
+    <string name="input_mode_touchpad">Touchpad</string>
+    <string name="keep_password_button">Keep</string>
     <string name="intro_dont_show">Don\'t show again</string>
     <string name="keys_caption">Keys</string>
     <string name="list_caption">List</string>
@@ -189,6 +192,8 @@
     <string name="save_as_copy">Save as Copy</string>
     <string name="scaling">Scaling</string>
     <string name="scaling_zoomable">Zoomable</string>
+    
+    <string name="patreon">Patreon</string>
 
     <!-- Send selected metakey -->
     <string name="send_button">Send</string>
@@ -204,249 +209,16 @@
 
     <string name="msg_directory_absolute_path">%1$s Directory Absolute Path: \"%2$s\"</string>
 
-    <!-- TermuxX11Activity -->
-    <string name="msg_storage_permission_not_granted_warning">The storage permission must be granted
-        to Vectras VM app to...</string>
-    <string name="action_grant_storage_permission">Grant Storage Permission</string>
-
-    <string name="msg_battery_optimization_not_disabled_warning">Android battery optimizations
-        should be disabled for the Vectras VM app so that…
-        Check https://developer.android.com/about/versions/oreo/background for more info and
-        https://developer.android.com/guide/components/foreground-services#background-start-restrictions
-        for more info.
-
-        \n\nAlso check https://dontkillmyapp.com for info on vendor specific app killers.
-        Depending on vendor you may need to do things like enable AutoStart, disable DuraSpeed,
-        enable `Display pop-up windows while running in the background` for the app.</string>
-    <string name="action_disable_battery_optimizations">Disable Battery Optimizations</string>
-
-    <string name="msg_display_over_other_apps_permission_not_granted_warning">The display over other
-        apps permission should be granted to Vectras VM app for starting foreground
-        activities from background. Check https://developer.android.com/guide/components/activities/background-starts
-        for more info.
-    </string>
-    <string name="action_grant_display_over_other_apps_permission">Grant Draw Over Apps Permission</string>
-
-    <string name="action_already_granted">Already Granted</string>
-    <string name="action_already_disabled">Already Disabled</string>
-    <string name="not_connected">Not connected</string>
-    <string name="help_button_text">   Help   </string>
-    <string name="preferences_button_text">   Preferences   </string>
-    <string name="extra_keys_config_desc">Here you can set value of extra-keys variable like in Termux app (read <a href="http://wiki.termux.com/wiki/Touch_Keyboard#Extra_Keys_Row">this</a>) and more (e.g. META).
-    Put empty string for the default value.</string>
-    <string name="install">INSTALL</string>
+    <string name="install">Install</string>
     <string name="select_tar">SELECT (.TAR.GZ)</string>
     <string name="not_selected_yet">not selected yet.</string>
     <string name="modify">MODIFY</string>
 
     <string name="input">input</string>
     <string name="tiny_vterm">Tiny vterm</string>
-    <string name="try_again">TRY AGAIN</string>
+    <string name="try_again">Try again</string>
     <string name="logs">Logs</string>
     <string name="options">Options</string>
-    <!--======================XServer XSDL STRINGS====================-->
-
-    <string name="init">Initializing</string>
-    <string name="please_wait">Please wait while data is being downloaded</string>
-
-    <string name="device_config">Device configuration</string>
-    <string name="device_change_cfg">Change device configuration</string>
-
-    <string name="download_unneeded">No need to download</string>
-    <string name="connecting_to">Connecting to %s</string>
-    <string name="failed_connecting_to">Failed connecting to %s</string>
-    <string name="error_connecting_to">Error connecting to %s</string>
-    <string name="dl_from">Downloading data from %s</string>
-    <string name="error_dl_from">Error downloading data from %s</string>
-    <string name="error_write">Error writing to %s</string>
-    <string name="dl_progress">%1$.0f%% done: file %2$s</string>
-    <string name="dl_finished">Finished</string>
-
-    <string name="storage_phone">Internal storage - %d MB free</string>
-    <string name="storage_sd">SD card storage - %d MB free</string>
-    <string name="storage_custom">Specify directory</string>
-    <string name="storage_commandline">Command line parameters, one argument per line</string>
-    <string name="storage_question">Data installation location</string>
-    <string name="storage_access">Permission to write to SD card</string>
-    <string name="optional_downloads">Downloads</string>
-    <string name="downloads">Downloads</string>
-    <string name="ok">OK</string>
-    <string name="cancel">Cancel</string>
-
-    <string name="controls_arrows">Arrows / joystick / dpad</string>
-    <string name="controls_trackball">Trackball</string>
-    <string name="controls_accel">Accelerometer</string>
-    <string name="controls_touch">Touchscreen only</string>
-    <string name="controls_question">What kind of navigation keys does your device have?</string>
-
-    <string name="controls_additional">Additional controls</string>
-    <string name="controls_screenkb">On-screen keyboard</string>
-    <string name="controls_accelnav">Accelerometer</string>
-
-    <string name="controls_screenkb_size">On-screen keyboard size</string>
-    <string name="controls_screenkb_drawsize">Size of button images</string>
-    <string name="controls_screenkb_large">Large</string>
-    <string name="controls_screenkb_medium">Medium</string>
-    <string name="controls_screenkb_small">Small</string>
-    <string name="controls_screenkb_tiny">Tiny</string>
-    <string name="controls_screenkb_custom">Custom</string>
-    <string name="controls_screenkb_theme">On-screen keyboard theme</string>
-    <string name="controls_screenkb_by">%1$s by %2$s</string>
-    <string name="controls_screenkb_transparency">On-screen keyboard transparency</string>
-    <string name="controls_screenkb_trans_0">Invisible</string>
-    <string name="controls_screenkb_trans_1">Almost invisible</string>
-    <string name="controls_screenkb_trans_2">Transparent</string>
-    <string name="controls_screenkb_trans_3">Semi-transparent</string>
-    <string name="controls_screenkb_trans_4">Non-transparent</string>
-
-    <string name="trackball_no_dampening">No dampening</string>
-    <string name="trackball_fast">Fast</string>
-    <string name="trackball_medium">Medium</string>
-    <string name="trackball_slow">Slow</string>
-    <string name="trackball_question">Trackball dampening</string>
-
-    <string name="accel_veryfast">Very fast</string>
-    <string name="accel_fast">Fast</string>
-    <string name="accel_medium">Medium</string>
-    <string name="accel_slow">Slow</string>
-    <string name="accel_veryslow">Very slow</string>
-    <string name="accel_question">Accelerometer sensitivity</string>
-
-    <string name="accel_floating">Floating</string>
-    <string name="accel_fixed_start">Fixed when application starts</string>
-    <string name="accel_fixed_horiz">Fixed to table desk orientation</string>
-    <string name="accel_question_center">Accelerometer center position</string>
-
-    <string name="mouse_emulation">Mouse emulation</string>
-    <string name="rightclick_question">Right mouse click</string>
-    <string name="rightclick_menu">Menu key</string>
-    <string name="rightclick_key">Physical key</string>
-    <string name="rightclick_multitouch">Touch screen with second finger</string>
-    <string name="rightclick_pressure">Touch screen with force</string>
-    <string name="rightclick_none">Disable right mouse click</string>
-
-    <string name="leftclick_question">Left mouse click</string>
-    <string name="leftclick_normal">Normal</string>
-    <string name="leftclick_near_cursor">Touch near mouse cursor</string>
-    <string name="leftclick_multitouch">Touch screen with second finger</string>
-    <string name="leftclick_pressure">Touch screen with force</string>
-    <string name="leftclick_dpadcenter">Trackball click / joystick center</string>
-    <string name="leftclick_timeout">Hold at the same spot</string>
-    <string name="leftclick_tap">Tap</string>
-    <string name="leftclick_tap_or_timeout">Tap or hold</string>
-    <string name="leftclick_timeout_time">Holding timeout</string>
-    <string name="leftclick_timeout_time_0">0.3 sec</string>
-    <string name="leftclick_timeout_time_1">0.5 sec</string>
-    <string name="leftclick_timeout_time_2">0.7 sec</string>
-    <string name="leftclick_timeout_time_3">1 sec</string>
-    <string name="leftclick_timeout_time_4">1.5 sec</string>
-    <string name="click_with_dpadcenter">Left mouse click with trackball / joystick center</string>
-
-    <string name="advanced">Advanced features</string>
-    <string name="mouse_keepaspectratio">Keep 4:3 screen aspect ratio</string>
-    <string name="mouse_showcreenunderfinger">Show screen under finger in separate window</string>
-    <string name="mouse_showcreenunderfinger2">On-screen magnifying glass</string>
-    <string name="mouse_joystickmouse">Move mouse with joystick or trackball</string>
-    <string name="mouse_joystickmousespeed">Move mouse with joystick speed</string>
-    <string name="mouse_joystickmouseaccel">Move mouse with joystick acceleration</string>
-    <string name="mouse_relative">Relative mouse movement (laptop mode)</string>
-    <string name="mouse_relative_speed">Relative mouse movement speed</string>
-    <string name="mouse_relative_accel">Relative mouse movement acceleration</string>
-    <string name="mouse_hover_jitter_filter">Filter jitter for stylus/finger hover</string>
-    <string name="mouse_gyroscope_mouse">Control mouse with gyroscope</string>
-    <string name="mouse_gyroscope_mouse_sensitivity">Gyroscope sensitivity</string>
-    <string name="mouse_finger_hover">Finger hover</string>
-    <string name="mouse_subframe_touch_events">Multiple touch events per video frame</string>
-
-    <string name="none">None</string>
-
-    <string name="measurepressure">Calibrate touchscreen pressure</string>
-    <string name="measurepressure_touchplease">Please slide finger across the screen for two seconds</string>
-    <string name="measurepressure_response">Pressure %1$03d radius %2$03d</string>
-
-    <string name="audiobuf_verysmall">Very small (fast devices, less lag)</string>
-    <string name="audiobuf_small">Small</string>
-    <string name="audiobuf_medium">Medium</string>
-    <string name="audiobuf_large">Large (older devices, if sound is choppy)</string>
-    <string name="audiobuf_question">Size of audio buffer</string>
-
-    <string name="remap_hwkeys">Remap physical keys</string>
-    <string name="remap_hwkeys_press">Press any key except HOME and POWER, you may use volume keys</string>
-    <string name="remap_hwkeys_select">Select SDL keycode</string>
-    <string name="remap_hwkeys_select_simple">Select action</string>
-    <string name="remap_hwkeys_select_more_keys">Show all keycodes</string>
-
-    <string name="remap_screenkb">Remap on-screen controls</string>
-    <string name="remap_screenkb_joystick">Joystick</string>
-    <string name="remap_screenkb_button">Button</string>
-    <string name="remap_screenkb_button_text">Text input button</string>
-    <string name="remap_screenkb_button_gestures">Two-finger screen gestures</string>
-    <string name="remap_screenkb_button_gestures_sensitivity">Two-finger screen gestures sensitivity</string>
-    <string name="remap_screenkb_button_zoomin">Zoom in two-finger gesture</string>
-    <string name="remap_screenkb_button_zoomout">Zoom out two-finger gesture</string>
-    <string name="remap_screenkb_button_rotateleft">Rotate left two-finger gesture</string>
-    <string name="remap_screenkb_button_rotateright">Rotate right two-finger gesture</string>
-
-    <string name="screenkb_custom_layout">Customize on-screen keyboard layout</string>
-    <string name="screenkb_custom_layout_help">Press BACK when done. Resize buttons by sliding on empty space.</string>
-    <string name="screenkb_floating_joystick">Floating joystick</string>
-
-    <string name="calibrate_touchscreen">Calibrate touchscreen</string>
-    <string name="calibrate_touchscreen_touch">Touch all edges of the screen, press BACK when done</string>
-
-    <string name="video">Video settings</string>
-    <string name="video_smooth">Linear video filtering</string>
-    <string name="video_separatethread">Separate thread for video, it can increase FPS, it also can crash the app</string>
-    <string name="video_orientation_vertical">Portrait/vertical screen orientation</string>
-    <string name="video_orientation_autodetect">Auto-detect screen orientation</string>
-    <string name="video_bpp_24">24 bpp screen color depth</string>
-    <string name="video_immersive">Hide system navigation buttons / immersive mode</string>
-    <string name="tv_borders">TV borders</string>
-
-    <string name="text_edit_click_here">Tap to start typing, press Back when done</string>
-
-    <string name="display_size_mouse">Mouse emulation mode</string>
-    <string name="display_size">Display size for mouse emulation</string>
-    <string name="display_size_desktop">Desktop, no emulation</string>
-    <string name="display_size_large">Large (tablets)</string>
-    <string name="display_size_small">Small, magnifying glass</string>
-    <string name="display_size_small_touchpad">Small, touchpad mode</string>
-    <string name="display_size_tiny">Tiny</string>
-    <string name="display_size_tiny_touchpad">Tiny, touchpad mode</string>
-
-    <string name="show_more_options">Show more options</string>
-
-    <string name="hardware_mouse_detected">Hardware mouse detected, disabling mouse emulation</string>
-
-    <string name="not_enough_ram">Not enough RAM</string>
-    <string name="not_enough_ram_size">This app needs %1$d Mb RAM, your device has %2$d Mb</string>
-    <string name="ignore">Ignore</string>
-
-    <string name="calibrate_gyroscope">Calibrate gyroscope</string>
-    <string name="calibrate_gyroscope_text">Put your device on a flat surface</string>
-    <string name="calibrate_gyroscope_not_supported">Your device does not have gyroscope</string>
-
-    <string name="reset_config">Reset config to defaults</string>
-    <string name="reset_config_ask">Reset all options to default values?</string>
-
-    <string name="cancel_download">Cancel data downloading?</string>
-    <string name="cancel_download_resume">You can resume it later, the data will not be downloaded twice.</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-
-    <!-- Play Game Services strings -->
-    <string name="gamehelper_sign_in_failed">Failed to sign in. Please check your network connection and try again.</string>
-    <string name="gamehelper_app_misconfigured">The application is incorrectly configured. Check that the package name and signing certificate match the client ID created in Developer Console. Also, if the application is not yet published, check that the account you are trying to sign in with is listed as a tester account. See logs for more information.</string>
-    <string name="gamehelper_license_failed">License check failed.</string>
-    <string name="gamehelper_unknown_error">Unknown error.</string>
-    <string name="accessing_network">Accessing network, please wait</string>
-
-    <string name="google_play_game_services_app_id" translatable="false">==GOOGLEPLAYGAMESERVICES_APP_ID==</string>
-
-    <string name="restarting_please_wait">Restarting, please wait.</string>
-
-    <string name="notification_app_is_running">%s is running</string>
-    <string name="notification_stop">Stop</string>
     <string name="create_virtual_harddisk">Create virtual harddisk</string>
     <string name="size_in_gb">SIZE IN GB</string>
     <string name="create_qcow2">CREATE QCOW2</string>
@@ -509,7 +281,7 @@
     <string name="error">ERROR!</string>
     <string name="done">DONE!</string>
     <string name="are_removed_successfully">" are removed successfully!"</string>
-    <string name="free_palestine">FREE PALESTINE</string>
+    <string name="teams">Vectras VM team and Nguyen Bao An Bui</string>
     <string name="repository">Repository</string>
     <string name="telegram_channel">Telegram Channel</string>
     <string name="youtube">Youtube</string>
@@ -519,14 +291,170 @@
     <string name="language">LANGUAGE</string>
     <string name="set">SET</string>
     <string name="change_app_locale">CHANGE APP LOCALE</string>
-    <string name="are_you_sure_you_want_to_shutdown_vm">Are you sure you want to shutdown vm?</string>
+    <string name="are_you_sure_you_want_to_shutdown_vm">Are you sure you want to shutdown vm? To leave this but keep everything running, tap and hold the Shut down button.</string>
     <string name="cpu">CPU</string>
     <string name="save_changes">SAVE CHANGES</string>
     <string name="qemu_create_cmd">QEMU CREATE CMD</string>
+    <string name="getit">Get</string>
+    <string name="adddrivenote">Make sure you have selected the ROM or CDROM to boot the OS from. You may not need to select it if you have added them to QEMU PARAMS.</string>
+    <string name="killqemu">Kill QEMU</string>
+    <string name="installing">Installing...</string>
+    <string name="vncdisplay">VNC display</string>
     <string name="setup_sound">Setup sound for Termux</string>
-    <string name="setup_sound_guide_content">WARNING: NOT FOR USE WITH X11! This enables virtual machines running on the Vectras VM to play audio using Termux. If you have not set up Termux yet, select Start setup, the command will be automatically copied to the clipboard, you need paste that command and run it in Termux to complete the setup. Next times, make sure Termux is running to play sound.</string>
+    <string name="setup_sound_guide_content">This enables virtual machines running on the Vectras VM to play audio using Termux. If you have not set up Termux yet, select Start setup, the command will be automatically copied to the clipboard, you need paste that command and run it in Termux to complete the setup. Next times, make sure Termux is running to play sound.</string>
     <string name="copied">Copied.</string>
     <string name="start_setup">Start setup</string>
     <string name="termux_is_not_installed">Termux is not installed</string>
     <string name="you_need_to_install_termux">You need to install Termux before setting up.</string>
+    <string name="wating_for_you">Waiting for you...</string>
+    <string name="suggested_use_of_create_command">We recommend that you use the Create command to make creating a virtual machine simpler and easier.</string>
+    <string name="oops">Oops!</string>
+    <string name="cpu_does_not_have_the_necessary_instructions">CPU on your device does not have the necessary instructions for Vectras VM to work.</string>
+    <string name="warning">Warning!</string>
+    <string name="cpu_not_support_64">The Android OS or CPU on your device does not support 64 bit, which means the VM will have poor performance and be unstable when running.</string>
+    <string name="an_error_occurred_with_the_vm_list_data">An error occurred with the virtual machine list data. Do you want to delete all?</string>
+    <string name="delete_all">Delete all</string>
+    <string name="need_fix_json_before_create">An error occurred with the virtual machine list data and a new virtual machine cannot be created at this time. To create a new virtual machine, you need to delete all virtual machine list data. Do you want to delete all?</string>
+    <string name="problem_has_been_detected">Problem has been detected</string>
+    <string name="you_have_not_added_any_storage_devices">You have not added any storage devices to start using or install an operating system. Do you want to continue creating?</string>
+    <string name="continuetext">Continue</string>
+    <string name="need_set_name">You need to give this virtual machine a new name.</string>
+    <string name="can_not_use_mttcg">The virtual machine cannot run because CPU or Android OS on your phone does not support 64bit to use Multi-threaded TCG. Do you want to continue running the virtual machine with Single-threaded TCG?</string>
+    <string name="VM_is_already_running">This VM is already running.</string>
+    <string name="delete_all_vm_content">All virtual machines will be erased including all your ROMs. Do you want to continue?</string>
+    <string name="delete_all_vm">Delete all VM</string>
+    <string name="create">Create</string>
+    <string name="nothing_here">Nothing here</string>
+    <string name="create_vm_now">Do you want to create a new virtual machine now?</string>
+    <string name="nothing_here_home">Tap the Create button at the bottom to start creating a new virtual machine.</string>
+    <string name="allow_access_to_storage">Allow access to storage</string>
+    <string name="you_need_to_allow_access_to_the_storage_to_continue">You need to allow access to the storage to continue.</string>
+    <string name="allow">Allow</string>
+    <string name="cannot_create_VM_at_this_time">Cannot create VM at this time.</string>
+    <string name="no_data">No data.</string>
+    <string name="roms_store">Rom store</string>
+    <string name="available">Available</string>
+    <string name="unavailable">Unavailable</string>
+    <string name="installed">Installed</string>
+    <string name="kill_all">Kill all</string>
+    <string name="do_you_want_to_kill_all_qemu_processes">Do you want to kill all Qemu processes?</string>
+    <string name="all_running_vms_will_be_forcibly_shut_down">All running VMs will be forcibly shut down.</string>
+    <string name="total_memory">Total:</string>
+    <string name="used_memory">Used:</string>
+    <string name="free_memory">Free:</string>
+    <string name="used">used</string>
+    <string name="there_is_nothing_here_because_there_is_no_vm_running">There is nothing here because there is no VM running.</string>
+    <string name="just_a_moment">Just a moment...</string>
+    <string name="unable_to_connect_to_server">Unable to connect to server.</string>
+    <string name="join_our_community">Join our community</string>
+    <string name="a_serious_problem_has_occurred">A serious problem has occurred! This problem is caused by the CPU or Android operating system on your device. You can join our community to learn more.</string>
+    <string name="keep_files_question_mark">Keep files?</string>
+    <string name="do_you_want_to_keep_this_ROM_file_and_CD_ROM_file">Do you want to keep this ROM file and CD ROM file?</string>
+    <string name="keep">Keep</string>
+    <string name="remove_all">Remove all</string>
+    <string name="format_not_supported_please_select_file_with_format_cvbi">Format not supported, please select file with format cvbi.</string>
+    <string name="error_CR_CVBI1">A problem has occurred and cannot continue because the cbvi file was not found. Error code: CR_CVBI1.</string>
+    <string name="error_CR_CVBI2">An error has occurred. Extraction was successful but the cvbi file does not contain information about this ROM so some default settings will be used. Error code: CR_CVBI2.</string>
+    <string name="from">From</string>
+    <string name="error_CR_CVBI3">An error has occurred and cannot continue. The extraction was successful but the cvbi file does not contain information for this ROM and does not contain any ROM files. Error code: CR_CVBI3.</string>
+    <string name="kept_some_files">Some files were retained because some other virtual machine needed them.</string>
+    
+    <!--======================TERMUX STRINGS====================-->
+    <string name="application_name">Vterm</string>
+    <string name="shared_user_label">Vterm user</string>
+    <string name="run_command_permission_label">Run commands in Vterm environment</string>
+    <string name="run_command_permission_description">execute arbitrary commands within Vterm environment</string>
+    <string name="new_session">New session</string>
+    <string name="new_session_failsafe">Failsafe</string>
+    <string name="toggle_soft_keyboard">Keyboard</string>
+    <string name="reset_terminal">Reset</string>
+    <string name="style_terminal">Style</string>
+    <string name="share_transcript_title">Terminal transcript</string>
+    <string name="toggle_keep_screen_on">Keep screen on</string>
+    <string name="autofill_password">Autofill password</string>
+
+    <string name="bootstrap_installer_body">Installing…</string>
+    <string name="bootstrap_error_title">Unable to install</string>
+    <string name="bootstrap_error_body">Vterm was unable to install the bootstrap packages.</string>
+    <string name="bootstrap_error_abort">Abort</string>
+    <string name="bootstrap_error_try_again">Try again</string>
+    <string name="bootstrap_error_not_primary_user_message">Vterm can only be installed on the primary user account.</string>
+
+    <string name="max_terminals_reached_title">Max terminals reached</string>
+    <string name="max_terminals_reached_message">Close down existing ones before creating new.</string>
+
+    <string name="reset_toast_notification">Terminal reset.</string>
+
+    <string name="select_url">Select URL</string>
+    <string name="select_url_dialog_title">Click URL to copy or long press to open</string>
+    <string name="select_all_and_share">Share transcript</string>
+    <string name="select_url_no_found">No URL found in the terminal.</string>
+    <string name="select_url_copied_to_clipboard">URL copied to clipboard</string>
+    <string name="share_transcript_chooser_title">Send text to:</string>
+
+    <string name="kill_process">Kill process (%d)</string>
+    <string name="confirm_kill_process">Really kill this session?</string>
+
+    <string name="session_rename_title">Set session name</string>
+    <string name="session_rename_positive_button">Set</string>
+    <string name="session_new_named_title">New named session</string>
+    <string name="session_new_named_positive_button">Create</string>
+
+    <string name="styling_not_installed">The Vterm:Style add-on is not installed.</string>
+    <string name="styling_install">Install</string>
+
+    <string name="notification_action_exit">Exit</string>
+    <string name="notification_action_wake_lock">Acquire wakelock</string>
+    <string name="notification_action_wake_unlock">Release wakelock</string>
+
+    <string name="file_received_title">Save file in ~/downloads/</string>
+    <string name="file_received_edit_button">Edit</string>
+    <string name="file_received_open_folder_button">Open folder</string>
+
+	
+    <!--======================TERMUX-X11 STRINGS====================-->
+    <string name="plugin_info">lol</string>
+
+    <!-- TermuxX11Activity -->
+    <string name="msg_storage_permission_not_granted_warning">The storage permission must be granted
+        to Vectras VM app to...</string>
+    <string name="action_grant_storage_permission">Grant Storage Permission</string>
+
+    <string name="msg_battery_optimization_not_disabled_warning">Android battery optimizations
+        should be disabled for the Vectras VM app so that…
+        Check https://developer.android.com/about/versions/oreo/background for more info and
+        https://developer.android.com/guide/components/foreground-services#background-start-restrictions
+        for more info.
+
+        \n\nAlso check https://dontkillmyapp.com for info on vendor specific app killers.
+        Depending on vendor you may need to do things like enable AutoStart, disable DuraSpeed,
+        enable `Display pop-up windows while running in the background` for the app.</string>
+    <string name="action_disable_battery_optimizations">Disable Battery Optimizations</string>
+
+    <string name="msg_display_over_other_apps_permission_not_granted_warning">The display over other
+        apps permission should be granted to Vectras VM app for starting foreground
+        activities from background. Check https://developer.android.com/guide/components/activities/background-starts
+        for more info.
+    </string>
+    <string name="action_grant_display_over_other_apps_permission">Grant Draw Over Apps Permission</string>
+
+    <string name="action_already_granted">Already Granted</string>
+    <string name="action_already_disabled">Already Disabled</string>
+    <string name="not_connected">Not connected</string>
+    <string name="help_button_text">   Help   </string>
+    <string name="preferences_button_text">   Preferences   </string>
+    <string name="extra_keys_config_desc">Here you can set value of extra-keys variable like in Termux app (read <a href="http://wiki.termux.com/wiki/Touch_Keyboard#Extra_Keys_Row">this</a>) and more (e.g. META).
+    Put empty string for the default value.</string>
+
+    <!-- Log Level -->
+    <string name="log_level_title">Log Level</string>
+    <string name="log_level_off">Off</string>
+    <string name="log_level_normal">Normal</string>
+    <string name="log_level_debug">Debug</string>
+    <string name="log_level_verbose">Verbose</string>
+    <string name="log_level_unknown">*Unknown*</string>
+    <string name="log_level_value">Logcat log level set to \"%1$s\"</string>
+    <string name="yes">yes</string>
+    <string name="no">cancel</string>
+    <string name="cancel">cancel</string>
 </resources>

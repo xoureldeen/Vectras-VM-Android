@@ -251,6 +251,33 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
+            <LinearLayout
+                android:id="@+id/linearnothinghere"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/package_2_96px" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/nothing_here"
+                    android:layout_margin="8dp"
+                    android:textSize="18sp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/nothing_here_home"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp" />
+            </LinearLayout>
+
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                 android:id="@+id/refreshRoms"
                 android:layout_width="match_parent"
@@ -291,7 +318,7 @@
             android:layout_margin="12dp"
             android:layout_marginEnd="16dp"
             android:contentDescription="@string/create_a_machine"
-            android:src="@drawable/round_browser_updated_24"
+            android:src="@drawable/round_add_24"
             app:elevation="0dp"
             app:fabAlignmentMode="center"
             app:fabCradleMargin="10dp"

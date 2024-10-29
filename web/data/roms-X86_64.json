@@ -1,0 +1,14 @@
+[
+    {
+        "rom_name":"a.com",
+        "rom_icon":"b.com",
+        "rom_url":"c.com",
+        "rom_path":"d.com",
+        "rom_avail":true,
+        "rom_size":"e.com",
+        "rom_arch":"X86_64",
+        "rom_kernel":"windows",
+        "rom_extra":"g.com"
+
+    }
+]

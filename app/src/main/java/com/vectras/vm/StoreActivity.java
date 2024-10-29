@@ -76,10 +76,10 @@ public class StoreActivity extends AppCompatActivity {
         toolbar.setTitle(getString(R.string.app_name));
 
         activity = this;
-
-        AdView mAdView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+        VectrasApp.prepareDataForAppConfig(activity);
+        //AdView mAdView = findViewById(R.id.adView);
+        //AdRequest adRequest = new AdRequest.Builder().build();
+        //mAdView.loadAd(adRequest);
         noConnectionLayout = findViewById(R.id.noConnectionLayout);
         mRVStore = findViewById(R.id.storeRv);
 

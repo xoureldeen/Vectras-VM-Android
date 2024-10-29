@@ -12,7 +12,8 @@
         android:layout_width="match_parent"
         android:gravity="center"
         android:id="@+id/appbar"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$Behavior">
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$Behavior"
+        android:layout_margin="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -57,7 +58,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/choose_qemu_architecture"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:layout_margin="8dp"
+            android:gravity="center" />
 
         <Button
             android:id="@+id/archi386"
@@ -99,5 +102,28 @@
             android:text="@string/qemu_website"
             android:textAlignment="textStart"
             app:icon="@drawable/round_public_24" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="8dp"
+            android:text="@string/suggested_use_of_create_command" />
+
+        <Button
+            android:id="@+id/buttongetcm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:text="@string/getit" />
     </LinearLayout>
 </LinearLayout>

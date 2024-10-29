@@ -6,17 +6,15 @@
 		android:icon="@drawable/round_info_24"
 		app:showAsAction="always"
 		android:title="@string/info"/>
-
 	<item
-		android:id="@+id/arch"
-		android:icon="@drawable/ic_arch"
+		android:id="@+id/vncdisplay"
+		android:icon="@drawable/desktop_windows_24px"
 		app:showAsAction="always"
-		android:title="@string/title_activity_set_arch"/>
-
+		android:title="@string/vncdisplay"/>
 	<item
 		android:id="@+id/shutdown"
 		android:icon="@drawable/power_settings_new_24px"
 		app:showAsAction="always"
-		android:title="Shut down"/>
+		android:title="@string/killqemu"/>
 
 </menu>

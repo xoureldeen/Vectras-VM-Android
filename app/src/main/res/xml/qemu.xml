@@ -109,9 +109,9 @@
         <ListPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:defaultValue="800x600x32"
-            android:entries="@array/displayResolutionLabels"
-            android:entryValues="@array/displayResolutionValues"
+            android:defaultValue="800x600"
+            android:entries="@array/displayResolution"
+            android:entryValues="@array/displayResolution"
             android:key="RESOLUTION"
             android:title="@string/x11_resolution"
             app:isPreferenceVisible="false"

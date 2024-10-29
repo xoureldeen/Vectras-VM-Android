@@ -1,5 +1,8 @@
 package com.vectras.vm;
 
+import static androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale;
+
+import android.Manifest;
 import android.app.Activity;
 import android.app.Application;
 import android.app.NotificationChannel;
@@ -7,33 +10,46 @@ import android.app.NotificationManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
-import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.google.android.material.color.DynamicColors;
-import com.vectras.qemu.Config;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.vectras.qemu.MainSettingsManager;
+import com.vectras.vm.MainRoms.AdapterMainRoms;
+import com.vectras.vm.utils.FileUtils;
 import com.vectras.vterm.Terminal;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
@@ -43,18 +59,22 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.Objects;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
-import android.content.SharedPreferences;
 
 public class VectrasApp extends Application {
 	public static VectrasApp vectrasapp;
@@ -66,6 +86,8 @@ public class VectrasApp extends Application {
 	}
 
 	private static Handler MAIN_HANDLER = new Handler(Looper.getMainLooper());
+
+	public static String TerminalOutput ="";
 
 	@Override
 	public void onCreate() {
@@ -87,7 +109,7 @@ public class VectrasApp extends Application {
 		if (language.contains("ar")) {
 			overrideFont("DEFAULT", R.font.cairo_regular);
 		} else {
-			overrideFont("DEFAULT", R.font.quicksand);
+			overrideFont("DEFAULT", R.font.gilroy);
 		}
 
 	}
@@ -415,23 +437,192 @@ public class VectrasApp extends Application {
 		}
 	}
 
-	public static void killallqemuprocesses(Activity activity) {
-		Terminal vterm = new Terminal(activity);
-		if (MainSettingsManager.getVmUi(activity).equals("X11")) {
-			Intent intent = new Intent();
-			intent.setClass(activity, SplashActivity.class);
-			activity.startActivity(intent);
-			vterm.executeShellCommand("killall -9 qemu-system-i386", false, MainActivity.activity);
-			vterm.executeShellCommand("killall -9 qemu-system-x86_64", false, MainActivity.activity);
-			vterm.executeShellCommand("killall -9 qemu-system-aarch64", false, MainActivity.activity);
-			vterm.executeShellCommand("killall -9 qemu-system-ppc", false, MainActivity.activity);
-			activity.finish();
+	public static boolean checkpermissionsgranted(Activity activity, boolean request) {
+		if (ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+			return true;
 		} else {
-			vterm.executeShellCommand("killall -9 qemu-system-i386", false, MainActivity.activity);
-			vterm.executeShellCommand("killall -9 qemu-system-x86_64", false, MainActivity.activity);
-			vterm.executeShellCommand("killall -9 qemu-system-aarch64", false, MainActivity.activity);
-			vterm.executeShellCommand("killall -9 qemu-system-ppc", false, MainActivity.activity);
+			if (request) {
+				AlertDialog alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
+				alertDialog.setTitle("Allow permissions");
+				alertDialog.setMessage("You need to grant permission to access the storage before use.");
+				alertDialog.setCancelable(false);
+				alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Allow", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						if (activity.shouldShowRequestPermissionRationale(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+							Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+							intent.setData(Uri.parse("package:" + activity.getPackageName()));
+							activity.startActivity(intent);
+							Toast.makeText(activity, "Find and allow access to storage in Settings.", Toast.LENGTH_LONG).show();
+						} else {
+							ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1000);
+						}
+						alertDialog.dismiss();
+					}
+				});
+				alertDialog.show();
+			}
+			return false;
 		}
+	}
+
+	public static boolean checkJSONIsNormal(String _filepath) {
+		ArrayList<HashMap<String, Objects>> mmap = new ArrayList<>();
+		String contentjson = "";
+		if (VectrasApp.isFileExists(_filepath)) {
+			contentjson = readFile(_filepath);
+			try {
+				mmap.clear();
+				mmap = new Gson().fromJson(contentjson, new TypeToken<ArrayList<HashMap<String, Object>>>() {
+				}.getType());
+				return true;
+			} catch (Exception e) {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
+	public static boolean checkJSONIsNormalFromString(String _content) {
+		ArrayList<HashMap<String, Objects>> mmap = new ArrayList<>();
+		try {
+			mmap.clear();
+			mmap = new Gson().fromJson(_content, new TypeToken<ArrayList<HashMap<String, Object>>>() {
+			}.getType());
+				return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	public static boolean checkJSONMapIsNormalFromString(String _content) {
+		HashMap<String, Object> mmap = new HashMap<>();
+		try {
+			mmap.clear();
+			mmap= new Gson().fromJson(_content, new TypeToken<HashMap<String, Object>>(){}.getType());
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	public static boolean isFileExists(String filePath) {
+		File file = new File(filePath);
+		return file.exists();
+	}
+
+	public static String readFile(String filePath) {
+		StringBuilder content = new StringBuilder();
+		try (FileInputStream inputStream = new FileInputStream(filePath);
+			 BufferedReader reader = new BufferedReader(new
+					 InputStreamReader(inputStream))) {
+			String line;
+			while ((line = reader.readLine()) != null) {
+				content.append(line).append("\n");
+			}
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		return content.toString();
+
+	}
+
+	public static void writeToFile(String folderPath, String fileName, String content) {
+		File vDir = new File(folderPath);
+		if (!vDir.exists()) {
+			vDir.mkdirs();
+		}
+		File file = new File(folderPath, fileName);
+		FileOutputStream outputStream = null;
+		try {
+			outputStream = new FileOutputStream(file);
+			outputStream.write(content.getBytes());
+			outputStream.close();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static void deleteDirectory(String _pathToDelete) {
+		File _dir = new File(_pathToDelete);
+		if (_dir.isDirectory()) {
+			String[] children = _dir.list();
+			for (int i = 0; i < children.length; i++) {
+				File temp = new File(_dir, children[i]);
+				deleteDirectory(String.valueOf(temp));
+			}
+		}
+		boolean success = _dir.delete();
+		if (!success) {
+			Log.e("ERROR", "Deletion failed. " + _dir);
+		}
+	}
+
+	public static void copyAFile(String _sourceFile, String _destFile) {
+		File vDir = new File(_destFile.substring((int)0, (int)(_destFile.lastIndexOf("/"))));
+		if (!vDir.exists()) {
+			vDir.mkdirs();
+		}
+		try {
+			File source = new File(_sourceFile);
+			File dest = new File(_destFile);
+
+			if (!source.exists())
+			{
+				throw new IOException("Source file not found");
+			}
+
+			FileInputStream inStream = new FileInputStream(source);
+			FileOutputStream outStream = new FileOutputStream(dest);
+
+			byte[] buffer = new byte[1024];
+			int length;
+			while ((length = inStream.read(buffer))
+					> 0) {
+				outStream.write(buffer, 0, length);
+			}
+
+			inStream.close();
+			outStream.close();
+		} catch (IOException e) {
+
+		}
+
+	}
+
+	public static void moveAFile(String _from, String _to) {
+		File oldFile = new File(_from);
+		File newFile = new File(_to);
+
+		boolean success = oldFile.renameTo(newFile);
+		if (success) {
+			Log.d("File", "Done!");
+		} else {
+			Log.e("File", "Failed!");
+		}
+
+	}
+
+	public static void listDir(String path, ArrayList<String> list) {
+		File dir = new File(path);
+		if (!dir.exists() || dir.isFile()) return;
+
+		File[] listFiles = dir.listFiles();
+		if (listFiles == null || listFiles.length <= 0) return;
+
+		if (list == null) return;
+		list.clear();
+		for (File file : listFiles) {
+			list.add(file.getAbsolutePath());
+		}
+	}
+
+	public static void killallqemuprocesses(Context context) {
+		Terminal vterm = new Terminal(context);
+		vterm.executeShellCommand("killall -9 qemu-system-i386", false, MainActivity.activity);
+		vterm.executeShellCommand("killall -9 qemu-system-x86_64", false, MainActivity.activity);
+		vterm.executeShellCommand("killall -9 qemu-system-aarch64", false, MainActivity.activity);
+		vterm.executeShellCommand("killall -9 qemu-system-ppc", false, MainActivity.activity);
 	}
 
 	public static void killcurrentqemuprocess(Context context) {
@@ -454,46 +645,6 @@ public class VectrasApp extends Application {
 		vterm.executeShellCommand(env, false, MainActivity.activity);
 	}
 
-	public static void disablerunsh(Context context) {
-		Terminal vterm = new Terminal(context);
-		vterm.executeShellCommand("sed -i '/run.sh/d' /etc/profile && chmod -x /home/run.sh", false, MainActivity.activity);
-	}
-
-	public static void createrunsh(String env,Context context) {
-		Terminal vterm = new Terminal(context);
-		vterm.executeShellCommand("echo '/home/run.sh' >> /etc/profile && echo 'sed -i '/run.sh/d' /etc/profile' > /home/run.sh && echo 'fluxbox &' >> /home/run.sh && echo 'chmod -x /home/run.sh' >> /home/run.sh &&  echo '"+ env +"' >> /home/run.sh && echo 'pkill -SIGKILL -u root' >> /home/run.sh && chmod +rwx /home/run.sh", true, MainActivity.activity);
-	}
-
-	public static void addrunshtostartup(Context context) {
-		SharedPreferences data = context.getSharedPreferences("addrunshtostartup", context.MODE_PRIVATE);
-		if (!data.getString("isaddedrunshtostartup","").contains("1")) {
-			data.edit().putString("isaddedrunshtostartup", "1").commit();
-			Terminal vterm = new Terminal(context);
-			vterm.executeShellCommand("echo '/home/run.sh' >> /etc/profile", true, MainActivity.activity);
-		}
-	}
-
-	public static void logoutroot(String env,Context context) {
-		Terminal vterm = new Terminal(context);
-		vterm.executeShellCommand("pkill -SIGKILL -u root", true, MainActivity.activity);
-	}
-
-	public static void saveappconfig(Context context) {
-		try {
-			SharedPreferences data = context.getSharedPreferences("appconfig", context.MODE_PRIVATE);
-			data.edit().putString("basefiledir", AppConfig.basefiledir).commit();
-			data.edit().putString("maindirpath", AppConfig.maindirpath).commit();
-			data.edit().putString("sharedFolder", AppConfig.sharedFolder).commit();
-			data.edit().putString("downloadsFolder", AppConfig.downloadsFolder).commit();
-			data.edit().putString("sharedFolder", AppConfig.vectrasWebsite).commit();
-			data.edit().putString("downloadsFolder", AppConfig.vectrasHelp).commit();
-		} catch (ExceptionInInitializerError e) {
-
-		} catch (NoClassDefFoundError e) {
-
-		}
-	}
-
 	public static boolean isAppInstalled(String packagename, Context context) {
 		PackageManager pm = context.getPackageManager();
 		try {
@@ -504,17 +655,199 @@ public class VectrasApp extends Application {
 		}
 	}
 
-	public static void writeToFile(String filePath, String content) {
-		File file = new File(filePath);
-		FileOutputStream outputStream = null;
-		try {
-			outputStream = new FileOutputStream(file);
-			outputStream.write(content.getBytes());
-			outputStream.close();
-		} catch (FileNotFoundException e) {
-			throw new RuntimeException(e);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
+	public static void setIconWithName(ImageView imageview, String name) {
+		String itemName = name.toLowerCase();
+		if (itemName.contains("linux") || itemName.contains("ubuntu")  || itemName.contains("debian") || itemName.contains("arch") || itemName.contains("kali")) {
+			imageview.setImageResource(R.drawable.linux);
+		} else if (itemName.contains("windows")) {
+			imageview.setImageResource(R.drawable.windows);
+		} else if (itemName.contains("macos") || itemName.contains("mac os")) {
+			imageview.setImageResource(R.drawable.macos);
+		} else if (itemName.contains("android")) {
+			imageview.setImageResource(R.drawable.android);
+		} else {
+			imageview.setImageResource(R.drawable.no_machine_image);
 		}
+	}
+
+	public static boolean isHaveADisk(String env) {
+		if (env.contains("-drive") || env.contains("-hda")  || env.contains("-hdb") || env.contains("-cdrom") || env.contains("-fda") || env.contains("-fdb"))
+			return true;
+		return false;
+	}
+
+	public static boolean isQemuRunning() {
+		Terminal vterm = new Terminal(MainActivity.activity);
+		vterm.executeShellCommand("ps -e", false, MainActivity.activity);
+		if (TerminalOutput.contains("qemu-system")) {
+			Log.d("VectrasApp.isQemuRunning", "Yes");
+			return true;
+		} else {
+			Log.d("VectrasApp.isQemuRunning", "No");
+			return false;
+		}
+	}
+
+	public static boolean isThisVMRunning(String intemExtra, String itemPath) {
+		Terminal vterm = new Terminal(MainActivity.activity);
+		vterm.executeShellCommand("ps -e", false, MainActivity.activity);
+		if (TerminalOutput.contains(intemExtra) && TerminalOutput.contains(itemPath)) {
+			Log.d("VectrasApp.isThisVMRunning", "Yes");
+			return true;
+		} else {
+			Log.d("VectrasApp.isThisVMRunning", "No");
+			return false;
+		}
+	}
+
+	public static void oneDialog(String _title, String _message, boolean _cancel, boolean _finish, Activity _activity) {
+		AlertDialog alertDialog = new AlertDialog.Builder(_activity, R.style.MainDialogTheme).create();
+		alertDialog.setTitle(_title);
+		alertDialog.setMessage(_message);
+		if (!_cancel) {
+			alertDialog.setCancelable(false);
+		}
+		alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				if (_finish) {
+					_activity.finish();
+				}
+			}
+		});
+		alertDialog.show();
+	}
+
+	public static void prepareDataForAppConfig(Activity _activity) {
+		AppConfig.vectrasVersion = "2.9.2";
+		AppConfig.vectrasWebsite = "https://vectras.vercel.app/";
+		AppConfig.vectrasWebsiteRaw = "https://raw.githubusercontent.com/xoureldeen/Vectras-VM-Android/refs/heads/master/web/";
+		AppConfig.bootstrapfileslink = AppConfig.vectrasWebsiteRaw + "/data/setupfiles.json";
+		AppConfig.vectrasHelp = AppConfig.vectrasWebsite + "how.html";
+		AppConfig.community = AppConfig.vectrasWebsite + "community.html";
+		AppConfig.vectrasRaw = AppConfig.vectrasWebsiteRaw + "data/";
+		AppConfig.vectrasLicense = AppConfig.vectrasRaw + "LICENSE.md";
+		AppConfig.vectrasPrivacy = AppConfig.vectrasRaw + "PRIVACYANDPOLICY.md";
+		AppConfig.vectrasTerms = AppConfig.vectrasRaw + "TERMSOFSERVICE.md";
+		AppConfig.vectrasInfo = AppConfig.vectrasRaw + "info.md";
+		AppConfig.vectrasRepo = "https://github.com/xoureldeen/Vectras-VM-Android";
+		AppConfig.updateJson = AppConfig.vectrasRaw + "UpdateConfig.json";
+		AppConfig.blogJson = AppConfig.vectrasRaw + "news_list.json";
+		AppConfig.storeJson = AppConfig.vectrasWebsiteRaw + "store_list.json";
+		AppConfig.releaseUrl = AppConfig.vectrasWebsite;
+		AppConfig.basefiledir = AppConfig.datadirpath(_activity) + "/.qemu/";
+		AppConfig.maindirpath = FileUtils.getExternalFilesDirectory(SplashActivity.activity).getPath() + "/";
+		AppConfig.sharedFolder = AppConfig.maindirpath + "SharedFolder/";
+		AppConfig.downloadsFolder = AppConfig.maindirpath + "Downloads/";
+		AppConfig.romsdatajson = Environment.getExternalStorageDirectory().toString() + "/Documents/VectrasVM/roms-data.json";
+	}
+	public static String ramdomVMID() {
+		String addAdb = "";
+		Random random = new Random();
+		int randomAbc = random.nextInt(10);
+		if (randomAbc == 0) {
+			addAdb = "a";
+		} else if (randomAbc == 1) {
+			addAdb = "b";
+		} else if (randomAbc == 2) {
+			addAdb = "c";
+		} else if (randomAbc == 3) {
+			addAdb = "d";
+		} else if (randomAbc == 4) {
+			addAdb = "e";
+		} else if (randomAbc == 5) {
+			addAdb = "f";
+		} else if (randomAbc == 6) {
+			addAdb = "g";
+		} else if (randomAbc == 7) {
+			addAdb = "h";
+		} else if (randomAbc == 8) {
+			addAdb = "i";
+		}
+		return addAdb + String.valueOf((long)(random.nextInt(10001)));
+	}
+	public static void deleteVMWithName(String _vmName) {
+		String _romsdata = VectrasApp.readFile(AppConfig.maindirpath + "roms-data.json").replace("\\/", "/");
+		if (isFileExists(AppConfig.maindirpath + "roms/" + _vmName + "/vmID.txt")) {
+			String _vmID = readFile(AppConfig.maindirpath + "roms/" + _vmName + "/vmID.txt");
+			if (!_vmID.isEmpty()) {
+				int _startRepeat = 0;
+				ArrayList<String> _filelist = new ArrayList<>();
+				listDir(AppConfig.maindirpath + "roms/", _filelist);
+				if (!_filelist.isEmpty()) {
+					for (int _repeat = 0; _repeat < (int)(_filelist.size()); _repeat++) {
+						if (_startRepeat < _filelist.size()) {
+							if (isFileExists(_filelist.get((int)(_startRepeat)) + "/vmID.txt")) {
+								if (!readFile(_filelist.get((int)(_startRepeat)) + "/vmID.txt").isEmpty()) {
+									if (readFile(_filelist.get((int)(_startRepeat)) + "/vmID.txt").equals(_vmID)) {
+										if (!_romsdata.contains(_filelist.get((int)(_startRepeat)))) {
+											deleteDirectory(_filelist.get((int)(_startRepeat)));
+										} else {
+											AdapterMainRoms.isKeptSomeFiles = true;
+											deleteVMIDFileWithName(_vmName);
+										}
+									}
+								}
+							}
+						}
+						_startRepeat++;
+					}
+				}
+			}
+		}
+	}
+
+	public static void deleteVMIDFileWithName(String _vmName) {
+		if (isFileExists(AppConfig.maindirpath + "roms/" + _vmName + "/vmID.txt")) {
+			String _vmID = readFile(AppConfig.maindirpath + "roms/" + _vmName + "/vmID.txt");
+			if (!_vmID.isEmpty()) {
+				int _startRepeat = 0;
+				ArrayList<String> _filelist = new ArrayList<>();
+				listDir(AppConfig.maindirpath + "roms/", _filelist);
+				if (!_filelist.isEmpty()) {
+					for (int _repeat = 0; _repeat < (int)(_filelist.size()); _repeat++) {
+						if (_startRepeat < _filelist.size()) {
+							if (isFileExists(_filelist.get((int)(_startRepeat)) + "/vmID.txt")) {
+								if (!readFile(_filelist.get((int)(_startRepeat)) + "/vmID.txt").isEmpty()) {
+									if (readFile(_filelist.get((int)(_startRepeat)) + "/vmID.txt").equals(_vmID)) {
+										moveAFile(_filelist.get((int)(_startRepeat)) + "/vmID.txt", _filelist.get((int)(_startRepeat)) + "/vmID.old.txt");
+									}
+								}
+							}
+						}
+						_startRepeat++;
+					}
+				}
+			}
+		}
+	}
+
+	public static String quickScanDiskFileInFolder(String _foderpath) {
+		if (!_foderpath.isEmpty()) {
+			int _startRepeat = 0;
+			ArrayList<String> _filelist = new ArrayList<>();
+			listDir(_foderpath, _filelist);
+			if (!_filelist.isEmpty()) {
+				for (int _repeat = 0; _repeat < (int)(_filelist.size()); _repeat++) {
+					if (_startRepeat < _filelist.size()) {
+						if (isADiskFile(_filelist.get((int)(_startRepeat)))) {
+							return _filelist.get((int)(_startRepeat));
+                        }
+					}
+					_startRepeat++;
+				}
+			}
+		}
+		return "";
+	}
+
+	public static boolean isADiskFile (String _filepath) {
+		if (_filepath.contains(".")) {
+			String _getFileName = Objects.requireNonNull(Uri.parse(_filepath).getLastPathSegment()).toLowerCase();
+			String _getFileFormat = _getFileName.substring((int)(_getFileName.lastIndexOf(".") + 1), (int)(_getFileName.length()));
+			if ("qcow2,img,vhd,vhdx,vdi,qcow,vmdk,vpc".contains(_getFileFormat)){
+				return true;
+			}
+		}
+		return false;
 	}
 }

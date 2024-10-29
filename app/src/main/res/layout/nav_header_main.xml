@@ -13,15 +13,34 @@
         android:layout_height="40dp"
         android:contentDescription="@string/free_palistine"
         android:scaleType="centerInside"
-        app:srcCompat="@drawable/free_palestine" />
-
-    <TextView
-        android:id="@+id/appNameTxt"
-        android:layout_width="wrap_content"
+        android:visibility="gone"
+        app:srcCompat="@drawable/gbp" />
+        
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:singleLine="true"
-        android:text="@string/app_name"
-        android:textSize="20sp" />
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+        <TextView
+            android:id="@+id/appNameTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:singleLine="true"
+            android:text="@string/app_name"
+            android:textSize="20sp" />
+    
+        <TextView
+            android:id="@+id/appVersionTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="8dp"
+            android:singleLine="true"
+            android:text="@string/app_version"
+            android:textSize="14sp" />
+        
+        </LinearLayout>
 
 </LinearLayout>

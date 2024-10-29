@@ -78,18 +78,18 @@ public class AdapterRoms extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         final MyHolder myHolder = (MyHolder) holder;
         final DataRoms current = data.get(position);
         Glide.with(RomsManagerActivity.activity).load(current.itemIcon).placeholder(R.drawable.no_machine_image).error(R.drawable.no_machine_image).into(myHolder.ivIcon);
-        myHolder.textName.setText(current.itemName + " " + current.itemArch);
+        myHolder.textName.setText(current.itemName);
         myHolder.textSize.setText(current.itemSize);
         myHolder.checkBox.setChecked(position == mSelectedItem);
         if (current.itemAvail) {
             if (FileUtils.fileValid(RomsManagerActivity.activity, AppConfig.maindirpath + current.itemPath)) {
                 myHolder.checkBox.setEnabled(false);
                 myHolder.textAvail.setTextColor(Color.BLUE);
-                myHolder.textAvail.setText("(installed)");
+                myHolder.textAvail.setText(RomsManagerActivity.sInstalled);
             } else {
                 myHolder.checkBox.setEnabled(true);
                 myHolder.textAvail.setTextColor(Color.GREEN);
-                myHolder.textAvail.setText("available");
+                myHolder.textAvail.setText(RomsManagerActivity.sAvailable);
             }
             myHolder.checkBox.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -98,10 +98,14 @@ public class AdapterRoms extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     notifyItemRangeChanged(0, data.size());
                     RomsManagerActivity.selected = true;
                     RomsManagerActivity.selectedPath = current.itemPath;
+                    RomsManagerActivity.selectedFinalRomFileName =current.itemFinalRomFileName;
                     RomsManagerActivity.selectedExtra = current.itemExtra;
-                    RomsManagerActivity.selectedName = current.itemName + " " + current.itemArch;
+                    RomsManagerActivity.selectedName = current.itemName;
                     RomsManagerActivity.selectedLink = current.itemUrl;
                     RomsManagerActivity.selectedIcon = current.itemIcon;
+                    RomsManagerActivity.selectedArch = current.itemArch;
+
+                    //Save image to icon folder
                     myHolder.ivIcon.buildDrawingCache();
                     Bitmap bm = myHolder.ivIcon.getDrawingCache();
                     OutputStream fOut = null;
@@ -109,7 +113,7 @@ public class AdapterRoms extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     try {
                         File root = new File(AppConfig.maindirpath + "/icons/");
                         root.mkdirs();
-                        File sdImageMainDirectory = new File(root, current.itemPath.replace(".IMG", ".jpg"));
+                        File sdImageMainDirectory = new File(root, current.itemPath + ".png");
                         outputFileUri = Uri.fromFile(sdImageMainDirectory);
                         fOut = new FileOutputStream(sdImageMainDirectory);
                     } catch (FileNotFoundException e) {
@@ -117,7 +121,7 @@ public class AdapterRoms extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     }
 
                     try {
-                        bm.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+                        bm.compress(Bitmap.CompressFormat.PNG, 100, fOut);
                         fOut.flush();
                         fOut.close();
                     } catch (Exception e) {
@@ -125,7 +129,7 @@ public class AdapterRoms extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 }
             });
         } else {
-            myHolder.textAvail.setText("unavailable");
+            myHolder.textAvail.setText(RomsManagerActivity.sUnavailable);
             myHolder.textAvail.setTextColor(Color.RED);
             myHolder.checkBox.setEnabled(false);
         }

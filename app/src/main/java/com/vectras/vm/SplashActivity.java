@@ -2,6 +2,7 @@ package com.vectras.vm;
 
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+import android.app.ProgressDialog;
 import static android.os.Build.VERSION.SDK_INT;
 
 import android.app.Notification;
@@ -11,6 +12,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.net.ConnectivityManager;
@@ -23,8 +25,10 @@ import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
@@ -53,11 +57,17 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
         super.onCreate(bundle);
         activity = this;
         setContentView(R.layout.activity_splash);
+
+        TextView textversionname;
+        textversionname = findViewById(R.id.versionname);
+        PackageInfo pinfo = MainActivity.activity.getAppInfo(getApplicationContext());
+        textversionname.setText(pinfo.versionName);
+        VectrasApp.prepareDataForAppConfig(activity);
         setupFolders();
         SharedPreferences prefs = getSharedPreferences(CREDENTIAL_SHARED_PREF, Context.MODE_PRIVATE);
 
         try {
-            new Handler().postDelayed(activity, 1000);
+            new Handler().postDelayed(activity, 3000);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }/*
@@ -67,17 +77,18 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
         } else {
         }
 */
+        //if (!checkPermission())
+            //requestPermission();
         MainSettingsManager.setOrientationSetting(activity, 1);
 
         setupFiles();
-        VectrasApp.disablerunsh(getApplicationContext());
     }
 
     public void setupFiles() {
         String filesDir = activity.getFilesDir().getAbsolutePath();
         String nativeLibDir = activity.getApplicationInfo().nativeLibraryDir;
 
-        File tmpDir = new File(activity.getFilesDir(), "tmp");
+        File tmpDir = new File(activity.getFilesDir(), "usr/tmp");
         if (!tmpDir.isDirectory()) {
             tmpDir.mkdirs();
             FileUtils.chmod(tmpDir, 0771);
@@ -108,11 +119,6 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
             downloadsDir.mkdirs();
         }
 
-        File qcow2Dir = new File(FileUtils.getExternalFilesDirectory(activity).getPath() + "/QCOW2");
-        if (!qcow2Dir.exists()) {
-            qcow2Dir.mkdirs();
-        }
-
         File jsonFile = new File(AppConfig.maindirpath
                 + "roms-data.json");
         if (!jsonFile.exists())
@@ -130,47 +136,9 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
                 e.printStackTrace();
             }
 
-        File binDir = new File(distroDir + "/bin");
-        if (!binDir.exists()) {
-            String CHANNEL_ID = "vectras";
-            String[] cmdline = {"tar", "xf", nativeLibDir + "/libbootstrap.so", "-C", filesDir + "/distro"};
-            try {
-                Runtime.getRuntime().exec(cmdline).waitFor();
-            } catch (IOException | InterruptedException e) {
-                // Prepare an intent that does something when the user clicks the notification.
-                Intent intent = new Intent(activity, activity.getClass()); // Replace TargetActivity with your activity that you want to start.
-                PendingIntent pendingIntent = PendingIntent.getActivity(activity, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-                // Build the notification to show in the notification tray.
-                Notification notification = new NotificationCompat.Builder(activity, CHANNEL_ID) // Replace YOUR_CHANNEL_ID with your actual channel ID
-                        .setContentTitle("Extract Bootstrap")
-                        .setContentText("Error during file extraction.")
-                        .setSmallIcon(R.mipmap.ic_launcher) // Replace this with your notification icon.
-                        .setAutoCancel(true)
-                        .setContentIntent(pendingIntent)
-                        .build();
-
-                // Use the Notification Manager to show the notification.
-                NotificationManager notificationManager = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
-
-                // It's a good practice to create a notification channel.
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    NotificationChannel channel = new NotificationChannel(
-                            CHANNEL_ID,
-                            "Extraction Status",
-                            NotificationManager.IMPORTANCE_DEFAULT
-                    );
-                    notificationManager.createNotificationChannel(channel);
-                }
-
-                // Show the notification. You can use a unique ID (e.g., 0) for each notification if you want to show multiple ones.
-                notificationManager.notify(0, notification);
-            }
-
-        }
-
         com.vectras.qemu.utils.FileInstaller.installFiles(activity, true);
     }
+
 
     public void onStart() {
         super.onStart();

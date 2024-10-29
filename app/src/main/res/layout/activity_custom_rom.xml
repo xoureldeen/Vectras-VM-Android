@@ -65,7 +65,6 @@
                     android:layout_height="wrap_content"
                     android:clickable="true"
                     android:hint="@string/rom_icon"
-                    android:enabled="false"
                     android:theme="@style/AppTheme.TextInput"
                     app:startIconDrawable="@drawable/round_image_24">
 
@@ -86,12 +85,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="true"
-                    android:enabled="false"
                     android:hint="@string/rom_drive_qcow2_img_etc"
                     android:theme="@style/AppTheme.TextInput"
                     app:endIconMode="custom"
                     app:startIconDrawable="@drawable/round_storage_24"
-                    app:endIconDrawable="@drawable/round_edit_24"
+                    app:endIconDrawable="@drawable/round_add_24"
                     app:endIconContentDescription="@string/make_image">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -111,7 +109,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clickable="true"
-                    android:enabled="false"
                     android:hint="CDROM (iso only)"
                     android:theme="@style/AppTheme.TextInput"
                     app:startIconDrawable="@drawable/round_album_24">
@@ -136,7 +133,7 @@
                     android:theme="@style/AppTheme.TextInput"
                     app:startIconDrawable="@drawable/ic_qemu"
                     app:endIconMode="custom"
-                    app:endIconDrawable="@drawable/round_edit_24"
+                    app:endIconDrawable="@drawable/cqcm48"
                     app:endIconContentDescription="@string/qemu_create_cmd">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -144,16 +141,22 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="text"
-                        android:selectAllOnFocus="true"
-                        android:singleLine="true" />
+                        android:selectAllOnFocus="true" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
                     android:id="@+id/addRomBtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:enabled="false"
                     android:text="@string/add" />
+
+                <TextView
+                    android:id="@+id/textview1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="@string/adddrivenote"
+                    android:textSize="12sp" />
             </LinearLayout>
         </ScrollView>
 

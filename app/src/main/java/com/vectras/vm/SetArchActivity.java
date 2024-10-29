@@ -29,11 +29,13 @@ public class SetArchActivity extends AppCompatActivity implements View.OnClickLi
         Button archarm64 = findViewById(R.id.archarm64);
         Button archppc = findViewById(R.id.archppc);
         Button web = findViewById(R.id.webBtn);
+        Button buttongetcm = findViewById(R.id.buttongetcm);
         archi386.setOnClickListener(this);
         archx86_64.setOnClickListener(this);
         archarm64.setOnClickListener(this);
         archppc.setOnClickListener(this);
         web.setOnClickListener(this);
+        buttongetcm.setOnClickListener(this);
     }
 
     public void onClick(View v) {
@@ -41,28 +43,33 @@ public class SetArchActivity extends AppCompatActivity implements View.OnClickLi
         if (id == R.id.archi386) {
             MainSettingsManager.setArch(this, "I386");
 
+            startActivity(new Intent(activity, CustomRomActivity.class));
             finish();
-            startActivity(new Intent(this, SplashActivity.class));
         } else if (id == R.id.archx86_64) {
             MainSettingsManager.setArch(this, "X86_64");
 
+            startActivity(new Intent(activity, CustomRomActivity.class));
             finish();
-            startActivity(new Intent(this, SplashActivity.class));
         } else if (id == R.id.archarm64) {
             MainSettingsManager.setArch(this, "ARM64");
 
+            startActivity(new Intent(activity, CustomRomActivity.class));
             finish();
-            startActivity(new Intent(this, SplashActivity.class));
         } else if (id == R.id.archppc) {
             MainSettingsManager.setArch(this, "PPC");
 
+            startActivity(new Intent(activity, CustomRomActivity.class));
             finish();
-            startActivity(new Intent(this, SplashActivity.class));
         } else if (id == R.id.webBtn) {
             String qe = "https://www.qemu.org/";
             Intent q = new Intent(Intent.ACTION_VIEW);
             q.setData(Uri.parse(qe));
             startActivity(q);
+        } else if (id == R.id.buttongetcm) {
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse("android-app://com.anbui.cqcm.app"));
+            startActivity(intent);
         }
     }
 }

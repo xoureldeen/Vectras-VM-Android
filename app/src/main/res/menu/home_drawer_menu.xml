@@ -5,6 +5,10 @@
         android:icon="@drawable/round_shop_24"
         android:title="@string/store" />
     <item
+        android:id="@+id/navigation_item_get_rom"
+        android:icon="@drawable/hard_disk_24px"
+        android:title="@string/roms_store" />
+    <item
         android:id="@+id/navigation_item_website"
         android:icon="@drawable/round_public_24"
         android:title="@string/vectras_website" />
@@ -43,13 +47,17 @@
         android:icon="@drawable/volume_up_24px"
         android:title="@string/setup_sound"/>
     <item
+        android:id="@+id/deletealldata"
+        android:icon="@drawable/delete_24px"
+        android:title="@string/delete_all_vm"/>
+    <item
         android:id="@+id/navigation_item_help"
         android:icon="@drawable/round_help_24"
         android:title="@string/help"/>
     <item
         android:id="@+id/navigation_item_donate"
-        android:icon="@drawable/ic_buy_me_a_coffee"
-        android:title="@string/buy_me_a_coffee"/>
+        android:icon="@drawable/ic_patreon"
+        android:title="@string/patreon"/>
     <item
         android:id="@+id/navigation_item_info"
         android:icon="@drawable/round_info_24"

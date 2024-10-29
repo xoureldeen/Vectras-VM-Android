@@ -305,21 +305,35 @@ public class MainVNCActivity extends VncCanvasActivity {
                 new AlertDialog.Builder(activity, R.style.MainDialogTheme)
                         .setTitle(getString(R.string.shutdown))
                         .setMessage(getString(R.string.are_you_sure_you_want_to_shutdown_vm))
-                        .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener()
-                        {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                started = false;
-                                // Stop the service
-                                MainService.stopService();
-                                Terminal.killQemuProcess();
-                                VectrasApp.killcurrentqemuprocess(getApplicationContext());
-                                finish();
-                            }
-
+                        .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
+                            started = false;
+                            // Stop the service
+                            MainService.stopService();
+                            //Terminal.killQemuProcess();
+                            VectrasApp.killcurrentqemuprocess(getApplicationContext());
+                            finish();
                         })
                         .setNegativeButton(getString(R.string.no), null)
                         .show();
+            }
+        });
+
+        shutdownBtn.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                AlertDialog alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
+                alertDialog.setTitle("Exit");
+                alertDialog.setMessage("You will be left here but the virtual machine will continue to run.");
+                alertDialog.setCancelable(true);
+                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Exit", (dialog, which) -> {
+                    started = false;
+                    finish();
+                });
+                alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", (dialog, which) -> {
+
+                });
+                alertDialog.show();
+                return false;
             }
         });
         keyboardBtn.setOnClickListener(new View.OnClickListener() {
@@ -775,9 +789,12 @@ public class MainVNCActivity extends VncCanvasActivity {
     }
 
     public void onDestroy() {
+        if (VectrasApp.isQemuRunning() && started) {
+            activity.startActivity(new Intent(activity, MainVNCActivity.class));
+        }
         super.onDestroy();
         this.stopTimeListener();
-        Terminal.killQemuProcess();
+        //Terminal.killQemuProcess();
     }
 
     public void onPause() {
@@ -1245,6 +1262,7 @@ public class MainVNCActivity extends VncCanvasActivity {
             } else
                 l.setVisibility(View.VISIBLE);
         }
+        started = false;
     }
 
     public void onHideToolbar() {

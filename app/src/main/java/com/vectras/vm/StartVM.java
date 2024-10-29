@@ -2,7 +2,6 @@ package com.vectras.vm;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 
 import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
@@ -28,8 +27,6 @@ public class StartVM {
 
         ArrayList<String> params = new ArrayList<>(Arrays.asList(qemu));
 
-        SharedPreferences dataAppConfig = activity.getSharedPreferences("appconfig", activity.MODE_PRIVATE);
-
         if (MainSettingsManager.getArch(activity).equals("I386"))
             params.add("qemu-system-i386");
         else if (MainSettingsManager.getArch(activity).equals("X86_64"))
@@ -48,13 +45,12 @@ public class StartVM {
         String cdrom;
         String hdd1;
 
-        if (!img.isEmpty()) {
+        if (!(img.length() == 0)) {
             String hdd0 = "-drive";
             hdd0 += " index=0";
             hdd0 += ",media=disk";
             hdd0 += ",if=" + ifType;
             hdd0 += ",file='" + img + "'";
-
             params.add(hdd0);
         }
 
@@ -101,9 +97,14 @@ public class StartVM {
         if (MainSettingsManager.getArch(activity).equals("PPC")) {
             bios = "-L ";
             bios += "openbios-ppc";
+        } else if (MainSettingsManager.getArch(activity).equals("ARM64")) {
+            bios = "-pflash ";
+            bios += AppConfig.basefiledir + "QEMU_EFI.img";
+            bios += " -pflash ";
+            bios += AppConfig.basefiledir + "QEMU_VARS.img";
         } else {
             bios = "-bios ";
-            bios += dataAppConfig.getString("basefiledir","") + "bios-vectras.bin";
+            bios += AppConfig.basefiledir + "bios-vectras.bin";
         }
 
         String machine = "-M ";
@@ -120,14 +121,13 @@ public class StartVM {
 
         params.add("-rtc");
         params.add("base=localtime");
+        //if (!MainSettingsManager.getArch(activity).equals("PPC")) {
+            //params.add("-nodefaults");
+        //}
 
-        if (!MainSettingsManager.getArch(activity).equals("PPC")) {
-            params.add("-nodefaults");
-        }
-
-        if (!Objects.equals(MainSettingsManager.getArch(activity), "ARM64")) {
-            params.add(bios);
-        }
+        //if (!Objects.equals(MainSettingsManager.getArch(activity), "ARM64")) {
+        params.add(bios);
+        //}
 
         params.add(boot);
 
@@ -146,12 +146,13 @@ public class StartVM {
             }
 
             if (!MainSettingsManager.getArch(activity).equals("PPC")) {
-                params.add("-monitor");
+                if (!MainSettingsManager.getArch(activity).equals("ARM64")) {
+                    params.add("-monitor");
+                }
             }
-            if (MainSettingsManager.getArch(activity).equals("ARM64"))
-                params.add("stdio");
-            else
-            if (!MainSettingsManager.getArch(activity).equals("PPC")) {
+            if (MainSettingsManager.getArch(activity).equals("ARM64")) {
+                //params.add("stdio");
+            } else if (!MainSettingsManager.getArch(activity).equals("PPC")) {
                 params.add("vc");
             }
         } else if (MainSettingsManager.getVmUi(activity).equals("SPICE")) {
@@ -160,8 +161,11 @@ public class StartVM {
             params.add(spiceStr);
         } else if (MainSettingsManager.getVmUi(activity).equals("X11")) {
             params.add("-display");
-            params.add("gtk");
+            params.add("sdl");
         }
+        
+        params.add("-qmp");
+        params.add("tcp:localhost:4444,server,nowait");
 
         params.add(extras);
 
