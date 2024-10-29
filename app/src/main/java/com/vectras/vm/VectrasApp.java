@@ -735,7 +735,7 @@ public class VectrasApp extends Application {
 		AppConfig.storeJson = AppConfig.vectrasWebsiteRaw + "store_list.json";
 		AppConfig.releaseUrl = AppConfig.vectrasWebsite;
 		AppConfig.basefiledir = AppConfig.datadirpath(_activity) + "/.qemu/";
-		AppConfig.maindirpath = FileUtils.getExternalFilesDirectory(SplashActivity.activity).getPath() + "/";
+		AppConfig.maindirpath = FileUtils.getExternalFilesDirectory(_activity).getPath() + "/";
 		AppConfig.sharedFolder = AppConfig.maindirpath + "SharedFolder/";
 		AppConfig.downloadsFolder = AppConfig.maindirpath + "Downloads/";
 		AppConfig.romsdatajson = Environment.getExternalStorageDirectory().toString() + "/Documents/VectrasVM/roms-data.json";
