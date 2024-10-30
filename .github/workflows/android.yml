@@ -29,7 +29,11 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build Android app in release mode
-        run: ./gradlew assembleRelease
+        run: ./gradlew assembleRelease 
+      - name: List APK Output Directory
+        run: |
+         ls -l app/build/outputs/apk/release/
+
 
       - name: Upload APK
         uses: actions/upload-artifact@v3
