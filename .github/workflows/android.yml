@@ -26,7 +26,8 @@ jobs:
           java-version: '17'
 
       - name: Build Android app in release mode
-        run: ./gradlew assembleRelease
+        run: bash ./gradlew assembleRelease
+
 
       - name: Upload APK
         uses: actions/upload-artifact@v3
