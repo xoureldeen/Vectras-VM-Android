@@ -1,3 +1,4 @@
+name: Build and Upload Release
 on:
   workflow_dispatch:
     inputs:
