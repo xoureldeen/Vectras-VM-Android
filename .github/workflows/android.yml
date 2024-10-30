@@ -1,35 +1,79 @@
-name: Android CI
+name: Android Release Build
 
 on:
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Release tag for the new version'
+        required: true
+        default: 'v1.0.0'
+      release_notes:
+        description: 'Release notes for the new version'
+        required: true
+        default: 'Initial release'
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: set up JDK 17
-      uses: actions/setup-java@v3
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-        cache: gradle
+      - name: Check out the repository
+        uses: actions/checkout@v3
 
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
 
-    - name: Build with Gradle
-      run: ./gradlew build
+      - name: Build Android app in release mode
+        run: ./gradlew assembleRelease
 
-    # This step will upload all files in the debug directory
-    - name: Upload Debug APKs
-      uses: actions/upload-artifact@v3
-      with:
-        name: debug-apks 
-        path: app/build/outputs/apk/debug/**
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-release.apk
+          path: app/build/outputs/apk/release/app-release.apk
+
+      - name: Download vectras-vm-arm64-v8a.tar.gz
+        run: wget -O vectras-vm-arm64-v8a.tar.gz https://github.com/xoureldeen/Vectras-VM-Android/releases/download/v2.9.2/vectras-vm-arm64-v8a.tar.gz
+
+      - name: Download vectras-vm-x86_64.tar.gz
+        run: wget -O vectras-vm-x86_64.tar.gz https://github.com/xoureldeen/Vectras-VM-Android/releases/download/v2.9.2/vectras-vm-x86_64.tar.gz
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create a release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ github.event.inputs.release_tag }}
+          release_name: Release ${{ github.event.inputs.release_tag }}
+          body: ${{ github.event.inputs.release_notes }}
+          draft: false
+          prerelease: false
+
+      - name: Upload APK to release
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: app/build/outputs/apk/release/app-release.apk
+          asset_name: app-release.apk
+          asset_content_type: application/vnd.android.package-archive
+
+      - name: Upload vectras-vm-arm64-v8a.tar.gz to release
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: vectras-vm-arm64-v8a.tar.gz
+          asset_name: vectras-vm-arm64-v8a.tar.gz
+          asset_content_type: application/gzip
+
+      - name: Upload vectras-vm-x86_64.tar.gz to release
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: vectras-vm-x86_64.tar.gz
+          asset_name: vectras-vm-x86_64.tar.gz
+          asset_content_type: application/gzip
