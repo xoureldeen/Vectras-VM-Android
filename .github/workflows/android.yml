@@ -51,7 +51,7 @@ jobs:
         id: create_release
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}  # Use your personal access token
         with:
           tag_name: ${{ github.event.inputs.release_tag }}
           release_name: Release ${{ github.event.inputs.release_tag }}
