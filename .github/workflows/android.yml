@@ -6,7 +6,7 @@ on:
       release_tag:
         description: 'Release tag for the new version'
         required: true
-        default: 'v1.0.0'
+        default: 'v2.9.3'
       release_notes:
         description: 'Release notes for the new version'
         required: true
@@ -24,6 +24,9 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: '17'
+
+      - name: Chmod gradlew
+        run: chmod +x ./gradlew
 
       - name: Build Android app in release mode
         run: ./gradlew assembleRelease
