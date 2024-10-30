@@ -1,5 +1,3 @@
-name: Android Release Build
-
 on:
   workflow_dispatch:
     inputs:
@@ -30,10 +28,10 @@ jobs:
 
       - name: Build Android app in release mode
         run: ./gradlew assembleRelease 
+
       - name: List APK Output Directory
         run: |
-         ls -l app/build/outputs/apk/release/
-
+          ls -l app/build/outputs/apk/release/
 
       - name: Upload APK
         uses: actions/upload-artifact@v3
@@ -55,7 +53,7 @@ jobs:
         id: create_release
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}  # Use your personal access token
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
         with:
           tag_name: ${{ github.event.inputs.release_tag }}
           release_name: Release ${{ github.event.inputs.release_tag }}
@@ -67,7 +65,7 @@ jobs:
         uses: actions/upload-release-asset@v1
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: app/release/app-release.apk
+          asset_path: app/build/outputs/apk/release/app-release.apk  # Corrected path
           asset_name: app-release.apk
           asset_content_type: application/vnd.android.package-archive
 
@@ -86,4 +84,3 @@ jobs:
           asset_path: vectras-vm-x86_64.tar.gz
           asset_name: vectras-vm-x86_64.tar.gz
           asset_content_type: application/gzip
-
