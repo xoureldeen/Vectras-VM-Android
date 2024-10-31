@@ -311,7 +311,7 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
                                     isKeptSomeFiles = true;
                                 }
 
-                                if (isKeptSomeFiles) {
+                                if (isKeptSomeFiles && VectrasApp.readFile(AppConfig.maindirpath + "roms-data.json").contains("{")) {
                                     VectrasApp.oneDialog(MainActivity.activity.getString(R.string.keep), MainActivity.activity.getString(R.string.kept_some_files), true, false, MainActivity.activity);
                                 }
                             }
@@ -333,6 +333,9 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
                             UIUtils.toastLong(MainActivity.activity, e.toString());
                         }
                         UIUtils.toastLong(MainActivity.activity, current.itemName + context.getString(R.string.are_removed_successfully));
+                        if (!VectrasApp.readFile(AppConfig.maindirpath + "roms-data.json").contains("{")) {
+                            MainActivity.mdatasize2();
+                        }
                         return;
                     }
                 });

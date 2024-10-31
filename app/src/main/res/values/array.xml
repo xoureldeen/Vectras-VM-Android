@@ -59,10 +59,12 @@
         <item>d</item>
     </string-array>
     <string-array name="iftypeLabels">
+        <item>DEFAULT</item>
         <item>IDE</item>
         <item>VIRTIO</item>
     </string-array>
     <string-array name="iftypeValues">
+        <item></item>
         <item>ide</item>
         <item>virtio</item>
     </string-array>

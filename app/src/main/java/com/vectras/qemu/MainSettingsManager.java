@@ -256,11 +256,11 @@ public class MainSettingsManager extends AppCompatActivity
 
             mHandler = new Handler();
 
-            Preference prefIfType = findPreference("ifType");
-            if (getArch(activity).equals("ARM64"))
-                if (prefIfType != null) {
-                    prefIfType.setVisible(false);
-                }
+            //Preference prefIfType = findPreference("ifType");
+            //if (getArch(activity).equals("ARM64"))
+                //if (prefIfType != null) {
+                    //prefIfType.setVisible(false);
+                //}
 
             Preference pref = findPreference("vmArch");
             if (pref != null) {
@@ -577,7 +577,7 @@ public class MainSettingsManager extends AppCompatActivity
 
     public static String getIfType(Activity activity) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        return prefs.getString("ifType", "ide");
+        return prefs.getString("ifType", "");
     }
 
     public static void setBoot(Activity activity, String boot) {

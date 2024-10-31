@@ -50,7 +50,7 @@
         <ListPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:defaultValue="ide"
+            android:defaultValue=""
             android:entries="@array/iftypeLabels"
             android:entryValues="@array/iftypeValues"
             android:title="@string/harddisk_type"
