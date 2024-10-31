@@ -1404,6 +1404,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public static void mdatasize2() {
+        linearnothinghere.setVisibility(View.VISIBLE);
+    }
+
     private void checkpermissions() {
         if (VectrasApp.checkpermissionsgranted(activity, true)) {
             errorjsondialog();
