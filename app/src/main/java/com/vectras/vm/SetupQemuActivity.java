@@ -335,7 +335,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         } else if (textToAdd.contains("Installing packages...")) {
             title.setText("It won't take long...");
             textviewsettingup.setText("Completed 10%\nIt won't take long...");
-        } else if (textToAdd.contains("50/")) {
+        } else if (textToAdd.contains("(50/")) {
             textviewsettingup.setText("Completed 20%\nIt won't take long...");
         } else if (textToAdd.contains("100/")) {
             textviewsettingup.setText("Completed 30%\nIt won't take long...");

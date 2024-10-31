@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">v2.9.3</string>
+    <string name="app_version" translatable="false">v2.9.3 (Chick)</string>
     <string name="qemu_version" translatable="false">مستقر</string>
     <string name="str_home">الرئيسية</string>
     <string name="str_logger">سجل الأحداث</string>
@@ -362,6 +362,8 @@
     <string name="clean_up_content">سيتم حذف أقراص ROM والملفات والمجلدات التي لم تعد قيد الاستخدام.</string>
     <string name="go_to_rom_store">انتقل إلى متجر ROM</string>
     <string name="want_to_learn_more_about_qemu">هل تريد أن تتعلم المزيد عن QEMU؟</string>
+    <string name="file_format_is_not_supported">قد لا تعمل الأشياء لأن تنسيق الملف غير مدعوم. هل تريد المتابعة؟</string>
+    <string name="you_cannot_use_IDE_hard_drive_type_with_ARM64">لا يمكنك استخدام نوع محرك الأقراص الثابتة IDE مع ARM64. إذا تابعت، فسيتم استخدام نوع محرك الأقراص الثابتة الافتراضي.</string>
 
     <!--======================TERMUX STRINGS====================-->
     <string name="application_name">Vterm</string>

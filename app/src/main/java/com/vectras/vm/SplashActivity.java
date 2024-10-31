@@ -58,10 +58,10 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
         activity = this;
         setContentView(R.layout.activity_splash);
 
-        TextView textversionname;
-        textversionname = findViewById(R.id.versionname);
-        PackageInfo pinfo = MainActivity.activity.getAppInfo(getApplicationContext());
-        textversionname.setText(pinfo.versionName);
+        //TextView textversionname;
+        //textversionname = findViewById(R.id.versionname);
+        //PackageInfo pinfo = MainActivity.activity.getAppInfo(getApplicationContext());
+        //textversionname.setText(pinfo.versionName);
         VectrasApp.prepareDataForAppConfig(activity);
         setupFolders();
         SharedPreferences prefs = getSharedPreferences(CREDENTIAL_SHARED_PREF, Context.MODE_PRIVATE);

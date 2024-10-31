@@ -12,7 +12,7 @@ android {
         minSdk minApi
         targetSdk targetApi
         versionCode 19
-        versionName "v2.9.3"
+        versionName "v2.9.3-chick"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
