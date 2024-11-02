@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">v2.9.3 (Chick)</string>
+    <string name="app_version" translatable="false">v2.9.3 (Velvet)</string>
     <string name="qemu_version" translatable="false">مستقر</string>
     <string name="str_home">الرئيسية</string>
     <string name="str_logger">سجل الأحداث</string>

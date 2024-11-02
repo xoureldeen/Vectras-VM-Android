@@ -1025,14 +1025,16 @@ public class CustomRomActivity extends AppCompatActivity {
                                         title.setText(jObj.getString("title"));
                                         icon.setText(AppConfig.maindirpath
                                                 + "roms/" + _filename.replace(".cvbi", "") + "/" + jObj.getString("icon"));
-                                        drive.setText(AppConfig.maindirpath
-                                                + "roms/" + _filename.replace(".cvbi", "") + "/" + jObj.getString("drive"));
+                                        if (!jObj.getString("drive").isEmpty()) {
+                                            drive.setText(AppConfig.maindirpath
+                                                    + "roms/" + _filename.replace(".cvbi", "") + "/" + jObj.getString("drive"));
+                                        }
                                         qemu.setText(jObj.getString("qemu"));
                                         ImageView ivIcon = findViewById(R.id.ivIcon);
                                         Bitmap bmImg = BitmapFactory.decodeFile(AppConfig.maindirpath
                                                 + "roms/" + _filename.replace(".cvbi", "") + "/" + jObj.getString("icon"));
                                         ivIcon.setImageBitmap(bmImg);
-                                        UIUtils.UIAlert(activity, getResources().getString(R.string.from) + ": " + jObj.getString("author") + "\n\n" + Html.fromHtml(jObj.getString("desc")), getResources().getString(R.string.description) + ":");
+                                        UIUtils.UIAlert(activity, getResources().getString(R.string.from) + ": " + jObj.getString("author"), getResources().getString(R.string.description) + ":\n\n" + Html.fromHtml(jObj.getString("desc")));
                                     } catch (JSONException e) {
                                         throw new RuntimeException(e);
                                     }
