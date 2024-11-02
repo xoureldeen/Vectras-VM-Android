@@ -417,11 +417,12 @@
     <string name="file_received_edit_button">تعديل</string>
     <string name="file_received_open_folder_button">فتح المجلد</string>
 
+
     <!--======================TERMUX-X11 STRINGS====================-->
     <string name="plugin_info">lol</string>
 
     <!-- TermuxX11Activity -->
-    <string name="msg_storage_permission_not_granted_warning">يجب منح إذن التخزين لتطبيق Vectras VM لـ...</string>
+    <string name="msg_storage_permission_not_granted_warning">يجب منح إذن التخزين لتطبيق Vectras VMلـ...</string>
     <string name="action_grant_storage_permission">منح إذن التخزين</string>
 
     <string name="msg_battery_optimization_not_disabled_warning">يجب تعطيل تحسينات بطارية Android لتطبيق Vectras VM حتى يتمكن من...
@@ -455,4 +456,5 @@ https://developer.android.com/guide/components/foreground-services#background-st
     <string name="yes">نعم</string>
     <string name="no">إلغاء</string>
     <string name="cancel">إلغاء</string>
+    <string name="back_to_the_display">Back to the Display</string>
 </resources>
