@@ -161,7 +161,7 @@ public class StartVM {
             params.add(spiceStr);
         } else if (MainSettingsManager.getVmUi(activity).equals("X11")) {
             params.add("-display");
-            params.add("sdl");
+            params.add("gtk");
         }
 
         params.add("-full-screen");
