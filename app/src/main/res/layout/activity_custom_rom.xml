@@ -25,7 +25,63 @@
             android:visibility="gone" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/container_main_roms" />
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cdItem"
+        style="@style/CardViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        app:cardCornerRadius="10dp"
+        app:cardUseCompatPadding="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/ivIcon"
+                android:layout_width="142dp"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/no_machine_image" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:maxLines="1"
+                    android:padding="8dp"
+                    android:singleLine="true"
+                    android:text="Title"
+                    android:textSize="25sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textArch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    android:gravity="left"
+                    android:maxLines="1"
+                    android:padding="8dp"
+                    android:singleLine="true"
+                    android:text="arch"
+                    android:textAlignment="gravity"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -87,10 +143,10 @@
                     android:clickable="true"
                     android:hint="@string/rom_drive_qcow2_img_etc"
                     android:theme="@style/AppTheme.TextInput"
-                    app:endIconMode="custom"
-                    app:startIconDrawable="@drawable/round_storage_24"
+                    app:endIconContentDescription="@string/make_image"
                     app:endIconDrawable="@drawable/round_add_24"
-                    app:endIconContentDescription="@string/make_image">
+                    app:endIconMode="custom"
+                    app:startIconDrawable="@drawable/round_storage_24">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/drive"
@@ -131,10 +187,10 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/qemu_params"
                     android:theme="@style/AppTheme.TextInput"
-                    app:startIconDrawable="@drawable/ic_qemu"
-                    app:endIconMode="custom"
+                    app:endIconContentDescription="@string/qemu_create_cmd"
                     app:endIconDrawable="@drawable/cqcm48"
-                    app:endIconContentDescription="@string/qemu_create_cmd">
+                    app:endIconMode="custom"
+                    app:startIconDrawable="@drawable/ic_qemu">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/qemu"
