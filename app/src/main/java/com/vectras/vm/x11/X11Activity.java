@@ -368,6 +368,7 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
 
         ImageButton shutdownBtn = findViewById(R.id.shutdownBtn);
         ImageButton settingBtn = findViewById(R.id.btnSettings);
+        ImageButton btnFit = findViewById(R.id.btnFit);
         ImageButton keyboardBtn = findViewById(R.id.kbdBtn);
         ImageButton controllersBtn = findViewById(R.id.btnMode);
         ImageButton upBtn = findViewById(R.id.upBtn);
@@ -393,7 +394,27 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
         ImageButton leftGameBtn = findViewById(R.id.leftGameBtn);
         ImageButton rightGameBtn = findViewById(R.id.rightGameBtn);
         ImageButton enterGameBtn = findViewById(R.id.enterGameBtn);
+
         qmpBtn = findViewById(R.id.btnQmp);
+
+        final boolean[] isFullScreen = {false};
+        btnFit.setOnClickListener(view -> {
+            sendKey(KEYCODE_CTRL_LEFT, false);
+            sendKey(KEYCODE_ALT_LEFT, false);
+            sendKey(KEYCODE_F, false);
+            sendKey(KEYCODE_CTRL_LEFT, true);
+            sendKey(KEYCODE_ALT_LEFT, true);
+            sendKey(KEYCODE_F, true);
+
+            if (isFullScreen[0]) {
+                btnFit.setImageDrawable(getResources().getDrawable(R.drawable.close_fullscreen_24px));
+                isFullScreen[0] = false;
+            } else {
+                btnFit.setImageDrawable(getResources().getDrawable(R.drawable.open_in_full_24px));
+                isFullScreen[0] = true;
+            }
+        });
+
         upGameBtn.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -586,16 +607,15 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                 newFragment.show(ft, "Controllers");
             }
         });
-        settingBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Dialog alertDialog = new Dialog(activity, R.style.MainDialogTheme);
-                alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-                alertDialog.setContentView(R.layout.dialog_setting);
-                alertDialog.show();
-            }
-        });
+        findViewById(R.id.btnSettings)
+                .setOnClickListener(
+                        (l) ->
+                                startActivity(
+                                        new Intent(this, LoriePreferences.class) {
+                                            {
+                                                setAction(Intent.ACTION_MAIN);
+                                            }
+                                        }));
         upBtn.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {

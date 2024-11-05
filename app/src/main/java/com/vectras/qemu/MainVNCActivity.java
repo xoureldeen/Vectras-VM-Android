@@ -236,6 +236,8 @@ public class MainVNCActivity extends VncCanvasActivity {
         });
         JoystickView joystick = (JoystickView) findViewById(R.id.joyStick);
         joystick.setVisibility(View.GONE);
+        ImageButton btnFit = findViewById(R.id.btnFit);
+        btnFit.setVisibility(View.GONE);
         tabBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

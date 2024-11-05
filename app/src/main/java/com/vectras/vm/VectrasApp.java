@@ -1,6 +1,7 @@
 package com.vectras.vm;
 
 import static androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale;
+import static androidx.core.content.ContextCompat.getString;
 
 import android.Manifest;
 import android.app.Activity;
@@ -443,16 +444,16 @@ public class VectrasApp extends Application {
 		} else {
 			if (request) {
 				AlertDialog alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
-				alertDialog.setTitle("Allow permissions");
-				alertDialog.setMessage("You need to grant permission to access the storage before use.");
+				alertDialog.setTitle(activity.getString(R.string.allow_permissions));
+				alertDialog.setMessage(activity.getString(R.string.you_need_to_grant_permission_to_access_the_storage_before_use));
 				alertDialog.setCancelable(false);
-				alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Allow", new DialogInterface.OnClickListener() {
+				alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getContext().getString(R.string.allow), new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
 						if (activity.shouldShowRequestPermissionRationale(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
 							Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
 							intent.setData(Uri.parse("package:" + activity.getPackageName()));
 							activity.startActivity(intent);
-							Toast.makeText(activity, "Find and allow access to storage in Settings.", Toast.LENGTH_LONG).show();
+							Toast.makeText(activity, R.string.find_and_allow_access_to_storage_in_settings, Toast.LENGTH_LONG).show();
 						} else {
 							ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1000);
 						}

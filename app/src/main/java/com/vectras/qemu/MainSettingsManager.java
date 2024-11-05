@@ -30,9 +30,12 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 import androidx.preference.SwitchPreferenceCompat;
 
+import com.vectras.vm.AboutActivity;
 import com.vectras.vm.MainActivity;
 import com.vectras.vm.R;
+import com.vectras.vm.RomsManagerActivity;
 import com.vectras.vm.SplashActivity;
+import com.vectras.vm.StoreActivity;
 import com.vectras.vm.VectrasApp;
 
 import java.util.Arrays;
@@ -131,7 +134,6 @@ public class MainSettingsManager extends AppCompatActivity
         }
 
     }
-
 
     public static class AppPreferencesFragment extends PreferenceFragmentCompat
             implements Preference.OnPreferenceChangeListener {

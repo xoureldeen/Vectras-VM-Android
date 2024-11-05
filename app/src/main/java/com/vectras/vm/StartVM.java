@@ -202,7 +202,7 @@ public class StartVM {
             params.add("gtk");
         }
 
-        params.add("-full-screen");
+        //params.add("-full-screen");
 
         params.add("-qmp");
         params.add("tcp:localhost:4444,server,nowait");

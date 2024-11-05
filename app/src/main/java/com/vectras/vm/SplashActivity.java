@@ -35,6 +35,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
 
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.utils.FileUtils;
@@ -85,15 +86,17 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
 
         setupFiles();
 
-        updateLocale(MainSettingsManager.getLang(activity));
+        updateLocale();
     }
 
-    private void updateLocale(String languageCode) {
+    private void updateLocale() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String languageCode = sharedPreferences.getString("language", "en");
+
         Locale locale = new Locale(languageCode);
         Locale.setDefault(locale);
         Configuration config = new Configuration();
         config.setLocale(locale);
-
         getResources().updateConfiguration(config, getResources().getDisplayMetrics());
     }
 
