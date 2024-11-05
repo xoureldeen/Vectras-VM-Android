@@ -23,7 +23,7 @@
             android:entryValues="@array/languageValues"
             android:defaultValue="en"
             android:summary="@string/change_app_locale"
-            app:isPreferenceVisible="false"
+            app:isPreferenceVisible="true"
             app:icon="@drawable/round_language_24" />
 
     </PreferenceCategory>

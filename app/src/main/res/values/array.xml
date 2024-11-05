@@ -2,12 +2,16 @@
 <resources>
     <string-array name="languageLabels">
         <item>English</item>
-        <item>العربيه</item>
+        <item>العربية</item>
+        <item>中文</item>
     </string-array>
+
     <string-array name="languageValues">
         <item>en</item>
         <item>ar</item>
+        <item>zh</item>
     </string-array>
+
     <string-array name="cpuCoresLabels">
         <item>1 core</item>
         <item>2 core</item>

@@ -30,6 +30,7 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 import androidx.preference.SwitchPreferenceCompat;
 
+import com.vectras.vm.MainActivity;
 import com.vectras.vm.R;
 import com.vectras.vm.SplashActivity;
 import com.vectras.vm.VectrasApp;
@@ -139,23 +140,6 @@ public class MainSettingsManager extends AppCompatActivity
             super.onCreate(savedInstanceState);
         }
 
-        public static void updateLanguage(Context context, String selectedLanguage) {
-            if (!"".equals(selectedLanguage)) {
-                Locale locale = new Locale(selectedLanguage);
-                Locale.setDefault(locale);
-                Configuration config = new Configuration();
-                config.locale = locale;
-                context.getResources().updateConfiguration(config, null);
-
-                // Persist user's language preference
-                SharedPreferences sharedPreferences =
-                        PreferenceManager.getDefaultSharedPreferences(context);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("language", selectedLanguage);
-                editor.apply();
-            }
-        }
-
         @Override
         public void onResume() {
             super.onResume();
@@ -168,20 +152,39 @@ public class MainSettingsManager extends AppCompatActivity
 
         }
 
-
         @Override
-        public void onCreatePreferences(Bundle bundle, String root_key) {
+        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             // Load the Preferences from the XML file
-            setPreferencesFromResource(R.xml.settings, root_key);
+            setPreferencesFromResource(R.xml.settings, rootKey);
 
+            // Find the ListPreference and set the change listener
+            ListPreference languagePref = findPreference("language");
+            if (languagePref != null) {
+                languagePref.setOnPreferenceChangeListener(this);
+            }
         }
 
         @Override
-        public boolean onPreferenceChange(Preference pref, Object newValue) {
-            if (pref.getKey().equals("app")) {
-
+        public boolean onPreferenceChange(Preference preference, Object newValue) {
+            if (preference.getKey().equals("language")) {
+                String newLocale = (String) newValue;
+                updateLocale(newLocale);
+                return true;
             }
-            return true;
+            return false;
+        }
+
+        private void updateLocale(String languageCode) {
+            Locale locale = new Locale(languageCode);
+            Locale.setDefault(locale);
+            Configuration config = new Configuration();
+            config.setLocale(locale);
+
+            getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+
+            MainActivity.activity.finish();
+            activity.finish();
+            startActivity(new Intent(activity, SplashActivity.class));
         }
 
     }
@@ -662,6 +665,18 @@ public class MainSettingsManager extends AppCompatActivity
     public static String getArch(Activity activity) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         return prefs.getString("vmArch", "X86_64");
+    }
+
+    public static void setLang(Activity activity, String language) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putString("language", language);
+        edit.apply();
+    }
+
+    public static String getLang(Activity activity) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        return prefs.getString("language", "en");
     }
 
     public static boolean isFirstLaunch(Activity activity) {

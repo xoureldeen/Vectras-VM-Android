@@ -15,6 +15,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -47,6 +48,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Locale;
 
 public class SplashActivity extends AppCompatActivity implements Runnable {
     public static SplashActivity activity;
@@ -82,6 +84,17 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
         MainSettingsManager.setOrientationSetting(activity, 1);
 
         setupFiles();
+
+        updateLocale(MainSettingsManager.getLang(activity));
+    }
+
+    private void updateLocale(String languageCode) {
+        Locale locale = new Locale(languageCode);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.setLocale(locale);
+
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
     }
 
     public void setupFiles() {
