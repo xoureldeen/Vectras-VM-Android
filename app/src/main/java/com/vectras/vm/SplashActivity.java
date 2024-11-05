@@ -58,10 +58,10 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
         activity = this;
         setContentView(R.layout.activity_splash);
 
-        TextView textversionname;
-        textversionname = findViewById(R.id.versionname);
-        PackageInfo pinfo = MainActivity.activity.getAppInfo(getApplicationContext());
-        textversionname.setText(pinfo.versionName);
+        //TextView textversionname;
+        //textversionname = findViewById(R.id.versionname);
+        //PackageInfo pinfo = MainActivity.activity.getAppInfo(getApplicationContext());
+        //textversionname.setText(pinfo.versionName);
         VectrasApp.prepareDataForAppConfig(activity);
         setupFolders();
         SharedPreferences prefs = getSharedPreferences(CREDENTIAL_SHARED_PREF, Context.MODE_PRIVATE);
@@ -331,10 +331,15 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
     public void run() {
         String filesDir = activity.getFilesDir().getAbsolutePath();
         SharedPreferences prefs = getSharedPreferences(CREDENTIAL_SHARED_PREF, Context.MODE_PRIVATE);
-        if ((new File(filesDir, "/distro/usr/local/bin/qemu-system-x86_64").exists()) || (new File(filesDir, "/distro/usr/bin/qemu-system-x86_64").exists()))
+        if ((new File(filesDir, "/distro/usr/local/bin/qemu-system-x86_64").exists()) || (new File(filesDir, "/distro/usr/bin/qemu-system-x86_64").exists())) {
             startActivity(new Intent(this, MainActivity.class));
-        else
+        } else {
             startActivity(new Intent(this, SetupQemuActivity.class));
+            //For Android 14+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                MainSettingsManager.setVmUi(this, "VNC");
+            }
+        }
         finish();
     }
 }

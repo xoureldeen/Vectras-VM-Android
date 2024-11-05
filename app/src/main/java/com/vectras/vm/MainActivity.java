@@ -131,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
     private AlertDialog alertDialog;
     private boolean doneonstart = false;
     public static boolean isActivate = false;
+    public boolean skipIDEwithARM64DialogInStartVM = false;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -756,7 +757,7 @@ public class MainActivity extends AppCompatActivity {
                         int versionCode = pinfo.versionCode;
                         String versionName = pinfo.versionName;
 
-                        if (versionCode < obj.getInt("versionCode") || !versionName.equals(obj.getString("versionName"))) {
+                        if (versionCode < obj.getInt("versionCode") || !obj.getString("versionName").contains(versionName)) {
                             AlertDialog.Builder alert = new AlertDialog.Builder(activity, R.style.MainDialogTheme);
                             alert.setTitle("Install the latest version")
                                     .setMessage(Html.fromHtml(obj.getString("Message") + "<br><br>update size:<br>" + obj.getString("size")))
@@ -949,6 +950,27 @@ public class MainActivity extends AppCompatActivity {
                 abiAlertDialog.show();
                 return;
             }
+        }
+
+        if (MainSettingsManager.getArch(activity).equals("ARM64") && MainSettingsManager.getIfType(activity).equals("ide") && !activity.skipIDEwithARM64DialogInStartVM) {
+            AlertDialog abiAlertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
+            abiAlertDialog.setTitle(activity.getResources().getString(R.string.problem_has_been_detected));
+            abiAlertDialog.setMessage(activity.getResources().getString(R.string.you_cannot_use_IDE_hard_drive_type_with_ARM64));
+            abiAlertDialog.setButton(DialogInterface.BUTTON_POSITIVE, activity.getResources().getString(R.string.continuetext), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    activity.skipIDEwithARM64DialogInStartVM = true;
+                    startVM(vmName, env, itemExtra, itemPath);
+                }
+            });
+            abiAlertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, activity.getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+            abiAlertDialog.show();
+            return;
+        } else if (activity.skipIDEwithARM64DialogInStartVM) {
+            activity.skipIDEwithARM64DialogInStartVM = false;
         }
 
         boolean isRunning = isMyServiceRunning(MainService.class);
@@ -1380,6 +1402,10 @@ public class MainActivity extends AppCompatActivity {
         } else {
             linearnothinghere.setVisibility(View.GONE);
         }
+    }
+
+    public static void mdatasize2() {
+        linearnothinghere.setVisibility(View.VISIBLE);
     }
 
     private void checkpermissions() {

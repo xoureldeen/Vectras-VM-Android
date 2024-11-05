@@ -37,48 +37,87 @@ public class StartVM {
             params.add("qemu-system-ppc");
 
         String ifType;
-        if (MainSettingsManager.getArch(activity).equals("ARM64"))
-            ifType = "ahci";
-        else
-            ifType= MainSettingsManager.getIfType(activity);
+        ifType= MainSettingsManager.getIfType(activity);
 
         String cdrom;
+        String hdd0;
         String hdd1;
 
-        if (!(img.length() == 0)) {
-            String hdd0 = "-drive";
-            hdd0 += " index=0";
-            hdd0 += ",media=disk";
-            hdd0 += ",if=" + ifType;
-            hdd0 += ",file='" + img + "'";
+        if (!img.isEmpty()) {
+            if (ifType.isEmpty()) {
+                hdd0 = "-hda";
+                hdd0 += " '" + img + "'";
+            } else {
+                hdd0 = "-drive";
+                hdd0 += " index=0";
+                hdd0 += ",media=disk";
+                hdd0 += ",if=" + ifType;
+                hdd0 += ",file='" + img + "'";
+
+                if ((MainSettingsManager.getArch(activity).equals("ARM64") && ifType.equals("ide")) || MainSettingsManager.getArch(activity).equals("PPC")) {
+                    hdd0 = "-drive";
+                    hdd0 += " index=0";
+                    hdd0 += ",media=disk";
+                    hdd0 += ",file='" + img + "'";
+                }
+            }
             params.add(hdd0);
         }
 
         File cdromFile = new File(filesDir + "/data/Vectras/drive.iso");
 
         if (cdromFile.exists()) {
-            cdrom = "-drive";
-            cdrom += " index=1";
-            cdrom += ",media=cdrom";
-            cdrom += ",file='" + cdromFile.getPath() + "'";
+            if (MainSettingsManager.getArch(activity).equals("ARM64")) {
+                cdrom = "-device";
+                cdrom += " usb-storage,drive=cdrom";
+                cdrom += " -drive";
+                cdrom += " if=none,id=cdrom,format=raw,media=cdrom,file='" + cdromFile.getPath() + "'";
+                if (!extras.contains("-device nec-usb-xhci")) {
+                    cdrom += " -device";
+                    cdrom += " qemu-xhci";
+                    cdrom += " -device";
+                    cdrom += " nec-usb-xhci";
+                }
+            } else {
+                if (ifType.isEmpty()) {
+                    cdrom = "-cdrom";
+                    cdrom += " '" + cdromFile.getPath() + "'";
+                } else {
+                    cdrom = "-drive";
+                    cdrom += " index=1";
+                    cdrom += ",media=cdrom";
+                    cdrom += ",file='" + cdromFile.getPath() + "'";
+                }
+            }
+
             params.add(cdrom);
         }
 
         File hdd1File = new File(filesDir + "/data/Vectras/hdd1.qcow2");
 
         if (hdd1File.exists()) {
-            hdd1 = "-drive";
-            hdd1 += " index=2";
-            hdd1 += ",media=disk";
-            hdd1 += ",if=" + ifType;
-            hdd1 += ",file='" + hdd1File.getPath() + "'";
+            if (ifType.isEmpty()) {
+                hdd1 = "-hdb";
+                hdd1 += " '" + hdd1File.getPath() + "'";
+            } else {
+                hdd1 = "-drive";
+                hdd1 += " index=2";
+                hdd1 += ",media=disk";
+                hdd1 += ",if=" + ifType;
+                hdd1 += ",file='" + hdd1File.getPath() + "'";
+            }
+
             params.add(hdd1);
         }
 
 
         if (MainSettingsManager.getSharedFolder(activity)) {
             String driveParams = "-drive ";
-            driveParams += "index=3,media=disk,file=fat:";
+            if (ifType.isEmpty()) {
+                driveParams += "media=disk,file=fat:";
+            } else {
+                driveParams += "index=3,media=disk,file=fat:";
+            }
             driveParams += "rw:"; //Disk Drives are always Read/Write
             driveParams += FileUtils.getExternalFilesDirectory(activity).getPath() + "/SharedFolder,format=raw";
             params.add(driveParams);
@@ -88,7 +127,12 @@ public class StartVM {
         memoryStr += RamInfo.vectrasMemory();
 
         String boot = "-boot ";
-        boot += MainSettingsManager.getBoot(activity);
+        if (extras.contains(".iso ")) {
+
+            boot += MainSettingsManager.getBoot(activity);
+        } else {
+            boot += "c";
+        }
 
         String soundDevice = "-audiodev pa,id=pa -device AC97,audiodev=pa";
 
@@ -145,14 +189,8 @@ public class StartVM {
                 params.add(qmpParams);
             }
 
-            if (!MainSettingsManager.getArch(activity).equals("PPC")) {
-                if (!MainSettingsManager.getArch(activity).equals("ARM64")) {
-                    params.add("-monitor");
-                }
-            }
-            if (MainSettingsManager.getArch(activity).equals("ARM64")) {
-                //params.add("stdio");
-            } else if (!MainSettingsManager.getArch(activity).equals("PPC")) {
+            if (!MainSettingsManager.getArch(activity).equals("PPC") || !MainSettingsManager.getArch(activity).equals("ARM64")) {
+                params.add("-monitor");
                 params.add("vc");
             }
         } else if (MainSettingsManager.getVmUi(activity).equals("SPICE")) {
@@ -169,7 +207,23 @@ public class StartVM {
         params.add("-qmp");
         params.add("tcp:localhost:4444,server,nowait");
 
-        params.add(extras);
+        String finalextra;
+
+        if (ifType.isEmpty()) {
+            if (extras.contains("-drive index=1,media=cdrom,file=")) {
+                finalextra = extras.replace("-drive index=1,media=cdrom,file=", "-cdrom ");
+            } else {
+                finalextra = extras;
+            }
+        } else {
+            if (extras.contains("-cdrom ")) {
+                finalextra = extras.replace("-cdrom ", "-drive index=1,media=cdrom,file=");
+            } else {
+                finalextra = extras;
+            }
+        }
+
+        params.add(finalextra);
 
         return String.join(" ", params);
     }

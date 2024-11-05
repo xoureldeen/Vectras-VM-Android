@@ -295,7 +295,7 @@ public class CustomRomActivity extends AppCompatActivity {
                             }
                             cdrom.setText("");
 
-                            Pattern pattern = Pattern.compile("-drive index=1,media=cdrom,file='([^']*)'");
+                            Pattern pattern = Pattern.compile(cdromPatternCompile());
                             Matcher matcher = pattern.matcher(qemu.getText().toString());
 
                             if (matcher.find()) {
@@ -441,7 +441,7 @@ public class CustomRomActivity extends AppCompatActivity {
             icon.setText(current.itemIcon);
             drive.setText(current.itemPath);
 
-            Pattern pattern = Pattern.compile("-drive index=1,media=cdrom,file='([^']*)'");
+            Pattern pattern = Pattern.compile(cdromPatternCompile());
             Matcher matcher = pattern.matcher(current.itemExtra);
 
             if (matcher.find()) {
@@ -591,57 +591,7 @@ public class CustomRomActivity extends AppCompatActivity {
                 }
             }).start();
         } else if (requestCode == 1002 && resultCode == RESULT_OK) {
-            Uri content_describer = ReturnedIntent.getData();
-            File selectedFilePath = new File(getPath(content_describer));
-            drive.setText(AppConfig.maindirpath + "roms/" + title.getText().toString() + "/" + selectedFilePath.getName());
-            loadingPb.setVisibility(View.VISIBLE);
-            custom.setVisibility(View.GONE);
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    FileInputStream File = null;
-                    try {
-                        File = (FileInputStream) getContentResolver().openInputStream(content_describer);
-                    } catch (FileNotFoundException e) {
-                        throw new RuntimeException(e);
-                    }
-                    try {
-                        try {
-                            OutputStream out = new FileOutputStream(new File(AppConfig.maindirpath + "roms/" + title.getText().toString() + "/" + selectedFilePath.getName()));
-                            try {
-                                // Transfer bytes from in to out
-                                byte[] buf = new byte[1024];
-                                int len;
-                                while ((len = File.read(buf)) > 0) {
-                                    out.write(buf, 0, len);
-                                }
-                            } finally {
-                                out.close();
-                            }
-                        } finally {
-                            Runnable runnable = new Runnable() {
-                                @Override
-                                public void run() {
-                                    loadingPb.setVisibility(View.GONE);
-                                    custom.setVisibility(View.VISIBLE);
-                                }
-                            };
-                            activity.runOnUiThread(runnable);
-                            File.close();
-                        }
-                    } catch (IOException e) {
-                        Runnable runnable = new Runnable() {
-                            @Override
-                            public void run() {
-                                loadingPb.setVisibility(View.GONE);
-                                custom.setVisibility(View.VISIBLE);
-                                UIUtils.UIAlert(activity, "error", e.toString());
-                            }
-                        };
-                        activity.runOnUiThread(runnable);
-                    }
-                }
-            }).start();
+            selectedDiskFile(ReturnedIntent.getData());
         } else if (requestCode == 1003 && resultCode == RESULT_OK) {
             Uri content_describer = ReturnedIntent.getData();
             File selectedFilePath = new File(getPath(content_describer));
@@ -652,10 +602,21 @@ public class CustomRomActivity extends AppCompatActivity {
                 String qemuText = qemu.getText().toString();
                 String cdromParam = "-drive index=1,media=cdrom,file='" + cdromPath + "'";
 
-                Pattern pattern = Pattern.compile("-drive index=1,media=cdrom,file='(.*?)'");
+                if (MainSettingsManager.getArch(activity).equals("ARM64")) {
+                    if (!qemu.getText().toString().contains("-device nec-usb-xhci")) {
+                        qemu.setText(qemu.getText().toString() + " -device nec-usb-xhci");
+                    }
+                    cdromParam = "-device usb-storage,drive=cdrom -drive if=none,id=cdrom,format=raw,media=cdrom,file='" + cdromPath + "'";
+                } else {
+                    if (MainSettingsManager.getIfType(activity).isEmpty()) {
+                        cdromParam = "-cdrom '" + cdromPath + "'";
+                    }
+                }
+
+                Pattern pattern = Pattern.compile(cdromPatternCompile2());
                 Matcher matcher = pattern.matcher(qemuText);
 
-                if (!qemuText.contains("-drive index=1,media=cdrom,file=")) {
+                if (!qemuText.contains("-drive index=1,media=cdrom,file=") || !qemuText.contains("-cdrom") || !qemuText.contains("-device usb-storage,drive=cdrom -drive if=none,id=cdrom,format=raw,media=cdrom,file=")) {
                     qemu.append(" " + cdromParam);
                 } else {
                     if (matcher.find()) {
@@ -792,7 +753,7 @@ public class CustomRomActivity extends AppCompatActivity {
         errorjsondialog();
 
         File isoFile = new File(cdrom.getText().toString());
-        if (isoFile.exists() && !qemu.getText().toString().contains("-drive index=1,media=cdrom,file=")) {
+        if (isoFile.exists() && !qemu.getText().toString().contains(cdrom.getText().toString())) {
             isoFile.delete();
         }
 
@@ -1064,14 +1025,16 @@ public class CustomRomActivity extends AppCompatActivity {
                                         title.setText(jObj.getString("title"));
                                         icon.setText(AppConfig.maindirpath
                                                 + "roms/" + _filename.replace(".cvbi", "") + "/" + jObj.getString("icon"));
-                                        drive.setText(AppConfig.maindirpath
-                                                + "roms/" + _filename.replace(".cvbi", "") + "/" + jObj.getString("drive"));
+                                        if (!jObj.getString("drive").isEmpty()) {
+                                            drive.setText(AppConfig.maindirpath
+                                                    + "roms/" + _filename.replace(".cvbi", "") + "/" + jObj.getString("drive"));
+                                        }
                                         qemu.setText(jObj.getString("qemu"));
                                         ImageView ivIcon = findViewById(R.id.ivIcon);
                                         Bitmap bmImg = BitmapFactory.decodeFile(AppConfig.maindirpath
                                                 + "roms/" + _filename.replace(".cvbi", "") + "/" + jObj.getString("icon"));
                                         ivIcon.setImageBitmap(bmImg);
-                                        UIUtils.UIAlert(activity, getResources().getString(R.string.from) + ": " + jObj.getString("author") + "\n\n" + Html.fromHtml(jObj.getString("desc")), getResources().getString(R.string.description) + ":");
+                                        UIUtils.UIAlert(activity, getResources().getString(R.string.from) + ": " + jObj.getString("author"), getResources().getString(R.string.description) + ":\n\n" + Html.fromHtml(jObj.getString("desc")));
                                     } catch (JSONException e) {
                                         throw new RuntimeException(e);
                                     }
@@ -1097,6 +1060,104 @@ public class CustomRomActivity extends AppCompatActivity {
             } else {
                 VectrasApp.oneDialog(getResources().getString(R.string.problem_has_been_detected), getResources().getString(R.string.format_not_supported_please_select_file_with_format_cvbi), true, false, this);
             }
+        }
+    }
+
+    private void selectedDiskFile(Uri _content_describer) {
+        File selectedFilePath = new File(getPath(_content_describer));
+        if (VectrasApp.isADiskFile(selectedFilePath.getPath())) {
+            startProcessingHardDriveFile(_content_describer);
+        } else {
+            alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
+            alertDialog.setTitle(getResources().getString(R.string.problem_has_been_detected));
+            alertDialog.setMessage(getResources().getString(R.string.file_format_is_not_supported));
+            alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.continuetext), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    startProcessingHardDriveFile(_content_describer);
+                }
+            });
+            alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    alertDialog.dismiss();
+                }
+            });
+            alertDialog.show();
+        }
+    }
+
+    private void startProcessingHardDriveFile (Uri _content_describer) {
+        LinearLayout custom = findViewById(R.id.custom);
+        File selectedFilePath = new File(getPath(_content_describer));
+        drive.setText(AppConfig.maindirpath + "roms/" + title.getText().toString() + "/" + selectedFilePath.getName());
+        loadingPb.setVisibility(View.VISIBLE);
+        custom.setVisibility(View.GONE);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                FileInputStream File = null;
+                try {
+                    File = (FileInputStream) getContentResolver().openInputStream(_content_describer);
+                } catch (FileNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+                try {
+                    try {
+                        OutputStream out = new FileOutputStream(new File(AppConfig.maindirpath + "roms/" + title.getText().toString() + "/" + selectedFilePath.getName()));
+                        try {
+                            // Transfer bytes from in to out
+                            byte[] buf = new byte[1024];
+                            int len;
+                            while ((len = File.read(buf)) > 0) {
+                                out.write(buf, 0, len);
+                            }
+                        } finally {
+                            out.close();
+                        }
+                    } finally {
+                        Runnable runnable = new Runnable() {
+                            @Override
+                            public void run() {
+                                loadingPb.setVisibility(View.GONE);
+                                custom.setVisibility(View.VISIBLE);
+                            }
+                        };
+                        activity.runOnUiThread(runnable);
+                        File.close();
+                    }
+                } catch (IOException e) {
+                    Runnable runnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            loadingPb.setVisibility(View.GONE);
+                            custom.setVisibility(View.VISIBLE);
+                            UIUtils.UIAlert(activity, "error", e.toString());
+                        }
+                    };
+                    activity.runOnUiThread(runnable);
+                }
+            }
+        }).start();
+    }
+
+    private String cdromPatternCompile() {
+        //Matches any string of characters that does not contain single quotes
+        if (MainSettingsManager.getArch(activity).equals("ARM64")) {
+            return  "-device usb-storage,drive=cdrom -drive if=none,id=cdrom,format=raw,media=cdrom,file='([^']*)'";
+        } else if (MainSettingsManager.getIfType(activity).isEmpty()) {
+            return  "-cdrom '([^']*)'";
+        } else {
+            return "-drive index=1,media=cdrom,file='([^']*)'";
+        }
+    }
+
+    private String cdromPatternCompile2() {
+        //Matches any string of characters, but will try to match the shortest string possible
+        if (MainSettingsManager.getArch(activity).equals("ARM64")) {
+            return  "-device usb-storage,drive=cdrom -drive if=none,id=cdrom,format=raw,media=cdrom,file='(.*?)'";
+        } else if (MainSettingsManager.getIfType(activity).isEmpty()) {
+            return  "-cdrom '(.*?)'";
+        } else {
+            return "-drive index=1,media=cdrom,file='(.*?)'";
         }
     }
 

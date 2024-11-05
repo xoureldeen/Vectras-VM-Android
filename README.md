@@ -11,13 +11,11 @@
 
 Welcome to Vectras VM! A virtual machine app for Android based on QEMU that let you emulate various OS including: Windows, MacOS, Linux and Android.
 
-If you want help you can go through [our documention](https://vectrasvm.blackstorm.cc/how.html). If you are short in time, you could get a straight to the point answer in [Vectras Telegram group](http://t.me/vectras_vm_discussion)
+If you want help you can go through [our documention](https://vectras.vercel.app/how.html). If you are short in time, you could get a straight to the point answer in [Vectras Telegram group](http://t.me/vectras_vm_discussion)
 
 # Installation
-> [!NOTE]
-> Starting from 2.8, there will be no official support for ARMv7 devices.
 
-You can either download Vectras VM from [releases](https://github.com/epicstudios856/Vectras-VM-Android/releases) or [official website](https://vectras.vercel.app/download.html).
+You can either download Vectras VM from [releases](https://github.com/xoureldeen/Vectras-VM-Android/releases) or [official website](https://vectras.vercel.app/download.html).
 
 [![OpenAPK](https://www.openapk.net/images/openapk-badge.png)](https://www.openapk.net/vectras-vm/com.vectras.vm/)
 
@@ -50,7 +48,7 @@ Help support the project by funding it.
 [ico-ko-fi]: https://img.shields.io/badge/Ko--fi-FF5E5B?logo=ko-fi&logoColor=white
 
 [link-telegram]: https://t.me/vectras_os
-[link-repo]: https://github.com/epicstudios856/Vectras-VM-Android/
-[link-releases]: https://github.com/epicstudios856/Vectras-VM-Android/releases/
+[link-repo]: https://github.com/xoureldeen/Vectras-VM-Android/
+[link-releases]: https://github.com/xoureldeen/Vectras-VM-Android/releases/
 [link-buymeacoffee]: https://www.buymeacoffee.com/vectrasvm
 [link-ko-fi]: https://ko-fi.com/vectrasvm

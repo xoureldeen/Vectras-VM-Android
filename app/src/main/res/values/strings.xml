@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
     
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">v2.9.3</string>
+    <string name="app_version" translatable="false">v2.9.3 (Velvet)</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -362,6 +362,8 @@
     <string name="clean_up_content">ROMs, files and folders that are no longer in use will be deleted.</string>
     <string name="go_to_rom_store">Go to ROM store</string>
     <string name="want_to_learn_more_about_qemu">Want to learn more about QEMU?</string>
+    <string name="file_format_is_not_supported">Things may not work because the file format is not supported. Do you want to continue?</string>
+    <string name="you_cannot_use_IDE_hard_drive_type_with_ARM64">You cannot use IDE hard drive type with ARM64. If you continue, the default hard drive type will be used.</string>
     
     <!--======================TERMUX STRINGS====================-->
     <string name="application_name">Vterm</string>
