@@ -352,7 +352,7 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
         } else {
             startActivity(new Intent(this, SetupQemuActivity.class));
             //For Android 14+
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            if (Build.VERSION.SDK_INT >= 34) {
                 MainSettingsManager.setVmUi(this, "VNC");
             }
         }
