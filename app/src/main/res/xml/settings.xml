@@ -3,7 +3,7 @@
     <PreferenceCategory
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:title="APP SETTINGS"
+        android:title="@string/app_settings"
         app:icon="@drawable/round_settings_24">
 
         <SwitchPreferenceCompat
@@ -23,7 +23,7 @@
             android:entryValues="@array/languageValues"
             android:defaultValue="en"
             android:summary="@string/change_app_locale"
-            app:isPreferenceVisible="false"
+            app:isPreferenceVisible="true"
             app:icon="@drawable/round_language_24" />
 
     </PreferenceCategory>

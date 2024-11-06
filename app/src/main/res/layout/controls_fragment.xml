@@ -91,6 +91,16 @@
                         app:tint="?attr/colorPrimary" />
 
                     <ImageButton
+                        android:id="@+id/btnFit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="8dp"
+                        android:background="@drawable/controls_button"
+                        android:backgroundTint="?attr/colorPrimary"
+                        android:src="@drawable/open_in_full_24px"
+                        app:tint="?attr/colorPrimary" />
+
+                    <ImageButton
                         android:id="@+id/btnMode"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

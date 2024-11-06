@@ -83,14 +83,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
-                    android:text="Start setup"
+                    android:text="@string/start_setup"
                     android:textSize="18sp" />
                 <TextView
                     android:id="@+id/textview3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
-                    android:text="Do you want to set it up automatically or select the bootstrap file manually\?" />
+                    android:text="@string/do_you_want_to_set_it_up_automatically_or_select_the_bootstrap_file_manually" />
                 <LinearLayout
                     android:id="@+id/linear5"
                     android:layout_width="match_parent"
@@ -105,14 +105,14 @@
                         android:layout_marginRight="4dp"
                         android:padding="8dp"
                         android:gravity="center_horizontal|center_vertical"
-                        android:text="Auto setup" />
+                        android:text="@string/auto_setup" />
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/buttonmanualsetup"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="8dp"
                         android:gravity="center_horizontal|center_vertical"
-                        android:text="Manual" />
+                        android:text="@string/manual" />
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
@@ -136,7 +136,7 @@
                     android:layout_height="wrap_content"
                     android:padding="8dp"
                     android:gravity="center"
-                    android:text="Getting ready for you..." />
+                    android:text="@string/getting_ready_for_you" />
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/linearsetupfailed"
@@ -150,14 +150,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
-                    android:text="Failed!"
+                    android:text="@string/failed"
                     android:textSize="18sp" />
                 <TextView
                     android:id="@+id/textview6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
-                    android:text="Something went wrong during setup. Would you like to try again\?" />
+                    android:text="@string/something_went_wrong_during_setup_would_you_like_to_try_again" />
                 <LinearLayout
                     android:id="@+id/linear8"
                     android:layout_width="match_parent"
@@ -172,14 +172,14 @@
                         android:layout_marginRight="4dp"
                         android:padding="8dp"
                         android:gravity="center_horizontal|center_vertical"
-                        android:text="Try again" />
+                        android:text="@string/try_again" />
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/buttonsetupshowlog"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="8dp"
                         android:gravity="center_horizontal|center_vertical"
-                        android:text="Show log" />
+                        android:text="@string/show_log" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -194,7 +194,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text="Show advanced setup" />
+                android:text="@string/show_advanced_setup" />
         </LinearLayout>
     </LinearLayout>
 <androidx.cardview.widget.CardView

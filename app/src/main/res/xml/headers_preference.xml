@@ -26,4 +26,10 @@
         android:title="@string/vnc"
         android:summary="@string/vnc_ui_environment"
         app:iconSpaceReserved="false" />
+    <Preference
+        android:key="x11"
+        android:fragment="com.vectras.vm.x11.LoriePreferences$LoriePreferenceFragment"
+        android:title="@string/x11"
+        android:summary="@string/x11_ui_environment"
+        app:iconSpaceReserved="false" />
 </PreferenceScreen>

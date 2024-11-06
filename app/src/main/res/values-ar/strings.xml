@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Vectras VM</string>
+    <string name="app_name">فيكترا</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">v2.9.3 (Velvet)</string>
-    <string name="qemu_version" translatable="false">مستقر</string>
     <string name="str_home">الرئيسية</string>
     <string name="str_logger">سجل الأحداث</string>
     <string name="fab_info">بدء المحاكاة</string>
@@ -231,7 +229,7 @@
     <string name="running">قيد التشغيل</string>
     <string name="stopped">متوقف</string>
     <string name="service">الخدمة:</string>
-    <string name="free_palistine">حرر فلسطين</string>
+    <string name="free_palistine">فلسطين حره</string>
     <string name="store">المتجر</string>
     <string name="no_internet_connection">لا يوجد اتصال بالإنترنت</string>
     <string name="check_your_internet_connection">تحقق من اتصالك بالإنترنت</string>

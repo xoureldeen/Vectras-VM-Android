@@ -199,10 +199,10 @@ public class StartVM {
             params.add(spiceStr);
         } else if (MainSettingsManager.getVmUi(activity).equals("X11")) {
             params.add("-display");
-            params.add("sdl");
+            params.add("gtk");
         }
 
-        params.add("-full-screen");
+        //params.add("-full-screen");
 
         params.add("-qmp");
         params.add("tcp:localhost:4444,server,nowait");

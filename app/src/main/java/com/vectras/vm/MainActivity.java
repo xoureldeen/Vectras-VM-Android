@@ -597,18 +597,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         if (Config.debug)
-            UIUtils.UIAlert(activity, "DEBUG TESTING BUILD 5", "welcome to debug build of vectras vm :)<br>" +
-                    "this version unstable and has alot of bugs<br>" +
-                    "don't forget to tell us on github issues or telegram bot<br>" +
-                    "<a href=\"https://t.me/vectras_protect_bot\">telegram report bot</a><br>" +
-                    "<a href=\"https://github.com/epicstudios856/Vectras-VM-Android/issues\">github issues page</a><br>");
+            UIUtils.UIAlert(activity, getString(R.string.debug_testing_build_5), getString(R.string.welcome_to_debug_build_of_vectras_vm_br) +
+                    getString(R.string.this_version_unstable_and_has_alot_of_bugs_br) +
+                    getString(R.string.don_t_forget_to_tell_us_on_github_issues_or_telegram_bot_br) +
+                    getString(R.string.a_href_https_t_me_vectras_protect_bot_telegram_report_bot_a_br) +
+                    getString(R.string.a_href_https_github_com_epicstudios856_vectras_vm_android_issues_github_issues_page_a_br));
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         if (!prefs.getBoolean("tgDialog", false)) {
             AlertDialog alertDialog;
             alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
-            alertDialog.setTitle("JOIN US ON TELEGRAM");
-            alertDialog.setMessage("Join us on Telegram where we publish all the news and updates and receive your opinions and bugs");
-            alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "JOIN", new DialogInterface.OnClickListener() {
+            alertDialog.setTitle(getString(R.string.join_us_on_telegram));
+            alertDialog.setMessage(getString(R.string.join_us_on_telegram_where_we_publish_all_the_news_and_updates_and_receive_your_opinions_and_bugs));
+            alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.join), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     String tg = "https://t.me/vectras_os";
                     Intent f = new Intent(Intent.ACTION_VIEW);
@@ -617,12 +617,12 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
             });
-            alertDialog.setButton(DialogInterface.BUTTON_NEUTRAL, "CANCEL", new DialogInterface.OnClickListener() {
+            alertDialog.setButton(DialogInterface.BUTTON_NEUTRAL, getString(R.string.cancel), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     return;
                 }
             });
-            alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "DONT SHOW AGAIN", new DialogInterface.OnClickListener() {
+            alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.dont_show_again), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
                     SharedPreferences.Editor edit = prefs.edit();

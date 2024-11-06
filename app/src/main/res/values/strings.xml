@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
     
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">v2.9.3 (Velvet)</string>
+    <string name="app_version" translatable="false">v2.9.4</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -464,4 +464,45 @@
     <string name="no">cancel</string>
     <string name="cancel">cancel</string>
     <string name="back_to_the_display">Back to the Display</string>
+    <string name="x11_ui_environment">x11 ui environment.</string>
+    <string name="x11">X11</string>
+    <string name="rom_options">Rom Options</string>
+    <string name="about_app">About App</string>
+    <string name="join_us_on_telegram">JOIN US ON TELEGRAM</string>
+    <string name="join_us_on_telegram_where_we_publish_all_the_news_and_updates_and_receive_your_opinions_and_bugs">Join us on Telegram where we publish all the news and updates and receive your opinions and bugs</string>
+    <string name="join">JOIN</string>
+    <string name="dont_show_again">DONT SHOW AGAIN</string>
+    <string name="this_version_unstable_and_has_alot_of_bugs_br"><![CDATA[this version unstable and has alot of bugs<br>]]></string>
+    <string name="debug_testing_build_5">DEBUG TESTING BUILD 5</string>
+    <string name="welcome_to_debug_build_of_vectras_vm_br"><![CDATA[welcome to debug build of vectras vm :)<br>]]></string>
+    <string name="don_t_forget_to_tell_us_on_github_issues_or_telegram_bot_br"><![CDATA[don\'t forget to tell us on github issues or telegram bot<br>]]></string>
+    <string name="a_href_https_t_me_vectras_protect_bot_telegram_report_bot_a_br"><![CDATA[<a href=\"https://t.me/vectras_protect_bot\">telegram report bot</a><br>]]></string>
+    <string name="a_href_https_github_com_epicstudios856_vectras_vm_android_issues_github_issues_page_a_br"><![CDATA[<a href=\"https://github.com/epicstudios856/Vectras-VM-Android/issues\">github issues page</a><br>]]></string>
+    <string name="getting_ready_for_you_please_don_t_disconnect_the_network">Getting ready for you...\nPlease don\'t disconnect the network.</string>
+    <string name="it_won_t_take_long">It won\'t take long...</string>
+    <string name="completed_10_it_won_t_take_long">Completed 10%\nIt won\'t take long...</string>
+    <string name="completed_20_it_won_t_take_long">Completed 20%\nIt won\'t take long...</string>
+    <string name="completed_30_it_won_t_take_long">Completed 30%\nIt won\'t take long...</string>
+    <string name="completed_40_it_won_t_take_long">Completed 40%\nIt won\'t take long...</string>
+    <string name="completed_50_it_won_t_take_long">Completed 50%\nIt won\'t take long...</string>
+    <string name="don_t_disconnect">Don\'t disconnect...</string>
+    <string name="completed_75_don_t_disconnect">Completed 75%\nDon\'t disconnect...</string>
+    <string name="keep_it_up">Keep it up...</string>
+    <string name="completed_80_keep_it_up">Completed 80%\nKeep it up...</string>
+    <string name="completed_95_keep_it_up">Completed 95%\nKeep it up...</string>
+    <string name="almost_there">Almost there.</string>
+    <string name="show_advanced_setup">Show advanced setup</string>
+    <string name="allow_permissions">Allow permissions</string>
+    <string name="you_need_to_grant_permission_to_access_the_storage_before_use">You need to grant permission to access the storage before use.</string>
+    <string name="find_and_allow_access_to_storage_in_settings">Find and allow access to storage in Settings.</string>
+    <string name="do_you_want_to_set_it_up_automatically_or_select_the_bootstrap_file_manually">Do you want to set it up automatically or select the bootstrap file manually?</string>
+    <string name="auto_setup">Auto setup</string>
+    <string name="manual">Manual</string>
+    <string name="getting_ready_for_you">Getting ready for you...</string>
+    <string name="failed">Failed!</string>
+    <string name="something_went_wrong_during_setup_would_you_like_to_try_again">Something went wrong during setup. Would you like to try again?</string>
+    <string name="show_log">Show log</string>
+    <string name="bootstrap_required">BOOTSTRAP REQUIRED!</string>
+    <string name="you_can_choose_between_auto_download_and_setup_or_manual_setup_by_choosing_bootstrap_file">You can choose between auto download and setup or manual setup by choosing bootstrap file.</string>
+    <string name="manual_setup">MANUAL SETUP</string>
 </resources>

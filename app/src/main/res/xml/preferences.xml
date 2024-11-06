@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <PreferenceCategory android:key="output" android:title="Output">
         <ListPreference
             android:title="Display resolution mode"
@@ -52,7 +53,8 @@
 
         <SwitchPreferenceCompat
             android:title="Force landscape orientation"
-            android:defaultValue="false"
+            android:defaultValue="true"
+            app:isPreferenceVisible="false"
             android:key="forceLandscape" />
 
         <SwitchPreferenceCompat
@@ -123,13 +125,15 @@
     <PreferenceCategory android:key="kbd" android:title="Keyboard">
         <SwitchPreferenceCompat
             android:title="Toggle keyboard using back key"
-            android:defaultValue="true"
+            android:defaultValue="false"
+            app:isPreferenceVisible="false"
             android:key="toggleIMEUsingBackKey" />
 
         <SwitchPreferenceCompat
             android:title="Show additional keyboard"
             android:summary="Show keyboard with additional keys."
-            android:defaultValue="true"
+            android:defaultValue="false"
+            app:isPreferenceVisible="false"
             android:key="showAdditionalKbd" />
 
         <SwitchPreferenceCompat
@@ -140,6 +144,7 @@
         <SwitchPreferenceCompat
             android:title="Hide additional keyboard on Volume Down key press"
             android:defaultValue="false"
+            app:isPreferenceVisible="false"
             android:key="hideEKOnVolDown" />
 
         <SwitchPreferenceCompat
@@ -198,17 +203,19 @@
             android:title="Opacity of extra keys bar, %"
             android:key="opacityEKBar"
             android:max="100"
+            app:isPreferenceVisible="false"
             android:defaultValue="100" />
 
         <Preference
             android:title="Extra keys config"
-            android:key="extra_keys_config" />
+            android:key="extra_keys_config"
+            app:isPreferenceVisible="false" />
     </PreferenceCategory>
 
     <PreferenceCategory android:key="other" android:title="Other">
         <SwitchPreferenceCompat
             android:title="Clipboard sharing"
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="clipboardEnable" />
 
         <Preference

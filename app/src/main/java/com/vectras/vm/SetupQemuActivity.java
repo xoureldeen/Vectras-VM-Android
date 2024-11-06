@@ -6,6 +6,7 @@ import static android.content.Intent.ACTION_VIEW;
 import com.termux.app.TermuxService;
 import static com.vectras.vm.utils.UIUtils.UIAlert;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -316,6 +317,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
     String tarPath;
 
     // Function to append text and automatically scroll to bottom
+    @SuppressLint("SetTextI18n")
     private void appendTextAndScroll(String textToAdd) {
         ScrollView scrollView = findViewById(R.id.scrollView);
 
@@ -331,29 +333,29 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
 
         if (textToAdd.contains("Starting setup...")) {
             title.setText("Getting ready for you...");
-            textviewsettingup.setText("Getting ready for you...\nPlease don't disconnect the network.");
+            textviewsettingup.setText(R.string.getting_ready_for_you_please_don_t_disconnect_the_network);
         } else if (textToAdd.contains("Installing packages...")) {
-            title.setText("It won't take long...");
-            textviewsettingup.setText("Completed 10%\nIt won't take long...");
+            title.setText(R.string.it_won_t_take_long);
+            textviewsettingup.setText(R.string.completed_10_it_won_t_take_long);
         } else if (textToAdd.contains("(50/")) {
-            textviewsettingup.setText("Completed 20%\nIt won't take long...");
+            textviewsettingup.setText(R.string.completed_20_it_won_t_take_long);
         } else if (textToAdd.contains("100/")) {
-            textviewsettingup.setText("Completed 30%\nIt won't take long...");
+            textviewsettingup.setText(R.string.completed_30_it_won_t_take_long);
         } else if (textToAdd.contains("150/")) {
-            textviewsettingup.setText("Completed 40%\nIt won't take long...");
+            textviewsettingup.setText(R.string.completed_40_it_won_t_take_long);
         } else if (textToAdd.contains("200/")) {
-            textviewsettingup.setText("Completed 50%\nIt won't take long...");
+            textviewsettingup.setText(R.string.completed_50_it_won_t_take_long);
         } else if (textToAdd.contains("Downloading Qemu...")) {
-            title.setText("Don't disconnect...");
-            textviewsettingup.setText("Completed 75%\nDon't disconnect...");
+            title.setText(R.string.don_t_disconnect);
+            textviewsettingup.setText(R.string.completed_75_don_t_disconnect);
         } else if (textToAdd.contains("Installing Qemu...")) {
-            title.setText("Keep it up...");
-            textviewsettingup.setText("Completed 80%\nKeep it up...");
+            title.setText(R.string.keep_it_up);
+            textviewsettingup.setText(R.string.completed_80_keep_it_up);
         } else if (textToAdd.contains("qemu-system")) {
-            textviewsettingup.setText("Completed 95%\nKeep it up...");
+            textviewsettingup.setText(R.string.completed_95_keep_it_up);
         } else if (textToAdd.contains("Just a sec...")) {
-            title.setText("Almost there.");
-            textviewsettingup.setText("Almost there.");
+            title.setText(R.string.almost_there);
+            textviewsettingup.setText(getString(R.string.almost_there));
         }
 
         // Scroll to the bottom
@@ -678,10 +680,10 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         }
 
         alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
-        alertDialog.setTitle("BOOTSTRAP REQUIRED!");
-        alertDialog.setMessage("You can choose between auto download and setup or manual setup by choosing bootstrap file.");
+        alertDialog.setTitle(getString(R.string.bootstrap_required));
+        alertDialog.setMessage(getString(R.string.you_can_choose_between_auto_download_and_setup_or_manual_setup_by_choosing_bootstrap_file));
         alertDialog.setCancelable(false);
-        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "AUTO SETUP", new DialogInterface.OnClickListener() {
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.auto_setup), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 //startDownload();
                 if (AppConfig.getSetupFiles().contains("arm64-v8a") || AppConfig.getSetupFiles().contains("x86_64")) {
@@ -692,7 +694,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                 return;
             }
         });
-        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "MANUAL SETUP", new DialogInterface.OnClickListener() {
+        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.manual_setup), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
