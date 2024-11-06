@@ -191,7 +191,7 @@
     <string name="scaling">التكبير</string>
     <string name="scaling_zoomable">قابل للتكبير</string>
 
-    <string name="patreon">باتريون</string>
+    <string name="patreon">Patreon</string>
 
     <!-- Send selected metakey -->
     <string name="send_button">إرسال</string>
@@ -454,5 +454,46 @@ https://developer.android.com/guide/components/foreground-services#background-st
     <string name="yes">نعم</string>
     <string name="no">إلغاء</string>
     <string name="cancel">إلغاء</string>
-    <string name="back_to_the_display">Back to the Display</string>
+    <string name="back_to_the_display">العودة إلى العرض</string>
+    <string name="x11_ui_environment">x11 بيئة واجهة.</string>
+    <string name="x11">X11</string>
+    <string name="rom_options">إعدادات الروم</string>
+    <string name="about_app">حول التطبيق</string>
+    <string name="join_us_on_telegram">إنضم إلينا على Telegram</string>
+    <string name="join_us_on_telegram_where_we_publish_all_the_news_and_updates_and_receive_your_opinions_and_bugs">انضم إلينا على Telegram حيث ننشر جميع الأخبار والتحديثات ونتلقى آرائكم وملاحظاتكم</string>
+    <string name="join">إنضمام</string>
+    <string name="dont_show_again">لا تظهر مرة أخرى</string>
+    <string name="this_version_unstable_and_has_alot_of_bugs_br"><![CDATA[هذا الإصدار غير مستقر وبه العديد من الأخطاء<br>]]></string>
+    <string name="debug_testing_build_5">إصدار اختبار التصحيح 5</string>
+    <string name="welcome_to_debug_build_of_vectras_vm_br"><![CDATA[مرحبًا بك في إصدار التصحيح من Vectras VM :)<br>]]></string>
+    <string name="don_t_forget_to_tell_us_on_github_issues_or_telegram_bot_br"><![CDATA[لا تنسَ إخبارنا عبر مشاكل GitHub أو بوت Telegram<br>]]></string>
+    <string name="a_href_https_t_me_vectras_protect_bot_telegram_report_bot_a_br"><![CDATA[<a href=\"https://t.me/vectras_protect_bot\">بوت تقرير تيليجرام</a><br>]]></string>
+    <string name="a_href_https_github_com_epicstudios856_vectras_vm_android_issues_github_issues_page_a_br"><![CDATA[<a href=\"https://github.com/epicstudios856/Vectras-VM-Android/issues\">صفحة مشاكل GitHub</a><br>]]></string>
+    <string name="getting_ready_for_you_please_don_t_disconnect_the_network">نحن نستعد لك...\nيرجى عدم فصل الشبكة.</string>
+    <string name="it_won_t_take_long">لن يستغرق الأمر طويلاً...</string>
+    <string name="completed_10_it_won_t_take_long">اكتمل 10%\nلن يستغرق الأمر طويلاً...</string>
+    <string name="completed_20_it_won_t_take_long">اكتمل 20%\nلن يستغرق الأمر طويلاً...</string>
+    <string name="completed_30_it_won_t_take_long">اكتمل 30%\nلن يستغرق الأمر طويلاً...</string>
+    <string name="completed_40_it_won_t_take_long">اكتمل 40%\nلن يستغرق الأمر طويلاً...</string>
+    <string name="completed_50_it_won_t_take_long">اكتمل 50%\nلن يستغرق الأمر طويلاً...</string>
+    <string name="don_t_disconnect">لا تفصل الاتصال...</string>
+    <string name="completed_75_don_t_disconnect">اكتمل 75%\nلا تفصل الاتصال...</string>
+    <string name="keep_it_up">استمر في ذلك...</string>
+    <string name="completed_80_keep_it_up">اكتمل 80%\nاستمر في ذلك...</string>
+    <string name="completed_95_keep_it_up">اكتمل 95%\nاستمر في ذلك...</string>
+    <string name="almost_there">نحن قريبون.</string>
+    <string name="show_advanced_setup">عرض الإعدادات المتقدمة</string>
+    <string name="allow_permissions">السماح بالأذونات</string>
+    <string name="you_need_to_grant_permission_to_access_the_storage_before_use">يجب عليك منح الإذن للوصول إلى التخزين قبل الاستخدام.</string>
+    <string name="find_and_allow_access_to_storage_in_settings">ابحث واسمح بالوصول إلى التخزين في الإعدادات.</string>
+    <string name="do_you_want_to_set_it_up_automatically_or_select_the_bootstrap_file_manually">هل ترغب في إعدادها تلقائيًا أم تحديد ملف Bootstrap يدويًا؟</string>
+    <string name="auto_setup">إعداد تلقائي</string>
+    <string name="manual">يدوي</string>
+    <string name="getting_ready_for_you">نحن نستعد لك...</string>
+    <string name="failed">فشل!</string>
+    <string name="something_went_wrong_during_setup_would_you_like_to_try_again">حدث خطأ أثناء الإعداد. هل ترغب في المحاولة مرة أخرى؟</string>
+    <string name="show_log">إظهار السجل</string>
+    <string name="bootstrap_required">Bootstrap مطلوب!</string>
+    <string name="you_can_choose_between_auto_download_and_setup_or_manual_setup_by_choosing_bootstrap_file">يمكنك الاختيار بين التنزيل التلقائي والإعداد أو الإعداد اليدوي من خلال اختيار ملف Bootstrap.</string>
+    <string name="manual_setup">إعداد يدوي</string>
 </resources>
