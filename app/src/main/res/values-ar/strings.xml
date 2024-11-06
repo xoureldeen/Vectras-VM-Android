@@ -362,6 +362,10 @@
     <string name="want_to_learn_more_about_qemu">هل تريد أن تتعلم المزيد عن QEMU؟</string>
     <string name="file_format_is_not_supported">قد لا تعمل الأشياء لأن تنسيق الملف غير مدعوم. هل تريد المتابعة؟</string>
     <string name="you_cannot_use_IDE_hard_drive_type_with_ARM64">لا يمكنك استخدام نوع محرك الأقراص الثابتة IDE مع ARM64. إذا تابعت، فسيتم استخدام نوع محرك الأقراص الثابتة الافتراضي.</string>
+    <string name="error_PROOT_IS_MISSING_0">النظام لا يعمل، الملفات الضرورية مفقودة. قد تكون هذه المشكلة ناجمة عن إعداد غير صحيح. هل تريد تجربة الإعداد مرة أخرى؟ رمز الخطأ: PROOT_IS_MISSING_0.</string>
+    <string name="error_DRIVE_INDEX_0_EXISTS">حدث خطأ ولم تتمكن الآلة الافتراضية من بدء التشغيل. هناك محركان أو أكثر لا يمكن توصيلهما بنفس الفتحة. يرجى التحقق من إعدادات الآلة الافتراضية والتأكد من عدم توصيل جميع المحركات بنفس الفتحة. رمز الخطأ: DRIVE_INDEX_0_EXISTS.</string>
+    <string name="error_X11_NOT_AVAILABLE">حدث خطأ ولا يمكن بدء تشغيل الجهاز الظاهري. X11 لا يعمل. نوصيك بالتبديل إلى VNC. هل تريد التبديل إلى VNC؟ رمز الخطأ: X11_NOT_AVAILABLE.</string>
+    <string name="switched_to_VNC">تم التحويل إلى VNC. يمكنك محاولة تشغيل الجهاز الظاهري مرة أخرى الآن.</string>
 
     <!--======================TERMUX STRINGS====================-->
     <string name="application_name">Vterm</string>

@@ -3,6 +3,7 @@ package com.vectras.vterm;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -27,6 +28,7 @@ import com.vectras.qemu.MainVNCActivity;
 import com.vectras.vm.MainActivity;
 import com.vectras.vm.MainService;
 import com.vectras.vm.R;
+import com.vectras.vm.SplashActivity;
 import com.vectras.vm.VectrasApp;
 
 public class Terminal {
@@ -62,6 +64,58 @@ public class Terminal {
     private void showDialog(String message, Activity activity, String usercommand) {
         if (!usercommand.contains("qemu-system") || message.contains("Killed"))
             return;
+        //Error code: PROOT_IS_MISSING_0
+        if (message.contains("proot\": error=2,")) {
+            AlertDialog alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
+            alertDialog.setTitle(activity.getResources().getString(R.string.problem_has_been_detected));
+            alertDialog.setMessage(activity.getResources().getString(R.string.error_PROOT_IS_MISSING_0));
+            alertDialog.setCancelable(false);
+            alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, activity.getResources().getString(R.string.continuetext), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    MainActivity.isActivate = false;
+                    VectrasApp.deleteDirectory(activity.getFilesDir().getAbsolutePath() + "/data");
+                    VectrasApp.deleteDirectory(activity.getFilesDir().getAbsolutePath() + "/distro");
+                    VectrasApp.deleteDirectory(activity.getFilesDir().getAbsolutePath() + "/usr");
+                    Intent intent = new Intent();
+                    intent.setClass(activity, SplashActivity.class);
+                    activity.startActivity(intent);
+                    activity.finish();
+                    return;
+                }
+            });
+            alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, activity.getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+            alertDialog.show();
+            return;
+        } else if (message.contains(") exists") && message.contains("drive with bus")) {
+            //Error code: DRIVE_INDEX_0_EXISTS
+            VectrasApp.oneDialog(activity.getResources().getString(R.string.problem_has_been_detected), activity.getResources().getString(R.string.error_DRIVE_INDEX_0_EXISTS), true, false, activity);
+            return;
+        } else if (message.contains("gtk initialization failed") || message.contains("x11 not available")) {
+            //Error code: X11_NOT_AVAILABLE
+            AlertDialog alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
+            alertDialog.setTitle(activity.getResources().getString(R.string.problem_has_been_detected));
+            alertDialog.setMessage(activity.getResources().getString(R.string.error_X11_NOT_AVAILABLE));
+            alertDialog.setCancelable(false);
+            alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, activity.getResources().getString(R.string.continuetext), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    MainSettingsManager.setVmUi(activity, "VNC");
+                    VectrasApp.oneDialog(activity.getResources().getString(R.string.done), activity.getResources().getString(R.string.switched_to_VNC), true, false, activity);
+                    return;
+                }
+            });
+            alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, activity.getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+            alertDialog.show();
+            return;
+        }
+
         AlertDialog dialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
         dialog.setTitle("Execution Result");
         dialog.setMessage(message);
