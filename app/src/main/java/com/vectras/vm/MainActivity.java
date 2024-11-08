@@ -578,6 +578,23 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
                     alertDialog.show();
+                } else if (id == R.id.restorevms) {
+                    alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
+                    alertDialog.setTitle(getResources().getString(R.string.restore));
+                    alertDialog.setMessage(getResources().getString(R.string.restore_content));
+                    alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.continuetext), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            VectrasApp.startRestore();
+                            errorjsondialog();
+                            VectrasApp.oneDialog(getResources().getString(R.string.done), getResources().getString(R.string.restored) + " " + String.valueOf(VectrasApp.restoredVMs) + ".", true, false, activity);
+                        }
+                    });
+                    alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            alertDialog.dismiss();
+                        }
+                    });
+                    alertDialog.show();
                 }
                 return false;
             }

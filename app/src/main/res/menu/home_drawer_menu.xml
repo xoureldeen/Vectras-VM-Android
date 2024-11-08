@@ -51,6 +51,10 @@
         android:icon="@drawable/cleaning_services_24px"
         android:title="@string/clean_up"/>
     <item
+        android:id="@+id/restorevms"
+        android:icon="@drawable/settings_backup_restore_24px"
+        android:title="@string/restore"/>
+    <item
         android:id="@+id/deletealldata"
         android:icon="@drawable/delete_24px"
         android:title="@string/delete_all_vm"/>

@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
     
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">v2.9.4 (Jelly bean)</string>
+    <string name="app_version" translatable="false">v2.9.4 (Lemon Meringue Pie)</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -368,6 +368,10 @@
     <string name="error_DRIVE_INDEX_0_EXISTS">An error occurred and the virtual machine cannot start. There are two or more drives that cannot be plugged into the same slot. Please check your virtual machine settings and make sure all drives are not plugged into the same slot. Error code: DRIVE_INDEX_0_EXISTS.</string>
     <string name="error_X11_NOT_AVAILABLE">An error occurred and the virtual machine cannot start. X11 is not working. We recommend you switch to VNC. Do you want to switch to VNC? Error code: X11_NOT_AVAILABLE.</string>
     <string name="switched_to_VNC">Switched to VNC. You can try running the virtual machine again now.</string>
+    <string name="restore">Restore</string>
+    <string name="restore_content">Virtual machines that were previously deleted but created with the Create command app and you chose to keep all files will be restored if possible.</string>
+    <string name="restored">Restored</string>
+
 
     <!--======================TERMUX STRINGS====================-->
     <string name="application_name">Vterm</string>
