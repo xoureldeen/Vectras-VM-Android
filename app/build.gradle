@@ -12,7 +12,7 @@ android {
         minSdk minApi
         targetSdk targetApi
         versionCode 20
-        versionName "v2.9.4-jellybean"
+        versionName "v2.9.4-lemonmeringuepie"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
