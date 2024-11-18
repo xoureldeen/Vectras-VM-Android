@@ -23,6 +23,7 @@ public class CqcmActivity extends AppCompatActivity {
     private String contentJson = "";
     private String contentJsonNow = "";
     private Button buttonallow;
+    private String vmID = VMManager.ramdomVMID();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,24 +87,21 @@ public class CqcmActivity extends AppCompatActivity {
                     Log.i("CqcmActivity", "Checked roms-data.json and no errors.");
                     if (contentJson.contains("}")) {
                         Log.i("CqcmActivity", "The roms-data.json file contains data about the VMs.");
-                        contentJsonNow = contentJson.replaceAll("]", "," + getIntent().getStringExtra("content"));
+                        contentJsonNow = contentJson.replaceAll("]", "," + getIntent().getStringExtra("content").replaceAll("\\}\\]", ",\"vmID\":\"" + vmID + "\"}]"));
                     } else {
                         Log.i("CqcmActivity", "The roms-data.json file does not contain data about the VMs.");
-                        contentJsonNow = contentJson.replaceAll("]", Objects.requireNonNull(getIntent().getStringExtra("content")));
+                        contentJsonNow = contentJson.replaceAll("]", Objects.requireNonNull(getIntent().getStringExtra("content")).replaceAll("\\}\\]", ",\"vmID\":\"" + vmID + "\"}]"));
                     }
                     Log.i("CqcmActivity", "Double check the data has been edited before adding.");
                     if (VectrasApp.checkJSONIsNormalFromString(contentJsonNow)) {
                         VectrasApp.writeToFile(AppConfig.maindirpath, "roms-data.json", contentJsonNow);
                         Log.i("CqcmActivity", "Successfully added new VM to roms-data.json file.");
                         // "\}\]" = Fix java.util.regex.PatternSyntaxException: Syntax error in regexp pattern near index 1
-                        VectrasApp.writeToFile(AppConfig.maindirpath + "roms/" + getIntent().getStringExtra("name"), "rom-data.json", Objects.requireNonNull(getIntent().getStringExtra("content")).replaceAll("\\}\\]", "}"));
+                        VectrasApp.writeToFile(AppConfig.maindirpath + "roms/" + vmID, "rom-data.json", Objects.requireNonNull(getIntent().getStringExtra("content")).replaceAll("\\}\\]", ",\"vmID\":\"" + vmID + "\"}"));
                         Log.i("CqcmActivity", "Successfully created rom-data.json file.");
-                        if (getIntent().hasExtra("vmid")) {
-                            VectrasApp.writeToFile(AppConfig.maindirpath + "roms/" + getIntent().getStringExtra("name"), "vmID.txt", getIntent().getStringExtra("vmid"));
-                            Log.i("CqcmActivity", "Successfully created ID for new VM.");
-                        } else {
-                            Log.w("CqcmActivity", "ID for VM not created.");
-                        }
+
+                        VectrasApp.writeToFile(AppConfig.maindirpath + "roms/" + vmID, "vmID.txt", vmID);
+                        Log.i("CqcmActivity", "Successfully created ID for new VM.");
                     } else {
                         Log.e("CqcmActivity", "Cannot add VM to roms-data.json as it will corrupt the roms-data.json file after adding.");
                         Toast.makeText(getApplicationContext(), getResources().getString(R.string.cannot_create_VM_at_this_time), Toast.LENGTH_LONG).show();

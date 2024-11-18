@@ -367,7 +367,7 @@
     <string name="error_X11_NOT_AVAILABLE">حدث خطأ ولا يمكن بدء تشغيل الجهاز الظاهري. X11 لا يعمل. نوصيك بالتبديل إلى VNC. هل تريد التبديل إلى VNC؟ رمز الخطأ: X11_NOT_AVAILABLE.</string>
     <string name="switched_to_VNC">تم التحويل إلى VNC. يمكنك محاولة تشغيل الجهاز الظاهري مرة أخرى الآن.</string>
     <string name="restore">يعيد</string>
-    <string name="restore_content">سيتم استعادة الآلات الافتراضية التي تم حذفها مسبقًا ولكن تم إنشاؤها باستخدام تطبيق الأمر "إنشاء" واخترت الاحتفاظ بجميع الملفات، إذا كان ذلك ممكنًا.</string>
+    <string name="restore_content">سيتم استعادة الأجهزة الافتراضية المحذوفة إذا اخترت مسبقًا الاحتفاظ بجميع الملفات.</string>
     <string name="restored">تم ترميمه</string>
 
     <!--======================TERMUX STRINGS====================-->

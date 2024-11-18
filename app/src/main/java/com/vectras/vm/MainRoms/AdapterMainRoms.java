@@ -44,6 +44,7 @@ import com.vectras.vm.MainActivity;
 import com.vectras.vm.MainService;
 import com.vectras.vm.R;
 import com.vectras.vm.StartVM;
+import com.vectras.vm.VMManager;
 import com.vectras.vm.VectrasApp;
 import com.vectras.vm.logger.VectrasStatus;
 import com.vectras.vm.utils.FileUtils;
@@ -117,7 +118,7 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     @Override
                     public void onClick(View v) {
                         com.vectras.vm.CustomRomActivity.current = data.get(position);
-                        MainActivity.activity.startActivity(new Intent(MainActivity.activity, CustomRomActivity.class).putExtra("POS", position).putExtra("MODIFY", true));
+                        MainActivity.activity.startActivity(new Intent(MainActivity.activity, CustomRomActivity.class).putExtra("POS", position).putExtra("MODIFY", true).putExtra("VMID", current.vmID));
                         bottomSheetDialog.cancel();
                     }
                 });
@@ -221,6 +222,7 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 } else if (current.itemArch.equals("PPC")) {
                     MainSettingsManager.setArch(MainActivity.activity, "PPC");
                 }
+                StartVM.cdrompath = current.imgCdrom;
                 String env = StartVM.env(MainActivity.activity, current.itemExtra, current.itemPath, current.itemCpu);
                 MainActivity.startVM(current.itemName, env, current.itemExtra, current.itemPath);
             }
@@ -234,6 +236,9 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 ad.setMessage(MainActivity.activity.getString(R.string.are_you_sure));
                 ad.setButton(Dialog.BUTTON_NEGATIVE, MainActivity.activity.getString(R.string.remove) + " " + current.itemName, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        VMManager.pendingPosition = position;
+                        VMManager.pendingJsonContent = VectrasApp.readFile(AppConfig.maindirpath + "roms-data.json");
+
                         File file = new File(current.itemPath);
                         File file2 = new File(current.itemDrv1);
                         Pattern pattern = Pattern.compile("-drive index=1,media=cdrom,file='([^']*)'");
@@ -245,71 +250,71 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         alertDialog.setCancelable(false);
                         alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Keep", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                VectrasApp.deleteVMIDFileWithName(current.itemName);
+                                VMManager.hideVMIDWithPosition();
                             }
                         });
                         alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Remove all", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 isKeptSomeFiles = false;
-                                String _romsdata = VectrasApp.readFile(AppConfig.maindirpath + "roms-data.json").replace("\\/", "/");
-                                if (matcher.find()) {
+                                //String _romsdata = VectrasApp.readFile(AppConfig.maindirpath + "roms-data.json").replace("\\/", "/");
+                                //if (matcher.find()) {
                                     // We found the -drive pattern and its file path.
-                                    if (!_romsdata.contains(matcher.group(1))) {
-                                        File cdrom = new File(matcher.group(1));
+                                    //if (!_romsdata.contains(matcher.group(1))) {
+                                        //File cdrom = new File(matcher.group(1));
 
-                                        try {
-                                            boolean deleted = cdrom.delete();
-                                            if(!deleted) {
+                                        //try {
+                                            //boolean deleted = cdrom.delete();
+                                            //if(!deleted) {
                                                 // The file wasn't successfully deleted.
                                                 // Handle this case, maybe the file didn't exist or was read only.
-                                            }
-                                        } catch (Exception e) {
-                                            UIUtils.toastLong(MainActivity.activity, e.toString());
-                                        }
-                                    } else {
-                                        isKeptSomeFiles = true;
-                                    }
+                                            //}
+                                        //} catch (Exception e) {
+                                            //UIUtils.toastLong(MainActivity.activity, e.toString());
+                                        //}
+                                    //} else {
+                                        //isKeptSomeFiles = true;
+                                    //}
 
-                                } else {
+                                //} else {
                                     // The pattern wasn't found in the current item's extra text.
                                     // Handle the case where the -drive pattern doesn't match.
-                                }
+                                //}
 
-                                if (!_romsdata.contains(current.itemPath)) {
-                                    try {
-                                        file.delete();
-                                    } catch (Exception e) {
-                                        UIUtils.toastLong(MainActivity.activity, e.toString());
-                                    } finally {
-                                    }
-                                } else {
-                                    isKeptSomeFiles = true;
-                                }
+//                                if (!_romsdata.contains(current.itemPath)) {
+//                                    try {
+//                                        file.delete();
+//                                    } catch (Exception e) {
+//                                        UIUtils.toastLong(MainActivity.activity, e.toString());
+//                                    } finally {
+//                                    }
+//                                } else {
+//                                    isKeptSomeFiles = true;
+//                                }
+//
+//                                if (!_romsdata.contains(current.itemDrv1)) {
+//                                    try {
+//                                        file2.delete();
+//                                    } catch (Exception e) {
+//                                        UIUtils.toastLong(MainActivity.activity, e.toString());
+//                                    } finally {
+//                                    }
+//                                } else {
+//                                    isKeptSomeFiles = true;
+//                                }
 
-                                if (!_romsdata.contains(current.itemDrv1)) {
-                                    try {
-                                        file2.delete();
-                                    } catch (Exception e) {
-                                        UIUtils.toastLong(MainActivity.activity, e.toString());
-                                    } finally {
-                                    }
-                                } else {
-                                    isKeptSomeFiles = true;
-                                }
+                                VMManager.deleteVM();
 
-                                VectrasApp.deleteVMWithName(current.itemName);
-
-                                if (!_romsdata.contains(AppConfig.maindirpath + "roms/" + current.itemName)) {
-                                    VectrasApp.deleteDirectory(AppConfig.maindirpath + "roms/" + current.itemName);
-                                } else {
-                                    isKeptSomeFiles = true;
-                                }
-
-                                if (!_romsdata.contains((AppConfig.maindirpath + "roms/" + current.itemName).replaceAll(" ", "."))) {
-                                    VectrasApp.deleteDirectory((AppConfig.maindirpath + "roms/" + current.itemName).replaceAll(" ", "."));
-                                } else {
-                                    isKeptSomeFiles = true;
-                                }
+//                                if (!_romsdata.contains(AppConfig.maindirpath + "roms/" + current.itemName)) {
+//                                    VectrasApp.deleteDirectory(AppConfig.maindirpath + "roms/" + current.itemName);
+//                                } else {
+//                                    isKeptSomeFiles = true;
+//                                }
+//
+//                                if (!_romsdata.contains((AppConfig.maindirpath + "roms/" + current.itemName).replaceAll(" ", "."))) {
+//                                    VectrasApp.deleteDirectory((AppConfig.maindirpath + "roms/" + current.itemName).replaceAll(" ", "."));
+//                                } else {
+//                                    isKeptSomeFiles = true;
+//                                }
 
                                 if (isKeptSomeFiles && VectrasApp.readFile(AppConfig.maindirpath + "roms-data.json").contains("{")) {
                                     VectrasApp.oneDialog(MainActivity.activity.getString(R.string.keep), MainActivity.activity.getString(R.string.kept_some_files), true, false, MainActivity.activity);

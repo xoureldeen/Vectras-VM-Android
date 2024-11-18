@@ -567,7 +567,7 @@ public class MainActivity extends AppCompatActivity {
                     alertDialog.setMessage(getResources().getString(R.string.clean_up_content));
                     alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.clean_up), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            VectrasApp.startCleanUp();
+                            VMManager.cleanUp();
                             errorjsondialog();
                             Toast.makeText(getApplicationContext(), activity.getResources().getString(R.string.done), Toast.LENGTH_LONG).show();
                         }
@@ -584,9 +584,9 @@ public class MainActivity extends AppCompatActivity {
                     alertDialog.setMessage(getResources().getString(R.string.restore_content));
                     alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.continuetext), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            VectrasApp.startRestore();
+                            VMManager.restoreVMs();
                             errorjsondialog();
-                            VectrasApp.oneDialog(getResources().getString(R.string.done), getResources().getString(R.string.restored) + " " + String.valueOf(VectrasApp.restoredVMs) + ".", true, false, activity);
+                            VectrasApp.oneDialog(getResources().getString(R.string.done), getResources().getString(R.string.restored) + " " + String.valueOf(VMManager.restoredVMs) + ".", true, false, activity);
                         }
                     });
                     alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -824,6 +824,16 @@ public class MainActivity extends AppCompatActivity {
                     romsMainData.itemArch = "unknown";
                 }
                 romsMainData.itemPath = json_data.getString("imgPath");
+                try {
+                    romsMainData.imgCdrom = json_data.getString("imgCdrom");
+                } catch (JSONException ignored) {
+                    romsMainData.imgCdrom = "";
+                }
+                try {
+                    romsMainData.vmID = json_data.getString("vmID");
+                } catch (JSONException ignored) {
+                    romsMainData.vmID = "";
+                }
                 try {
                     romsMainData.itemDrv1 = json_data.getString("imgDrv1");
                 } catch (JSONException ignored) {
