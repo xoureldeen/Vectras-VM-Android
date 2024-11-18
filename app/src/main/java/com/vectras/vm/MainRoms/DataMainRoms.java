@@ -7,4 +7,6 @@ public class DataMainRoms {
     public String itemPath;
     public String itemDrv1;
     public String itemExtra;
+    public String imgCdrom;
+    public String vmID;
 }

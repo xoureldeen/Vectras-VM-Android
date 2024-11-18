@@ -37,6 +37,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -92,6 +94,9 @@ public class CustomRomActivity extends AppCompatActivity {
     public String previousName = "";
     public String secondVMdirectory = "";
     public boolean addromnowdone = false;
+    public String vmID = VMManager.ramdomVMID();
+    private boolean created = false;
+    private boolean importedCVBI = false;
 
     public ProgressBar loadingPb;
 
@@ -295,17 +300,17 @@ public class CustomRomActivity extends AppCompatActivity {
                             }
                             cdrom.setText("");
 
-                            Pattern pattern = Pattern.compile(cdromPatternCompile());
-                            Matcher matcher = pattern.matcher(qemu.getText().toString());
+                            //Pattern pattern = Pattern.compile(cdromPatternCompile());
+                            //Matcher matcher = pattern.matcher(qemu.getText().toString());
 
-                            if (matcher.find()) {
+                            //if (matcher.find()) {
                                 // Replace the entire -drive ... file='...' parameter with an empty string
-                                String modifiedQemuText = qemu.getText().toString().replace(matcher.group(0), "");
-                                qemu.setText(modifiedQemuText);
-                            } else {
+                                //String modifiedQemuText = qemu.getText().toString().replace(matcher.group(0), "");
+                                //qemu.setText(modifiedQemuText);
+                           //} else {
                                 // Handle the case where the -drive parameter doesn't exist
                                 // This could involve logging the issue, displaying a message to the user, etc.
-                            }
+                            //}
                         }
                     });
                     ad.show();
@@ -335,17 +340,17 @@ public class CustomRomActivity extends AppCompatActivity {
                 if (title.getText().toString().isEmpty()) {
                     VectrasApp.oneDialog(getResources().getString(R.string.oops), getResources().getString(R.string.need_set_name),true, false, activity);
                 } else if ((!drive.getText().toString().isEmpty()) || (!cdrom.getText().toString().isEmpty())) {
-                    startCreateVM();
+                    startCreateNewVM();
                 } else {
                     if (VectrasApp.isHaveADisk(qemu.getText().toString())) {
-                        startCreateVM();
+                        startCreateNewVM();
                     } else {
                         AlertDialog alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
                         alertDialog.setTitle(getResources().getString(R.string.problem_has_been_detected));
                         alertDialog.setMessage(getResources().getString(R.string.you_have_not_added_any_storage_devices));
                         alertDialog.setCancelable(true);
                         alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.continuetext), (dialog, which) -> {
-                            startCreateVM();
+                            startCreateNewVM();
                         });
                         alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), (dialog, which) -> {
 
@@ -440,14 +445,20 @@ public class CustomRomActivity extends AppCompatActivity {
             title.setText(current.itemName);
             icon.setText(current.itemIcon);
             drive.setText(current.itemPath);
+            cdrom.setText(current.imgCdrom);
+            vmID = getIntent().getStringExtra("VMID");
 
-            Pattern pattern = Pattern.compile(cdromPatternCompile());
-            Matcher matcher = pattern.matcher(current.itemExtra);
-
-            if (matcher.find()) {
-                String cdromPath = matcher.group(1);
-                cdrom.setText(cdromPath);
+            if (vmID.isEmpty()) {
+                vmID = VMManager.ramdomVMID();
             }
+
+            //Pattern pattern = Pattern.compile(cdromPatternCompile());
+            //Matcher matcher = pattern.matcher(current.itemExtra);
+
+            //if (matcher.find()) {
+                //String cdromPath = matcher.group(1);
+                //cdrom.setText(cdromPath);
+            //}
 
             qemu.setText(current.itemExtra);
 
@@ -564,13 +575,13 @@ public class CustomRomActivity extends AppCompatActivity {
                     } finally {
                         try {
                             try {
-                                SaveImage(selectedImage, new File(AppConfig.maindirpath + "roms/" + title.getText().toString()), title.getText().toString() + "-" + selectedFilePath.getName());
+                                SaveImage(selectedImage, new File(AppConfig.maindirpath + "roms/" + vmID), vmID + "-" + selectedFilePath.getName());
                             } finally {
                                 Runnable runnable = new Runnable() {
                                     @Override
                                     public void run() {
                                         loadingPb.setVisibility(View.GONE);
-                                        icon.setText(AppConfig.maindirpath + "roms/" + title.getText().toString() + "/" + title.getText().toString() + "-" + selectedFilePath.getName());
+                                        icon.setText(AppConfig.maindirpath + "roms/" + vmID + "/" + vmID + "-" + selectedFilePath.getName());
                                     }
                                 };
                                 activity.runOnUiThread(runnable);
@@ -596,34 +607,34 @@ public class CustomRomActivity extends AppCompatActivity {
             Uri content_describer = ReturnedIntent.getData();
             File selectedFilePath = new File(getPath(content_describer));
             if (selectedFilePath.getName().endsWith(".iso")) {
-                String cdromPath = AppConfig.maindirpath + "roms/" + title.getText().toString() + "/" + selectedFilePath.getName();
+                String cdromPath = AppConfig.maindirpath + "roms/" + vmID + "/" + selectedFilePath.getName();
                 cdrom.setText(cdromPath);
 
-                String qemuText = qemu.getText().toString();
-                String cdromParam = "-drive index=1,media=cdrom,file='" + cdromPath + "'";
+                //String qemuText = qemu.getText().toString();
+                //String cdromParam = "-drive index=1,media=cdrom,file='" + cdromPath + "'";
 
-                if (MainSettingsManager.getArch(activity).equals("ARM64")) {
-                    if (!qemu.getText().toString().contains("-device nec-usb-xhci")) {
-                        qemu.setText(qemu.getText().toString() + " -device nec-usb-xhci");
-                    }
-                    cdromParam = "-device usb-storage,drive=cdrom -drive if=none,id=cdrom,format=raw,media=cdrom,file='" + cdromPath + "'";
-                } else {
-                    if (MainSettingsManager.getIfType(activity).isEmpty()) {
-                        cdromParam = "-cdrom '" + cdromPath + "'";
-                    }
-                }
+                //if (MainSettingsManager.getArch(activity).equals("ARM64")) {
+                    //if (!qemu.getText().toString().contains("-device nec-usb-xhci")) {
+                        //qemu.setText(qemu.getText().toString() + " -device nec-usb-xhci");
+                    //}
+                    //cdromParam = "-device usb-storage,drive=cdrom -drive if=none,id=cdrom,format=raw,media=cdrom,file='" + cdromPath + "'";
+                //} else {
+                    //if (MainSettingsManager.getIfType(activity).isEmpty()) {
+                        //cdromParam = "-cdrom '" + cdromPath + "'";
+                    //}
+                //}
 
-                Pattern pattern = Pattern.compile(cdromPatternCompile2());
-                Matcher matcher = pattern.matcher(qemuText);
+                //Pattern pattern = Pattern.compile(cdromPatternCompile2());
+                //Matcher matcher = pattern.matcher(qemuText);
 
-                if (!qemuText.contains("-drive index=1,media=cdrom,file=") || !qemuText.contains("-cdrom") || !qemuText.contains("-device usb-storage,drive=cdrom -drive if=none,id=cdrom,format=raw,media=cdrom,file=")) {
-                    qemu.append(" " + cdromParam);
-                } else {
-                    if (matcher.find()) {
-                        String cdromPath1 = matcher.group(1);
-                        qemu.setText(qemuText.replace(cdromPath1, cdromPath)); // Fixed this line to actually change the text of `qemu`
-                    }
-                }
+                //if (!qemuText.contains("-drive index=1,media=cdrom,file=") || !qemuText.contains("-cdrom") || !qemuText.contains("-device usb-storage,drive=cdrom -drive if=none,id=cdrom,format=raw,media=cdrom,file=")) {
+                    //qemu.append(" " + cdromParam);
+                //} else {
+                    //if (matcher.find()) {
+                        //String cdromPath1 = matcher.group(1);
+                        //qemu.setText(qemuText.replace(cdromPath1, cdromPath)); // Fixed this line to actually change the text of `qemu`
+                    //}
+                //}
                 loadingPb.setVisibility(View.VISIBLE);
                 custom.setVisibility(View.GONE);
                 new Thread(new Runnable() {
@@ -637,7 +648,7 @@ public class CustomRomActivity extends AppCompatActivity {
                         }
                         try {
                             try {
-                                OutputStream out = new FileOutputStream(new File(AppConfig.maindirpath + "roms/" + title.getText().toString() + "/" + selectedFilePath.getName()));
+                                OutputStream out = new FileOutputStream(new File(AppConfig.maindirpath + "roms/" + vmID + "/" + selectedFilePath.getName()));
                                 try {
                                     // Transfer bytes from in to out
                                     byte[] buf = new byte[1024];
@@ -857,19 +868,35 @@ public class CustomRomActivity extends AppCompatActivity {
         }
         if (!previousName.isEmpty() && !title.getText().toString().equals(previousName)) {
             if (VectrasApp.isFileExists(AppConfig.maindirpath + "roms/" + previousName + "/vmID.txt")) {
-                VectrasApp.copyAFile(AppConfig.maindirpath + "roms/" + previousName + "/vmID.txt", AppConfig.maindirpath + "roms/" + title.getText().toString() + "/vmID.txt");
+                VectrasApp.copyAFile(AppConfig.maindirpath + "roms/" + previousName + "/vmID.txt", AppConfig.maindirpath + "roms/" + vmID + "/vmID.txt");
             } else {
-                VectrasApp.writeToFile(AppConfig.maindirpath + "roms/" + title.getText().toString(), "/vmID.txt", VectrasApp.ramdomVMID());
-                VectrasApp.copyAFile(AppConfig.maindirpath + "roms/" + title.getText().toString() + "/vmID.txt", AppConfig.maindirpath + previousName + "/vmID.txt");
+                VectrasApp.writeToFile(AppConfig.maindirpath + "roms/" + title.getText().toString(), "/vmID.txt", VMManager.ramdomVMID());
+                VectrasApp.copyAFile(AppConfig.maindirpath + "roms/" + vmID + "/vmID.txt", AppConfig.maindirpath + previousName + "/vmID.txt");
             }
         } else {
-            VectrasApp.writeToFile(AppConfig.maindirpath + "roms/" + title.getText().toString(), "/vmID.txt", VectrasApp.ramdomVMID());
+            VectrasApp.writeToFile(AppConfig.maindirpath + "roms/" + title.getText().toString(), "/vmID.txt", VMManager.ramdomVMID());
         }
-        if ((!secondVMdirectory.isEmpty()) && VectrasApp.isFileExists(AppConfig.maindirpath + "roms/" + title.getText().toString() + "/vmID.txt")) {
+        if ((!secondVMdirectory.isEmpty()) && VectrasApp.isFileExists(AppConfig.maindirpath + "roms/" + vmID + "/vmID.txt")) {
             if (!(AppConfig.maindirpath + "roms/" + title.getText().toString()).equals(secondVMdirectory)) {
-                VectrasApp.copyAFile(AppConfig.maindirpath + "roms/" + title.getText().toString() + "/vmID.txt", secondVMdirectory + "/vmID.txt");
+                VectrasApp.copyAFile(AppConfig.maindirpath + "roms/" + vmID + "/vmID.txt", secondVMdirectory + "/vmID.txt");
             }
        }
+    }
+
+    private void startCreateNewVM() {
+        if (modify) {
+            VMManager.editVM(Objects.requireNonNull(title.getText()).toString(), Objects.requireNonNull(icon.getText()).toString(), Objects.requireNonNull(drive.getText()).toString(), MainSettingsManager.getArch(activity), Objects.requireNonNull(cdrom.getText()).toString(), Objects.requireNonNull(qemu.getText()).toString(), getIntent().getIntExtra("POS", 0));
+        } else {
+            VMManager.createNewVM(Objects.requireNonNull(title.getText()).toString(), Objects.requireNonNull(icon.getText()).toString(), Objects.requireNonNull(drive.getText()).toString(), MainSettingsManager.getArch(activity), Objects.requireNonNull(cdrom.getText()).toString(), Objects.requireNonNull(qemu.getText()).toString(), vmID, importedCVBI);
+        }
+
+        created = true;
+
+        if (getIntent().hasExtra("addromnow")) {
+            RomsManagerActivity.isFinishNow = true;
+        }
+
+        finish();
     }
 
     private void setDefault() {
@@ -929,7 +956,7 @@ public class CustomRomActivity extends AppCompatActivity {
                     FileInputStream zipFile = null;
                     try {
                         zipFile = (FileInputStream) getContentResolver().openInputStream((Uri.fromFile(new File(_filepath))));
-                        File targetDirectory = new File(AppConfig.maindirpath + "roms/" + _filename.replace(".cvbi", ""));
+                        File targetDirectory = new File(AppConfig.maindirpath + "roms/" + vmID);
                         ZipInputStream zis = null;
                         zis = new ZipInputStream(
                                 new BufferedInputStream(zipFile));
@@ -971,9 +998,8 @@ public class CustomRomActivity extends AppCompatActivity {
                                     custom.setVisibility(View.VISIBLE);
                                     ivIcon.setEnabled(true);
                                     try {
-                                        secondVMdirectory = AppConfig.maindirpath + "roms/" + _filename.replace(".cvbi", "");
-                                        if (!VectrasApp.isFileExists(AppConfig.maindirpath + "roms/" + _filename.replace(".cvbi", "") + "/rom-data.json")) {
-                                            String _getDiskFile = VectrasApp.quickScanDiskFileInFolder(AppConfig.maindirpath + "roms/" + _filename.replace(".cvbi", ""));
+                                        if (!VectrasApp.isFileExists(AppConfig.maindirpath + "roms/" + vmID + "/rom-data.json")) {
+                                            String _getDiskFile = VectrasApp.quickScanDiskFileInFolder(AppConfig.maindirpath + "roms/" + vmID);
                                             if (!_getDiskFile.isEmpty()) {
                                                 //Error code: CR_CVBI2
                                                 if (getIntent().hasExtra("addromnow") && !addromnowdone) {
@@ -1008,6 +1034,7 @@ public class CustomRomActivity extends AppCompatActivity {
                                                     drive.setText(_getDiskFile);
                                                 }
                                                 VectrasApp.oneDialog(getResources().getString(R.string.oops), getResources().getString(R.string.error_CR_CVBI2), true, false, CustomRomActivity.this);
+                                                importedCVBI = true;
                                             } else {
                                                 //Error code: CR_CVBI3
                                                 if (getIntent().hasExtra("addromnow")) {
@@ -1015,25 +1042,36 @@ public class CustomRomActivity extends AppCompatActivity {
                                                 } else {
                                                     VectrasApp.oneDialog(getResources().getString(R.string.oops), getResources().getString(R.string.error_CR_CVBI3), true, false, CustomRomActivity.this);
                                                 }
+                                                importedCVBI = false;
                                             }
                                             return;
                                         }
 
                                         JSONObject jObj = new JSONObject(FileUtils.readFromFile(MainActivity.activity, new File(AppConfig.maindirpath
-                                                + "roms/" + _filename.replace(".cvbi", "") + "/rom-data.json")));
+                                                + "roms/" + vmID + "/rom-data.json")));
 
                                         title.setText(jObj.getString("title"));
                                         icon.setText(AppConfig.maindirpath
-                                                + "roms/" + _filename.replace(".cvbi", "") + "/" + jObj.getString("icon"));
+                                                + "roms/" + vmID + "/" + jObj.getString("icon"));
                                         if (!jObj.getString("drive").isEmpty()) {
                                             drive.setText(AppConfig.maindirpath
-                                                    + "roms/" + _filename.replace(".cvbi", "") + "/" + jObj.getString("drive"));
+                                                    + "roms/" + vmID + "/" + jObj.getString("drive"));
                                         }
                                         qemu.setText(jObj.getString("qemu"));
                                         ImageView ivIcon = findViewById(R.id.ivIcon);
                                         Bitmap bmImg = BitmapFactory.decodeFile(AppConfig.maindirpath
-                                                + "roms/" + _filename.replace(".cvbi", "") + "/" + jObj.getString("icon"));
+                                                + "roms/" + vmID + "/" + jObj.getString("icon"));
                                         ivIcon.setImageBitmap(bmImg);
+                                        try {
+                                            if (!jObj.getString("cdrom").isEmpty()) {
+                                                drive.setText(AppConfig.maindirpath
+                                                        + "roms/" + vmID + "/" + jObj.getString("cdrom"));
+                                            }
+                                        } catch (Exception _e) {
+
+                                        }
+
+                                        VectrasApp.moveAFile(AppConfig.maindirpath + "roms/" + _filename.replace(".cvbi", ""), AppConfig.maindirpath + "roms/" + vmID);
                                         UIUtils.UIAlert(activity, getResources().getString(R.string.from) + ": " + jObj.getString("author"), getResources().getString(R.string.description) + ":\n\n" + Html.fromHtml(jObj.getString("desc")));
                                     } catch (JSONException e) {
                                         throw new RuntimeException(e);
@@ -1088,7 +1126,7 @@ public class CustomRomActivity extends AppCompatActivity {
     private void startProcessingHardDriveFile (Uri _content_describer) {
         LinearLayout custom = findViewById(R.id.custom);
         File selectedFilePath = new File(getPath(_content_describer));
-        drive.setText(AppConfig.maindirpath + "roms/" + title.getText().toString() + "/" + selectedFilePath.getName());
+        drive.setText(AppConfig.maindirpath + "roms/" + vmID + "/" + selectedFilePath.getName());
         loadingPb.setVisibility(View.VISIBLE);
         custom.setVisibility(View.GONE);
         new Thread(new Runnable() {
@@ -1102,7 +1140,7 @@ public class CustomRomActivity extends AppCompatActivity {
                 }
                 try {
                     try {
-                        OutputStream out = new FileOutputStream(new File(AppConfig.maindirpath + "roms/" + title.getText().toString() + "/" + selectedFilePath.getName()));
+                        OutputStream out = new FileOutputStream(new File(AppConfig.maindirpath + "roms/" + vmID + "/" + selectedFilePath.getName()));
                         try {
                             // Transfer bytes from in to out
                             byte[] buf = new byte[1024];
@@ -1161,12 +1199,18 @@ public class CustomRomActivity extends AppCompatActivity {
         }
     }
 
-    public void onDestroy() {
-        super.onDestroy();
-        File lol = new File(AppConfig.maindirpath + drive.getText().toString());
-        try {
-            lol.delete();
-        } catch (Exception e) {
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (!created && !modify) {
+            VectrasApp.deleteDirectory(AppConfig.maindirpath + "roms/" + vmID);
         }
+    }
+
+    public void onDestroy() {
+        if (!created && !modify) {
+            VectrasApp.deleteDirectory(AppConfig.maindirpath + "roms/" + vmID);
+        }
+        super.onDestroy();
     }
 }

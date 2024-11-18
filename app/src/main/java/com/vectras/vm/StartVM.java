@@ -16,6 +16,8 @@ import java.util.Objects;
 public class StartVM {
     public static String cache;
 
+    public static String cdrompath;
+
     public static String env(Activity activity, String extras, String img, String cpu) {
 
         String filesDir = activity.getFilesDir().getAbsolutePath();
@@ -64,14 +66,41 @@ public class StartVM {
             params.add(hdd0);
         }
 
-        File cdromFile = new File(filesDir + "/data/Vectras/drive.iso");
+        if (cdrompath.isEmpty()) {
+            File cdromFile = new File(filesDir + "/data/Vectras/drive.iso");
 
-        if (cdromFile.exists()) {
+            if (cdromFile.exists()) {
+                if (MainSettingsManager.getArch(activity).equals("ARM64")) {
+                    cdrom = "-device";
+                    cdrom += " usb-storage,drive=cdrom";
+                    cdrom += " -drive";
+                    cdrom += " if=none,id=cdrom,format=raw,media=cdrom,file='" + cdromFile.getPath() + "'";
+                    if (!extras.contains("-device nec-usb-xhci")) {
+                        cdrom += " -device";
+                        cdrom += " qemu-xhci";
+                        cdrom += " -device";
+                        cdrom += " nec-usb-xhci";
+                    }
+                } else {
+                    if (ifType.isEmpty()) {
+                        cdrom = "-cdrom";
+                        cdrom += " '" + cdromFile.getPath() + "'";
+                    } else {
+                        cdrom = "-drive";
+                        cdrom += " index=1";
+                        cdrom += ",media=cdrom";
+                        cdrom += ",file='" + cdromFile.getPath() + "'";
+                    }
+                }
+
+                params.add(cdrom);
+            }
+        } else {
             if (MainSettingsManager.getArch(activity).equals("ARM64")) {
                 cdrom = "-device";
                 cdrom += " usb-storage,drive=cdrom";
                 cdrom += " -drive";
-                cdrom += " if=none,id=cdrom,format=raw,media=cdrom,file='" + cdromFile.getPath() + "'";
+                cdrom += " if=none,id=cdrom,format=raw,media=cdrom,file='" + cdrompath + "'";
                 if (!extras.contains("-device nec-usb-xhci")) {
                     cdrom += " -device";
                     cdrom += " qemu-xhci";
@@ -81,15 +110,14 @@ public class StartVM {
             } else {
                 if (ifType.isEmpty()) {
                     cdrom = "-cdrom";
-                    cdrom += " '" + cdromFile.getPath() + "'";
+                    cdrom += " '" + cdrompath + "'";
                 } else {
                     cdrom = "-drive";
                     cdrom += " index=1";
                     cdrom += ",media=cdrom";
-                    cdrom += ",file='" + cdromFile.getPath() + "'";
+                    cdrom += ",file='" + cdrompath + "'";
                 }
             }
-
             params.add(cdrom);
         }
 
@@ -109,7 +137,6 @@ public class StartVM {
 
             params.add(hdd1);
         }
-
 
         if (MainSettingsManager.getSharedFolder(activity)) {
             String driveParams = "-drive ";

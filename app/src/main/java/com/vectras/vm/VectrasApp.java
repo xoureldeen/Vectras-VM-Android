@@ -90,8 +90,6 @@ public class VectrasApp extends Application {
 
 	public static String TerminalOutput ="";
 
-	public static int restoredVMs = 0;
-
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -547,6 +545,10 @@ public class VectrasApp extends Application {
 	}
 
 	public static void deleteDirectory(String _pathToDelete) {
+		//Prevent accidental deletion of user data outside of Vectras VM.
+		if (!_pathToDelete.contains(AppConfig.maindirpath))
+			return;
+
 		File _dir = new File(_pathToDelete);
 		if (_dir.isDirectory()) {
 			String[] children = _dir.list();
@@ -743,86 +745,6 @@ public class VectrasApp extends Application {
 		AppConfig.downloadsFolder = AppConfig.maindirpath + "Downloads/";
 		AppConfig.romsdatajson = Environment.getExternalStorageDirectory().toString() + "/Documents/VectrasVM/roms-data.json";
 	}
-	public static String ramdomVMID() {
-		String addAdb = "";
-		Random random = new Random();
-		int randomAbc = random.nextInt(10);
-		if (randomAbc == 0) {
-			addAdb = "a";
-		} else if (randomAbc == 1) {
-			addAdb = "b";
-		} else if (randomAbc == 2) {
-			addAdb = "c";
-		} else if (randomAbc == 3) {
-			addAdb = "d";
-		} else if (randomAbc == 4) {
-			addAdb = "e";
-		} else if (randomAbc == 5) {
-			addAdb = "f";
-		} else if (randomAbc == 6) {
-			addAdb = "g";
-		} else if (randomAbc == 7) {
-			addAdb = "h";
-		} else if (randomAbc == 8) {
-			addAdb = "i";
-		}
-		return addAdb + String.valueOf((long)(random.nextInt(10001)));
-	}
-	public static void deleteVMWithName(String _vmName) {
-		String _romsdata = VectrasApp.readFile(AppConfig.maindirpath + "roms-data.json").replace("\\/", "/");
-		if (isFileExists(AppConfig.maindirpath + "roms/" + _vmName + "/vmID.txt")) {
-			String _vmID = readFile(AppConfig.maindirpath + "roms/" + _vmName + "/vmID.txt");
-			if (!_vmID.isEmpty()) {
-				int _startRepeat = 0;
-				ArrayList<String> _filelist = new ArrayList<>();
-				listDir(AppConfig.maindirpath + "roms/", _filelist);
-				if (!_filelist.isEmpty()) {
-					for (int _repeat = 0; _repeat < (int)(_filelist.size()); _repeat++) {
-						if (_startRepeat < _filelist.size()) {
-							if (isFileExists(_filelist.get((int)(_startRepeat)) + "/vmID.txt")) {
-								if (!readFile(_filelist.get((int)(_startRepeat)) + "/vmID.txt").isEmpty()) {
-									if (readFile(_filelist.get((int)(_startRepeat)) + "/vmID.txt").equals(_vmID)) {
-										if (!_romsdata.contains(_filelist.get((int)(_startRepeat)))) {
-											deleteDirectory(_filelist.get((int)(_startRepeat)));
-										} else {
-											AdapterMainRoms.isKeptSomeFiles = true;
-											deleteVMIDFileWithName(_vmName);
-										}
-									}
-								}
-							}
-						}
-						_startRepeat++;
-					}
-				}
-			}
-		}
-	}
-
-	public static void deleteVMIDFileWithName(String _vmName) {
-		if (isFileExists(AppConfig.maindirpath + "roms/" + _vmName + "/vmID.txt")) {
-			String _vmID = readFile(AppConfig.maindirpath + "roms/" + _vmName + "/vmID.txt");
-			if (!_vmID.isEmpty()) {
-				int _startRepeat = 0;
-				ArrayList<String> _filelist = new ArrayList<>();
-				listDir(AppConfig.maindirpath + "roms/", _filelist);
-				if (!_filelist.isEmpty()) {
-					for (int _repeat = 0; _repeat < (int)(_filelist.size()); _repeat++) {
-						if (_startRepeat < _filelist.size()) {
-							if (isFileExists(_filelist.get((int)(_startRepeat)) + "/vmID.txt")) {
-								if (!readFile(_filelist.get((int)(_startRepeat)) + "/vmID.txt").isEmpty()) {
-									if (readFile(_filelist.get((int)(_startRepeat)) + "/vmID.txt").equals(_vmID)) {
-										moveAFile(_filelist.get((int)(_startRepeat)) + "/vmID.txt", _filelist.get((int)(_startRepeat)) + "/vmID.old.txt");
-									}
-								}
-							}
-						}
-						_startRepeat++;
-					}
-				}
-			}
-		}
-	}
 
 	public static String quickScanDiskFileInFolder(String _foderpath) {
 		if (!_foderpath.isEmpty()) {
@@ -841,112 +763,6 @@ public class VectrasApp extends Application {
 			}
 		}
 		return "";
-	}
-
-	public static void startCleanUp() {
-		String _romsdata = VectrasApp.readFile(AppConfig.maindirpath + "roms-data.json").replace("\\/", "/");
-		int _startRepeat = 0;
-		ArrayList<String> _filelist = new ArrayList<>();
-		listDir(AppConfig.maindirpath + "roms/", _filelist);
-		if (!_filelist.isEmpty()) {
-			for (int _repeat = 0; _repeat < (int)(_filelist.size()); _repeat++) {
-				if (_startRepeat < _filelist.size()) {
-					if (!isFileExists(_filelist.get((int)(_startRepeat)) + "/vmID.txt")) {
-						if (!_romsdata.contains(_filelist.get((int)(_startRepeat)))) {
-							deleteDirectory(_filelist.get((int)(_startRepeat)));
-						}
-					}
-				}
-				_startRepeat++;
-			}
-		}
-	}
-
-	public static void startRestore() {
-		int _startRepeat = 0;
-		String _resulttemp ="";
-		String _result ="";
-		restoredVMs = 0;
-		ArrayList<String> _filelist = new ArrayList<>();
-		listDir(AppConfig.maindirpath + "roms/", _filelist);
-		if (!_filelist.isEmpty()) {
-			for (int _repeat = 0; _repeat < (int)(_filelist.size()); _repeat++) {
-				if (_startRepeat < _filelist.size()) {
-					if (!isFileExists(_filelist.get((int)(_startRepeat)) + "/vmID.txt")) {
-						if (isFileExists(_filelist.get((int)(_startRepeat)) + "/rom-data.json")) {
-							if (checkJSONMapIsNormalFromString(readFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json"))) {
-								if (_resulttemp.contains("}")) {
-									_resulttemp = _resulttemp + "," + readFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
-								} else {
-									_resulttemp = readFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
-								}
-								if (checkJSONIsNormalFromString(readFile(AppConfig.maindirpath + "/roms-data.json").replaceAll("]", _resulttemp + "]"))) {
-									if (_result.contains("}")) {
-										_result = _result + "," + readFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
-									} else {
-										_result = readFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
-									}
-									if (isFileExists(_filelist.get((int)(_startRepeat)) + "/vmID.old.txt")) {
-										startRestoreVMs(readFile(_filelist.get((int)(_startRepeat)) + "/vmID.old.txt"));
-									} else {
-										VectrasApp.writeToFile(_filelist.get((int)(_startRepeat)), "/vmID.txt", VectrasApp.ramdomVMID());
-									}
-									restoredVMs++;
-								}
-							}
-						}
-					}
-
-				_startRepeat++;
-					if (_startRepeat == _filelist.size()) {
-						if (!_result.isEmpty()) {
-							if (checkJSONIsNormalFromString("[" + _result + "]")) {
-								if (isFileExists(AppConfig.maindirpath + "roms-data.json")) {
-									if (checkJSONIsNormal(AppConfig.maindirpath + "roms-data.json")) {
-										String _JSONcontent = readFile(AppConfig.maindirpath + "roms-data.json");
-										String _JSONcontentnew = _JSONcontent.replaceAll("]", _result + "]");
-										if (checkJSONIsNormalFromString(_JSONcontentnew)) {
-											writeToFile(AppConfig.maindirpath, "roms-data.json", _JSONcontentnew);
-										} else {
-											restoredVMs = 0;
-										}
-									} else {
-										restoredVMs = 0;
-									}
-								} else {
-									writeToFile(AppConfig.maindirpath, "roms-data.json", "[" + _result + "]");
-								}
-							} else {
-								restoredVMs = 0;
-							}
-						} else {
-							restoredVMs = 0;
-						}
-					}
-				}
-			}
-
-		}
-	}
-
-	public static void startRestoreVMs(String _vmID) {
-		if (_vmID.isEmpty())
-			return;
-		int _startRepeat = 0;
-		ArrayList<String> _filelist = new ArrayList<>();
-		listDir(AppConfig.maindirpath + "roms/", _filelist);
-		if (!_filelist.isEmpty()) {
-			for (int _repeat = 0; _repeat < (int)(_filelist.size()); _repeat++) {
-				if (_startRepeat < _filelist.size()) {
-					if (isFileExists(_filelist.get((int)(_startRepeat)) + "/vmID.old.txt")) {
-						if (readFile(_filelist.get((int)(_startRepeat)) + "/vmID.old.txt").equals(_vmID)) {
-							moveAFile(_filelist.get((int)(_startRepeat)) + "/vmID.old.txt", _filelist.get((int)(_startRepeat)) + "/vmID.txt");
-						}
-					}
-				}
-				_startRepeat++;
-			}
-		}
 	}
 
 	public static boolean isADiskFile (String _filepath) {
