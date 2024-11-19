@@ -23,7 +23,7 @@ public class VMManager {
     public static int pendingPosition = 0;
     public static int restoredVMs = 0;
 
-    public static void createNewVM(String name, String thumbnail, String drive, String arch, String cdrom, String params, String vmID, boolean dontcheckduplicateid) {
+    public static void createNewVM(String name, String thumbnail, String drive, String arch, String cdrom, String params, String vmID) {
         mapForCreateNewVM.clear();
         mapForCreateNewVM.put("imgName", name);
         mapForCreateNewVM.put("imgIcon", thumbnail);
@@ -33,12 +33,8 @@ public class VMManager {
         mapForCreateNewVM.put("imgArch", arch);
         mapForCreateNewVM.put("vmID", vmID);
 
-        if (!dontcheckduplicateid && VectrasApp.isFileExists(AppConfig.maindirpath + "/roms/" + Objects.requireNonNull(mapForCreateNewVM.get("vmID")).toString())) {
-            mapForCreateNewVM.put("vmID", ramdomVMID());
-        }
-
         listmapForCreateNewVM.clear();
-        listmapForCreateNewVM = new Gson().fromJson(VectrasApp.readFile(AppConfig.maindirpath + "roms-data.json"), new TypeToken<ArrayList<HashMap<String, Object>>>(){}.getType());
+        listmapForCreateNewVM = new Gson().fromJson(VectrasApp.readFile(AppConfig.romsdatajson), new TypeToken<ArrayList<HashMap<String, Object>>>(){}.getType());
 
         listmapForCreateNewVM.add(0,mapForCreateNewVM);
         finalJson = new Gson().toJson(listmapForCreateNewVM);
@@ -51,7 +47,7 @@ public class VMManager {
 
     public static void editVM(String name, String thumbnail, String drive, String arch, String cdrom, String params, int position) {
         listmapForCreateNewVM.clear();
-        listmapForCreateNewVM = new Gson().fromJson(VectrasApp.readFile(AppConfig.maindirpath + "roms-data.json"), new TypeToken<ArrayList<HashMap<String, Object>>>(){}.getType());
+        listmapForCreateNewVM = new Gson().fromJson(VectrasApp.readFile(AppConfig.romsdatajson), new TypeToken<ArrayList<HashMap<String, Object>>>(){}.getType());
 
         mapForCreateNewVM.clear();
         mapForCreateNewVM.put("imgName", name);
@@ -64,7 +60,7 @@ public class VMManager {
         if (listmapForCreateNewVM.get(position).containsKey("vmID")) {
             mapForCreateNewVM.put("vmID", Objects.requireNonNull(listmapForCreateNewVM.get(position).get("vmID")).toString());
         } else {
-            mapForCreateNewVM.put("vmID", ramdomVMID());
+            mapForCreateNewVM.put("vmID", idGenerator());
         }
 
         listmapForCreateNewVM.set(position,mapForCreateNewVM);
@@ -75,7 +71,21 @@ public class VMManager {
         VectrasApp.writeToFile(AppConfig.maindirpath + "/roms/" + Objects.requireNonNull(mapForCreateNewVM.get("vmID")).toString(), "vmID.txt", Objects.requireNonNull(mapForCreateNewVM.get("vmID")).toString());
     }
 
-    public static String ramdomVMID() {
+    public static String idGenerator() {
+        String _result = startRamdomVMID();
+
+        if (VectrasApp.isFileExists(AppConfig.maindirpath + "/roms/" + _result)) {
+            _result = startRamdomVMID();
+        }
+
+        if (VectrasApp.isFileExists(AppConfig.maindirpath + "/roms/" + _result)) {
+            _result = startRamdomVMID();
+        }
+
+        return _result;
+    }
+
+    public static String startRamdomVMID() {
         String addAdb = "";
         Random random = new Random();
         int randomAbc = random.nextInt(12);
@@ -123,7 +133,7 @@ public class VMManager {
             int _startRepeat = 0;
             String _currentVMIDToScan = "";
             ArrayList<String> _filelist = new ArrayList<>();
-            VectrasApp.listDir(AppConfig.maindirpath + "roms", _filelist);
+            VectrasApp.listDir(AppConfig.vmFolder, _filelist);
             if (!_filelist.isEmpty()) {
                 for (int _repeat = 0; _repeat < (int)(_filelist.size()); _repeat++) {
                     if (_startRepeat < _filelist.size()) {
@@ -152,7 +162,7 @@ public class VMManager {
             int _startRepeat = 0;
             String _currentVMIDToScan = "";
             ArrayList<String> _filelist = new ArrayList<>();
-            VectrasApp.listDir(AppConfig.maindirpath + "roms/", _filelist);
+            VectrasApp.listDir(AppConfig.vmFolder, _filelist);
             if (!_filelist.isEmpty()) {
                 for (int _repeat = 0; _repeat < (int)(_filelist.size()); _repeat++) {
                     if (_startRepeat < _filelist.size()) {
@@ -183,7 +193,7 @@ public class VMManager {
             int _startRepeat = 0;
             String _currentVMIDToScan = "";
             ArrayList<String> _filelist = new ArrayList<>();
-            VectrasApp.listDir(AppConfig.maindirpath + "roms/", _filelist);
+            VectrasApp.listDir(AppConfig.vmFolder, _filelist);
             if (!_filelist.isEmpty()) {
                 for (int _repeat = 0; _repeat < (int)(_filelist.size()); _repeat++) {
                     if (_startRepeat < _filelist.size()) {
@@ -203,11 +213,11 @@ public class VMManager {
     }
 
     public static void cleanUp() {
-        finalJson = VectrasApp.readFile(AppConfig.maindirpath + "roms-data.json");
+        finalJson = VectrasApp.readFile(AppConfig.romsdatajson);
         if (!finalJson.isEmpty()) {
             int _startRepeat = 0;
             ArrayList<String> _filelist = new ArrayList<>();
-            VectrasApp.listDir(AppConfig.maindirpath + "roms", _filelist);
+            VectrasApp.listDir(AppConfig.vmFolder, _filelist);
             if (!_filelist.isEmpty()) {
                 for (int _repeat = 0; _repeat < (int)(_filelist.size()); _repeat++) {
                     if (_startRepeat < _filelist.size()) {
@@ -229,7 +239,7 @@ public class VMManager {
         String _result ="";
         restoredVMs = 0;
         ArrayList<String> _filelist = new ArrayList<>();
-        VectrasApp.listDir(AppConfig.maindirpath + "roms/", _filelist);
+        VectrasApp.listDir(AppConfig.vmFolder, _filelist);
         if (!_filelist.isEmpty()) {
             for (int _repeat = 0; _repeat < (int)(_filelist.size()); _repeat++) {
                 if (_startRepeat < _filelist.size()) {
@@ -250,7 +260,7 @@ public class VMManager {
                                     if (VectrasApp.isFileExists(_filelist.get((int)(_startRepeat)) + "/vmID.old.txt")) {
                                         enableVMID(VectrasApp.readFile(_filelist.get((int)(_startRepeat)) + "/vmID.old.txt"));
                                     } else {
-                                        VectrasApp.writeToFile(_filelist.get((int)(_startRepeat)), "/vmID.txt", VMManager.ramdomVMID());
+                                        VectrasApp.writeToFile(_filelist.get((int)(_startRepeat)), "/vmID.txt", VMManager.idGenerator());
                                     }
                                     restoredVMs++;
                                 } else if (VectrasApp.checkJSONIsNormalFromString(VectrasApp.readFile(AppConfig.maindirpath + "/roms-data.json").replaceAll("]", "," + _resulttemp + "]"))) {
@@ -262,7 +272,7 @@ public class VMManager {
                                     if (VectrasApp.isFileExists(_filelist.get((int)(_startRepeat)) + "/vmID.old.txt")) {
                                         enableVMID(VectrasApp.readFile(_filelist.get((int)(_startRepeat)) + "/vmID.old.txt"));
                                     } else {
-                                        VectrasApp.writeToFile(_filelist.get((int)(_startRepeat)), "/vmID.txt", VMManager.ramdomVMID());
+                                        VectrasApp.writeToFile(_filelist.get((int)(_startRepeat)), "/vmID.txt", VMManager.idGenerator());
                                     }
                                     restoredVMs++;
                                 } else {
@@ -276,9 +286,9 @@ public class VMManager {
                     if (_startRepeat == _filelist.size()) {
                         if (!_result.isEmpty()) {
                             if (VectrasApp.checkJSONIsNormalFromString("[" + _result + "]")) {
-                                if (VectrasApp.isFileExists(AppConfig.maindirpath + "roms-data.json")) {
-                                    if (VectrasApp.checkJSONIsNormal(AppConfig.maindirpath + "roms-data.json")) {
-                                        String _JSONcontent = VectrasApp.readFile(AppConfig.maindirpath + "roms-data.json");
+                                if (VectrasApp.isFileExists(AppConfig.romsdatajson)) {
+                                    if (VectrasApp.checkJSONIsNormal(AppConfig.romsdatajson)) {
+                                        String _JSONcontent = VectrasApp.readFile(AppConfig.romsdatajson);
                                         String _JSONcontentnew = _JSONcontent.replaceAll("]", _result + "]");
                                         if (VectrasApp.checkJSONIsNormalFromString(_JSONcontentnew)) {
                                             VectrasApp.writeToFile(AppConfig.maindirpath, "roms-data.json", _JSONcontentnew);
@@ -309,7 +319,7 @@ public class VMManager {
             return;
         int _startRepeat = 0;
         ArrayList<String> _filelist = new ArrayList<>();
-        VectrasApp.listDir(AppConfig.maindirpath + "roms/", _filelist);
+        VectrasApp.listDir(AppConfig.vmFolder, _filelist);
         if (!_filelist.isEmpty()) {
             for (int _repeat = 0; _repeat < (int)(_filelist.size()); _repeat++) {
                 if (_startRepeat < _filelist.size()) {

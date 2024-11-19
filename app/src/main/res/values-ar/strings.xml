@@ -369,6 +369,7 @@
     <string name="restore">يعيد</string>
     <string name="restore_content">سيتم استعادة الأجهزة الافتراضية المحذوفة إذا اخترت مسبقًا الاحتفاظ بجميع الملفات.</string>
     <string name="restored">تم ترميمه</string>
+    <string name="qemu_params_is_empty">معلمات QEMU فارغة. سيتم تعيين بعض الأجهزة التي سيتم محاكاتها على إعدادات QEMU الافتراضية.</string>
 
     <!--======================TERMUX STRINGS====================-->
     <string name="application_name">Vterm</string>
