@@ -69,6 +69,7 @@ public class AppConfig {
     //public static String maindirpath = FileUtils.getExternalFilesDirectory(SplashActivity.activity).getPath() + "/";
     public static String sharedFolder = maindirpath + "SharedFolder/";
     public static String downloadsFolder = maindirpath + "Downloads/";
-    public static String romsdatajson = Environment.getExternalStorageDirectory().toString() + "/Documents/VectrasVM/roms-data.json";
+    public static String romsdatajson = maindirpath + "roms-data.json";
+    public static String vmFolder = maindirpath + "roms/";
 
 }

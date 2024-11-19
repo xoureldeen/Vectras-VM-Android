@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
     
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">v2.9.4 (New York Cheesecake)</string>
+    <string name="app_version" translatable="false">v2.9.4 (Oatmeal Cookie)</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -371,6 +371,7 @@
     <string name="restore">Restore</string>
     <string name="restore_content">Deleted virtual machines will be restored if you previously chose to keep all files.</string>
     <string name="restored">Restored</string>
+    <string name="qemu_params_is_empty">QEMU Params is empty. Some hardware to be emulated will be set by default by QEMU.</string>
 
 
     <!--======================TERMUX STRINGS====================-->

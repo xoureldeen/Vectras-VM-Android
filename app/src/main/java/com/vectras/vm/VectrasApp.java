@@ -545,10 +545,6 @@ public class VectrasApp extends Application {
 	}
 
 	public static void deleteDirectory(String _pathToDelete) {
-		//Prevent accidental deletion of user data outside of Vectras VM.
-		if (!_pathToDelete.contains(AppConfig.maindirpath))
-			return;
-
 		File _dir = new File(_pathToDelete);
 		if (_dir.isDirectory()) {
 			String[] children = _dir.list();
@@ -743,7 +739,8 @@ public class VectrasApp extends Application {
 		AppConfig.maindirpath = FileUtils.getExternalFilesDirectory(_activity).getPath() + "/";
 		AppConfig.sharedFolder = AppConfig.maindirpath + "SharedFolder/";
 		AppConfig.downloadsFolder = AppConfig.maindirpath + "Downloads/";
-		AppConfig.romsdatajson = Environment.getExternalStorageDirectory().toString() + "/Documents/VectrasVM/roms-data.json";
+		AppConfig.romsdatajson = AppConfig.maindirpath + "roms-data.json";
+		AppConfig.vmFolder = AppConfig.maindirpath + "roms/";
 	}
 
 	public static String quickScanDiskFileInFolder(String _foderpath) {

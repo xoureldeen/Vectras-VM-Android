@@ -23,7 +23,7 @@ public class CqcmActivity extends AppCompatActivity {
     private String contentJson = "";
     private String contentJsonNow = "";
     private Button buttonallow;
-    private String vmID = VMManager.ramdomVMID();
+    private String vmID = VMManager.idGenerator();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
