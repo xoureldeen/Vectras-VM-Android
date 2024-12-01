@@ -26,8 +26,9 @@
     <uses-permission
         android:name="android.permission.QUERY_ALL_PACKAGES"
         tools:ignore="QueryAllPackagesPermission" />
-	
-    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" tools:ignore="ProtectedPermissions" />
+    <uses-permission
+        android:name="android.permission.WRITE_SECURE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
 
     <uses-feature
         android:name="android.hardware.touchscreen"
@@ -48,11 +49,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".ExportRomActivity"
+            android:exported="false"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
             android:name=".CqcmActivity"
             android:exported="true" />
         <activity
             android:name=".EditActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".SplashActivity"
             android:exported="true"
@@ -134,48 +142,53 @@
         <service
             android:name=".MainService"
             android:exported="false" />
+
         <activity
             android:name="com.termux.app.TermuxActivity"
-            android:label="@string/application_name"
             android:configChanges="orientation|screenSize|smallestScreenSize|density|screenLayout|uiMode|keyboard|keyboardHidden|navigation"
+            android:label="@string/application_name"
             android:launchMode="singleTask"
             android:resizeableActivity="true"
-            android:windowSoftInputMode="adjustResize|stateAlwaysVisible"/>
+            android:windowSoftInputMode="adjustResize|stateAlwaysVisible" />
+
         <service
             android:name="com.termux.app.TermuxService"
             android:exported="false" />
         <service
             android:name="com.termux.app.RunCommandService"
             android:exported="true"
-            android:stopWithTask="true">
-        </service>
-			
-		<!--Termux-X11-->
+            android:stopWithTask="true" /> <!-- Termux-X11 -->
         <activity
-            android:name="com.vectras.vm.x11.X11Activity"
-            android:taskAffinity="com.vectras.vm.x11.X11Activity"
-            android:supportsPictureInPicture="true"
+            android:name=".x11.X11Activity"
             android:configChanges="fontScale|orientation|screenSize|keyboard|keyboardHidden|layoutDirection|locale|mcc|mnc|navigation|screenLayout|touchscreen|uiMode|smallestScreenSize|density"
-            android:resizeableActivity="true"
-            android:windowSoftInputMode="stateHidden"
             android:exported="true"
-            android:screenOrientation="sensorLandscape"/>
-        <activity
-            android:excludeFromRecents="true"
-            android:name="com.vectras.vm.x11.LoriePreferences"
-            android:taskAffinity="com.vectras.vm.x11.LoriePreferences"
-            android:supportsPictureInPicture="false"
             android:resizeableActivity="true"
-            android:exported="true">
+            android:screenOrientation="sensorLandscape"
+            android:supportsPictureInPicture="true"
+            android:taskAffinity="com.vectras.vm.x11.X11Activity"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".x11.LoriePreferences"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:resizeableActivity="true"
+            android:supportsPictureInPicture="false"
+            android:taskAffinity="com.vectras.vm.x11.LoriePreferences">
             <intent-filter>
                 <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-	    <meta-data android:name="com.samsung.android.multidisplay.keep_process_alive" android:value="false"/>
-	    <meta-data android:name="android.allow_multiple_resumed_activities" android:value="true" />
 
-        <service android:name="com.vectras.vm.x11.utils.KeyInterceptor"
+        <meta-data
+            android:name="com.samsung.android.multidisplay.keep_process_alive"
+            android:value="false" />
+        <meta-data
+            android:name="android.allow_multiple_resumed_activities"
+            android:value="true" />
+
+        <service
+            android:name=".x11.utils.KeyInterceptor"
             android:exported="true"
             android:label="Termux:X11 KeyInterceptor"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
@@ -188,7 +201,11 @@
                 android:resource="@xml/accessibility_service_config" />
         </service>
 
-        <receiver android:name="com.vectras.vm.x11.LoriePreferences$Receiver" android:exported="true" tools:ignore="ExportedReceiver" android:enabled="true">
+        <receiver
+            android:name=".x11.LoriePreferences$Receiver"
+            android:enabled="true"
+            android:exported="true"
+            tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="com.vectras.vm.x11.CHANGE_PREFERENCE" />
             </intent-filter>

@@ -40,6 +40,7 @@ import com.vectras.qemu.MainSettingsManager;
 import com.vectras.qemu.MainVNCActivity;
 import com.vectras.vm.AppConfig;
 import com.vectras.vm.CustomRomActivity;
+import com.vectras.vm.ExportRomActivity;
 import com.vectras.vm.MainActivity;
 import com.vectras.vm.MainService;
 import com.vectras.vm.R;
@@ -126,84 +127,10 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 exportRomBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        final File jsonFile = new File(MainActivity.activity.getExternalFilesDir("data") + "/rom-data.json");
-                        AlertDialog ad;
-                        ad = new AlertDialog.Builder(MainActivity.activity).create();
-                        ad.setTitle(MainActivity.activity.getString(R.string.export_rom));
-                        ad.setMessage(MainActivity.activity.getString(R.string.are_you_sure));
-                        final TextInputLayout Description = new TextInputLayout(MainActivity.activity);
-                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams.MATCH_PARENT,
-                                LinearLayout.LayoutParams.MATCH_PARENT);
-                        Description.setHint(R.string.description_html_supported);
-                        Description.setLayoutParams(lp);
-                        Description.setPadding(10, 10, 10, 10);
-                        final TextInputEditText DescriptionET = new TextInputEditText(MainActivity.activity);
-                        LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams.MATCH_PARENT,
-                                LinearLayout.LayoutParams.MATCH_PARENT);
-                        DescriptionET.setLayoutParams(lp2);
-                        Description.addView(DescriptionET);
-                        DescriptionET.setText("");
-                        DescriptionET.setInputType(InputType.TYPE_CLASS_TEXT);
-                        DescriptionET.setSelectAllOnFocus(true);
-                        ad.setView(Description);
-                        ad.setButton(Dialog.BUTTON_POSITIVE, "EXPORT", (dialog, which) -> {
-                            RomJson obj = new RomJson();//TODO:UPDATE AUTHOR NAME
-                            JSONObject jsonObject = obj.makeJSONObject(current.itemName, current.itemArch, "UNKNOWN", DescriptionET.getText().toString(), new File(current.itemIcon).getName(), new File(current.itemPath).getName(), current.itemExtra);
-
-                            try {
-                                Writer output = null;
-                                output = new BufferedWriter(new FileWriter(jsonFile));
-                                output.write(jsonObject.toString().replace("\\", "").replace("//", "/"));
-                                output.close();
-                            } catch (Exception e) {
-                            }
-                            SharedPreferences credentials = MainActivity.activity.getSharedPreferences(CREDENTIAL_SHARED_PREF, Context.MODE_PRIVATE);
-
-                            ProgressDialog progressDialog = new ProgressDialog(MainActivity.activity);
-                            progressDialog.setTitle(MainActivity.activity.getString(R.string.compressing_cvbi));
-                            progressDialog.setMessage(MainActivity.activity.getString(R.string.please_wait_dialog));
-                            progressDialog.setCancelable(false);
-                            progressDialog.show(); // Showing Progress Dialog
-                            Thread t = new Thread() {
-                                public void run() {
-                                    try {
-                                        ZipEntrySource[] addedEntries = new ZipEntrySource[]{
-                                                new FileSource("/" + new File(current.itemPath).getName(), new File(current.itemPath)),
-                                                new FileSource("/" + new File(current.itemIcon).getName(), new File(current.itemIcon)),
-                                                new FileSource("/" + new File(MainActivity.activity.getExternalFilesDir("data") + "/rom-data.json").getName(), new File(MainActivity.activity.getExternalFilesDir("data") + "/rom-data.json"))
-                                        };
-                                        ZipUtil.pack(addedEntries, new File(FileUtils.getExternalFilesDirectory(MainActivity.activity).getPath() + "/cvbi/" + current.itemName + ".cvbi"));
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                        Runnable runnable = new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                progressDialog.cancel(); // cancelling Dialog.
-                                                UIUtils.UIAlert(MainActivity.activity, MainActivity.activity.getString(R.string.error), e.toString());
-                                            }
-                                        };
-                                        MainActivity.activity.runOnUiThread(runnable);
-                                    } finally {
-                                        Runnable runnable = new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                progressDialog.cancel(); // cancelling Dialog.}
-                                                UIUtils.UIAlert(MainActivity.activity, MainActivity.activity.getString(R.string.done), FileUtils.getExternalFilesDirectory(MainActivity.activity).getPath() + "/cvbi/" + current.itemName + ".cvbi");
-                                            }
-                                        };
-                                        MainActivity.activity.runOnUiThread(runnable);
-                                    }
-                                }
-                            };
-                            t.start();
-                            return;
-                        });
-                        ad.setButton(Dialog.BUTTON_NEGATIVE, MainActivity.activity.getString(R.string.close), (dialog, which) -> {
-                            return;
-                        });
-                        ad.show();
+                        ExportRomActivity.pendingPosition = position;
+                        Intent intent = new Intent();
+                        intent.setClass(context.getApplicationContext(), ExportRomActivity.class);
+                        context.startActivity(intent);
                         bottomSheetDialog.cancel();
                     }
                 });
