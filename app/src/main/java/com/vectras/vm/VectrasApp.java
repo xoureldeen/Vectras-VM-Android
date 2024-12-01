@@ -742,34 +742,4 @@ public class VectrasApp extends Application {
 		AppConfig.romsdatajson = AppConfig.maindirpath + "roms-data.json";
 		AppConfig.vmFolder = AppConfig.maindirpath + "roms/";
 	}
-
-	public static String quickScanDiskFileInFolder(String _foderpath) {
-		if (!_foderpath.isEmpty()) {
-			int _startRepeat = 0;
-			ArrayList<String> _filelist = new ArrayList<>();
-			listDir(_foderpath, _filelist);
-			if (!_filelist.isEmpty()) {
-				for (int _repeat = 0; _repeat < (int)(_filelist.size()); _repeat++) {
-					if (_startRepeat < _filelist.size()) {
-						if (isADiskFile(_filelist.get((int)(_startRepeat)))) {
-							return _filelist.get((int)(_startRepeat));
-                        }
-					}
-					_startRepeat++;
-				}
-			}
-		}
-		return "";
-	}
-
-	public static boolean isADiskFile (String _filepath) {
-		if (_filepath.contains(".")) {
-			String _getFileName = Objects.requireNonNull(Uri.parse(_filepath).getLastPathSegment()).toLowerCase();
-			String _getFileFormat = _getFileName.substring((int)(_getFileName.lastIndexOf(".") + 1), (int)(_getFileName.length()));
-			if ("qcow2,img,vhd,vhdx,vdi,qcow,vmdk,vpc".contains(_getFileFormat)){
-				return true;
-			}
-		}
-		return false;
-	}
 }
