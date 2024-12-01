@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Vectras VM</string>
-    
+
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">v2.9.4 (Oatmeal Cookie)</string>
+    <string name="app_version" translatable="false">v2.9.4 (Apricot tart)</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -192,7 +192,7 @@
     <string name="save_as_copy">Save as Copy</string>
     <string name="scaling">Scaling</string>
     <string name="scaling_zoomable">Zoomable</string>
-    
+
     <string name="patreon">Patreon</string>
 
     <!-- Send selected metakey -->
@@ -372,6 +372,9 @@
     <string name="restore_content">Deleted virtual machines will be restored if you previously chose to keep all files.</string>
     <string name="restored">Restored</string>
     <string name="qemu_params_is_empty">QEMU Params is empty. Some hardware to be emulated will be set by default by QEMU.</string>
+    <string name="cannot_export_with_error">Cannot export with error:</string>
+    <string name="author">Author</string>
+    <string name="saved_in">Saved in</string>
 
 
     <!--======================TERMUX STRINGS====================-->
@@ -426,7 +429,7 @@
     <string name="file_received_edit_button">Edit</string>
     <string name="file_received_open_folder_button">Open folder</string>
 
-	
+
     <!--======================TERMUX-X11 STRINGS====================-->
     <string name="plugin_info">lol</string>
 

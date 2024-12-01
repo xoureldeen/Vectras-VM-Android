@@ -454,6 +454,7 @@ public class CustomRomActivity extends AppCompatActivity {
 
         modify = getIntent().getBooleanExtra("MODIFY", false);
         if (modify) {
+            created = true;
             addRomBtn.setText(R.string.save_changes);
             title.setText(current.itemName);
             icon.setText(current.itemIcon);

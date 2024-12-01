@@ -508,7 +508,7 @@ public class VectrasApp extends Application {
 	}
 
 	public static boolean isFileExists(String filePath) {
-		File file = new File(filePath);
+		File file = new File(filePath.replaceAll("\n", ""));
 		return file.exists();
 	}
 

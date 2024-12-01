@@ -1,6 +1,6 @@
 {
     "versionCode":"20",
-    "versionName":"v2.9.4,v2.9.4-jellybean,v2.9.4-lemonmeringuepie,v2.9.4-newyorkcheesecake,v2.9.4-oatmealcookie",
+    "versionName":"v2.9.4,v2.9.4-jellybean,v2.9.4-lemonmeringuepie,v2.9.4-newyorkcheesecake,v2.9.4-oatmealcookie,v2.9.4-apricottart",
     "size": "60 MB",
     "url": "https://github.com/xoureldeen/Vectras-VM-Android/releases/v2.9.4",
     "Message": "<h2>v2.9.4</h2><ul><li>Now you can change locale in app settings.</li><li>Now you can access x11 settings.</li><li>New button to set full screen in x11 display.</li><li>Enhanced UI.</li><li>Chinese language by <a href=\"https://github.com/adk23333\" target=\"_blank\">@adk23333</a></li></ul><br><br>New updates are live!",
