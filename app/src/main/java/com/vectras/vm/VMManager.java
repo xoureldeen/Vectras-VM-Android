@@ -1,9 +1,12 @@
 package com.vectras.vm;
 
+import android.content.Context;
+import android.net.Uri;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.MainRoms.AdapterMainRoms;
 
 import java.util.ArrayList;
@@ -331,6 +334,83 @@ public class VMManager {
                 }
                 _startRepeat++;
             }
+        }
+    }
+
+    public static String quickScanDiskFileInFolder(String _foderpath) {
+        if (!_foderpath.isEmpty()) {
+            int _startRepeat = 0;
+            ArrayList<String> _filelist = new ArrayList<>();
+            VectrasApp.listDir(_foderpath, _filelist);
+            if (!_filelist.isEmpty()) {
+                for (int _repeat = 0; _repeat < (int)(_filelist.size()); _repeat++) {
+                    if (_startRepeat < _filelist.size()) {
+                        if (isADiskFile(_filelist.get((int)(_startRepeat)))) {
+                            return _filelist.get((int)(_startRepeat));
+                        }
+                    }
+                    _startRepeat++;
+                }
+            }
+        }
+        return "";
+    }
+
+    public static boolean isADiskFile (String _filepath) {
+        if (_filepath.contains(".")) {
+            String _getFileName = Objects.requireNonNull(Uri.parse(_filepath).getLastPathSegment()).toLowerCase();
+            String _getFileFormat = _getFileName.substring((int)(_getFileName.lastIndexOf(".") + 1), (int)(_getFileName.length()));
+            if ("qcow2,img,vhd,vhdx,vdi,qcow,vmdk,vpc".contains(_getFileFormat)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static String quickScanISOFileInFolder(String _foderpath) {
+        if (!_foderpath.isEmpty()) {
+            int _startRepeat = 0;
+            ArrayList<String> _filelist = new ArrayList<>();
+            VectrasApp.listDir(_foderpath, _filelist);
+            if (!_filelist.isEmpty()) {
+                for (int _repeat = 0; _repeat < (int)(_filelist.size()); _repeat++) {
+                    if (_startRepeat < _filelist.size()) {
+                        if (isAISOFile(_filelist.get((int)(_startRepeat)))) {
+                            return _filelist.get((int)(_startRepeat));
+                        }
+                    }
+                    _startRepeat++;
+                }
+            }
+        }
+        return "";
+    }
+
+    public static boolean isAISOFile (String _filepath) {
+        if (_filepath.contains(".")) {
+            String _getFileName = Objects.requireNonNull(Uri.parse(_filepath).getLastPathSegment()).toLowerCase();
+            String _getFileFormat = _getFileName.substring((int)(_getFileName.lastIndexOf(".") + 1), (int)(_getFileName.length()));
+            if ("iso".contains(_getFileFormat)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void setArch(String _arch, Context _context) {
+        switch (_arch) {
+            case "I386":
+                MainSettingsManager.setArch(MainActivity.activity, "I386");
+                break;
+            case "ARM64":
+                MainSettingsManager.setArch(MainActivity.activity, "ARM64");
+                break;
+            case "PPC":
+                MainSettingsManager.setArch(MainActivity.activity, "PPC");
+                break;
+            default:
+                MainSettingsManager.setArch(MainActivity.activity, "X86_64");
+                break;
         }
     }
 }

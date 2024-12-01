@@ -1015,7 +1015,7 @@ public class CustomRomActivity extends AppCompatActivity {
                                     ivIcon.setEnabled(true);
                                     try {
                                         if (!VectrasApp.isFileExists(AppConfig.vmFolder + vmID + "/rom-data.json")) {
-                                            String _getDiskFile = VectrasApp.quickScanDiskFileInFolder(AppConfig.vmFolder + vmID);
+                                            String _getDiskFile = VMManager.quickScanDiskFileInFolder(AppConfig.vmFolder + vmID);
                                             if (!_getDiskFile.isEmpty()) {
                                                 //Error code: CR_CVBI2
                                                 if (getIntent().hasExtra("addromnow") && !addromnowdone) {
@@ -1049,6 +1049,7 @@ public class CustomRomActivity extends AppCompatActivity {
                                                     }
                                                     drive.setText(_getDiskFile);
                                                 }
+                                                VMManager.setArch("X86_64", getApplicationContext());
                                                 VectrasApp.oneDialog(getResources().getString(R.string.oops), getResources().getString(R.string.error_CR_CVBI2), true, false, CustomRomActivity.this);
                                             } else {
                                                 //Error code: CR_CVBI3
@@ -1071,7 +1072,7 @@ public class CustomRomActivity extends AppCompatActivity {
                                             drive.setText(AppConfig.vmFolder
                                                     + vmID + "/" + jObj.getString("drive"));
                                         }
-                                        qemu.setText(jObj.getString("qemu"));
+                                        qemu.setText(jObj.getString("qemu").replaceAll("OhnoIjustrealizeditsmidnightandIstillhavetodothis", AppConfig.vmFolder + vmID + "/"));
                                         ImageView ivIcon = findViewById(R.id.ivIcon);
                                         Bitmap bmImg = BitmapFactory.decodeFile(AppConfig.vmFolder
                                                 + vmID + "/" + jObj.getString("icon"));
@@ -1080,6 +1081,14 @@ public class CustomRomActivity extends AppCompatActivity {
                                             if (!jObj.getString("cdrom").isEmpty()) {
                                                 drive.setText(AppConfig.vmFolder
                                                         + vmID + "/" + jObj.getString("cdrom"));
+                                            }
+                                        } catch (Exception _e) {
+
+                                        }
+
+                                        try {
+                                            if (!jObj.getString("imgArch").isEmpty()) {
+                                                VMManager.setArch(jObj.getString("imgArch"), getApplicationContext());
                                             }
                                         } catch (Exception _e) {
 
@@ -1117,7 +1126,7 @@ public class CustomRomActivity extends AppCompatActivity {
 
     private void selectedDiskFile(Uri _content_describer) {
         File selectedFilePath = new File(getPath(_content_describer));
-        if (VectrasApp.isADiskFile(selectedFilePath.getPath())) {
+        if (VMManager.isADiskFile(selectedFilePath.getPath())) {
             startProcessingHardDriveFile(_content_describer);
         } else {
             alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
