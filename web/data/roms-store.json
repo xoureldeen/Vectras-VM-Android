@@ -104,7 +104,8 @@
         "rom_size":"2MB (From Mhmd Acil)",
         "rom_arch":"X86_64",
         "rom_kernel":"windows",
-        "rom_extra":"-cpu qemu64 -smp sockets=1,cores=2,threads=1 -m 1G -drive file=paper7.qcow2,aio=threads,cache=unsafe -vga std -device intel-hda -device hda-duplex -device e1000,netdev=n0 -netdev user,id=n0 -accel tcg,tb-size=2048"
+        "rom_extra":"-cpu qemu64 -smp sockets=1,cores=2,threads=1 -m 1G -drive file=paper7.qcow2,aio=threads,cache=unsafe -vga std -device intel-hda -device hda-duplex -device e1000,netdev=n0 -netdev user,id=n0 -accel tcg,tb-size=2048",
+        "final_rom_file_name":"paper7.qcow2"
     },
     {
         "rom_name":"Windows 8.1",
