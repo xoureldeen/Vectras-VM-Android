@@ -96,6 +96,17 @@
         "final_rom_file_name":"c.img"
     },
     {
+        "rom_name":"Windows Paper 7",
+        "rom_icon":"https://static.wikia.nocookie.net/world-of-media/images/1/12/Windows-7-logo.png/revision/latest?cb=20160217163447",
+        "rom_url":"https://www.mediafire.com/file/9p021dylkplm3wk/paper7.qcow2/file",
+        "rom_path":"paper7.qcow2",
+        "rom_avail":true,
+        "rom_size":"2MB (From Mhmd Acil)",
+        "rom_arch":"X86_64",
+        "rom_kernel":"windows",
+        "rom_extra":"-cpu qemu64 -smp sockets=1,cores=2,threads=1 -m 1G -drive file=paper7.qcow2,aio=threads,cache=unsafe -vga std -device intel-hda -device hda-duplex -device e1000,netdev=n0 -netdev user,id=n0 -accel tcg,tb-size=2048"
+    },
+    {
         "rom_name":"Windows 8.1",
         "rom_icon":"https://www.getmyos.com/upload/files/2018/10/19/windows_8_8.1_logo_1_17b84e6869fdc9169328be8b5827d602.png",
         "rom_url":"https://www.mediafire.com/file/bbv0yiw6bxep0gd/vectras.win8.1.cvbi/file",
