@@ -101,7 +101,7 @@
         "rom_url":"https://www.mediafire.com/file/9p021dylkplm3wk/paper7.qcow2/file",
         "rom_path":"paper7.qcow2",
         "rom_avail":true,
-        "rom_size":"2MB (From Mhmd Acil)",
+        "rom_size":"932MB (From Mhmd Acil)",
         "rom_arch":"X86_64",
         "rom_kernel":"windows",
         "rom_extra":"-cpu qemu64 -smp sockets=1,cores=2,threads=1 -m 1G -drive file=paper7.qcow2,aio=threads,cache=unsafe -vga std -device intel-hda -device hda-duplex -device e1000,netdev=n0 -netdev user,id=n0 -accel tcg,tb-size=2048",
