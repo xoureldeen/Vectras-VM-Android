@@ -4,6 +4,8 @@ import static android.content.Intent.ACTION_OPEN_DOCUMENT;
 import static android.content.Intent.ACTION_VIEW;
 import static android.os.Build.VERSION.SDK_INT;
 import com.termux.app.TermuxService;
+
+import static com.vectras.vm.VectrasApp.getAppInfo;
 import static com.vectras.vm.utils.UIUtils.UIAlert;
 
 import android.app.ActivityManager;
@@ -753,14 +755,6 @@ public class MainActivity extends AppCompatActivity {
             throw new IllegalArgumentException(l + " cannot be cast to int without changing its value.");
         }
         return (int) l;
-    }
-
-    public static PackageInfo getAppInfo(Context context) {
-        try {
-            return context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-        } catch (PackageManager.NameNotFoundException e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public void updateApp(final boolean showDialog) {

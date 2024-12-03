@@ -373,6 +373,8 @@
     <string name="cannot_export_with_error">غير قادر على التصدير مع وجود خطأ:</string>
     <string name="author">مؤلف</string>
     <string name="saved_in">تم الحفظ في</string>
+    <string name="this_rom_is_missing_too_much_information">يفتقد هذا القرص المضغوط الكثير من المعلومات وقد لا يعمل، ويرجع هذا الخطأ إلى قيام المنشئ بإنشائه بشكل غير صحيح.</string>
+    <string name="this_rom_may_not_be_compatible">قد لا يكون هذا القرص المضغوط متوافقًا لأنه موجود في إصدار أقدم.</string>
 
     <!--======================TERMUX STRINGS====================-->
     <string name="application_name">Vterm</string>

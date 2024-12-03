@@ -742,4 +742,12 @@ public class VectrasApp extends Application {
 		AppConfig.romsdatajson = AppConfig.maindirpath + "roms-data.json";
 		AppConfig.vmFolder = AppConfig.maindirpath + "roms/";
 	}
+
+	public static PackageInfo getAppInfo(Context context) {
+		try {
+			return context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+		} catch (PackageManager.NameNotFoundException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }
