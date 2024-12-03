@@ -1,8 +1,11 @@
 package com.vectras.vm;
 
+import static com.vectras.vm.VectrasApp.getAppInfo;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -186,9 +189,9 @@ public class ExportRomActivity extends AppCompatActivity {
             mapForGetData.put("qemu", "");
         }
         if (listmapForGetData.get(pendingPosition).containsKey("imgArch")) {
-            mapForGetData.put("imgArch", Objects.requireNonNull(listmapForGetData.get(pendingPosition).get("imgArch")).toString());
+            mapForGetData.put("arch", Objects.requireNonNull(listmapForGetData.get(pendingPosition).get("imgArch")).toString());
         } else {
-            mapForGetData.put("imgArch", "");
+            mapForGetData.put("arch", "");
         }
         if (editauthor.getText().toString().isEmpty()) {
             mapForGetData.put("author", "Unknow");
@@ -200,6 +203,9 @@ public class ExportRomActivity extends AppCompatActivity {
         } else {
             mapForGetData.put("desc", editdesc.getText().toString());
         }
+
+        PackageInfo pinfo = getAppInfo(getApplicationContext());
+        mapForGetData.put("versioncode", pinfo.versionCode);
 
         VectrasApp.writeToFile(new File(String.valueOf(getApplicationContext().getExternalFilesDir("data"))).getPath(), "rom-data.json", new Gson().toJson(mapForGetData));
 

@@ -29,12 +29,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center">
-        <ProgressBar
+        <com.google.android.material.progressindicator.CircularProgressIndicator
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8dp"
-            android:indeterminate="false"
-            style="?android:progressBarStyle" />
+            android:indeterminate="true"
+            app:showAnimationBehavior="inward"/>
         <TextView
             android:id="@+id/textviewsettingup"
             android:layout_width="wrap_content"

@@ -1059,43 +1059,60 @@ public class CustomRomActivity extends AppCompatActivity {
                                                     VectrasApp.oneDialog(getResources().getString(R.string.oops), getResources().getString(R.string.error_CR_CVBI3), true, false, CustomRomActivity.this);
                                                 }
                                             }
-                                            return;
-                                        }
+                                        } else {
+                                            JSONObject jObj = new JSONObject(FileUtils.readFromFile(MainActivity.activity, new File(AppConfig.vmFolder + vmID + "/rom-data.json")));
 
-                                        JSONObject jObj = new JSONObject(FileUtils.readFromFile(MainActivity.activity, new File(AppConfig.vmFolder
-                                                + vmID + "/rom-data.json")));
-
-                                        title.setText(jObj.getString("title"));
-                                        icon.setText(AppConfig.vmFolder
-                                                + vmID + "/" + jObj.getString("icon"));
-                                        if (!jObj.getString("drive").isEmpty()) {
-                                            drive.setText(AppConfig.vmFolder
-                                                    + vmID + "/" + jObj.getString("drive"));
-                                        }
-                                        qemu.setText(jObj.getString("qemu").replaceAll("OhnoIjustrealizeditsmidnightandIstillhavetodothis", AppConfig.vmFolder + vmID + "/"));
-                                        ImageView ivIcon = findViewById(R.id.ivIcon);
-                                        Bitmap bmImg = BitmapFactory.decodeFile(AppConfig.vmFolder
-                                                + vmID + "/" + jObj.getString("icon"));
-                                        ivIcon.setImageBitmap(bmImg);
-                                        try {
-                                            if (!jObj.getString("cdrom").isEmpty()) {
-                                                drive.setText(AppConfig.vmFolder
-                                                        + vmID + "/" + jObj.getString("cdrom"));
+                                            if (jObj.has("title") && !jObj.isNull("title")) {
+                                                title.setText(jObj.getString("title"));
                                             }
-                                        } catch (Exception _e) {
 
-                                        }
+                                            if (jObj.has("drive") && !jObj.isNull("drive")) {
+                                                if (!jObj.getString("drive").isEmpty()) {
+                                                    drive.setText(AppConfig.vmFolder + vmID + "/" + jObj.getString("drive"));
+                                                }
 
-                                        try {
-                                            if (!jObj.getString("imgArch").isEmpty()) {
-                                                VMManager.setArch(jObj.getString("imgArch"), getApplicationContext());
                                             }
-                                        } catch (Exception _e) {
 
+                                            if (jObj.has("qemu") && !jObj.isNull("qemu")) {
+                                                if (!jObj.getString("qemu").isEmpty()) {
+                                                    qemu.setText(jObj.getString("qemu").replaceAll("OhnoIjustrealizeditsmidnightandIstillhavetodothis", AppConfig.vmFolder + vmID + "/"));
+                                                }
+                                            }
+
+                                            if (jObj.has("icon") && !jObj.isNull("icon")) {
+                                                icon.setText(AppConfig.vmFolder + vmID + "/" + jObj.getString("icon"));
+                                                ImageView ivIcon = findViewById(R.id.ivIcon);
+                                                Bitmap bmImg = BitmapFactory.decodeFile(AppConfig.vmFolder
+                                                        + vmID + "/" + jObj.getString("icon"));
+                                                ivIcon.setImageBitmap(bmImg);
+                                            }
+
+                                            if (jObj.has("cdrom") && !jObj.isNull("cdrom")) {
+                                                if (!jObj.getString("cdrom").isEmpty()) {
+                                                    cdrom.setText(AppConfig.vmFolder + vmID + "/" + jObj.getString("cdrom"));
+                                                }
+                                            }
+
+                                            if (jObj.has("arch") && !jObj.isNull("arch")) {
+                                                VMManager.setArch(jObj.getString("arch"), getApplicationContext());
+                                            } else {
+                                                VMManager.setArch("x86_64", getApplicationContext());
+                                            }
+
+                                            VectrasApp.moveAFile(AppConfig.vmFolder + _filename.replace(".cvbi", ""), AppConfig.vmFolder + vmID);
+
+                                            if (!jObj.has("drive") && !jObj.has("cdrom") && !jObj.has("qemu")) {
+                                                VectrasApp.oneDialog(getResources().getString(R.string.problem_has_been_detected), getResources().getString(R.string.this_rom_is_missing_too_much_information), true, false, CustomRomActivity.this);
+                                            }
+
+                                            if (!jObj.has("versioncode")) {
+                                                VectrasApp.oneDialog(getResources().getString(R.string.problem_has_been_detected), getResources().getString(R.string.this_rom_may_not_be_compatible), true, false, CustomRomActivity.this);
+                                            }
+
+                                            if (jObj.has("author") && !jObj.isNull("author") && jObj.has("desc") && !jObj.isNull("desc")) {
+                                                UIUtils.UIAlert(activity, getResources().getString(R.string.from) + ": " + jObj.getString("author"), getResources().getString(R.string.description) + ":\n\n" + Html.fromHtml(jObj.getString("desc")));
+                                            }
                                         }
-
-                                        VectrasApp.moveAFile(AppConfig.vmFolder + _filename.replace(".cvbi", ""), AppConfig.vmFolder + vmID);
-                                        UIUtils.UIAlert(activity, getResources().getString(R.string.from) + ": " + jObj.getString("author"), getResources().getString(R.string.description) + ":\n\n" + Html.fromHtml(jObj.getString("desc")));
                                     } catch (JSONException e) {
                                         throw new RuntimeException(e);
                                     }

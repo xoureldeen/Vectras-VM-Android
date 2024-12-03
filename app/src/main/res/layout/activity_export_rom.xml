@@ -66,12 +66,6 @@
         android:orientation="vertical"
         android:gravity="center"
         android:visibility="gone">
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:indeterminate="false"
-            style="?android:progressBarStyle" />
         <TextView
             android:id="@+id/textviewsettingup"
             android:layout_width="wrap_content"
@@ -79,6 +73,12 @@
             android:padding="8dp"
             android:gravity="center"
             android:text="@string/compressing_cvbi" />
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:indeterminate="true"
+            app:showAnimationBehavior="inward"/>
     </LinearLayout>
     <LinearLayout
         android:id="@+id/lineardone"
@@ -103,7 +103,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/unable_to_connect_to_server"
+            android:text=""
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp" />

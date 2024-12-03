@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">v2.9.4 (Biscuit)</string>
+    <string name="app_version" translatable="false">v2.9.4 (Croissant)</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -375,6 +375,8 @@
     <string name="cannot_export_with_error">Cannot export with error:</string>
     <string name="author">Author</string>
     <string name="saved_in">Saved in</string>
+    <string name="this_rom_is_missing_too_much_information">This ROM is missing too much information and it may not work, this error is caused by the person who created it incorrectly.</string>
+    <string name="this_rom_may_not_be_compatible">This ROM may not be compatible as it is for an older version.</string>
 
 
     <!--======================TERMUX STRINGS====================-->
