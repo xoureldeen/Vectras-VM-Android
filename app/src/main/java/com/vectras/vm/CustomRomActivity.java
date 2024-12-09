@@ -954,7 +954,7 @@ public class CustomRomActivity extends AppCompatActivity {
     private void importCVBI(String _filepath, String _filename) {
         LinearLayout custom = findViewById(R.id.custom);
         ImageView ivIcon = findViewById(R.id.ivIcon);
-        if (_filepath.endsWith(".cvbi")) {
+        if (_filepath.endsWith(".cvbi") || _filepath.endsWith(".cvbi.zip")) {
             //Error code: CR_CVBI1
             if (!VectrasApp.isFileExists(_filepath)) {
                 if (getIntent().hasExtra("addromnow")) {
@@ -1021,19 +1021,19 @@ public class CustomRomActivity extends AppCompatActivity {
                                                 if (getIntent().hasExtra("addromnow") && !addromnowdone) {
                                                     addromnowdone = true;
                                                     title.setText(getIntent().getStringExtra("romname"));
-                                                    if (getIntent().getStringExtra("romextra").isEmpty()) {
+                                                    if (Objects.requireNonNull(getIntent().getStringExtra("romextra")).isEmpty()) {
                                                         setDefault();
                                                         drive.setText(_getDiskFile);
                                                     } else {
-                                                        if (getIntent().getStringExtra("romextra").contains(getIntent().getStringExtra("finalromfilename"))) {
-                                                            qemu.setText(getIntent().getStringExtra("romextra").replaceAll(getIntent().getStringExtra("finalromfilename"), "\"" + _getDiskFile + "\""));
+                                                        if (Objects.requireNonNull(getIntent().getStringExtra("romextra")).contains(getIntent().getStringExtra("finalromfilename"))) {
+                                                            qemu.setText(Objects.requireNonNull(getIntent().getStringExtra("romextra")).replaceAll(getIntent().getStringExtra("finalromfilename"), "\"" + _getDiskFile + "\""));
                                                         } else {
                                                             drive.setText(_getDiskFile);
                                                             qemu.setText(getIntent().getStringExtra("romextra"));
                                                         }
                                                     }
                                                     icon.setText(getIntent().getStringExtra("romicon"));
-                                                    if (!getIntent().getStringExtra("romicon").isEmpty()) {
+                                                    if (!Objects.requireNonNull(getIntent().getStringExtra("romicon")).isEmpty()) {
                                                         File imgFile = new File(getIntent().getStringExtra("romicon"));
                                                         if (imgFile.exists()) {
                                                             Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
@@ -1041,10 +1041,10 @@ public class CustomRomActivity extends AppCompatActivity {
                                                         }
                                                     }
                                                 } else {
-                                                    if (title.getText().toString().isEmpty() || title.getText().toString().equals("New VM")) {
+                                                    if (Objects.requireNonNull(title.getText()).toString().isEmpty() || title.getText().toString().equals("New VM")) {
                                                         title.setText(_filename.replace(".cvbi", ""));
                                                     }
-                                                    if (qemu.getText().toString().isEmpty()) {
+                                                    if (Objects.requireNonNull(qemu.getText()).toString().isEmpty()) {
                                                         setDefault();
                                                     }
                                                     drive.setText(_getDiskFile);
