@@ -500,8 +500,13 @@ public class CustomRomActivity extends AppCompatActivity {
                 if (Objects.requireNonNull(getIntent().getStringExtra("romfilename")).endsWith(".cvbi")) {
                     importCVBI(Objects.requireNonNull(getIntent().getStringExtra("rompath")), getIntent().getStringExtra("romfilename"));
                 } else {
-                    drive.setText(getIntent().getStringExtra("rompath"));
                     addromnowdone = true;
+                    if (!Objects.requireNonNull(getIntent().getStringExtra("rompath")).isEmpty()) {
+                        selectedDiskFile(Uri.fromFile(new File((Objects.requireNonNull(getIntent().getStringExtra("rompath"))))), false);
+                    }
+                    if (!Objects.requireNonNull(getIntent().getStringExtra("addtodrive")).isEmpty()) {
+                        drive.setText(AppConfig.vmFolder + vmID + "/" + getIntent().getStringExtra("romfilename"));
+                    }
                 }
             } else {
                 title.setText("New VM");
@@ -610,7 +615,7 @@ public class CustomRomActivity extends AppCompatActivity {
                 }
             }).start();
         } else if (requestCode == 1002 && resultCode == RESULT_OK) {
-            selectedDiskFile(ReturnedIntent.getData());
+            selectedDiskFile(ReturnedIntent.getData(), true);
         } else if (requestCode == 1003 && resultCode == RESULT_OK) {
             Uri content_describer = ReturnedIntent.getData();
             File selectedFilePath = new File(getPath(content_describer));
@@ -1135,17 +1140,17 @@ public class CustomRomActivity extends AppCompatActivity {
         }
     }
 
-    private void selectedDiskFile(Uri _content_describer) {
+    private void selectedDiskFile(Uri _content_describer, boolean _addtodrive) {
         File selectedFilePath = new File(getPath(_content_describer));
         if (VMManager.isADiskFile(selectedFilePath.getPath())) {
-            startProcessingHardDriveFile(_content_describer);
+            startProcessingHardDriveFile(_content_describer, _addtodrive);
         } else {
             alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
             alertDialog.setTitle(getResources().getString(R.string.problem_has_been_detected));
             alertDialog.setMessage(getResources().getString(R.string.file_format_is_not_supported));
             alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.continuetext), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    startProcessingHardDriveFile(_content_describer);
+                    startProcessingHardDriveFile(_content_describer, _addtodrive);
                 }
             });
             alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -1157,12 +1162,16 @@ public class CustomRomActivity extends AppCompatActivity {
         }
     }
 
-    private void startProcessingHardDriveFile (Uri _content_describer) {
+    private void startProcessingHardDriveFile (Uri _content_describer, boolean _addtodrive) {
         LinearLayout custom = findViewById(R.id.custom);
         File selectedFilePath = new File(getPath(_content_describer));
-        drive.setText(AppConfig.vmFolder + vmID + "/" + selectedFilePath.getName());
+        if (_addtodrive) {
+            drive.setText(AppConfig.vmFolder + vmID + "/" + selectedFilePath.getName());
+        }
         loadingPb.setVisibility(View.VISIBLE);
         custom.setVisibility(View.GONE);
+        File romDir = new File(AppConfig.vmFolder + vmID);
+        romDir.mkdirs();
         new Thread(new Runnable() {
             @Override
             public void run() {

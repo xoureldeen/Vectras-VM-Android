@@ -519,18 +519,19 @@ public class RomsManagerActivity extends AppCompatActivity {
         if (requestCode == 0 && resultCode == RESULT_OK) {
             Uri content_describer = data.getData();
             File selectedFilePath = new File(getPath(content_describer));
-            if (selectedFilePath.getName().equals(selectedPath)) {
+            if (selectedFilePath.getName().equals(selectedPath) || selectedFilePath.getName().equals(selectedPath + ".zip")) {
                 Intent intent = new Intent();
                 intent.setClass(getApplicationContext(), CustomRomActivity.class);
                 intent.putExtra("addromnow", "");
                 intent.putExtra("romname", selectedName);
                 intent.putExtra("romfilename", selectedPath);
                 intent.putExtra("finalromfilename", selectedFinalRomFileName);
+                intent.putExtra("rompath", selectedFilePath.getPath());
                 if (selectedExtra.contains(selectedFilePath.getName())) {
-                    intent.putExtra("rompath", "");
-                    intent.putExtra("romextra", selectedExtra.replace(selectedFilePath.getName(),"\"" + selectedFilePath.getPath() + "\""));
+                    intent.putExtra("addtodrive", "");
+                    intent.putExtra("romextra", selectedExtra);
                 } else {
-                    intent.putExtra("rompath", selectedFilePath.getPath());
+                    intent.putExtra("addtodrive", "1");
                     intent.putExtra("romextra", selectedExtra);
                 }
                 intent.putExtra("romicon", AppConfig.maindirpath + "icons/" + selectedPath + ".png");

@@ -2,8 +2,8 @@
     {
         "rom_name":"MS-DOS",
         "rom_icon":"https://upload.wikimedia.org/wikipedia/commons/3/3d/Msdos-icon.png",
-        "rom_url":"https://www.mediafire.com/file/8iyxeyyh2yot304/MSDOS.img/file",
-        "rom_path":"MSDOS.img",
+        "rom_url":"https://www.mediafire.com/file/yvgg5ku4o6fnzkf/MS-DOS.cvbi/file",
+        "rom_path":"MS-DOS.cvbi",
         "rom_avail":true,
         "rom_size":"128MB",
         "rom_arch":"X86_64",
