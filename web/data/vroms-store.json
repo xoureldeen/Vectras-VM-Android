@@ -1,0 +1,122 @@
+[
+    {
+        "rom_name":"MS-DOS",
+        "rom_icon":"https://upload.wikimedia.org/wikipedia/commons/3/3d/Msdos-icon.png",
+        "rom_url":"https://www.mediafire.com/file/8iyxeyyh2yot304/MSDOS.img/file",
+        "rom_path":"MSDOS.img",
+        "rom_avail":true,
+        "rom_size":"128MB",
+        "rom_arch":"X86_64",
+        "rom_kernel":"windows",
+        "rom_extra":"-cpu n270 -smp 1 -m 2M -vga cirrus -device sb16",
+        "final_rom_file_name":"MSDOS.img"
+    },
+    {
+        "rom_name":"Windows 1.01",
+        "rom_icon":"https://upload.wikimedia.org/wikipedia/commons/8/80/Windows_1.01_booting.png",
+        "rom_url":"https://www.mediafire.com/file/4sdhxfkxlj6w5o0/Windows1.0.ima/file",
+        "rom_path":"Windows1.0.ima",
+        "rom_avail":true,
+        "rom_size":"2MB",
+        "rom_arch":"X86_64",
+        "rom_kernel":"windows",
+        "rom_extra":"-cpu n270 -smp 1 -m 16M -vga cirrus -device sb16 -fda 'OhnoIjustrealizeditsmidnightandIstillhavetodothisWindows1.0.ima'",
+        "final_rom_file_name":"Windows1.0.ima"
+    },
+    {
+        "rom_name":"Windows 2.03",
+        "rom_icon":"https://classicreload.com/sites/default/files/Microsoft-Windows-2.03.png",
+        "rom_url":"https://www.mediafire.com/file/c263dbsy4sl67q6/Windows2.0.vdi/file",
+        "rom_path":"Windows2.0.vdi",
+        "rom_avail":true,
+        "rom_size":"14MB",
+        "rom_arch":"X86_64",
+        "rom_kernel":"windows",
+        "rom_extra":"-cpu n270 -smp 1 -m 16M -vga cirrus -device sb16",
+        "final_rom_file_name":"Windows2.0.vdi"
+    },
+    {
+        "rom_name":"Windows 3.0",
+        "rom_icon":"https://upload.wikimedia.org/wikipedia/commons/9/9b/Windows_3.0_29_12_2020_11_03_55_GER.png",
+        "rom_url":"https://firebasestorage.googleapis.com/v0/b/anbui-71c6e.appspot.com/o/Windows%203.0.vdi?alt=media&token=7e266c1b-63b4-40bf-b1a3-f93f1c3f6da5",
+        "rom_path":"Windows 3.0.vdi",
+        "rom_avail":true,
+        "rom_size":"17MB",
+        "rom_arch":"X86_64",
+        "rom_kernel":"windows",
+        "rom_extra":"-cpu n270 -smp 1 -m 16M -vga cirrus -device sb16",
+        "final_rom_file_name":"Windows 3.0.vdi"
+    },
+    {
+        "rom_name":"Windows 98",
+        "rom_icon":"https://www.getmyos.com/upload/files/2018/10/04/windows_logo_1995_1_21eb221818c6620a5391a14ce1b0fc51.png",
+        "rom_url":"https://www.mediafire.com/file/4n8r3re8qh7vf7i/98.qcow2/file",
+        "rom_path":"98.qcow2",
+        "rom_avail":true,
+        "rom_size":"537MB (From ketuja)",
+        "rom_arch":"X86_64",
+        "rom_kernel":"windows",
+        "rom_extra":"-cpu qemu32 -smp sockets=1,cores=1,threads=1 -m 128M -hda 'OhnoIjustrealizeditsmidnightandIstillhavetodothis98.qcow2' -vga cirrus -device sb16 -device pcnet,netdev=n0 -netdev user,id=n0 -accel tcg,thread=multi",
+        "final_rom_file_name":"98.qcow2"
+    },
+    {
+        "rom_name":"Windows 98 Plus!",
+        "rom_icon":"https://www.getmyos.com/upload/files/2018/10/04/windows_logo_1995_1_21eb221818c6620a5391a14ce1b0fc51.png",
+        "rom_url":"https://www.mediafire.com/file/8cndpbaaallbqws/98PLUS%2521.qcow2/file",
+        "rom_path":"98PLUS!.qcow2",
+        "rom_avail":true,
+        "rom_size":"537MB (From ketuja)",
+        "rom_arch":"X86_64",
+        "rom_kernel":"windows",
+        "rom_extra":"-cpu qemu32 -smp sockets=1,cores=1,threads=1 -m 128M -hda 'OhnoIjustrealizeditsmidnightandIstillhavetodothis98PLUS!.qcow2' -vga cirrus -device sb16 -device pcnet,netdev=n0 -netdev user,id=n0 -accel tcg,thread=multi",
+        "final_rom_file_name":"98PLUS!.qcow2"
+    },
+    {
+        "rom_name":"Windows CE 5.0",
+        "rom_icon":"https://upload.wikimedia.org/wikipedia/en/7/72/Wince50.PNG",
+        "rom_url":"https://github.com/Stiven2016/vecras-roms/releases/download/roms/windows.ce.5.0.cvbi",
+        "rom_path":"windows.ce.5.0.cvbi",
+        "rom_avail":true,
+        "rom_size":"9MB (From Stiven2016)",
+        "rom_arch":"X86_64",
+        "rom_kernel":"windows",
+        "rom_extra":"-cpu qemu32 -smp sockets=1,cores=1,threads=1 -m 512M -hda 'OhnoIjustrealizeditsmidnightandIstillhavetodothis12.vhd' -vga std -device ac97 -device rtl8139,netdev=n0 -netdev user,id=n0 -accel tcg,tb-size=2048",
+        "final_rom_file_name":"12.vhd"
+    },
+    {
+        "rom_name":"KolibriOS",
+        "rom_icon":"https://avatars.githubusercontent.com/u/19728236?s=280&v=4",
+        "rom_url":"https://www.mediafire.com/file/q7suozay9gop3wd/KolibriOS.img/file",
+        "rom_path":"KolibriOS.img",
+        "rom_avail":true,
+        "rom_size":"1.4MB (From Hacks, Coding and more)",
+        "rom_arch":"X86_64",
+        "rom_kernel":"linux",
+        "rom_extra":"-cpu qemu64 -smp sockets=1,cores=2,threads=1 -m 1G -drive file='OhnoIjustrealizeditsmidnightandIstillhavetodothisKolibriOS.img',aio=threads,cache=unsafe -vga std -device intel-hda -device hda-duplex -device e1000,netdev=n0 -netdev user,id=n0 -accel tcg,tb-size=2048",
+        "final_rom_file_name":"KolibriOS.img"
+    },
+    {
+        "rom_name":"KolibriOS (2022)",
+        "rom_icon":"https://avatars.githubusercontent.com/u/19728236?s=280&v=4",
+        "rom_url":"https://drive.google.com/file/d/1OOghfD_GmET2y8YlbfT0cITJFqcqM7yx/view",
+        "rom_path":"KolibriOS.qcow",
+        "rom_avail":true,
+        "rom_size":"103MB (From Nomis_official)",
+        "rom_arch":"X86_64",
+        "rom_kernel":"linux",
+        "rom_extra":"-cpu qemu64 -smp sockets=1,cores=2,threads=1 -m 1G -drive file='OhnoIjustrealizeditsmidnightandIstillhavetodothisKolibriOS.qcow',aio=threads,cache=unsafe -vga std -device intel-hda -device hda-duplex -device e1000,netdev=n0 -netdev user,id=n0 -accel tcg,tb-size=2048",
+        "final_rom_file_name":"KolibriOS.qcow"
+    },
+    {
+        "rom_name":"Alpine Linux",
+        "rom_icon":"https://avatars.githubusercontent.com/u/7600810?s=200&v=4",
+        "rom_url":"https://www.mediafire.com/file/v79ivyqdogj7a8l/sda.qcow2/file",
+        "rom_path":"sda.qcow2",
+        "rom_avail":true,
+        "rom_size":"1.2GB (From Hacks, Coding and more)",
+        "rom_arch":"X86_64",
+        "rom_kernel":"linux",
+        "rom_extra":"-cpu qemu64 -smp sockets=1,cores=2,threads=1 -m 1G -drive file='OhnoIjustrealizeditsmidnightandIstillhavetodothissda.qcow2',aio=threads,cache=unsafe -vga std -device intel-hda -device hda-duplex -device e1000,netdev=n0 -netdev user,id=n0 -accel tcg,tb-size=2048",
+        "final_rom_file_name":"sda.qcow2"
+    }
+]

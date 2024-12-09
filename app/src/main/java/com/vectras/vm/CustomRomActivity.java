@@ -114,10 +114,6 @@ public class CustomRomActivity extends AppCompatActivity {
 
     private AlertDialog alertDialog;
 
-    private ArrayList<HashMap<String, Objects>> mmap = new ArrayList<>();
-
-    private String contentjson = "";
-
     public void onStart() {
         super.onStart();
     }
@@ -270,7 +266,7 @@ public class CustomRomActivity extends AppCompatActivity {
         View.OnClickListener cdromClickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (cdrom.getText().length() > 0) {
+                if (Objects.requireNonNull(cdrom.getText()).length() > 0) {
                     AlertDialog ad;
                     ad = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
                     ad.setTitle("REPLACE ISO");
@@ -336,12 +332,12 @@ public class CustomRomActivity extends AppCompatActivity {
         addRomBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (title.getText().toString().isEmpty()) {
+                if (Objects.requireNonNull(title.getText()).toString().isEmpty()) {
                     VectrasApp.oneDialog(getResources().getString(R.string.oops), getResources().getString(R.string.need_set_name),true, false, activity);
-                } else if ((!drive.getText().toString().isEmpty()) || (!cdrom.getText().toString().isEmpty())) {
+                } else if ((!Objects.requireNonNull(drive.getText()).toString().isEmpty()) || (!Objects.requireNonNull(cdrom.getText()).toString().isEmpty())) {
                     checkJsonFile();
                 } else {
-                    if (VectrasApp.isHaveADisk(qemu.getText().toString())) {
+                    if (VectrasApp.isHaveADisk(Objects.requireNonNull(qemu.getText()).toString())) {
                         checkJsonFile();
                     } else {
                         if (qemu.getText().toString().isEmpty()) {
@@ -405,7 +401,7 @@ public class CustomRomActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                textName.setText(title.getText().toString());
+                textName.setText(Objects.requireNonNull(title.getText()).toString());
 
                 if (!Objects.requireNonNull(icon.getText()).toString().isEmpty())
                     return;
@@ -476,7 +472,7 @@ public class CustomRomActivity extends AppCompatActivity {
 
             qemu.setText(current.itemExtra);
 
-            File imgFile = new  File(icon.getText().toString());
+            File imgFile = new  File(Objects.requireNonNull(icon.getText()).toString());
 
             if(imgFile.exists()){
                 Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
@@ -488,21 +484,21 @@ public class CustomRomActivity extends AppCompatActivity {
         } else {
             if (getIntent().hasExtra("addromnow")) {
                 title.setText(getIntent().getStringExtra("romname"));
-                if (getIntent().getStringExtra("romextra").isEmpty()) {
+                if (Objects.requireNonNull(getIntent().getStringExtra("romextra")).isEmpty()) {
                     setDefault();
                 } else {
-                    qemu.setText(getIntent().getStringExtra("romextra"));
+                    qemu.setText(Objects.requireNonNull(getIntent().getStringExtra("romextra")).replaceAll("OhnoIjustrealizeditsmidnightandIstillhavetodothis", AppConfig.vmFolder + vmID + "/"));
                 }
                 icon.setText(getIntent().getStringExtra("romicon"));
-                if (!getIntent().getStringExtra("romicon").isEmpty()) {
+                if (!Objects.requireNonNull(getIntent().getStringExtra("romicon")).isEmpty()) {
                     File imgFile = new File(getIntent().getStringExtra("romicon"));
                     if (imgFile.exists()) {
                         Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                         ivIcon.setImageBitmap(myBitmap);
                     }
                 }
-                if (getIntent().getStringExtra("romfilename").endsWith(".cvbi")) {
-                    importCVBI(getIntent().getStringExtra("rompath"), getIntent().getStringExtra("romfilename"));
+                if (Objects.requireNonNull(getIntent().getStringExtra("romfilename")).endsWith(".cvbi")) {
+                    importCVBI(Objects.requireNonNull(getIntent().getStringExtra("rompath")), getIntent().getStringExtra("romfilename"));
                 } else {
                     drive.setText(getIntent().getStringExtra("rompath"));
                     addromnowdone = true;
@@ -770,16 +766,14 @@ public class CustomRomActivity extends AppCompatActivity {
     }
 
     private void checkpermissions() {
-        if (!VectrasApp.checkpermissionsgranted(activity, true)) {
-
-        }
+        boolean result = VectrasApp.checkpermissionsgranted(activity, true);
     }
 
     private void startCreateVM() {
         //errorjsondialog();
 
-        File isoFile = new File(cdrom.getText().toString());
-        if (isoFile.exists() && !qemu.getText().toString().contains(cdrom.getText().toString())) {
+        File isoFile = new File(Objects.requireNonNull(cdrom.getText()).toString());
+        if (isoFile.exists() && !Objects.requireNonNull(qemu.getText()).toString().contains(cdrom.getText().toString())) {
             isoFile.delete();
         }
 
@@ -787,12 +781,12 @@ public class CustomRomActivity extends AppCompatActivity {
 
             int position = getIntent().getIntExtra("POS", 0);
             final File jsonFile = new File(AppConfig.romsdatajson);
-            current.itemDrv1 = drive.getText().toString();
-            current.itemExtra = qemu.getText().toString();
+            current.itemDrv1 = Objects.requireNonNull(drive.getText()).toString();
+            current.itemExtra = Objects.requireNonNull(qemu.getText()).toString();
             try {
                 JSONObject jObj = MainActivity.jArray.getJSONObject(position);
-                jObj.put("imgName", title.getText().toString());
-                jObj.put("imgIcon", icon.getText().toString());
+                jObj.put("imgName", Objects.requireNonNull(title.getText()).toString());
+                jObj.put("imgIcon", Objects.requireNonNull(icon.getText()).toString());
                 jObj.put("imgPath", drive.getText().toString());
                 jObj.put("imgExtra", qemu.getText().toString());
 
@@ -843,7 +837,7 @@ public class CustomRomActivity extends AppCompatActivity {
                         Toast.makeText(MainActivity.activity, e.toString(), Toast.LENGTH_LONG).show();
                     }
 
-                    JSONObject jsonObject = obj.makeJSONObject(title.getText().toString(), icon.getText().toString(), MainSettingsManager.getArch(activity), drive.getText().toString(), qemu.getText().toString());
+                    JSONObject jsonObject = obj.makeJSONObject(Objects.requireNonNull(title.getText()).toString(), Objects.requireNonNull(icon.getText()).toString(), MainSettingsManager.getArch(activity), drive.getText().toString(), qemu.getText().toString());
                     jArray.put(jsonObject);
                     try {
                         Writer output = null;
@@ -860,7 +854,7 @@ public class CustomRomActivity extends AppCompatActivity {
                     throw new RuntimeException(e);
                 }
             } else {
-                JSONObject jsonObject = obj.makeJSONObject(title.getText().toString(), icon.getText().toString(), MainSettingsManager.getArch(activity), drive.getText().toString(), qemu.getText().toString());
+                JSONObject jsonObject = obj.makeJSONObject(Objects.requireNonNull(title.getText()).toString(), Objects.requireNonNull(icon.getText()).toString(), MainSettingsManager.getArch(activity), drive.getText().toString(), qemu.getText().toString());
                 JSONArray jsonArray = new JSONArray();
                 jsonArray.put(jsonObject);
                 try {
@@ -1029,7 +1023,7 @@ public class CustomRomActivity extends AppCompatActivity {
                                                             qemu.setText(Objects.requireNonNull(getIntent().getStringExtra("romextra")).replaceAll(getIntent().getStringExtra("finalromfilename"), "\"" + _getDiskFile + "\""));
                                                         } else {
                                                             drive.setText(_getDiskFile);
-                                                            qemu.setText(getIntent().getStringExtra("romextra"));
+                                                            qemu.setText(getIntent().getStringExtra("romextra").replaceAll("OhnoIjustrealizeditsmidnightandIstillhavetodothis", AppConfig.vmFolder + vmID + "/"));
                                                         }
                                                     }
                                                     icon.setText(getIntent().getStringExtra("romicon"));
