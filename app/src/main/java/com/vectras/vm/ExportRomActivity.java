@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -157,7 +158,11 @@ public class ExportRomActivity extends AppCompatActivity {
         }
         if (listmapForGetData.get(pendingPosition).containsKey("imgIcon")) {
             iconfile = Objects.requireNonNull(listmapForGetData.get(pendingPosition).get("imgIcon")).toString();
-            mapForGetData.put("icon", Objects.requireNonNull(listmapForGetData.get(pendingPosition).get("imgIcon")).toString().replaceAll(getRomPath, ""));
+            try {
+                mapForGetData.put("icon", Uri.parse(Objects.requireNonNull(listmapForGetData.get(pendingPosition).get("imgIcon")).toString()).getLastPathSegment());
+            } catch (Exception _e){
+                mapForGetData.put("icon", Objects.requireNonNull(listmapForGetData.get(pendingPosition).get("imgIcon")).toString());
+            }
         } else {
             mapForGetData.put("icon", "");
         }
