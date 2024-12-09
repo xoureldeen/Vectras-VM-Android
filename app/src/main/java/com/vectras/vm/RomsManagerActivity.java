@@ -519,7 +519,7 @@ public class RomsManagerActivity extends AppCompatActivity {
         if (requestCode == 0 && resultCode == RESULT_OK) {
             Uri content_describer = data.getData();
             File selectedFilePath = new File(getPath(content_describer));
-            if (selectedFilePath.getName().equals(selectedPath) || selectedFilePath.getName().equals(selectedPath + ".zip")) {
+            if (selectedFilePath.getName().equals(selectedPath) || (selectedFilePath.getName().endsWith(".cvbi.zip") && selectedFilePath.getName().equals(selectedPath + ".zip"))) {
                 Intent intent = new Intent();
                 intent.setClass(getApplicationContext(), CustomRomActivity.class);
                 intent.putExtra("addromnow", "");
