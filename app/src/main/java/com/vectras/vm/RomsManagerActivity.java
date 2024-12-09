@@ -297,11 +297,11 @@ public class RomsManagerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 linearload.setVisibility(View.VISIBLE);
-                net.startRequestNetwork(RequestNetworkController.GET,AppConfig.vectrasRaw + "roms-store.json","anbui",_net_request_listener);
+                net.startRequestNetwork(RequestNetworkController.GET,AppConfig.vectrasRaw + "vroms-store.json","anbui",_net_request_listener);
             }
         });
 
-        net.startRequestNetwork(RequestNetworkController.GET,AppConfig.vectrasRaw + "roms-store.json","anbui",_net_request_listener);
+        net.startRequestNetwork(RequestNetworkController.GET,AppConfig.vectrasRaw + "vroms-store.json","anbui",_net_request_listener);
     }
 
     public void onResume() {
