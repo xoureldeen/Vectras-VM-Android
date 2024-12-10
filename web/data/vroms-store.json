@@ -96,6 +96,18 @@
         "final_rom_file_name":"KolibriOS.qcow"
     },
     {
+        "rom_name":"Anonym.OS",
+        "rom_icon":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQlezHOdq-S2UjgmEoIcVxBA4jlDO6bPGsLA&usqp=CAU",
+        "rom_url":"https://www.mediafire.com/file/laparebxxunsztk/Anonym.OS.cvbi/file",
+        "rom_path":"Anonym.OS.cvbi",
+        "rom_avail":true,
+        "rom_size":"196MB",
+        "rom_arch":"X86_64",
+        "rom_kernel":"linux",
+        "rom_extra":"",
+        "final_rom_file_name":""
+    },
+    {
         "rom_name":"Alpine Linux",
         "rom_icon":"https://avatars.githubusercontent.com/u/7600810?s=200&v=4",
         "rom_url":"https://www.mediafire.com/file/v79ivyqdogj7a8l/sda.qcow2/file",
