@@ -60,7 +60,19 @@
         "final_rom_file_name":"98PLUS!.qcow2"
     },
     {
-        "rom_name":"KolibriOS (2022)",
+        "rom_name":"PonyOS",
+        "rom_icon":"https://ponyos.org/assets/img/logo-new.png",
+        "rom_url":"https://www.mediafire.com/file/fzcjieuuw8uxb2m/PonyOS.cvbi/file",
+        "rom_path":"PonyOS.cvbi",
+        "rom_avail":true,
+        "rom_size":"6MB",
+        "rom_arch":"X86_64",
+        "rom_kernel":"linux",
+        "rom_extra":"",
+        "final_rom_file_name":""
+    },
+    {
+        "rom_name":"KolibriOS",
         "rom_icon":"https://avatars.githubusercontent.com/u/19728236?s=280&v=4",
         "rom_url":"https://drive.google.com/file/d/1OOghfD_GmET2y8YlbfT0cITJFqcqM7yx/view",
         "rom_path":"KolibriOS.qcow",
