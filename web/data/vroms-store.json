@@ -130,5 +130,17 @@
         "rom_kernel":"android",
         "rom_extra":"",
         "final_rom_file_name":""
+    },
+    {
+        "rom_name":"BlackberryOS (Android 7.1.2)",
+        "rom_icon":"https://d-cb.jc-cdn.com/sites/crackberry.com/files/topic_images/2013/blackberry-OS.png",
+        "rom_url":"https://archive.org/download/blackberry-os/BlackberryOS.cvbi",
+        "rom_path":"BlackberryOS.cvbi",
+        "rom_avail":true,
+        "rom_size":"763MB",
+        "rom_arch":"X86_64",
+        "rom_kernel":"android",
+        "rom_extra":"",
+        "final_rom_file_name":""
     }
 ]
