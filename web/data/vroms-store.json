@@ -106,5 +106,17 @@
         "rom_kernel":"linux",
         "rom_extra":"-cpu qemu64 -smp sockets=1,cores=2,threads=1 -m 1G -drive file='OhnoIjustrealizeditsmidnightandIstillhavetodothissda.qcow2',aio=threads,cache=unsafe -vga std -device intel-hda -device hda-duplex -device e1000,netdev=n0 -netdev user,id=n0 -accel tcg,tb-size=2048",
         "final_rom_file_name":"sda.qcow2"
+    },
+    {
+        "rom_name":"Android 3.2",
+        "rom_icon":"https://static.wikia.nocookie.net/android/images/d/d2/Honeycomb-logo2-e1298681115525.png/revision/latest?cb=20111216204245",
+        "rom_url":"https://www.mediafire.com/file/4rj9x99jmog6u4d/Android_3.2.cvbi/file",
+        "rom_path":"Android 3.2.cvbi",
+        "rom_avail":true,
+        "rom_size":"180MB",
+        "rom_arch":"X86_64",
+        "rom_kernel":"android",
+        "rom_extra":"",
+        "final_rom_file_name":""
     }
 ]
