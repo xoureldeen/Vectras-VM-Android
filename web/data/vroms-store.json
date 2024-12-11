@@ -9,7 +9,8 @@
         "rom_arch":"X86_64",
         "rom_kernel":"windows",
         "rom_extra":"-cpu n270 -smp 1 -m 2M -vga cirrus -device sb16",
-        "final_rom_file_name":"MSDOS.img"
+        "final_rom_file_name":"MSDOS.img",
+        "desc":""
     },
     {
         "rom_name":"Windows 1.01",
@@ -21,7 +22,8 @@
         "rom_arch":"X86_64",
         "rom_kernel":"windows",
         "rom_extra":"-cpu n270 -smp 1 -m 16M -vga cirrus -device sb16 -fda 'OhnoIjustrealizeditsmidnightandIstillhavetodothisWindows1.0.ima'",
-        "final_rom_file_name":"Windows1.0.ima"
+        "final_rom_file_name":"Windows1.0.ima",
+        "desc":""
     },
     {
         "rom_name":"Windows 2.03",
@@ -33,7 +35,8 @@
         "rom_arch":"X86_64",
         "rom_kernel":"windows",
         "rom_extra":"-cpu n270 -smp 1 -m 16M -vga cirrus -device sb16",
-        "final_rom_file_name":"Windows2.0.vdi"
+        "final_rom_file_name":"Windows2.0.vdi",
+        "desc":""
     },
     {
         "rom_name":"Windows 3.0",
@@ -45,7 +48,8 @@
         "rom_arch":"X86_64",
         "rom_kernel":"windows",
         "rom_extra":"-cpu n270 -smp 1 -m 16M -vga cirrus -device sb16",
-        "final_rom_file_name":"Windows 3.0.vdi"
+        "final_rom_file_name":"Windows 3.0.vdi",
+        "desc":""
     },
     {
         "rom_name":"Windows 98 Plus!",
@@ -57,7 +61,8 @@
         "rom_arch":"X86_64",
         "rom_kernel":"windows",
         "rom_extra":"-cpu qemu32 -smp sockets=1,cores=1,threads=1 -m 128M -hda 'OhnoIjustrealizeditsmidnightandIstillhavetodothis98PLUS!.qcow2' -vga cirrus -device sb16 -device pcnet,netdev=n0 -netdev user,id=n0 -accel tcg,thread=multi",
-        "final_rom_file_name":"98PLUS!.qcow2"
+        "final_rom_file_name":"98PLUS!.qcow2",
+        "desc":""
     },
     {
         "rom_name":"PonyOS",
@@ -69,7 +74,8 @@
         "rom_arch":"X86_64",
         "rom_kernel":"linux",
         "rom_extra":"",
-        "final_rom_file_name":""
+        "final_rom_file_name":"",
+        "desc":""
     },
     {
         "rom_name":"BSDeviant",
@@ -81,7 +87,8 @@
         "rom_arch":"X86_64",
         "rom_kernel":"linux",
         "rom_extra":"",
-        "final_rom_file_name":""
+        "final_rom_file_name":"",
+        "desc":""
     },
     {
         "rom_name":"KolibriOS",
@@ -93,7 +100,8 @@
         "rom_arch":"X86_64",
         "rom_kernel":"linux",
         "rom_extra":"-cpu qemu64 -smp sockets=1,cores=2,threads=1 -m 1G -drive file='OhnoIjustrealizeditsmidnightandIstillhavetodothisKolibriOS.qcow',aio=threads,cache=unsafe -vga std -device intel-hda -device hda-duplex -device e1000,netdev=n0 -netdev user,id=n0 -accel tcg,tb-size=2048",
-        "final_rom_file_name":"KolibriOS.qcow"
+        "final_rom_file_name":"KolibriOS.qcow",
+        "desc":""
     },
     {
         "rom_name":"Anonym.OS",
@@ -105,7 +113,8 @@
         "rom_arch":"X86_64",
         "rom_kernel":"linux",
         "rom_extra":"",
-        "final_rom_file_name":""
+        "final_rom_file_name":"",
+        "desc":""
     },
     {
         "rom_name":"Alpine Linux",
@@ -117,7 +126,8 @@
         "rom_arch":"X86_64",
         "rom_kernel":"linux",
         "rom_extra":"-cpu qemu64 -smp sockets=1,cores=2,threads=1 -m 1G -drive file='OhnoIjustrealizeditsmidnightandIstillhavetodothissda.qcow2',aio=threads,cache=unsafe -vga std -device intel-hda -device hda-duplex -device e1000,netdev=n0 -netdev user,id=n0 -accel tcg,tb-size=2048",
-        "final_rom_file_name":"sda.qcow2"
+        "final_rom_file_name":"sda.qcow2",
+        "desc":""
     },
     {
         "rom_name":"Anonymous OS",
@@ -129,7 +139,8 @@
         "rom_arch":"X86_64",
         "rom_kernel":"android",
         "rom_extra":"",
-        "final_rom_file_name":""
+        "final_rom_file_name":"",
+        "desc":""
     },
     {
         "rom_name":"Android 3.2",
@@ -141,7 +152,8 @@
         "rom_arch":"X86_64",
         "rom_kernel":"android",
         "rom_extra":"",
-        "final_rom_file_name":""
+        "final_rom_file_name":"",
+        "desc":""
     },
     {
         "rom_name":"BlackberryOS (Android 7.1.2)",
@@ -153,6 +165,7 @@
         "rom_arch":"X86_64",
         "rom_kernel":"android",
         "rom_extra":"",
-        "final_rom_file_name":""
+        "final_rom_file_name":"",
+        "desc":""
     }
 ]
