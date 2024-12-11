@@ -120,6 +120,18 @@
         "final_rom_file_name":"sda.qcow2"
     },
     {
+        "rom_name":"Anonymous OS",
+        "rom_icon":"https://i0.wp.com/securityaffairs.com/wp-content/uploads/2012/03/anonymous-os.jpg?fit=498%2C459&ssl=1&resize=1280%2C720",
+        "rom_url":"https://archive.org/download/blackberry-os/Anonymous%20OS.cvbi",
+        "rom_path":"Anonymous OS.cvbi",
+        "rom_avail":true,
+        "rom_size":"1.34GB",
+        "rom_arch":"X86_64",
+        "rom_kernel":"android",
+        "rom_extra":"",
+        "final_rom_file_name":""
+    },
+    {
         "rom_name":"Android 3.2",
         "rom_icon":"https://static.wikia.nocookie.net/android/images/d/d2/Honeycomb-logo2-e1298681115525.png/revision/latest?cb=20111216204245",
         "rom_url":"https://www.mediafire.com/file/4rj9x99jmog6u4d/Android_3.2.cvbi/file",
