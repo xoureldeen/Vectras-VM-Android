@@ -378,6 +378,7 @@
     <string name="this_rom_is_missing_too_much_information">This ROM is missing too much information and it may not work, this error is caused by the person who created it incorrectly.</string>
     <string name="this_rom_may_not_be_compatible">This ROM may not be compatible as it is for an older version.</string>
     <string name="please_select">Please select</string>
+    <string name="select">Select</string>
 
 
     <!--======================TERMUX STRINGS====================-->
