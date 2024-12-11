@@ -375,6 +375,7 @@
     <string name="saved_in">تم الحفظ في</string>
     <string name="this_rom_is_missing_too_much_information">يفتقد هذا القرص المضغوط الكثير من المعلومات وقد لا يعمل، ويرجع هذا الخطأ إلى قيام المنشئ بإنشائه بشكل غير صحيح.</string>
     <string name="this_rom_may_not_be_compatible">قد لا يكون هذا القرص المضغوط متوافقًا لأنه موجود في إصدار أقدم.</string>
+    <string name="please_select">الرجاء الاختيار</string>
 
     <!--======================TERMUX STRINGS====================-->
     <string name="application_name">Vterm</string>

@@ -330,6 +330,7 @@ public class RomsManagerActivity extends AppCompatActivity {
                 romsData.itemArch = json_data.getString("rom_arch");
                 romsData.itemKernel = json_data.getString("rom_kernel");
                 romsData.itemExtra = json_data.getString("rom_extra");
+                romsData.itemDesc = json_data.getString("desc");
                 if (filter != null) {
                     if (romsData.itemKernel.toLowerCase().contains(filter.toLowerCase())) {
                         data.add(romsData);

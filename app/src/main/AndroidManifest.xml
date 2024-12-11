@@ -49,17 +49,24 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ExportRomActivity"
+            android:name="com.vectras.vm.RomInfo"
             android:exported="false"
+            android:hardwareAccelerated="true" />
+        <activity
+            android:name=".ExportRomActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:exported="false"
+            android:hardwareAccelerated="true"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".CqcmActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:hardwareAccelerated="true" />
         <activity
             android:name=".EditActivity"
-            android:exported="false"
             android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:exported="false"
+            android:hardwareAccelerated="true"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".SplashActivity"
@@ -74,13 +81,11 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:hardwareAccelerated="true"
-            android:launchMode="singleTask" />
+            android:hardwareAccelerated="true" />
         <activity
             android:name=".SetupQemuActivity"
             android:exported="true"
             android:hardwareAccelerated="true"
-            android:launchMode="singleTask"
             tools:ignore="DiscouragedApi" /> <!-- stupid android issue -->
         <activity
             android:name=".RomsManagerActivity"

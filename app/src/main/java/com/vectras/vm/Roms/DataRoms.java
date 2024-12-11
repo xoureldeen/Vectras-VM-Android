@@ -12,4 +12,5 @@ public class DataRoms {
     public String itemPath;
     public String itemFinalRomFileName;
     public String itemExtra;
+    public String itemDesc;
 }
