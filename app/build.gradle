@@ -13,7 +13,7 @@ android {
         minSdk minApi
         targetSdk targetApi
         versionCode 20
-        versionName "v2.9.4-ecclescake"
+        versionName "v2.9.4-frenchtoast"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
