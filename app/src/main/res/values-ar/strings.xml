@@ -377,6 +377,8 @@
     <string name="this_rom_may_not_be_compatible">قد لا يكون هذا القرص المضغوط متوافقًا لأنه موجود في إصدار أقدم.</string>
     <string name="please_select">الرجاء الاختيار</string>
     <string name="select">يختار</string>
+    <string name="use_default_bios_uefi">استخدم BIOS/UEFI الافتراضي</string>
+    <string name="use_local_time">استخدم التوقيت المحلي</string>
 
     <!--======================TERMUX STRINGS====================-->
     <string name="application_name">Vterm</string>

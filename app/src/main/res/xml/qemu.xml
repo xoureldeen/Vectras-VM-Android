@@ -86,6 +86,20 @@
             android:title="@string/custom_params"
             app:useSimpleSummaryProvider="true"
             app:icon="@drawable/round_terminal_24" />
+        <SwitchPreferenceCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="true"
+            android:key="useDefaultBios"
+            android:title="@string/use_default_bios_uefi"
+            app:icon="@drawable/hard_disk_24px" />
+        <SwitchPreferenceCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="true"
+            android:key="useLocalTime"
+            android:title="@string/use_local_time"
+            app:icon="@drawable/schedule_24px" />
     </PreferenceCategory>
     <PreferenceCategory
         android:layout_width="wrap_content"
