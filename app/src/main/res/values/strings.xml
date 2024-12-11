@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">v2.9.4 (French toast)</string>
+    <string name="app_version" translatable="false">v2.9.4 (Genoise)</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -379,6 +379,8 @@
     <string name="this_rom_may_not_be_compatible">This ROM may not be compatible as it is for an older version.</string>
     <string name="please_select">Please select</string>
     <string name="select">Select</string>
+    <string name="use_default_bios_uefi">Use default BIOS/UEFI</string>
+    <string name="use_local_time">Use local time</string>
 
 
     <!--======================TERMUX STRINGS====================-->

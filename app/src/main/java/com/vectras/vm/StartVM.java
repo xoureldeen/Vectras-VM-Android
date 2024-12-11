@@ -151,7 +151,11 @@ public class StartVM {
         }
 
         String memoryStr = "-m ";
-        memoryStr += RamInfo.vectrasMemory();
+        if (MainSettingsManager.getArch(activity).equals("PPC") && RamInfo.vectrasMemory() > 2048) {
+            memoryStr += 2048;
+        } else {
+            memoryStr += RamInfo.vectrasMemory();
+        }
 
         String boot = "-boot ";
         if (extras.contains(".iso ")) {
@@ -165,33 +169,38 @@ public class StartVM {
 
         //params.add(soundDevice);
 
-        if (MainSettingsManager.getArch(activity).equals("PPC")) {
-            bios = "-L ";
-            bios += "openbios-ppc";
-        } else if (MainSettingsManager.getArch(activity).equals("ARM64")) {
-            bios = "-pflash ";
-            bios += AppConfig.basefiledir + "QEMU_EFI.img";
-            bios += " -pflash ";
-            bios += AppConfig.basefiledir + "QEMU_VARS.img";
-        } else {
-            bios = "-bios ";
-            bios += AppConfig.basefiledir + "bios-vectras.bin";
-        }
+        if (MainSettingsManager.useDefaultBios(MainActivity.activity)) {
+            if (MainSettingsManager.getArch(activity).equals("PPC")) {
+                bios = "-L ";
+                bios += "pc-bios";
+            } else if (MainSettingsManager.getArch(activity).equals("ARM64")) {
+                bios = "-pflash ";
+                bios += AppConfig.basefiledir + "QEMU_EFI.img";
+                bios += " -pflash ";
+                bios += AppConfig.basefiledir + "QEMU_VARS.img";
+            } else {
+                bios = "-bios ";
+                bios += AppConfig.basefiledir + "bios-vectras.bin";
+            }
 
-        String machine = "-M ";
-        if (Objects.equals(MainSettingsManager.getArch(activity), "X86_64")) {
-            machine += "pc";
-            params.add(machine);
-        } else if (Objects.equals(MainSettingsManager.getArch(activity), "ARM64")) {
-            machine += "virt";
-            params.add(machine);
+            String machine = "-M ";
+            if (Objects.equals(MainSettingsManager.getArch(activity), "X86_64")) {
+                machine += "pc";
+                params.add(machine);
+            } else if (Objects.equals(MainSettingsManager.getArch(activity), "ARM64")) {
+                machine += "virt";
+                params.add(machine);
+            }
         }
 
         params.add("-overcommit");
         params.add("mem-lock=off");
 
-        params.add("-rtc");
-        params.add("base=localtime");
+        if (MainSettingsManager.useLocalTime(MainActivity.activity)) {
+            params.add("-rtc");
+            params.add("base=localtime");
+        }
+
         //if (!MainSettingsManager.getArch(activity).equals("PPC")) {
             //params.add("-nodefaults");
         //}
@@ -216,10 +225,10 @@ public class StartVM {
                 params.add(qmpParams);
             }
 
-            if (!MainSettingsManager.getArch(activity).equals("PPC") || !MainSettingsManager.getArch(activity).equals("ARM64")) {
-                params.add("-monitor");
-                params.add("vc");
-            }
+            //if (!MainSettingsManager.getArch(activity).equals("PPC") || !MainSettingsManager.getArch(activity).equals("ARM64")) {
+            params.add("-monitor");
+            params.add("vc");
+            //}
         } else if (MainSettingsManager.getVmUi(activity).equals("SPICE")) {
             String spiceStr = "-spice ";
             spiceStr += "port=6999,disable-ticketing=on";
