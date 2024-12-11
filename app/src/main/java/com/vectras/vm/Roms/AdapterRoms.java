@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.vectras.vm.AppConfig;
 import com.bumptech.glide.Glide;
+import com.vectras.vm.RomInfo;
 import com.vectras.vm.RomsManagerActivity;
 import com.vectras.vm.MainActivity;
 import com.vectras.vm.R;
@@ -98,12 +99,25 @@ public class AdapterRoms extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     notifyItemRangeChanged(0, data.size());
                     RomsManagerActivity.selected = true;
                     RomsManagerActivity.selectedPath = current.itemPath;
-                    RomsManagerActivity.selectedFinalRomFileName =current.itemFinalRomFileName;
+                    RomsManagerActivity.selectedFinalRomFileName = current.itemFinalRomFileName;
                     RomsManagerActivity.selectedExtra = current.itemExtra;
                     RomsManagerActivity.selectedName = current.itemName;
                     RomsManagerActivity.selectedLink = current.itemUrl;
                     RomsManagerActivity.selectedIcon = current.itemIcon;
                     RomsManagerActivity.selectedArch = current.itemArch;
+
+                    Intent intent = new Intent();
+                    intent.setClass(RomsManagerActivity.activity, RomInfo.class);
+                    intent.putExtra("title", current.itemName);
+                    intent.putExtra("shortdesc", current.itemSize);
+                    intent.putExtra("getrom", current.itemUrl);
+                    intent.putExtra("desc", current.itemDesc);
+                    intent.putExtra("icon", current.itemIcon);
+                    intent.putExtra("filename", current.itemPath);
+                    intent.putExtra("finalromfilename", current.itemFinalRomFileName);
+                    intent.putExtra("extra", current.itemExtra);
+                    intent.putExtra("arch", current.itemArch);
+                    RomsManagerActivity.activity.startActivity(intent);
 
                     //Save image to icon folder
                     myHolder.ivIcon.buildDrawingCache();
