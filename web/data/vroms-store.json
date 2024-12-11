@@ -10,7 +10,7 @@
         "rom_kernel":"windows",
         "rom_extra":"-cpu n270 -smp 1 -m 2M -vga cirrus -device sb16",
         "final_rom_file_name":"MSDOS.img",
-        "desc":""
+        "desc":"MS-DOS (/ˌɛmˌɛsˈdɒs/ em-es-DOSS; acronym for Microsoft Disk Operating System, also known as Microsoft DOS) is an operating system for x86-based personal computers mostly developed by Microsoft. Collectively, MS-DOS, its rebranding as IBM PC DOS, and a few operating systems attempting to be compatible with MS-DOS, are sometimes referred to as \"DOS\" (which is also the generic acronym for disk operating system). MS-DOS was the main operating system for IBM PC compatibles during the 1980s, from which point it was gradually superseded by operating systems offering a graphical user interface (GUI), in various generations of the graphical Microsoft Windows operating system."
     },
     {
         "rom_name":"Windows 1.01",
@@ -23,7 +23,7 @@
         "rom_kernel":"windows",
         "rom_extra":"-cpu n270 -smp 1 -m 16M -vga cirrus -device sb16 -fda 'OhnoIjustrealizeditsmidnightandIstillhavetodothisWindows1.0.ima'",
         "final_rom_file_name":"Windows1.0.ima",
-        "desc":""
+        "desc":"Windows 1.0 is the first major release of Microsoft Windows, a family of graphical operating systems for personal computers developed by Microsoft. It was first released to manufacturing in the United States on November 20, 1985, while the European version was released as Windows 1.02 in May 1986."
     },
     {
         "rom_name":"Windows 2.03",
@@ -36,7 +36,7 @@
         "rom_kernel":"windows",
         "rom_extra":"-cpu n270 -smp 1 -m 16M -vga cirrus -device sb16",
         "final_rom_file_name":"Windows2.0.vdi",
-        "desc":""
+        "desc":"Windows 2.0 is a major release of Microsoft Windows, a family of graphical operating systems for personal computers developed by Microsoft. It was released to manufacturing on December 9, 1987, as a successor to Windows 1.0."
     },
     {
         "rom_name":"Windows 3.0",
@@ -49,7 +49,7 @@
         "rom_kernel":"windows",
         "rom_extra":"-cpu n270 -smp 1 -m 16M -vga cirrus -device sb16",
         "final_rom_file_name":"Windows 3.0.vdi",
-        "desc":""
+        "desc":"Windows 3.0 is the third major release of Microsoft Windows, launched on May 22, 1990. It introduces a new graphical user interface (GUI) that represents applications as clickable icons, instead of the list of file names in its predecessors. Later updates expand capabilities, such as multimedia support for sound recording and playback, and support for CD-ROMs."
     },
     {
         "rom_name":"Windows 98 Plus!",
@@ -62,7 +62,7 @@
         "rom_kernel":"windows",
         "rom_extra":"-cpu qemu32 -smp sockets=1,cores=1,threads=1 -m 128M -hda 'OhnoIjustrealizeditsmidnightandIstillhavetodothis98PLUS!.qcow2' -vga cirrus -device sb16 -device pcnet,netdev=n0 -netdev user,id=n0 -accel tcg,thread=multi",
         "final_rom_file_name":"98PLUS!.qcow2",
-        "desc":""
+        "desc":"Windows 98 is a consumer-oriented operating system developed by Microsoft as part of its Windows 9x family of Microsoft Windows operating systems. It was the second operating system in the 9x line, as the successor to Windows 95. It was released to manufacturing on May 15, 1998, and generally to retail on June 25, 1998. Like its predecessor, it is a hybrid 16-bit and 32-bit monolithic product with the boot stage based on MS-DOS."
     },
     {
         "rom_name":"PonyOS",
@@ -75,7 +75,7 @@
         "rom_kernel":"linux",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":""
+        "desc":"PonyOS is a hobby Unix-like operating system, designed for ponies like you!"
     },
     {
         "rom_name":"BSDeviant",
@@ -88,7 +88,7 @@
         "rom_kernel":"linux",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":""
+        "desc":"BSDeviant – a free, FreeBSD-based UNIX-like operating system. The distribution is currently (as of June 2004) under 210MB and fully operates from a mini-CDR (or regular CDR) without the need to install anything on the hard drive."
     },
     {
         "rom_name":"KolibriOS",
@@ -101,7 +101,7 @@
         "rom_kernel":"linux",
         "rom_extra":"-cpu qemu64 -smp sockets=1,cores=2,threads=1 -m 1G -drive file='OhnoIjustrealizeditsmidnightandIstillhavetodothisKolibriOS.qcow',aio=threads,cache=unsafe -vga std -device intel-hda -device hda-duplex -device e1000,netdev=n0 -netdev user,id=n0 -accel tcg,tb-size=2048",
         "final_rom_file_name":"KolibriOS.qcow",
-        "desc":""
+        "desc":"KolibriOS is a tiny yet incredibly powerful and fast operating system. This power requires only a few megabyte disk space and 8MB of RAM to run. KolibriOS features a rich set of applications that include word processor, image viewer, graphical editor, web browser and well over 30 exciting games. Full FAT12/16/32 support is implemented, as well as read-only support for NTFS, exFAT, ISO9660 and Ext2/3/4. Drivers are written for popular sound, network and graphics cards."
     },
     {
         "rom_name":"Anonym.OS",
@@ -114,7 +114,7 @@
         "rom_kernel":"linux",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":""
+        "desc":"Anonym.OS was a Live CD operating system based on OpenBSD 3.8 with strong encryption and anonymization tools. The goal of the project was to provide secure, anonymous web browsing access to everyday users.[1] The operating system was OpenBSD 3.8, although many packages have been added to facilitate its goal. It used Fluxbox as its window manager.\n\nThe project was discontinued after the release of Beta 4 (2006)."
     },
     {
         "rom_name":"Alpine Linux",
@@ -127,7 +127,7 @@
         "rom_kernel":"linux",
         "rom_extra":"-cpu qemu64 -smp sockets=1,cores=2,threads=1 -m 1G -drive file='OhnoIjustrealizeditsmidnightandIstillhavetodothissda.qcow2',aio=threads,cache=unsafe -vga std -device intel-hda -device hda-duplex -device e1000,netdev=n0 -netdev user,id=n0 -accel tcg,tb-size=2048",
         "final_rom_file_name":"sda.qcow2",
-        "desc":""
+        "desc":"Alpine Linux is a Linux distribution designed to be small, simple, and secure. It uses musl, BusyBox, and OpenRC instead of the more commonly used glibc, GNU Core Utilities, and systemd. This makes Alpine one of few Linux distributions not to be based on the GNU Core Utilities."
     },
     {
         "rom_name":"Anonymous OS",
@@ -140,7 +140,7 @@
         "rom_kernel":"android",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":""
+        "desc":"Anonymous-OS is an Ubuntu-based Linux distribution Ubuntu. The operating system was released in March 2012. Anonymous-OS uses MATE as a desktop environment, and contains many essential software for hackers, such as Tor browser, Hash Identifier, XChat, SQL Poison, IP server finder, ParolaPass Password Generator, and HOIC. Similar to Backtrack, Anonymous-OS has been speculated that it contains trojans and malware. This operating system is not published by AnonymousAnonymous. After downloading and running Anonymous-OS, Rik Ferguson, director of the European Trend Micro cybersecurity research director, said it was \"a functional operating system with a range of pre-installed tools that could be used for purposes such as finding vulnerabilities or breaking passwords.\""
     },
     {
         "rom_name":"Android 3.2",
@@ -153,7 +153,7 @@
         "rom_kernel":"android",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":""
+        "desc":"Android Honeycomb is the codename for the third major version of Android, designed for devices with larger screen sizes, particularly tablets, however has been unofficially ported to the Nexus One. It is the eighth version of Android and is no longer supported. Honeycomb debuted with the Motorola Xoom in February 2011. Besides the addition of new features, Honeycomb introduced a new so-called \"holographic\" user interface theme and an interaction model that built on the main features of Android, such as multitasking, notifications and widgets."
     },
     {
         "rom_name":"BlackberryOS (Android 7.1.2)",
@@ -166,6 +166,6 @@
         "rom_kernel":"android",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":""
+        "desc":"BlackBerry OS is a discontinued proprietary mobile operating system developed by Canadian company BlackBerry Limited for its BlackBerry line of smartphone handheld devices. The operating system provides multitasking and supports specialized input devices adopted by BlackBerry for use in its handhelds, particularly the trackwheel, trackball, and most recently, the trackpad and touchscreen."
     }
 ]

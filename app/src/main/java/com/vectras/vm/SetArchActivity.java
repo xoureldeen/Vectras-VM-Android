@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import com.vectras.qemu.MainSettingsManager;
 
@@ -30,12 +31,14 @@ public class SetArchActivity extends AppCompatActivity implements View.OnClickLi
         Button archppc = findViewById(R.id.archppc);
         Button web = findViewById(R.id.webBtn);
         Button buttongetcm = findViewById(R.id.buttongetcm);
+        CardView cdCustom = findViewById(R.id.cdCustom);
         archi386.setOnClickListener(this);
         archx86_64.setOnClickListener(this);
         archarm64.setOnClickListener(this);
         archppc.setOnClickListener(this);
         web.setOnClickListener(this);
         buttongetcm.setOnClickListener(this);
+        cdCustom.setOnClickListener(this);
     }
 
     public void onClick(View v) {
@@ -70,6 +73,12 @@ public class SetArchActivity extends AppCompatActivity implements View.OnClickLi
             intent.setAction(Intent.ACTION_VIEW);
             intent.setData(Uri.parse("android-app://com.anbui.cqcm.app"));
             startActivity(intent);
+        } else if (id == R.id.cdCustom) {
+            Intent intent = new Intent();
+            intent.setClass(getApplicationContext(), CustomRomActivity.class);
+            intent.putExtra("importcvbinow", "");
+            startActivity(intent);
+            finish();
         }
     }
 }

@@ -16,6 +16,7 @@ import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -28,6 +29,8 @@ import java.io.File;
 import java.util.Objects;
 
 public class RomInfo extends AppCompatActivity {
+
+    public static boolean isFinishNow = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +72,7 @@ public class RomInfo extends AppCompatActivity {
                 intent.addCategory(Intent.CATEGORY_OPENABLE);
                 intent.setType("*/*");
                 intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
-                startActivity(intent);
+                startActivityForResult(intent, 0);
             }
         });
 
@@ -86,6 +89,15 @@ public class RomInfo extends AppCompatActivity {
         if (getIntent().hasExtra("icon")) {
             Glide.with(this).load(getIntent().getStringExtra("icon")).into(ivIcon);
         }
+
+        btn_pick.setText(getString(R.string.select) + " " + getIntent().getStringExtra("filename"));
+    }
+
+    public void onResume() {
+        super.onResume();
+        if (isFinishNow)
+            finish();
+        isFinishNow = false;
     }
 
     @Override
@@ -109,7 +121,7 @@ public class RomInfo extends AppCompatActivity {
                     intent.putExtra("addtodrive", "1");
                     intent.putExtra("romextra", getIntent().getStringExtra("extra"));
                 }
-                intent.putExtra("romicon", AppConfig.maindirpath + "icons/" + getIntent().getStringExtra("title") + ".png");
+                intent.putExtra("romicon", AppConfig.maindirpath + "icons/" + getIntent().getStringExtra("filename") + ".png");
                 switch (Objects.requireNonNull(getIntent().getStringExtra("arch"))) {
                     case "X86_64":
                         MainSettingsManager.setArch(this, "X86_64");

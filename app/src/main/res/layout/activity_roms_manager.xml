@@ -197,7 +197,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/continuetext"
-            app:backgroundTint="@drawable/btn_state" />
+            app:backgroundTint="@drawable/btn_state"
+            android:visibility="gone"/>
     </LinearLayout>
 
 </LinearLayout>

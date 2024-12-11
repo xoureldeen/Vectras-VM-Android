@@ -508,6 +508,22 @@ public class CustomRomActivity extends AppCompatActivity {
                         drive.setText(AppConfig.vmFolder + vmID + "/" + getIntent().getStringExtra("romfilename"));
                     }
                 }
+
+            } else if (getIntent().hasExtra("importcvbinow")) {
+                title.setText("New VM");
+                setDefault();
+
+                Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("*/*");
+
+                // Optionally, specify a URI for the file that should appear in the
+                // system file picker when it loads.
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
+                }
+
+                startActivityForResult(intent, 0);
             } else {
                 title.setText("New VM");
                 setDefault();
@@ -908,6 +924,7 @@ public class CustomRomActivity extends AppCompatActivity {
 
         if (getIntent().hasExtra("addromnow")) {
             RomsManagerActivity.isFinishNow = true;
+            RomInfo.isFinishNow = true;
         }
 
         modify = false;
