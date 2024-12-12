@@ -37,10 +37,16 @@ You can try running Vectras VM on unsupported devices, but we cannot guarantee s
 You can download Vectras VM from the [releases](https://github.com/xoureldeen/Vectras-VM-Android/releases) page or the [official website](https://vectras.vercel.app/download.html).
 
 ### Minimum System Requirements
-- Android 5.0 and up
-- 3GB RAM (1GB of free RAM)
-- ARM64-v8A or X86_64 devices only
-- A good processor
+- Android 5.0 and up.
+- 3GB RAM (1GB of free RAM).
+- A good processor.
+
+### Recommended System Requirements
+- Android 8.1 and up.
+- 8GB RAM (3GB of free RAM).
+- CPU and Android OS support 64-bit.
+- Snapdragon 855 CPU or better.
+- Integrated or removable cooling system (if running operating systems from 2010 to present).
 > [!TIP]
 > If the OS you are trying to emulate crashes, try using an older version.
 
