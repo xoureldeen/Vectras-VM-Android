@@ -46,6 +46,7 @@ You can download Vectras VM from the [releases](https://github.com/xoureldeen/Ve
 - 8GB RAM (3GB of free RAM).
 - CPU and Android OS support 64-bit.
 - Snapdragon 855 CPU or better.
+- Integrated or removable cooling system (if running operating systems from 2010 to present).
 > [!TIP]
 > If the OS you are trying to emulate crashes, try using an older version.
 
