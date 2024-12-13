@@ -65,6 +65,7 @@ public class AppConfig {
     }
     public static String basefiledir = "";
     public static String maindirpath = "";
+    public static String recyclebin = "";
     //public static String basefiledir = datadirpath(SplashActivity.activity) + "/.qemu/";
     //public static String maindirpath = FileUtils.getExternalFilesDirectory(SplashActivity.activity).getPath() + "/";
     public static String sharedFolder = maindirpath + "SharedFolder/";

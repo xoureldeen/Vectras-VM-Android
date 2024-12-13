@@ -578,6 +578,11 @@ public class MainSettingsManager extends AppCompatActivity
         return prefs.getBoolean("useDefaultBios", true);
     }
 
+    public static boolean useMemoryOvercommit(Activity activity) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        return prefs.getBoolean("useMemoryOvercommit", true);
+    }
+
     public static boolean useLocalTime(Activity activity) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         return prefs.getBoolean("useLocalTime", true);

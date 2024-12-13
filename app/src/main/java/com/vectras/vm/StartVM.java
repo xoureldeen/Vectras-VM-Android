@@ -193,8 +193,11 @@ public class StartVM {
             }
         }
 
-        params.add("-overcommit");
-        params.add("mem-lock=off");
+        if (MainSettingsManager.useMemoryOvercommit(MainActivity.activity)) {
+            params.add("-overcommit");
+            params.add("mem-lock=off");
+        }
+
 
         if (MainSettingsManager.useLocalTime(MainActivity.activity)) {
             params.add("-rtc");
