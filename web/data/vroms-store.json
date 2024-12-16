@@ -179,6 +179,6 @@
         "rom_kernel":"linux",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"GXDE OS: Continues\n\nWith the updated kernel GXDE, DDE 15 returns to focus\n\nGXDE, Gorgeous eXtended Deepin Environment\n\nDefault user: sudoers\nPassword: 123456"
+        "desc":"GXDE OS: Continues\n\nWith the updated kernel GXDE, DDE 15 returns to focus\n\nGXDE, Gorgeous eXtended Deepin Environment\n\nMinimum Requirements:\n\n- Quad-core processor or higher.\n- At least 16GB of free storage.\n- At least 5GB of free memory.\n\nDefault user: sudoers\nPassword: 123456"
     }
 ]
