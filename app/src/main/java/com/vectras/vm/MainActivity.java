@@ -5,6 +5,7 @@ import static android.content.Intent.ACTION_VIEW;
 import static android.os.Build.VERSION.SDK_INT;
 import com.termux.app.TermuxService;
 
+import static com.vectras.vm.VectrasApp.getApp;
 import static com.vectras.vm.VectrasApp.getAppInfo;
 import static com.vectras.vm.utils.UIUtils.UIAlert;
 
@@ -1364,21 +1365,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void errorjsondialog() {
         if (VectrasApp.isFileExists(AppConfig.romsdatajson)) {
-            if (!VectrasApp.checkJSONIsNormal(AppConfig.romsdatajson)) {
-                alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
-                alertDialog.setTitle(getResources().getString(R.string.oops));
-                alertDialog.setMessage(getResources().getString(R.string.an_error_occurred_with_the_vm_list_data));
-                alertDialog.setCancelable(true);
-                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.delete_all), (dialog, which) -> {
-                    VectrasApp.writeToFile(AppConfig.maindirpath, "roms-data.json", "[]");
-                    loadDataVbi();
-                    mdatasize();
-                });
-                alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), (dialog, which) -> {
-
-                });
-                alertDialog.show();
-            } else {
+            if (VMManager.isRomsDataJsonNormal(true, MainActivity.this)) {
                 loadDataVbi();
                 mdatasize();
             }
@@ -1426,7 +1413,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void mdatasize2() {
-        linearnothinghere.setVisibility(View.VISIBLE);
+        if (MainActivity.data.isEmpty()) {
+            linearnothinghere.setVisibility(View.VISIBLE);
+        } else {
+            linearnothinghere.setVisibility(View.GONE);
+        }
     }
 
     private void checkpermissions() {

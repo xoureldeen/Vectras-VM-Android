@@ -312,7 +312,7 @@
     <string name="cpu_not_support_64">نظام Android أو وحدة المعالجة المركزية على جهازك لا تدعم 64 بت، مما يعني أن VM سيكون أداؤه ضعيفًا وغير مستقر عند التشغيل.</string>
     <string name="an_error_occurred_with_the_vm_list_data">حدث خطأ في بيانات قائمة الآلات الافتراضية. هل تريد حذف الكل؟</string>
     <string name="delete_all">حذف الكل</string>
-    <string name="need_fix_json_before_create">حدث خطأ في بيانات قائمة الآلات الافتراضية ولا يمكن إنشاء آلة افتراضية جديدة في هذا الوقت. لإنشاء آلة افتراضية جديدة، تحتاج إلى حذف جميع بيانات قائمة الآلات الافتراضية. هل تريد حذف الكل؟</string>
+    <string name="need_fix_json_before_create">بيانات قائمة الأجهزة الافتراضية تالفة وتحتاج إلى الإصلاح. هل تريد أن تبدأ الإصلاحات الآن؟</string>
     <string name="problem_has_been_detected">تم اكتشاف مشكلة</string>
     <string name="you_have_not_added_any_storage_devices">لم تقم بإضافة أي أجهزة تخزين لبدء الاستخدام أو تثبيت نظام تشغيل. هل تريد متابعة الإنشاء؟</string>
     <string name="continuetext">استمر</string>
@@ -379,6 +379,9 @@
     <string name="select">يختار</string>
     <string name="use_default_bios_uefi">استخدم BIOS/UEFI الافتراضي</string>
     <string name="use_local_time">استخدم التوقيت المحلي</string>
+    <string name="roms_data_json_fixed_successfully">تم إصلاح المشكلة بنجاح. ولكن قد تختفي بعض الأجهزة الافتراضية ويتم نقلها إلى مجلد سلة المحذوفات.</string>
+    <string name="roms_data_json_fixed_unsuccessfully">فشلت عملية الإصلاح ولم تعد كل الأجهزة الافتراضية الخاصة بك تظهر في قائمة الأجهزة الافتراضية. لقد تم نقلها إلى مجلد سلة المحذوفات.</string>
+    <string name="use_memory_overcommit">استخدم ذاكرة overcommit</string>
 
     <!--======================TERMUX STRINGS====================-->
     <string name="application_name">Vterm</string>

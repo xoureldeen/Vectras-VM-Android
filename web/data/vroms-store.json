@@ -67,7 +67,7 @@
     {
         "rom_name":"PonyOS",
         "rom_icon":"https://ponyos.org/assets/img/logo-new.png",
-        "rom_url":"https://www.mediafire.com/file/fzcjieuuw8uxb2m/PonyOS.cvbi/file",
+        "rom_url":"https://archive.org/download/blackberry-os/PonyOS.cvbi",
         "rom_path":"PonyOS.cvbi",
         "rom_avail":true,
         "rom_size":"6MB",
@@ -80,7 +80,7 @@
     {
         "rom_name":"BSDeviant",
         "rom_icon":"https://archiveos.org/wp-content/uploads/2019/03/bsdeviant.webp",
-        "rom_url":"https://www.mediafire.com/file/y6u4cg0t435scbf/BSDeviant.cvbi/file",
+        "rom_url":"https://archive.org/download/blackberry-os/BSDeviant.cvbi",
         "rom_path":"BSDeviant.cvbi",
         "rom_avail":true,
         "rom_size":"81MB",
@@ -106,7 +106,7 @@
     {
         "rom_name":"Anonym.OS",
         "rom_icon":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQlezHOdq-S2UjgmEoIcVxBA4jlDO6bPGsLA&usqp=CAU",
-        "rom_url":"https://www.mediafire.com/file/laparebxxunsztk/Anonym.OS.cvbi/file",
+        "rom_url":"https://archive.org/download/blackberry-os/Anonym.OS.cvbi",
         "rom_path":"Anonym.OS.cvbi",
         "rom_avail":true,
         "rom_size":"196MB",
@@ -145,7 +145,7 @@
     {
         "rom_name":"Android 3.2",
         "rom_icon":"https://static.wikia.nocookie.net/android/images/d/d2/Honeycomb-logo2-e1298681115525.png/revision/latest?cb=20111216204245",
-        "rom_url":"https://www.mediafire.com/file/4rj9x99jmog6u4d/Android_3.2.cvbi/file",
+        "rom_url":"https://archive.org/download/blackberry-os/Android%203.2.cvbi",
         "rom_path":"Android 3.2.cvbi",
         "rom_avail":true,
         "rom_size":"180MB",

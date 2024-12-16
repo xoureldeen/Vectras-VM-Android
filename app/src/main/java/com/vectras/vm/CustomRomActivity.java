@@ -54,6 +54,7 @@ import com.vectras.vm.logger.VectrasStatus;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.UIUtils;
 
+import org.checkerframework.checker.units.qual.C;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -743,19 +744,7 @@ public class CustomRomActivity extends AppCompatActivity {
 
     private void checkJsonFile() {
         if (isFileExists(AppConfig.romsdatajson)) {
-            if (!VectrasApp.checkJSONIsNormal(AppConfig.romsdatajson)) {
-                alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
-                alertDialog.setTitle(getResources().getString(R.string.oops));
-                alertDialog.setMessage(getResources().getString(R.string.need_fix_json_before_create));
-                alertDialog.setCancelable(true);
-                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.delete_all), (dialog, which) -> {
-                    VectrasApp.writeToFile(AppConfig.maindirpath, "roms-data.json", "[]");
-                });
-                alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), (dialog, which) -> {
-
-                });
-                alertDialog.show();
-            } else {
+            if (VMManager.isRomsDataJsonNormal(true, CustomRomActivity.this)) {
                 startCreateNewVM();
             }
 
@@ -1064,8 +1053,9 @@ public class CustomRomActivity extends AppCompatActivity {
                                                         setDefault();
                                                     }
                                                     drive.setText(_getDiskFile);
+                                                    VMManager.setArch("X86_64", CustomRomActivity.this);
                                                 }
-                                                VMManager.setArch("X86_64", getApplicationContext());
+
                                                 VectrasApp.oneDialog(getResources().getString(R.string.oops), getResources().getString(R.string.error_CR_CVBI2), true, false, CustomRomActivity.this);
                                             } else {
                                                 //Error code: CR_CVBI3
@@ -1110,9 +1100,9 @@ public class CustomRomActivity extends AppCompatActivity {
                                             }
 
                                             if (jObj.has("arch") && !jObj.isNull("arch")) {
-                                                VMManager.setArch(jObj.getString("arch"), getApplicationContext());
+                                                VMManager.setArch(jObj.getString("arch"), CustomRomActivity.this);
                                             } else {
-                                                VMManager.setArch("x86_64", getApplicationContext());
+                                                VMManager.setArch("x86_64", CustomRomActivity.this);
                                             }
 
                                             VectrasApp.moveAFile(AppConfig.vmFolder + _filename.replace(".cvbi", ""), AppConfig.vmFolder + vmID);

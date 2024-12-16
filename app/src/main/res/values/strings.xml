@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">v2.9.4 (Genoise)</string>
+    <string name="app_version" translatable="false">v2.9.4 (Honey Cake)</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -314,7 +314,7 @@
     <string name="cpu_not_support_64">The Android OS or CPU on your device does not support 64 bit, which means the VM will have poor performance and be unstable when running.</string>
     <string name="an_error_occurred_with_the_vm_list_data">An error occurred with the virtual machine list data. Do you want to delete all?</string>
     <string name="delete_all">Delete all</string>
-    <string name="need_fix_json_before_create">An error occurred with the virtual machine list data and a new virtual machine cannot be created at this time. To create a new virtual machine, you need to delete all virtual machine list data. Do you want to delete all?</string>
+    <string name="need_fix_json_before_create">The virtual machine list data is corrupted and needs to be repaired. Do you want to start repairing now?</string>
     <string name="problem_has_been_detected">Problem has been detected</string>
     <string name="you_have_not_added_any_storage_devices">You have not added any storage devices to start using or install an operating system. Do you want to continue creating?</string>
     <string name="continuetext">Continue</string>
@@ -381,6 +381,9 @@
     <string name="select">Select</string>
     <string name="use_default_bios_uefi">Use default BIOS/UEFI</string>
     <string name="use_local_time">Use local time</string>
+    <string name="roms_data_json_fixed_successfully">Fixed successfully. But some virtual machines may disappear and they were moved to the Recycle bin folder.</string>
+    <string name="roms_data_json_fixed_unsuccessfully">The fix fails and all your virtual machines no longer appear in the virtual machine list. They were moved to the Recycle bin folder.</string>
+    <string name="use_memory_overcommit">Use memory overcommit</string>
 
 
     <!--======================TERMUX STRINGS====================-->

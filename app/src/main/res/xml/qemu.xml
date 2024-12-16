@@ -97,6 +97,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="true"
+            android:key="useMemoryOvercommit"
+            android:title="@string/use_memory_overcommit"
+            app:icon="@drawable/memory_alt_24px" />
+        <SwitchPreferenceCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="true"
             android:key="useLocalTime"
             android:title="@string/use_local_time"
             app:icon="@drawable/schedule_24px" />

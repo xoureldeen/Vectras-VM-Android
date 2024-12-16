@@ -718,6 +718,21 @@ public class VectrasApp extends Application {
 		alertDialog.show();
 	}
 
+	public static void oneDialogWithContext(String _title, String _message, boolean _cancel, Context _context) {
+		AlertDialog alertDialog = new AlertDialog.Builder(_context, R.style.MainDialogTheme).create();
+		alertDialog.setTitle(_title);
+		alertDialog.setMessage(_message);
+		if (!_cancel) {
+			alertDialog.setCancelable(false);
+		}
+		alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+
+			}
+		});
+		alertDialog.show();
+	}
+
 	public static void prepareDataForAppConfig(Activity _activity) {
 		AppConfig.vectrasVersion = "2.9.4";
 		AppConfig.vectrasWebsite = "https://vectras.vercel.app/";
@@ -741,6 +756,7 @@ public class VectrasApp extends Application {
 		AppConfig.downloadsFolder = AppConfig.maindirpath + "Downloads/";
 		AppConfig.romsdatajson = AppConfig.maindirpath + "roms-data.json";
 		AppConfig.vmFolder = AppConfig.maindirpath + "roms/";
+		AppConfig.recyclebin = AppConfig.maindirpath + "recyclebin/";
 	}
 
 	public static PackageInfo getAppInfo(Context context) {
