@@ -67,7 +67,7 @@
     {
         "rom_name":"PonyOS",
         "rom_icon":"https://ponyos.org/assets/img/logo-new.png",
-        "rom_url":"https://www.mediafire.com/file/fzcjieuuw8uxb2m/PonyOS.cvbi/file",
+        "rom_url":"https://archive.org/download/blackberry-os/PonyOS.cvbi",
         "rom_path":"PonyOS.cvbi",
         "rom_avail":true,
         "rom_size":"6MB",
