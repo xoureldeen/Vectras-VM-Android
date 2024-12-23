@@ -36,6 +36,12 @@ You can try running Vectras VM on unsupported devices, but we cannot guarantee s
 
 You can download Vectras VM from the [releases](https://github.com/xoureldeen/Vectras-VM-Android/releases) page or the [official website](https://vectras.vercel.app/download.html).
 
+or
+
+
+[![OpenAPK](https://www.openapk.net/images/openapk-badge.png)](https://www.openapk.net/vectras-vm/com.vectras.vm/)
+
+
 ### Minimum System Requirements
 - Android 5.0 and up.
 - 3GB RAM (1GB of free RAM).

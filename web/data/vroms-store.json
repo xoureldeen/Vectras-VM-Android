@@ -67,7 +67,7 @@
     {
         "rom_name":"PonyOS",
         "rom_icon":"https://ponyos.org/assets/img/logo-new.png",
-        "rom_url":"https://www.mediafire.com/file/fzcjieuuw8uxb2m/PonyOS.cvbi/file",
+        "rom_url":"https://archive.org/download/blackberry-os/PonyOS.cvbi",
         "rom_path":"PonyOS.cvbi",
         "rom_avail":true,
         "rom_size":"6MB",
@@ -80,7 +80,7 @@
     {
         "rom_name":"BSDeviant",
         "rom_icon":"https://archiveos.org/wp-content/uploads/2019/03/bsdeviant.webp",
-        "rom_url":"https://www.mediafire.com/file/y6u4cg0t435scbf/BSDeviant.cvbi/file",
+        "rom_url":"https://archive.org/download/blackberry-os/BSDeviant.cvbi",
         "rom_path":"BSDeviant.cvbi",
         "rom_avail":true,
         "rom_size":"81MB",
@@ -106,7 +106,7 @@
     {
         "rom_name":"Anonym.OS",
         "rom_icon":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQlezHOdq-S2UjgmEoIcVxBA4jlDO6bPGsLA&usqp=CAU",
-        "rom_url":"https://www.mediafire.com/file/laparebxxunsztk/Anonym.OS.cvbi/file",
+        "rom_url":"https://archive.org/download/blackberry-os/Anonym.OS.cvbi",
         "rom_path":"Anonym.OS.cvbi",
         "rom_avail":true,
         "rom_size":"196MB",
@@ -145,7 +145,7 @@
     {
         "rom_name":"Android 3.2",
         "rom_icon":"https://static.wikia.nocookie.net/android/images/d/d2/Honeycomb-logo2-e1298681115525.png/revision/latest?cb=20111216204245",
-        "rom_url":"https://www.mediafire.com/file/4rj9x99jmog6u4d/Android_3.2.cvbi/file",
+        "rom_url":"https://archive.org/download/blackberry-os/Android%203.2.cvbi",
         "rom_path":"Android 3.2.cvbi",
         "rom_avail":true,
         "rom_size":"180MB",
@@ -167,5 +167,18 @@
         "rom_extra":"",
         "final_rom_file_name":"",
         "desc":"BlackBerry OS is a discontinued proprietary mobile operating system developed by Canadian company BlackBerry Limited for its BlackBerry line of smartphone handheld devices. The operating system provides multitasking and supports specialized input devices adopted by BlackBerry for use in its handhelds, particularly the trackwheel, trackball, and most recently, the trackpad and touchscreen."
+    },
+    {
+        "rom_name":"GXDE OS: Continues (Aarch64)",
+        "rom_icon":"https://www.gxde.org/logo.png",
+        "rom_url":"https://archive.org/download/blackberry-os/GXDE%20OS.cvbi",
+        "rom_path":"GXDE OS.cvbi",
+        "rom_avail":true,
+        "rom_size":"4GB",
+        "rom_arch":"ARM64",
+        "rom_kernel":"linux",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"GXDE OS: Continues\n\nWith the updated kernel GXDE, DDE 15 returns to focus\n\nGXDE, Gorgeous eXtended Deepin Environment\n\nMinimum Requirements:\n\n- Quad-core processor or higher.\n- At least 16GB of free storage.\n- At least 5GB of free memory.\n\nDefault user: sudoers\nPassword: 123456"
     }
 ]
