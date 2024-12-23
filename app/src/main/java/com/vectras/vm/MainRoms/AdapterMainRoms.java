@@ -142,7 +142,7 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
             public void onClick(View view) {
                 VMManager.setArch(current.itemArch, MainActivity.activity);
                 StartVM.cdrompath = current.imgCdrom;
-                String env = StartVM.env(MainActivity.activity, current.itemExtra, current.itemPath, current.itemCpu);
+                String env = StartVM.env(MainActivity.activity, current.itemExtra, current.itemPath, "");
                 MainActivity.startVM(current.itemName, env, current.itemExtra, current.itemPath);
             }
         });

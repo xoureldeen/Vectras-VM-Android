@@ -382,6 +382,7 @@
     <string name="roms_data_json_fixed_successfully">تم إصلاح المشكلة بنجاح. ولكن قد تختفي بعض الأجهزة الافتراضية ويتم نقلها إلى مجلد سلة المحذوفات.</string>
     <string name="roms_data_json_fixed_unsuccessfully">فشلت عملية الإصلاح ولم تعد كل الأجهزة الافتراضية الخاصة بك تظهر في قائمة الأجهزة الافتراضية. لقد تم نقلها إلى مجلد سلة المحذوفات.</string>
     <string name="use_memory_overcommit">استخدم ذاكرة overcommit</string>
+    <string name="harmful_command_was_detected">تم اكتشاف أمر قد يتسبب في حدوث ضرر وتنفيذ سلوك غير مرغوب فيه وتم حظره. الرجاء التحقق من هذا الجهاز الظاهري مرة أخرى والمحاولة مرة أخرى.</string>
 
     <!--======================TERMUX STRINGS====================-->
     <string name="application_name">Vterm</string>

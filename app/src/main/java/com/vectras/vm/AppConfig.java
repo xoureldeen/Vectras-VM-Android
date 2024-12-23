@@ -72,5 +72,6 @@ public class AppConfig {
     public static String downloadsFolder = maindirpath + "Downloads/";
     public static String romsdatajson = maindirpath + "roms-data.json";
     public static String vmFolder = maindirpath + "roms/";
+    public static String pendingCommand = "";
 
 }

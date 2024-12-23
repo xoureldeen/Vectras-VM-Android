@@ -605,13 +605,13 @@ public class CustomRomActivity extends AppCompatActivity {
                     } finally {
                         try {
                             try {
-                                SaveImage(selectedImage, new File(AppConfig.vmFolder + vmID), vmID + "-" + selectedFilePath.getName());
+                                SaveImage(selectedImage, new File(AppConfig.vmFolder + vmID), "thumbnail.webp");
                             } finally {
                                 Runnable runnable = new Runnable() {
                                     @Override
                                     public void run() {
                                         loadingPb.setVisibility(View.GONE);
-                                        icon.setText(AppConfig.vmFolder + vmID + "/" + vmID + "-" + selectedFilePath.getName());
+                                        icon.setText(AppConfig.vmFolder + vmID + "/thumbnail.webp");
                                     }
                                 };
                                 activity.runOnUiThread(runnable);

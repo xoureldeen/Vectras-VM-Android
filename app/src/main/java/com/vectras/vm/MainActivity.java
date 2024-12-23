@@ -948,6 +948,11 @@ public class MainActivity extends AppCompatActivity {
 
     public static void startVM(String vmName, String env, String itemExtra, String itemPath) {
 
+        if (!VMManager.allowtoruncommand(env)) {
+            VectrasApp.oneDialog(activity.getResources().getString(R.string.problem_has_been_detected), activity.getResources().getString(R.string.harmful_command_was_detected), true, false, activity);
+            return;
+        }
+
         if (VectrasApp.isThisVMRunning(itemExtra, itemPath)) {
             Toast.makeText(activity, "This VM is already running.", Toast.LENGTH_LONG).show();
             activity.startActivity(new Intent(activity, MainVNCActivity.class));
@@ -1138,6 +1143,18 @@ public class MainActivity extends AppCompatActivity {
             Log.d("TAG", "The interstitial ad wasn't ready yet.");
         }
         doneonstart = true;
+
+        if (!AppConfig.pendingCommand.isEmpty()) {
+            if (!VMManager.allowtoruncommand(AppConfig.pendingCommand)) {
+                AppConfig.pendingCommand = "";
+                VectrasApp.oneDialog(activity.getResources().getString(R.string.problem_has_been_detected), activity.getResources().getString(R.string.harmful_command_was_detected), true, false, activity);
+                return;
+            }
+            StartVM.cdrompath = "";
+            String env = StartVM.env(MainActivity.activity, AppConfig.pendingCommand, "", "1");
+            MainActivity.startVM("Quick run", env, AppConfig.pendingCommand, "");
+            AppConfig.pendingCommand = "";
+        }
     }
 
     @Override
