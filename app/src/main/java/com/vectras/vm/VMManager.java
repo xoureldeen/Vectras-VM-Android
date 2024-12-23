@@ -630,7 +630,9 @@ public class VMManager {
                                                     if (!_command.contains("apk ")) {
                                                         if (!_command.contains("dpkg ")) {
                                                             if (!_command.contains(" &")) {
-                                                                return true;
+                                                                if (!_command.contains("\n")) {
+                                                                    return true;
+                                                                }
                                                             }
                                                         }
                                                     }
