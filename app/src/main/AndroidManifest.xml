@@ -49,7 +49,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.vectras.vm.RomInfo"
+            android:name=".RomInfo"
             android:exported="false"
             android:hardwareAccelerated="true" />
         <activity

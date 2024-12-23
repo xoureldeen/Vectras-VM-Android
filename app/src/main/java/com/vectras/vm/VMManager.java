@@ -296,11 +296,11 @@ public class VMManager {
                     _startRepeat++;
                     if (_startRepeat == _filelist.size()) {
                         if (!_result.isEmpty()) {
-                            if (VectrasApp.checkJSONIsNormalFromString("[" + _result + "]")) {
+                            if (VectrasApp.checkJSONIsNormalFromString("[" + _result.replaceAll("u003d", "=") + "]")) {
                                 if (isFileExists(AppConfig.romsdatajson)) {
                                     if (VectrasApp.checkJSONIsNormal(AppConfig.romsdatajson)) {
                                         String _JSONcontent = VectrasApp.readFile(AppConfig.romsdatajson);
-                                        String _JSONcontentnew = _JSONcontent.replaceAll("]", _result + "]");
+                                        String _JSONcontentnew = _JSONcontent.replaceAll("]", _result.replaceAll("u003d", "=") + "]");
                                         if (VectrasApp.checkJSONIsNormalFromString(_JSONcontentnew)) {
                                             VectrasApp.writeToFile(AppConfig.maindirpath, "roms-data.json", _JSONcontentnew);
                                         } else {
@@ -613,5 +613,38 @@ public class VMManager {
         MainActivity.loadDataVbi();
         MainActivity.mdatasize2();
         movetoRecycleBin();
+    }
+
+    public static boolean allowtoruncommand(String _command) {
+        if (_command.startsWith("qemu")) {
+            if (!_command.contains("./")) {
+                if (!_command.contains("cd /")) {
+                    if (!_command.contains("rm /")) {
+                        if (!_command.contains("cp /")) {
+                            if (!_command.contains("mv /")) {
+                                if (!_command.contains("ln -")) {
+                                    if (!_command.contains("curl ")) {
+                                        if (!_command.contains("wget ")) {
+                                            if (!_command.contains("scp ")) {
+                                                if (!_command.contains("chmod ")) {
+                                                    if (!_command.contains("apk ")) {
+                                                        if (!_command.contains("dpkg ")) {
+                                                            if (!_command.contains(" &")) {
+                                                                return true;
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 }

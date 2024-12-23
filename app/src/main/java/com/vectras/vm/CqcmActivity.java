@@ -54,8 +54,13 @@ public class CqcmActivity extends AppCompatActivity {
         super.onResume();
         Log.i("CqcmActivity", "Checking access to storage...");
         if(VectrasApp.checkpermissionsgranted(this,false)) {
-            startAdd();
+            if (getIntent().hasExtra("command")) {
+                runCommand(getIntent().getStringExtra("command"));
+            } else {
+                startAdd();
+            }
         }
+
     }
     private void startAdd() {
         HashMap<String, Object> mapForCreateNewVM = new HashMap<>();
@@ -109,6 +114,25 @@ public class CqcmActivity extends AppCompatActivity {
         } else {
             Toast.makeText(getApplicationContext(), "The virtual machine list data is corrupted and new virtual machines cannot be added right now.", Toast.LENGTH_LONG).show();
         }
+        if(!MainActivity.isActivate) {
+            Log.i("CqcmActivity", "Vectras VM is not opening.");
+            gotoActivity.setClass(getApplicationContext(), SplashActivity.class);
+            startActivity(gotoActivity);
+            Log.i("CqcmActivity", "Opened SplashActivity");
+        } else {
+            Log.i("CqcmActivity", "Vectras VM is opening.");
+            openURL.setAction(Intent.ACTION_VIEW);
+            openURL.setData(Uri.parse("android-app://com.vectras.vm"));
+            startActivity(openURL);
+            Log.i("CqcmActivity", "Opened Vectras VM using URL.");
+        }
+        finish();
+    }
+
+    private void runCommand(String _command) {
+        VectrasApp.prepareDataForAppConfig(CqcmActivity.this);
+        AppConfig.pendingCommand = _command;
+
         if(!MainActivity.isActivate) {
             Log.i("CqcmActivity", "Vectras VM is not opening.");
             gotoActivity.setClass(getApplicationContext(), SplashActivity.class);
