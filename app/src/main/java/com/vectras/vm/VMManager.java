@@ -615,33 +615,13 @@ public class VMManager {
         movetoRecycleBin();
     }
 
-    public static boolean allowtoruncommand(String _command) {
+    public static boolean isthiscommandsafe(String _command) {
         if (_command.startsWith("qemu")) {
-            if (!_command.contains("./")) {
-                if (!_command.contains("cd /")) {
-                    if (!_command.contains("rm /")) {
-                        if (!_command.contains("cp /")) {
-                            if (!_command.contains("mv /")) {
-                                if (!_command.contains("ln -")) {
-                                    if (!_command.contains("curl ")) {
-                                        if (!_command.contains("wget ")) {
-                                            if (!_command.contains("scp ")) {
-                                                if (!_command.contains("chmod ")) {
-                                                    if (!_command.contains("apk ")) {
-                                                        if (!_command.contains("dpkg ")) {
-                                                            if (!_command.contains(" &")) {
-                                                                if (!_command.contains("\n")) {
-                                                                    return true;
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+            if (!_command.contains("&")) {
+                if (!_command.contains("\n")) {
+                    if (!_command.contains(";")) {
+                        if (!_command.contains("|")) {
+                            return true;
                         }
                     }
                 }

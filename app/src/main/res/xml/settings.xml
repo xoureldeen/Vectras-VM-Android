@@ -26,5 +26,15 @@
             app:isPreferenceVisible="true"
             app:icon="@drawable/round_language_24" />
 
+        <SwitchPreferenceCompat
+            android:id="@+id/copyfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="true"
+            android:key="copyFile"
+            android:summary="@string/copy_file_content"
+            android:title="@string/copy_file"
+            app:icon="@drawable/file_copy_24px" />
+
     </PreferenceCategory>
 </PreferenceScreen>

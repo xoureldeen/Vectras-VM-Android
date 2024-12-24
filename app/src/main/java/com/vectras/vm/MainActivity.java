@@ -548,7 +548,8 @@ public class MainActivity extends AppCompatActivity {
                     alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.delete_all), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             VectrasApp.killallqemuprocesses(getApplicationContext());
-                            VectrasApp.deleteDirectory(AppConfig.maindirpath);
+                            VectrasApp.deleteDirectory(AppConfig.vmFolder);
+                            VectrasApp.deleteDirectory(AppConfig.recyclebin);
                             File vDir = new File(com.vectras.vm.AppConfig.maindirpath);
                             vDir.mkdirs();
                             errorjsondialog();
@@ -948,7 +949,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static void startVM(String vmName, String env, String itemExtra, String itemPath) {
 
-        if (!VMManager.allowtoruncommand(env)) {
+        if (!VMManager.isthiscommandsafe(env)) {
             VectrasApp.oneDialog(activity.getResources().getString(R.string.problem_has_been_detected), activity.getResources().getString(R.string.harmful_command_was_detected), true, false, activity);
             return;
         }
@@ -1145,7 +1146,7 @@ public class MainActivity extends AppCompatActivity {
         doneonstart = true;
 
         if (!AppConfig.pendingCommand.isEmpty()) {
-            if (!VMManager.allowtoruncommand(AppConfig.pendingCommand)) {
+            if (!VMManager.isthiscommandsafe(AppConfig.pendingCommand)) {
                 AppConfig.pendingCommand = "";
                 VectrasApp.oneDialog(activity.getResources().getString(R.string.problem_has_been_detected), activity.getResources().getString(R.string.harmful_command_was_detected), true, false, activity);
                 return;

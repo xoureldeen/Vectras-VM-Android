@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">v2.9.4 (Italian meringue)</string>
+    <string name="app_version" translatable="false">v2.9.4 (Jam tart)</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -385,6 +385,8 @@
     <string name="roms_data_json_fixed_unsuccessfully">The fix fails and all your virtual machines no longer appear in the virtual machine list. They were moved to the Recycle bin folder.</string>
     <string name="use_memory_overcommit">Use memory overcommit</string>
     <string name="harmful_command_was_detected">A potentially harmful command was detected and it has been blocked. Please check this virtual machine and try again.</string>
+    <string name="copy_file">Copy file</string>
+    <string name="copy_file_content">Always copy the selected file to the virtual machine instead of using it directly.</string>
 
 
     <!--======================TERMUX STRINGS====================-->
