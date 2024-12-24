@@ -604,18 +604,28 @@ public class CustomRomActivity extends AppCompatActivity {
                         throw new RuntimeException(e);
                     } finally {
                         try {
-                            try {
-                                SaveImage(selectedImage, new File(AppConfig.vmFolder + vmID), "thumbnail.webp");
-                            } finally {
-                                Runnable runnable = new Runnable() {
+                            if (MainSettingsManager.copyFile(activity)) {
+                                try {
+                                    SaveImage(selectedImage, new File(AppConfig.vmFolder + vmID), "thumbnail.webp");
+                                } finally {
+                                    Runnable runnable = new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            loadingPb.setVisibility(View.GONE);
+                                            icon.setText(AppConfig.vmFolder + vmID + "/thumbnail.webp");
+                                        }
+                                    };
+                                    activity.runOnUiThread(runnable);
+                                    File.close();
+                                }
+                            } else {
+                                runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         loadingPb.setVisibility(View.GONE);
-                                        icon.setText(AppConfig.vmFolder + vmID + "/thumbnail.webp");
+                                        icon.setText(selectedFilePath.getPath());
                                     }
-                                };
-                                activity.runOnUiThread(runnable);
-                                File.close();
+                                });
                             }
                         } catch (IOException e) {
                             Runnable runnable = new Runnable() {
@@ -637,82 +647,88 @@ public class CustomRomActivity extends AppCompatActivity {
             Uri content_describer = ReturnedIntent.getData();
             File selectedFilePath = new File(getPath(content_describer));
             if (selectedFilePath.getName().endsWith(".iso")) {
-                String cdromPath = AppConfig.vmFolder + vmID + "/" + selectedFilePath.getName();
-                cdrom.setText(cdromPath);
+                if (MainSettingsManager.copyFile(activity)) {
+                    String cdromPath = AppConfig.vmFolder + vmID + "/" + selectedFilePath.getName();
+                    cdrom.setText(cdromPath);
 
-                //String qemuText = qemu.getText().toString();
-                //String cdromParam = "-drive index=1,media=cdrom,file='" + cdromPath + "'";
+                    //String qemuText = qemu.getText().toString();
+                    //String cdromParam = "-drive index=1,media=cdrom,file='" + cdromPath + "'";
 
-                //if (MainSettingsManager.getArch(activity).equals("ARM64")) {
+                    //if (MainSettingsManager.getArch(activity).equals("ARM64")) {
                     //if (!qemu.getText().toString().contains("-device nec-usb-xhci")) {
-                        //qemu.setText(qemu.getText().toString() + " -device nec-usb-xhci");
+                    //qemu.setText(qemu.getText().toString() + " -device nec-usb-xhci");
                     //}
                     //cdromParam = "-device usb-storage,drive=cdrom -drive if=none,id=cdrom,format=raw,media=cdrom,file='" + cdromPath + "'";
-                //} else {
+                    //} else {
                     //if (MainSettingsManager.getIfType(activity).isEmpty()) {
-                        //cdromParam = "-cdrom '" + cdromPath + "'";
+                    //cdromParam = "-cdrom '" + cdromPath + "'";
                     //}
-                //}
+                    //}
 
-                //Pattern pattern = Pattern.compile(cdromPatternCompile2());
-                //Matcher matcher = pattern.matcher(qemuText);
+                    //Pattern pattern = Pattern.compile(cdromPatternCompile2());
+                    //Matcher matcher = pattern.matcher(qemuText);
 
-                //if (!qemuText.contains("-drive index=1,media=cdrom,file=") || !qemuText.contains("-cdrom") || !qemuText.contains("-device usb-storage,drive=cdrom -drive if=none,id=cdrom,format=raw,media=cdrom,file=")) {
+                    //if (!qemuText.contains("-drive index=1,media=cdrom,file=") || !qemuText.contains("-cdrom") || !qemuText.contains("-device usb-storage,drive=cdrom -drive if=none,id=cdrom,format=raw,media=cdrom,file=")) {
                     //qemu.append(" " + cdromParam);
-                //} else {
+                    //} else {
                     //if (matcher.find()) {
-                        //String cdromPath1 = matcher.group(1);
-                        //qemu.setText(qemuText.replace(cdromPath1, cdromPath)); // Fixed this line to actually change the text of `qemu`
+                    //String cdromPath1 = matcher.group(1);
+                    //qemu.setText(qemuText.replace(cdromPath1, cdromPath)); // Fixed this line to actually change the text of `qemu`
                     //}
-                //}
-                loadingPb.setVisibility(View.VISIBLE);
-                custom.setVisibility(View.GONE);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        FileInputStream File = null;
-                        try {
-                            File = (FileInputStream) getContentResolver().openInputStream(content_describer);
-                        } catch (FileNotFoundException e) {
-                            throw new RuntimeException(e);
-                        }
-                        try {
+                    //}
+                    loadingPb.setVisibility(View.VISIBLE);
+                    custom.setVisibility(View.GONE);
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            FileInputStream File = null;
                             try {
-                                OutputStream out = new FileOutputStream(new File(AppConfig.vmFolder + vmID + "/" + selectedFilePath.getName()));
+                                File = (FileInputStream) getContentResolver().openInputStream(content_describer);
+                            } catch (FileNotFoundException e) {
+                                throw new RuntimeException(e);
+                            }
+                            try {
                                 try {
-                                    // Transfer bytes from in to out
-                                    byte[] buf = new byte[1024];
-                                    int len;
-                                    while ((len = File.read(buf)) > 0) {
-                                        out.write(buf, 0, len);
+                                    OutputStream out = new FileOutputStream(new File(AppConfig.vmFolder + vmID + "/" + selectedFilePath.getName()));
+                                    try {
+                                        // Transfer bytes from in to out
+                                        byte[] buf = new byte[1024];
+                                        int len;
+                                        while ((len = File.read(buf)) > 0) {
+                                            out.write(buf, 0, len);
+                                        }
+                                    } finally {
+                                        out.close();
                                     }
                                 } finally {
-                                    out.close();
+                                    Runnable runnable = new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            loadingPb.setVisibility(View.GONE);
+                                            custom.setVisibility(View.VISIBLE);
+                                        }
+                                    };
+                                    activity.runOnUiThread(runnable);
+                                    File.close();
                                 }
-                            } finally {
+                            } catch (IOException e) {
                                 Runnable runnable = new Runnable() {
                                     @Override
                                     public void run() {
                                         loadingPb.setVisibility(View.GONE);
                                         custom.setVisibility(View.VISIBLE);
+                                        UIUtils.UIAlert(activity, "error", e.toString());
                                     }
                                 };
                                 activity.runOnUiThread(runnable);
-                                File.close();
                             }
-                        } catch (IOException e) {
-                            Runnable runnable = new Runnable() {
-                                @Override
-                                public void run() {
-                                    loadingPb.setVisibility(View.GONE);
-                                    custom.setVisibility(View.VISIBLE);
-                                    UIUtils.UIAlert(activity, "error", e.toString());
-                                }
-                            };
-                            activity.runOnUiThread(runnable);
                         }
-                    }
-                }).start();
+                    }).start();
+                } else {
+                    cdrom.setText(selectedFilePath.getPath());
+                    loadingPb.setVisibility(View.GONE);
+                }
+
             } else
                 UIUtils.UIAlert(activity, "please select iso file to continue.", "File not supported");
         } else if (requestCode == 0 && resultCode == RESULT_OK) {
@@ -1170,61 +1186,67 @@ public class CustomRomActivity extends AppCompatActivity {
     }
 
     private void startProcessingHardDriveFile (Uri _content_describer, boolean _addtodrive) {
-        LinearLayout custom = findViewById(R.id.custom);
         File selectedFilePath = new File(getPath(_content_describer));
-        if (_addtodrive) {
-            drive.setText(AppConfig.vmFolder + vmID + "/" + selectedFilePath.getName());
-        }
-        loadingPb.setVisibility(View.VISIBLE);
-        custom.setVisibility(View.GONE);
-        File romDir = new File(AppConfig.vmFolder + vmID);
-        romDir.mkdirs();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                FileInputStream File = null;
-                try {
-                    File = (FileInputStream) getContentResolver().openInputStream(_content_describer);
-                } catch (FileNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
-                try {
+        if (MainSettingsManager.copyFile(activity)) {
+            LinearLayout custom = findViewById(R.id.custom);
+            if (_addtodrive) {
+                drive.setText(AppConfig.vmFolder + vmID + "/" + selectedFilePath.getName());
+            }
+            loadingPb.setVisibility(View.VISIBLE);
+            custom.setVisibility(View.GONE);
+            File romDir = new File(AppConfig.vmFolder + vmID);
+            romDir.mkdirs();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    FileInputStream File = null;
                     try {
-                        OutputStream out = new FileOutputStream(new File(AppConfig.vmFolder + vmID + "/" + selectedFilePath.getName()));
+                        File = (FileInputStream) getContentResolver().openInputStream(_content_describer);
+                    } catch (FileNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                    try {
                         try {
-                            // Transfer bytes from in to out
-                            byte[] buf = new byte[1024];
-                            int len;
-                            while ((len = File.read(buf)) > 0) {
-                                out.write(buf, 0, len);
+                            OutputStream out = new FileOutputStream(new File(AppConfig.vmFolder + vmID + "/" + selectedFilePath.getName()));
+                            try {
+                                // Transfer bytes from in to out
+                                byte[] buf = new byte[1024];
+                                int len;
+                                while ((len = File.read(buf)) > 0) {
+                                    out.write(buf, 0, len);
+                                }
+                            } finally {
+                                out.close();
                             }
                         } finally {
-                            out.close();
+                            Runnable runnable = new Runnable() {
+                                @Override
+                                public void run() {
+                                    loadingPb.setVisibility(View.GONE);
+                                    custom.setVisibility(View.VISIBLE);
+                                }
+                            };
+                            activity.runOnUiThread(runnable);
+                            File.close();
                         }
-                    } finally {
+                    } catch (IOException e) {
                         Runnable runnable = new Runnable() {
                             @Override
                             public void run() {
                                 loadingPb.setVisibility(View.GONE);
                                 custom.setVisibility(View.VISIBLE);
+                                UIUtils.UIAlert(activity, "error", e.toString());
                             }
                         };
                         activity.runOnUiThread(runnable);
-                        File.close();
                     }
-                } catch (IOException e) {
-                    Runnable runnable = new Runnable() {
-                        @Override
-                        public void run() {
-                            loadingPb.setVisibility(View.GONE);
-                            custom.setVisibility(View.VISIBLE);
-                            UIUtils.UIAlert(activity, "error", e.toString());
-                        }
-                    };
-                    activity.runOnUiThread(runnable);
                 }
-            }
-        }).start();
+            }).start();
+        } else {
+            drive.setText(selectedFilePath.getPath());
+            loadingPb.setVisibility(View.GONE);
+        }
+
     }
 
     private String cdromPatternCompile() {

@@ -588,6 +588,11 @@ public class MainSettingsManager extends AppCompatActivity
         return prefs.getBoolean("useLocalTime", true);
     }
 
+    public static boolean copyFile(Activity activity) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        return prefs.getBoolean("copyFile", true);
+    }
+
     public static void setIfType(Activity activity, String type) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         SharedPreferences.Editor edit = prefs.edit();
