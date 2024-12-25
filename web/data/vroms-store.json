@@ -117,6 +117,19 @@
         "desc":"Anonym.OS was a Live CD operating system based on OpenBSD 3.8 with strong encryption and anonymization tools. The goal of the project was to provide secure, anonymous web browsing access to everyday users.[1] The operating system was OpenBSD 3.8, although many packages have been added to facilitate its goal. It used Fluxbox as its window manager.\n\nThe project was discontinued after the release of Beta 4 (2006)."
     },
     {
+        "rom_name":"Debian",
+        "rom_icon":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRw2CcpHNKIioANF5MV4H-Zw2H3S7hPDMaqeA&s",
+        "rom_url":"https://archive.org/download/blackberry-os/debian.cvbi",
+        "rom_path":"debian.cvbi",
+        "rom_avail":true,
+        "rom_size":"400MB",
+        "rom_arch":"X86_64",
+        "rom_kernel":"linux",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"Debian (/ˈdɛbiən/), also known as Debian GNU/Linux, is a free and open source Linux distribution, developed by the Debian Project, which was established by Ian Murdock in August 1993. Debian is one of the oldest operating systems based on the Linux kernel, and is the basis for many other Linux distributions."
+    },
+    {
         "rom_name":"Alpine Linux",
         "rom_icon":"https://avatars.githubusercontent.com/u/7600810?s=200&v=4",
         "rom_url":"https://www.mediafire.com/file/v79ivyqdogj7a8l/sda.qcow2/file",
