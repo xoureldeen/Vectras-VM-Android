@@ -445,7 +445,6 @@
     <string name="join_us_on_telegram_where_we_publish_all_the_news_and_updates_and_receive_your_opinions_and_bugs">Присоединяйтесь к нам в Telegram, где мы публикуем все новости и обновления, а также получаем ваши мнения и сообщения об ошибках</string>
     <string name="join">Присоединиться</string>
     <string name="dont_show_again">Больше не показывать</string>
-    <string name="this_version_unstable_and_has_alot_of_bugs_br">Эта версия нестабильна и содержит много ошибок<br></string>
     <string name="debug_testing_build_5">ОТЛАДОЧНАЯ ТЕСТОВАЯ СБОРКА 5</string>
     <string name="welcome_to_debug_build_of_vectras_vm_br">Добро пожаловать в отладочную сборку Vectras VM :)<br></string>
     <string name="don_t_forget_to_tell_us_on_github_issues_or_telegram_bot_br">Не забудьте сообщить нам об ошибках на странице Github Issues или через Telegram бота<br></string>
