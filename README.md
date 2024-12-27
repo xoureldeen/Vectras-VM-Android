@@ -13,6 +13,8 @@ Welcome to Vectras VM! A virtual machine app for Android based on QEMU that lets
 
 If you need help, check out [our documentation](https://vectras.vercel.app/how.html). For quick answers, join the [Vectras Telegram group](http://t.me/vectras_vm_discussion).
 
+<iframe width="320" height="180" src="https://www.youtube.com/embed/AlNbverd0xE" frameborder="0" allowfullscreen></iframe>
+
 ## Device Compatibility
 
 ### Not Supported
