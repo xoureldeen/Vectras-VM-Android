@@ -129,7 +129,6 @@
     <string name="import_settings">Импорт</string>
     <string name="import_settings_file_url">Импортировать из файла или URL</string>
     <string name="info">Информация</string>
-    <string name="intro_text">Если вам нужна помощь, пожалуйста, обратитесь к <a href="http://code.google.com/p/android-vnc-viewer/wiki/Documentation">руководству</a> (нажмите кнопку Меню на телефоне, чтобы получить доступ к руководству и другим пунктам меню), или к <a href="http://code.google.com/p/android-vnc-viewer/wiki/faq">FAQ</a>.<br/></string>
     <string name="intro_title">Добро пожаловать</string>
     <string name="input_mode">Режим ввода</string>
     <string name="input_mode_fit_to_screen">Без панорамирования; Трекбол-мышь</string>
@@ -446,10 +445,6 @@
     <string name="join">Присоединиться</string>
     <string name="dont_show_again">Больше не показывать</string>
     <string name="debug_testing_build_5">ОТЛАДОЧНАЯ ТЕСТОВАЯ СБОРКА 5</string>
-    <string name="welcome_to_debug_build_of_vectras_vm_br">Добро пожаловать в отладочную сборку Vectras VM :)<br></string>
-    <string name="don_t_forget_to_tell_us_on_github_issues_or_telegram_bot_br">Не забудьте сообщить нам об ошибках на странице Github Issues или через Telegram бота<br></string>
-    <string name="a_href_https_t_me_vectras_protect_bot_telegram_report_bot_a_br"><a href=\"https://t.me/vectras_protect_bot\">Telegram бот для сообщений об ошибках</a><br></string>
-    <string name="a_href_https_github_com_epicstudios856_vectras_vm_android_issues_github_issues_page_a_br"><a href=\"https://github.com/epicstudios856/Vectras-VM-Android/issues\">Страница Github Issues</a><br></string>
     <string name="getting_ready_for_you_please_don_t_disconnect_the_network">Подготавливаем всё для вас...\nПожалуйста, не отключайте сеть.</string>
     <string name="it_won_t_take_long">Это не займет много времени...</string>
     <string name="completed_10_it_won_t_take_long">Завершено 10%\nЭто не займет много времени...</string>
@@ -525,3 +520,4 @@
     </string>
     <string name="title_activity_rom_info">Информация об образе</string>
 </resources>
+ 
