@@ -131,7 +131,6 @@
     <string name="info">Информация</string>
     <string name="intro_text">Если вам нужна помощь, пожалуйста, обратитесь к <a href="http://code.google.com/p/android-vnc-viewer/wiki/Documentation">руководству</a> (нажмите кнопку Меню на телефоне, чтобы получить доступ к руководству и другим пунктам меню), или к <a href="http://code.google.com/p/android-vnc-viewer/wiki/faq">FAQ</a>.<br/></string>
     <string name="intro_title">Добро пожаловать</string>
-    <string name="intro_version_text"><br>--Отправленный текст запоминается между сессиями (опционально)<br>--Импорт/Экспорт настроек в файл<br>--Кнопка с элементами управления масштабированием для вызова клавиатуры<br>--Можно принудительно включить режим тайлинга (очень большие экраны)</string>
     <string name="input_mode">Режим ввода</string>
     <string name="input_mode_fit_to_screen">Без панорамирования; Трекбол-мышь</string>
     <string name="input_mode_mouse">Режим управления указателем мыши</string>
