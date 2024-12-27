@@ -1,0 +1,530 @@
+<resources>
+    <string name="str_home">Главное</string>
+    <string name="str_logger">Журнал</string>
+    <string name="fab_info">Запустить ВМ</string>
+
+    <string name="startvm">ВМ запущена!</string>
+    <string name="stopvm">ВМ остановлена!</string>
+    <string name="noproccesses">Нет запущенных процессов!</string>
+    <string name="unknownstate">Состояние неизвестно!</string>
+
+    <string name="desktopInstructions">Для использования внешней мыши:\n\tОтключите ускорение мыши в гостевой ОС.\n\t\tДля DSL используйте команду: xset m 1\n"\t\tДля других ОС отключите \"Повышенную точность указателя\" или выберите мышь \"usb-tablet\" в основных настройках Vectras.\n\tПодключите или свяжите вашу USB/Bluetooth мышь и нажмите OK\n\tПереместите указатель мыши по всем сторонам экрана для калибровки.\n"</string>
+
+    <string name="address_caption">Адрес</string>
+    <string name="reset">Сброс</string>
+    <string name="shutdown">Выключить</string>
+    <string name="devices">Устройства</string>
+    <string name="external_mouse">Внешняя мышь</string>
+    <string name="stretch_to_screen">На весь экран</string>
+    <string name="full_screen">На весь экран</string>
+    <string name="toggle_full_screen">Переключить полноэкранный режим</string>
+    <string name="zoom_in">Увеличить</string>
+    <string name="zoom_out">Уменьшить</string>
+    <string name="right_click">Правый клик мыши</string>
+    <string name="help">Помощь</string>
+    <string name="drives">Образы дисков</string>
+    <string name="volume">Громкость</string>
+    <string name="hide_toolbar">Скрыть панель инструментов</string>
+    <string name="view_log">Просмотр журнала</string>
+    <string name="mode">Режим</string>
+    <string name="keyboard">КЛАВИАТУРА</string>
+    <string name="name">Имя</string>
+    <string name="size">Размер:</string>
+    <string name="availablity">Доступно:</string>
+    <string name="hide">Скрыть</string>
+    <string name="title_activity_login">Вход</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Пароль</string>
+    <string name="action_sign_in">Войти</string>
+    <string name="action_sign_up">Зарегистрироваться</string>
+    <string name="action_sign_with_google">Войти через Google</string>
+    <string name="welcome">"Добро пожаловать!"</string>
+    <string name="invalid_username">Недопустимое имя пользователя</string>
+    <string name="invalid_password">Пароль должен быть длиннее 5 символов</string>
+    <string name="login_failed">"Ошибка входа"</string>
+    <string name="profile">Профиль</string>
+    <string name="apps_amp_games">Приложения и игры</string>
+    <string name="vectras_website">Сайт Vectras</string>
+    <string name="about">О приложении</string>
+    <string name="emulation_information">Информация об эмуляции</string>
+    <string name="full_name">Полное имя</string>
+    <string name="terms_amp_conditions">Условия использования</string>
+    <string name="i_accept_terms_amp_conditions">Я принимаю Условия использования</string>
+    <string name="settings">Настройки</string>
+    <string name="go_ahead">Продолжить</string>
+    <string name="download">Скачать</string>
+    <string name="username">ИМЯ ПОЛЬЗОВАТЕЛЯ</string>
+    <string name="save">СОХРАНИТЬ</string>
+    <string name="memory_usage">Использование памяти</string>
+    
+    <string name="hello_blank_fragment">Привет, пустой фрагмент</string>
+    <string name="install_rom">Установить образ</string>
+    <string name="reconnect">Переподключиться</string>
+    <string name="display">Дисплей</string>
+    <string name="calibrate_mouse">Калибровка мыши</string>
+    <string name="hide_controller">СКРЫТЬ КОНТРОЛЛЕР</string>
+    <string name="remove">Удалить</string>
+    <string name="view_logs">Просмотр журналов</string>
+    <string name="title_activity_set_arch">Выбор архитектуры</string>
+    
+    <string name="first_fragment_label">Первый фрагмент</string>
+    <string name="second_fragment_label">Второй фрагмент</string>
+    <string name="next">Далее</string>
+    <string name="previous">Назад</string>
+
+    <string name="input_mode_hardware_mouse">Режим аппаратной мыши</string>
+    <string name="previous_entry">Предыдущая запись</string>
+    <string name="next_entry">Следующая запись</string>
+    <string name="choose_qemu_architicture">Выберите архитектуру QEMU:</string>
+    <string name="choose_qemu_architecture">Выберите архитектуру QEMU:</string>
+    <string name="import_custom_rom_cvbi">ИМПОРТИРОВАТЬ ПОЛЬЗОВАТЕЛЬСКИЙ ОБРАЗ \".CVBI\"</string>
+    <string name="rom_name">ИМЯ ОБРАЗА</string>
+    <string name="rom_drive_qcow2_img_etc">ДИСК ОБРАЗА (qcow2, img, и т.д.)</string>
+    <string name="qemu_params">ПАРАМЕТРЫ QEMU</string>
+    <string name="rom_icon">ИКОНКА ОБРАЗА</string>
+    <string name="add">ДОБАВИТЬ</string>
+    <string name="import_iso">Импортировать ISO</string>
+    <string name="importRom">ИМПОРТ</string>
+    <string name="privacy_amp_policy">Политика конфиденциальности</string>
+    <string name="permission_title">Требуется разрешение!</string>
+    <string name="permission_notification_text">В соответствии с политикой Android, для отправки уведомлений о ВМ требуются разрешения на уведомления!</string>
+    <string name="mouse_mode">Режим мыши</string>
+    <string name="export">ЭКСПОРТ</string>
+    <string name="email_verification_sent">Письмо с подтверждением отправлено.</string>
+    <string name="sign_out">Выйти</string>
+    <string name="guest">Гость</string>
+    <string name="hdd1_qcow_img_etc">HDD1 (qcow, img, и т.д.)</string>
+    <string name="data_explorer">Проводник</string>
+    <string name="forgot_password">Забыли пароль?</string>
+    <string name="buy_me_a_coffee">Купить мне кофе</string>
+
+    <string name="create_a_machine">Создать машину</string>
+
+    <string name="arrow_down">Стрелка вниз</string>
+    <string name="arrow_left">Стрелка влево</string>
+    <string name="arrow_right">Стрелка вправо</string>
+    <string name="arrow_up">Стрелка вверх</string>
+    <string name="auto">Авто</string>
+    <string name="button_send_text">Отправить текст</string>
+    <string name="button_send_without_saving">Отправить текст без сохранения</string>
+    <string name="center_mouse">Мышь @</string>
+    <string name="close">Закрыть</string>
+    <string name="color_format_caption">Формат цвета</string>
+    <string name="color_mode">Цветовой режим</string>
+    <string name="connect_button">Подключиться</string>
+    <string name="connection_caption">Подключение</string>
+    <string name="control_check">Ctrl</string>
+    <string name="copy_list_button">Копировать список</string>
+    <string name="delete_connection">Удалить подключение</string>
+    <string name="delete_key">Удалить выбранную клавишу</string>
+    <string name="delete_key_list">Удалить список клавиш</string>
+    <string name="disconnect">Отключиться</string>
+    <string name="export_settings">Экспорт</string>
+    <string name="export_settings_path">Экспортировать в файл</string>
+    <string name="enter_text_title">Введите текст для отправки</string>
+    <string name="enter_text">Отправить текст</string>
+    <string name="fit_to_screen">Вписать в экран</string>
+    <string name="force_full_check">Принудительно полноэкранный режим</string>
+    <string name="import_export_settings">Импорт/Экспорт настроек</string>
+    <string name="import_settings">Импорт</string>
+    <string name="import_settings_file_url">Импортировать из файла или URL</string>
+    <string name="info">Информация</string>
+    <string name="intro_text">Если вам нужна помощь, пожалуйста, обратитесь к <a href="http://code.google.com/p/android-vnc-viewer/wiki/Documentation">руководству</a> (нажмите кнопку Меню на телефоне, чтобы получить доступ к руководству и другим пунктам меню), или к <a href="http://code.google.com/p/android-vnc-viewer/wiki/faq">FAQ</a>.<br></string>
+    <string name="intro_title">Добро пожаловать</string>
+    <string name="intro_version_text"><br>--Отправленный текст запоминается между сессиями (опционально)<br>--Импорт/Экспорт настроек в файл<br>--Кнопка с элементами управления масштабированием для вызова клавиатуры<br>--Можно принудительно включить режим тайлинга (очень большие экраны)</string>
+    <string name="input_mode">Режим ввода</string>
+    <string name="input_mode_fit_to_screen">Без панорамирования; Трекбол-мышь</string>
+    <string name="input_mode_mouse">Режим управления указателем мыши</string>
+    <string name="input_mode_panning">Режим панорамирования рабочего стола</string>
+    <string name="input_mode_touchpad_pan_trackball_mouse">Сенсорное панорамирование; Трекбол-мышь</string>
+    <string name="input_mode_dpad_pan_touchpad_mouse">Сенсорная мышь; D-Pad панорамирование</string>
+    <string name="input_mode_touch_pan_zoom_mouse">Сенсорная мышь: панорамирование и масштабирование</string>
+    <string name="input_mode_touchpad">Тачпад</string>
+    <string name="keep_password_button">Сохранить</string>
+    <string name="intro_dont_show">Больше не показывать</string>
+    <string name="keys_caption">Клавиши</string>
+    <string name="list_caption">Список</string>
+    <string name="list_name_caption">Имя списка</string>
+    <string name="local_mouse_check">Локальный указатель мыши</string>
+    <string name="meta_key_title">Отправить специальные клавиши</string>
+    <string name="mouse_follow_pan">Следование мыши за панорамированием</string>
+    <string name="new_list_button">Новый список</string>
+    <string name="nickname_caption">Псевдоним</string>
+    <string name="off">Выкл</string>
+    <string name="on">Вкл</string>
+    <string name="open_doc">Руководство/Вики</string>
+    <string name="pan_follow_mouse">Панорамирование следует за мышью</string>
+    <string name="password_caption">Пароль</string>
+    <string name="port_caption">Порт</string>
+    <string name="repeater_button">Ретранслятор</string>
+    <string name="repeater_caption">Введите адрес ретранслятора <b>только если</b> вы используете ретранслятор типа <br><i>UltraVNC</i></string>
+    <string name="repeater_clear">Не использовать ретранслятор</string>
+    <string name="repeater_dialog_title">Информация о ретрансляторе</string>
+    <string name="repeater_empty_text">Нет ретранслятора</string>
+    <string name="repeater_save">Использовать этот адрес ретранслятора</string>
+    <string name="save_as_copy">Сохранить как копию</string>
+    <string name="scaling">Масштабирование</string>
+    <string name="scaling_zoomable">Масштабируемый</string>
+
+    <string name="send_button">Отправить</string>
+    <string name="send_key_again">Отправить клавишу снова</string>
+    <string name="shortcut_label">VNC подключение</string>
+    <string name="showkbd_label">Клавиатура</string>
+    <string name="special_keys">Отправить клавиши</string>
+    <string name="username_caption">Имя пользователя</string>
+    <string name="username_hint">Для аутентификации Windows</string>
+    <string name="permdesc_open_vnc_conn">Запуск пользовательских VNC подключений</string>
+    <string name="terminal">Терминал</string>
+
+    <string name="msg_directory_absolute_path">%1$s Абсолютный путь к директории: \"%2$s\"</string>
+
+    <string name="install">Установить</string>
+    <string name="select_tar">ВЫБЕРИТЕ (.TAR.GZ)</string>
+    <string name="not_selected_yet">ещё не выбрано.</string>
+    <string name="modify">ИЗМЕНИТЬ</string>
+
+    <string name="input">ввод</string>
+    <string name="tiny_vterm">Крошечный vterm</string>
+    <string name="try_again">Попробовать снова</string>
+    <string name="logs">Журналы</string>
+    <string name="options">Опции</string>
+    <string name="create_virtual_harddisk">Создать виртуальный жёсткий диск</string>
+    <string name="size_in_gb">РАЗМЕР (ГБ)</string>
+    <string name="create_qcow2">СОЗДАТЬ QCOW2</string>
+    <string name="image_name">ИМЯ ОБРАЗА</string>
+    <string name="make_image">СОЗДАТЬ ОБРАЗ</string>
+    <string name="imported_roms_will_be_shown_here">ИМПОРТИРОВАННЫЕ ОБРАЗЫ БУДУТ ПОКАЗАНЫ ЗДЕСЬ</string>
+    <string name="version">ВЕРСИЯ:</string>
+    <string name="qemu">QEMU</string>
+    <string name="arch">АРХИТЕКТУРА:</string>
+    <string name="running">Работает</string>
+    <string name="stopped">Остановлена</string>
+    <string name="service">СЕРВИС:</string>
+    <string name="free_palistine">СВОБОДУ ПАЛЕСТИНЕ</string>
+    <string name="store">Магазин</string>
+    <string name="no_internet_connection">Нет подключения к интернету</string>
+    <string name="check_your_internet_connection">Проверьте ваше интернет-соединение</string>
+    <string name="downloading_file">Загрузка файла..</string>
+    <string name="lenght_of_file">"Размер файла: "</string>
+    <string name="downloaded_to_path">"Загружено в: "</string>
+    <string name="downloaded_successfully">Загружено успешно!</string>
+    <string name="app_settings">НАСТРОЙКИ ПРИЛОЖЕНИЯ</string>
+    <string name="main_app_settings">Основные настройки приложения.</string>
+    <string name="user_interface">ПОЛЬЗОВАТЕЛЬСКИЙ ИНТЕРФЕЙС</string>
+    <string name="themes_and_ui">Темы и интерфейс.</string>
+    <string name="emulation_settings">Настройки эмуляции.</string>
+    <string name="vnc_ui_environment">Среда интерфейса VNC.</string>
+    <string name="vm_arch">АРХИТЕКТУРА ВМ</string>
+    <string name="cpu_model">МОДЕЛЬ ЦП</string>
+    <string name="custom_memory">ПОЛЬЗОВАТЕЛЬСКАЯ ПАМЯТЬ</string>
+    <string name="memory_mb">ПАМЯТЬ (МБ)</string>
+    <string name="sound_card">ЗВУКОВАЯ КАРТА</string>
+    <string name="tb_size_kb">РАЗМЕР TB (КБ)</string>
+    <string name="kvm_acceleration">Ускорение KVM</string>
+    <string name="cpu_cores">ЯДРА ЦП</string>
+    <string name="harddisk_type">ТИП ЖЕСТКОГО ДИСКА</string>
+    <string name="boot_from">ЗАГРУЗКА С</string>
+    <string name="shared_folder">ОБЩАЯ ПАПКА</string>
+    <string name="custom_params">ПОЛЬЗОВАТЕЛЬСКИЕ ПАРАМЕТРЫ</string>
+    <string name="vm_ui_environment">СРЕДА ИНТЕРФЕЙСА ВМ</string>
+    <string name="x11_resolution">Разрешение X11</string>
+    <string name="mouse">МЫШЬ</string>
+    <string name="check_for_software_updates_on_startup">ПРОВЕРЯТЬ ОБНОВЛЕНИЯ ПРИ ЗАПУСКЕ</string>
+    <string name="check_for_software_updates">ПРОВЕРИТЬ ОБНОВЛЕНИЯ</string>
+    <string name="night_mode">НОЧНОЙ РЕЖИМ</string>
+    <string name="description">Описание</string>
+    <string name="qemu_website">Веб-сайт QEMU</string>
+    <string name="powerpc_qemu">PowerPC</string>
+    <string name="x86_64_qemu_recommended">x86_64 (рекомендуется)</string>
+    <string name="export_rom">Экспортировать образ</string>
+    <string name="are_you_sure">Вы уверены?</string>
+    <string name="description_html_supported">ОПИСАНИЕ (поддерживается HTML)</string>
+    <string name="compressing_cvbi">Сжатие CVBI</string>
+    <string name="please_wait_dialog">Пожалуйста, подождите...</string>
+    <string name="error">ОШИБКА!</string>
+    <string name="done">ГОТОВО!</string>
+    <string name="are_removed_successfully">" успешно удалены!"</string>
+    <string name="teams">Команда Vectras VM и Nguyen Bao An Bui</string>
+    <string name="repository">Репозиторий</string>
+    <string name="telegram_channel">Telegram канал</string>
+    <string name="change_log">Список изменений</string>
+    <string name="language">ЯЗЫК</string>
+    <string name="set">УСТАНОВИТЬ</string>
+    <string name="change_app_locale">ИЗМЕНИТЬ ЯЗЫК ПРИЛОЖЕНИЯ</string>
+    <string name="are_you_sure_you_want_to_shutdown_vm">Вы уверены, что хотите выключить ВМ? Чтобы выйти, но оставить всё работающим, нажмите и удерживайте кнопку "Выключить".</string>
+    <string name="save_changes">СОХРАНИТЬ ИЗМЕНЕНИЯ</string>
+    <string name="qemu_create_cmd">КОМАНДА СОЗДАНИЯ QEMU</string>
+    <string name="getit">Получить</string>
+    <string name="adddrivenote">Убедитесь, что вы выбрали ROM или CDROM для загрузки ОС. Вам может не понадобиться выбирать его, если вы добавили их в ПАРАМЕТРЫ QEMU.</string>
+    <string name="killqemu">Завершить QEMU</string>
+    <string name="installing">Установка...</string>
+    <string name="vncdisplay">VNC дисплей</string>
+    <string name="setup_sound">Настройка звука для Termux</string>
+    <string name="setup_sound_guide_content">Это позволяет виртуальным машинам, работающим в Vectras VM, воспроизводить звук с помощью Termux. Если вы еще не настроили Termux, выберите "Начать настройку", команда будет автоматически скопирована в буфер обмена, вам нужно вставить эту команду и запустить ее в Termux, чтобы завершить настройку. В следующий раз убедитесь, что Termux запущен, чтобы воспроизводить звук.</string>
+    <string name="copied">Скопировано.</string>
+    <string name="start_setup">Начать настройку</string>
+    <string name="termux_is_not_installed">Termux не установлен</string>
+    <string name="you_need_to_install_termux">Вам нужно установить Termux перед настройкой.</string>
+    <string name="wating_for_you">Ждем вас...</string>
+    <string name="suggested_use_of_create_command">Мы рекомендуем вам использовать команду "Создать", чтобы сделать создание виртуальной машины проще и легче.</string>
+    <string name="oops">Ой!</string>
+    <string name="cpu_does_not_have_the_necessary_instructions">ЦП на вашем устройстве не имеет необходимых инструкций для работы Vectras VM.</string>
+    <string name="warning">Внимание!</string>
+    <string name="cpu_not_support_64">ОС Android или ЦП на вашем устройстве не поддерживает 64 бит, что означает, что ВМ будет иметь низкую производительность и будет нестабильной при работе.</string>
+    <string name="an_error_occurred_with_the_vm_list_data">Произошла ошибка с данными списка виртуальных машин. Вы хотите удалить все?</string>
+    <string name="delete_all">Удалить все</string>
+    <string name="need_fix_json_before_create">Данные списка виртуальных машин повреждены и нуждаются в восстановлении. Вы хотите начать восстановление сейчас?</string>
+    <string name="problem_has_been_detected">Обнаружена проблема</string>
+    <string name="you_have_not_added_any_storage_devices">Вы не добавили ни одного устройства хранения, чтобы начать использовать или установить операционную систему. Вы хотите продолжить создание?</string>
+    <string name="continuetext">Продолжить</string>
+    <string name="need_set_name">Необходимо задать имя для этой виртуальной машины.</string>
+    <string name="can_not_use_mttcg">Виртуальная машина не может работать, потому что ЦП или ОС Android на вашем телефоне не поддерживает 64 бит для использования многопоточного TCG. Вы хотите продолжить работу виртуальной машины с однопоточным TCG?</string>
+    <string name="VM_is_already_running">Эта ВМ уже запущена.</string>
+    <string name="delete_all_vm_content">Все виртуальные машины и связанные с ними образы будут удалены. Вы хотите продолжить?</string>
+    <string name="delete_all_vm">Удалить все ВМ</string>
+    <string name="create">Создать</string>
+    <string name="nothing_here">Здесь ничего нет</string>
+    <string name="create_vm_now">Вы хотите создать новую виртуальную машину сейчас?</string>
+    <string name="nothing_here_home">Нажмите кнопку "Создать" внизу, чтобы создать новую виртуальную машину. Или…</string>
+    <string name="allow_access_to_storage">Разрешить доступ к хранилищу</string>
+    <string name="you_need_to_allow_access_to_the_storage_to_continue">Вам нужно разрешить доступ к хранилищу, чтобы продолжить.</string>
+    <string name="allow">Разрешить</string>
+    <string name="cannot_create_VM_at_this_time">Невозможно создать ВМ в данный момент.</string>
+    <string name="no_data">Нет данных.</string>
+    <string name="roms_store">Магазин образов</string>
+    <string name="available">Доступно</string>
+    <string name="unavailable">Недоступно</string>
+    <string name="installed">Установлено</string>
+    <string name="kill_all">Завершить все</string>
+    <string name="do_you_want_to_kill_all_qemu_processes">Вы хотите завершить все процессы Qemu?</string>
+    <string name="all_running_vms_will_be_forcibly_shut_down">Все работающие ВМ будут принудительно остановлены.</string>
+    <string name="total_memory">Всего:</string>
+    <string name="used_memory">Использовано:</string>
+    <string name="free_memory">Свободно:</string>
+    <string name="used">использовано</string>
+    <string name="there_is_nothing_here_because_there_is_no_vm_running">Здесь ничего нет, потому что нет работающих ВМ.</string>
+    <string name="just_a_moment">Минутку...</string>
+    <string name="unable_to_connect_to_server">Невозможно подключиться к серверу.</string>
+    <string name="join_our_community">Присоединяйтесь к нашему сообществу</string>
+    <string name="a_serious_problem_has_occurred">Произошла серьезная проблема! Эта проблема вызвана ЦП или операционной системой Android на вашем устройстве. Вы можете присоединиться к нашему сообществу, чтобы узнать больше.</string>
+    <string name="keep_files_question_mark">Сохранить файлы?</string>
+    <string name="do_you_want_to_keep_this_ROM_file_and_CD_ROM_file">Сохранить файлы образа и CD-ROM</string>
+    <string name="keep">Сохранить</string>
+    <string name="remove_all">Удалить все</string>
+    <string name="format_not_supported_please_select_file_with_format_cvbi">Формат не поддерживается, пожалуйста, выберите файл с форматом cvbi.</string>
+    <string name="error_CR_CVBI1">Произошла проблема, и продолжение невозможно, потому что файл cbvi не найден. Код ошибки: CR_CVBI1.</string>
+    <string name="error_CR_CVBI2">Произошла ошибка. Извлечение прошло успешно, но файл cvbi не содержит информации об этом образе. Будут использованы настройки по умолчанию. Код ошибки: CR_CVBI2.</string>
+    <string name="from">Из</string>
+    <string name="error_CR_CVBI3">Произошла ошибка, и продолжение невозможно. Извлечение прошло успешно, но файл cvbi не содержит информации об этом образе и не включает в себя файлы образа. Код ошибки: CR_CVBI3.</string>
+    <string name="kept_some_files">Некоторые файлы были сохранены, так как они используются другими виртуальными машинами.</string>
+    <string name="clean_up">Очистка</string>
+    <string name="clean_up_content">Образы, файлы и папки, которые больше не используются, будут удалены.</string>
+    <string name="go_to_rom_store">Перейти в магазин образов</string>
+    <string name="want_to_learn_more_about_qemu">Хотите узнать больше о QEMU?</string>
+    <string name="file_format_is_not_supported">Некоторые функции могут быть недоступны, так как формат файла не поддерживается. Вы хотите продолжить?</string>
+    <string name="you_cannot_use_IDE_hard_drive_type_with_ARM64">Тип жесткого диска IDE не поддерживается на архитектуре ARM64. Если вы продолжите, будет использован тип жесткого диска по умолчанию.</string>
+    <string name="error_PROOT_IS_MISSING_0">Работа системы невозможна из-за отсутствия необходимых файлов. Эта проблема может быть вызвана неправильной настройкой. Вы хотите попробовать настройку снова? Код ошибки: PROOT_IS_MISSING_0.</string>
+    <string name="error_DRIVE_INDEX_0_EXISTS">Произошла ошибка, и виртуальная машина не может запуститься. Обнаружено два или более дисков, подключенных к одному слоту. Пожалуйста, проверьте настройки вашей виртуальной машины и убедитесь, что все диски не подключены к одному слоту. Код ошибки: DRIVE_INDEX_0_EXISTS.</string>
+    <string name="error_X11_NOT_AVAILABLE">Произошла ошибка, и виртуальная машина не может запуститься. X11 не работает. Мы рекомендуем вам переключиться на VNC. Вы хотите переключиться на VNC? Код ошибки: X11_NOT_AVAILABLE.</string>
+    <string name="switched_to_VNC">Переключено на VNC. Вы можете попробовать запустить виртуальную машину снова.</string>
+    <string name="restore">Восстановить</string>
+    <string name="restore_content">Удаленные виртуальные машины будут восстановлены, если вы ранее выбрали сохранение всех файлов.</string>
+    <string name="restored">Восстановлено</string>
+    <string name="qemu_params_is_empty">Параметры QEMU пусты. Некоторое оборудование для эмуляции будет установлено по умолчанию QEMU.</string>
+    <string name="cannot_export_with_error">Невозможно экспортировать с ошибкой:</string>
+    <string name="author">Автор</string>
+    <string name="saved_in">Сохранено в</string>
+    <string name="this_rom_is_missing_too_much_information">В этом образе отсутствует слишком много информации, и он может не работать, эта ошибка вызвана тем, кто создал его неправильно.</string>
+    <string name="this_rom_may_not_be_compatible">Этот образ может быть несовместим, так как он предназначен для более старой версии.</string>
+    <string name="please_select">Пожалуйста, выберите</string>
+    <string name="select">Выбрать</string>
+    <string name="use_default_bios_uefi">Использовать BIOS/UEFI по умолчанию</string>
+    <string name="use_local_time">Использовать местное время</string>
+    <string name="roms_data_json_fixed_successfully">Исправлено успешно. Но некоторые виртуальные машины могут исчезнуть, и они были перемещены в папку "Корзина".</string>
+    <string name="roms_data_json_fixed_unsuccessfully">Исправление не удалось, и все ваши виртуальные машины больше не отображаются в списке виртуальных машин. Они были перемещены в папку "Корзина".</string>
+    <string name="use_memory_overcommit">Использовать перерасход памяти</string>
+    <string name="harmful_command_was_detected">Была обнаружена потенциально опасная команда, и она была заблокирована. Пожалуйста, проверьте эту виртуальную машину и попробуйте снова.</string>
+    <string name="copy_file">Копировать файл</string>
+    <string name="copy_file_content">Всегда копировать выбранный файл в виртуальную машину вместо того, чтобы использовать его напрямую.</string>
+
+    <string name="shared_user_label">Пользователь Vterm</string>
+    <string name="run_command_permission_label">Запуск команд в среде Vterm</string>
+    <string name="run_command_permission_description">Выполнение произвольных команд в среде Vterm</string>
+    <string name="new_session">Новая сессия</string>
+    <string name="new_session_failsafe">Безопасная сессия</string>
+    <string name="toggle_soft_keyboard">Клавиатура</string>
+    <string name="reset_terminal">Сбросить терминал</string>
+    <string name="style_terminal">Стиль</string>
+    <string name="share_transcript_title">Содержимое терминала</string>
+    <string name="toggle_keep_screen_on">Не выключать экран</string>
+    <string name="autofill_password">Автозаполнение пароля</string>
+
+    <string name="bootstrap_installer_body">Установка…</string>
+    <string name="bootstrap_error_title">Не удалось установить</string>
+    <string name="bootstrap_error_body">Vterm не смог установить загрузочные пакеты.</string>
+    <string name="bootstrap_error_abort">Прервать</string>
+    <string name="bootstrap_error_try_again">Попробовать снова</string>
+    <string name="bootstrap_error_not_primary_user_message">Vterm может быть установлен только в основной учетной записи пользователя.</string>
+
+    <string name="max_terminals_reached_title">Достигнуто максимальное количество терминалов</string>
+    <string name="max_terminals_reached_message">Закройте существующие, прежде чем создавать новые.</string>
+
+    <string name="reset_toast_notification">Терминал сброшен.</string>
+
+    <string name="select_url">Выбрать URL</string>
+    <string name="select_url_dialog_title">Нажмите на URL, чтобы скопировать, или удерживайте, чтобы открыть</string>
+    <string name="select_all_and_share">Поделиться содержимым терминала</string>
+    <string name="select_url_no_found">В терминале не найдено URL.</string>
+    <string name="select_url_copied_to_clipboard">URL скопирован в буфер обмена</string>
+    <string name="share_transcript_chooser_title">Отправить текст в:</string>
+
+    <string name="kill_process">Завершить процесс (%d)</string>
+    <string name="confirm_kill_process">Действительно завершить эту сессию?</string>
+
+    <string name="session_rename_title">Установить имя сессии</string>
+    <string name="session_rename_positive_button">Установить</string>
+    <string name="session_new_named_title">Новая именованная сессия</string>
+    <string name="session_new_named_positive_button">Создать</string>
+
+    <string name="styling_not_installed">Дополнение Vterm:Style не установлено.</string>
+    <string name="styling_install">Установить</string>
+
+    <string name="notification_action_exit">Выход</string>
+    <string name="notification_action_wake_lock">Получить блокировку бодрствования</string>
+    <string name="notification_action_wake_unlock">Снять блокировку бодрствования</string>
+
+    <string name="file_received_title">Сохранить файл в ~/downloads/</string>
+    <string name="file_received_edit_button">Редактировать</string>
+    <string name="file_received_open_folder_button">Открыть папку</string>
+
+    <string name="plugin_info">Лол</string>
+
+    <string name="msg_storage_permission_not_granted_warning">Разрешение на доступ к хранилищу должно быть предоставлено
+        приложению Vectras VM, чтобы...</string>
+    <string name="action_grant_storage_permission">Предоставить разрешение на доступ к хранилищу</string>
+
+    <string name="msg_battery_optimization_not_disabled_warning">Оптимизация батареи Android
+        должна быть отключена для приложения Vectras VM, чтобы…
+        Проверьте https://developer.android.com/about/versions/oreo/background для получения дополнительной информации и
+        https://developer.android.com/guide/components/foreground-services#background-start-restrictions
+        для получения дополнительной информации.
+
+        \n\nТакже проверьте https://dontkillmyapp.com для получения информации о специфичных для производителей убийцах приложений.
+        В зависимости от производителя вам может потребоваться включить автозапуск, отключить DuraSpeed,
+        включить `Отображать всплывающие окна при работе в фоновом режиме` для приложения.</string>
+    <string name="action_disable_battery_optimizations">Отключить оптимизацию батареи</string>
+
+    <string name="msg_display_over_other_apps_permission_not_granted_warning">Разрешение на отображение поверх других
+        приложений должно быть предоставлено приложению Vectras VM для запуска
+        активностей переднего плана из фона. Проверьте https://developer.android.com/guide/components/activities/background-starts
+        для получения дополнительной информации.
+    </string>
+    <string name="action_grant_display_over_other_apps_permission">Предоставить разрешение на отображение поверх других приложений</string>
+
+    <string name="action_already_granted">Уже предоставлено</string>
+    <string name="action_already_disabled">Уже отключено</string>
+    <string name="not_connected">Не подключено</string>
+    <string name="help_button_text">   Помощь   </string>
+    <string name="preferences_button_text">   Настройки   </string>
+    <string name="extra_keys_config_desc">Здесь вы можете установить значение переменной extra-keys, как в приложении Termux (прочитайте <a href="http://wiki.termux.com/wiki/Touch_Keyboard#Extra_Keys_Row">это</a>) и многое другое (например, META).
+    Оставьте пустую строку для значения по умолчанию.</string>
+
+    <string name="log_level_title">Уровень журнала</string>
+    <string name="log_level_off">Выкл</string>
+    <string name="log_level_normal">Нормальный</string>
+    <string name="log_level_debug">Отладка</string>
+    <string name="log_level_verbose">Подробный</string>
+    <string name="log_level_unknown">*Неизвестно*</string>
+    <string name="log_level_value">Уровень журнала Logcat установлен на \"%1$s\"</string>
+    <string name="yes">да</string>
+    <string name="no">отмена</string>
+    <string name="cancel">отмена</string>
+    <string name="back_to_the_display">Вернуться к отображению</string>
+    <string name="x11_ui_environment">Среда интерфейса x11.</string>
+    <string name="rom_options">Параметры образа</string>
+    <string name="about_app">О приложении</string>
+    <string name="join_us_on_telegram">Присоединиться к нам в Telegram</string>
+    <string name="join_us_on_telegram_where_we_publish_all_the_news_and_updates_and_receive_your_opinions_and_bugs">Присоединяйтесь к нам в Telegram, где мы публикуем все новости и обновления, а также получаем ваши мнения и сообщения об ошибках</string>
+    <string name="join">Присоединиться</string>
+    <string name="dont_show_again">Больше не показывать</string>
+    <string name="this_version_unstable_and_has_alot_of_bugs_br">Эта версия нестабильна и содержит много ошибок<br></string>
+    <string name="debug_testing_build_5">ОТЛАДОЧНАЯ ТЕСТОВАЯ СБОРКА 5</string>
+    <string name="welcome_to_debug_build_of_vectras_vm_br">Добро пожаловать в отладочную сборку Vectras VM :)<br></string>
+    <string name="don_t_forget_to_tell_us_on_github_issues_or_telegram_bot_br">Не забудьте сообщить нам об ошибках на странице Github Issues или через Telegram бота<br></string>
+    <string name="a_href_https_t_me_vectras_protect_bot_telegram_report_bot_a_br"><a href=\"https://t.me/vectras_protect_bot\">Telegram бот для сообщений об ошибках</a><br></string>
+    <string name="a_href_https_github_com_epicstudios856_vectras_vm_android_issues_github_issues_page_a_br"><a href=\"https://github.com/epicstudios856/Vectras-VM-Android/issues\">Страница Github Issues</a><br></string>
+    <string name="getting_ready_for_you_please_don_t_disconnect_the_network">Подготавливаем всё для вас...\nПожалуйста, не отключайте сеть.</string>
+    <string name="it_won_t_take_long">Это не займет много времени...</string>
+    <string name="completed_10_it_won_t_take_long">Завершено 10%\nЭто не займет много времени...</string>
+    <string name="completed_20_it_won_t_take_long">Завершено 20%\nЭто не займет много времени...</string>
+    <string name="completed_30_it_won_t_take_long">Завершено 30%\nЭто не займет много времени...</string>
+    <string name="completed_40_it_won_t_take_long">Завершено 40%\nЭто не займет много времени...</string>
+    <string name="completed_50_it_won_t_take_long">Завершено 50%\nЭто не займет много времени...</string>
+    <string name="don_t_disconnect">Не отключайтесь...</string>
+    <string name="completed_75_don_t_disconnect">Завершено 75%\nНе отключайтесь...</string>
+    <string name="keep_it_up">Продолжайте в том же духе...</string>
+    <string name="completed_80_keep_it_up">Завершено 80%\nПродолжайте в том же духе...</string>
+    <string name="completed_95_keep_it_up">Завершено 95%\nПродолжайте в том же духе...</string>
+    <string name="almost_there">Почти готово.</string>
+    <string name="show_advanced_setup">Показать расширенную настройку</string>
+    <string name="allow_permissions">Разрешить доступ</string>
+    <string name="you_need_to_grant_permission_to_access_the_storage_before_use">Вам нужно предоставить разрешение на доступ к хранилищу перед использованием.</string>
+    <string name="find_and_allow_access_to_storage_in_settings">Найдите и разрешите доступ к хранилищу в Настройках.</string>
+    <string name="do_you_want_to_set_it_up_automatically_or_select_the_bootstrap_file_manually">Вы хотите настроить автоматически или выбрать файл начальной загрузки вручную?</string>
+    <string name="auto_setup">Автоматическая настройка</string>
+    <string name="manual">Вручную</string>
+    <string name="getting_ready_for_you">Подготавливаем всё для вас...</string>
+    <string name="failed">Ошибка!</string>
+    <string name="something_went_wrong_during_setup_would_you_like_to_try_again">Что-то пошло не так во время установки. Хотите попробовать ещё раз?</string>
+    <string name="show_log">Показать журнал</string>
+    <string name="bootstrap_required">ТРЕБУЕТСЯ НАЧАЛЬНАЯ ЗАГРУЗКА!</string>
+    <string name="you_can_choose_between_auto_download_and_setup_or_manual_setup_by_choosing_bootstrap_file">Вы можете выбрать между автоматической загрузкой и настройкой или ручной настройкой, выбрав файл начальной загрузки.</string>
+    <string name="manual_setup">РУЧНАЯ НАСТРОЙКА</string>
+
+    <string name="lorem_ipsum">
+        В своём стремлении улучшить пользовательский опыт мы упускаем, что явные признаки
+        институционализации являются только методом политического участия и нарушающими
+        общечеловеческие нормы этики. С учётом сложившейся международной обстановки,
+        укрепление и развитие внутренней структуры создаёт предпосылки для позиций,
+        занимаемых участниками в отношении поставленных задач. Но социально-экономическое
+        развитие не оставляет шанса для первоочередных требований. Значимость этих проблем
+        настолько очевидна, что существующая теория способствует подготовке и реализации
+        направлений прогрессивного развития.\n\n
+        С другой стороны, выбранный нами инновационный путь влечёт за собой процесс
+        внедрения и модернизации модели развития. В рамках спецификации современных
+        стандартов, некоторые особенности внутренней политики неоднозначны и будут
+        объективно рассмотрены соответствующими инстанциями. Как уже неоднократно
+        упомянуто, сделанные на базе интернет-аналитики выводы ограничены исключительно
+        образом мышления. Следует отметить, что высокотехнологичная концепция
+        общественного уклада создаёт необходимость включения в производственный план
+        целого ряда внеочередных мероприятий с учётом комплекса кластеризации усилий.\n\n
+        Имеется спорная точка зрения, гласящая примерно следующее: акционеры крупнейших
+        компаний, инициированные исключительно синтетически, превращены в посмешище, хотя
+        само их существование приносит несомненную пользу обществу. Для современного
+        мира перспективное планирование однозначно фиксирует необходимость
+        соответствующих условий активизации. Внезапно, предприниматели в сети интернет
+        будут функционально разнесены на независимые элементы. В своём стремлении
+        повысить качество жизни, они забывают, что дальнейшее развитие различных форм
+        деятельности требует определения и уточнения системы массового участия.\n\n
+        Также как реализация намеченных плановых заданий играет определяющее значение
+        для форм воздействия. Принимая во внимание показатели успешности, постоянное
+        информационно-пропагандистское обеспечение нашей деятельности требует анализа
+        распределения внутренних резервов и ресурсов. Вот вам яркий пример современных
+        тенденций - консультация с широким активом предоставляет широкие возможности
+        для системы обучения кадров, соответствующей насущным потребностям. И нет
+        сомнений, что представители современных социальных резервов освещают чрезвычайно
+        интересные особенности картины в целом, однако конкретные выводы, разумеется,
+        обнародованы.\n\n
+        Лишь независимые государства набирают популярность среди определенных слоев
+        населения, а значит, должны быть указаны как претенденты на роль ключевых
+        факторов. Лишь активно развивающиеся страны третьего мира призывают к
+        ответственности. Учитывая ключевые сценарии поведения, начало повседневной
+        работы по формированию позиции создаёт предпосылки качественно новых шагов
+        для своевременного выполнения сверхзадачи. Равным образом, курс на
+        социально-ориентированный национальный проект требует от нас анализа
+        анализа существующих паттернов поведения. Задача организации, в особенности
+        же экономическая повестка сегодняшнего дня способствует подготовке и
+        реализации прогресса профессионального сообщества.
+    </string>
+    <string name="title_activity_rom_info">Информация об образе</string>
+</resources>
