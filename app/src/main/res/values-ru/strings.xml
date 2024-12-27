@@ -156,7 +156,6 @@
     <string name="password_caption">Пароль</string>
     <string name="port_caption">Порт</string>
     <string name="repeater_button">Ретранслятор</string>
-    <string name="repeater_caption">Введите адрес ретранслятора <b>только если</b> вы используете ретранслятор типа <br><i>UltraVNC</i></string>
     <string name="repeater_clear">Не использовать ретранслятор</string>
     <string name="repeater_dialog_title">Информация о ретрансляторе</string>
     <string name="repeater_empty_text">Нет ретранслятора</string>
