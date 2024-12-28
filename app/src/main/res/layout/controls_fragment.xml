@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:alpha="0.5">
+    android:alpha="0.5"
+    android:layoutDirection="ltr">
 
     <FrameLayout
         android:id="@+id/mainControl"
@@ -56,7 +57,8 @@
                     android:orientation="horizontal"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
-                    android:translationY="-6dp">
+                    android:translationY="-6dp"
+                    android:layoutDirection="ltr">
 
                     <ImageButton
                         android:id="@+id/btnVterm"
@@ -78,6 +80,16 @@
                         android:background="@drawable/controls_button"
                         android:backgroundTint="?attr/colorPrimary"
                         android:src="@drawable/round_settings_24"
+                        app:tint="?attr/colorPrimary" />
+
+                    <ImageButton
+                        android:id="@+id/btnPrograms"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="8dp"
+                        android:background="@drawable/controls_button"
+                        android:backgroundTint="?attr/colorPrimary"
+                        android:src="@drawable/apps_24px"
                         app:tint="?attr/colorPrimary" />
 
                     <ImageButton

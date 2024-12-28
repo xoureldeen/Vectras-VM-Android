@@ -31,6 +31,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="8dp"
+                    android:padding="3dp"
                     android:orientation="horizontal">
 
                     <com.google.android.material.card.MaterialCardView
@@ -148,6 +149,7 @@
                                     tools:ignore="SmallSp" />
 
                                 <TextView
+                                    android:id="@+id/qemuVersion"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="2dp"
@@ -342,6 +344,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
+            android:visibility="gone"
             app:adSize="BANNER"
             app:adUnitId="ca-app-pub-3568137780412047/2777459854"
             app:layout_constraintBottom_toTopOf="@id/bottomAppBar"

@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">v2.9.4 (Jam tart)</string>
+    <string name="app_version" translatable="false">v2.9.5 (3dfx)</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -567,4 +567,6 @@
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
     <string name="title_activity_rom_info">RomInfo</string>
+    <string name="alpine_desktop">Alpine Xfce4</string>
+    <string name="discord">Discord</string>
 </resources>

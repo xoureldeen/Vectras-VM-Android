@@ -7,6 +7,7 @@ import com.termux.app.TermuxService;
 
 import static com.vectras.vm.VectrasApp.getApp;
 import static com.vectras.vm.VectrasApp.getAppInfo;
+import static com.vectras.vm.utils.LibraryChecker.isPackageInstalled2;
 import static com.vectras.vm.utils.UIUtils.UIAlert;
 
 import android.app.ActivityManager;
@@ -82,6 +83,7 @@ import com.vectras.vm.adapter.LogsAdapter;
 import com.vectras.vm.logger.VectrasStatus;
 import com.vectras.vm.utils.AppUpdater;
 import com.vectras.vm.utils.FileUtils;
+import com.vectras.vm.utils.LibraryChecker;
 import com.vectras.vm.utils.UIUtils;
 import com.vectras.vterm.Terminal;
 
@@ -99,8 +101,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import com.google.gson.Gson;
@@ -152,6 +156,8 @@ public class MainActivity extends AppCompatActivity {
         if (MainSettingsManager.getPromptUpdateVersion(activity))
             updateApp(false);
 
+        new LibraryChecker(activity).checkMissingLibraries(activity);
+
         romsLayout = findViewById(R.id.romsLayout);
 
         SwipeRefreshLayout refreshRoms = findViewById(R.id.refreshRoms);
@@ -174,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
                 MainService.stopService();
 
                 Terminal vterm = new Terminal(activity);
-                vterm.executeShellCommand("killall qemu-system-*", false, activity);
+                vterm.executeShellCommand2("killall qemu-system-*", false, activity);
 
                 extVncLayout.setVisibility(View.GONE);
                 appbar.setExpanded(false);
@@ -249,12 +255,12 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if (id == R.id.navigation_item_help) {
                     String tw = AppConfig.vectrasHelp;
-                    Intent w = new Intent(Intent.ACTION_VIEW);
+                    Intent w = new Intent(ACTION_VIEW);
                     w.setData(Uri.parse(tw));
                     startActivity(w);
                 } else if (id == R.id.navigation_item_website) {
                     String tw = AppConfig.vectrasWebsite;
-                    Intent w = new Intent(Intent.ACTION_VIEW);
+                    Intent w = new Intent(ACTION_VIEW);
                     w.setData(Uri.parse(tw));
                     startActivity(w);
                 } else if (id == R.id.navigation_item_import_iso) {
@@ -434,6 +440,52 @@ public class MainActivity extends AppCompatActivity {
 
                         startActivityForResult(intent, 1006);
                     }
+                } else if (id == R.id.navigation_item_desktop) {
+                    if (SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                        builder.setTitle("X11 Feature Not Supported")
+                                .setMessage("The X11 feature is currently not supported on Android 14 and above. Please use a device with Android 13 or below for X11 functionality.")
+                                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                                .create()
+                                .show();
+                    } else {
+                        // XFCE4 meta-package
+                        String xfce4Package = "xfce4";
+
+                        // Check if XFCE4 is installed
+                        isPackageInstalled2(activity, xfce4Package, (output, errors) -> {
+                            boolean isInstalled = false;
+
+                            // Check if the package exists in the installed packages output
+                            if (output != null) {
+                                Set<String> installedPackages = new HashSet<>();
+                                for (String installedPackage : output.split("\n")) {
+                                    installedPackages.add(installedPackage.trim());
+                                }
+
+                                isInstalled = installedPackages.contains(xfce4Package.trim());
+                            }
+
+                            // If not installed, show a dialog to install it
+                            if (!isInstalled) {
+                                new AlertDialog.Builder(activity, R.style.MainDialogTheme)
+                                        .setTitle("Install XFCE4")
+                                        .setMessage("XFCE4 is not installed. Would you like to install it?")
+                                        .setCancelable(false)
+                                        .setPositiveButton("Install", (dialog, which) -> {
+                                            String installCommand = "apk add " + xfce4Package;
+                                            new Terminal(activity).executeShellCommand(installCommand, true, activity);
+                                        })
+                                        .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                                        .show();
+                            } else {
+                                new Terminal(activity).executeShellCommand2("killall xfce4-session", false, activity);
+                                startActivity(new Intent(activity, X11Activity.class));
+                                new Terminal(activity).executeShellCommand2("xfce4-session", false, MainActivity.activity);
+                            }
+                        });
+
+                    }
                 } else if (id == R.id.navigation_item_terminal) {
                     /*com.vectras.vterm.TerminalBottomSheetDialog VTERM = new com.vectras.vterm.TerminalBottomSheetDialog(activity);
                     VTERM.showVterm();*/
@@ -448,8 +500,8 @@ public class MainActivity extends AppCompatActivity {
                     Timer _timer = new Timer();
                     TimerTask t;
 
-                    LinearLayoutManager layoutManager = new LinearLayoutManager(VectrasApp.getApp());
-                    LogsAdapter mLogAdapter = new LogsAdapter(layoutManager, VectrasApp.getApp());
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(getApp());
+                    LogsAdapter mLogAdapter = new LogsAdapter(layoutManager, getApp());
                     RecyclerView logList = (RecyclerView) view.findViewById(R.id.recyclerLog);
                     logList.setAdapter(mLogAdapter);
                     logList.setLayoutManager(layoutManager);
@@ -495,7 +547,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(new Intent(activity, DataExplorerActivity.class));
                 } else if (id == R.id.navigation_item_donate) {
                     String tw = "https://www.patreon.com/VectrasTeam";
-                    Intent w = new Intent(Intent.ACTION_VIEW);
+                    Intent w = new Intent(ACTION_VIEW);
                     w.setData(Uri.parse(tw));
                     startActivity(w);
                 } else if (id== R.id.setup_sound) {
@@ -550,7 +602,7 @@ public class MainActivity extends AppCompatActivity {
                             VectrasApp.killallqemuprocesses(getApplicationContext());
                             VectrasApp.deleteDirectory(AppConfig.vmFolder);
                             VectrasApp.deleteDirectory(AppConfig.recyclebin);
-                            File vDir = new File(com.vectras.vm.AppConfig.maindirpath);
+                            File vDir = new File(AppConfig.maindirpath);
                             vDir.mkdirs();
                             errorjsondialog();
                         }
@@ -618,7 +670,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         if (Config.debug)
-            UIUtils.UIAlert(activity, getString(R.string.debug_testing_build_5), getString(R.string.welcome_to_debug_build_of_vectras_vm_br) +
+            UIAlert(activity, getString(R.string.debug_testing_build_5), getString(R.string.welcome_to_debug_build_of_vectras_vm_br) +
                     getString(R.string.this_version_unstable_and_has_alot_of_bugs_br) +
                     getString(R.string.don_t_forget_to_tell_us_on_github_issues_or_telegram_bot_br) +
                     getString(R.string.a_href_https_t_me_vectras_protect_bot_telegram_report_bot_a_br) +
@@ -632,7 +684,7 @@ public class MainActivity extends AppCompatActivity {
             alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.join), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     String tg = "https://t.me/vectras_os";
-                    Intent f = new Intent(Intent.ACTION_VIEW);
+                    Intent f = new Intent(ACTION_VIEW);
                     f.setData(Uri.parse(tg));
                     startActivity(f);
                     return;
@@ -739,6 +791,21 @@ public class MainActivity extends AppCompatActivity {
         _timer.scheduleAtFixedRate(t, (int) (0), (int) (1000));
         ShellExecutor shellExec = new ShellExecutor();
         shellExec.exec(TermuxService.PREFIX_PATH + "/bin/termux-x11 :0");
+
+        TextView qemuVersion = findViewById(R.id.qemuVersion);
+
+        String command = "qemu-system-x86_64 --version";
+        new Terminal(activity).extractQemuVersion(command, false, activity, (output, errors) -> {
+            if (errors.isEmpty()) {
+                String versionStr = "Unknown";
+                if (output.equals("8.2.1"))
+                    versionStr = output + " - 3dfx";
+                Log.d(TAG, "QEMU Version: " + versionStr);
+                qemuVersion.setText(versionStr);
+            } else {
+                Log.e(TAG, "Errors: " + errors);
+            }
+        });
     }
 
     @Override
@@ -778,7 +845,7 @@ public class MainActivity extends AppCompatActivity {
                                     .setNegativeButton("Update", new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int id) {
                                             try {
-                                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(obj.getString("url"))));
+                                                startActivity(new Intent(ACTION_VIEW, Uri.parse(obj.getString("url"))));
                                             } catch (JSONException e) {
 
                                             }
@@ -1378,7 +1445,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public String getPath(Uri uri) {
-        return com.vectras.vm.utils.FileUtils.getPath(this, uri);
+        return FileUtils.getPath(this, uri);
     }
 
     private void errorjsondialog() {

@@ -23,8 +23,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -75,8 +75,8 @@
                         android:orientation="horizontal">
 
                         <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
                             android:padding="8dp"
                             app:srcCompat="@drawable/free_palestine" />
 
@@ -89,6 +89,29 @@
                             android:text="@string/free_palistine"
                             android:textSize="16sp" />
                     </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
+                    <ImageView
+                        android:id="@+id/imageView"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        app:srcCompat="@drawable/ic_qemu" />
+
+                    <TextView
+                        android:id="@+id/qemuVersion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="8dp"
+                        android:text="Unknown"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -107,80 +130,87 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:gravity="center"
                 android:orientation="vertical">
-        
+
                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:text="Our Social"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:padding="8dp"
-                    android:text="Developers" />
-        
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/github_users_recycler_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:nestedScrollingEnabled="false"
-                    android:clipToPadding="false" />
-                
-                <Button
-                    android:id="@+id/btn_github"
-                    style="@style/Widget.Material3.Button.TextButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:padding="8dp"
-                    android:text="@string/repository"
-                    android:textAlignment="textStart"
-                    app:icon="@drawable/ic_github" />
+                    android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/btn_telegram"
-                    style="@style/Widget.Material3.Button.TextButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:padding="8dp"
-                    android:text="@string/telegram_channel"
-                    android:textAlignment="textStart"
-                    app:icon="@drawable/ic_telegram" />
+                    <Button
+                        android:id="@+id/btn_github"
+                        style="@style/Widget.Material3.Button.TextButton"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_margin="8dp"
+                        android:padding="8dp"
+                        android:textAlignment="textStart"
+                        app:icon="@drawable/ic_github" />
 
-                <Button
-                    android:id="@+id/btn_youtube"
-                    style="@style/Widget.Material3.Button.TextButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:padding="8dp"
-                    android:text="@string/youtube"
-                    android:textAlignment="textStart"
-                    app:icon="@drawable/ic_youtube" />
+                    <Button
+                        android:id="@+id/btn_discord"
+                        style="@style/Widget.Material3.Button.TextButton"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_margin="8dp"
+                        android:padding="8dp"
+                        android:textAlignment="textStart"
+                        app:icon="@drawable/ic_discord" />
 
-                <Button
-                    android:id="@+id/btn_instagram"
-                    style="@style/Widget.Material3.Button.TextButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:padding="8dp"
-                    android:text="@string/instagram"
-                    android:textAlignment="textStart"
-                    app:icon="@drawable/ic_instagram" />
+                    <Button
+                        android:id="@+id/btn_telegram"
+                        style="@style/Widget.Material3.Button.TextButton"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_margin="8dp"
+                        android:padding="8dp"
+                        android:textAlignment="textStart"
+                        app:icon="@drawable/ic_telegram" />
 
-                <Button
-                    android:id="@+id/btn_facebook"
-                    style="@style/Widget.Material3.Button.TextButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:padding="8dp"
-                    android:text="@string/facebook"
-                    android:visibility="gone"
-                    android:textAlignment="textStart"
-                    app:icon="@drawable/ic_facebook" />
-        
+                    <Button
+                        android:id="@+id/btn_youtube"
+                        style="@style/Widget.Material3.Button.TextButton"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_margin="8dp"
+                        android:padding="8dp"
+                        android:textAlignment="textStart"
+                        app:icon="@drawable/ic_youtube" />
+
+                    <Button
+                        android:id="@+id/btn_instagram"
+                        style="@style/Widget.Material3.Button.TextButton"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_margin="8dp"
+                        android:padding="8dp"
+                        android:textAlignment="textStart"
+                        app:icon="@drawable/ic_instagram" />
+
+                    <Button
+                        android:id="@+id/btn_facebook"
+                        style="@style/Widget.Material3.Button.TextButton"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:layout_margin="8dp"
+                        android:padding="8dp"
+                        android:textAlignment="textStart"
+                        android:visibility="gone"
+                        app:icon="@drawable/ic_facebook" />
+
+                </LinearLayout>
+
                 <Button
                     android:id="@+id/btn_changelog"
                     style="@style/Widget.Material3.Button.TextButton"
@@ -189,8 +219,8 @@
                     android:layout_margin="8dp"
                     android:padding="8dp"
                     android:text="@string/change_log"
-                    android:visibility="gone"
                     android:textAlignment="textStart"
+                    android:visibility="gone"
                     app:icon="@drawable/round_info_24" />
 
                 <Button
@@ -201,9 +231,43 @@
                     android:layout_margin="8dp"
                     android:padding="8dp"
                     android:text="@string/info"
-                    android:visibility="gone"
                     android:textAlignment="textStart"
+                    android:visibility="gone"
                     app:icon="@drawable/round_info_24" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            style="@style/CardViewStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:padding="4dp"
+            android:visibility="visible"
+            app:cardCornerRadius="12dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:text="Developers"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/github_users_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false" />
+
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 

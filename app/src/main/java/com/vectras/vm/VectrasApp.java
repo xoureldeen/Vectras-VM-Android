@@ -620,10 +620,10 @@ public class VectrasApp extends Application {
 
 	public static void killallqemuprocesses(Context context) {
 		Terminal vterm = new Terminal(context);
-		vterm.executeShellCommand("killall -9 qemu-system-i386", false, MainActivity.activity);
-		vterm.executeShellCommand("killall -9 qemu-system-x86_64", false, MainActivity.activity);
-		vterm.executeShellCommand("killall -9 qemu-system-aarch64", false, MainActivity.activity);
-		vterm.executeShellCommand("killall -9 qemu-system-ppc", false, MainActivity.activity);
+		vterm.executeShellCommand2("killall -9 qemu-system-i386", false, MainActivity.activity);
+		vterm.executeShellCommand2("killall -9 qemu-system-x86_64", false, MainActivity.activity);
+		vterm.executeShellCommand2("killall -9 qemu-system-aarch64", false, MainActivity.activity);
+		vterm.executeShellCommand2("killall -9 qemu-system-ppc", false, MainActivity.activity);
 	}
 
 	public static void killcurrentqemuprocess(Context context) {
@@ -643,7 +643,7 @@ public class VectrasApp extends Application {
 				env += "qemu-system-x86_64";
 				break;
 		}
-		vterm.executeShellCommand(env, false, MainActivity.activity);
+		vterm.executeShellCommand2(env, false, MainActivity.activity);
 	}
 
 	public static boolean isAppInstalled(String packagename, Context context) {
@@ -679,7 +679,7 @@ public class VectrasApp extends Application {
 
 	public static boolean isQemuRunning() {
 		Terminal vterm = new Terminal(MainActivity.activity);
-		vterm.executeShellCommand("ps -e", false, MainActivity.activity);
+		vterm.executeShellCommand2("ps -e", false, MainActivity.activity);
 		if (TerminalOutput.contains("qemu-system")) {
 			Log.d("VectrasApp.isQemuRunning", "Yes");
 			return true;
@@ -691,7 +691,7 @@ public class VectrasApp extends Application {
 
 	public static boolean isThisVMRunning(String intemExtra, String itemPath) {
 		Terminal vterm = new Terminal(MainActivity.activity);
-		vterm.executeShellCommand("ps -e", false, MainActivity.activity);
+		vterm.executeShellCommand2("ps -e", false, MainActivity.activity);
 		if (TerminalOutput.contains(intemExtra) && TerminalOutput.contains(itemPath)) {
 			Log.d("VectrasApp.isThisVMRunning", "Yes");
 			return true;

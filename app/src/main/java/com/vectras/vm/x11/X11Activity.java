@@ -11,6 +11,8 @@ import android.os.Looper;
 import static android.view.InputDevice.KEYBOARD_TYPE_ALPHABETIC;
 import static android.view.KeyEvent.*;
 import static android.view.WindowManager.LayoutParams.*;
+
+import android.view.WindowManager;
 import android.widget.TextView;
 import androidx.fragment.app.FragmentTransaction;
 import com.vectras.qemu.MainSettingsManager;
@@ -80,6 +82,7 @@ import com.vectras.vm.x11.utils.KeyInterceptor;
 import com.vectras.vm.x11.utils.TermuxX11ExtraKeys;
 import com.vectras.vm.x11.utils.X11ToolbarViewPager;
 import com.vectras.vm.R;
+import com.vectras.vterm.Terminal;
 
 import java.util.Map;
 import java.util.Objects;
@@ -394,6 +397,7 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
         ImageButton leftGameBtn = findViewById(R.id.leftGameBtn);
         ImageButton rightGameBtn = findViewById(R.id.rightGameBtn);
         ImageButton enterGameBtn = findViewById(R.id.enterGameBtn);
+        ImageButton appsBtn = findViewById(R.id.btnPrograms);
 
         qmpBtn = findViewById(R.id.btnQmp);
 
@@ -413,6 +417,38 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                 btnFit.setImageDrawable(getResources().getDrawable(R.drawable.open_in_full_24px));
                 isFullScreen[0] = true;
             }
+        });
+
+        appsBtn.setOnClickListener(v -> {
+            Dialog dialog = new Dialog(activity);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.dialog_programs);
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+            WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
+            layoutParams.alpha = 1f;
+            dialog.getWindow().setAttributes(layoutParams);
+
+            ImageButton termBtn = dialog.findViewById(R.id.btnTerminal);
+            ImageButton vkCubeBtn = dialog.findViewById(R.id.btnVkCube);
+            ImageButton glxGearsBtn = dialog.findViewById(R.id.btnGlxGears);
+
+            termBtn.setOnClickListener(v1 -> {
+                new Terminal(activity).executeShellCommand2("xfce4-terminal", false, activity);
+                dialog.dismiss();
+            });
+
+            glxGearsBtn.setOnClickListener(v1 -> {
+                new Terminal(activity).executeShellCommand2("glxgears", false, activity);
+                dialog.dismiss();
+            });
+
+            vkCubeBtn.setOnClickListener(v1 -> {
+                new Terminal(activity).executeShellCommand2("vkcube", false, activity);
+                dialog.dismiss();
+            });
+
+            dialog.show();
         });
 
         upGameBtn.setOnTouchListener(new View.OnTouchListener() {
@@ -1424,7 +1460,13 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
     }
 
     @Override
-    public void onBackPressed() {}
+    public void onBackPressed() {
+        if (findViewById(R.id.mainControl).getVisibility() == View.GONE) {
+            findViewById(R.id.mainControl).setVisibility(View.VISIBLE);
+        } else if (findViewById(R.id.mainControl).getVisibility() == View.VISIBLE) {
+            findViewById(R.id.mainControl).setVisibility(View.GONE);
+        }
+    }
 
     public static boolean hasPipPermission(@NonNull Context context) {
         AppOpsManager appOpsManager =

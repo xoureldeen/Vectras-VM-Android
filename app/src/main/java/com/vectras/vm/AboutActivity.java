@@ -38,6 +38,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.vectras.vm.R;
+import com.vectras.vterm.Terminal;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -46,7 +47,7 @@ import java.net.URL;
 
 public class AboutActivity extends AppCompatActivity implements View.OnClickListener{
 
-    Button btn_osl, btn_clog, btn_youtube, btn_github, btn_telegram, btn_instagram, btn_facebook;
+    Button btn_osl, btn_clog, btn_discord, btn_youtube, btn_github, btn_telegram, btn_instagram, btn_facebook;
     String appInfo;
 
     public String TAG = "AboutActivity";
@@ -66,6 +67,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
         btn_github = (Button) findViewById(R.id.btn_github);
         btn_instagram = (Button) findViewById(R.id.btn_instagram);
         btn_facebook = (Button) findViewById(R.id.btn_facebook);
+        btn_discord = (Button) findViewById(R.id.btn_discord);
         btn_osl = (Button) findViewById(R.id.btn_osl);
         btn_clog = (Button) findViewById(R.id.btn_changelog);
         //onclicklistener
@@ -74,6 +76,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
         btn_youtube.setOnClickListener(this);
         btn_instagram.setOnClickListener(this);
         btn_facebook.setOnClickListener(this);
+        btn_discord.setOnClickListener(this);
         btn_osl.setOnClickListener(this);
         btn_clog.setOnClickListener(this);
 
@@ -138,6 +141,22 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
         GithubUserAdapter adapter = new GithubUserAdapter(this, usernames);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
+        TextView qemuVersion = findViewById(R.id.qemuVersion);
+
+        String command = "qemu-system-x86_64 --version";
+        new Terminal(this).extractQemuVersion(command, false, this, (output, errors) -> {
+            if (errors.isEmpty()) {
+                String versionStr = "Unknown";
+                if (output.equals("8.2.1"))
+                    versionStr = output + " - 3dfx";
+                Log.d(TAG, "QEMU Version: " + versionStr);
+                qemuVersion.setText(versionStr);
+            } else {
+                Log.e(TAG, "Errors: " + errors);
+            }
+        });
     }
 
     @Override
@@ -152,6 +171,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
     public static final int GT = R.id.btn_github;
     public static final int IG = R.id.btn_instagram;
     public static final int FB = R.id.btn_facebook;
+    public static final int DD = R.id.btn_discord;
     public static final int CL = R.id.btn_changelog;
     public static final int OSL = R.id.btn_osl;
     @Override
@@ -177,6 +197,11 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
                 Intent i = new Intent(Intent.ACTION_VIEW);
                 i.setData(Uri.parse(ig));
                 startActivity(i);
+            } else if (id == DD) {
+                String dd = "https://discord.gg/t8TACrKSk7";
+                Intent f = new Intent(Intent.ACTION_VIEW);
+                f.setData(Uri.parse(dd));
+                startActivity(f);
             } else if (id == FB) {
                 String fb = AppConfig.vectrasWebsite + "community.html";
                 Intent f = new Intent(Intent.ACTION_VIEW);

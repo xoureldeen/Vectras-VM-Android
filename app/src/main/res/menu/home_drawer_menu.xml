@@ -3,6 +3,7 @@
     <item
         android:id="@+id/navigation_item_store"
         android:icon="@drawable/round_shop_24"
+        android:visible="false"
         android:title="@string/store" />
     <item
         android:id="@+id/navigation_item_get_rom"
@@ -29,7 +30,12 @@
     <item
         android:id="@+id/navigation_data_explorer"
         android:icon="@drawable/round_folder_24"
+        android:visible="false"
         android:title="@string/data_explorer"/>
+    <item
+        android:id="@+id/navigation_item_desktop"
+        android:icon="@drawable/desktop_24px"
+        android:title="@string/alpine_desktop"/>
     <item
         android:id="@+id/navigation_item_terminal"
         android:icon="@drawable/round_terminal_24"
@@ -59,13 +65,13 @@
         android:icon="@drawable/delete_24px"
         android:title="@string/delete_all_vm"/>
     <item
-        android:id="@+id/navigation_item_help"
-        android:icon="@drawable/round_help_24"
-        android:title="@string/help"/>
-    <item
         android:id="@+id/navigation_item_donate"
         android:icon="@drawable/ic_patreon"
         android:title="@string/patreon"/>
+    <item
+        android:id="@+id/navigation_item_help"
+        android:icon="@drawable/round_help_24"
+        android:title="@string/help"/>
     <item
         android:id="@+id/navigation_item_info"
         android:icon="@drawable/round_info_24"

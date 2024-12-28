@@ -609,9 +609,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                 " echo \"Starting setup...\";" +
                 " apk update;" +
                 " echo \"Installing packages...\";" +
-                " apk add tar dwm libslirp libslirp-dev pulseaudio-dev glib-dev pixman-dev zlib-dev spice-dev" +
-                " libusbredirparser usbredir-dev libiscsi-dev  sdl2 sdl2-dev libepoxy-dev virglrenderer-dev rdma-core" +
-                " libusb ncurses-libs curl libnfs sdl2 gtk+3.0 fuse libpulse libseccomp jack pipewire liburing mesa-dri-gallium;" +
+                " apk add " + AppConfig.neededPkgs + ";" +
                 " echo \"Installing Qemu...\";" +
                 " tar -xzvf " + tarPath + " -C /;" +
                 " rm " + tarPath + ";" +
@@ -633,9 +631,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                 " echo \"Starting setup...\";" +
                 " apk update;" +
                 " echo \"Installing packages...\";" +
-                " apk add tar dwm libslirp libslirp-dev pulseaudio-dev glib-dev pixman-dev zlib-dev spice-dev" +
-                " libusbredirparser usbredir-dev libiscsi-dev  sdl2 sdl2-dev libepoxy-dev virglrenderer-dev rdma-core" +
-                " libusb ncurses-libs curl libnfs sdl2 gtk+3.0 fuse libpulse libseccomp jack pipewire liburing;" +
+                " apk add " + AppConfig.neededPkgs + ";" +
                 //" tar -xzvf " + tarPath + " -C /;" +
                 " echo \"Installing Qemu...\";" +
                 " apk add qemu-system-x86_64 qemu-system-ppc qemu-system-i386 qemu-system-aarch64 qemu-pr-helper qemu-img qemu-audio-sdl pulseaudio mesa-dri-gallium;" +
@@ -657,9 +653,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                 " echo \"Starting setup...\";" +
                 " apk update;" +
                 " echo \"Installing packages...\";" +
-                " apk add tar dwm libslirp libslirp-dev pulseaudio-dev glib-dev pixman-dev zlib-dev spice-dev" +
-                " libusbredirparser usbredir-dev libiscsi-dev  sdl2 sdl2-dev libepoxy-dev virglrenderer-dev rdma-core" +
-                " libusb ncurses-libs curl libnfs sdl2 gtk+3.0 fuse libpulse libseccomp jack pipewire liburing mesa-dri-gallium;" +
+                " apk add " + AppConfig.neededPkgs + ";" +
                 " echo \"Downloading Qemu...\";" +
                 " curl -o setup.tar.gz -L " + bootstrapfilelink + ";" +
                 " echo \"Installing Qemu...\";" +

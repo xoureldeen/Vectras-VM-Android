@@ -162,6 +162,8 @@ public class MainVNCActivity extends VncCanvasActivity {
         ImageButton rightGameBtn = findViewById(R.id.rightGameBtn);
         ImageButton enterGameBtn = findViewById(R.id.enterGameBtn);
         qmpBtn = findViewById(R.id.btnQmp);
+        ImageButton appsBtn = findViewById(R.id.btnPrograms);
+        appsBtn.setVisibility(View.GONE);
         upGameBtn.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {

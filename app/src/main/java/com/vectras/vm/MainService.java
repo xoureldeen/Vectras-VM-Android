@@ -13,6 +13,7 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 
 import com.vectras.qemu.MainVNCActivity;
+import com.vectras.vm.core.PulseAudio;
 import com.vectras.vterm.Terminal;
 
 import java.io.File;
@@ -48,10 +49,8 @@ public class MainService extends Service {
             if (service != null) {
                 String filesDir = MainActivity.activity.getFilesDir().getAbsolutePath();
                 Terminal vterm = new Terminal(this);
-                //vterm.executeShellCommand("chmod 770 /run/pulse -R");
-                //vterm.executeShellCommand("pulseaudio --system --disallow-exit --disallow-module-loading --daemonize --log-level=debug --log-time=1");
-                vterm.executeShellCommand("dwm", false, MainActivity.activity);
-                vterm.executeShellCommand(env, true, MainActivity.activity);
+                vterm.executeShellCommand2("dwm", false, MainActivity.activity);
+                vterm.executeShellCommand2(env, false, MainActivity.activity);
             }
         } else
             Log.e(TAG, "env is null");
