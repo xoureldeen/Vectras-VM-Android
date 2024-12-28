@@ -1,0 +1,47 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:gravity="center"
+    android:padding="20dp"
+    android:background="@drawable/transparent_background">
+
+    <ImageButton
+        android:id="@+id/btnTerminal"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginRight="8dp"
+        android:background="@drawable/controls_button"
+        android:backgroundTint="?attr/colorPrimary"
+        android:src="@drawable/round_terminal_24"
+        android:scaleType="fitCenter"
+        android:layout_margin="4dp"
+        app:tint="?attr/colorPrimary" />
+
+    <ImageButton
+        android:id="@+id/btnGlxGears"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginRight="8dp"
+        android:background="@drawable/controls_button"
+        android:backgroundTint="?attr/colorPrimary"
+        android:src="@drawable/manufacturing_24px"
+        android:scaleType="fitCenter"
+        android:layout_margin="4dp"
+        app:tint="?attr/colorPrimary" />
+
+    <ImageButton
+        android:id="@+id/btnVkCube"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginRight="8dp"
+        android:background="@drawable/controls_button"
+        android:backgroundTint="?attr/colorPrimary"
+        android:src="@drawable/deployed_code_24px"
+        android:visibility="gone"
+        android:scaleType="fitCenter"
+        android:layout_margin="4dp"
+        app:tint="?attr/colorPrimary" />
+
+</LinearLayout>
