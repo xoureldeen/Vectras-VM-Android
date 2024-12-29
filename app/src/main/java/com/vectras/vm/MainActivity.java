@@ -602,6 +602,7 @@ public class MainActivity extends AppCompatActivity {
                             VectrasApp.killallqemuprocesses(getApplicationContext());
                             VectrasApp.deleteDirectory(AppConfig.vmFolder);
                             VectrasApp.deleteDirectory(AppConfig.recyclebin);
+                            VectrasApp.deleteDirectory(AppConfig.romsdatajson);
                             File vDir = new File(AppConfig.maindirpath);
                             vDir.mkdirs();
                             errorjsondialog();
