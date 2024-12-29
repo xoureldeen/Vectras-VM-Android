@@ -52,7 +52,7 @@ public class VMManager {
 
         VectrasApp.writeToFile(AppConfig.maindirpath, "roms-data.json", finalJson);
         finalJson = new Gson().toJson(mapForCreateNewVM);
-        VectrasApp.writeToFile(AppConfig.maindirpath + "/roms/" + Objects.requireNonNull(mapForCreateNewVM.get("vmID")).toString(), "rom-data.json", finalJson);
+        VectrasApp.writeToFile(AppConfig.maindirpath + "/roms/" + Objects.requireNonNull(mapForCreateNewVM.get("vmID")).toString(), "rom-data.json", finalJson.replace("\\u003d", "="));
         VectrasApp.writeToFile(AppConfig.maindirpath + "/roms/" + Objects.requireNonNull(mapForCreateNewVM.get("vmID")).toString(), "vmID.txt", Objects.requireNonNull(mapForCreateNewVM.get("vmID")).toString());
     }
 
@@ -78,7 +78,7 @@ public class VMManager {
         finalJson = new Gson().toJson(listmapForCreateNewVM);
         VectrasApp.writeToFile(AppConfig.maindirpath, "roms-data.json", finalJson);
         finalJson = new Gson().toJson(mapForCreateNewVM);
-        VectrasApp.writeToFile(AppConfig.maindirpath + "/roms/" + Objects.requireNonNull(mapForCreateNewVM.get("vmID")).toString(), "rom-data.json", finalJson);
+        VectrasApp.writeToFile(AppConfig.maindirpath + "/roms/" + Objects.requireNonNull(mapForCreateNewVM.get("vmID")).toString(), "rom-data.json", finalJson.replace("\\u003d", "="));
         VectrasApp.writeToFile(AppConfig.maindirpath + "/roms/" + Objects.requireNonNull(mapForCreateNewVM.get("vmID")).toString(), "vmID.txt", Objects.requireNonNull(mapForCreateNewVM.get("vmID")).toString());
     }
 
@@ -296,11 +296,11 @@ public class VMManager {
                     _startRepeat++;
                     if (_startRepeat == _filelist.size()) {
                         if (!_result.isEmpty()) {
-                            if (VectrasApp.checkJSONIsNormalFromString("[" + _result.replaceAll("u003d", "=") + "]")) {
+                            if (VectrasApp.checkJSONIsNormalFromString("[" + _result + "]")) {
                                 if (isFileExists(AppConfig.romsdatajson)) {
                                     if (VectrasApp.checkJSONIsNormal(AppConfig.romsdatajson)) {
                                         String _JSONcontent = VectrasApp.readFile(AppConfig.romsdatajson);
-                                        String _JSONcontentnew = _JSONcontent.replaceAll("]", _result.replaceAll("u003d", "=") + "]");
+                                        String _JSONcontentnew = _JSONcontent.replaceAll("]", _result + "]");
                                         if (VectrasApp.checkJSONIsNormalFromString(_JSONcontentnew)) {
                                             VectrasApp.writeToFile(AppConfig.maindirpath, "roms-data.json", _JSONcontentnew);
                                         } else {
@@ -372,8 +372,8 @@ public class VMManager {
                                     if (VectrasApp.checkJSONIsNormal(AppConfig.romsdatajson)) {
                                         String _JSONcontent = VectrasApp.readFile(AppConfig.romsdatajson);
                                         String _JSONcontentnew = _JSONcontent.replaceAll("]", _result + "]");
-                                        if (VectrasApp.checkJSONIsNormalFromString(_JSONcontentnew.replaceAll("u003d", "="))) {
-                                            VectrasApp.writeToFile(AppConfig.maindirpath, "roms-data.json", _JSONcontentnew.replaceAll("u003d", "="));
+                                        if (VectrasApp.checkJSONIsNormalFromString(_JSONcontentnew)) {
+                                            VectrasApp.writeToFile(AppConfig.maindirpath, "roms-data.json", _JSONcontentnew);
                                         } else {
                                             restoredVMs = 0;
                                         }

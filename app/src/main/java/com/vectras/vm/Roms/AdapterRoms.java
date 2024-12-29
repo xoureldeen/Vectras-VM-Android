@@ -119,26 +119,28 @@ public class AdapterRoms extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     intent.putExtra("arch", current.itemArch);
                     RomsManagerActivity.activity.startActivity(intent);
 
-                    //Save image to icon folder
-                    myHolder.ivIcon.buildDrawingCache();
-                    Bitmap bm = myHolder.ivIcon.getDrawingCache();
-                    OutputStream fOut = null;
-                    Uri outputFileUri;
-                    try {
-                        File root = new File(AppConfig.maindirpath + "/icons/");
-                        root.mkdirs();
-                        File sdImageMainDirectory = new File(root, current.itemPath + ".png");
-                        outputFileUri = Uri.fromFile(sdImageMainDirectory);
-                        fOut = new FileOutputStream(sdImageMainDirectory);
-                    } catch (FileNotFoundException e) {
-                        throw new RuntimeException(e);
-                    }
+                    if (!current.itemPath.endsWith(".cvbi")) {
+                        //Save image to icon folder
+                        myHolder.ivIcon.buildDrawingCache();
+                        Bitmap bm = myHolder.ivIcon.getDrawingCache();
+                        OutputStream fOut = null;
+                        Uri outputFileUri;
+                        try {
+                            File root = new File(AppConfig.maindirpath + "/icons/");
+                            root.mkdirs();
+                            File sdImageMainDirectory = new File(root, current.itemPath + ".png");
+                            outputFileUri = Uri.fromFile(sdImageMainDirectory);
+                            fOut = new FileOutputStream(sdImageMainDirectory);
+                        } catch (FileNotFoundException e) {
+                            throw new RuntimeException(e);
+                        }
 
-                    try {
-                        bm.compress(Bitmap.CompressFormat.PNG, 100, fOut);
-                        fOut.flush();
-                        fOut.close();
-                    } catch (Exception e) {
+                        try {
+                            bm.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+                            fOut.flush();
+                            fOut.close();
+                        } catch (Exception e) {
+                        }
                     }
                 }
             });
