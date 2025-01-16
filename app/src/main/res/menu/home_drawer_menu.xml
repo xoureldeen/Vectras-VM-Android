@@ -49,21 +49,9 @@
         android:icon="@drawable/round_settings_24"
         android:title="@string/settings"/>
     <item
-        android:id="@+id/setup_sound"
-        android:icon="@drawable/volume_up_24px"
-        android:title="@string/setup_sound"/>
-    <item
-        android:id="@+id/cleanup"
-        android:icon="@drawable/cleaning_services_24px"
-        android:title="@string/clean_up"/>
-    <item
-        android:id="@+id/restorevms"
-        android:icon="@drawable/settings_backup_restore_24px"
-        android:title="@string/restore"/>
-    <item
-        android:id="@+id/deletealldata"
-        android:icon="@drawable/delete_24px"
-        android:title="@string/delete_all_vm"/>
+        android:id="@+id/mini_tools"
+        android:icon="@drawable/home_repair_service_24px"
+        android:title="@string/mini_tools"/>
     <item
         android:id="@+id/navigation_item_donate"
         android:icon="@drawable/ic_patreon"

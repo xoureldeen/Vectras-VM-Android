@@ -550,108 +550,14 @@ public class MainActivity extends AppCompatActivity {
                     Intent w = new Intent(ACTION_VIEW);
                     w.setData(Uri.parse(tw));
                     startActivity(w);
-                } else if (id== R.id.setup_sound) {
-                    if (VectrasApp.isAppInstalled("com.termux", getApplicationContext())) {
-                        alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
-                        alertDialog.setTitle(getResources().getString(R.string.setup_sound));
-                        alertDialog.setMessage(getResources().getString(R.string.setup_sound_guide_content));
-                        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.start_setup), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                                ClipData clip = ClipData.newPlainText("Setup", "curl -o setup.sh https://raw.githubusercontent.com/AnBui2004/termux/refs/heads/main/installpulseaudio.sh && chmod +rwx setup.sh && ./setup.sh && rm setup.sh");
-                                clipboard.setPrimaryClip(clip);
-                                Intent intent = new Intent();
-                                intent.setAction(ACTION_VIEW);
-                                intent.setData(Uri.parse("android-app://com.termux"));
-                                startActivity(intent);
-                                Toast.makeText(getApplicationContext(), getResources().getString(R.string.copied), Toast.LENGTH_LONG).show();
-                                return;
-                            }
-                        });
-                        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                alertDialog.dismiss();
-                            }
-                        });
-                    } else {
-                        alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
-                        alertDialog.setTitle(getResources().getString(R.string.termux_is_not_installed));
-                        alertDialog.setMessage(getResources().getString(R.string.you_need_to_install_termux));
-                        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.install), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent();
-                                intent.setAction(ACTION_VIEW);
-                                intent.setData(Uri.parse("https://github.com/termux/termux-app/releases"));
-                                startActivity(intent);
-                                return;
-                            }
-                        });
-                        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                alertDialog.dismiss();
-                            }
-                        });
-                    }
-                    alertDialog.show();
-                } else if (id == R.id.deletealldata) {
-                    alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
-                    alertDialog.setTitle(getResources().getString(R.string.delete_all_vm));
-                    alertDialog.setMessage(getResources().getString(R.string.delete_all_vm_content));
-                    alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.delete_all), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            VectrasApp.killallqemuprocesses(getApplicationContext());
-                            VectrasApp.deleteDirectory(AppConfig.vmFolder);
-                            VectrasApp.deleteDirectory(AppConfig.recyclebin);
-                            VectrasApp.deleteDirectory(AppConfig.romsdatajson);
-                            File vDir = new File(AppConfig.maindirpath);
-                            vDir.mkdirs();
-                            errorjsondialog();
-                        }
-                    });
-                    alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            alertDialog.dismiss();
-                        }
-                    });
-                    alertDialog.show();
                 } else if (id == R.id.navigation_item_get_rom) {
                     Intent intent = new Intent();
                     intent.setClass(getApplicationContext(), RomsManagerActivity.class);
                     startActivity(intent);
-                } else if (id == R.id.cleanup) {
-                    alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
-                    alertDialog.setTitle(getResources().getString(R.string.clean_up));
-                    alertDialog.setMessage(getResources().getString(R.string.clean_up_content));
-                    alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.clean_up), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            VMManager.cleanUp();
-                            errorjsondialog();
-                            Toast.makeText(getApplicationContext(), activity.getResources().getString(R.string.done), Toast.LENGTH_LONG).show();
-                        }
-                    });
-                    alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            alertDialog.dismiss();
-                        }
-                    });
-                    alertDialog.show();
-                } else if (id == R.id.restorevms) {
-                    alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
-                    alertDialog.setTitle(getResources().getString(R.string.restore));
-                    alertDialog.setMessage(getResources().getString(R.string.restore_content));
-                    alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.continuetext), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            VMManager.restoreVMs();
-                            errorjsondialog();
-                            VectrasApp.oneDialog(getResources().getString(R.string.done), getResources().getString(R.string.restored) + " " + String.valueOf(VMManager.restoredVMs) + ".", true, false, activity);
-                        }
-                    });
-                    alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            alertDialog.dismiss();
-                        }
-                    });
-                    alertDialog.show();
+                } else if (id == R.id.mini_tools) {
+                    Intent intent = new Intent();
+                    intent.setClass(activity, Minitools.class);
+                    startActivity(intent);
                 }
                 return false;
             }
@@ -1024,7 +930,10 @@ public class MainActivity extends AppCompatActivity {
 
         if (VectrasApp.isThisVMRunning(itemExtra, itemPath)) {
             Toast.makeText(activity, "This VM is already running.", Toast.LENGTH_LONG).show();
-            activity.startActivity(new Intent(activity, MainVNCActivity.class));
+            if (MainSettingsManager.getVmUi(activity).equals("VNC"))
+                activity.startActivity(new Intent(activity, MainVNCActivity.class));
+            else if (MainSettingsManager.getVmUi(activity).equals("X11"))
+                activity.startActivity(new Intent(activity, X11Activity.class));
             return;
         }
 

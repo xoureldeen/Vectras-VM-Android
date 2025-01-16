@@ -49,6 +49,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".Minitools"
+            android:exported="false"
+            android:label="@string/mini_tools" />
+        <activity
             android:name=".RomInfo"
             android:exported="false"
             android:hardwareAccelerated="true" />
@@ -225,6 +229,10 @@
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3568137780412047~1296857222" />
+        <property
+            android:name="android.adservices.AD_SERVICES_CONFIG"
+            android:resource="@xml/gma_ad_services_config"
+            tools:replace="android:resource" />
     </application>
 
 </manifest>
