@@ -385,6 +385,10 @@
     <string name="harmful_command_was_detected">تم اكتشاف أمر قد يتسبب في حدوث ضرر وتنفيذ سلوك غير مرغوب فيه وتم حظره. الرجاء التحقق من هذا الجهاز الظاهري مرة أخرى والمحاولة مرة أخرى.</string>
     <string name="copy_file">نسخ الملف</string>
     <string name="copy_file_content">قم دائمًا بنسخ الملف المحدد إلى الجهاز الظاهري بدلاً من استخدامه مباشرة.</string>
+    <string name="reinstall_system">إعادة تثبيت النظام</string>
+    <string name="reinstall_system_content">إذا وجدت أن النظام يواجه مشاكل خطيرة، فيمكنك إعادة تثبيت النظام. ويتم الاحتفاظ بجميع الآلات الافتراضية.</string>
+    <string name="reinstalling">إعادة التثبيت...</string>
+    <string name="mini_tools">أدوات صغيرة</string>
 
     <!--======================TERMUX STRINGS====================-->
     <string name="application_name">Vterm</string>

@@ -1084,6 +1084,15 @@ public class CustomRomActivity extends AppCompatActivity {
                                         } else {
                                             JSONObject jObj = new JSONObject(FileUtils.readFromFile(MainActivity.activity, new File(AppConfig.vmFolder + vmID + "/rom-data.json")));
 
+                                            if (jObj.has("vmID")) {
+                                                if (!jObj.isNull("vmID")) {
+                                                    if (!jObj.getString("vmID").isEmpty()) {
+                                                        VectrasApp.moveAFile(AppConfig.vmFolder + vmID, AppConfig.vmFolder + jObj.getString("vmID"));
+                                                        vmID = jObj.getString("vmID");
+                                                    }
+                                                }
+                                            }
+
                                             if (jObj.has("title") && !jObj.isNull("title")) {
                                                 title.setText(jObj.getString("title"));
                                             }

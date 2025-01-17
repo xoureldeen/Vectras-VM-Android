@@ -1,6 +1,6 @@
 {
     "versionCode":"21",
-    "versionName":"v2.9.5-3dfx,v2.9.5-3dfx-almondcake",
+    "versionName":"v2.9.5-3dfx,v2.9.5-3dfx-almondcake,v2.9.5-3dfx-bread",
     "size": "46 MB",
     "url": "https://github.com/xoureldeen/Vectras-VM-Android/releases/v2.9.5",
     "Message": "<h2>v2.9.5-3dfx</h2><ul><li>Bring back 3dfx support.</li><li>Enhance app execution.</li><li>Added some linux programs in x11 display.</li><li>Added alpine linux (x11).</li><li>Russian language by <a href=\"https://github.com/OFGING\" target=\"_blank\">@OFGING</a></li></ul><br><br>New updates are live!",

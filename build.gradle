@@ -6,11 +6,10 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.1.2' // Android Gradle plugin
+        classpath 'com.android.tools.build:gradle:8.8.0' // Android Gradle plugin
         // Add other classpaths like Google Services and Firebase Crashlytics if needed here.
         classpath 'com.google.gms:google-services:4.4.0'  // assuming you need it for your project
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.9'
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.0'
 // assuming you need it for project
     }
 }
@@ -26,8 +25,8 @@ allprojects {
 }
 
 ext {
-    toolsVersion = properties.get('TOOLS_VERSION', '34.0.0')
-    compileApi = properties.get('COMPILE_API', 34)
+    toolsVersion = properties.get('TOOLS_VERSION', '35.0.0')
+    compileApi = properties.get('COMPILE_API', 35)
     targetApi = properties.get('TARGET_API', 28)
     minApi = properties.get('MIN_API', 23)
 }

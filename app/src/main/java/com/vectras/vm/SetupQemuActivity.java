@@ -145,6 +145,16 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                         }
                         linearcannotconnecttoserver.setVisibility(View.GONE);
                     }
+                    if (AppConfig.needreinstallsystem) {
+                        if (AppConfig.getSetupFiles().contains("arm64-v8a") || AppConfig.getSetupFiles().contains("x86_64")) {
+                            setupVectras64();
+                        } else {
+                            setupVectras32();
+                        }
+                        textviewsettingup.setText(getResources().getString(R.string.reinstalling));
+                    }
+                } else {
+                    linearload.setVisibility(View.GONE);
                 }
             }
 

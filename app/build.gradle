@@ -1,6 +1,5 @@
 plugins {
     id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
 }
 
 android {
@@ -13,7 +12,7 @@ android {
         minSdk minApi
         targetSdk targetApi
         versionCode 21
-        versionName "v2.9.5-3dfx-almondcake"
+        versionName "v2.9.5-3dfx-bread"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -71,35 +70,34 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'com.google.android.material:material:1.12.0'
-    implementation "androidx.annotation:annotation:1.7.1"
-    implementation "androidx.core:core:1.13.1"
+    implementation "androidx.annotation:annotation:1.9.1"
+    implementation "androidx.core:core:1.15.0"
     implementation "androidx.drawerlayout:drawerlayout:1.2.0"
     implementation "androidx.preference:preference:1.2.1"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
-    implementation "androidx.viewpager:viewpager:1.0.0"
-    implementation platform('com.google.firebase:firebase-bom:33.0.0')
+    implementation "androidx.viewpager:viewpager:1.1.0"
+    implementation platform('com.google.firebase:firebase-bom:33.7.0')
     implementation 'com.google.firebase:firebase-analytics'
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-database")
     implementation 'com.google.firebase:firebase-storage'
-    implementation("com.google.android.gms:play-services-auth:21.1.1")
+    implementation("com.google.android.gms:play-services-auth:21.3.0")
     implementation("com.google.firebase:firebase-crashlytics")
-    implementation 'com.google.android.gms:play-services-ads:23.1.0'
+    implementation 'com.google.android.gms:play-services-ads:23.6.0'
     implementation 'com.github.bumptech.glide:glide:4.16.0'
     implementation 'com.google.guava:guava:33.1.0-jre'
     implementation 'com.google.code.gson:gson:2.11.0'
     implementation 'com.squareup.okhttp3:okhttp:4.12.0'
-    implementation "androidx.window:window:1.0.0-alpha09"
-    implementation "commons-io:commons-io:2.5"
+    implementation "androidx.window:window:1.3.0"
+    implementation "commons-io:commons-io:2.13.0"
     implementation 'org.zeroturnaround:zt-zip:1.16'
-    implementation 'com.airbnb.android:lottie:6.3.0'
+    implementation 'com.airbnb.android:lottie:6.5.2'
     implementation 'org.apache.commons:commons-compress:1.25.0'
-    implementation 'com.google.firebase:firebase-crashlytics-buildtools:2.9.9'
-    implementation 'androidx.activity:activity:1.9.2'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.0.20"
+    implementation 'com.google.firebase:firebase-crashlytics-buildtools:3.0.2'
+    implementation 'androidx.activity:activity:1.10.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.0'
     implementation 'androidx.preference:preference:1.2.1'
     compileOnly project(':shell-loader:stub')
     implementation project(":terminal-view")
@@ -109,11 +107,11 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 
     // Glide
-    implementation 'com.github.bumptech.glide:glide:4.15.1'
+    implementation 'com.github.bumptech.glide:glide:4.16.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.15.1'
     
     // Test dependencies
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
 }

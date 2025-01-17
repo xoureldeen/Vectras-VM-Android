@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">v2.9.5 (3dfx - Almond cake)</string>
+    <string name="app_version" translatable="false">v2.9.5 (3dfx - Bread)</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -387,6 +387,10 @@
     <string name="harmful_command_was_detected">A potentially harmful command was detected and it has been blocked. Please check this virtual machine and try again.</string>
     <string name="copy_file">Copy file</string>
     <string name="copy_file_content">Always copy the selected file to the virtual machine instead of using it directly.</string>
+    <string name="reinstall_system">Reinstall system</string>
+    <string name="reinstall_system_content">If you find that your system is having serious problems, you can reinstall the system. And all virtual machines will be kept.</string>
+    <string name="reinstalling">Reinstalling...</string>
+    <string name="mini_tools">Mini tools</string>
 
 
     <!--======================TERMUX STRINGS====================-->
@@ -486,7 +490,7 @@
     <string name="log_level_value">Logcat log level set to \"%1$s\"</string>
     <string name="yes">yes</string>
     <string name="no">cancel</string>
-    <string name="cancel">cancel</string>
+    <string name="cancel">Cancel</string>
     <string name="back_to_the_display">Back to the Display</string>
     <string name="x11_ui_environment">x11 ui environment.</string>
     <string name="x11">X11</string>

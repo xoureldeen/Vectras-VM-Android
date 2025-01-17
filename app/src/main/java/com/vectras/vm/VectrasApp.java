@@ -538,6 +538,12 @@ public class VectrasApp extends Application {
 		File _dir = new File(_pathToDelete);
 		if (_dir.isDirectory()) {
 			String[] children = _dir.list();
+
+			if (children == null) {
+				Log.e("ERROR", "Deletion failed. " + _dir);
+				return;
+			}
+
 			for (int i = 0; i < children.length; i++) {
 				File temp = new File(_dir, children[i]);
 				deleteDirectory(String.valueOf(temp));
