@@ -87,6 +87,15 @@
             app:useSimpleSummaryProvider="true"
             app:icon="@drawable/round_terminal_24" />
         <SwitchPreferenceCompat
+            android:id="@+id/autocreatedisk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="true"
+            android:key="autoCreateDisk"
+            android:summary="@string/with_size_is_128GB"
+            android:title="@string/auto_create_new_hard_drive_when_creating_new_vm"
+            app:icon="@drawable/round_add_24" />
+        <SwitchPreferenceCompat
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="true"

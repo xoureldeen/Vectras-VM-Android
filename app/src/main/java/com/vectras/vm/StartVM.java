@@ -44,7 +44,7 @@ public class StartVM {
                 String ifType;
                 ifType= MainSettingsManager.getIfType(activity);
 
-                String cdrom;
+                String cdrom = "";
                 String hdd0;
                 String hdd1;
 
@@ -74,10 +74,10 @@ public class StartVM {
 
                     if (cdromFile.exists()) {
                         if (MainSettingsManager.getArch(activity).equals("ARM64")) {
-                            cdrom = "-device";
-                            cdrom += " usb-storage,drive=cdrom";
-                            cdrom += " -drive";
+                            cdrom = " -drive";
                             cdrom += " if=none,id=cdrom,format=raw,media=cdrom,file='" + cdromFile.getPath() + "'";
+                            cdrom += "-device";
+                            cdrom += " usb-storage,drive=cdrom";
                             if (!extras.contains("-device nec-usb-xhci")) {
                                 cdrom += " -device";
                                 cdrom += " qemu-xhci";
@@ -100,16 +100,12 @@ public class StartVM {
                     }
                 } else {
                     if (MainSettingsManager.getArch(activity).equals("ARM64")) {
-                        cdrom = "-device";
-                        cdrom += " usb-storage,drive=cdrom";
+                        cdrom += " -device";
+                        cdrom += " nec-usb-xhci,id=defaultxhci";
+                        cdrom += " -device";
+                        cdrom += " usb-storage,bus=defaultxhci.0,drive=cdrom";
                         cdrom += " -drive";
                         cdrom += " if=none,id=cdrom,format=raw,media=cdrom,file='" + cdrompath + "'";
-                        if (!extras.contains("-device nec-usb-xhci")) {
-                            cdrom += " -device";
-                            cdrom += " qemu-xhci";
-                            cdrom += " -device";
-                            cdrom += " nec-usb-xhci";
-                        }
                     } else {
                         if (ifType.isEmpty()) {
                             cdrom = "-cdrom";
@@ -177,23 +173,23 @@ public class StartVM {
                         bios = "-L ";
                         bios += "pc-bios";
                     } else if (MainSettingsManager.getArch(activity).equals("ARM64")) {
-                        bios = "-pflash ";
-                        bios += AppConfig.basefiledir + "QEMU_EFI.img";
-                        bios += " -pflash ";
-                        bios += AppConfig.basefiledir + "QEMU_VARS.img";
+                        bios = "-drive ";
+                        bios += "file=" + AppConfig.basefiledir + "QEMU_EFI.img,format=raw,readonly=on,if=pflash";
+                        bios += " -drive ";
+                        bios += "file=" + AppConfig.basefiledir + "QEMU_VARS.img,format=raw,if=pflash";
                     } else {
                         bios = "-bios ";
                         bios += AppConfig.basefiledir + "bios-vectras.bin";
                     }
+                }
 
-                    String machine = "-M ";
-                    if (Objects.equals(MainSettingsManager.getArch(activity), "X86_64")) {
-                        machine += "pc";
-                        params.add(machine);
-                    } else if (Objects.equals(MainSettingsManager.getArch(activity), "ARM64")) {
-                        machine += "virt";
-                        params.add(machine);
-                    }
+                String machine = "-M ";
+                if (Objects.equals(MainSettingsManager.getArch(activity), "X86_64")) {
+                    machine += "pc";
+                    params.add(machine);
+                } else if (Objects.equals(MainSettingsManager.getArch(activity), "ARM64")) {
+                    machine += "virt";
+                    params.add(machine);
                 }
 
                 if (MainSettingsManager.useMemoryOvercommit(MainActivity.activity)) {

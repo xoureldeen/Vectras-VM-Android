@@ -389,6 +389,9 @@
     <string name="reinstall_system_content">إذا وجدت أن النظام يواجه مشاكل خطيرة، فيمكنك إعادة تثبيت النظام. ويتم الاحتفاظ بجميع الآلات الافتراضية.</string>
     <string name="reinstalling">إعادة التثبيت...</string>
     <string name="mini_tools">أدوات صغيرة</string>
+    <string name="error_NO_SUCH_FILE_OR_DIRECTORY">حدثت مشكلة وفشل تشغيل الجهاز الظاهري لأن الملف أو الدليل الذي يحتاجه الجهاز الظاهري للتشغيل غير موجود.</string>
+    <string name="auto_create_new_hard_drive_when_creating_new_vm">إنشاء محرك أقراص ثابت جديد تلقائيًا عند إنشاء جهاز افتراضي جديد</string>
+    <string name="with_size_is_128GB">بحجم 128 جيجابايت.</string>
 
     <!--======================TERMUX STRINGS====================-->
     <string name="application_name">Vterm</string>
