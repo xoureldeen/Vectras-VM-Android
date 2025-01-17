@@ -119,6 +119,7 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     @Override
                     public void onClick(View v) {
                         com.vectras.vm.CustomRomActivity.current = data.get(position);
+                        VMManager.setArch(current.itemArch, MainActivity.activity);
                         MainActivity.activity.startActivity(new Intent(MainActivity.activity, CustomRomActivity.class).putExtra("POS", position).putExtra("MODIFY", true).putExtra("VMID", current.vmID));
                         bottomSheetDialog.cancel();
                     }

@@ -519,8 +519,10 @@ public class VMManager {
     }
 
     public static boolean isExecutedCommandError(String _command, String _result, Activity _activity) {
-        if (!_command.contains("qemu-system") || _result.contains("Killed"))
+        if (!_command.contains("qemu-system"))
             return false;
+        if (_command.contains("qemu-system") && _result.contains("Killed"))
+            return true;
         //Error code: PROOT_IS_MISSING_0
         if (_result.contains("proot\": error=2,")) {
             AlertDialog alertDialog = new AlertDialog.Builder(_activity, R.style.MainDialogTheme).create();
@@ -568,6 +570,11 @@ public class VMManager {
                 }
             });
             alertDialog.show();
+            return true;
+        } else if (_result.contains("No such file or directory")) {
+            //Error code: NO_SUCH_FILE_OR_DIRECTORY
+            VectrasApp.oneDialog(_activity.getResources().getString(R.string.problem_has_been_detected), _activity.getResources().getString(R.string.error_NO_SUCH_FILE_OR_DIRECTORY), true, false, _activity);
+            _activity.stopService(new Intent(_activity, MainService.class));
             return true;
         } else {
             return false;

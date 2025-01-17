@@ -82,6 +82,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.vectras.vterm.Terminal;
 
 public class CustomRomActivity extends AppCompatActivity {
 
@@ -528,6 +529,13 @@ public class CustomRomActivity extends AppCompatActivity {
             } else {
                 title.setText("New VM");
                 setDefault();
+                if (MainSettingsManager.autoCreateDisk(CustomRomActivity.this)) {
+                    File myDir = new File(AppConfig.vmFolder + vmID);
+                    myDir.mkdirs();
+                    Terminal vterm = new Terminal(CustomRomActivity.this);
+                    vterm.executeShellCommand2("qemu-img create -f qcow2 " + AppConfig.vmFolder + vmID + "/disk.qcow2 128G", false, CustomRomActivity.this);
+                    drive.setText(AppConfig.vmFolder + vmID + "/disk.qcow2");
+                }
             }
         }
         VectrasApp.prepareDataForAppConfig(activity);

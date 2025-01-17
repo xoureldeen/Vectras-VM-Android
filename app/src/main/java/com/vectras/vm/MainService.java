@@ -50,7 +50,7 @@ public class MainService extends Service {
                 String filesDir = MainActivity.activity.getFilesDir().getAbsolutePath();
                 Terminal vterm = new Terminal(this);
                 vterm.executeShellCommand2("dwm", false, MainActivity.activity);
-                vterm.executeShellCommand2(env, false, MainActivity.activity);
+                vterm.executeShellCommand2(env, true, MainActivity.activity);
             }
         } else
             Log.e(TAG, "env is null");

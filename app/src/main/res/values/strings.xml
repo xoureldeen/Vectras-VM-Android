@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">v2.9.5 (3dfx - Bread)</string>
+    <string name="app_version" translatable="false">v2.9.5 (3dfx - Churro)</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -391,6 +391,9 @@
     <string name="reinstall_system_content">If you find that your system is having serious problems, you can reinstall the system. And all virtual machines will be kept.</string>
     <string name="reinstalling">Reinstalling...</string>
     <string name="mini_tools">Mini tools</string>
+    <string name="error_NO_SUCH_FILE_OR_DIRECTORY">A problem occurred and the virtual machine failed to run because a file or directory that the virtual machine needs to run does not exist.</string>
+    <string name="auto_create_new_hard_drive_when_creating_new_vm">Automatically create new hard drive when creating new virtual machine</string>
+    <string name="with_size_is_128GB">With size is 128GB.</string>
 
 
     <!--======================TERMUX STRINGS====================-->

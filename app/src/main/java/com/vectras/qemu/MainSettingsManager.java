@@ -573,6 +573,11 @@ public class MainSettingsManager extends AppCompatActivity
         return prefs.getBoolean("customMemory", false);
     }
 
+    public static boolean autoCreateDisk(Activity activity) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        return prefs.getBoolean("autoCreateDisk", true);
+    }
+
     public static boolean useDefaultBios(Activity activity) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         return prefs.getBoolean("useDefaultBios", true);
