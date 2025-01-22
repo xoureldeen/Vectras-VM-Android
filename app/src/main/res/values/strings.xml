@@ -16,16 +16,16 @@
 
     <string name="desktopInstructions">To use External Mouse:\n\tDisable Mouse Acceleration inside the Guest OS.\n\t\tFor DSL use command: xset m 1\n"\t\tFor Other OSes disable \"Enhance pointer Precision\" or choose Mouse \"usb-tablet\" from Vectras main options.\n\tPlug in or Pair your USB/Bluetooth Mouse and press OK\n\tMove your mouse pointer to all desktop sides to calibrate.\n"</string>
 
-    <string name="navigation_drawer_open" translatable="false">drawer open</string>
-    <string name="navigation_drawer_close" translatable="false">drawer close</string>
+    <string name="navigation_drawer_open">drawer open</string>
+    <string name="navigation_drawer_close">drawer close</string>
     <string name="address_caption">Address</string>
-    <string name="alt_check">Alt</string>
+    <string name="alt_check" translatable="false">Alt</string>
     <string name="reset">Reset</string>
     <string name="shutdown">Shut down</string>
     <string name="ctrl_c" translatable="false">Ctrl-c</string>
     <string name="devices">Devices</string>
     <string name="external_mouse">External Mouse</string>
-    <string name="monitor" translatable="false">QEMU Monitor</string>
+    <string name="monitor">QEMU Monitor</string>
     <string name="stretch_to_screen">Stretch to Screen</string>
     <string name="full_screen">Fullscreen</string>
     <string name="toggle_full_screen">Toggle Fullscreen</string>
@@ -64,7 +64,7 @@
     <string name="settings">Settings</string>
     <string name="go_ahead">Go ahead</string>
     <string name="download">Download</string>
-    <string name="view_profile" translatable="false"><u><![CDATA[View Profile>>]]></u></string>
+    <string name="view_profile"><u><![CDATA[View Profile>>]]></u></string>
     <string name="username">USERNAME</string>
     <string name="save">SAVE</string>
     <string name="memory_usage">Memory Usage</string>
@@ -73,8 +73,8 @@
     <string name="linux" translatable="false">Linux</string>
     <string name="windows" translatable="false">Windows</string>
     <string name="apple" translatable="false">Apple</string>
-    <string name="external_vnc" translatable="false">EXTERNAL VNC</string>
-    <string name="hosted_successfully" translatable="false">HOSTED SUCCESSFULLY!</string>
+    <string name="external_vnc">EXTERNAL VNC</string>
+    <string name="hosted_successfully">HOSTED SUCCESSFULLY!</string>
     <string name="ip" translatable="false">IP: 127.0.0.1:9</string>
     <string name="install_rom">Install Rom</string>
     <string name="reconnect">Reconnect</string>
@@ -114,15 +114,15 @@
     <string name="other" translatable="false">Other</string>
     <string name="guest">Guest</string>
     <string name="hdd1_qcow_img_etc">HDD1 (qcow, img, etc…)</string>
-    <string name="default_configuration">-vga std -net nic,model=ne2k_pci -net user</string>
+    <string name="default_configuration" translatable="false">-vga std -net nic,model=ne2k_pci -net user</string>
     <string name="data_explorer">Data Explorer</string>
     <string name="forgot_password">forgot password?</string>
     <string name="buy_me_a_coffee">Buy me a coffee</string>
-    <string name="hdd1">HDD1</string>
-    <string name="hdd2">HDD2</string>
+    <string name="hdd1" translatable="false">HDD1</string>
+    <string name="hdd2" translatable="false">HDD2</string>
 
-    <string name="echo_nameserver_8_8_8_8">echo \'nameserver 8.8.8.8\' </string>
-    <string name="etc_resolv_conf"> /etc/resolv.conf</string>
+    <string name="echo_nameserver_8_8_8_8" translatable="false">echo \'nameserver 8.8.8.8\' </string>
+    <string name="etc_resolv_conf" translatable="false"> /etc/resolv.conf</string>
     <string name="create_a_machine">Create a Machine</string>
 
     <string name="arrow_down">Down Arrow</string>
@@ -138,9 +138,9 @@
     <string name="color_mode">Color Mode</string>
     <string name="connect_button">Connect</string>
     <string name="connection_caption">Connection</string>
-    <string name="control_check">Ctrl</string>
+    <string name="control_check" translatable="false">Ctrl</string>
     <string name="copy_list_button">Copy List</string>
-    <string name="ctrl_alt_del">Ctrl-Alt-Del</string>
+    <string name="ctrl_alt_del" translatable="false">Ctrl-Alt-Del</string>
     <string name="delete_connection">Delete Connection</string>
     <string name="delete_key">Delete Selected Key</string>
     <string name="delete_key_list">Delete Key List</string>
@@ -178,7 +178,7 @@
     <string name="nickname_caption">Nickname</string>
     <string name="off">Off</string>
     <string name="on">On</string>
-    <string name="one_to_one">1:1</string>
+    <string name="one_to_one" translatable="false">1:1</string>
     <string name="open_doc">Manual/Wiki</string>
     <string name="pan_follow_mouse">Pan Follows Mouse</string>
     <string name="password_caption">Password</string>
@@ -198,7 +198,7 @@
     <!-- Send selected metakey -->
     <string name="send_button">Send</string>
     <string name="send_key_again">Send Key Again</string>
-    <string name="shift_check">Shift</string>
+    <string name="shift_check" translatable="false">Shift</string>
     <string name="shortcut_label">VNC Connection</string>
     <string name="showkbd_label">Keyboard</string>
     <string name="special_keys">Send Keys</string>
@@ -226,7 +226,7 @@
     <string name="make_image">MAKE IMAGE</string>
     <string name="imported_roms_will_be_shown_here">IMPORTED ROMS WILL BE SHOWN HERE</string>
     <string name="version">VERSION:</string>
-    <string name="qemu">QEMU</string>
+    <string name="qemu" translatable="false">QEMU</string>
     <string name="arch">ARCH:</string>
     <string name="running">Running</string>
     <string name="stopped">Stopped</string>
@@ -244,7 +244,7 @@
     <string name="user_interface">USER INTERFACE</string>
     <string name="themes_and_ui">themes and ui.</string>
     <string name="emulation_settings">emulation settings.</string>
-    <string name="vnc">VNC</string>
+    <string name="vnc" translatable="false">VNC</string>
     <string name="vnc_ui_environment">vnc ui environment.</string>
     <string name="vm_arch">VM ARCH</string>
     <string name="cpu_model">CPU MODEL</string>
@@ -255,7 +255,7 @@
     <string name="avx">AVX</string>
     <string name="mttcg">MTTCG</string>
     <string name="kvm_acceleration">kvm acceleration</string>
-    <string name="kvm">KVM</string>
+    <string name="kvm" translatable="false">KVM</string>
     <string name="cpu_cores">CPU CORES</string>
     <string name="harddisk_type">HARDDISK TYPE</string>
     <string name="boot_from">BOOT FROM</string>
@@ -269,10 +269,10 @@
     <string name="night_mode">NIGHT MODE</string>
     <string name="description">Description</string>
     <string name="qemu_website">QEMU website</string>
-    <string name="powerpc_qemu">PowerPC</string>
-    <string name="arm64_qemu">ARM64</string>
+    <string name="powerpc_qemu" translatable="false">PowerPC</string>
+    <string name="arm64_qemu" translatable="false">ARM64</string>
     <string name="x86_64_qemu_recommended">x86_64 (Recommended)</string>
-    <string name="i386_qemu">i386</string>
+    <string name="i386_qemu" translatable="false">i386</string>
     <string name="export_rom">Export Rom</string>
     <string name="are_you_sure">Are you sure?</string>
     <string name="description_html_supported">DESCRIPTION (html supported)</string>
@@ -281,7 +281,7 @@
     <string name="error">ERROR!</string>
     <string name="done">DONE!</string>
     <string name="are_removed_successfully">" are removed successfully!"</string>
-    <string name="teams">Vectras VM team and Nguyen Bao An Bui</string>
+    <string name="teams" translatable="false">Vectras VM team and Nguyen Bao An Bui</string>
     <string name="repository">Repository</string>
     <string name="telegram_channel">Telegram Channel</string>
     <string name="youtube">Youtube</string>
@@ -292,7 +292,7 @@
     <string name="set">SET</string>
     <string name="change_app_locale">CHANGE APP LOCALE</string>
     <string name="are_you_sure_you_want_to_shutdown_vm">Are you sure you want to shutdown vm? To leave this but keep everything running, tap and hold the Shut down button.</string>
-    <string name="cpu">CPU</string>
+    <string name="cpu" translatable="false">CPU</string>
     <string name="save_changes">SAVE CHANGES</string>
     <string name="qemu_create_cmd">QEMU CREATE CMD</string>
     <string name="getit">Get</string>
@@ -397,7 +397,7 @@
 
 
     <!--======================TERMUX STRINGS====================-->
-    <string name="application_name">Vterm</string>
+    <string name="application_name" translatable="false">Vterm</string>
     <string name="shared_user_label">Vterm user</string>
     <string name="run_command_permission_label">Run commands in Vterm environment</string>
     <string name="run_command_permission_description">execute arbitrary commands within Vterm environment</string>
@@ -509,7 +509,7 @@
     <string name="don_t_forget_to_tell_us_on_github_issues_or_telegram_bot_br"><![CDATA[don\'t forget to tell us on github issues or telegram bot<br>]]></string>
     <string name="a_href_https_t_me_vectras_protect_bot_telegram_report_bot_a_br"><![CDATA[<a href=\"https://t.me/vectras_protect_bot\">telegram report bot</a><br>]]></string>
     <string name="a_href_https_github_com_epicstudios856_vectras_vm_android_issues_github_issues_page_a_br"><![CDATA[<a href=\"https://github.com/epicstudios856/Vectras-VM-Android/issues\">github issues page</a><br>]]></string>
-    <string name="getting_ready_for_you_please_don_t_disconnect_the_network">Getting ready for you...\nPlease don\'t disconnect the network.</string>
+    <string name="getting_ready_for_you_please_don_t_disconnect_the_network">Getting ready for you... Please don\'t disconnect the network.</string>
     <string name="it_won_t_take_long">It won\'t take long...</string>
     <string name="completed_10_it_won_t_take_long">Completed 10%\nIt won\'t take long...</string>
     <string name="completed_20_it_won_t_take_long">Completed 20%\nIt won\'t take long...</string>
