@@ -240,7 +240,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                 if (success) {
                     Toast.makeText(
                                     getApplicationContext(),
-                                    "Extraction complete!",
+                                    R.string.extraction_complete,
                                     Toast.LENGTH_SHORT)
                             .show();
                 } else {
