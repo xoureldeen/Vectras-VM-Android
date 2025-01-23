@@ -113,7 +113,6 @@
     <string name="color_mode">Цветовой режим</string>
     <string name="connect_button">Подключиться</string>
     <string name="connection_caption">Подключение</string>
-    <string name="control_check">Ctrl</string>
     <string name="copy_list_button">Копировать список</string>
     <string name="delete_connection">Удалить подключение</string>
     <string name="delete_key">Удалить выбранную клавишу</string>
@@ -192,7 +191,6 @@
     <string name="make_image">СОЗДАТЬ ОБРАЗ</string>
     <string name="imported_roms_will_be_shown_here">ИМПОРТИРОВАННЫЕ ОБРАЗЫ БУДУТ ПОКАЗАНЫ ЗДЕСЬ</string>
     <string name="version">ВЕРСИЯ:</string>
-    <string name="qemu">QEMU</string>
     <string name="arch">АРХИТЕКТУРА:</string>
     <string name="running">Работает</string>
     <string name="stopped">Остановлена</string>
@@ -231,7 +229,6 @@
     <string name="night_mode">НОЧНОЙ РЕЖИМ</string>
     <string name="description">Описание</string>
     <string name="qemu_website">Веб-сайт QEMU</string>
-    <string name="powerpc_qemu">PowerPC</string>
     <string name="x86_64_qemu_recommended">x86_64 (рекомендуется)</string>
     <string name="export_rom">Экспортировать образ</string>
     <string name="are_you_sure">Вы уверены?</string>
@@ -241,7 +238,6 @@
     <string name="error">ОШИБКА!</string>
     <string name="done">ГОТОВО!</string>
     <string name="are_removed_successfully">" успешно удалены!"</string>
-    <string name="teams">Команда Vectras VM и Nguyen Bao An Bui</string>
     <string name="repository">Репозиторий</string>
     <string name="telegram_channel">Telegram канал</string>
     <string name="change_log">Список изменений</string>

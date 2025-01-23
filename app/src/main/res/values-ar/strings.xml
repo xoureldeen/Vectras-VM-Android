@@ -14,16 +14,11 @@
 
     <string name="desktopInstructions">لاستخدام الماوس الخارجية:\n\tقم بإيقاف تسريع الماوس داخل نظام التشغيل الضيف.\n\t\tلـ DSL استخدم الأمر: xset m 1\n\t\tلأنظمة التشغيل الأخرى قم بإيقاف "تحسين دقة المؤشر" أو اختر ماوس "usb-tablet" من خيارات فيكتراس الرئيسية.\n\tقم بتوصيل أو اقتران فأرتك USB/Bluetooth واضغط موافق\n\tقم بتحريك مؤشر الماوس إلى جميع جوانب سطح المكتب للتعيين.\n</string>
 
-    <string name="navigation_drawer_open" translatable="false">drawer open</string>
-    <string name="navigation_drawer_close" translatable="false">drawer close</string>
     <string name="address_caption">العنوان</string>
-    <string name="alt_check">Alt</string>
     <string name="reset">إعادة تعيين</string>
     <string name="shutdown">إيقاف التشغيل</string>
-    <string name="ctrl_c" translatable="false">Ctrl-c</string>
     <string name="devices">الأجهزة</string>
     <string name="external_mouse">ماوس خارجي</string>
-    <string name="monitor" translatable="false">مراقب QEMU</string>
     <string name="stretch_to_screen">تمديد إلى الشاشة</string>
     <string name="full_screen">ملء الشاشة</string>
     <string name="toggle_full_screen">تبديل ملء الشاشة</string>
@@ -62,18 +57,11 @@
     <string name="settings">الإعدادات</string>
     <string name="go_ahead">تابع</string>
     <string name="download">تحميل</string>
-    <string name="view_profile" translatable="false"><u><![CDATA[عرض الملف الشخصي>>]]></u></string>
     <string name="username">اسم المستخدم</string>
     <string name="save">حفظ</string>
     <string name="memory_usage">استخدام الذاكرة</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">مرحبا، جزء فارغ</string>
-    <string name="linux" translatable="false">لينكس</string>
-    <string name="windows" translatable="false">ويندوز</string>
-    <string name="apple" translatable="false">أبل</string>
-    <string name="external_vnc" translatable="false">VNC خارجي</string>
-    <string name="hosted_successfully" translatable="false">تم الاستضافة بنجاح!</string>
-    <string name="ip" translatable="false">IP: 127.0.0.1:9</string>
     <string name="install_rom">تثبيت روم</string>
     <string name="reconnect">إعادة الاتصال</string>
     <string name="display">الشاشة</string>
@@ -108,19 +96,12 @@
     <string name="export">تصدير</string>
     <string name="email_verification_sent">تم إرسال تحقق البريد الإلكتروني.</string>
     <string name="sign_out">تسجيل الخروج</string>
-    <string name="android" translatable="false">أندرويد</string>
-    <string name="other" translatable="false">أخرى</string>
     <string name="guest">ضيف</string>
     <string name="hdd1_qcow_img_etc">HDD1 (qcow، img، إلخ…)</string>
-    <string name="default_configuration">-vga std -net nic,model=ne2k_pci -net user</string>
     <string name="data_explorer">مستكشف البيانات</string>
     <string name="forgot_password">نسيت كلمة المرور؟</string>
     <string name="buy_me_a_coffee">اشتر لي قهوة</string>
-    <string name="hdd1">HDD1</string>
-    <string name="hdd2">HDD2</string>
 
-    <string name="echo_nameserver_8_8_8_8">echo \'nameserver 8.8.8.8\' </string>
-    <string name="etc_resolv_conf"> /etc/resolv.conf</string>
     <string name="create_a_machine">إنشاء آلة</string>
 
     <string name="arrow_down">سهم لأسفل</string>
@@ -136,9 +117,7 @@
     <string name="color_mode">وضع اللون</string>
     <string name="connect_button">اتصال</string>
     <string name="connection_caption">الاتصال</string>
-    <string name="control_check">Ctrl</string>
     <string name="copy_list_button">نسخ القائمة</string>
-    <string name="ctrl_alt_del">Ctrl-Alt-Del</string>
     <string name="delete_connection">حذف الاتصال</string>
     <string name="delete_key">حذف المفتاح المحدد</string>
     <string name="delete_key_list">حذف قائمة المفاتيح</string>
@@ -176,7 +155,6 @@
     <string name="nickname_caption">اسم مستعار</string>
     <string name="off">إيقاف</string>
     <string name="on">تشغيل</string>
-    <string name="one_to_one">1:1</string>
     <string name="open_doc">الدليل/ويكي</string>
     <string name="pan_follow_mouse">تحريك يتبع الماوس</string>
     <string name="password_caption">كلمة المرور</string>
@@ -196,7 +174,6 @@
     <!-- Send selected metakey -->
     <string name="send_button">إرسال</string>
     <string name="send_key_again">إرسال المفتاح مرة أخرى</string>
-    <string name="shift_check">Shift</string>
     <string name="shortcut_label">اتصال VNC</string>
     <string name="showkbd_label">لوحة المفاتيح</string>
     <string name="special_keys">إرسال المفاتيح</string>
@@ -224,7 +201,6 @@
     <string name="make_image">إنشاء صورة</string>
     <string name="imported_roms_will_be_shown_here">سيتم عرض الرومات المستوردة هنا</string>
     <string name="version">الإصدار:</string>
-    <string name="qemu">QEMU</string>
     <string name="arch">المعمارية:</string>
     <string name="running">قيد التشغيل</string>
     <string name="stopped">متوقف</string>
@@ -242,7 +218,6 @@
     <string name="user_interface">واجهة المستخدم</string>
     <string name="themes_and_ui">الثيمات وواجهة المستخدم.</string>
     <string name="emulation_settings">إعدادات المحاكاة.</string>
-    <string name="vnc">VNC</string>
     <string name="vnc_ui_environment">بيئة واجهة VNC.</string>
     <string name="vm_arch">معمارية VM</string>
     <string name="cpu_model">نموذج وحدة المعالجة المركزية</string>
@@ -253,7 +228,6 @@
     <string name="avx">AVX</string>
     <string name="mttcg">MTTCG</string>
     <string name="kvm_acceleration">تسريع KVM</string>
-    <string name="kvm">KVM</string>
     <string name="cpu_cores">أنوية وحدة المعالجة المركزية</string>
     <string name="harddisk_type">نوع القرص الصلب</string>
     <string name="boot_from">التمهيد من</string>
@@ -267,10 +241,7 @@
     <string name="night_mode">وضع الليل</string>
     <string name="description">وصف</string>
     <string name="qemu_website">موقع QEMU</string>
-    <string name="powerpc_qemu">POWERPC QEMU</string>
-    <string name="arm64_qemu">ARM64 QEMU</string>
     <string name="x86_64_qemu_recommended">x86_64 QEMU (موصى به)</string>
-    <string name="i386_qemu">I386 QEMU</string>
     <string name="export_rom">تصدير الروم</string>
     <string name="are_you_sure">هل أنت متأكد؟</string>
     <string name="description_html_supported">الوصف (يدعم HTML)</string>
@@ -279,7 +250,6 @@
     <string name="error">خطأ!</string>
     <string name="done">تم!</string>
     <string name="are_removed_successfully">"تمت الإزالة بنجاح!"</string>
-    <string name="teams">فريق Vectras VM ونجوين باو آن بوي</string>
     <string name="repository">المستودع</string>
     <string name="telegram_channel">قناة Telegram</string>
     <string name="youtube">YouTube</string>
@@ -290,7 +260,6 @@
     <string name="set">تعيين</string>
     <string name="change_app_locale">تغيير لغة التطبيق</string>
     <string name="are_you_sure_you_want_to_shutdown_vm">هل أنت متأكد أنك تريد إيقاف تشغيل VM؟ للخروج من هذا ولكن مع الحفاظ على كل شيء قيد التشغيل، اضغط مع الاستمرار على زر إيقاف التشغيل.</string>
-    <string name="cpu">وحدة المعالجة المركزية</string>
     <string name="save_changes">حفظ التغييرات</string>
     <string name="qemu_create_cmd">أمر إنشاء QEMU</string>
     <string name="getit">الحصول عليه</string>
@@ -394,7 +363,6 @@
     <string name="with_size_is_128GB">بحجم 128 جيجابايت.</string>
 
     <!--======================TERMUX STRINGS====================-->
-    <string name="application_name">Vterm</string>
     <string name="shared_user_label">مستخدم Vterm</string>
     <string name="run_command_permission_label">تشغيل الأوامر في بيئة Vterm</string>
     <string name="run_command_permission_description">تنفيذ أوامر عشوائية ضمن بيئة Vterm</string>
