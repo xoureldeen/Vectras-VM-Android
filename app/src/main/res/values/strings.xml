@@ -509,7 +509,7 @@
     <string name="don_t_forget_to_tell_us_on_github_issues_or_telegram_bot_br"><![CDATA[don\'t forget to tell us on github issues or telegram bot<br>]]></string>
     <string name="a_href_https_t_me_vectras_protect_bot_telegram_report_bot_a_br"><![CDATA[<a href=\"https://t.me/vectras_protect_bot\">telegram report bot</a><br>]]></string>
     <string name="a_href_https_github_com_epicstudios856_vectras_vm_android_issues_github_issues_page_a_br"><![CDATA[<a href=\"https://github.com/epicstudios856/Vectras-VM-Android/issues\">github issues page</a><br>]]></string>
-    <string name="getting_ready_for_you_please_don_t_disconnect_the_network">Getting ready for you... Please don\'t disconnect the network.</string>
+    <string name="getting_ready_for_you_please_don_t_disconnect_the_network">1G  etting ready for you... Please don\'t disconnect the network.</string>
     <string name="it_won_t_take_long">It won\'t take long...</string>
     <string name="completed_10_it_won_t_take_long">Completed 10%\nIt won\'t take long...</string>
     <string name="completed_20_it_won_t_take_long">Completed 20%\nIt won\'t take long...</string>
@@ -601,11 +601,11 @@
     <string name="settings_x11_capture_pointer_move_factor">Captured pointer speed factor, %</string>
     <string name="settings_x11_tap_to_move">Enable tap-to-move for touchpads</string>
     <string name="settings_x11_back_toggle">Toggle keyboard using back key</string>
-    <string name="settings_x11_ext_keyboard">Show additional keyboard</string>
+    <string name="settings_x11_ext_keyboard_title">Show additional keyboard</string>
     <string name="settiongs_capture_volkey">Capture volume keys</string>
     <string name="settings_x11_hide_extkey_vol">Hide additional keyboard on Volume Down key press</string>
-    <string name="settings_x11_deact_speckey">Deactivate special keys on additional key bar after each keypress</string>
-    <string name="settings_x11_ime_speckey">Show IME with external keyboard</string>
+    <string name="settings_x11_deact_speckey_title">Deactivate special keys on additional key bar after each keypress</string>
+    <string name="settings_x11_ime_with_hardkeyboard_title">Show IME with external keyboard</string>
     <string name="settings_x11_prefer_scancode_title">Prefer scancodes when possible</string>
     <string name="settings_x11_prefer_scancode_summary">Let X server handle hardware keyboard layout (with DE settings or setxkbmap).</string>
     <string name="settings_x11_fix_hard_keyboard_scancode_title">Hardware keyboard scancodes workaround</string>
@@ -619,4 +619,23 @@
     <string name="settings_extra_keys_config">Extra keys config</string>
     <string name="settings_clipboard_sharing">Clipboard sharing</string>
     <string name="settings_x11_request_notification_permission">Request notification permission</string>
+    <string name="x11_feature_not_supported">X11 Feature Not Supported</string>
+    <string name="the_x11_feature_is_currently_not_supported_on_android_14_and_above_please_use_a_device_with_android_13_or_below_for_x11_functionality">The X11 feature is currently not supported on Android 14 and above. Please use a device with Android 13 or below for X11 functionality.</string>
+    <string name="booting_up">Booting up...</string>
+    <string name="press_volume_down_for_right_click">Press Volume Down for Right Click</string>
+    <string name="press_volume_up_for_left_click">Press Volume Up for Left Click</string>
+    <string name="press_back_button_for_hide_show_controls_ui">Press Back Button for Hide/Show Controls UI</string>
+    <string name="settings_x11_adjust_display_title">Adjust display height for extra keys bar</string>
+    <string name="settings_x11_adjust_display_summary">May cause screen flickering during toggling EK bar</string>
+    <string name="settings_x11_ext_keyboard_summary">Show keyboard with additional keys.</string>
+    <string name="settings_x11_ime_with_hardkeyboard_summary">Show software keyboard while hardware keyboard is connected. Requires WRITE_SECURE_SETTINGS permission.</string>
+    <string name="settings_x11_auto_intercept_shortcut_title">Enable Accessibility service for intercepting system shortcuts automatically.</string>
+    <string name="settings_x11_auto_intercept_shortcut_summary">Requires WRITE_SECURE_SETTINGS permission.</string>
+    <string name="settings_x11_ignore_win_key_title">Filter out intercepted Win (Meta/Mod4) key.</string>
+    <string name="settings_x11_ignore_win_key_summary">Allows you to use Dex shortcuts while intercepting.</string>
+    <string name="settings_x11_deact_speckey_summary">Use long-tap to lock special keys</string>
+    <string name="settings_tag_output">Output</string>
+    <string name="settings_tag_point">Pointer</string>
+    <string name="settings_tag_keyboard">Keyboard</string>
+    <string name="settings_tag_other">Other</string>
 </resources>
