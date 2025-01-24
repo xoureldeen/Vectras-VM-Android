@@ -207,11 +207,11 @@ public class UIUtils {
     public static void showHints(Activity activity) {
 
 
-        UIUtils.toastShortTop(activity, "Press Volume Down for Right Click");
+        UIUtils.toastShortTop(activity, activity.getString(R.string.press_volume_down_for_right_click));
 
-        UIUtils.toastShortTop(activity, "Press Volume Up for Left Click");
+        UIUtils.toastShortTop(activity, activity.getString(R.string.press_volume_up_for_left_click));
 
-        UIUtils.toastShortTop(activity, "Press Back Button for Hide/Show Controls UI");
+        UIUtils.toastShortTop(activity, activity.getString(R.string.press_back_button_for_hide_show_controls_ui));
 
 
     }
