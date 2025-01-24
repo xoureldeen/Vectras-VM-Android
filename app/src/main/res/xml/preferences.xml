@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <PreferenceCategory android:key="output" android:title="Output">
+    <PreferenceCategory
+        android:key="output"
+        android:title="@string/settings_tag_output">
         <ListPreference
             android:defaultValue="native"
             android:entries="@array/displayResolutionVariants"
@@ -48,14 +50,14 @@
         <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="fullscreen"
-            android:summary="Toggles immersive mode in your device display"
+            android:summary="@string/settings_x11_full_screen_summary"
             android:title="@string/settings_x11_full_screen_title" />
 
         <SwitchPreferenceCompat
-            android:title="Force landscape orientation"
             android:defaultValue="true"
-            app:isPreferenceVisible="false"
-            android:key="forceLandscape" />
+            android:key="forceLandscape"
+            android:title="Force landscape orientation"
+            app:isPreferenceVisible="false" />
 
         <SwitchPreferenceCompat
             android:defaultValue="false"
@@ -68,12 +70,14 @@
             android:title="@string/settings_x11_keep_screen_on" />
 
         <SwitchPreferenceCompat
-            android:title="Adjust display height for extra keys bar"
-            android:summary="May cause screen flickering during toggling EK bar"
             android:defaultValue="false"
-            android:key="adjustHeightForEK" />
+            android:key="adjustHeightForEK"
+            android:summary="@string/settings_x11_adjust_display_summary"
+            android:title="@string/settings_x11_adjust_display_title" />
     </PreferenceCategory>
-    <PreferenceCategory android:key="pointer" android:title="Pointer">
+    <PreferenceCategory
+        android:key="pointer"
+        android:title="@string/settings_tag_point">
         <ListPreference
             android:defaultValue="1"
             android:entries="@array/touchscreenInputModesEntries"
@@ -122,7 +126,9 @@
             android:key="tapToMove"
             android:title="@string/settings_x11_tap_to_move" />
     </PreferenceCategory>
-    <PreferenceCategory android:key="kbd" android:title="Keyboard">
+    <PreferenceCategory
+        android:key="kbd"
+        android:title="@string/settings_tag_keyboard">
         <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="toggleIMEUsingBackKey"
@@ -130,11 +136,11 @@
             app:isPreferenceVisible="false" />
 
         <SwitchPreferenceCompat
-            android:title="Show additional keyboard"
-            android:summary="Show keyboard with additional keys."
             android:defaultValue="false"
-            app:isPreferenceVisible="false"
-            android:key="showAdditionalKbd" />
+            android:key="showAdditionalKbd"
+            android:summary="@string/settings_x11_ext_keyboard_summary"
+            android:title="@string/settings_x11_ext_keyboard_title"
+            app:isPreferenceVisible="false" />
 
         <SwitchPreferenceCompat
             android:defaultValue="true"
@@ -150,14 +156,14 @@
         <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="useTermuxEKBarBehaviour"
-            android:summary="Use long-tap to lock special keys"
-            android:title="@string/settings_x11_deact_speckey" />
+            android:summary="@string/settings_x11_deact_speckey_summary"
+            android:title="@string/settings_x11_deact_speckey_title" />
 
         <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="showIMEWhileExternalConnected"
-            android:summary="Show software keyboard while hardware keyboard is connected. Requires WRITE_SECURE_SETTINGS permission."
-            android:title="@string/settings_x11_ime_speckey" />
+            android:summary="@string/settings_x11_ime_with_hardkeyboard_summary"
+            android:title="@string/settings_x11_ime_with_hardkeyboard_title" />
 
         <SwitchPreferenceCompat
             android:defaultValue="false"
@@ -172,10 +178,10 @@
             android:title="@string/settings_x11_fix_hard_keyboard_scancode_title" />
 
         <SwitchPreferenceCompat
-            android:title="Intercept system shortcuts"
-            android:summary="Samsung Dex only. Allows interception of &quot;Alt+F4&quot;, &quot;Meta+D&quot;, &quot;Meta+E&quot;, etc. "
             android:defaultValue="false"
-            android:key="dexMetaKeyCapture" />
+            android:key="dexMetaKeyCapture"
+            android:summary="@string/settings_x11_full_screen_summary"
+            android:title="@string/settings_x11_full_screen_title" />
 
         <Preference
             android:key="enableAccessibilityService"
@@ -183,10 +189,10 @@
             android:title="@string/settings_x11_capture_shortcut_manually_title" />
 
         <SwitchPreferenceCompat
-            android:title="Enable Accessibility service for intercepting system shortcuts automatically."
-            android:summary="Requires WRITE_SECURE_SETTINGS permission."
             android:defaultValue="false"
-            android:key="enableAccessibilityServiceAutomatically" />
+            android:key="enableAccessibilityServiceAutomatically"
+            android:summary="@string/settings_x11_auto_intercept_shortcut_summary"
+            android:title="@string/settings_x11_auto_intercept_shortcut_title" />
 
         <SwitchPreferenceCompat
             android:defaultValue="false"
@@ -194,10 +200,10 @@
             android:title="@string/settings_x11_intercepting_esc" />
 
         <SwitchPreferenceCompat
-            android:title="Filter out intercepted Win (Meta/Mod4) key."
-            android:summary="Allows you to use Dex shortcuts while intercepting."
             android:defaultValue="false"
-            android:key="filterOutWinkey" />
+            android:key="filterOutWinkey"
+            android:summary="@string/settings_x11_ignore_win_key_summary"
+            android:title="@string/settings_x11_ignore_win_key_title" />
 
         <SeekBarPreference
             android:defaultValue="100"
@@ -212,14 +218,16 @@
             app:isPreferenceVisible="false" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:key="other" android:title="Other">
+    <PreferenceCategory
+        android:key="other"
+        android:title="@string/settings_tag_other">
         <SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="clipboardEnable"
             android:title="@string/settings_clipboard_sharing" />
 
         <Preference
-            android:title="Request notification permission"
-            android:key="requestNotificationPermission" />
+            android:key="requestNotificationPermission"
+            android:title="Request notification permission" />
     </PreferenceCategory>
 </PreferenceScreen>
