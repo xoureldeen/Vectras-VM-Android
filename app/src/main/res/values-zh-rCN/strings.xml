@@ -594,4 +594,5 @@
     <string name="settings_tag_point">鼠标指针</string>
     <string name="settings_tag_keyboard">键盘</string>
     <string name="settings_tag_other">杂项</string>
+    <string name="executing_command_please_wait">正在执行命令，请稍后…</string>
 </resources>

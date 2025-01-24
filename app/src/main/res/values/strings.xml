@@ -157,7 +157,7 @@
     <string name="info">Info</string>
     <string name="intro_text">If you need help, please check the &lt;a href="http://code.google.com/p/android-vnc-viewer/wiki/Documentation"&gt;manual&lt;/a&gt; (press phone\'s Menu button to access manual and other menu items), or the &lt;a href="http://code.google.com/p/android-vnc-viewer/wiki/faq"&gt;FAQ&lt;/a&gt;.&lt;br&gt;</string>
     <string name="intro_title">Welcome</string>
-    <string name="intro_version_text">&lt;br&gt;--Sent text is remembered across sessions (optionally)&lt;br&gt;--Import/Export settings to file&lt;br&gt;--Button with zoom controls to bring up keyboard&lt;br&gt;--Can force tiling mode (very large screens)</string>
+    <string name="intro_version_text">&lt;br&gt;—Sent text is remembered across sessions (optionally)&lt;br&gt;—Import/Export settings to file&lt;br&gt;—Button with zoom controls to bring up keyboard&lt;br&gt;—Can force tiling mode (very large screens)</string>
     <string name="input_mode">Input Mode</string>
     <string name="input_mode_fit_to_screen">No Pan; Trackball Mouse</string>
     <string name="input_mode_mouse">Mouse Pointer Control Mode</string>
@@ -277,7 +277,7 @@
     <string name="are_you_sure">Are you sure?</string>
     <string name="description_html_supported">DESCRIPTION (html supported)</string>
     <string name="compressing_cvbi">Compressing CVBI</string>
-    <string name="please_wait_dialog">Please wait...</string>
+    <string name="please_wait_dialog">Please wait…</string>
     <string name="error">ERROR!</string>
     <string name="done">DONE!</string>
     <string name="are_removed_successfully">" are removed successfully!"</string>
@@ -298,7 +298,7 @@
     <string name="getit">Get</string>
     <string name="adddrivenote">Make sure you have selected the ROM or CDROM to boot the OS from. You may not need to select it if you have added them to QEMU PARAMS.</string>
     <string name="killqemu">Kill QEMU</string>
-    <string name="installing">Installing...</string>
+    <string name="installing">Installing…</string>
     <string name="vncdisplay">VNC display</string>
     <string name="setup_sound">Setup sound for Termux</string>
     <string name="setup_sound_guide_content">This enables virtual machines running on the Vectras VM to play audio using Termux. If you have not set up Termux yet, select Start setup, the command will be automatically copied to the clipboard, you need paste that command and run it in Termux to complete the setup. Next times, make sure Termux is running to play sound.</string>
@@ -306,7 +306,7 @@
     <string name="start_setup">Start setup</string>
     <string name="termux_is_not_installed">Termux is not installed</string>
     <string name="you_need_to_install_termux">You need to install Termux before setting up.</string>
-    <string name="wating_for_you">Waiting for you...</string>
+    <string name="wating_for_you">Waiting for you…</string>
     <string name="suggested_use_of_create_command">We recommend that you use the Create command to make creating a virtual machine simpler and easier.</string>
     <string name="oops">Oops!</string>
     <string name="cpu_does_not_have_the_necessary_instructions">CPU on your device does not have the necessary instructions for Vectras VM to work.</string>
@@ -344,7 +344,7 @@
     <string name="free_memory">Free:</string>
     <string name="used">used</string>
     <string name="there_is_nothing_here_because_there_is_no_vm_running">There is nothing here because there is no VM running.</string>
-    <string name="just_a_moment">Just a moment...</string>
+    <string name="just_a_moment">Just a moment…</string>
     <string name="unable_to_connect_to_server">Unable to connect to server.</string>
     <string name="join_our_community">Join our community</string>
     <string name="a_serious_problem_has_occurred">A serious problem has occurred! This problem is caused by the CPU or Android operating system on your device. You can join our community to learn more.</string>
@@ -389,7 +389,7 @@
     <string name="copy_file_content">Always copy the selected file to the virtual machine instead of using it directly.</string>
     <string name="reinstall_system">Reinstall system</string>
     <string name="reinstall_system_content">If you find that your system is having serious problems, you can reinstall the system. And all virtual machines will be kept.</string>
-    <string name="reinstalling">Reinstalling...</string>
+    <string name="reinstalling">Reinstalling…</string>
     <string name="mini_tools">Mini tools</string>
     <string name="error_NO_SUCH_FILE_OR_DIRECTORY">A problem occurred and the virtual machine failed to run because a file or directory that the virtual machine needs to run does not exist.</string>
     <string name="auto_create_new_hard_drive_when_creating_new_vm">Automatically create new hard drive when creating new virtual machine</string>
@@ -454,7 +454,7 @@
 
     <!-- TermuxX11Activity -->
     <string name="msg_storage_permission_not_granted_warning">The storage permission must be granted
-        to Vectras VM app to...</string>
+        to Vectras VM app to…</string>
     <string name="action_grant_storage_permission">Grant Storage Permission</string>
 
     <string name="msg_battery_optimization_not_disabled_warning">Android battery optimizations
@@ -492,7 +492,7 @@
     <string name="log_level_unknown">*Unknown*</string>
     <string name="log_level_value">Logcat log level set to \"%1$s\"</string>
     <string name="yes">yes</string>
-    <string name="no">cancel</string>
+    <string name="no">Cancel</string>
     <string name="cancel">Cancel</string>
     <string name="back_to_the_display">Back to the Display</string>
     <string name="x11_ui_environment">x11 ui environment.</string>
@@ -503,24 +503,24 @@
     <string name="join_us_on_telegram_where_we_publish_all_the_news_and_updates_and_receive_your_opinions_and_bugs">Join us on Telegram where we publish all the news and updates and receive your opinions and bugs</string>
     <string name="join">JOIN</string>
     <string name="dont_show_again">DONT SHOW AGAIN</string>
-    <string name="this_version_unstable_and_has_alot_of_bugs_br"><![CDATA[this version unstable and has alot of bugs<br>]]></string>
+    <string name="this_version_unstable_and_has_alot_of_bugs_br"><![CDATA[this version unstable and has a lot of bugs<br>]]></string>
     <string name="debug_testing_build_5">DEBUG TESTING BUILD 5</string>
     <string name="welcome_to_debug_build_of_vectras_vm_br"><![CDATA[welcome to debug build of vectras vm :)<br>]]></string>
     <string name="don_t_forget_to_tell_us_on_github_issues_or_telegram_bot_br"><![CDATA[don\'t forget to tell us on github issues or telegram bot<br>]]></string>
     <string name="a_href_https_t_me_vectras_protect_bot_telegram_report_bot_a_br"><![CDATA[<a href=\"https://t.me/vectras_protect_bot\">telegram report bot</a><br>]]></string>
     <string name="a_href_https_github_com_epicstudios856_vectras_vm_android_issues_github_issues_page_a_br"><![CDATA[<a href=\"https://github.com/epicstudios856/Vectras-VM-Android/issues\">github issues page</a><br>]]></string>
-    <string name="getting_ready_for_you_please_don_t_disconnect_the_network">1G  etting ready for you... Please don\'t disconnect the network.</string>
-    <string name="it_won_t_take_long">It won\'t take long...</string>
-    <string name="completed_10_it_won_t_take_long">Completed 10%\nIt won\'t take long...</string>
-    <string name="completed_20_it_won_t_take_long">Completed 20%\nIt won\'t take long...</string>
-    <string name="completed_30_it_won_t_take_long">Completed 30%\nIt won\'t take long...</string>
-    <string name="completed_40_it_won_t_take_long">Completed 40%\nIt won\'t take long...</string>
-    <string name="completed_50_it_won_t_take_long">Completed 50%\nIt won\'t take long...</string>
-    <string name="don_t_disconnect">Don\'t disconnect...</string>
-    <string name="completed_75_don_t_disconnect">Completed 75%\nDon\'t disconnect...</string>
-    <string name="keep_it_up">Keep it up...</string>
-    <string name="completed_80_keep_it_up">Completed 80%\nKeep it up...</string>
-    <string name="completed_95_keep_it_up">Completed 95%\nKeep it up...</string>
+    <string name="getting_ready_for_you_please_don_t_disconnect_the_network">1G  etting ready for you… Please don\'t disconnect the network.</string>
+    <string name="it_won_t_take_long">It won\'t take long…</string>
+    <string name="completed_10_it_won_t_take_long">Completed 10%\nIt won\'t take long…</string>
+    <string name="completed_20_it_won_t_take_long">Completed 20%\nIt won\'t take long…</string>
+    <string name="completed_30_it_won_t_take_long">Completed 30%\nIt won\'t take long…</string>
+    <string name="completed_40_it_won_t_take_long">Completed 40%\nIt won\'t take long…</string>
+    <string name="completed_50_it_won_t_take_long">Completed 50%\nIt won\'t take long…</string>
+    <string name="don_t_disconnect">Don\'t disconnect…</string>
+    <string name="completed_75_don_t_disconnect">Completed 75%\nDon\'t disconnect…</string>
+    <string name="keep_it_up">Keep it up…</string>
+    <string name="completed_80_keep_it_up">Completed 80%\nKeep it up…</string>
+    <string name="completed_95_keep_it_up">Completed 95%\nKeep it up…</string>
     <string name="almost_there">Almost there.</string>
     <string name="show_advanced_setup">Show advanced setup</string>
     <string name="allow_permissions">Allow permissions</string>
@@ -529,7 +529,7 @@
     <string name="do_you_want_to_set_it_up_automatically_or_select_the_bootstrap_file_manually">Do you want to set it up automatically or select the bootstrap file manually?</string>
     <string name="auto_setup">Auto setup</string>
     <string name="manual">Manual</string>
-    <string name="getting_ready_for_you">Getting ready for you...</string>
+    <string name="getting_ready_for_you">Getting ready for you…</string>
     <string name="failed">Failed!</string>
     <string name="something_went_wrong_during_setup_would_you_like_to_try_again">Something went wrong during setup. Would you like to try again?</string>
     <string name="show_log">Show log</string>
@@ -621,7 +621,7 @@
     <string name="settings_x11_request_notification_permission">Request notification permission</string>
     <string name="x11_feature_not_supported">X11 Feature Not Supported</string>
     <string name="the_x11_feature_is_currently_not_supported_on_android_14_and_above_please_use_a_device_with_android_13_or_below_for_x11_functionality">The X11 feature is currently not supported on Android 14 and above. Please use a device with Android 13 or below for X11 functionality.</string>
-    <string name="booting_up">Booting up...</string>
+    <string name="booting_up">Booting up…</string>
     <string name="press_volume_down_for_right_click">Press Volume Down for Right Click</string>
     <string name="press_volume_up_for_left_click">Press Volume Up for Left Click</string>
     <string name="press_back_button_for_hide_show_controls_ui">Press Back Button for Hide/Show Controls UI</string>
@@ -638,4 +638,5 @@
     <string name="settings_tag_point">Pointer</string>
     <string name="settings_tag_keyboard">Keyboard</string>
     <string name="settings_tag_other">Other</string>
+    <string name="executing_command_please_wait">Executing command, please wait…</string>
 </resources>
