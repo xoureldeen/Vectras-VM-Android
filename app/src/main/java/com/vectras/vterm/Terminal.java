@@ -96,7 +96,7 @@ public class Terminal {
 
         // Show ProgressDialog
         ProgressDialog progressDialog = new ProgressDialog(dialogActivity);
-        progressDialog.setMessage("Executing command, please wait...");
+        progressDialog.setMessage(dialogActivity.getString(R.string.executing_command_please_wait));
         progressDialog.setCancelable(false);
         progressDialog.show();
 
@@ -408,7 +408,7 @@ public class Terminal {
 
         // Show ProgressDialog on the main thread
         ProgressDialog progressDialog = new ProgressDialog(dialogActivity);
-        progressDialog.setMessage("Executing command, please wait...");
+        progressDialog.setMessage(dialogActivity.getString(R.string.executing_command_please_wait));
         progressDialog.setCancelable(false);
 
         // Make sure to show the dialog on the main thread

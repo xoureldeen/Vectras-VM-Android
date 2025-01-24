@@ -443,8 +443,8 @@ public class MainActivity extends AppCompatActivity {
                 } else if (id == R.id.navigation_item_desktop) {
                     if (SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                        builder.setTitle("X11 Feature Not Supported")
-                                .setMessage("The X11 feature is currently not supported on Android 14 and above. Please use a device with Android 13 or below for X11 functionality.")
+                        builder.setTitle(R.string.x11_feature_not_supported)
+                                .setMessage(R.string.the_x11_feature_is_currently_not_supported_on_android_14_and_above_please_use_a_device_with_android_13_or_below_for_x11_functionality)
                                 .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
                                 .create()
                                 .show();
@@ -981,7 +981,7 @@ public class MainActivity extends AppCompatActivity {
         boolean isRunning = isMyServiceRunning(MainService.class);
 
         ProgressDialog progressDialog = new ProgressDialog(activity, R.style.MainDialogTheme);
-        progressDialog.setMessage("Booting up...");
+        progressDialog.setMessage(activity.getString(R.string.booting_up));
         progressDialog.setCancelable(false);
         progressDialog.show();
         Handler handler = new Handler();

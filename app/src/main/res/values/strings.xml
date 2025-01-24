@@ -16,16 +16,16 @@
 
     <string name="desktopInstructions">To use External Mouse:\n\tDisable Mouse Acceleration inside the Guest OS.\n\t\tFor DSL use command: xset m 1\n"\t\tFor Other OSes disable \"Enhance pointer Precision\" or choose Mouse \"usb-tablet\" from Vectras main options.\n\tPlug in or Pair your USB/Bluetooth Mouse and press OK\n\tMove your mouse pointer to all desktop sides to calibrate.\n"</string>
 
-    <string name="navigation_drawer_open" translatable="false">drawer open</string>
-    <string name="navigation_drawer_close" translatable="false">drawer close</string>
+    <string name="navigation_drawer_open">drawer open</string>
+    <string name="navigation_drawer_close">drawer close</string>
     <string name="address_caption">Address</string>
-    <string name="alt_check">Alt</string>
+    <string name="alt_check" translatable="false">Alt</string>
     <string name="reset">Reset</string>
     <string name="shutdown">Shut down</string>
     <string name="ctrl_c" translatable="false">Ctrl-c</string>
     <string name="devices">Devices</string>
     <string name="external_mouse">External Mouse</string>
-    <string name="monitor" translatable="false">QEMU Monitor</string>
+    <string name="monitor">QEMU Monitor</string>
     <string name="stretch_to_screen">Stretch to Screen</string>
     <string name="full_screen">Fullscreen</string>
     <string name="toggle_full_screen">Toggle Fullscreen</string>
@@ -64,7 +64,7 @@
     <string name="settings">Settings</string>
     <string name="go_ahead">Go ahead</string>
     <string name="download">Download</string>
-    <string name="view_profile" translatable="false"><u><![CDATA[View Profile>>]]></u></string>
+    <string name="view_profile"><u><![CDATA[View Profile>>]]></u></string>
     <string name="username">USERNAME</string>
     <string name="save">SAVE</string>
     <string name="memory_usage">Memory Usage</string>
@@ -73,8 +73,8 @@
     <string name="linux" translatable="false">Linux</string>
     <string name="windows" translatable="false">Windows</string>
     <string name="apple" translatable="false">Apple</string>
-    <string name="external_vnc" translatable="false">EXTERNAL VNC</string>
-    <string name="hosted_successfully" translatable="false">HOSTED SUCCESSFULLY!</string>
+    <string name="external_vnc">EXTERNAL VNC</string>
+    <string name="hosted_successfully">HOSTED SUCCESSFULLY!</string>
     <string name="ip" translatable="false">IP: 127.0.0.1:9</string>
     <string name="install_rom">Install Rom</string>
     <string name="reconnect">Reconnect</string>
@@ -114,15 +114,15 @@
     <string name="other" translatable="false">Other</string>
     <string name="guest">Guest</string>
     <string name="hdd1_qcow_img_etc">HDD1 (qcow, img, etc…)</string>
-    <string name="default_configuration">-vga std -net nic,model=ne2k_pci -net user</string>
+    <string name="default_configuration" translatable="false">-vga std -net nic,model=ne2k_pci -net user</string>
     <string name="data_explorer">Data Explorer</string>
     <string name="forgot_password">forgot password?</string>
     <string name="buy_me_a_coffee">Buy me a coffee</string>
-    <string name="hdd1">HDD1</string>
-    <string name="hdd2">HDD2</string>
+    <string name="hdd1" translatable="false">HDD1</string>
+    <string name="hdd2" translatable="false">HDD2</string>
 
-    <string name="echo_nameserver_8_8_8_8">echo \'nameserver 8.8.8.8\' </string>
-    <string name="etc_resolv_conf"> /etc/resolv.conf</string>
+    <string name="echo_nameserver_8_8_8_8" translatable="false">echo \'nameserver 8.8.8.8\' </string>
+    <string name="etc_resolv_conf" translatable="false"> /etc/resolv.conf</string>
     <string name="create_a_machine">Create a Machine</string>
 
     <string name="arrow_down">Down Arrow</string>
@@ -138,9 +138,9 @@
     <string name="color_mode">Color Mode</string>
     <string name="connect_button">Connect</string>
     <string name="connection_caption">Connection</string>
-    <string name="control_check">Ctrl</string>
+    <string name="control_check" translatable="false">Ctrl</string>
     <string name="copy_list_button">Copy List</string>
-    <string name="ctrl_alt_del">Ctrl-Alt-Del</string>
+    <string name="ctrl_alt_del" translatable="false">Ctrl-Alt-Del</string>
     <string name="delete_connection">Delete Connection</string>
     <string name="delete_key">Delete Selected Key</string>
     <string name="delete_key_list">Delete Key List</string>
@@ -157,7 +157,7 @@
     <string name="info">Info</string>
     <string name="intro_text">If you need help, please check the &lt;a href="http://code.google.com/p/android-vnc-viewer/wiki/Documentation"&gt;manual&lt;/a&gt; (press phone\'s Menu button to access manual and other menu items), or the &lt;a href="http://code.google.com/p/android-vnc-viewer/wiki/faq"&gt;FAQ&lt;/a&gt;.&lt;br&gt;</string>
     <string name="intro_title">Welcome</string>
-    <string name="intro_version_text">&lt;br&gt;--Sent text is remembered across sessions (optionally)&lt;br&gt;--Import/Export settings to file&lt;br&gt;--Button with zoom controls to bring up keyboard&lt;br&gt;--Can force tiling mode (very large screens)</string>
+    <string name="intro_version_text">&lt;br&gt;—Sent text is remembered across sessions (optionally)&lt;br&gt;—Import/Export settings to file&lt;br&gt;—Button with zoom controls to bring up keyboard&lt;br&gt;—Can force tiling mode (very large screens)</string>
     <string name="input_mode">Input Mode</string>
     <string name="input_mode_fit_to_screen">No Pan; Trackball Mouse</string>
     <string name="input_mode_mouse">Mouse Pointer Control Mode</string>
@@ -178,7 +178,7 @@
     <string name="nickname_caption">Nickname</string>
     <string name="off">Off</string>
     <string name="on">On</string>
-    <string name="one_to_one">1:1</string>
+    <string name="one_to_one" translatable="false">1:1</string>
     <string name="open_doc">Manual/Wiki</string>
     <string name="pan_follow_mouse">Pan Follows Mouse</string>
     <string name="password_caption">Password</string>
@@ -198,7 +198,7 @@
     <!-- Send selected metakey -->
     <string name="send_button">Send</string>
     <string name="send_key_again">Send Key Again</string>
-    <string name="shift_check">Shift</string>
+    <string name="shift_check" translatable="false">Shift</string>
     <string name="shortcut_label">VNC Connection</string>
     <string name="showkbd_label">Keyboard</string>
     <string name="special_keys">Send Keys</string>
@@ -226,7 +226,7 @@
     <string name="make_image">MAKE IMAGE</string>
     <string name="imported_roms_will_be_shown_here">IMPORTED ROMS WILL BE SHOWN HERE</string>
     <string name="version">VERSION:</string>
-    <string name="qemu">QEMU</string>
+    <string name="qemu" translatable="false">QEMU</string>
     <string name="arch">ARCH:</string>
     <string name="running">Running</string>
     <string name="stopped">Stopped</string>
@@ -244,7 +244,7 @@
     <string name="user_interface">USER INTERFACE</string>
     <string name="themes_and_ui">themes and ui.</string>
     <string name="emulation_settings">emulation settings.</string>
-    <string name="vnc">VNC</string>
+    <string name="vnc" translatable="false">VNC</string>
     <string name="vnc_ui_environment">vnc ui environment.</string>
     <string name="vm_arch">VM ARCH</string>
     <string name="cpu_model">CPU MODEL</string>
@@ -255,7 +255,7 @@
     <string name="avx">AVX</string>
     <string name="mttcg">MTTCG</string>
     <string name="kvm_acceleration">kvm acceleration</string>
-    <string name="kvm">KVM</string>
+    <string name="kvm" translatable="false">KVM</string>
     <string name="cpu_cores">CPU CORES</string>
     <string name="harddisk_type">HARDDISK TYPE</string>
     <string name="boot_from">BOOT FROM</string>
@@ -269,19 +269,19 @@
     <string name="night_mode">NIGHT MODE</string>
     <string name="description">Description</string>
     <string name="qemu_website">QEMU website</string>
-    <string name="powerpc_qemu">PowerPC</string>
-    <string name="arm64_qemu">ARM64</string>
+    <string name="powerpc_qemu" translatable="false">PowerPC</string>
+    <string name="arm64_qemu" translatable="false">ARM64</string>
     <string name="x86_64_qemu_recommended">x86_64 (Recommended)</string>
-    <string name="i386_qemu">i386</string>
+    <string name="i386_qemu" translatable="false">i386</string>
     <string name="export_rom">Export Rom</string>
     <string name="are_you_sure">Are you sure?</string>
     <string name="description_html_supported">DESCRIPTION (html supported)</string>
     <string name="compressing_cvbi">Compressing CVBI</string>
-    <string name="please_wait_dialog">Please wait...</string>
+    <string name="please_wait_dialog">Please wait…</string>
     <string name="error">ERROR!</string>
     <string name="done">DONE!</string>
     <string name="are_removed_successfully">" are removed successfully!"</string>
-    <string name="teams">Vectras VM team and Nguyen Bao An Bui</string>
+    <string name="teams" translatable="false">Vectras VM team and Nguyen Bao An Bui</string>
     <string name="repository">Repository</string>
     <string name="telegram_channel">Telegram Channel</string>
     <string name="youtube">Youtube</string>
@@ -292,13 +292,13 @@
     <string name="set">SET</string>
     <string name="change_app_locale">CHANGE APP LOCALE</string>
     <string name="are_you_sure_you_want_to_shutdown_vm">Are you sure you want to shutdown vm? To leave this but keep everything running, tap and hold the Shut down button.</string>
-    <string name="cpu">CPU</string>
+    <string name="cpu" translatable="false">CPU</string>
     <string name="save_changes">SAVE CHANGES</string>
     <string name="qemu_create_cmd">QEMU CREATE CMD</string>
     <string name="getit">Get</string>
     <string name="adddrivenote">Make sure you have selected the ROM or CDROM to boot the OS from. You may not need to select it if you have added them to QEMU PARAMS.</string>
     <string name="killqemu">Kill QEMU</string>
-    <string name="installing">Installing...</string>
+    <string name="installing">Installing…</string>
     <string name="vncdisplay">VNC display</string>
     <string name="setup_sound">Setup sound for Termux</string>
     <string name="setup_sound_guide_content">This enables virtual machines running on the Vectras VM to play audio using Termux. If you have not set up Termux yet, select Start setup, the command will be automatically copied to the clipboard, you need paste that command and run it in Termux to complete the setup. Next times, make sure Termux is running to play sound.</string>
@@ -306,7 +306,7 @@
     <string name="start_setup">Start setup</string>
     <string name="termux_is_not_installed">Termux is not installed</string>
     <string name="you_need_to_install_termux">You need to install Termux before setting up.</string>
-    <string name="wating_for_you">Waiting for you...</string>
+    <string name="wating_for_you">Waiting for you…</string>
     <string name="suggested_use_of_create_command">We recommend that you use the Create command to make creating a virtual machine simpler and easier.</string>
     <string name="oops">Oops!</string>
     <string name="cpu_does_not_have_the_necessary_instructions">CPU on your device does not have the necessary instructions for Vectras VM to work.</string>
@@ -344,7 +344,7 @@
     <string name="free_memory">Free:</string>
     <string name="used">used</string>
     <string name="there_is_nothing_here_because_there_is_no_vm_running">There is nothing here because there is no VM running.</string>
-    <string name="just_a_moment">Just a moment...</string>
+    <string name="just_a_moment">Just a moment…</string>
     <string name="unable_to_connect_to_server">Unable to connect to server.</string>
     <string name="join_our_community">Join our community</string>
     <string name="a_serious_problem_has_occurred">A serious problem has occurred! This problem is caused by the CPU or Android operating system on your device. You can join our community to learn more.</string>
@@ -389,7 +389,7 @@
     <string name="copy_file_content">Always copy the selected file to the virtual machine instead of using it directly.</string>
     <string name="reinstall_system">Reinstall system</string>
     <string name="reinstall_system_content">If you find that your system is having serious problems, you can reinstall the system. And all virtual machines will be kept.</string>
-    <string name="reinstalling">Reinstalling...</string>
+    <string name="reinstalling">Reinstalling…</string>
     <string name="mini_tools">Mini tools</string>
     <string name="error_NO_SUCH_FILE_OR_DIRECTORY">A problem occurred and the virtual machine failed to run because a file or directory that the virtual machine needs to run does not exist.</string>
     <string name="auto_create_new_hard_drive_when_creating_new_vm">Automatically create new hard drive when creating new virtual machine</string>
@@ -397,7 +397,7 @@
 
 
     <!--======================TERMUX STRINGS====================-->
-    <string name="application_name">Vterm</string>
+    <string name="application_name" translatable="false">Vterm</string>
     <string name="shared_user_label">Vterm user</string>
     <string name="run_command_permission_label">Run commands in Vterm environment</string>
     <string name="run_command_permission_description">execute arbitrary commands within Vterm environment</string>
@@ -454,7 +454,7 @@
 
     <!-- TermuxX11Activity -->
     <string name="msg_storage_permission_not_granted_warning">The storage permission must be granted
-        to Vectras VM app to...</string>
+        to Vectras VM app to…</string>
     <string name="action_grant_storage_permission">Grant Storage Permission</string>
 
     <string name="msg_battery_optimization_not_disabled_warning">Android battery optimizations
@@ -492,7 +492,7 @@
     <string name="log_level_unknown">*Unknown*</string>
     <string name="log_level_value">Logcat log level set to \"%1$s\"</string>
     <string name="yes">yes</string>
-    <string name="no">cancel</string>
+    <string name="no">Cancel</string>
     <string name="cancel">Cancel</string>
     <string name="back_to_the_display">Back to the Display</string>
     <string name="x11_ui_environment">x11 ui environment.</string>
@@ -503,24 +503,24 @@
     <string name="join_us_on_telegram_where_we_publish_all_the_news_and_updates_and_receive_your_opinions_and_bugs">Join us on Telegram where we publish all the news and updates and receive your opinions and bugs</string>
     <string name="join">JOIN</string>
     <string name="dont_show_again">DONT SHOW AGAIN</string>
-    <string name="this_version_unstable_and_has_alot_of_bugs_br"><![CDATA[this version unstable and has alot of bugs<br>]]></string>
+    <string name="this_version_unstable_and_has_alot_of_bugs_br"><![CDATA[this version unstable and has a lot of bugs<br>]]></string>
     <string name="debug_testing_build_5">DEBUG TESTING BUILD 5</string>
     <string name="welcome_to_debug_build_of_vectras_vm_br"><![CDATA[welcome to debug build of vectras vm :)<br>]]></string>
     <string name="don_t_forget_to_tell_us_on_github_issues_or_telegram_bot_br"><![CDATA[don\'t forget to tell us on github issues or telegram bot<br>]]></string>
     <string name="a_href_https_t_me_vectras_protect_bot_telegram_report_bot_a_br"><![CDATA[<a href=\"https://t.me/vectras_protect_bot\">telegram report bot</a><br>]]></string>
     <string name="a_href_https_github_com_epicstudios856_vectras_vm_android_issues_github_issues_page_a_br"><![CDATA[<a href=\"https://github.com/epicstudios856/Vectras-VM-Android/issues\">github issues page</a><br>]]></string>
-    <string name="getting_ready_for_you_please_don_t_disconnect_the_network">Getting ready for you...\nPlease don\'t disconnect the network.</string>
-    <string name="it_won_t_take_long">It won\'t take long...</string>
-    <string name="completed_10_it_won_t_take_long">Completed 10%\nIt won\'t take long...</string>
-    <string name="completed_20_it_won_t_take_long">Completed 20%\nIt won\'t take long...</string>
-    <string name="completed_30_it_won_t_take_long">Completed 30%\nIt won\'t take long...</string>
-    <string name="completed_40_it_won_t_take_long">Completed 40%\nIt won\'t take long...</string>
-    <string name="completed_50_it_won_t_take_long">Completed 50%\nIt won\'t take long...</string>
-    <string name="don_t_disconnect">Don\'t disconnect...</string>
-    <string name="completed_75_don_t_disconnect">Completed 75%\nDon\'t disconnect...</string>
-    <string name="keep_it_up">Keep it up...</string>
-    <string name="completed_80_keep_it_up">Completed 80%\nKeep it up...</string>
-    <string name="completed_95_keep_it_up">Completed 95%\nKeep it up...</string>
+    <string name="getting_ready_for_you_please_don_t_disconnect_the_network">1G  etting ready for you… Please don\'t disconnect the network.</string>
+    <string name="it_won_t_take_long">It won\'t take long…</string>
+    <string name="completed_10_it_won_t_take_long">Completed 10%\nIt won\'t take long…</string>
+    <string name="completed_20_it_won_t_take_long">Completed 20%\nIt won\'t take long…</string>
+    <string name="completed_30_it_won_t_take_long">Completed 30%\nIt won\'t take long…</string>
+    <string name="completed_40_it_won_t_take_long">Completed 40%\nIt won\'t take long…</string>
+    <string name="completed_50_it_won_t_take_long">Completed 50%\nIt won\'t take long…</string>
+    <string name="don_t_disconnect">Don\'t disconnect…</string>
+    <string name="completed_75_don_t_disconnect">Completed 75%\nDon\'t disconnect…</string>
+    <string name="keep_it_up">Keep it up…</string>
+    <string name="completed_80_keep_it_up">Completed 80%\nKeep it up…</string>
+    <string name="completed_95_keep_it_up">Completed 95%\nKeep it up…</string>
     <string name="almost_there">Almost there.</string>
     <string name="show_advanced_setup">Show advanced setup</string>
     <string name="allow_permissions">Allow permissions</string>
@@ -529,7 +529,7 @@
     <string name="do_you_want_to_set_it_up_automatically_or_select_the_bootstrap_file_manually">Do you want to set it up automatically or select the bootstrap file manually?</string>
     <string name="auto_setup">Auto setup</string>
     <string name="manual">Manual</string>
-    <string name="getting_ready_for_you">Getting ready for you...</string>
+    <string name="getting_ready_for_you">Getting ready for you…</string>
     <string name="failed">Failed!</string>
     <string name="something_went_wrong_during_setup_would_you_like_to_try_again">Something went wrong during setup. Would you like to try again?</string>
     <string name="show_log">Show log</string>
@@ -576,4 +576,67 @@
     <string name="title_activity_rom_info">RomInfo</string>
     <string name="alpine_desktop">Alpine Xfce4</string>
     <string name="discord">Discord</string>
+    <string name="extraction_complete">Extraction complete!</string>
+    <string name="settings_x11_display_resolution_mode">Display resolution mode</string>
+    <string name="settings_x11_display_scale">Display scale, %</string>
+    <string name="settings_x11_display_resolution">Display resolution</string>
+    <string name="settings_x11_reseed_screen_title">Reseed screen while soft keyboard is open</string>
+    <string name="settings_x11_reseed_screen_summary">The screen size will be adjusted while Soft Keyboard is open.</string>
+    <string name="settings_x11_pip_title">PIP</string>
+    <string name="settings_x11_pip_summary">Show app in picture-in-picture mode when home button or recents button is pressed</string>
+    <string name="settings_x11_full_screen_title">Fullscreen on device display</string>
+    <string name="settings_x11_full_screen_summary">Toggles immersive mode in your device display</string>
+    <string name="settings_x11_cutout">Hide display cutout (if any)</string>
+    <string name="settings_x11_keep_screen_on">Keep Screen On</string>
+    <string name="settings_x11_stretch">Stretch to fit display</string>
+    <string name="settings_x11_touchscreen_input_mode">Touchscreen input mode</string>
+    <string name="settings_x11_display_scale_factor_to_touchpad">Apply display scale factor to touchpad</string>
+    <string name="settings_x11_stylus_option_title">Show stylus click options</string>
+    <string name="settings_x11_stylus_option_summary">Stylus touch override, left middle or right click (Only for the stylus)</string>
+    <string name="settings_x11_mouse_overlay_title">Show mouse click helper overlay</string>
+    <string name="settings_x11_mouse_overlay_summary">Onscreen mouse buttons usable with touchpad</string>
+    <string name="settings_x11_capture_mouse_title">Capture external mouse when possible</string>
+    <string name="settings_x11_capture_mouse_summary">Intercept all hardware mouse events. Pointer is back to Android after pressing Escape key.</string>
+    <string name="settings_x11_capture_pointer_move">Transform captured pointer movements</string>
+    <string name="settings_x11_capture_pointer_move_factor">Captured pointer speed factor, %</string>
+    <string name="settings_x11_tap_to_move">Enable tap-to-move for touchpads</string>
+    <string name="settings_x11_back_toggle">Toggle keyboard using back key</string>
+    <string name="settings_x11_ext_keyboard_title">Show additional keyboard</string>
+    <string name="settiongs_capture_volkey">Capture volume keys</string>
+    <string name="settings_x11_hide_extkey_vol">Hide additional keyboard on Volume Down key press</string>
+    <string name="settings_x11_deact_speckey_title">Deactivate special keys on additional key bar after each keypress</string>
+    <string name="settings_x11_ime_with_hardkeyboard_title">Show IME with external keyboard</string>
+    <string name="settings_x11_prefer_scancode_title">Prefer scancodes when possible</string>
+    <string name="settings_x11_prefer_scancode_summary">Let X server handle hardware keyboard layout (with DE settings or setxkbmap).</string>
+    <string name="settings_x11_fix_hard_keyboard_scancode_title">Hardware keyboard scancodes workaround</string>
+    <string name="settings_x11_fix_hard_keyboard_scancode_summary">Fixes scancodes on some devices. Might cause problems with multiple layouts.</string>
+    <string name="settings_x11_intercept_system_shortcuts_title">Intercept system shortcuts</string>
+    <string name="settings_x11_intercept_system_shortcuts_summery">Samsung Dex only. Allows interception of &quot;Alt+F4&quot;, &quot;Meta+D&quot;, &quot;Meta+E&quot;, etc.</string>
+    <string name="settings_x11_capture_shortcut_manually_title">Enable Accessibility service for intercepting system shortcuts manually.</string>
+    <string name="settings_x11_capture_shortcut_manually_summary">Open Accessibility settings.</string>
+    <string name="settings_x11_intercepting_esc">Pause key intercepting with Esc key</string>
+    <string name="settings_x11_opacity_extra_keys_bar">Opacity of extra keys bar, %</string>
+    <string name="settings_extra_keys_config">Extra keys config</string>
+    <string name="settings_clipboard_sharing">Clipboard sharing</string>
+    <string name="settings_x11_request_notification_permission">Request notification permission</string>
+    <string name="x11_feature_not_supported">X11 Feature Not Supported</string>
+    <string name="the_x11_feature_is_currently_not_supported_on_android_14_and_above_please_use_a_device_with_android_13_or_below_for_x11_functionality">The X11 feature is currently not supported on Android 14 and above. Please use a device with Android 13 or below for X11 functionality.</string>
+    <string name="booting_up">Booting up…</string>
+    <string name="press_volume_down_for_right_click">Press Volume Down for Right Click</string>
+    <string name="press_volume_up_for_left_click">Press Volume Up for Left Click</string>
+    <string name="press_back_button_for_hide_show_controls_ui">Press Back Button for Hide/Show Controls UI</string>
+    <string name="settings_x11_adjust_display_title">Adjust display height for extra keys bar</string>
+    <string name="settings_x11_adjust_display_summary">May cause screen flickering during toggling EK bar</string>
+    <string name="settings_x11_ext_keyboard_summary">Show keyboard with additional keys.</string>
+    <string name="settings_x11_ime_with_hardkeyboard_summary">Show software keyboard while hardware keyboard is connected. Requires WRITE_SECURE_SETTINGS permission.</string>
+    <string name="settings_x11_auto_intercept_shortcut_title">Enable Accessibility service for intercepting system shortcuts automatically.</string>
+    <string name="settings_x11_auto_intercept_shortcut_summary">Requires WRITE_SECURE_SETTINGS permission.</string>
+    <string name="settings_x11_ignore_win_key_title">Filter out intercepted Win (Meta/Mod4) key.</string>
+    <string name="settings_x11_ignore_win_key_summary">Allows you to use Dex shortcuts while intercepting.</string>
+    <string name="settings_x11_deact_speckey_summary">Use long-tap to lock special keys</string>
+    <string name="settings_tag_output">Output</string>
+    <string name="settings_tag_point">Pointer</string>
+    <string name="settings_tag_keyboard">Keyboard</string>
+    <string name="settings_tag_other">Other</string>
+    <string name="executing_command_please_wait">Executing command, please wait…</string>
 </resources>
