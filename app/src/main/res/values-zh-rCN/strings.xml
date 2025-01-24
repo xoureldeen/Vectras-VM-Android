@@ -315,7 +315,7 @@
     <string name="used_memory">已用：</string>
     <string name="free_memory">剩余：</string>
     <string name="used">已被使用</string>
-    <string name="there_is_nothing_here_because_there_is_no_vm_running">m</string>
+    <string name="there_is_nothing_here_because_there_is_no_vm_running">无正在运行的虚拟机</string>
     <string name="just_a_moment">请稍等…</string>
     <string name="unable_to_connect_to_server">无法连接到服务器</string>
     <string name="join_our_community">加入我们的社区</string>
@@ -423,7 +423,7 @@
     <string name="plugin_info">lol</string>
 
     <!-- TermuxX11Activity -->
-    <string name="msg_storage_permission_not_granted_warning">必须为Vectras VM\n        授予存储权限...</string>
+    <string name="msg_storage_permission_not_granted_warning">必须为Vectras VM\n        授予存储权限…</string>
     <string name="action_grant_storage_permission">授予存储权限</string>
 
     <string name="msg_battery_optimization_not_disabled_warning">安卓电池优化（MIUI神隐模式/ColorOS后台行为控制）\n        应当为Vectras VM设置为“无限制”…\n        详情参阅 https://developer.android.com/about/versions/oreo/background\n        以及 https://developer.android.com/guide/components/foreground-services#background-start-restrictions\n\n        \n\n也可查阅 https://dontkillmyapp.com 获取关于厂商针对特定app杀后台的问题\n        按照不同的厂商你需要允许Vectras VM自启动, 关闭DuraSpeed（又称“MTK快霸”）\n        或者在DuraSpeed中为Vectras VM设置白名单,\n        放行 `后台弹出界面`权限</string>
@@ -451,7 +451,7 @@
     <string name="no">取消</string>
     <string name="cancel">取消</string>
     <string name="back_to_the_display">返回显示界面</string>
-    <string name="x11_ui_environment">X11 UI 环境</string>
+    <string name="x11_ui_environment">X11图形环境</string>
     <string name="x11">X11</string>
     <string name="rom_options">ROM选项</string>
     <string name="about_app">关于软件</string>
@@ -476,7 +476,7 @@
     <string name="completed_75_don_t_disconnect">已完成 75%\n快了快了</string>
     <string name="keep_it_up">只要能到达那个地方…</string>
     <string name="completed_80_keep_it_up">已完成 80%\n你别急让我先急</string>
-    <string name="completed_95_keep_it_up">Completed 95%\nKeep it up...</string>
+    <string name="completed_95_keep_it_up">Completed 95%\nKeep it up…</string>
     <string name="almost_there">已完成 95%</string>
     <string name="show_advanced_setup">显示详细日志</string>
     <string name="allow_permissions">请授予必要权限</string>
@@ -557,22 +557,41 @@
     <string name="settings_x11_capture_pointer_move_factor">捕获的鼠标移动速度调整（%）</string>
     <string name="settings_x11_tap_to_move">触摸板: 将鼠标直接移动至触摸点</string>
     <string name="settings_x11_back_toggle">返回键触发键盘</string>
-    <string name="settings_x11_ext_keyboard">显示附加键盘</string>
+    <string name="settings_x11_ext_keyboard_title">显示附加键盘</string>
     <string name="settiongs_capture_volkey">捕获音量键</string>
     <string name="settings_x11_hide_extkey_vol">按下音量减键时隐藏附加键盘</string>
-    <string name="settings_x11_deact_speckey">在按下任意键后自动解除特殊按键的按住状态</string>
-    <string name="settings_x11_ime_speckey">在输入法键盘上附上附加键盘</string>
+    <string name="settings_x11_deact_speckey_title">在按下任意键后自动解除特殊按键的按住状态</string>
+    <string name="settings_x11_ime_with_hardkeyboard_title">在连接实体键盘的同时显示输入法</string>
     <string name="settings_x11_prefer_scancode_title">尽量使用扫描码</string>
     <string name="settings_x11_prefer_scancode_summary">让X-Server处理键盘布局（带有DE设置与setxbkmap）</string>
     <string name="settings_x11_fix_hard_keyboard_scancode_title">解决实体键盘扫描码问题</string>
     <string name="settings_x11_fix_hard_keyboard_scancode_summary">解决部分设备的扫描码问题. 在多键盘布局的设备上可能存在问题</string>
-    <string name="settings_x11_intercept_system_shortcuts_title">捕获系统快捷方式</string>
-    <string name="settings_x11_intercept_system_shortcuts_summery">仅限三星. 允许捕获 &quot;Alt+F4&quot;, &quot;Meta+D&quot;, &quot;Meta+E&quot;, 等</string>
-    <string name="settings_x11_capture_shortcut_manually_title">打开无障碍服务实现捕获系统快捷方式</string>
+    <string name="settings_x11_intercept_system_shortcuts_title">捕获系统快捷手势</string>
+    <string name="settings_x11_intercept_system_shortcuts_summery">仅限三星DeX. 允许捕获 &quot;Alt+F4&quot;, &quot;Meta+D&quot;, &quot;Meta+E&quot;, 等</string>
+    <string name="settings_x11_capture_shortcut_manually_title">打开无障碍服务实现捕获系统快捷手势</string>
     <string name="settings_x11_capture_shortcut_manually_summary">打开无障碍设置</string>
     <string name="settings_x11_intercepting_esc">按下ESC键暂停按键捕获</string>
     <string name="settings_x11_opacity_extra_keys_bar">附加按键栏的不透明度（%）</string>
     <string name="settings_extra_keys_config">附加按键设置</string>
     <string name="settings_clipboard_sharing">开启剪贴板共享</string>
     <string name="settings_x11_request_notification_permission">请求通知权限</string>
+    <string name="x11_feature_not_supported">不兼容X11</string>
+    <string name="the_x11_feature_is_currently_not_supported_on_android_14_and_above_please_use_a_device_with_android_13_or_below_for_x11_functionality">在安卓14及以上版本里X11不被支持. 请在运行安卓13及以下的设备上使用X11功能</string>
+    <string name="booting_up">正在启动…</string>
+    <string name="press_volume_down_for_right_click">音量减=鼠标右键</string>
+    <string name="press_volume_up_for_left_click">音量加=鼠标左键</string>
+    <string name="press_back_button_for_hide_show_controls_ui">返回键触发控制界面的显示与隐藏</string>
+    <string name="settings_x11_adjust_display_title">为附加按键栏调整显示尺寸</string>
+    <string name="settings_x11_adjust_display_summary">可能会导致屏幕闪烁</string>
+    <string name="settings_x11_ext_keyboard_summary">显示有附加按键的键盘</string>
+    <string name="settings_x11_ime_with_hardkeyboard_summary">要在连接硬件键盘的情况下使用软键盘需要授予WRITE_SECURE_SETTINGS权限</string>
+    <string name="settings_x11_auto_intercept_shortcut_title">启用无障碍权限实现自动开启系统快捷手势的捕获</string>
+    <string name="settings_x11_auto_intercept_shortcut_summary">需要授予WRITE_SECURE_SETTINGS权限</string>
+    <string name="settings_x11_ignore_win_key_title">不捕获Meta/Win/Mod4键</string>
+    <string name="settings_x11_ignore_win_key_summary">允许你在捕获按键的同时使用DeX快捷键</string>
+    <string name="settings_x11_deact_speckey_summary">长按实现不自动解除</string>
+    <string name="settings_tag_output">显示输出</string>
+    <string name="settings_tag_point">鼠标指针</string>
+    <string name="settings_tag_keyboard">键盘</string>
+    <string name="settings_tag_other">杂项</string>
 </resources>
