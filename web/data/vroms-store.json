@@ -65,6 +65,19 @@
         "desc":"Windows 98 is a consumer-oriented operating system developed by Microsoft as part of its Windows 9x family of Microsoft Windows operating systems. It was the second operating system in the 9x line, as the successor to Windows 95. It was released to manufacturing on May 15, 1998, and generally to retail on June 25, 1998. Like its predecessor, it is a hybrid 16-bit and 32-bit monolithic product with the boot stage based on MS-DOS."
     },
     {
+        "rom_name":"Windows Server 2003",
+        "rom_icon":"https://4kwallpapers.com/images/wallpapers/microsoft-windows-2880x1800-17236.png",
+        "rom_url":"https://youtu.be/EvY-5Xhm0sY",
+        "rom_path":"Windows Server 2003.cvbi",
+        "rom_avail":true,
+        "rom_size":"2GB",
+        "rom_arch":"X86_64",
+        "rom_kernel":"windows",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"This Rom is from Nguyen Bao An Bui.\n\nWindows Server 2003 is a major release of Windows Server family, released to manufacturing on 24 April 2003. It is the server counterpart of Windows XP, although it was released nearly 18 months after its original release and is built on a slightly newer codebase (NT kernel version is 5.2). It was released in several editions, including Web Edition, Standard Edition, Datacenter Edition and Enterprise Edition. It replaces Windows 2000 Server and was eventually succeeded by Windows Server 2008."
+    },
+    {
         "rom_name":"Windows 10 LTSB 2015",
         "rom_icon":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3201px2BHmB4QCtWBBE7OpKAIU2HnmpS8PQ&s",
         "rom_url":"https://youtu.be/9AMJ1UB5NeY",
@@ -74,7 +87,7 @@
         "rom_arch":"X86_64",
         "rom_kernel":"windows",
         "rom_extra":"",
-        "final_rom_file_name":"Windows 10 LTSB 2015.cvbi",
+        "final_rom_file_name":"",
         "desc":"This Rom is from Nguyen Bao An Bui.\n\nWindows 10 is a major release of Microsoft's Windows NT operating system. The successor to Windows 8.1, it was released to manufacturing on July 15, 2015, and later to retail on July 29, 2015. Windows 10 was made available for download via MSDN and TechNet, as a free upgrade for retail copies of Windows 8 and Windows 8.1 users via the Microsoft Store, and to Windows 7 users via Windows Update. Unlike previous Windows NT releases, Windows 10 receives new builds on an ongoing basis, which are available at no additional cost to users; devices in enterprise environments can alternatively use long-term support milestones that only receive critical updates, such as security patches."
     },
     {
@@ -167,6 +180,19 @@
         "rom_extra":"",
         "final_rom_file_name":"",
         "desc":"Anonymous-OS is an Ubuntu-based Linux distribution Ubuntu. The operating system was released in March 2012. Anonymous-OS uses MATE as a desktop environment, and contains many essential software for hackers, such as Tor browser, Hash Identifier, XChat, SQL Poison, IP server finder, ParolaPass Password Generator, and HOIC. Similar to Backtrack, Anonymous-OS has been speculated that it contains trojans and malware. This operating system is not published by AnonymousAnonymous. After downloading and running Anonymous-OS, Rik Ferguson, director of the European Trend Micro cybersecurity research director, said it was \"a functional operating system with a range of pre-installed tools that could be used for purposes such as finding vulnerabilities or breaking passwords.\""
+    },
+    {
+        "rom_name":"Android 1.6 R2",
+        "rom_icon":"https://static.wikia.nocookie.net/android/images/f/f4/Androiddonut.jpg/revision/latest?cb=20111216213427",
+        "rom_url":"https://youtu.be/x4RYF0iOncs",
+        "rom_path":"Android 1.6 x86 R2.cvbi",
+        "rom_avail":true,
+        "rom_size":"1GB",
+        "rom_arch":"X86_64",
+        "rom_kernel":"android",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"This Rom is from Nguyen Bao An Bui.\n\nAndroid 1.6 Donut is a version of Android that was released on 15 September 2009, based on Linux kernel 2.6.29. Its predecessor was Android 1.5 Cupcake and its successor was Android 2.0 Eclair. Included in the update were numerous new features."
     },
     {
         "rom_name":"Android 3.2",
