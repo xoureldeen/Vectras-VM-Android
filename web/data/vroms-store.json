@@ -75,7 +75,7 @@
         "rom_kernel":"windows",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"This Rom is from Nguyen Bao An Bui.\n\nWindows Server 2003 is a major release of Windows Server family, released to manufacturing on 24 April 2003. It is the server counterpart of Windows XP, although it was released nearly 18 months after its original release and is built on a slightly newer codebase (NT kernel version is 5.2). It was released in several editions, including Web Edition, Standard Edition, Datacenter Edition and Enterprise Edition. It replaces Windows 2000 Server and was eventually succeeded by Windows Server 2008."
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows Server 2003 is a major release of Windows Server family, released to manufacturing on 24 April 2003. It is the server counterpart of Windows XP, although it was released nearly 18 months after its original release and is built on a slightly newer codebase (NT kernel version is 5.2). It was released in several editions, including Web Edition, Standard Edition, Datacenter Edition and Enterprise Edition. It replaces Windows 2000 Server and was eventually succeeded by Windows Server 2008."
     },
     {
         "rom_name":"Windows 10 LTSB 2015",
@@ -88,7 +88,7 @@
         "rom_kernel":"windows",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"This Rom is from Nguyen Bao An Bui.\n\nWindows 10 is a major release of Microsoft's Windows NT operating system. The successor to Windows 8.1, it was released to manufacturing on July 15, 2015, and later to retail on July 29, 2015. Windows 10 was made available for download via MSDN and TechNet, as a free upgrade for retail copies of Windows 8 and Windows 8.1 users via the Microsoft Store, and to Windows 7 users via Windows Update. Unlike previous Windows NT releases, Windows 10 receives new builds on an ongoing basis, which are available at no additional cost to users; devices in enterprise environments can alternatively use long-term support milestones that only receive critical updates, such as security patches."
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 10 is a major release of Microsoft's Windows NT operating system. The successor to Windows 8.1, it was released to manufacturing on July 15, 2015, and later to retail on July 29, 2015. Windows 10 was made available for download via MSDN and TechNet, as a free upgrade for retail copies of Windows 8 and Windows 8.1 users via the Microsoft Store, and to Windows 7 users via Windows Update. Unlike previous Windows NT releases, Windows 10 receives new builds on an ongoing basis, which are available at no additional cost to users; devices in enterprise environments can alternatively use long-term support milestones that only receive critical updates, such as security patches."
     },
     {
         "rom_name":"PonyOS",
@@ -192,7 +192,7 @@
         "rom_kernel":"android",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"This Rom is from Nguyen Bao An Bui.\n\nAndroid 1.6 Donut is a version of Android that was released on 15 September 2009, based on Linux kernel 2.6.29. Its predecessor was Android 1.5 Cupcake and its successor was Android 2.0 Eclair. Included in the update were numerous new features."
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nAndroid 1.6 Donut is a version of Android that was released on 15 September 2009, based on Linux kernel 2.6.29. Its predecessor was Android 1.5 Cupcake and its successor was Android 2.0 Eclair. Included in the update were numerous new features."
     },
     {
         "rom_name":"Android 3.2",
