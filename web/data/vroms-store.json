@@ -91,6 +91,19 @@
         "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 10 is a major release of Microsoft's Windows NT operating system. The successor to Windows 8.1, it was released to manufacturing on July 15, 2015, and later to retail on July 29, 2015. Windows 10 was made available for download via MSDN and TechNet, as a free upgrade for retail copies of Windows 8 and Windows 8.1 users via the Microsoft Store, and to Windows 7 users via Windows Update. Unlike previous Windows NT releases, Windows 10 receives new builds on an ongoing basis, which are available at no additional cost to users; devices in enterprise environments can alternatively use long-term support milestones that only receive critical updates, such as security patches."
     },
     {
+        "rom_name":"Windows 11 23H2",
+        "rom_icon":"https://www.getmyos.com/app_public/files/t/1/2021/06/windows_11_logo_by_getmyos.png",
+        "rom_url":"https://youtu.be/GnIx5vWU2tU",
+        "rom_path":"Windows 11 23H2 T11C.cvbi",
+        "rom_avail":true,
+        "rom_size":"8GB",
+        "rom_arch":"X86_64",
+        "rom_kernel":"windows",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 11 is the latest major release of Microsoft's Windows NT operating system, released on October 5, 2021 as the successor to Windows 10 (2015). It is provided free for any Windows 10 devices that meet the new Windows 11 system requirements. A server version, Windows Server 2025, was released in 2024. Windows 11 is the first major version of Windows NT without a companion mobile version following the discontinuations of Windows Phone with Windows 10 Mobile."
+    },
+    {
         "rom_name":"PonyOS",
         "rom_icon":"https://ponyos.org/assets/img/logo-new.png",
         "rom_url":"https://archive.org/download/blackberry-os/PonyOS.cvbi",
