@@ -48,6 +48,9 @@ body:
         - Google Pixel
         - Xiaomi (HyperOS)
         - RedMagic
+    validations:
+      required: true
+
   - type: textarea
     id: logs
     attributes:
