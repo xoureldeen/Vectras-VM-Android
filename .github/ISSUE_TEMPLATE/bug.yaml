@@ -1,5 +1,5 @@
 name: Bug Report
-description: bug report.
+description: bug report
 title: "🐛 [bug]: "
 labels: ["bug"]
 body:
