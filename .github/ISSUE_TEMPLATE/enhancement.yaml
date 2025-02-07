@@ -1,0 +1,54 @@
+name: Enhancement Request
+description: Suggest a new feature or an improvement to an existing one.
+title: "[🚀]: "
+labels: ["enhancement"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: "## 🚀 Enhancement Request"
+
+  - type: input
+    id: summary
+    attributes:
+      label: "Summary"
+      description: "Briefly summarize the enhancement request."
+      placeholder: "e.g., Add filter options to the search function"
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: "Problem Description"
+      description: "Explain why this enhancement is needed or describe the problem with the current functionality."
+      placeholder: "e.g., The search function currently lacks filtering options, making it hard to find specific results."
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: "Proposed Solution"
+      description: "Describe how this enhancement should be implemented."
+      placeholder: "e.g., Add dropdown filters for categories and date ranges in the search UI."
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: "Alternatives Considered"
+      description: "Have you considered any alternative solutions? If so, describe them here."
+      placeholder: "e.g., Instead of dropdown filters, allow users to enter custom search queries."
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: "Additional Context"
+      description: "Provide any other context, screenshots, or references related to this enhancement."
+      placeholder: "e.g., Example screenshots from similar applications."
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: "Checklist"
+      description: "Please check the following before submitting:"
+      options:
+        - label: "I have searched for similar enhancement requests."
+        - label: "I have provided sufficient detail in the request."
+        - label: "I understand that not all requests may be accepted."
