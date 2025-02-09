@@ -636,4 +636,23 @@ public class VMManager {
         }
         return false;
     }
+
+    public static boolean isthiscommandsafeimg(String _command) {
+        if (!_command.contains("-f qcow2")) {
+            String _getsize = _command.substring(_command.lastIndexOf(" ") + 1);
+            if (_getsize.toLowerCase().endsWith("t") || _getsize.toLowerCase().endsWith("p")  || _getsize.toLowerCase().endsWith("e")) {
+                return false;
+            }
+            if (_getsize.toLowerCase().endsWith("g")) {
+                return _getsize.length() <= 2;
+            }
+            if (_getsize.toLowerCase().endsWith("m")) {
+                return _getsize.length() <= 4;
+            }
+            if (_getsize.toLowerCase().endsWith("k")) {
+                return _getsize.length() <= 8;
+            }
+        }
+        return true;
+    }
 }

@@ -219,6 +219,23 @@ public class CustomRomActivity extends AppCompatActivity {
                 startActivityForResult(intent, 1001);
             }
         });
+
+        icon.setOnLongClickListener((View.OnLongClickListener) v -> {
+            if (!Objects.requireNonNull(icon.getText()).toString().isEmpty()) {
+                icon.setText("");
+                VectrasApp.setIconWithName(ivIcon, Objects.requireNonNull(title.getText()).toString());
+            }
+            return false;
+        });
+
+        iconLayout.setOnLongClickListener((View.OnLongClickListener) v -> {
+            if (!Objects.requireNonNull(icon.getText()).toString().isEmpty()) {
+                icon.setText("");
+                VectrasApp.setIconWithName(ivIcon, Objects.requireNonNull(title.getText()).toString());
+            }
+            return false;
+        });
+
         drive.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -235,6 +252,7 @@ public class CustomRomActivity extends AppCompatActivity {
                 startActivityForResult(intent, 1002);
             }
         });
+
         driveLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -263,6 +281,20 @@ public class CustomRomActivity extends AppCompatActivity {
                 dialogFragment.customRom = true;
                 dialogFragment.show(getSupportFragmentManager(), "CreateImageDialogFragment");
             }
+        });
+
+        drive.setOnLongClickListener((View.OnLongClickListener) v -> {
+            if (!Objects.requireNonNull(drive.getText()).toString().isEmpty()) {
+                drive.setText("");
+            }
+            return false;
+        });
+
+        driveLayout.setOnLongClickListener((View.OnLongClickListener) v -> {
+            if (!Objects.requireNonNull(drive.getText()).toString().isEmpty()) {
+                drive.setText("");
+            }
+            return false;
         });
 
         View.OnClickListener cdromClickListener = new View.OnClickListener() {
@@ -329,6 +361,20 @@ public class CustomRomActivity extends AppCompatActivity {
 
         cdrom.setOnClickListener(cdromClickListener);
         cdromLayout.setOnClickListener(cdromClickListener);
+
+        cdrom.setOnLongClickListener((View.OnLongClickListener) v -> {
+            if (!Objects.requireNonNull(cdrom.getText()).toString().isEmpty()) {
+                cdrom.setText("");
+            }
+            return false;
+        });
+
+        cdromLayout.setOnLongClickListener((View.OnLongClickListener) v -> {
+            if (!Objects.requireNonNull(cdrom.getText()).toString().isEmpty()) {
+                cdrom.setText("");
+            }
+            return false;
+        });
 
         addRomBtn = findViewById(R.id.addRomBtn);
         addRomBtn.setOnClickListener(new View.OnClickListener() {
@@ -448,6 +494,14 @@ public class CustomRomActivity extends AppCompatActivity {
 
                 startActivityForResult(intent, 1001);
             }
+        });
+
+        ivIcon.setOnLongClickListener((View.OnLongClickListener) v -> {
+            if (!Objects.requireNonNull(icon.getText()).toString().isEmpty()) {
+                icon.setText("");
+                VectrasApp.setIconWithName(ivIcon, title.getText().toString());
+            }
+            return false;
         });
 
         modify = getIntent().getBooleanExtra("MODIFY", false);

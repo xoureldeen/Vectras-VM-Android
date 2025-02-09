@@ -1128,9 +1128,18 @@ public class MainActivity extends AppCompatActivity {
                 VectrasApp.oneDialog(activity.getResources().getString(R.string.problem_has_been_detected), activity.getResources().getString(R.string.harmful_command_was_detected), true, false, activity);
                 return;
             }
-            StartVM.cdrompath = "";
-            String env = StartVM.env(MainActivity.activity, AppConfig.pendingCommand, "", "1");
-            MainActivity.startVM("Quick run", env, AppConfig.pendingCommand, "");
+            if (AppConfig.pendingCommand.startsWith("qemu-img")) {
+                if (!VMManager.isthiscommandsafeimg(AppConfig.pendingCommand)) {
+                    return;
+                }
+                Terminal _vterm = new Terminal(MainActivity.this);
+                _vterm.executeShellCommand2(AppConfig.pendingCommand, false, MainActivity.activity);
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.done), Toast.LENGTH_LONG).show();
+            } else {
+                StartVM.cdrompath = "";
+                String env = StartVM.env(MainActivity.activity, AppConfig.pendingCommand, "", "1");
+                MainActivity.startVM("Quick run", env, AppConfig.pendingCommand, "");
+            }
             AppConfig.pendingCommand = "";
         }
     }

@@ -4,15 +4,15 @@ plugins {
 
 android {
     namespace 'com.vectras.vm'
-    compileSdk compileApi
-    buildToolsVersion toolsVersion
+    compileSdk 35
+    buildToolsVersion '35.0.0'
 
     defaultConfig {
         applicationId "com.vectras.vm"
         minSdk minApi
         targetSdk targetApi
         versionCode 21
-        versionName "v2.9.5-3dfx-churro"
+        versionName "v2.9.5-3dfx-doughnut"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -63,8 +63,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
     }
 }
 

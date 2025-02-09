@@ -53,6 +53,7 @@ public class Minitools extends AppCompatActivity {
         LinearLayout restore = findViewById(R.id.restore);
         LinearLayout deleteallvm = findViewById(R.id.deleteallvm);
         LinearLayout reinstallsystem = findViewById(R.id.reinstallsystem);
+        LinearLayout deleteall = findViewById(R.id.deleteall);
 
         setupsoundfortermux.setOnClickListener(v -> {
             if (VectrasApp.isAppInstalled("com.termux", getApplicationContext())) {
@@ -156,6 +157,32 @@ public class Minitools extends AppCompatActivity {
                     cleanup.setVisibility(GONE);
                     restore.setVisibility(GONE);
                     deleteallvm.setVisibility(GONE);
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.done), Toast.LENGTH_LONG).show();
+                }
+            });
+            alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    alertDialog.dismiss();
+                }
+            });
+            alertDialog.show();
+        });
+
+        deleteall.setOnClickListener(v -> {
+            AlertDialog alertDialog = new AlertDialog.Builder(Minitools.this, R.style.MainDialogTheme).create();
+            alertDialog.setTitle(getResources().getString(R.string.delete_all));
+            alertDialog.setMessage(getResources().getString(R.string.delete_all_content));
+            alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.delete_all), new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    VectrasApp.killallqemuprocesses(getApplicationContext());
+                    VectrasApp.deleteDirectory(AppConfig.maindirpath);
+                    File vDir = new File(AppConfig.maindirpath);
+                    vDir.mkdirs();
+                    VectrasApp.writeToFile(AppConfig.maindirpath, "roms-data.json", "[]");
+                    cleanup.setVisibility(GONE);
+                    restore.setVisibility(GONE);
+                    deleteallvm.setVisibility(GONE);
+                    deleteall.setVisibility(GONE);
                     Toast.makeText(getApplicationContext(), getResources().getString(R.string.done), Toast.LENGTH_LONG).show();
                 }
             });

@@ -575,7 +575,7 @@ public class MainSettingsManager extends AppCompatActivity
 
     public static boolean autoCreateDisk(Activity activity) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        return prefs.getBoolean("autoCreateDisk", true);
+        return prefs.getBoolean("autoCreateDisk", false);
     }
 
     public static boolean useDefaultBios(Activity activity) {
@@ -748,6 +748,18 @@ public class MainSettingsManager extends AppCompatActivity
         edit.putBoolean("updateVersionPrompt", flag);
         edit.apply();
         // UIUtils.log("Setting First time: ");
+    }
+
+    public static void setsetUpWithManualSetupBefore(Context context, Boolean _boolean) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putBoolean("setUpWithManualSetupBefore", _boolean);
+        edit.commit();
+    }
+
+    public static Boolean getsetUpWithManualSetupBefore(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean("setUpWithManualSetupBefore", false);
     }
 
 }
