@@ -146,12 +146,16 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                         linearcannotconnecttoserver.setVisibility(View.GONE);
                     }
                     if (AppConfig.needreinstallsystem) {
-                        if (AppConfig.getSetupFiles().contains("arm64-v8a") || AppConfig.getSetupFiles().contains("x86_64")) {
-                            setupVectras64();
-                        } else {
-                            setupVectras32();
+                        AppConfig.needreinstallsystem = false;
+                        if (!MainSettingsManager.getsetUpWithManualSetupBefore(SetupQemuActivity.this)) {
+                            if (AppConfig.getSetupFiles().contains("arm64-v8a") || AppConfig.getSetupFiles().contains("x86_64")) {
+                                setupVectras64();
+                            } else {
+                                setupVectras32();
+                            }
+                            textviewsettingup.setText(getResources().getString(R.string.reinstalling));
+                            simpleSetupUIControler(1);
                         }
-                        textviewsettingup.setText(getResources().getString(R.string.reinstalling));
                     }
                 } else {
                     linearload.setVisibility(View.GONE);
@@ -792,6 +796,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                                         loading.setVisibility(View.GONE);
                                         alertDialog.dismiss();
                                         setupVectras();
+                                        MainSettingsManager.setsetUpWithManualSetupBefore(SetupQemuActivity.this, true);
                                     }
                                 };
                                 activity.runOnUiThread(runnable);

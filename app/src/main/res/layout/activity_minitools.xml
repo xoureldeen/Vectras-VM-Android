@@ -125,6 +125,26 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:padding="16dp"
+                    android:id="@+id/deleteall"
+                    android:background="?android:attr/selectableItemBackground" >
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/delete_forever_24px"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/delete_all"
+                        android:layout_marginLeft="8dp"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:padding="16dp"
                     android:id="@+id/reinstallsystem"
                     android:background="?android:attr/selectableItemBackground" >
 

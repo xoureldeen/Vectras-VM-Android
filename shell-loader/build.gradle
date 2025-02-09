@@ -1,13 +1,18 @@
 //file:noinspection UnnecessaryQualifiedReference, GrDeprecatedAPIUsage
 apply plugin: 'com.android.application'
 
+android {
+
+    buildToolsVersion '35.0.0'
+    compileSdk 35
+}
+
 android.namespace 'com.vectras.vm'
 android.defaultConfig.minSdkVersion 21
-android.compileSdkVersion 34
 android.buildTypes.debug.signingConfig null
 android.buildFeatures.buildConfig true
-android.compileOptions.sourceCompatibility JavaVersion.VERSION_1_8
-android.compileOptions.targetCompatibility JavaVersion.VERSION_1_8
+android.compileOptions.sourceCompatibility SDK_VERSION
+android.compileOptions.targetCompatibility SDK_VERSION
 dependencies.compileOnly project(':shell-loader:stub')
 android.applicationVariants.configureEach { outputs.configureEach { outputFileName = "loader.apk" } }
 

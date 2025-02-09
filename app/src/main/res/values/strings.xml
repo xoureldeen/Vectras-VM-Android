@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">v2.9.5 (3dfx - Churro)</string>
+    <string name="app_version" translatable="false">v2.9.5 (3dfx - Doughnut)</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -394,6 +394,7 @@
     <string name="error_NO_SUCH_FILE_OR_DIRECTORY">A problem occurred and the virtual machine failed to run because a file or directory that the virtual machine needs to run does not exist.</string>
     <string name="auto_create_new_hard_drive_when_creating_new_vm">Automatically create new hard drive when creating new virtual machine</string>
     <string name="with_size_is_128GB">With size is 128GB.</string>
+    <string name="delete_all_content">All data will be erased except the system.</string>
 
 
     <!--======================TERMUX STRINGS====================-->
@@ -509,7 +510,7 @@
     <string name="don_t_forget_to_tell_us_on_github_issues_or_telegram_bot_br"><![CDATA[don\'t forget to tell us on github issues or telegram bot<br>]]></string>
     <string name="a_href_https_t_me_vectras_protect_bot_telegram_report_bot_a_br"><![CDATA[<a href=\"https://t.me/vectras_protect_bot\">telegram report bot</a><br>]]></string>
     <string name="a_href_https_github_com_epicstudios856_vectras_vm_android_issues_github_issues_page_a_br"><![CDATA[<a href=\"https://github.com/epicstudios856/Vectras-VM-Android/issues\">github issues page</a><br>]]></string>
-    <string name="getting_ready_for_you_please_don_t_disconnect_the_network">1G  etting ready for you… Please don\'t disconnect the network.</string>
+    <string name="getting_ready_for_you_please_don_t_disconnect_the_network">Getting ready for you…\nPlease don\'t disconnect the network.</string>
     <string name="it_won_t_take_long">It won\'t take long…</string>
     <string name="completed_10_it_won_t_take_long">Completed 10%\nIt won\'t take long…</string>
     <string name="completed_20_it_won_t_take_long">Completed 20%\nIt won\'t take long…</string>
