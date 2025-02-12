@@ -245,5 +245,18 @@
         "rom_extra":"",
         "final_rom_file_name":"",
         "desc":"GXDE OS: Continues\n\nWith the updated kernel GXDE, DDE 15 returns to focus\n\nGXDE, Gorgeous eXtended Deepin Environment\n\nMinimum Requirements:\n\n- Quad-core processor or higher.\n- At least 16GB of free storage.\n- At least 5GB of free memory.\n\nDefault user: sudoers\nPassword: 123456"
+    },
+    {
+        "rom_name":"Mac OS 9.1",
+        "rom_icon":"https://www.macintoshrepository.org/_resize.php?w=640&h=480&bg_color=333333&imgenc=ZmlsZ8faXMvdXBsb2Fkcy9zY3JlZW5zaG90cy8xNjI4OTQ4MTE0LjUxNDFwMzU5MDBfMXUyLS0uLS1hLnBuZ3x3d3cubWFjaW50b3NocmVwb3NpdG9yeS5vcmcvMzU5MDAtbWFjLW9zLTktMS1zeXN0ZW0tZm9sZGVyLWZvci1tYWMtb3MteC1jbGFzc2ljLWVudmlyb25tZW50LQ%3D%3D",
+        "rom_url":"https://youtu.be/To_qgUH-RpM",
+        "rom_path":"Mac OS 9.1.cvbi",
+        "rom_avail":true,
+        "rom_size":"300MB",
+        "rom_arch":"PPC",
+        "rom_kernel":"apple",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nMac OS 9.x, based on Mac OS 8 was the final product based on the classic MacOS architecture. Like previous version, it lacks true protected memory or pre-emptive multitasking. MacOS 9 was abandoned in favor of of the Unix-ish NextStep/Openstep based Mac OS X."
     }
 ]
