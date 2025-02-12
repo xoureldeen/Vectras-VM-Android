@@ -45,7 +45,7 @@ or
 
 
 ### Minimum System Requirements
-- Android 5.0 and up.
+- Android 6.0 and up.
 - 3GB RAM (1GB of free RAM).
 - A good processor.
 
