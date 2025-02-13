@@ -189,10 +189,23 @@
         "rom_avail":true,
         "rom_size":"1.34GB",
         "rom_arch":"X86_64",
-        "rom_kernel":"android",
+        "rom_kernel":"linux",
         "rom_extra":"",
         "final_rom_file_name":"",
         "desc":"Anonymous-OS is an Ubuntu-based Linux distribution Ubuntu. The operating system was released in March 2012. Anonymous-OS uses MATE as a desktop environment, and contains many essential software for hackers, such as Tor browser, Hash Identifier, XChat, SQL Poison, IP server finder, ParolaPass Password Generator, and HOIC. Similar to Backtrack, Anonymous-OS has been speculated that it contains trojans and malware. This operating system is not published by AnonymousAnonymous. After downloading and running Anonymous-OS, Rik Ferguson, director of the European Trend Micro cybersecurity research director, said it was \"a functional operating system with a range of pre-installed tools that could be used for purposes such as finding vulnerabilities or breaking passwords.\""
+    },
+    {
+        "rom_name":"Armbian",
+        "rom_icon":"https://raw.githubusercontent.com/armbian/.github/master/profile/tux-three.png",
+        "rom_url":"https://archive.org/download/blackberry-os/armbian.cvbi",
+        "rom_path":"armbian.cvbi",
+        "rom_avail":true,
+        "rom_size":"3.5GB",
+        "rom_arch":"ARM64",
+        "rom_kernel":"linux",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"User: root\nPassword: 1234\n\nUltralight Linux optimized for custom ARM / RISC-V or Intel / AMD hardware\nComes with powerful system config tools.\nFor production: Noble, Bookworm. For testing: Trixie, Plucky"
     },
     {
         "rom_name":"Android 1.6 R2",
