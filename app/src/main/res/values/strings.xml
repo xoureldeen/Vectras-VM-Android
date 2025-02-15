@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">v2.9.5 (3dfx - Doughnut)</string>
+    <string name="app_version" translatable="false">v2.9.5 (3dfx - Empanada)</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -395,6 +395,7 @@
     <string name="auto_create_new_hard_drive_when_creating_new_vm">Automatically create new hard drive when creating new virtual machine</string>
     <string name="with_size_is_128GB">With size is 128GB.</string>
     <string name="delete_all_content">All data will be erased except the system.</string>
+    <string name="hide_advanced_setup">Hide advanced setup</string>
 
 
     <!--======================TERMUX STRINGS====================-->

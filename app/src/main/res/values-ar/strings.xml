@@ -362,6 +362,7 @@
     <string name="auto_create_new_hard_drive_when_creating_new_vm">إنشاء محرك أقراص ثابت جديد تلقائيًا عند إنشاء جهاز افتراضي جديد</string>
     <string name="with_size_is_128GB">بحجم 128 جيجابايت.</string>
     <string name="delete_all_content">سيتم مسح كافة البيانات باستثناء النظام.</string>
+    <string name="hide_advanced_setup">إخفاء الإعدادات المتقدمة</string>
 
     <!--======================TERMUX STRINGS====================-->
     <string name="shared_user_label">مستخدم Vterm</string>
