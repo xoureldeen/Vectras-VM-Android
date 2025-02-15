@@ -79,6 +79,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
     MaterialButton buttonsetuptryagain;
     MaterialButton buttonsetupshowlog;
     TextView textviewshowadvancedsetup;
+    TextView textviewhideadvancedsetup;
 
     AlertDialog alertDialog;
     private boolean settingup = false;
@@ -109,6 +110,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         buttonsetuptryagain = findViewById(R.id.buttonsetuptryagain);
         buttonsetupshowlog = findViewById(R.id.buttonsetupshowlog);
         textviewshowadvancedsetup = findViewById(R.id.textviewshowadvancedsetup);
+        textviewhideadvancedsetup = findViewById(R.id.textviewhideadvancedsetup);
 
         buttontryconnectagain.setOnClickListener(this);
         buttonautosetup.setOnClickListener(this);
@@ -116,6 +118,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         buttonsetuptryagain.setOnClickListener(this);
         buttonsetupshowlog.setOnClickListener(this);
         textviewshowadvancedsetup.setOnClickListener(this);
+        textviewhideadvancedsetup.setOnClickListener(this);
 
         progressBar = findViewById(R.id.progressBar);
 
@@ -325,6 +328,9 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         } else if (id == R.id.buttontryconnectagain) {
             linearload.setVisibility(View.VISIBLE);
             net.startRequestNetwork(RequestNetworkController.GET,AppConfig.bootstrapfileslink,"anbui",_net_request_listener);
+        } else if (id == R.id.textviewhideadvancedsetup) {
+            linearsimplesetupui.setVisibility(View.VISIBLE);
+            alertDialog.dismiss();
         }
     }
 
@@ -699,6 +705,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                 } else {
                     setupVectras32();
                 }
+                simpleSetupUIControler(1);
                 return;
             }
         });

@@ -1206,6 +1206,8 @@ public class CustomRomActivity extends AppCompatActivity {
                                                 UIUtils.UIAlert(activity, getResources().getString(R.string.from) + ": " + jObj.getString("author"), getResources().getString(R.string.description) + ":\n\n" + Html.fromHtml(jObj.getString("desc")));
                                             }
                                         }
+                                        TextView arch = findViewById(R.id.textArch);
+                                        arch.setText(MainSettingsManager.getArch(CustomRomActivity.this));
                                     } catch (JSONException e) {
                                         throw new RuntimeException(e);
                                     }
