@@ -71,6 +71,7 @@ Help support the project by contributing!
 - [3DFX QEMU PATCH](https://github.com/kjliew/qemu-3dfx)
 - [PROOT](https://proot-me.github.io/)
 - [Alpine Linux](https://www.alpinelinux.org/)
+- [Termux](https://github.com/termux)
 
 [ico-telegram]: https://img.shields.io/badge/Telegram-2CA5E0?logo=telegram&logoColor=white
 [ico-discord]: https://img.shields.io/badge/Discord-%235865F2.svg?&logo=discord&logoColor=white
