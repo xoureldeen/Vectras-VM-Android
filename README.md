@@ -6,6 +6,7 @@
 [![Ceasefire Now](https://badge.techforpalestine.org/default)](https://techforpalestine.org/learn-more)
 
 [![Telegram Channel][ico-telegram]][link-telegram]
+[![Discord][ico-discord]][link-discord]
 [![Latest Version][ico-version]][link-releases]
 [![Software License][ico-license]](LICENSE)
 
@@ -71,12 +72,14 @@ Help support the project by contributing!
 - [PROOT](https://proot-me.github.io/)
 - [Alpine Linux](https://www.alpinelinux.org/)
 
-[ico-telegram]: https://img.shields.io/badge/Telegram-2CA5E0?style=flat-square&logo=telegram&logoColor=white
+[ico-telegram]: https://img.shields.io/badge/Telegram-2CA5E0?logo=telegram&logoColor=white
+[ico-discord]: https://img.shields.io/badge/Discord-%235865F2.svg?&logo=discord&logoColor=white
 [ico-version]: https://img.shields.io/badge/Android-3DDC84?logo=android&logoColor=white
 [ico-license]: https://img.shields.io/badge/License-GPL_v2-blue.svg
 [ico-buymeacoffee]: https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?&logo=buy-me-a-coffee&logoColor=black
 [ico-ko-fi]: https://img.shields.io/badge/Ko--fi-FF5E5B?logo=ko-fi&logoColor=white
 
+[link-discord]: https://discord.gg/t8TACrKSk7
 [link-telegram]: https://t.me/vectras_os
 [link-repo]: https://github.com/xoureldeen/Vectras-VM-Android/
 [link-releases]: https://github.com/xoureldeen/Vectras-VM-Android/releases/
