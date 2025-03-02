@@ -18,20 +18,22 @@ If you need help, check out [our documentation](https://vectras.vercel.app/how.h
 
 ## Device Compatibility
 
-### Not Supported
-The following devices do not support this project on Android 14+:
+Works fine on devices manufactured in 2021 or later and devices equipped with Snapdragon 855 CPU or better. Here are the devices tested:
+
+### Works well
+
+- **Samsung**
+- **Google Pixel**
+- **Xiaomi**
+- **RedMagic**
+
+### Unstable
+
 - **Oppo**
 - **Realme**
 - **Huawei**
 - **Honor**
 - **Vivo**
-
-### Supported Devices
-The following devices are supported:
-- **Samsung**
-- **Google Pixel**
-- **Xiaomi (HyperOS)**
-- **RedMagic**
 
 You can try running Vectras VM on unsupported devices, but we cannot guarantee stability or support.
 
