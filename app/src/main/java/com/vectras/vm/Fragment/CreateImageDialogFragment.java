@@ -95,6 +95,12 @@ public class CreateImageDialogFragment extends DialogFragment {
                         imageSize.getText().toString() + "G", true, getActivity());
                 if (customRom)
                     CustomRomActivity.drive.setText(AppConfig.maindirpath + "IMG/" + imageName.getText().toString() + ".qcow2");
+                try {
+                    CustomRomActivity.driveLayout.setEndIconDrawable(R.drawable.more_vert_24px);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+
                 dismiss();
             }
         });

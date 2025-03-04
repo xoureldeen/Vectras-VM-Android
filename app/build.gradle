@@ -5,14 +5,13 @@ plugins {
 android {
     namespace 'com.vectras.vm'
     compileSdk 35
-    buildToolsVersion '35.0.0'
 
     defaultConfig {
         applicationId "com.vectras.vm"
         minSdk minApi
         targetSdk targetApi
         versionCode 21
-        versionName "v2.9.5-3dfx-empanada"
+        versionName "v2.9.5-3dfx-flan"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -66,6 +65,8 @@ android {
         sourceCompatibility JavaVersion.VERSION_21
         targetCompatibility JavaVersion.VERSION_21
     }
+    buildToolsVersion '35.0.1'
+    ndkVersion '21'
 }
 
 dependencies {
@@ -78,14 +79,14 @@ dependencies {
     implementation "androidx.preference:preference:1.2.1"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     implementation "androidx.viewpager:viewpager:1.1.0"
-    implementation platform('com.google.firebase:firebase-bom:33.7.0')
+    implementation platform('com.google.firebase:firebase-bom:33.10.0')
     implementation 'com.google.firebase:firebase-analytics'
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-database")
     implementation 'com.google.firebase:firebase-storage'
     implementation("com.google.android.gms:play-services-auth:21.3.0")
     implementation("com.google.firebase:firebase-crashlytics")
-    implementation 'com.google.android.gms:play-services-ads:23.6.0'
+    implementation 'com.google.android.gms:play-services-ads:24.0.0'
     implementation 'com.github.bumptech.glide:glide:4.16.0'
     implementation 'com.google.guava:guava:33.1.0-jre'
     implementation 'com.google.code.gson:gson:2.11.0'
@@ -95,9 +96,9 @@ dependencies {
     implementation 'org.zeroturnaround:zt-zip:1.16'
     implementation 'com.airbnb.android:lottie:6.5.2'
     implementation 'org.apache.commons:commons-compress:1.25.0'
-    implementation 'com.google.firebase:firebase-crashlytics-buildtools:3.0.2'
-    implementation 'androidx.activity:activity:1.10.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.2.0'
+    implementation 'com.google.firebase:firebase-crashlytics-buildtools:3.0.3'
+    implementation 'androidx.activity:activity:1.10.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
     implementation 'androidx.preference:preference:1.2.1'
     compileOnly project(':shell-loader:stub')
     implementation project(":terminal-view")

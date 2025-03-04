@@ -135,6 +135,14 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
                         bottomSheetDialog.cancel();
                     }
                 });
+                Button removeRomBtn = v.findViewById(R.id.removeRomBtn);
+                removeRomBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        VMManager.deleteVMDialog(current.itemName, position, MainActivity.activity);
+                        bottomSheetDialog.cancel();
+                    }
+                });
                 bottomSheetDialog.show();
             }
         });
@@ -150,126 +158,7 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
         myHolder.cdRoms.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                AlertDialog ad;
-                ad = new AlertDialog.Builder(MainActivity.activity, R.style.MainDialogTheme).create();
-                ad.setTitle(MainActivity.activity.getString(R.string.remove)+ " " + current.itemName);
-                ad.setMessage(MainActivity.activity.getString(R.string.are_you_sure));
-                ad.setButton(Dialog.BUTTON_NEGATIVE, MainActivity.activity.getString(R.string.remove) + " " + current.itemName, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        VMManager.pendingPosition = position;
-                        VMManager.pendingJsonContent = VectrasApp.readFile(AppConfig.maindirpath + "roms-data.json");
-
-                        File file = new File(current.itemPath);
-                        File file2 = new File(current.itemDrv1);
-                        Pattern pattern = Pattern.compile("-drive index=1,media=cdrom,file='([^']*)'");
-                        Matcher matcher = pattern.matcher(current.itemExtra);
-
-                        AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.activity, R.style.MainDialogTheme).create();
-                        alertDialog.setTitle("Keep files?");
-                        alertDialog.setMessage("Do you want to keep this ROM file and CD ROM file?");
-                        alertDialog.setCancelable(false);
-                        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Keep", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                VMManager.hideVMIDWithPosition();
-                            }
-                        });
-                        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Remove all", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                isKeptSomeFiles = false;
-                                //String _romsdata = VectrasApp.readFile(AppConfig.maindirpath + "roms-data.json").replace("\\/", "/");
-                                //if (matcher.find()) {
-                                    // We found the -drive pattern and its file path.
-                                    //if (!_romsdata.contains(matcher.group(1))) {
-                                        //File cdrom = new File(matcher.group(1));
-
-                                        //try {
-                                            //boolean deleted = cdrom.delete();
-                                            //if(!deleted) {
-                                                // The file wasn't successfully deleted.
-                                                // Handle this case, maybe the file didn't exist or was read only.
-                                            //}
-                                        //} catch (Exception e) {
-                                            //UIUtils.toastLong(MainActivity.activity, e.toString());
-                                        //}
-                                    //} else {
-                                        //isKeptSomeFiles = true;
-                                    //}
-
-                                //} else {
-                                    // The pattern wasn't found in the current item's extra text.
-                                    // Handle the case where the -drive pattern doesn't match.
-                                //}
-
-//                                if (!_romsdata.contains(current.itemPath)) {
-//                                    try {
-//                                        file.delete();
-//                                    } catch (Exception e) {
-//                                        UIUtils.toastLong(MainActivity.activity, e.toString());
-//                                    } finally {
-//                                    }
-//                                } else {
-//                                    isKeptSomeFiles = true;
-//                                }
-//
-//                                if (!_romsdata.contains(current.itemDrv1)) {
-//                                    try {
-//                                        file2.delete();
-//                                    } catch (Exception e) {
-//                                        UIUtils.toastLong(MainActivity.activity, e.toString());
-//                                    } finally {
-//                                    }
-//                                } else {
-//                                    isKeptSomeFiles = true;
-//                                }
-
-                                VMManager.deleteVM();
-
-//                                if (!_romsdata.contains(AppConfig.maindirpath + "roms/" + current.itemName)) {
-//                                    VectrasApp.deleteDirectory(AppConfig.maindirpath + "roms/" + current.itemName);
-//                                } else {
-//                                    isKeptSomeFiles = true;
-//                                }
-//
-//                                if (!_romsdata.contains((AppConfig.maindirpath + "roms/" + current.itemName).replaceAll(" ", "."))) {
-//                                    VectrasApp.deleteDirectory((AppConfig.maindirpath + "roms/" + current.itemName).replaceAll(" ", "."));
-//                                } else {
-//                                    isKeptSomeFiles = true;
-//                                }
-
-                                if (isKeptSomeFiles && VectrasApp.readFile(AppConfig.maindirpath + "roms-data.json").contains("{")) {
-                                    VectrasApp.oneDialog(MainActivity.activity.getString(R.string.keep), MainActivity.activity.getString(R.string.kept_some_files), true, false, MainActivity.activity);
-                                }
-                            }
-                        });
-                        alertDialog.show();
-
-                        MainActivity.mMainAdapter = new AdapterMainRoms(MainActivity.activity, MainActivity.data);
-                        MainActivity.data.remove(position);
-                        MainActivity.mRVMainRoms.setAdapter(MainActivity.mMainAdapter);
-                        MainActivity.mRVMainRoms.setLayoutManager(new GridLayoutManager(MainActivity.activity, 2));
-                        MainActivity.jArray.remove(position);
-                        try {
-                            Writer output = null;
-                            File jsonFile = new File(AppConfig.maindirpath + "roms-data" + ".json");
-                            output = new BufferedWriter(new FileWriter(jsonFile));
-                            output.write(MainActivity.jArray.toString());
-                            output.close();
-                        } catch (Exception e) {
-                            UIUtils.toastLong(MainActivity.activity, e.toString());
-                        }
-                        UIUtils.toastLong(MainActivity.activity, current.itemName + context.getString(R.string.are_removed_successfully));
-                        if (!VectrasApp.readFile(AppConfig.maindirpath + "roms-data.json").contains("{")) {
-                            MainActivity.mdatasize2();
-                        }
-                        return;
-                    }
-                });
-                ad.setButton(Dialog.BUTTON_POSITIVE, MainActivity.activity.getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        return;
-                    }
-                });
-                ad.show();
+                VMManager.deleteVMDialog(current.itemName, position, MainActivity.activity);
                 return false;
             }
         });

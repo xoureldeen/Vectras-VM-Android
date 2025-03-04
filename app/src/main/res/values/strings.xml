@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">v2.9.5 (3dfx - Empanada)</string>
+    <string name="app_version" translatable="false">v2.9.5 (3dfx - Flan)</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -107,7 +107,7 @@
     <string name="permission_title">Permission Required!</string>
     <string name="permission_notification_text">Due to android policy, notification permissions are needed, to send vm notifications!</string>
     <string name="mouse_mode">Mouse Mode</string>
-    <string name="export">EXPORT</string>
+    <string name="export">Export</string>
     <string name="email_verification_sent">Email Verification Sent.</string>
     <string name="sign_out">Sign out</string>
     <string name="android" translatable="false">Android</string>
@@ -212,7 +212,7 @@
     <string name="install">Install</string>
     <string name="select_tar">SELECT (.TAR.GZ)</string>
     <string name="not_selected_yet">not selected yet.</string>
-    <string name="modify">MODIFY</string>
+    <string name="modify">Modify</string>
 
     <string name="input">input</string>
     <string name="tiny_vterm">Tiny vterm</string>
@@ -396,6 +396,12 @@
     <string name="with_size_is_128GB">With size is 128GB.</string>
     <string name="delete_all_content">All data will be erased except the system.</string>
     <string name="hide_advanced_setup">Hide advanced setup</string>
+    <string name="change_thumbnail">Change thumbnail</string>
+    <string name="do_you_want_to_change_or_remove">Do you want to change or remove?</string>
+    <string name="change">Change</string>
+    <string name="change_hard_drive">Change hard drive</string>
+    <string name="do_you_want_to_change_create_or_remove">Do you want to change, create or remove?</string>
+
 
 
     <!--======================TERMUX STRINGS====================-->
