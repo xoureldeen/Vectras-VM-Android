@@ -3,6 +3,7 @@ package com.vectras.vm;
 import static com.vectras.vm.VectrasApp.isFileExists;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,17 +11,24 @@ import android.net.Uri;
 import android.util.Log;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.MainRoms.AdapterMainRoms;
+import com.vectras.vm.utils.UIUtils;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class VMManager {
 
@@ -33,6 +41,7 @@ public class VMManager {
     public static String pendingVMID = "";
     public static int pendingPosition = 0;
     public static int restoredVMs = 0;
+    public static boolean isKeptSomeFiles = false;
 
     public static void createNewVM(String name, String thumbnail, String drive, String arch, String cdrom, String params, String vmID) {
         mapForCreateNewVM.clear();
@@ -80,6 +89,64 @@ public class VMManager {
         finalJson = new Gson().toJson(mapForCreateNewVM);
         VectrasApp.writeToFile(AppConfig.maindirpath + "/roms/" + Objects.requireNonNull(mapForCreateNewVM.get("vmID")).toString(), "rom-data.json", finalJson.replace("\\u003d", "="));
         VectrasApp.writeToFile(AppConfig.maindirpath + "/roms/" + Objects.requireNonNull(mapForCreateNewVM.get("vmID")).toString(), "vmID.txt", Objects.requireNonNull(mapForCreateNewVM.get("vmID")).toString());
+    }
+
+    public static void deleteVMDialog(String _vmName, int _position, Activity _activity) {
+        AlertDialog ad = new AlertDialog.Builder(_activity, R.style.MainDialogTheme).create();
+        ad.setTitle(_activity.getString(R.string.remove)+ " " + _vmName);
+        ad.setMessage(_activity.getString(R.string.are_you_sure));
+        ad.setButton(Dialog.BUTTON_NEGATIVE, _activity.getString(R.string.remove) + " " + _vmName, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                pendingPosition = _position;
+                pendingJsonContent = VectrasApp.readFile(AppConfig.maindirpath + "roms-data.json");
+
+                AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.activity, R.style.MainDialogTheme).create();
+                alertDialog.setTitle(_activity.getString(R.string.keep_files_question_mark));
+                alertDialog.setMessage(_activity.getString(R.string.do_you_want_to_keep_this_ROM_file_and_CD_ROM_file));
+                alertDialog.setCancelable(false);
+                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, _activity.getString(R.string.keep), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        hideVMIDWithPosition();
+                    }
+                });
+                alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, _activity.getString(R.string.remove_all), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        isKeptSomeFiles = false;
+                        deleteVM();
+
+                        if (isKeptSomeFiles && VectrasApp.readFile(AppConfig.maindirpath + "roms-data.json").contains("{")) {
+                            VectrasApp.oneDialog(_activity.getString(R.string.keep), _activity.getString(R.string.kept_some_files), true, false, _activity);
+                        }
+                    }
+                });
+                alertDialog.show();
+
+                MainActivity.mMainAdapter = new AdapterMainRoms(MainActivity.activity, MainActivity.data);
+                MainActivity.data.remove(_position);
+                MainActivity.mRVMainRoms.setAdapter(MainActivity.mMainAdapter);
+                MainActivity.mRVMainRoms.setLayoutManager(new GridLayoutManager(MainActivity.activity, 2));
+                MainActivity.jArray.remove(_position);
+                try {
+                    Writer output = null;
+                    File jsonFile = new File(AppConfig.maindirpath + "roms-data" + ".json");
+                    output = new BufferedWriter(new FileWriter(jsonFile));
+                    output.write(MainActivity.jArray.toString());
+                    output.close();
+                } catch (Exception e) {
+                    UIUtils.toastLong(_activity, e.toString());
+                }
+                UIUtils.toastLong(_activity, _vmName + _activity.getString(R.string.are_removed_successfully));
+                if (!VectrasApp.readFile(AppConfig.maindirpath + "roms-data.json").contains("{")) {
+                    MainActivity.mdatasize2();
+                }
+            }
+        });
+        ad.setButton(Dialog.BUTTON_POSITIVE, _activity.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                ad.dismiss();
+            }
+        });
+        ad.show();
     }
 
     public static String idGenerator() {
@@ -155,7 +222,7 @@ public class VMManager {
                                     if (!finalJson.contains(_filelist.get((int)(_startRepeat)))) {
                                         VectrasApp.deleteDirectory(_filelist.get((int)(_startRepeat)));
                                     } else {
-                                        AdapterMainRoms.isKeptSomeFiles = true;
+                                        isKeptSomeFiles = true;
                                         hideVMID(pendingVMID);
                                     }
                                 }

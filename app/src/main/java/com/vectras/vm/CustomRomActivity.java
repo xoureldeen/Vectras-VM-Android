@@ -103,6 +103,12 @@ public class CustomRomActivity extends AppCompatActivity {
 
     public static CustomRomActivity activity;
 
+    private String thumbnailPath = "";
+    private ImageView ivAddThubnail;
+    private TextInputLayout cdromLayout;
+    private ImageView ivIcon;
+    public static TextInputLayout driveLayout;
+
     private boolean isFilled(TextInputEditText TXT) {
         if (TXT.getText().toString().trim().length() > 0)
             return true;
@@ -124,8 +130,8 @@ public class CustomRomActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
 
-        if (!modify)
-            menu.add(1, 1, 1, "custom rom").setShortcut('3', 'c').setIcon(R.drawable.input_circle).setShowAsAction(1);
+        //if (!modify)
+            menu.add(1, 1, 1, getString(R.string.create)).setShortcut('3', 'c').setIcon(R.drawable.check_24px).setShowAsAction(1);
 
         return true;
     }
@@ -135,17 +141,54 @@ public class CustomRomActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case 1:
-                Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType("*/*");
+//                Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
+//                intent.addCategory(Intent.CATEGORY_OPENABLE);
+//                intent.setType("*/*");
+//
+//                // Optionally, specify a URI for the file that should appear in the
+//                // system file picker when it loads.
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                    intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
+//                }
+//
+//                startActivityForResult(intent, 0);
+                if (loadingPb.getVisibility() == View.GONE) {
+                    if (Objects.requireNonNull(title.getText()).toString().isEmpty()) {
+                        VectrasApp.oneDialog(getResources().getString(R.string.oops), getResources().getString(R.string.need_set_name),true, false, activity);
+                    } else if ((!Objects.requireNonNull(drive.getText()).toString().isEmpty()) || (!Objects.requireNonNull(cdrom.getText()).toString().isEmpty())) {
+                        checkJsonFile();
+                    } else {
+                        if (VectrasApp.isHaveADisk(Objects.requireNonNull(qemu.getText()).toString())) {
+                            checkJsonFile();
+                        } else {
+                            if (qemu.getText().toString().isEmpty()) {
+                                AlertDialog alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
+                                alertDialog.setTitle(getResources().getString(R.string.problem_has_been_detected));
+                                alertDialog.setMessage(getResources().getString(R.string.qemu_params_is_empty));
+                                alertDialog.setCancelable(true);
+                                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.continuetext), (dialog, which) -> {
+                                    checkJsonFile();
+                                });
+                                alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), (dialog, which) -> {
 
-                // Optionally, specify a URI for the file that should appear in the
-                // system file picker when it loads.
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
+                                });
+                                alertDialog.show();
+                            } else {
+                                AlertDialog alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
+                                alertDialog.setTitle(getResources().getString(R.string.problem_has_been_detected));
+                                alertDialog.setMessage(getResources().getString(R.string.you_have_not_added_any_storage_devices));
+                                alertDialog.setCancelable(true);
+                                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.continuetext), (dialog, which) -> {
+                                    checkJsonFile();
+                                });
+                                alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), (dialog, which) -> {
+
+                                });
+                                alertDialog.show();
+                            }
+                        }
+                    }
                 }
-
-                startActivityForResult(intent, 0);
                 return true;
             case android.R.id.home:
                 finish();
@@ -175,18 +218,19 @@ public class CustomRomActivity extends AppCompatActivity {
 
             }
         });
+        ivAddThubnail = findViewById(R.id.ivAddThubnail);
+        cdromLayout = findViewById(R.id.cdromField);
+        driveLayout = findViewById(R.id.driveField);
+        ivIcon = findViewById(R.id.ivIcon);
         title = findViewById(R.id.title);
         icon = findViewById(R.id.icon);
         drive = findViewById(R.id.drive);
         cdrom = findViewById(R.id.cdrom);
         qemu = findViewById(R.id.qemu);
         TextInputLayout iconLayout = findViewById(R.id.iconField);
-        TextInputLayout driveLayout = findViewById(R.id.driveField);
-        TextInputLayout cdromLayout = findViewById(R.id.cdromField);
         TextInputLayout qemuLayout = findViewById(R.id.qemuField);
         TextView arch = findViewById(R.id.textArch);
         arch.setText(MainSettingsManager.getArch(this));
-        ImageView ivIcon = findViewById(R.id.ivIcon);
         icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -218,22 +262,6 @@ public class CustomRomActivity extends AppCompatActivity {
 
                 startActivityForResult(intent, 1001);
             }
-        });
-
-        icon.setOnLongClickListener((View.OnLongClickListener) v -> {
-            if (!Objects.requireNonNull(icon.getText()).toString().isEmpty()) {
-                icon.setText("");
-                VectrasApp.setIconWithName(ivIcon, Objects.requireNonNull(title.getText()).toString());
-            }
-            return false;
-        });
-
-        iconLayout.setOnLongClickListener((View.OnLongClickListener) v -> {
-            if (!Objects.requireNonNull(icon.getText()).toString().isEmpty()) {
-                icon.setText("");
-                VectrasApp.setIconWithName(ivIcon, Objects.requireNonNull(title.getText()).toString());
-            }
-            return false;
         });
 
         drive.setOnClickListener(new View.OnClickListener() {
@@ -273,39 +301,19 @@ public class CustomRomActivity extends AppCompatActivity {
         driveLayout.setEndIconOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                File vDir = new File(com.vectras.vm.AppConfig.maindirpath + "IMG");
-                if (!vDir.exists()) {
-                    vDir.mkdirs();
-                }
-                CreateImageDialogFragment dialogFragment = new CreateImageDialogFragment();
-                dialogFragment.customRom = true;
-                dialogFragment.show(getSupportFragmentManager(), "CreateImageDialogFragment");
-            }
-        });
-
-        drive.setOnLongClickListener((View.OnLongClickListener) v -> {
-            if (!Objects.requireNonNull(drive.getText()).toString().isEmpty()) {
-                drive.setText("");
-            }
-            return false;
-        });
-
-        driveLayout.setOnLongClickListener((View.OnLongClickListener) v -> {
-            if (!Objects.requireNonNull(drive.getText()).toString().isEmpty()) {
-                drive.setText("");
-            }
-            return false;
-        });
-
-        View.OnClickListener cdromClickListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (Objects.requireNonNull(cdrom.getText()).length() > 0) {
-                    AlertDialog ad;
-                    ad = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
-                    ad.setTitle("REPLACE ISO");
-                    ad.setMessage("there is iso imported you want to replace it?");
-                    ad.setButton(Dialog.BUTTON_POSITIVE, "REPLACE", new DialogInterface.OnClickListener() {
+                if (Objects.requireNonNull(drive.getText()).toString().isEmpty()) {
+                    File vDir = new File(com.vectras.vm.AppConfig.maindirpath + "IMG");
+                    if (!vDir.exists()) {
+                        vDir.mkdirs();
+                    }
+                    CreateImageDialogFragment dialogFragment = new CreateImageDialogFragment();
+                    dialogFragment.customRom = true;
+                    dialogFragment.show(getSupportFragmentManager(), "CreateImageDialogFragment");
+                } else {
+                    AlertDialog ad = new AlertDialog.Builder(CustomRomActivity.this, R.style.MainDialogTheme).create();
+                    ad.setTitle(getString(R.string.change_hard_drive));
+                    ad.setMessage(getString(R.string.do_you_want_to_change_create_or_remove));
+                    ad.setButton(Dialog.BUTTON_NEGATIVE, getString(R.string.change), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
                             intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -317,63 +325,63 @@ public class CustomRomActivity extends AppCompatActivity {
                                 intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
                             }
 
-                            startActivityForResult(intent, 1003);
-                            return;
+                            startActivityForResult(intent, 1002);
+                            ad.dismiss();
                         }
                     });
-                    ad.setButton(Dialog.BUTTON_NEGATIVE, "REMOVE", new DialogInterface.OnClickListener() {
+                    ad.setButton(Dialog.BUTTON_POSITIVE, getString(R.string.remove), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            File isoFile = new File(cdrom.getText().toString());
-                            if (isoFile.exists()) {
-                                isoFile.delete();
+                            VectrasApp.deleteDirectory(drive.getText().toString());
+                            drive.setText("");
+                            driveLayout.setEndIconDrawable(R.drawable.round_add_24);
+                            ad.dismiss();
+                        }
+                    });
+                    ad.setButton(Dialog.BUTTON_NEUTRAL, getString(R.string.create), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            File vDir = new File(com.vectras.vm.AppConfig.maindirpath + "IMG");
+                            if (!vDir.exists()) {
+                                vDir.mkdirs();
                             }
-                            cdrom.setText("");
-
-                            //Pattern pattern = Pattern.compile(cdromPatternCompile());
-                            //Matcher matcher = pattern.matcher(qemu.getText().toString());
-
-                            //if (matcher.find()) {
-                                // Replace the entire -drive ... file='...' parameter with an empty string
-                                //String modifiedQemuText = qemu.getText().toString().replace(matcher.group(0), "");
-                                //qemu.setText(modifiedQemuText);
-                           //} else {
-                                // Handle the case where the -drive parameter doesn't exist
-                                // This could involve logging the issue, displaying a message to the user, etc.
-                            //}
+                            CreateImageDialogFragment dialogFragment = new CreateImageDialogFragment();
+                            dialogFragment.customRom = true;
+                            dialogFragment.show(getSupportFragmentManager(), "CreateImageDialogFragment");
+                            ad.dismiss();
                         }
                     });
                     ad.show();
-                } else {
-                    Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
-                    intent.addCategory(Intent.CATEGORY_OPENABLE);
-                    intent.setType("*/*");
-
-                    // Optionally, specify a URI for the file that should appear in the
-                    // system file picker when it loads.
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
-                    }
-
-                    startActivityForResult(intent, 1003);
                 }
+            }
+        });
+
+        View.OnClickListener cdromClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("*/*");
+
+                // Optionally, specify a URI for the file that should appear in the
+                // system file picker when it loads.
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
+                }
+
+                startActivityForResult(intent, 1003);
             }
         };
 
         cdrom.setOnClickListener(cdromClickListener);
         cdromLayout.setOnClickListener(cdromClickListener);
 
-        cdrom.setOnLongClickListener((View.OnLongClickListener) v -> {
-            if (!Objects.requireNonNull(cdrom.getText()).toString().isEmpty()) {
-                cdrom.setText("");
+        cdromLayout.setEndIconOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!Objects.requireNonNull(cdrom.getText()).toString().isEmpty()) {
+                    cdrom.setText("");
+                    cdromLayout.setEndIconMode(TextInputLayout.END_ICON_NONE);
+                }
             }
-            return false;
-        });
-
-        cdromLayout.setOnLongClickListener((View.OnLongClickListener) v -> {
-            if (!Objects.requireNonNull(cdrom.getText()).toString().isEmpty()) {
-                cdrom.setText("");
-            }
-            return false;
         });
 
         addRomBtn = findViewById(R.id.addRomBtn);
@@ -482,26 +490,49 @@ public class CustomRomActivity extends AppCompatActivity {
         ivIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType("image/*");
+                if (thumbnailPath.isEmpty()) {
+                    Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    intent.setType("image/*");
 
-                // Optionally, specify a URI for the file that should appear in the
-                // system file picker when it loads.
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
+                    // Optionally, specify a URI for the file that should appear in the
+                    // system file picker when it loads.
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
+                    }
+
+                    startActivityForResult(intent, 1001);
+                } else {
+                    AlertDialog ad = new AlertDialog.Builder(CustomRomActivity.this, R.style.MainDialogTheme).create();
+                    ad.setTitle(getString(R.string.change_thumbnail));
+                    ad.setMessage(getString(R.string.do_you_want_to_change_or_remove));
+                    ad.setButton(Dialog.BUTTON_NEGATIVE, getString(R.string.change), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
+                            intent.addCategory(Intent.CATEGORY_OPENABLE);
+                            intent.setType("image/*");
+
+                            // Optionally, specify a URI for the file that should appear in the
+                            // system file picker when it loads.
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
+                            }
+
+                            startActivityForResult(intent, 1001);
+                            ad.dismiss();
+                        }
+                    });
+                    ad.setButton(Dialog.BUTTON_POSITIVE, getString(R.string.remove), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            thumbnailPath = "";
+                            ivAddThubnail.setImageResource(R.drawable.round_add_24);
+                            VectrasApp.setIconWithName(ivIcon, Objects.requireNonNull(title.getText()).toString());
+                            ad.dismiss();
+                        }
+                    });
+                    ad.show();
                 }
-
-                startActivityForResult(intent, 1001);
             }
-        });
-
-        ivIcon.setOnLongClickListener((View.OnLongClickListener) v -> {
-            if (!Objects.requireNonNull(icon.getText()).toString().isEmpty()) {
-                icon.setText("");
-                VectrasApp.setIconWithName(ivIcon, title.getText().toString());
-            }
-            return false;
         });
 
         modify = getIntent().getBooleanExtra("MODIFY", false);
@@ -509,9 +540,9 @@ public class CustomRomActivity extends AppCompatActivity {
             created = true;
             addRomBtn.setText(R.string.save_changes);
             title.setText(current.itemName);
-            icon.setText(current.itemIcon);
             drive.setText(current.itemPath);
             cdrom.setText(current.imgCdrom);
+            thumbnailPath = current.itemIcon;
             vmID = getIntent().getStringExtra("VMID");
 
             if (vmID.isEmpty()) {
@@ -528,14 +559,28 @@ public class CustomRomActivity extends AppCompatActivity {
 
             qemu.setText(current.itemExtra);
 
-            File imgFile = new  File(Objects.requireNonNull(icon.getText()).toString());
+            if (!thumbnailPath.isEmpty()) {
+                ivAddThubnail.setImageResource(R.drawable.round_edit_24);
+                File imgFile = new  File(thumbnailPath);
 
-            if(imgFile.exists()){
-                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                ivIcon.setImageBitmap(myBitmap);
-            } else {
-                VectrasApp.setIconWithName(ivIcon, current.itemName);
+                if(imgFile.exists()){
+                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                    ivIcon.setImageBitmap(myBitmap);
+                } else {
+                    VectrasApp.setIconWithName(ivIcon, current.itemName);
+                }
             }
+
+            if (Objects.requireNonNull(drive.getText()).toString().isEmpty()) {
+                driveLayout.setEndIconDrawable(R.drawable.round_add_24);
+            }
+
+            if (!Objects.requireNonNull(cdrom.getText()).toString().isEmpty()) {
+                cdromLayout.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
+                cdromLayout.setEndIconDrawable(R.drawable.close_24px);
+                setOnClick();
+            }
+
             previousName = current.itemName;
         } else {
             if (getIntent().hasExtra("addromnow")) {
@@ -562,6 +607,13 @@ public class CustomRomActivity extends AppCompatActivity {
                     }
                     if (!Objects.requireNonNull(getIntent().getStringExtra("addtodrive")).isEmpty()) {
                         drive.setText(AppConfig.vmFolder + vmID + "/" + getIntent().getStringExtra("romfilename"));
+                        if (Objects.requireNonNull(drive.getText()).toString().isEmpty()) {
+                            driveLayout.setEndIconDrawable(R.drawable.round_add_24);
+                        } else {
+                            driveLayout.setEndIconDrawable(R.drawable.more_vert_24px);
+                        }
+                    } else {
+                        driveLayout.setEndIconDrawable(R.drawable.round_add_24);
                     }
                 }
 
@@ -589,7 +641,10 @@ public class CustomRomActivity extends AppCompatActivity {
                     Terminal vterm = new Terminal(CustomRomActivity.this);
                     vterm.executeShellCommand2("qemu-img create -f qcow2 " + AppConfig.vmFolder + vmID + "/disk.qcow2 128G", false, CustomRomActivity.this);
                     drive.setText(AppConfig.vmFolder + vmID + "/disk.qcow2");
+                } else {
+                    driveLayout.setEndIconDrawable(R.drawable.round_add_24);
                 }
+
             }
         }
         VectrasApp.prepareDataForAppConfig(activity);
@@ -674,7 +729,8 @@ public class CustomRomActivity extends AppCompatActivity {
                                         @Override
                                         public void run() {
                                             loadingPb.setVisibility(View.GONE);
-                                            icon.setText(AppConfig.vmFolder + vmID + "/thumbnail.webp");
+                                            ivAddThubnail.setImageResource(R.drawable.round_edit_24);
+                                            thumbnailPath = AppConfig.vmFolder + vmID + "/thumbnail.webp";
                                         }
                                     };
                                     activity.runOnUiThread(runnable);
@@ -712,6 +768,9 @@ public class CustomRomActivity extends AppCompatActivity {
                 if (MainSettingsManager.copyFile(activity)) {
                     String cdromPath = AppConfig.vmFolder + vmID + "/" + selectedFilePath.getName();
                     cdrom.setText(cdromPath);
+                    cdromLayout.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
+                    cdromLayout.setEndIconDrawable(R.drawable.close_24px);
+                    setOnClick();
 
                     //String qemuText = qemu.getText().toString();
                     //String cdromParam = "-drive index=1,media=cdrom,file='" + cdromPath + "'";
@@ -982,9 +1041,9 @@ public class CustomRomActivity extends AppCompatActivity {
 
     private void startCreateNewVM() {
         if (modify) {
-            VMManager.editVM(Objects.requireNonNull(title.getText()).toString(), Objects.requireNonNull(icon.getText()).toString(), Objects.requireNonNull(drive.getText()).toString(), MainSettingsManager.getArch(activity), Objects.requireNonNull(cdrom.getText()).toString(), Objects.requireNonNull(qemu.getText()).toString(), getIntent().getIntExtra("POS", 0));
+            VMManager.editVM(Objects.requireNonNull(title.getText()).toString(), thumbnailPath, Objects.requireNonNull(drive.getText()).toString(), MainSettingsManager.getArch(activity), Objects.requireNonNull(cdrom.getText()).toString(), Objects.requireNonNull(qemu.getText()).toString(), getIntent().getIntExtra("POS", 0));
         } else {
-            VMManager.createNewVM(Objects.requireNonNull(title.getText()).toString(), Objects.requireNonNull(icon.getText()).toString(), Objects.requireNonNull(drive.getText()).toString(), MainSettingsManager.getArch(activity), Objects.requireNonNull(cdrom.getText()).toString(), Objects.requireNonNull(qemu.getText()).toString(), vmID);
+            VMManager.createNewVM(Objects.requireNonNull(title.getText()).toString(), thumbnailPath, Objects.requireNonNull(drive.getText()).toString(), MainSettingsManager.getArch(activity), Objects.requireNonNull(cdrom.getText()).toString(), Objects.requireNonNull(qemu.getText()).toString(), vmID);
         }
 
         created = true;
@@ -1108,19 +1167,20 @@ public class CustomRomActivity extends AppCompatActivity {
                                                         setDefault();
                                                         drive.setText(_getDiskFile);
                                                     } else {
-                                                        if (Objects.requireNonNull(getIntent().getStringExtra("romextra")).contains(getIntent().getStringExtra("finalromfilename"))) {
+                                                        if (Objects.requireNonNull(getIntent().getStringExtra("romextra")).contains(Objects.requireNonNull(getIntent().getStringExtra("finalromfilename")))) {
                                                             qemu.setText(Objects.requireNonNull(getIntent().getStringExtra("romextra")).replaceAll(getIntent().getStringExtra("finalromfilename"), "\"" + _getDiskFile + "\""));
                                                         } else {
                                                             drive.setText(_getDiskFile);
-                                                            qemu.setText(getIntent().getStringExtra("romextra").replaceAll("OhnoIjustrealizeditsmidnightandIstillhavetodothis", AppConfig.vmFolder + vmID + "/"));
+                                                            qemu.setText(Objects.requireNonNull(getIntent().getStringExtra("romextra")).replaceAll("OhnoIjustrealizeditsmidnightandIstillhavetodothis", AppConfig.vmFolder + vmID + "/"));
                                                         }
                                                     }
-                                                    icon.setText(getIntent().getStringExtra("romicon"));
                                                     if (!Objects.requireNonNull(getIntent().getStringExtra("romicon")).isEmpty()) {
-                                                        File imgFile = new File(getIntent().getStringExtra("romicon"));
+                                                        File imgFile = new File(Objects.requireNonNull(getIntent().getStringExtra("romicon")));
                                                         if (imgFile.exists()) {
                                                             Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                                                             ivIcon.setImageBitmap(myBitmap);
+                                                            thumbnailPath = getIntent().getStringExtra("romicon");
+                                                            ivAddThubnail.setImageResource(R.drawable.round_edit_24);
                                                         }
                                                     }
                                                 } else {
@@ -1173,17 +1233,28 @@ public class CustomRomActivity extends AppCompatActivity {
                                             }
 
                                             if (jObj.has("icon") && !jObj.isNull("icon")) {
-                                                icon.setText(AppConfig.vmFolder + vmID + "/" + jObj.getString("icon"));
+                                                ivAddThubnail.setImageResource(R.drawable.round_edit_24);
+                                                thumbnailPath = AppConfig.vmFolder + vmID + "/" + jObj.getString("icon");
                                                 ImageView ivIcon = findViewById(R.id.ivIcon);
                                                 Bitmap bmImg = BitmapFactory.decodeFile(AppConfig.vmFolder
                                                         + vmID + "/" + jObj.getString("icon"));
                                                 ivIcon.setImageBitmap(bmImg);
+                                            } else {
+                                                ivAddThubnail.setImageResource(R.drawable.round_add_24);
+                                                VectrasApp.setIconWithName(ivIcon, Objects.requireNonNull(title.getText()).toString());
                                             }
 
                                             if (jObj.has("cdrom") && !jObj.isNull("cdrom")) {
                                                 if (!jObj.getString("cdrom").isEmpty()) {
                                                     cdrom.setText(AppConfig.vmFolder + vmID + "/" + jObj.getString("cdrom"));
+                                                    cdromLayout.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
+                                                    cdromLayout.setEndIconDrawable(R.drawable.close_24px);
+                                                    setOnClick();
+                                                } else {
+                                                    cdromLayout.setEndIconMode(TextInputLayout.END_ICON_NONE);
                                                 }
+                                            } else {
+                                                cdromLayout.setEndIconMode(TextInputLayout.END_ICON_NONE);
                                             }
 
                                             if (jObj.has("arch") && !jObj.isNull("arch")) {
@@ -1234,6 +1305,12 @@ public class CustomRomActivity extends AppCompatActivity {
                 VectrasApp.oneDialog(getResources().getString(R.string.problem_has_been_detected), getResources().getString(R.string.format_not_supported_please_select_file_with_format_cvbi), true, false, this);
             }
         }
+
+        if (Objects.requireNonNull(drive.getText()).toString().isEmpty()) {
+            driveLayout.setEndIconDrawable(R.drawable.round_add_24);
+        } else {
+            driveLayout.setEndIconDrawable(R.drawable.more_vert_24px);
+        }
     }
 
     private void selectedDiskFile(Uri _content_describer, boolean _addtodrive) {
@@ -1264,6 +1341,7 @@ public class CustomRomActivity extends AppCompatActivity {
             LinearLayout custom = findViewById(R.id.custom);
             if (_addtodrive) {
                 drive.setText(AppConfig.vmFolder + vmID + "/" + selectedFilePath.getName());
+                driveLayout.setEndIconDrawable(R.drawable.more_vert_24px);
             }
             loadingPb.setVisibility(View.VISIBLE);
             custom.setVisibility(View.GONE);
@@ -1317,6 +1395,7 @@ public class CustomRomActivity extends AppCompatActivity {
             }).start();
         } else {
             drive.setText(selectedFilePath.getPath());
+            driveLayout.setEndIconDrawable(R.drawable.more_vert_24px);
             loadingPb.setVisibility(View.GONE);
         }
 
@@ -1342,6 +1421,18 @@ public class CustomRomActivity extends AppCompatActivity {
         } else {
             return "-drive index=1,media=cdrom,file='(.*?)'";
         }
+    }
+
+    private void setOnClick() {
+        cdromLayout.setEndIconOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!Objects.requireNonNull(cdrom.getText()).toString().isEmpty()) {
+                    cdrom.setText("");
+                    cdromLayout.setEndIconMode(TextInputLayout.END_ICON_NONE);
+                }
+            }
+        });
     }
 
     @Override

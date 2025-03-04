@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ad-services-config>
+    <!-- Attribution API -->
+    <attribution allowAllToAccess="true" />
+
+    <!-- Topics API -->
+    <topics allowAllToAccess="true" />
+
+    <!-- Protected Audience on Android API -->
+    <custom-audiences allowAllToAccess="true" />
+</ad-services-config>

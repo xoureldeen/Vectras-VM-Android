@@ -41,12 +41,29 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/ivIcon"
+            <RelativeLayout
                 android:layout_width="142dp"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                app:srcCompat="@drawable/no_machine_image" />
+                android:layout_height="match_parent" >
+                <ImageView
+                    android:id="@+id/ivIcon"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    app:srcCompat="@drawable/no_machine_image" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="bottom|right">
+                    <ImageView
+                        android:id="@+id/ivAddThubnail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp"
+                        app:tint="@android:color/white"
+                        app:srcCompat="@drawable/round_add_24"
+                        android:background="@drawable/backgroud_round_only_left_25_black_50_style"/>
+                </LinearLayout>
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -122,7 +139,8 @@
                     android:clickable="true"
                     android:hint="@string/rom_icon"
                     android:theme="@style/AppTheme.TextInput"
-                    app:startIconDrawable="@drawable/round_image_24">
+                    app:startIconDrawable="@drawable/round_image_24"
+                    android:visibility="gone" >
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/icon"
@@ -144,7 +162,7 @@
                     android:hint="@string/rom_drive_qcow2_img_etc"
                     android:theme="@style/AppTheme.TextInput"
                     app:endIconContentDescription="@string/make_image"
-                    app:endIconDrawable="@drawable/round_add_24"
+                    app:endIconDrawable="@drawable/more_vert_24px"
                     app:endIconMode="custom"
                     app:startIconDrawable="@drawable/round_storage_24">
 
@@ -167,7 +185,8 @@
                     android:clickable="true"
                     android:hint="CDROM (iso only)"
                     android:theme="@style/AppTheme.TextInput"
-                    app:startIconDrawable="@drawable/round_album_24">
+                    app:startIconDrawable="@drawable/round_album_24"
+                    app:endIconDrawable="@drawable/close_24px">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/cdrom"
@@ -204,7 +223,8 @@
                     android:id="@+id/addRomBtn"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/add" />
+                    android:text="@string/add"
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/textview1"
