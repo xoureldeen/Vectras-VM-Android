@@ -1398,7 +1398,18 @@ public class CustomRomActivity extends AppCompatActivity {
             driveLayout.setEndIconDrawable(R.drawable.more_vert_24px);
             loadingPb.setVisibility(View.GONE);
         }
+        //Fix image loaded from file.
+        if (!thumbnailPath.isEmpty()) {
+            ivAddThubnail.setImageResource(R.drawable.round_edit_24);
+            File imgFile = new  File(thumbnailPath);
 
+            if(imgFile.exists()){
+                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                ivIcon.setImageBitmap(myBitmap);
+            } else {
+                VectrasApp.setIconWithName(ivIcon, current.itemName);
+            }
+        }
     }
 
     private String cdromPatternCompile() {
