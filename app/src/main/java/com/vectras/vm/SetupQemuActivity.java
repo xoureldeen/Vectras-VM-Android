@@ -653,6 +653,10 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         inBtn.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
         String filesDir = activity.getFilesDir().getAbsolutePath();
+        String neededPkgs = AppConfig.neededPkgs;
+        if (!AppConfig.getSetupFiles().contains("64")) {
+            neededPkgs.replaceAll(" mesa-vulkan-broadcom mesa-vulkan-freedreno mesa-vulkan-panfrost", "");
+        }
         String cmd = "";
         cmd += selectedMirrorCommand + ";";
         executeShellCommand(cmd);
@@ -660,7 +664,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                 " echo \"Starting setup...\";" +
                 " apk update;" +
                 " echo \"Installing packages...\";" +
-                " apk add " + AppConfig.neededPkgs + ";" +
+                " apk add " + neededPkgs + ";" +
                 " echo \"Installing Qemu...\";" +
                 " tar -xzvf " + tarPath + " -C /;" +
                 " rm " + tarPath + ";" +
@@ -682,7 +686,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                 " echo \"Starting setup...\";" +
                 " apk update;" +
                 " echo \"Installing packages...\";" +
-                " apk add " + AppConfig.neededPkgs + ";" +
+                " apk add " + AppConfig.neededPkgs.replaceAll(" mesa-vulkan-broadcom mesa-vulkan-freedreno mesa-vulkan-panfrost", "") + ";" +
                 //" tar -xzvf " + tarPath + " -C /;" +
                 " echo \"Installing Qemu...\";" +
                 " apk add qemu-system-x86_64 qemu-system-ppc qemu-system-i386 qemu-system-aarch64 qemu-pr-helper qemu-img qemu-audio-sdl pulseaudio mesa-dri-gallium;" +
