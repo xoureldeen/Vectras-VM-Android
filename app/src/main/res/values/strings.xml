@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">v2.9.5 (3dfx - Flan)</string>
+    <string name="app_version" translatable="false">v2.9.5 (3dfx - Gugelhupf)</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -401,6 +401,9 @@
     <string name="change">Change</string>
     <string name="change_hard_drive">Change hard drive</string>
     <string name="do_you_want_to_change_create_or_remove">Do you want to change, create or remove?</string>
+    <string name="do_you_want_to_change_the_mirror_before_setting_up_the_current_mirror_is">Do you want to change the mirror before setting up?\nThe current mirror is:</string>
+    <string name="connecting_to_mirror_in">Connecting to mirror in</string>
+    <string name="mirror">Mirror</string>
 
 
 

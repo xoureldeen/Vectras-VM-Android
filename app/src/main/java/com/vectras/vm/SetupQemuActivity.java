@@ -21,14 +21,20 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.Settings;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.Manifest;
+import android.widget.BaseAdapter;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -56,7 +62,9 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class SetupQemuActivity extends AppCompatActivity implements View.OnClickListener {
     Activity activity;
@@ -80,6 +88,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
     MaterialButton buttonsetupshowlog;
     TextView textviewshowadvancedsetup;
     TextView textviewhideadvancedsetup;
+    Spinner spinnerselectmirror;
 
     AlertDialog alertDialog;
     private boolean settingup = false;
@@ -90,6 +99,9 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
     private String contentJSON = "";
     private HashMap<String, Object> mmap = new HashMap<>();
     private String bootstrapfilelink = "";
+    private ArrayList<HashMap<String, String>> listmapForSelectMirrors = new ArrayList<>();
+    private String selectedMirrorCommand = "";
+    private String selectedMirrorLocation = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +123,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         buttonsetupshowlog = findViewById(R.id.buttonsetupshowlog);
         textviewshowadvancedsetup = findViewById(R.id.textviewshowadvancedsetup);
         textviewhideadvancedsetup = findViewById(R.id.textviewhideadvancedsetup);
+        spinnerselectmirror = findViewById(R.id.spinnerselectmirror);
 
         buttontryconnectagain.setOnClickListener(this);
         buttonautosetup.setOnClickListener(this);
@@ -127,9 +140,24 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         inBtn = findViewById(R.id.btnInstall);
         title = findViewById(R.id.title);
         inBtn.setOnClickListener(this);
+        setupSpiner();
 
         tarPath = getExternalFilesDir("data") + "/data.tar.gz";
         VectrasApp.prepareDataForAppConfig(activity);
+
+        spinnerselectmirror.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedMirrorCommand = Objects.requireNonNull(listmapForSelectMirrors.get(position).get("mirror"));
+                selectedMirrorLocation = Objects.requireNonNull(listmapForSelectMirrors.get(position).get("location"));
+                MainSettingsManager.setSelectedMirror(activity, position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         net = new RequestNetwork(this);
         _net_request_listener = new RequestNetwork.RequestListener() {
@@ -354,6 +382,9 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         if (textToAdd.contains("Starting setup...")) {
             title.setText("Getting ready for you...");
             textviewsettingup.setText(R.string.getting_ready_for_you_please_don_t_disconnect_the_network);
+        } else if (textToAdd.contains("fetch http")) {
+            title.setText(getString(R.string.connecting_to_mirror_in) + "\n" + selectedMirrorLocation + "...");
+            textviewsettingup.setText(getString(R.string.connecting_to_mirror_in) + "\n" + selectedMirrorLocation + "...");
         } else if (textToAdd.contains("Installing packages...")) {
             title.setText(R.string.it_won_t_take_long);
             textviewsettingup.setText(R.string.completed_10_it_won_t_take_long);
@@ -623,7 +654,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         progressBar.setVisibility(View.VISIBLE);
         String filesDir = activity.getFilesDir().getAbsolutePath();
         String cmd = "";
-        cmd += "echo \"https://dl-cdn.alpinelinux.org/alpine/edge/testing\" | tee -a /etc/apk/repositories;";
+        cmd += selectedMirrorCommand + ";";
         executeShellCommand(cmd);
         executeShellCommand("set -e;" +
                 " echo \"Starting setup...\";" +
@@ -645,7 +676,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         progressBar.setVisibility(View.VISIBLE);
         String filesDir = activity.getFilesDir().getAbsolutePath();
         String cmd = "";
-        cmd += "echo \"https://dl-cdn.alpinelinux.org/alpine/edge/testing\" | tee -a /etc/apk/repositories;";
+        cmd += selectedMirrorCommand + ";";
         executeShellCommand(cmd);
         executeShellCommand("set -e;" +
                 " echo \"Starting setup...\";" +
@@ -667,7 +698,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         progressBar.setVisibility(View.VISIBLE);
         String filesDir = activity.getFilesDir().getAbsolutePath();
         String cmd = "";
-        cmd += "echo \"https://dl-cdn.alpinelinux.org/alpine/edge/testing\" | tee -a /etc/apk/repositories;";
+        cmd += selectedMirrorCommand + ";";
         executeShellCommand(cmd);
         executeShellCommand("set -e;" +
                 " echo \"Starting setup...\";" +
@@ -830,6 +861,52 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         } else
         if (linearsimplesetupui.getVisibility() == View.GONE) {
             alertDialog.show();
+        }
+    }
+
+    private void setupSpiner() {
+        VectrasApp.setupMirrorListForListmap(listmapForSelectMirrors);
+
+        spinnerselectmirror.setAdapter(new SpinnerSelectMirrorAdapter(listmapForSelectMirrors));
+        spinnerselectmirror.setSelection(MainSettingsManager.getSelectedMirror(activity));
+    }
+
+    public class SpinnerSelectMirrorAdapter extends BaseAdapter {
+
+        ArrayList<HashMap<String, String>> _data;
+
+        public SpinnerSelectMirrorAdapter(ArrayList<HashMap<String, String>> _arr) {
+            _data = _arr;
+        }
+
+        @Override
+        public int getCount() {
+            return _data.size();
+        }
+
+        @Override
+        public HashMap<String, String> getItem(int _index) {
+            return _data.get(_index);
+        }
+
+        @Override
+        public long getItemId(int _index) {
+            return _index;
+        }
+
+        @Override
+        public View getView(final int _position, View _v, ViewGroup _container) {
+            LayoutInflater _inflater = getLayoutInflater();
+            View _view = _v;
+            if (_view == null) {
+                _view = _inflater.inflate(R.layout.simple_layout_for_spiner, null);
+            }
+
+            final TextView textViewLocation = _view.findViewById(R.id.textViewLocation);
+
+            textViewLocation.setText(Objects.requireNonNull(_data.get((int) _position).get("location")));
+
+            return _view;
         }
     }
 }
