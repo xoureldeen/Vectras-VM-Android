@@ -614,6 +614,11 @@ public class VectrasApp extends Application {
 		}
 	}
 
+	public static void runACommand(String _command, Activity _activity) {
+		Terminal vterm = new Terminal(_activity);
+		vterm.executeShellCommand2(_command, false, _activity);
+	}
+
 	public static void killallqemuprocesses(Context context) {
 		Terminal vterm = new Terminal(context);
 		vterm.executeShellCommand2("killall -9 qemu-system-i386", false, MainActivity.activity);
@@ -761,5 +766,201 @@ public class VectrasApp extends Application {
 		} catch (PackageManager.NameNotFoundException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	public static void setupMirrorListForListmap(ArrayList<HashMap<String, String>> listmapForSelectMirrors) {
+		HashMap<String, String> mapForAddItems = new HashMap<>();
+
+		mapForAddItems.put("location", "United States (Default)");
+		mapForAddItems.put("mirror", createCommandForSelectedMirror(true, "dl-cdn.alpinelinux.org", "/alpine"));
+		listmapForSelectMirrors.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("location", "Australia");
+		mapForAddItems.put("mirror", createCommandForSelectedMirror(false,"mirror.aarnet.edu.au", "/pub/alpine"));
+		listmapForSelectMirrors.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("location", "Austria");
+		mapForAddItems.put("mirror", createCommandForSelectedMirror(true,"mirror.alwyzon.net", "/alpine"));
+		listmapForSelectMirrors.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("location", "Bulgaria");
+		mapForAddItems.put("mirror", createCommandForSelectedMirror(true,"mirrors.neterra.net", "/alpine"));
+		listmapForSelectMirrors.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("location", "Brazil");
+		mapForAddItems.put("mirror", createCommandForSelectedMirror(true,"mirror.uepg.br", "/alpine"));
+		listmapForSelectMirrors.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("location", "Cambodia");
+		mapForAddItems.put("mirror", createCommandForSelectedMirror(true,"mirror.sabay.com.kh", "/alpine"));
+		listmapForSelectMirrors.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("location", "Canada");
+		mapForAddItems.put("mirror", createCommandForSelectedMirror(true, "mirror.csclub.uwaterloo.ca", "/alpine"));
+		listmapForSelectMirrors.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("location", "Chile");
+		mapForAddItems.put("mirror", createCommandForSelectedMirror(true,"elmirror.cl", "/alpine"));
+		listmapForSelectMirrors.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("location", "China");
+		mapForAddItems.put("mirror", createCommandForSelectedMirror(true, "mirrors.tuna.tsinghua.edu.cn", "/alpine"));
+		listmapForSelectMirrors.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("location", "Czech Republic");
+		mapForAddItems.put("mirror", createCommandForSelectedMirror(true, "mirror.fel.cvut.cz", "/alpine"));
+		listmapForSelectMirrors.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("location", "Denmark");
+		mapForAddItems.put("mirror", createCommandForSelectedMirror(true, "mirrors.dotsrc.org", "/alpine"));
+		listmapForSelectMirrors.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("location", "Finland");
+		mapForAddItems.put("mirror", createCommandForSelectedMirror(true, "mirror.5i.fi", "/alpine"));
+		listmapForSelectMirrors.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("location", "France");
+		mapForAddItems.put("mirror", createCommandForSelectedMirror(true,"mirrors.ircam.fr", "/pub/alpine"));
+		listmapForSelectMirrors.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("location", "Germany");
+		mapForAddItems.put("mirror", createCommandForSelectedMirror(true,"ftp.halifax.rwth-aachen.de", "/alpine"));
+		listmapForSelectMirrors.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("location", "Hong Kong");
+		mapForAddItems.put("mirror", createCommandForSelectedMirror(true, "mirror.xtom.com.hk", "/alpine"));
+		listmapForSelectMirrors.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("location", "Indonesia");
+		mapForAddItems.put("mirror", createCommandForSelectedMirror(false,"foobar.turbo.net.id", "/alpine"));
+		listmapForSelectMirrors.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("location", "Iran");
+		mapForAddItems.put("mirror", createCommandForSelectedMirror(true,"mirror.bardia.tech", "/alpine"));
+		listmapForSelectMirrors.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("location", "Italy");
+		mapForAddItems.put("mirror", createCommandForSelectedMirror(true,"alpinelinux.mirror.garr.it", ""));
+		listmapForSelectMirrors.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("location", "Japan");
+		mapForAddItems.put("mirror", createCommandForSelectedMirror(true, "repo.jing.rocks", "/alpine"));
+		listmapForSelectMirrors.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("location", "Kazakhstan");
+		mapForAddItems.put("mirror", createCommandForSelectedMirror(true,"mirror.ps.kz", "/alpine"));
+		listmapForSelectMirrors.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("location", "Moldova");
+		mapForAddItems.put("mirror", createCommandForSelectedMirror(true,"mirror.ihost.md", "/alpine"));
+		listmapForSelectMirrors.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("location", "Morocco");
+		mapForAddItems.put("mirror", createCommandForSelectedMirror(true, "mirror.marwan.ma", "/alpine"));
+		listmapForSelectMirrors.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("location", "New Caledonia");
+		mapForAddItems.put("mirror", createCommandForSelectedMirror(true,"mirror.lagoon.nc", "/alpine"));
+		listmapForSelectMirrors.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("location", "New Zealand");
+		mapForAddItems.put("mirror", createCommandForSelectedMirror(true,"mirror.2degrees.nz", "/alpine"));
+		listmapForSelectMirrors.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("location", "Poland");
+		mapForAddItems.put("mirror", createCommandForSelectedMirror(true,"ftp.icm.edu.pl", "/pub/Linux/distributions/alpine"));
+		listmapForSelectMirrors.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("location", "Portugal");
+		mapForAddItems.put("mirror", createCommandForSelectedMirror(true,"mirror.leitecastro.com", "/alpine"));
+		listmapForSelectMirrors.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("location", "Romania");
+		mapForAddItems.put("mirror", createCommandForSelectedMirror(true,"mirrors.hosterion.ro", "/alpinelinux"));
+		listmapForSelectMirrors.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("location", "Russia");
+		mapForAddItems.put("mirror", createCommandForSelectedMirror(true,"mirror.hyperdedic.ru", "/alpinelinux"));
+		listmapForSelectMirrors.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("location", "Singapore");
+		mapForAddItems.put("mirror", createCommandForSelectedMirror(true,"mirror.jingk.ai", "/alpine"));
+		listmapForSelectMirrors.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("location", "Slovenia");
+		mapForAddItems.put("mirror", createCommandForSelectedMirror(true,"mirror.tux.si", "/alpine"));
+		listmapForSelectMirrors.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("location", "Spain");
+		mapForAddItems.put("mirror", createCommandForSelectedMirror(true,"mirror.raiolanetworks.com", "/alpine"));
+		listmapForSelectMirrors.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("location", "Sweden");
+		mapForAddItems.put("mirror", createCommandForSelectedMirror(true, "ftp.lysator.liu.se/pub", "/alpine"));
+		listmapForSelectMirrors.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("location", "Switzerland");
+		mapForAddItems.put("mirror", createCommandForSelectedMirror(true, "pkg.adfinis.com", "/alpine"));
+		listmapForSelectMirrors.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("location", "Taiwan");
+		mapForAddItems.put("mirror", createCommandForSelectedMirror(true, "mirror.twds.com.tw", "/alpine"));
+		listmapForSelectMirrors.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("location", "Thailand");
+		mapForAddItems.put("mirror", createCommandForSelectedMirror(true,"mirror.kku.ac.th", "/alpine"));
+		listmapForSelectMirrors.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("location", "The Netherlands");
+		mapForAddItems.put("mirror", createCommandForSelectedMirror(true,"alpine.mirror.wearetriple.com", ""));
+		listmapForSelectMirrors.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("location", "United Kingdom");
+		mapForAddItems.put("mirror", createCommandForSelectedMirror(true,"uk.alpinelinux.org", "/alpine"));
+		listmapForSelectMirrors.add(mapForAddItems);
+	}
+
+	public static String createCommandForSelectedMirror(boolean _https, String _url, String _beforemain) {
+		String command = "echo \"\" > /etc/apk/repositories && sed -i -e \"1ihttps://xssFjnj58Id/yttGkok69Je/edge/testing\" /etc/apk/repositories && sed -i -e \"1ihttps://xssFjnj58Id/alpine/v3.19/community\" /etc/apk/repositories && sed -i -e \"1ihttps://xssFjnj58Id/alpine/v3.19/main\" /etc/apk/repositories";
+		command = command.replaceAll("/yttGkok69Je", _beforemain);
+		if (!_https)
+			command = command.replaceAll("https://", "http://");
+		return command.replaceAll("xssFjnj58Id", _url);
 	}
 }

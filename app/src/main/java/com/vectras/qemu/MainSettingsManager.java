@@ -762,4 +762,16 @@ public class MainSettingsManager extends AppCompatActivity
         return prefs.getBoolean("setUpWithManualSetupBefore", false);
     }
 
+    public static void setSelectedMirror(Context context, int _int) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putInt("SelectedMirror", _int);
+        edit.commit();
+    }
+
+    public static int getSelectedMirror(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getInt("SelectedMirror", 0);
+    }
+
 }

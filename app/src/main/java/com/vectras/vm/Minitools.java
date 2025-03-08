@@ -14,10 +14,16 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.BaseAdapter;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
@@ -27,9 +33,17 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.vectras.qemu.MainSettingsManager;
+
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Minitools extends AppCompatActivity {
+
+    private ArrayList<HashMap<String, String>> listmapForSelectMirrors = new ArrayList<>();
+    private Spinner spinnerselectmirror;
+    private String selectedMirrorCommand = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +68,7 @@ public class Minitools extends AppCompatActivity {
         LinearLayout deleteallvm = findViewById(R.id.deleteallvm);
         LinearLayout reinstallsystem = findViewById(R.id.reinstallsystem);
         LinearLayout deleteall = findViewById(R.id.deleteall);
+        spinnerselectmirror = findViewById(R.id.spinnerselectmirror);
 
         setupsoundfortermux.setOnClickListener(v -> {
             if (VectrasApp.isAppInstalled("com.termux", getApplicationContext())) {
@@ -219,6 +234,22 @@ public class Minitools extends AppCompatActivity {
             });
             alertDialog.show();
         });
+
+        spinnerselectmirror.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedMirrorCommand = listmapForSelectMirrors.get(position).get("mirror");
+                MainSettingsManager.setSelectedMirror(Minitools.this, position);
+                VectrasApp.runACommand(selectedMirrorCommand + "&& exit", Minitools.this);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        setupSpiner();
     }
 
     @Override
@@ -232,5 +263,51 @@ public class Minitools extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setupSpiner() {
+        VectrasApp.setupMirrorListForListmap(listmapForSelectMirrors);
+
+        spinnerselectmirror.setAdapter(new SpinnerSelectMirrorAdapter(listmapForSelectMirrors));
+        spinnerselectmirror.setSelection(MainSettingsManager.getSelectedMirror(Minitools.this));
+    }
+
+    public class SpinnerSelectMirrorAdapter extends BaseAdapter {
+
+        ArrayList<HashMap<String, String>> _data;
+
+        public SpinnerSelectMirrorAdapter(ArrayList<HashMap<String, String>> _arr) {
+            _data = _arr;
+        }
+
+        @Override
+        public int getCount() {
+            return _data.size();
+        }
+
+        @Override
+        public HashMap<String, String> getItem(int _index) {
+            return _data.get(_index);
+        }
+
+        @Override
+        public long getItemId(int _index) {
+            return _index;
+        }
+
+        @Override
+        public View getView(final int _position, View _v, ViewGroup _container) {
+            LayoutInflater _inflater = getLayoutInflater();
+            View _view = _v;
+            if (_view == null) {
+                _view = _inflater.inflate(R.layout.simple_layout_for_spiner, null);
+            }
+
+            final TextView textViewLocation = _view.findViewById(R.id.textViewLocation);
+
+            textViewLocation.setText(_data.get((int) _position).get("location"));
+
+            return _view;
+        }
     }
 }

@@ -114,6 +114,32 @@
                         android:gravity="center_horizontal|center_vertical"
                         android:text="@string/manual" />
                 </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/linear6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="20dp"
+                        android:paddingBottom="8dp"
+                        android:text="@string/do_you_want_to_change_the_mirror_before_setting_up_the_current_mirror_is" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/backgroud_stroke_for_spinner">
+                        <Spinner
+                            android:id="@+id/spinnerselectmirror"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:spinnerMode="dialog"
+                            tools:listitem="@layout/simple_layout_for_spiner"/>
+                    </LinearLayout>
+
+                </LinearLayout>
             </LinearLayout>
             <LinearLayout
                 android:id="@+id/linearsettingup"
