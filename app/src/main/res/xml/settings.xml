@@ -16,6 +16,15 @@
             android:title="@string/check_for_software_updates"
             app:icon="@drawable/round_update_24" />
 
+        <SwitchPreferenceCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="false"
+            android:key="checkforupdatesfromthebetachannel"
+            android:summary="@string/check_from_the_Beta_channel_instead_of_the_Stable_channel"
+            android:title="@string/check_for_updates_from_the_beta_channel"
+            app:icon="@drawable/science_24px" />
+
         <ListPreference
             android:key="language"
             android:title="@string/language"

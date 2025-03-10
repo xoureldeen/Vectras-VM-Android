@@ -407,6 +407,8 @@
     <string name="welcome">Welcome!</string>
     <string name="welcome_to_vectras_vm_lets_get_started">Welcome to Vectras VM. Let\'s get started!</string>
     <string name="processing_this_may_take_a_few_minutes">Processing...\nThis may take a few minutes.</string>
+    <string name="check_for_updates_from_the_beta_channel">Check for updates from the Beta channel</string>
+    <string name="check_from_the_Beta_channel_instead_of_the_Stable_channel">Check from the Beta channel instead of the Stable channel</string>
 
 
 

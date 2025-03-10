@@ -743,8 +743,15 @@ public class MainActivity extends AppCompatActivity {
                         PackageInfo pinfo = getAppInfo(getApplicationContext());
                         int versionCode = pinfo.versionCode;
                         String versionName = pinfo.versionName;
+                        String versionNameonUpdate;
 
-                        if (versionCode < obj.getInt("versionCode") || !obj.getString("versionName").contains(versionName)) {
+                        if (MainSettingsManager.getcheckforupdatesfromthebetachannel(activity)) {
+                            versionNameonUpdate = obj.getString("versionNameBeta");
+                        } else {
+                            versionNameonUpdate = obj.getString("versionName");
+                        }
+
+                        if (versionCode < obj.getInt("versionCode") || !versionNameonUpdate.contains(versionName)) {
                             AlertDialog.Builder alert = new AlertDialog.Builder(activity, R.style.MainDialogTheme);
                             alert.setTitle("Install the latest version")
                                     .setMessage(Html.fromHtml(obj.getString("Message") + "<br><br>update size:<br>" + obj.getString("size")))
