@@ -705,7 +705,7 @@ public class VMManager {
     }
 
     public static boolean isthiscommandsafeimg(String _command) {
-        if (!_command.contains("-f qcow2")) {
+        if (!_command.contains("qcow2")) {
             String _getsize = _command.substring(_command.lastIndexOf(" ") + 1);
             if (_getsize.toLowerCase().endsWith("t") || _getsize.toLowerCase().endsWith("p")  || _getsize.toLowerCase().endsWith("e")) {
                 return false;
