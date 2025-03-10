@@ -750,6 +750,20 @@ public class MainSettingsManager extends AppCompatActivity
         // UIUtils.log("Setting First time: ");
     }
 
+    public static boolean getcheckforupdatesfromthebetachannel(Activity activity) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        return prefs.getBoolean("checkforupdatesfromthebetachannel", false);
+    }
+
+
+    public static void setcheckforupdatesfromthebetachannel(Activity activity, boolean flag) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putBoolean("checkforupdatesfromthebetachannel", flag);
+        edit.apply();
+        // UIUtils.log("Setting First time: ");
+    }
+
     public static void setsetUpWithManualSetupBefore(Context context, Boolean _boolean) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();

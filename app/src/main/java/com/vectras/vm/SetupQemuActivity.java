@@ -89,6 +89,8 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
     TextView textviewshowadvancedsetup;
     TextView textviewhideadvancedsetup;
     Spinner spinnerselectmirror;
+    LinearLayout linearwelcome;
+    Button buttonletstart;
 
     AlertDialog alertDialog;
     private boolean settingup = false;
@@ -124,6 +126,8 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         textviewshowadvancedsetup = findViewById(R.id.textviewshowadvancedsetup);
         textviewhideadvancedsetup = findViewById(R.id.textviewhideadvancedsetup);
         spinnerselectmirror = findViewById(R.id.spinnerselectmirror);
+        linearwelcome = findViewById(R.id.linearwelcome);
+        buttonletstart = findViewById(R.id.buttonletstart);
 
         buttontryconnectagain.setOnClickListener(this);
         buttonautosetup.setOnClickListener(this);
@@ -132,6 +136,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         buttonsetupshowlog.setOnClickListener(this);
         textviewshowadvancedsetup.setOnClickListener(this);
         textviewhideadvancedsetup.setOnClickListener(this);
+        buttonletstart.setOnClickListener(this);
 
         progressBar = findViewById(R.id.progressBar);
 
@@ -198,7 +203,6 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                 linearload.setVisibility(View.GONE);
             }
         };
-        net.startRequestNetwork(RequestNetworkController.GET,AppConfig.bootstrapfileslink,"anbui",_net_request_listener);
         
         String filesDir = activity.getFilesDir().getAbsolutePath();
         File distroDir = new File(filesDir + "/distro");
@@ -359,6 +363,9 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         } else if (id == R.id.textviewhideadvancedsetup) {
             linearsimplesetupui.setVisibility(View.VISIBLE);
             alertDialog.dismiss();
+        } else if (id == R.id.buttonletstart) {
+            linearwelcome.setVisibility(View.GONE);
+            net.startRequestNetwork(RequestNetworkController.GET,AppConfig.bootstrapfileslink,"anbui",_net_request_listener);
         }
     }
 
@@ -373,7 +380,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         vterm.append(textToAdd);
 
         if (textToAdd.contains("xssFjnj58Id")) {
-            startActivity(new Intent(this, SplashActivity.class));
+            startActivity(new Intent(this, MainActivity.class));
             finish();
         } else if (textToAdd.contains("libproot.so --help")){
             libprooterror = true;

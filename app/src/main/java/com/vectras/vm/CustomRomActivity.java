@@ -27,6 +27,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -45,6 +46,7 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.vectras.qemu.MainSettingsManager;
@@ -99,8 +101,6 @@ public class CustomRomActivity extends AppCompatActivity {
     public String vmID = VMManager.idGenerator();
     private boolean created = false;
 
-    public ProgressBar loadingPb;
-
     public static CustomRomActivity activity;
 
     private String thumbnailPath = "";
@@ -152,7 +152,7 @@ public class CustomRomActivity extends AppCompatActivity {
 //                }
 //
 //                startActivityForResult(intent, 0);
-                if (loadingPb.getVisibility() == View.GONE) {
+                //if (mainlayout.getVisibility() == View.VISIBLE) {
                     if (Objects.requireNonNull(title.getText()).toString().isEmpty()) {
                         VectrasApp.oneDialog(getResources().getString(R.string.oops), getResources().getString(R.string.need_set_name),true, false, activity);
                     } else if ((!Objects.requireNonNull(drive.getText()).toString().isEmpty()) || (!Objects.requireNonNull(cdrom.getText()).toString().isEmpty())) {
@@ -188,7 +188,7 @@ public class CustomRomActivity extends AppCompatActivity {
                             }
                         }
                     }
-                }
+                //}
                 return true;
             case android.R.id.home:
                 finish();
@@ -204,7 +204,6 @@ public class CustomRomActivity extends AppCompatActivity {
         setContentView(R.layout.activity_custom_rom);
         activity = this;
         Toolbar toolbar = findViewById(R.id.toolbar);
-        loadingPb = findViewById(R.id.loadingPb);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -559,17 +558,7 @@ public class CustomRomActivity extends AppCompatActivity {
 
             qemu.setText(current.itemExtra);
 
-            if (!thumbnailPath.isEmpty()) {
-                ivAddThubnail.setImageResource(R.drawable.round_edit_24);
-                File imgFile = new  File(thumbnailPath);
-
-                if(imgFile.exists()){
-                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                    ivIcon.setImageBitmap(myBitmap);
-                } else {
-                    VectrasApp.setIconWithName(ivIcon, current.itemName);
-                }
-            }
+            thumbnailProcessing();
 
             if (Objects.requireNonNull(drive.getText()).toString().isEmpty()) {
                 driveLayout.setEndIconDrawable(R.drawable.round_add_24);
@@ -657,6 +646,8 @@ public class CustomRomActivity extends AppCompatActivity {
         if (iseditparams) {
             iseditparams = false;
             qemu.setText(EditActivity.result);
+            //Fix image loaded from file.
+            thumbnailProcessing();
         }
     }
 
@@ -700,7 +691,7 @@ public class CustomRomActivity extends AppCompatActivity {
             TextInputEditText icon = findViewById(R.id.icon);
             File selectedFilePath = new File(getPath(content_describer));
             ImageView ivIcon = findViewById(R.id.ivIcon);
-            loadingPb.setVisibility(View.VISIBLE);
+            whenProcessing(true);
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -728,9 +719,9 @@ public class CustomRomActivity extends AppCompatActivity {
                                     Runnable runnable = new Runnable() {
                                         @Override
                                         public void run() {
-                                            loadingPb.setVisibility(View.GONE);
-                                            ivAddThubnail.setImageResource(R.drawable.round_edit_24);
+                                            whenProcessing(false);
                                             thumbnailPath = AppConfig.vmFolder + vmID + "/thumbnail.webp";
+                                            thumbnailProcessing();
                                         }
                                     };
                                     activity.runOnUiThread(runnable);
@@ -740,7 +731,7 @@ public class CustomRomActivity extends AppCompatActivity {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        loadingPb.setVisibility(View.GONE);
+                                        whenProcessing(false);
                                         icon.setText(selectedFilePath.getPath());
                                     }
                                 });
@@ -749,7 +740,7 @@ public class CustomRomActivity extends AppCompatActivity {
                             Runnable runnable = new Runnable() {
                                 @Override
                                 public void run() {
-                                    loadingPb.setVisibility(View.GONE);
+                                    whenProcessing(false);
                                 }
                             };
                             activity.runOnUiThread(runnable);
@@ -797,7 +788,7 @@ public class CustomRomActivity extends AppCompatActivity {
                     //qemu.setText(qemuText.replace(cdromPath1, cdromPath)); // Fixed this line to actually change the text of `qemu`
                     //}
                     //}
-                    loadingPb.setVisibility(View.VISIBLE);
+                    whenProcessing(true);
                     custom.setVisibility(View.GONE);
                     new Thread(new Runnable() {
                         @Override
@@ -825,7 +816,7 @@ public class CustomRomActivity extends AppCompatActivity {
                                     Runnable runnable = new Runnable() {
                                         @Override
                                         public void run() {
-                                            loadingPb.setVisibility(View.GONE);
+                                            whenProcessing(false);
                                             custom.setVisibility(View.VISIBLE);
                                         }
                                     };
@@ -836,7 +827,7 @@ public class CustomRomActivity extends AppCompatActivity {
                                 Runnable runnable = new Runnable() {
                                     @Override
                                     public void run() {
-                                        loadingPb.setVisibility(View.GONE);
+                                        whenProcessing(false);
                                         custom.setVisibility(View.VISIBLE);
                                         UIUtils.UIAlert(activity, "error", e.toString());
                                     }
@@ -847,7 +838,7 @@ public class CustomRomActivity extends AppCompatActivity {
                     }).start();
                 } else {
                     cdrom.setText(selectedFilePath.getPath());
-                    loadingPb.setVisibility(View.GONE);
+                    whenProcessing(false);
                 }
 
             } else
@@ -959,7 +950,7 @@ public class CustomRomActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = credentials.edit();
             editor.putBoolean("isFirstLaunch", Boolean.TRUE);
             editor.apply();
-            loadingPb.setVisibility(View.VISIBLE);
+            whenProcessing(true);
             final File jsonFile = new File(AppConfig.romsdatajson);
             RomsJso obj = new RomsJso();
             if (jsonFile.exists()) {
@@ -994,10 +985,10 @@ public class CustomRomActivity extends AppCompatActivity {
                         output.close();
                     } catch (Exception e) {
                         UIUtils.toastLong(activity, e.toString());
-                        loadingPb.setVisibility(View.GONE);
+                        whenProcessing(false);
                     }
                 } catch (JSONException e) {
-                    loadingPb.setVisibility(View.GONE);
+                    whenProcessing(false);
                     throw new RuntimeException(e);
                 }
             } else {
@@ -1106,7 +1097,7 @@ public class CustomRomActivity extends AppCompatActivity {
                 }
                 return;
             }
-            loadingPb.setVisibility(View.VISIBLE);
+            whenProcessing(true);
             custom.setVisibility(View.GONE);
             ivIcon.setEnabled(false);
             Thread t = new Thread() {
@@ -1152,7 +1143,7 @@ public class CustomRomActivity extends AppCompatActivity {
                             Runnable runnable = new Runnable() {
                                 @Override
                                 public void run() {
-                                    loadingPb.setVisibility(View.GONE);
+                                    whenProcessing(false);
                                     custom.setVisibility(View.VISIBLE);
                                     ivIcon.setEnabled(true);
                                     try {
@@ -1177,10 +1168,8 @@ public class CustomRomActivity extends AppCompatActivity {
                                                     if (!Objects.requireNonNull(getIntent().getStringExtra("romicon")).isEmpty()) {
                                                         File imgFile = new File(Objects.requireNonNull(getIntent().getStringExtra("romicon")));
                                                         if (imgFile.exists()) {
-                                                            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                                                            ivIcon.setImageBitmap(myBitmap);
                                                             thumbnailPath = getIntent().getStringExtra("romicon");
-                                                            ivAddThubnail.setImageResource(R.drawable.round_edit_24);
+                                                            thumbnailProcessing();
                                                         }
                                                     }
                                                 } else {
@@ -1235,10 +1224,7 @@ public class CustomRomActivity extends AppCompatActivity {
                                             if (jObj.has("icon") && !jObj.isNull("icon")) {
                                                 ivAddThubnail.setImageResource(R.drawable.round_edit_24);
                                                 thumbnailPath = AppConfig.vmFolder + vmID + "/" + jObj.getString("icon");
-                                                ImageView ivIcon = findViewById(R.id.ivIcon);
-                                                Bitmap bmImg = BitmapFactory.decodeFile(AppConfig.vmFolder
-                                                        + vmID + "/" + jObj.getString("icon"));
-                                                ivIcon.setImageBitmap(bmImg);
+                                                thumbnailProcessing();
                                             } else {
                                                 ivAddThubnail.setImageResource(R.drawable.round_add_24);
                                                 VectrasApp.setIconWithName(ivIcon, Objects.requireNonNull(title.getText()).toString());
@@ -1343,7 +1329,7 @@ public class CustomRomActivity extends AppCompatActivity {
                 drive.setText(AppConfig.vmFolder + vmID + "/" + selectedFilePath.getName());
                 driveLayout.setEndIconDrawable(R.drawable.more_vert_24px);
             }
-            loadingPb.setVisibility(View.VISIBLE);
+            whenProcessing(true);
             custom.setVisibility(View.GONE);
             File romDir = new File(AppConfig.vmFolder + vmID);
             romDir.mkdirs();
@@ -1373,7 +1359,7 @@ public class CustomRomActivity extends AppCompatActivity {
                             Runnable runnable = new Runnable() {
                                 @Override
                                 public void run() {
-                                    loadingPb.setVisibility(View.GONE);
+                                    whenProcessing(false);
                                     custom.setVisibility(View.VISIBLE);
                                 }
                             };
@@ -1384,7 +1370,7 @@ public class CustomRomActivity extends AppCompatActivity {
                         Runnable runnable = new Runnable() {
                             @Override
                             public void run() {
-                                loadingPb.setVisibility(View.GONE);
+                                whenProcessing(false);
                                 custom.setVisibility(View.VISIBLE);
                                 UIUtils.UIAlert(activity, "error", e.toString());
                             }
@@ -1396,20 +1382,10 @@ public class CustomRomActivity extends AppCompatActivity {
         } else {
             drive.setText(selectedFilePath.getPath());
             driveLayout.setEndIconDrawable(R.drawable.more_vert_24px);
-            loadingPb.setVisibility(View.GONE);
+            whenProcessing(false);
         }
         //Fix image loaded from file.
-        if (!thumbnailPath.isEmpty()) {
-            ivAddThubnail.setImageResource(R.drawable.round_edit_24);
-            File imgFile = new  File(thumbnailPath);
-
-            if(imgFile.exists()){
-                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                ivIcon.setImageBitmap(myBitmap);
-            } else {
-                VectrasApp.setIconWithName(ivIcon, current.itemName);
-            }
-        }
+        thumbnailProcessing();
     }
 
     private String cdromPatternCompile() {
@@ -1461,5 +1437,34 @@ public class CustomRomActivity extends AppCompatActivity {
         }
         modify = false;
         super.onDestroy();
+    }
+
+    private void whenProcessing(boolean _isProcessing) {
+        AppBarLayout appbar = findViewById(R.id.appbar);
+        FrameLayout mainlayout = findViewById(R.id.mainlayout);
+        if (_isProcessing) {
+            mainlayout.setVisibility(View.GONE);
+            appbar.setVisibility(View.GONE);
+        } else {
+            mainlayout.setVisibility(View.VISIBLE);
+            appbar.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void thumbnailProcessing() {
+        if (!thumbnailPath.isEmpty()) {
+            ivAddThubnail.setImageResource(R.drawable.round_edit_24);
+            File imgFile = new  File(thumbnailPath);
+
+            if(imgFile.exists()){
+                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                ivIcon.setImageBitmap(myBitmap);
+            } else {
+                ivAddThubnail.setImageResource(R.drawable.round_add_24);
+                VectrasApp.setIconWithName(ivIcon, current.itemName);
+            }
+        } else {
+            ivAddThubnail.setImageResource(R.drawable.round_add_24);
+        }
     }
 }

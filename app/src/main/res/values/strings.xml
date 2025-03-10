@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">v2.9.5 (3dfx - Hamentaschen)</string>
+    <string name="app_version" translatable="false">v2.9.5 (3dfx - Italian ice)</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -49,7 +49,6 @@
     <string name="action_sign_in">Sign in</string>
     <string name="action_sign_up">Sign up</string>
     <string name="action_sign_with_google">Sign in with google</string>
-    <string name="welcome">"Welcome !"</string>
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
@@ -404,6 +403,12 @@
     <string name="do_you_want_to_change_the_mirror_before_setting_up_the_current_mirror_is">Do you want to change the mirror before setting up?\nThe current mirror is:</string>
     <string name="connecting_to_mirror_in">Connecting to mirror in</string>
     <string name="mirror">Mirror</string>
+    <string name="letstart">Let\'s start</string>
+    <string name="welcome">Welcome!</string>
+    <string name="welcome_to_vectras_vm_lets_get_started">Welcome to Vectras VM. Let\'s get started!</string>
+    <string name="processing_this_may_take_a_few_minutes">Processing...\nThis may take a few minutes.</string>
+    <string name="check_for_updates_from_the_beta_channel">Check for updates from the Beta channel</string>
+    <string name="check_from_the_Beta_channel_instead_of_the_Stable_channel">Check from the Beta channel instead of the Stable channel</string>
 
 
 
