@@ -1205,6 +1205,25 @@ public class RfbProto {
 	    os.write(eventBuf, 0, eventBufLen);	  
   }
 
+  void writeAkey(int _KEY) throws IOException {
+    try {
+      // Press
+      eventBufLen = 0;
+      writeKeyEvent(_KEY, true);
+      os.write(eventBuf, 0, eventBufLen);
+
+      // Release
+      eventBufLen = 0;
+      writeKeyEvent(_KEY, false);
+
+      // Reset VNC server modifiers state
+      writeModifierKeyEvents(0);
+      os.write(eventBuf, 0, eventBufLen);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
   void writeCtrlAltDel() throws IOException {
 	  final int DELETE = 0xffff;
 	  final int CTRLALT = VncCanvas.CTRL_MASK | VncCanvas.ALT_MASK;
@@ -1226,6 +1245,98 @@ public class RfbProto {
 	  } catch (IOException e) {
 		  e.printStackTrace();
 	  }
+  }
+
+  void writeCtrlC() throws IOException {
+    final int CKEY = 67;
+    final int CTRL = VncCanvas.CTRL_MASK;
+    try {
+      // Press
+      eventBufLen = 0;
+      writeModifierKeyEvents(CTRL);
+      writeKeyEvent(CKEY, true);
+      os.write(eventBuf, 0, eventBufLen);
+
+      // Release
+      eventBufLen = 0;
+      writeModifierKeyEvents(CTRL);
+      writeKeyEvent(CKEY, false);
+
+      // Reset VNC server modifiers state
+      writeModifierKeyEvents(0);
+      os.write(eventBuf, 0, eventBufLen);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  void writeCtrlX() throws IOException {
+    final int XKEY = 88;
+    final int CTRL = VncCanvas.CTRL_MASK;
+    try {
+      // Press
+      eventBufLen = 0;
+      writeModifierKeyEvents(CTRL);
+      writeKeyEvent(XKEY, true);
+      os.write(eventBuf, 0, eventBufLen);
+
+      // Release
+      eventBufLen = 0;
+      writeModifierKeyEvents(CTRL);
+      writeKeyEvent(XKEY, false);
+
+      // Reset VNC server modifiers state
+      writeModifierKeyEvents(0);
+      os.write(eventBuf, 0, eventBufLen);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  void writeCtrlV() throws IOException {
+    final int VKEY = 86;
+    final int CTRL = VncCanvas.CTRL_MASK;
+    try {
+      // Press
+      eventBufLen = 0;
+      writeModifierKeyEvents(CTRL);
+      writeKeyEvent(VKEY, true);
+      os.write(eventBuf, 0, eventBufLen);
+
+      // Release
+      eventBufLen = 0;
+      writeModifierKeyEvents(CTRL);
+      writeKeyEvent(VKEY, false);
+
+      // Reset VNC server modifiers state
+      writeModifierKeyEvents(0);
+      os.write(eventBuf, 0, eventBufLen);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  void writeCtrlA() throws IOException {
+    final int AKEY = 65;
+    final int CTRL = VncCanvas.CTRL_MASK;
+    try {
+      // Press
+      eventBufLen = 0;
+      writeModifierKeyEvents(CTRL);
+      writeKeyEvent(AKEY, true);
+      os.write(eventBuf, 0, eventBufLen);
+
+      // Release
+      eventBufLen = 0;
+      writeModifierKeyEvents(CTRL);
+      writeKeyEvent(AKEY, false);
+
+      // Reset VNC server modifiers state
+      writeModifierKeyEvents(0);
+      os.write(eventBuf, 0, eventBufLen);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
     
   //

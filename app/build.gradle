@@ -11,7 +11,7 @@ android {
         minSdk minApi
         targetSdk targetApi
         versionCode 21
-        versionName "v2.9.5-3dfx-italianice"
+        versionName "v2.9.5-3dfx-jello"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }

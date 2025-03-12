@@ -1,6 +1,7 @@
 package com.vectras.qemu;
 
 import android.androidVNC.AbstractScaling;
+import android.androidVNC.RfbProto;
 import android.androidVNC.VncCanvasActivity;
 
 import androidx.appcompat.app.ActionBar;
@@ -15,9 +16,12 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -29,9 +33,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -39,9 +46,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -49,6 +59,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.text.TextWatcher;
 
 import com.vectras.vm.*;
 
@@ -63,7 +74,11 @@ import com.vectras.vm.widgets.JoystickView;
 import com.vectras.vterm.Terminal;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -74,6 +89,9 @@ import org.json.JSONObject;
  * @author Dev
  */
 public class MainVNCActivity extends VncCanvasActivity {
+
+    private Timer _timer = new Timer();
+    private TimerTask timerTask;
 
     public static boolean started = false;
     public static final int KEYBOARD = 10000;
@@ -95,6 +113,20 @@ public class MainVNCActivity extends VncCanvasActivity {
     public static MainVNCActivity activity;
     public static LinearLayout desktop;
     public static LinearLayout gamepad;
+
+    private LinearLayout sendkeylayout;
+    private RecyclerView sendkeylist;
+    private EditText sendtextEdittext;
+    private ImageButton sendtextButton;
+    private ImageButton hidesendkeyButton;
+    private ImageButton sendselectallkeyButton;
+    private ImageButton sendcutButton;
+    private ImageButton sendcopykeyButton;
+    private ImageButton sendpastekeyButton;
+    private ImageButton senddelkeyButton;
+    private ArrayList<HashMap<String, Object>> listmapForSendKey = new ArrayList<>();
+    private LinearLayoutManager rvLayoutManager;
+
     @Override
     public void onCreate(Bundle b) {
 
@@ -161,6 +193,17 @@ public class MainVNCActivity extends VncCanvasActivity {
         ImageButton leftGameBtn = findViewById(R.id.leftGameBtn);
         ImageButton rightGameBtn = findViewById(R.id.rightGameBtn);
         ImageButton enterGameBtn = findViewById(R.id.enterGameBtn);
+        ImageButton ctrlaltdelBtn = findViewById(R.id.ctrlaltdelBtn);
+        sendkeylayout = findViewById(R.id.sendkeylayout);
+        sendkeylist = findViewById(R.id.sendkeylist);
+        sendtextEdittext = findViewById(R.id.sendtextEdittext);
+        sendtextButton = findViewById(R.id.sendtextButton);
+        hidesendkeyButton = findViewById(R.id.hidesendkeyButton);
+        sendselectallkeyButton = findViewById(R.id.sendselectallkeyButton);
+        sendpastekeyButton = findViewById(R.id.sendpastekeyButton);
+        sendcutButton = findViewById(R.id.sendcutButton);
+        sendcopykeyButton = findViewById(R.id.sendcopykeyButton);
+        senddelkeyButton = findViewById(R.id.senddelkeyButton);
         qmpBtn = findViewById(R.id.btnQmp);
         ImageButton appsBtn = findViewById(R.id.btnPrograms);
         appsBtn.setVisibility(View.GONE);
@@ -246,6 +289,19 @@ public class MainVNCActivity extends VncCanvasActivity {
                 keyDownUp(KeyEvent.KEYCODE_TAB);
             }
         });
+        ctrlaltdelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (sendkeylayout.getVisibility() == View.VISIBLE) {
+                    sendkeylayout.setVisibility(View.GONE);
+                    sendtextEdittext.setEnabled(false);
+                    sendtextEdittext.setEnabled(true);
+                } else {
+                    sendkeylayout.setVisibility(View.VISIBLE);
+                }
+                //sendCtrlAtlDelKey();
+            }
+        });
         tabGameBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -314,8 +370,8 @@ public class MainVNCActivity extends VncCanvasActivity {
                             // Stop the service
                             MainService.stopService();
                             //Terminal.killQemuProcess();
-                            VectrasApp.killcurrentqemuprocess(getApplicationContext());
-                            finish();
+                            //VectrasApp.killcurrentqemuprocess(getApplicationContext());
+                            shutdownthisvm();
                         })
                         .setNegativeButton(getString(R.string.no), null)
                         .show();
@@ -349,6 +405,27 @@ public class MainVNCActivity extends VncCanvasActivity {
                         toggleKeyboardFlag = UIUtils.onKeyboard(activity, toggleKeyboardFlag, vncCanvas);
                     }
                 }, 200);
+            }
+        });
+        keyboardBtn.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (sendkeylayout.getVisibility() == View.VISIBLE) {
+                    sendkeylayout.setVisibility(View.GONE);
+                    sendtextEdittext.setEnabled(false);
+                    sendtextEdittext.setEnabled(true);
+                } else {
+                    sendkeylayout.setVisibility(View.VISIBLE);
+                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            sendtextEdittext.requestFocus();
+                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.showSoftInput(sendtextEdittext, InputMethodManager.SHOW_IMPLICIT);
+                        }
+                    }, 500);
+                }
+                return false;
             }
         });
         controllersBtn.setOnClickListener(new View.OnClickListener() {
@@ -540,9 +617,91 @@ public class MainVNCActivity extends VncCanvasActivity {
                 sendKey(KeyEvent.KEYCODE_ESCAPE, false);
             }
         });
+        sendselectallkeyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                vncCanvas.sendCtrlA();
+            }
+        });
+        sendcutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                vncCanvas.sendCtrlX();
+            }
+        });
+        sendcopykeyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                vncCanvas.sendCtrlC();
+            }
+        });
+        sendpastekeyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                vncCanvas.sendCtrlV();
+            }
+        });
+        senddelkeyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_FORWARD_DEL));
+                dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_FORWARD_DEL));
+            }
+        });
+        hidesendkeyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendkeylayout.setVisibility(View.GONE);
+                sendtextEdittext.setEnabled(false);
+                sendtextEdittext.setEnabled(true);
+            }
+        });
+        sendtextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                vncCanvas.sendText(sendtextEdittext.getText().toString());
+                sendtextEdittext.setText("");
+            }
+        });
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                R.layout.container_function, functionsArray);
+        sendtextEdittext.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() == 0) {
+                    sendtextButton.setVisibility(View.GONE);
+                } else {
+                    sendtextButton.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        sendtextEdittext.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if (actionId == EditorInfo.IME_ACTION_SEND) {
+                    vncCanvas.sendText(sendtextEdittext.getText().toString());
+                    sendtextEdittext.setText("");
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(sendtextEdittext.getWindowToken(), 0);
+                    handled = true;
+                }
+                return handled;
+            }
+        });
+
+                ArrayAdapter < String > adapter = new ArrayAdapter<>(this,
+                        R.layout.container_function, functionsArray);
 
         ListView listView = findViewById(R.id.functions);
         listView.setAdapter(adapter);
@@ -576,6 +735,9 @@ public class MainVNCActivity extends VncCanvasActivity {
                 }
             }
         });
+        sendkeylayout.setVisibility(View.GONE);
+        sendtextButton.setVisibility(View.GONE);
+        sendkeydialog();
     }
 
     public boolean rightClick(final MotionEvent e, final int i) {
@@ -643,30 +805,7 @@ public class MainVNCActivity extends VncCanvasActivity {
     }
 
     public void sendCtrlAtlDelKey() {
-        dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_CTRL_LEFT));
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ALT_LEFT));
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_CTRL_LEFT));
-        dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ALT_LEFT));
-        dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_DEL));
+        vncCanvas.sendCtrlAltDel();
     }
 
     private void setDefaulViewMode() {
@@ -1257,16 +1396,22 @@ public class MainVNCActivity extends VncCanvasActivity {
 
     }
 
+    @Override
     public void onBackPressed() {
         super.onBackPressed();
-        FrameLayout l = findViewById(R.id.mainControl);
-        if (l != null) {
-            if (l.getVisibility() == View.VISIBLE) {
-                l.setVisibility(View.GONE);
-            } else
-                l.setVisibility(View.VISIBLE);
+        if (sendkeylayout.getVisibility() == View.VISIBLE) {
+            sendkeylayout.setVisibility(View.GONE);
+        } else {
+            FrameLayout l = findViewById(R.id.mainControl);
+            if (l != null) {
+                if (l.getVisibility() == View.VISIBLE) {
+                    l.setVisibility(View.GONE);
+                } else
+                    l.setVisibility(View.VISIBLE);
+            }
+            started = false;
+            finish();
         }
-        started = false;
     }
 
     public void onHideToolbar() {
@@ -1294,5 +1439,123 @@ public class MainVNCActivity extends VncCanvasActivity {
             }
         }, 1000);
 
+    }
+
+    private void shutdownthisvm() {
+        vncCanvas.sendMetaKey1(50, 6);
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_Q));
+                dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_Q));
+                dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_U));
+                dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_U));
+                dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_I));
+                dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_I));
+                dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_T));
+                dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_T));
+                dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
+                dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ENTER));
+                finish();
+            }
+        };
+        _timer.schedule(timerTask, 1000);
+    }
+
+    private void sendkeydialog() {
+        VectrasApp.setupSendKeyListForListmap(listmapForSendKey);
+        rvLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false);
+        sendkeylist.setAdapter(new Recyclerview1Adapter(listmapForSendKey));
+        sendkeylist.setLayoutManager(rvLayoutManager);
+        sendkeylist.setHasFixedSize(true);
+    }
+
+    public class Recyclerview1Adapter extends RecyclerView.Adapter<Recyclerview1Adapter.ViewHolder> {
+
+        ArrayList<HashMap<String, Object>> _data;
+
+        public Recyclerview1Adapter(ArrayList<HashMap<String, Object>> _arr) {
+            _data = _arr;
+        }
+
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            LayoutInflater _inflater = getLayoutInflater();
+            View _v = _inflater.inflate(R.layout.layout_for_send_keys, null);
+            RecyclerView.LayoutParams _lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            _v.setLayoutParams(_lp);
+            return new ViewHolder(_v);
+        }
+
+        @Override
+        public void onBindViewHolder(ViewHolder _holder, final int _position) {
+            View _view = _holder.itemView;
+            RecyclerView.LayoutParams _lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            _view.setLayoutParams(_lp);
+            final LinearLayout _all = _view.findViewById(R.id.all);
+            final TextView _textViewKeyName = _view.findViewById(R.id.textViewKeyName);
+            final ImageView _imageViewKey = _view.findViewById(R.id.imageViewKey);
+            _textViewKeyName.setTextColor(0xff000000);
+
+
+            if ((boolean) _data.get(_position).get("useIcon")) {
+                _textViewKeyName.setVisibility(View.GONE);
+                _imageViewKey.setVisibility(View.VISIBLE);
+                _imageViewKey.setImageResource((int) _data.get(_position).get("rIcon"));
+            } else {
+                _imageViewKey.setVisibility(View.GONE);
+                _textViewKeyName.setVisibility(View.VISIBLE);
+                _textViewKeyName.setText(_data.get(_position).get("keyname").toString());
+            }
+
+            _all.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View _view) {
+                    if (_position == 0) {
+                        sendCtrlAtlDelKey();
+                    } else {
+                        if ((boolean) _data.get(_position).get("useKeyEvent")) {
+                            dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, (int) _data.get(_position).get("keycode")));
+                            dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, (int) _data.get(_position).get("keycode")));
+                        } else {
+                            vncCanvas.sendAKey((int) _data.get(_position).get("keycode"));
+                        }
+                    }
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return _data.size();
+        }
+
+        public class ViewHolder extends RecyclerView.ViewHolder {
+            public ViewHolder(View v) {
+                super(v);
+            }
+        }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        int pointerCount = event.getPointerCount();
+
+        switch (event.getActionMasked()) {
+            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_POINTER_DOWN:
+                if (pointerCount == 3) {
+                    MotionEvent e = MotionEvent.obtain(1000, 1000, MotionEvent.ACTION_DOWN, vncCanvas.mouseX, vncCanvas.mouseY,
+                            0);
+                    ((TouchpadInputHandler) VncCanvasActivity.inputHandler).middleClick(e);
+                } else if (pointerCount == 2) {
+                    MotionEvent e = MotionEvent.obtain(1000, 1000, MotionEvent.ACTION_DOWN, vncCanvas.mouseX, vncCanvas.mouseY,
+                            0);
+                    ((TouchpadInputHandler) VncCanvasActivity.inputHandler).rightClick(e);
+                }
+                break;
+        }
+
+        return super.onTouchEvent(event);
     }
 }

@@ -20,17 +20,18 @@
             android:layout_centerVertical="true"
             android:orientation="vertical">
 
-            <android.androidVNC.VncCanvas
-                android:id="@+id/vnc_canvas"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:keepScreenOn="true" />
+                <android.androidVNC.VncCanvas
+                    android:id="@+id/vnc_canvas"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:keepScreenOn="true" />
 
         </RelativeLayout>
 
         <include layout="@layout/controls_fragment" />
+        <include layout="@layout/send_key_dialog" />
 
     </RelativeLayout>
 
