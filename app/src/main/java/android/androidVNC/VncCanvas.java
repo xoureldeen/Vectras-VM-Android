@@ -1211,6 +1211,78 @@ public class VncCanvas extends AppCompatImageView {
 
 	}
 
+	public void sendMetaKey1Down(int key, int flags) {
+		try {
+			rfb.writeKeyEvent(key, flags, true);
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+
+	}
+
+	public void sendMetaKey1Up(int key, int flags) {
+		try {
+			rfb.writeKeyEvent(key, flags, false);
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+
+	}
+
+	public void sendAKey(int _key) {
+		try {
+			rfb.writeAkey(_key);
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+
+	}
+
+	public void sendCtrlAltDel() {
+		try {
+			rfb.writeCtrlAltDel();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+
+	}
+
+	public void sendCtrlC() {
+		try {
+			rfb.writeCtrlC();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+
+	}
+
+	public void sendCtrlX() {
+		try {
+			rfb.writeCtrlX();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+
+	}
+
+	public void sendCtrlV() {
+		try {
+			rfb.writeCtrlV();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+
+	}
+
+	public void sendCtrlA() {
+		try {
+			rfb.writeCtrlA();
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+
+	}
+
 	public void sendText(String s) {
 		int l = s.length();
 		for (int i = 0; i < l; i++) {

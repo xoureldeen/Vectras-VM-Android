@@ -20,6 +20,7 @@ import android.os.Looper;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
@@ -962,5 +963,232 @@ public class VectrasApp extends Application {
 		if (!_https)
 			command = command.replaceAll("https://", "http://");
 		return command.replaceAll("xssFjnj58Id", _url);
+	}
+
+	public static void setupSendKeyListForListmap(ArrayList<HashMap<String, Object>> listmapForSendKey) {
+		HashMap<String, Object> mapForAddItems = new HashMap<>();
+
+		mapForAddItems.put("keyname", "Ctrl + Alt + Del");
+		mapForAddItems.put("keycode", 0);
+		mapForAddItems.put("useKeyEvent", false);
+		mapForAddItems.put("useIcon", false);
+		mapForAddItems.put("rIcon", 0);
+		listmapForSendKey.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("keyname", "Esc");
+		mapForAddItems.put("keycode", KeyEvent.KEYCODE_ESCAPE);
+		mapForAddItems.put("useKeyEvent", true);
+		mapForAddItems.put("useIcon", false);
+		mapForAddItems.put("rIcon", 0);
+		listmapForSendKey.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("keyname", "Windows");
+		mapForAddItems.put("keycode", 91);
+		mapForAddItems.put("useKeyEvent", false);
+		mapForAddItems.put("useIcon", true);
+		mapForAddItems.put("rIcon", R.drawable.grid_view_24px);
+		listmapForSendKey.add(mapForAddItems);
+
+//		mapForAddItems = new HashMap<>();
+//		mapForAddItems.put("keyname", "Menu");
+//		mapForAddItems.put("keycode", 93);
+//		mapForAddItems.put("useKeyEvent", false);
+//		mapForAddItems.put("useIcon", true);
+//		mapForAddItems.put("rIcon", R.drawable.menu_24px);
+//		listmapForSendKey.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("keyname", "Backspace");
+		mapForAddItems.put("keycode", KeyEvent.KEYCODE_DEL);
+		mapForAddItems.put("useKeyEvent", true);
+		mapForAddItems.put("useIcon", true);
+		mapForAddItems.put("rIcon", R.drawable.backspace_24px);
+		listmapForSendKey.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("keyname", "Enter");
+		mapForAddItems.put("keycode", KeyEvent.KEYCODE_ENTER);
+		mapForAddItems.put("useKeyEvent", true);
+		mapForAddItems.put("useIcon", true);
+		mapForAddItems.put("rIcon", R.drawable.keyboard_return_24px);
+		listmapForSendKey.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("keyname", "Tab");
+		mapForAddItems.put("keycode", KeyEvent.KEYCODE_TAB);
+		mapForAddItems.put("useKeyEvent", true);
+		mapForAddItems.put("useIcon", true);
+		mapForAddItems.put("rIcon", R.drawable.sync_alt_24px);
+		listmapForSendKey.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("keyname", "Up");
+		mapForAddItems.put("keycode", KeyEvent.KEYCODE_DPAD_UP);
+		mapForAddItems.put("useKeyEvent", true);
+		mapForAddItems.put("useIcon", true);
+		mapForAddItems.put("rIcon", R.drawable.arrow_upward_24px);
+		listmapForSendKey.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("keyname", "Down");
+		mapForAddItems.put("keycode", KeyEvent.KEYCODE_DPAD_DOWN);
+		mapForAddItems.put("useKeyEvent", true);
+		mapForAddItems.put("useIcon", true);
+		mapForAddItems.put("rIcon", R.drawable.arrow_downward_24px);
+		listmapForSendKey.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("keyname", "Left");
+		mapForAddItems.put("keycode", KeyEvent.KEYCODE_DPAD_LEFT);
+		mapForAddItems.put("useKeyEvent", true);
+		mapForAddItems.put("useIcon", true);
+		mapForAddItems.put("rIcon", R.drawable.arrow_back_24px);
+		listmapForSendKey.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("keyname", "Left");
+		mapForAddItems.put("keycode", KeyEvent.KEYCODE_DPAD_RIGHT);
+		mapForAddItems.put("useKeyEvent", true);
+		mapForAddItems.put("useIcon", true);
+		mapForAddItems.put("rIcon", R.drawable.arrow_forward_24px);
+		listmapForSendKey.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("keyname", "Home");
+		mapForAddItems.put("keycode", KeyEvent.KEYCODE_MOVE_HOME);
+		mapForAddItems.put("useKeyEvent", true);
+		mapForAddItems.put("useIcon", true);
+		mapForAddItems.put("rIcon", R.drawable.vertical_align_top_24px);
+		listmapForSendKey.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("keyname", "End");
+		mapForAddItems.put("keycode", KeyEvent.KEYCODE_MOVE_END);
+		mapForAddItems.put("useKeyEvent", true);
+		mapForAddItems.put("useIcon", true);
+		mapForAddItems.put("rIcon", R.drawable.vertical_align_bottom_24px);
+		listmapForSendKey.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("keyname", "End");
+		mapForAddItems.put("keycode", KeyEvent.KEYCODE_PAGE_UP);
+		mapForAddItems.put("useKeyEvent", true);
+		mapForAddItems.put("useIcon", true);
+		mapForAddItems.put("rIcon", R.drawable.arrow_warm_up_24px);
+		listmapForSendKey.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("keyname", "End");
+		mapForAddItems.put("keycode", KeyEvent.KEYCODE_PAGE_DOWN);
+		mapForAddItems.put("useKeyEvent", true);
+		mapForAddItems.put("useIcon", true);
+		mapForAddItems.put("rIcon", R.drawable.arrow_cool_down_24px);
+		listmapForSendKey.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("keyname", "End");
+		mapForAddItems.put("keycode", KeyEvent.KEYCODE_INSERT);
+		mapForAddItems.put("useKeyEvent", true);
+		mapForAddItems.put("useIcon", true);
+		mapForAddItems.put("rIcon", R.drawable.insert_text_24px);
+		listmapForSendKey.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("keyname", "F1");
+		mapForAddItems.put("keycode", KeyEvent.KEYCODE_F1);
+		mapForAddItems.put("useKeyEvent", true);
+		mapForAddItems.put("useIcon", false);
+		mapForAddItems.put("rIcon", 0);
+		listmapForSendKey.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("keyname", "F2");
+		mapForAddItems.put("keycode", KeyEvent.KEYCODE_F2);
+		mapForAddItems.put("useKeyEvent", true);
+		mapForAddItems.put("useIcon", false);
+		mapForAddItems.put("rIcon", 0);
+		listmapForSendKey.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("keyname", "F3");
+		mapForAddItems.put("keycode", KeyEvent.KEYCODE_F3);
+		mapForAddItems.put("useKeyEvent", true);
+		mapForAddItems.put("useIcon", false);
+		mapForAddItems.put("rIcon", 0);
+		listmapForSendKey.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("keyname", "F4");
+		mapForAddItems.put("keycode", KeyEvent.KEYCODE_F4);
+		mapForAddItems.put("useKeyEvent", true);
+		mapForAddItems.put("useIcon", false);
+		mapForAddItems.put("rIcon", 0);
+		listmapForSendKey.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("keyname", "F5");
+		mapForAddItems.put("keycode", KeyEvent.KEYCODE_F5);
+		mapForAddItems.put("useKeyEvent", true);
+		mapForAddItems.put("useIcon", false);
+		mapForAddItems.put("rIcon", 0);
+		listmapForSendKey.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("keyname", "F6");
+		mapForAddItems.put("keycode", KeyEvent.KEYCODE_F6);
+		mapForAddItems.put("useKeyEvent", true);
+		mapForAddItems.put("useIcon", false);
+		mapForAddItems.put("rIcon", 0);
+		listmapForSendKey.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("keyname", "F7");
+		mapForAddItems.put("keycode", KeyEvent.KEYCODE_F7);
+		mapForAddItems.put("useKeyEvent", true);
+		mapForAddItems.put("useIcon", false);
+		mapForAddItems.put("rIcon", 0);
+		listmapForSendKey.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("keyname", "F8");
+		mapForAddItems.put("keycode", KeyEvent.KEYCODE_F8);
+		mapForAddItems.put("useKeyEvent", true);
+		mapForAddItems.put("useIcon", false);
+		mapForAddItems.put("rIcon", 0);
+		listmapForSendKey.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("keyname", "F9");
+		mapForAddItems.put("keycode", KeyEvent.KEYCODE_F9);
+		mapForAddItems.put("useKeyEvent", true);
+		mapForAddItems.put("useIcon", false);
+		mapForAddItems.put("rIcon", 0);
+		listmapForSendKey.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("keyname", "F10");
+		mapForAddItems.put("keycode", KeyEvent.KEYCODE_F10);
+		mapForAddItems.put("useKeyEvent", true);
+		mapForAddItems.put("useIcon", false);
+		mapForAddItems.put("rIcon", 0);
+		listmapForSendKey.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("keyname", "F11");
+		mapForAddItems.put("keycode", KeyEvent.KEYCODE_F11);
+		mapForAddItems.put("useKeyEvent", true);
+		mapForAddItems.put("useIcon", false);
+		mapForAddItems.put("rIcon", 0);
+		listmapForSendKey.add(mapForAddItems);
+
+		mapForAddItems = new HashMap<>();
+		mapForAddItems.put("keyname", "F12");
+		mapForAddItems.put("keycode", KeyEvent.KEYCODE_F12);
+		mapForAddItems.put("useKeyEvent", true);
+		mapForAddItems.put("useIcon", false);
+		mapForAddItems.put("rIcon", 0);
+		listmapForSendKey.add(mapForAddItems);
 	}
 }

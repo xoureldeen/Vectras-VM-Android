@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:gravity="bottom"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+        android:id="@+id/sendkeylayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/backgroud_round_dialog"
+        android:layout_marginTop="8sp"
+        android:layout_marginLeft="16sp"
+        android:layout_marginRight="16sp"
+        android:layout_marginBottom="16sp">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/sendkeylist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:listitem="@layout/layout_for_send_keys"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_weight="1"
+                android:background="@drawable/backgroud_round_edittext_50"
+                android:layout_marginTop="1sp"
+                android:layout_marginLeft="1sp"
+                android:animateLayoutChanges="true">
+                <EditText
+                    android:id="@+id/sendtextEdittext"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Send text..."
+                    android:textSize="20sp"
+                    android:padding="6sp"
+                    android:textColor="@android:color/black"
+                    android:textColorHint="@android:color/black"
+                    android:background="@android:color/transparent"
+                    android:layout_weight="1"
+                    android:imeOptions="actionSend"/>
+
+                <ImageButton
+                    android:id="@+id/sendtextButton"
+                    android:layout_width="57dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2sp"
+                    android:background="@drawable/backgroud_round_dialog"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="10dp"
+                    android:src="@drawable/arrow_upward_24px"
+                    app:tint="@android:color/black" />
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/sendselectallkeyButton"
+                android:layout_width="57dp"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="10dp"
+                android:src="@drawable/select_all_24px"
+                app:tint="@android:color/black" />
+
+            <ImageButton
+                android:id="@+id/sendcutButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="10dp"
+                android:src="@drawable/content_cut_24px"
+                app:tint="@android:color/black" />
+
+            <ImageButton
+                android:id="@+id/sendcopykeyButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="10dp"
+                android:src="@drawable/ic_copy"
+                app:tint="@android:color/black" />
+
+            <ImageButton
+                android:id="@+id/sendpastekeyButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="10dp"
+                android:src="@drawable/content_paste_24px"
+                app:tint="@android:color/black" />
+
+            <ImageButton
+                android:id="@+id/senddelkeyButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="10dp"
+                android:src="@drawable/delete_forever_24px"
+                app:tint="@android:color/black" />
+
+            <ImageButton
+                android:id="@+id/hidesendkeyButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="10dp"
+                android:src="@drawable/keyboard_arrow_down_24px"
+                app:tint="@android:color/black" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
