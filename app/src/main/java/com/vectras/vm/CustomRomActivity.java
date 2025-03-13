@@ -99,6 +99,7 @@ public class CustomRomActivity extends AppCompatActivity {
     public String secondVMdirectory = "";
     public boolean addromnowdone = false;
     public String vmID = VMManager.idGenerator();
+    public int port = VMManager.startRandomPort();
     private boolean created = false;
 
     public static CustomRomActivity activity;
@@ -1034,7 +1035,7 @@ public class CustomRomActivity extends AppCompatActivity {
         if (modify) {
             VMManager.editVM(Objects.requireNonNull(title.getText()).toString(), thumbnailPath, Objects.requireNonNull(drive.getText()).toString(), MainSettingsManager.getArch(activity), Objects.requireNonNull(cdrom.getText()).toString(), Objects.requireNonNull(qemu.getText()).toString(), getIntent().getIntExtra("POS", 0));
         } else {
-            VMManager.createNewVM(Objects.requireNonNull(title.getText()).toString(), thumbnailPath, Objects.requireNonNull(drive.getText()).toString(), MainSettingsManager.getArch(activity), Objects.requireNonNull(cdrom.getText()).toString(), Objects.requireNonNull(qemu.getText()).toString(), vmID);
+            VMManager.createNewVM(Objects.requireNonNull(title.getText()).toString(), thumbnailPath, Objects.requireNonNull(drive.getText()).toString(), MainSettingsManager.getArch(activity), Objects.requireNonNull(cdrom.getText()).toString(), Objects.requireNonNull(qemu.getText()).toString(), vmID, port);
         }
 
         created = true;

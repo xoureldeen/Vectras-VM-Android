@@ -257,7 +257,7 @@ public class StartVM {
         //params.add("-full-screen");
 
         params.add("-qmp");
-        params.add("tcp:localhost:4444,server,nowait");
+        params.add("tcp:localhost:" + Config.QMPPort + ",server,nowait");
 
         return String.join(" ", params);
     }

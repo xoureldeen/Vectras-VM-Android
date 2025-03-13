@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
         linearnothinghere = findViewById(R.id.linearnothinghere);
 
         TextView tvLogin = findViewById(R.id.tvLogin);
-        tvLogin.setText("LOGIN --> " + Config.defaultVNCHost + ":" + (5900 + Config.defaultVNCPort)/* + "\nPASSWORD --> " + Config.defaultVNCPasswd*/);
+        tvLogin.setText("LOGIN --> " + Config.defaultVNCHost + ":" + (5901)/* + "\nPASSWORD --> " + Config.defaultVNCPasswd*/);
 
         Button stopBtn = findViewById(R.id.stopBtn);
         stopBtn.setOnClickListener(new View.OnClickListener() {
@@ -747,25 +747,42 @@ public class MainActivity extends AppCompatActivity {
 
                         if (MainSettingsManager.getcheckforupdatesfromthebetachannel(activity)) {
                             versionNameonUpdate = obj.getString("versionNameBeta");
+
+                            if (versionCode < obj.getInt("versionCode") || !versionNameonUpdate.equals(versionName)) {
+                                AlertDialog.Builder alert = new AlertDialog.Builder(activity, R.style.MainDialogTheme);
+                                alert.setTitle("Install the latest version")
+                                        .setMessage(Html.fromHtml(obj.getString("MessageBeta") + "<br><br>Update size:<br>" + obj.getString("sizeBeta")))
+                                        .setCancelable(obj.getBoolean("cancellableBeta"))
+                                        .setNegativeButton("Update", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                try {
+                                                    startActivity(new Intent(ACTION_VIEW, Uri.parse(obj.getString("urlBeta"))));
+                                                } catch (JSONException e) {
+
+                                                }
+                                            }
+                                        }).show();
+
+                            }
                         } else {
                             versionNameonUpdate = obj.getString("versionName");
-                        }
 
-                        if (versionCode < obj.getInt("versionCode") || !versionNameonUpdate.contains(versionName)) {
-                            AlertDialog.Builder alert = new AlertDialog.Builder(activity, R.style.MainDialogTheme);
-                            alert.setTitle("Install the latest version")
-                                    .setMessage(Html.fromHtml(obj.getString("Message") + "<br><br>update size:<br>" + obj.getString("size")))
-                                    .setCancelable(obj.getBoolean("cancellable"))
-                                    .setNegativeButton("Update", new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int id) {
-                                            try {
-                                                startActivity(new Intent(ACTION_VIEW, Uri.parse(obj.getString("url"))));
-                                            } catch (JSONException e) {
+                            if (versionCode < obj.getInt("versionCode") || !versionNameonUpdate.contains(versionName)) {
+                                AlertDialog.Builder alert = new AlertDialog.Builder(activity, R.style.MainDialogTheme);
+                                alert.setTitle("Install the latest version")
+                                        .setMessage(Html.fromHtml(obj.getString("Message") + "<br><br>Update size:<br>" + obj.getString("size")))
+                                        .setCancelable(obj.getBoolean("cancellable"))
+                                        .setNegativeButton("Update", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int id) {
+                                                try {
+                                                    startActivity(new Intent(ACTION_VIEW, Uri.parse(obj.getString("url"))));
+                                                } catch (JSONException e) {
 
+                                                }
                                             }
-                                        }
-                                    }).show();
+                                        }).show();
 
+                            }
                         }
                     } else if (result.contains("Error on getting data") && showDialog) {
                         errorUpdateDialog(result);
@@ -810,6 +827,11 @@ public class MainActivity extends AppCompatActivity {
                     romsMainData.vmID = json_data.getString("vmID");
                 } catch (JSONException ignored) {
                     romsMainData.vmID = "";
+                }
+                try {
+                    romsMainData.qmpPort = json_data.getInt("qmpPort");
+                } catch (JSONException ignored) {
+                    romsMainData.qmpPort= 0;
                 }
                 try {
                     romsMainData.itemDrv1 = json_data.getString("imgDrv1");
@@ -930,6 +952,9 @@ public class MainActivity extends AppCompatActivity {
 
     public static void startVM(String vmName, String env, String itemExtra, String itemPath) {
 
+        File romDir = new File(Config.getCacheDir()+ "/" + Config.vmID);
+        romDir.mkdirs();
+
         if (!VMManager.isthiscommandsafe(env)) {
             VectrasApp.oneDialog(activity.getResources().getString(R.string.problem_has_been_detected), activity.getResources().getString(R.string.harmful_command_was_detected), true, false, activity);
             return;
@@ -995,14 +1020,19 @@ public class MainActivity extends AppCompatActivity {
         handler.postDelayed(
                 new Runnable() {
                     public void run() {
-                        Intent serviceIntent = new Intent(activity, MainService.class);
-                        MainService.env = env;
-                        MainService.CHANNEL_ID = vmName;
-                        if (SDK_INT >= Build.VERSION_CODES.O) {
-                            activity.startForegroundService(serviceIntent);
+                        if (isRunning) {
+                            MainService.startCommand(env, activity);
                         } else {
-                            activity.startService(serviceIntent);
+                            Intent serviceIntent = new Intent(activity, MainService.class);
+                            MainService.env = env;
+                            MainService.CHANNEL_ID = vmName;
+                            if (SDK_INT >= Build.VERSION_CODES.O) {
+                                activity.startForegroundService(serviceIntent);
+                            } else {
+                                activity.startService(serviceIntent);
+                            }
                         }
+
 
                         if (MainSettingsManager.getVmUi(activity).equals("VNC")) {
                             if (MainSettingsManager.getVncExternal(MainActivity.activity)) {

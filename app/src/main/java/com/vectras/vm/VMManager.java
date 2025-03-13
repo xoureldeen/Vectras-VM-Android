@@ -43,7 +43,7 @@ public class VMManager {
     public static int restoredVMs = 0;
     public static boolean isKeptSomeFiles = false;
 
-    public static void createNewVM(String name, String thumbnail, String drive, String arch, String cdrom, String params, String vmID) {
+    public static void createNewVM(String name, String thumbnail, String drive, String arch, String cdrom, String params, String vmID, int port) {
         mapForCreateNewVM.clear();
         mapForCreateNewVM.put("imgName", name);
         mapForCreateNewVM.put("imgIcon", thumbnail);
@@ -52,6 +52,7 @@ public class VMManager {
         mapForCreateNewVM.put("imgExtra", params);
         mapForCreateNewVM.put("imgArch", arch);
         mapForCreateNewVM.put("vmID", vmID);
+        mapForCreateNewVM.put("qmpPort", port);
 
         listmapForCreateNewVM.clear();
         listmapForCreateNewVM = new Gson().fromJson(VectrasApp.readFile(AppConfig.romsdatajson), new TypeToken<ArrayList<HashMap<String, Object>>>(){}.getType());
@@ -76,6 +77,11 @@ public class VMManager {
         mapForCreateNewVM.put("imgCdrom", cdrom);
         mapForCreateNewVM.put("imgExtra", params);
         mapForCreateNewVM.put("imgArch", arch);
+        if (listmapForCreateNewVM.get(position).containsKey("qmpPort")) {
+            mapForCreateNewVM.put("qmpPort", listmapForCreateNewVM.get(position).get("qmpPort"));
+        } else {
+            mapForCreateNewVM.put("qmpPort", startRandomPort());
+        }
 
         if (listmapForCreateNewVM.get(position).containsKey("vmID")) {
             mapForCreateNewVM.put("vmID", Objects.requireNonNull(listmapForCreateNewVM.get(position).get("vmID")).toString());
@@ -193,6 +199,13 @@ public class VMManager {
             addAdb = "l";
         }
         return addAdb + String.valueOf((long)(random.nextInt(10001)));
+    }
+
+    public static int startRandomPort() {
+        Random _random = new Random();
+        int _min = 10000;
+        int _max = 65535;
+        return _random.nextInt(_max - _min + 1) + _min;
     }
 
     public static void deleteVM() {
@@ -638,7 +651,7 @@ public class VMManager {
             });
             alertDialog.show();
             return true;
-        } else if (_result.contains("No such file or directory")) {
+        } else if (_result.contains("No such file or directory1")) {
             //Error code: NO_SUCH_FILE_OR_DIRECTORY
             VectrasApp.oneDialog(_activity.getResources().getString(R.string.problem_has_been_detected), _activity.getResources().getString(R.string.error_NO_SUCH_FILE_OR_DIRECTORY), true, false, _activity);
             _activity.stopService(new Intent(_activity, MainService.class));

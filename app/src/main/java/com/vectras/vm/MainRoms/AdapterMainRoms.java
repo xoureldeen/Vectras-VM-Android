@@ -36,6 +36,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.qemu.MainVNCActivity;
 import com.vectras.vm.AppConfig;
@@ -151,6 +152,12 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
             public void onClick(View view) {
                 VMManager.setArch(current.itemArch, MainActivity.activity);
                 StartVM.cdrompath = current.imgCdrom;
+                if (current.qmpPort == 0) {
+                    Config.setDefault();
+                } else {
+                    Config.QMPPort = current.qmpPort;
+                }
+                Config.vmID = current.vmID;
                 String env = StartVM.env(MainActivity.activity, current.itemExtra, current.itemPath, "");
                 MainActivity.startVM(current.itemName, env, current.itemExtra, current.itemPath);
             }
