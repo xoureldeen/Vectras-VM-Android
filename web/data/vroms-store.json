@@ -221,19 +221,6 @@
         "desc":"User: root\nPassword: [None]\nDebian (/ˈdɛbiən/), also known as Debian GNU/Linux, is a free and open source Linux distribution, developed by the Debian Project, which was established by Ian Murdock in August 1993. Debian is one of the oldest operating systems based on the Linux kernel, and is the basis for many other Linux distributions."
     },
     {
-        "rom_name":"Alpine Linux",
-        "rom_icon":"https://avatars.githubusercontent.com/u/7600810?s=200&v=4",
-        "rom_url":"https://www.mediafire.com/file/v79ivyqdogj7a8l/sda.qcow2/file",
-        "rom_path":"sda.qcow2",
-        "rom_avail":true,
-        "rom_size":"1.2GB (From Hacks, Coding and more)",
-        "rom_arch":"X86_64",
-        "rom_kernel":"linux",
-        "rom_extra":"-cpu qemu64 -smp sockets=1,cores=2,threads=1 -m 1G -drive file='OhnoIjustrealizeditsmidnightandIstillhavetodothissda.qcow2',aio=threads,cache=unsafe -vga std -device intel-hda -device hda-duplex -device e1000,netdev=n0 -netdev user,id=n0 -accel tcg,tb-size=2048",
-        "final_rom_file_name":"sda.qcow2",
-        "desc":"Alpine Linux is a Linux distribution designed to be small, simple, and secure. It uses musl, BusyBox, and OpenRC instead of the more commonly used glibc, GNU Core Utilities, and systemd. This makes Alpine one of few Linux distributions not to be based on the GNU Core Utilities."
-    },
-    {
         "rom_name":"Anonymous OS",
         "rom_icon":"https://i0.wp.com/securityaffairs.com/wp-content/uploads/2012/03/anonymous-os.jpg?fit=498%2C459&ssl=1&resize=1280%2C720",
         "rom_url":"https://archive.org/download/blackberry-os/Anonymous%20OS.cvbi",
