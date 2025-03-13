@@ -1,10 +1,12 @@
 package com.vectras.vm;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
@@ -106,5 +108,11 @@ public class MainService extends Service {
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(serviceChannel);
         }
+    }
+
+    public static void startCommand(String _env, Activity _activity) {
+        Terminal vterm = new Terminal(_activity);
+        vterm.executeShellCommand2("dwm", false, _activity);
+        vterm.executeShellCommand2(_env, true, _activity);
     }
 }

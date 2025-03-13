@@ -9,4 +9,5 @@ public class DataMainRoms {
     public String itemExtra;
     public String imgCdrom;
     public String vmID;
+    public int qmpPort;
 }

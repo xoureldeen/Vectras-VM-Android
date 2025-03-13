@@ -128,12 +128,12 @@ public class Config {
 
     // VNC Defaults
     public static String defaultVNCHost = "localhost";
-    public static final String defaultVNCUsername = "vectras";
-    public static final String defaultVNCPasswd = "vectras";
+    public static String defaultVNCUsername = "vectras";
+    public static String defaultVNCPasswd = "555555";
 
     //It seems that for new version of qemu it expects a relative number
     //  so we stop using absolute port numbers
-    public static final int defaultVNCPort = 1;
+    public static int defaultVNCPort = 5901;
 
     //Keyboard Layout
     public static String defaultKeyboardLayout = "en-us";
@@ -154,7 +154,7 @@ public class Config {
     }
 
     public static String getLocalVNCSocketPath() {
-        return Config.getCacheDir()+"/vncsocket";
+        return Config.getCacheDir()+ "/" + vmID + "/vncsocket";
     }
 
     public static enum MouseMode {
@@ -180,4 +180,13 @@ public class Config {
     public static final ScaleType defaultFullscreenScaleMode = ScaleType.FIT_CENTER;
     public static final ScaleType defaultScaleModeCenter = ScaleType.CENTER;
     public static final String defaultInputMode = VncCanvasActivity.TOUCH_ZOOM_MODE;
+    public static String vmID = "";
+
+    public static void setDefault () {
+        defaultVNCHost = "localhost";
+        defaultVNCUsername = "vectras";
+        defaultVNCPasswd = "555555";
+        defaultVNCPort = 5901;
+        QMPPort = 4444;
+    }
 }

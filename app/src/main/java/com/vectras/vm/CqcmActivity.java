@@ -104,7 +104,7 @@ public class CqcmActivity extends AppCompatActivity {
                     if (mapForCreateNewVM.containsKey("imgExtra")) {
                         imgExtra = Objects.requireNonNull(mapForCreateNewVM.get("imgExtra")).toString();
                     }
-                    VMManager.createNewVM(imgName, imgIcon, imgPath, imgArch, imgCdrom, imgExtra, vmID);
+                    VMManager.createNewVM(imgName, imgIcon, imgPath, imgArch, imgCdrom, imgExtra, vmID, VMManager.startRandomPort());
                 } else {
                     Toast.makeText(getApplicationContext(), "The data for the new virtual machine is corrupted and cannot be created.", Toast.LENGTH_LONG).show();
                 }
