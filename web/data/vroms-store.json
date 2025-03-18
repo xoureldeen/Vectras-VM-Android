@@ -234,6 +234,19 @@
         "desc":"User: root\nPassword: [None]\nDebian (/ˈdɛbiən/), also known as Debian GNU/Linux, is a free and open source Linux distribution, developed by the Debian Project, which was established by Ian Murdock in August 1993. Debian is one of the oldest operating systems based on the Linux kernel, and is the basis for many other Linux distributions."
     },
     {
+        "rom_name":"Haiku OS Beta 5",
+        "rom_icon":"https://www.haiku-os.org/files/wallpaper-call/braelin_michelus_shining_harmony.png",
+        "rom_url":"https://archive.org/download/blackberry-os/Haiku-beta5.cvbi",
+        "rom_path":"Haiku-beta5.cvbi",
+        "rom_avail":true,
+        "rom_size":"1GB",
+        "rom_arch":"X86_64",
+        "rom_kernel":"linux",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"From marstraveler01 at https://github.com/marstraveler01/vm-stuff/releases/tag/beta-5 and fixed by Nguyen Bao An Bui."
+    },
+    {
         "rom_name":"Anonymous OS",
         "rom_icon":"https://i0.wp.com/securityaffairs.com/wp-content/uploads/2012/03/anonymous-os.jpg?fit=498%2C459&ssl=1&resize=1280%2C720",
         "rom_url":"https://archive.org/download/blackberry-os/Anonymous%20OS.cvbi",
