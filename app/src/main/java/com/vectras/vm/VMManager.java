@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.MainRoms.AdapterMainRoms;
 import com.vectras.vm.utils.UIUtils;
@@ -213,6 +214,7 @@ public class VMManager {
         listmapForRemoveVM = new Gson().fromJson(pendingJsonContent, new TypeToken<ArrayList<HashMap<String, Object>>>(){}.getType());
         if (listmapForRemoveVM.get(pendingPosition).containsKey("vmID")) {
             pendingVMID = Objects.requireNonNull(listmapForRemoveVM.get(pendingPosition).get("vmID")).toString();
+            VectrasApp.deleteDirectory(Config.getCacheDir()+ "/" + pendingVMID);
             Log.i("VMManager", "deleteVM: ID obtained: " + pendingVMID);
         } else {
             Log.e("VMManager", "deleteVM: Cannot get ID.");

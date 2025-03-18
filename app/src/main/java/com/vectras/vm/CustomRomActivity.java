@@ -98,7 +98,7 @@ public class CustomRomActivity extends AppCompatActivity {
     public String previousName = "";
     public String secondVMdirectory = "";
     public boolean addromnowdone = false;
-    public String vmID = VMManager.idGenerator();
+    public static String vmID = VMManager.idGenerator();
     public int port = VMManager.startRandomPort();
     private boolean created = false;
 
@@ -302,10 +302,10 @@ public class CustomRomActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (Objects.requireNonNull(drive.getText()).toString().isEmpty()) {
-                    File vDir = new File(com.vectras.vm.AppConfig.maindirpath + "IMG");
-                    if (!vDir.exists()) {
-                        vDir.mkdirs();
-                    }
+//                    File vDir = new File(com.vectras.vm.AppConfig.maindirpath + "IMG");
+//                    if (!vDir.exists()) {
+//                        vDir.mkdirs();
+//                    }
                     CreateImageDialogFragment dialogFragment = new CreateImageDialogFragment();
                     dialogFragment.customRom = true;
                     dialogFragment.show(getSupportFragmentManager(), "CreateImageDialogFragment");

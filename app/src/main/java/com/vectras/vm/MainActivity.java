@@ -701,6 +701,8 @@ public class MainActivity extends AppCompatActivity {
 
         TextView qemuVersion = findViewById(R.id.qemuVersion);
 
+        setupBottomAppBar();
+
         String command = "qemu-system-x86_64 --version";
         new Terminal(activity).extractQemuVersion(command, false, activity, (output, errors) -> {
             if (errors.isEmpty()) {
@@ -1465,6 +1467,43 @@ public class MainActivity extends AppCompatActivity {
         if (VectrasApp.checkpermissionsgranted(activity, true)) {
             errorjsondialog();
         }
+    }
+
+    private void setupBottomAppBar() {
+        BottomAppBar bottomAppBar = findViewById(R.id.bottomAppBar);
+        bottomAppBar.setOnMenuItemClickListener(new BottomAppBar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getItemId() == R.id.shutdown) {
+                    alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
+                    alertDialog.setTitle(getResources().getString(R.string.do_you_want_to_kill_all_qemu_processes));
+                    alertDialog.setMessage(getResources().getString(R.string.all_running_vms_will_be_forcibly_shut_down));
+                    alertDialog.setCancelable(true);
+                    alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.kill_all), (dialog, which) -> {
+                        VectrasApp.killallqemuprocesses(getApplicationContext());
+                    });
+                    alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), (dialog, which) -> {
+
+                    });
+                    alertDialog.show();
+                } else if (item.getItemId() == R.id.backtothedisplay) {
+                    if (VectrasApp.isQemuRunning()) {
+                        if (MainSettingsManager.getVmUi(activity).equals("VNC"))
+                            activity.startActivity(new Intent(activity, MainVNCActivity.class));
+                        else if (MainSettingsManager.getVmUi(activity).equals("X11"))
+                            activity.startActivity(new Intent(activity, X11Activity.class));
+                    } else {
+                        Toast.makeText(getApplicationContext(), activity.getResources().getString(R.string.there_is_nothing_here_because_there_is_no_vm_running), Toast.LENGTH_LONG).show();
+                    }
+                } else if (item.getItemId() == R.id.importrom) {
+                    Intent intent = new Intent();
+                    intent.setClass(getApplicationContext(), CustomRomActivity.class);
+                    intent.putExtra("importcvbinow", "");
+                    startActivity(intent);
+                }
+                return false;
+            }
+        });
     }
 
 }

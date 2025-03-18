@@ -958,7 +958,7 @@ public class VectrasApp extends Application {
 	}
 
 	public static String createCommandForSelectedMirror(boolean _https, String _url, String _beforemain) {
-		String command = "echo \"\" > /etc/apk/repositories && sed -i -e \"1ihttps://xssFjnj58Id/yttGkok69Je/edge/testing\" /etc/apk/repositories && sed -i -e \"1ihttps://xssFjnj58Id/alpine/v3.19/community\" /etc/apk/repositories && sed -i -e \"1ihttps://xssFjnj58Id/alpine/v3.19/main\" /etc/apk/repositories";
+		String command = "echo \"\" > /etc/apk/repositories && sed -i -e \"1ihttps://xssFjnj58Id/yttGkok69Je/edge/testing\" /etc/apk/repositories && sed -i -e \"1ihttps://xssFjnj58Id/yttGkok69Je/v3.19/community\" /etc/apk/repositories && sed -i -e \"1ihttps://xssFjnj58Id/yttGkok69Je/v3.19/main\" /etc/apk/repositories";
 		command = command.replaceAll("/yttGkok69Je", _beforemain);
 		if (!_https)
 			command = command.replaceAll("https://", "http://");
