@@ -23,9 +23,13 @@ import com.vectras.vm.R;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vterm.Terminal;
 
+import java.io.File;
+
 public class CreateImageDialogFragment extends DialogFragment {
 
     public boolean customRom = false;
+
+    public String folder = AppConfig.vmFolder + CustomRomActivity.vmID + "/";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,7 +57,7 @@ public class CreateImageDialogFragment extends DialogFragment {
 
         TextView createPath = view.findViewById(R.id.createPath);
 
-        createPath.setText(AppConfig.maindirpath + "IMG/");
+        createPath.setText(folder);
 
         if (customRom)
             createPath.append(CustomRomActivity.title.getText().toString() + ".qcow2");
@@ -73,7 +77,7 @@ public class CreateImageDialogFragment extends DialogFragment {
                 } else {
                     createQcow2Btn.setEnabled(false);
                 }
-                createPath.setText(AppConfig.maindirpath + "IMG/" + imageName.getText().toString() + ".qcow2");
+                createPath.setText(folder + imageName.getText().toString() + ".qcow2");
             }
 
             @Override
@@ -90,11 +94,15 @@ public class CreateImageDialogFragment extends DialogFragment {
         createQcow2Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                File vDir = new File(folder);
+                if (!vDir.exists()) {
+                    vDir.mkdirs();
+                }
                 Terminal vterm = new Terminal(getActivity());
-                vterm.executeShellCommand("qemu-img create -f qcow2 \"" + AppConfig.maindirpath + "IMG/" + imageName.getText().toString() + ".qcow2\" " +
+                vterm.executeShellCommand("qemu-img create -f qcow2 \"" + folder + imageName.getText().toString() + ".qcow2\" " +
                         imageSize.getText().toString() + "G", true, getActivity());
                 if (customRom)
-                    CustomRomActivity.drive.setText(AppConfig.maindirpath + "IMG/" + imageName.getText().toString() + ".qcow2");
+                    CustomRomActivity.drive.setText(folder + imageName.getText().toString() + ".qcow2");
                 try {
                     CustomRomActivity.driveLayout.setEndIconDrawable(R.drawable.more_vert_24px);
                 } catch (Exception e) {

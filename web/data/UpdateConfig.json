@@ -6,9 +6,9 @@
     "Message": "<h2>v2.9.5-3dfx</h2><ul><li>Bring back 3dfx support.</li><li>Enhance app execution.</li><li>Added some linux programs in x11 display.</li><li>Added alpine linux (x11).</li><li>Russian language by <a href=\"https://github.com/OFGING\" target=\"_blank\">@OFGING</a></li></ul><br><br>New updates are live!",
     "cancellable": true,
     "versionCodeBeta":"21",
-    "versionNameBeta":"v2.9.5-3dfx-kuchen",
+    "versionNameBeta":"v2.9.5-3dfx-ladyfingers",
     "sizeBeta": "48 MB",
     "urlBeta": "https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases",
-    "MessageBeta": "<h2>Kuchen</h2>Bugs fixed.",
+    "MessageBeta": "<h2>Ladyfingers</h2>Bugs fixed.",
     "cancellableBeta": true
 }

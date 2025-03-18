@@ -4,17 +4,19 @@
 	<item
 		android:id="@+id/info"
 		android:icon="@drawable/round_info_24"
-		app:showAsAction="always"
+		app:showAsAction="ifRoom"
 		android:title="@string/info"/>
 	<item
 		android:id="@+id/backtothedisplay"
 		android:icon="@drawable/desktop_windows_24px"
 		app:showAsAction="always"
-		android:title="@string/back_to_the_display"/>
+		android:title="@string/back_to_the_display"
+		android:visible="false"/>
 	<item
 		android:id="@+id/shutdown"
 		android:icon="@drawable/power_settings_new_24px"
 		app:showAsAction="always"
-		android:title="@string/killqemu"/>
+		android:title="@string/killqemu"
+		android:visible="false"/>
 
 </menu>
