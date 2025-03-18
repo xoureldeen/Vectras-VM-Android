@@ -52,6 +52,19 @@
         "desc":"Windows 3.0 is the third major release of Microsoft Windows, launched on May 22, 1990. It introduces a new graphical user interface (GUI) that represents applications as clickable icons, instead of the list of file names in its predecessors. Later updates expand capabilities, such as multimedia support for sound recording and playback, and support for CD-ROMs."
     },
     {
+        "rom_name":"OS/2",
+        "rom_icon":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBiMkh0JObb3TtXY5Mat_qaGuwM6GQzuthcQ&s",
+        "rom_url":"https://github.com/marstraveler01/vm-stuff/releases/tag/v4",
+        "rom_path":"os4.cvbi",
+        "rom_avail":true,
+        "rom_size":"77MB",
+        "rom_arch":"X86_64",
+        "rom_kernel":"other",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"From marstraveler01 on GitHub.\n\nOS/2 is a proprietary computer operating system for x86 and PowerPC based personal computers. It was created and initially developed jointly by IBM and Microsoft, under the leadership of IBM software designer Ed Iacobucci, intended as a replacement for DOS. The first version was released in 1987. A feud between the two companies beginning in 1990 led to Microsoft’s leaving development solely to IBM, which continued development on its own. OS/2 Warp 4 in 1996 was the last major upgrade, after which IBM slowly halted the product as it failed to compete against Microsoft's Windows; updated versions of OS/2 were released by IBM until 2001."
+    },
+    {
         "rom_name":"Windows 98 Plus!",
         "rom_icon":"https://www.getmyos.com/upload/files/2018/10/04/windows_logo_1995_1_21eb221818c6620a5391a14ce1b0fc51.png",
         "rom_url":"https://www.mediafire.com/file/8cndpbaaallbqws/98PLUS%2521.qcow2/file",
