@@ -74,6 +74,7 @@ Help support the project by contributing!
 - [PROOT](https://proot-me.github.io/)
 - [Alpine Linux](https://www.alpinelinux.org/)
 - [Termux](https://github.com/termux)
+- [Glide](https://github.com/bumptech/glide)
 
 [ico-telegram]: https://img.shields.io/badge/Telegram-2CA5E0?logo=telegram&logoColor=white
 [ico-discord]: https://img.shields.io/badge/Discord-%235865F2.svg?&logo=discord&logoColor=white
