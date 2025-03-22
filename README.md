@@ -75,6 +75,8 @@ Help support the project by contributing!
 - [Alpine Linux](https://www.alpinelinux.org/)
 - [Termux](https://github.com/termux)
 - [Glide](https://github.com/bumptech/glide)
+- [OkHttp](https://github.com/square/okhttp)
+- [Gson](https://github.com/google/gson)
 
 [ico-telegram]: https://img.shields.io/badge/Telegram-2CA5E0?logo=telegram&logoColor=white
 [ico-discord]: https://img.shields.io/badge/Discord-%235865F2.svg?&logo=discord&logoColor=white
