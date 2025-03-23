@@ -747,6 +747,28 @@ public class MainActivity extends AppCompatActivity {
                         String versionName = pinfo.versionName;
                         String versionNameonUpdate;
 
+                        if (obj.getString("versionNameBetas").equals(versionName) && !MainSettingsManager.getcheckforupdatesfromthebetachannel(activity) && !MainSettingsManager.getDontShowAgainJoinBetaUpdateChannelDialog(activity)) {
+                            AlertDialog _alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
+                            _alertDialog.setTitle(getResources().getString(R.string.you_are_using_beta_version));
+                            _alertDialog.setMessage(getResources().getString(R.string.switch_to_check_for_updates_on_the_Beta_channel_now));
+                            _alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    MainSettingsManager.setcheckforupdatesfromthebetachannel(activity, true);
+                                }
+                            });
+                            _alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    _alertDialog.dismiss();
+                                }
+                            });
+                            _alertDialog.setButton(DialogInterface.BUTTON_NEUTRAL, getResources().getString(R.string.dont_show_again), new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    MainSettingsManager.setDontShowAgainJoinBetaUpdateChannelDialog(activity, true);
+                                }
+                            });
+                            _alertDialog.show();
+                        }
+
                         if (MainSettingsManager.getcheckforupdatesfromthebetachannel(activity)) {
                             versionNameonUpdate = obj.getString("versionNameBeta");
 

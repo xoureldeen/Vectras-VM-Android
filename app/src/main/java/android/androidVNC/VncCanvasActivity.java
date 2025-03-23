@@ -48,6 +48,7 @@ import android.widget.Toast;
 import android.widget.ZoomControls;
 
 import com.antlersoft.android.bc.BCFactory;
+import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.R;
 import com.vectras.qemu.Config;
 import com.vectras.vm.MainActivity;
@@ -59,7 +60,7 @@ import java.util.logging.Logger;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class VncCanvasActivity extends AppCompatActivity {
+public abstract class VncCanvasActivity extends AppCompatActivity {
 
 	static Display display = null;
 	public static Activity activity;
@@ -1087,7 +1088,7 @@ public class VncCanvasActivity extends AppCompatActivity {
 		return inputHandler.onTrackballEvent(event);
 	}
 
-	@Override
+    @Override
 	public boolean onTouchEvent(MotionEvent event) {
 		// MK
 		if (event.getAction() == MotionEvent.ACTION_CANCEL)

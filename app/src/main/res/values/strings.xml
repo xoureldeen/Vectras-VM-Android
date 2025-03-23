@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">v2.9.5 (3dfx - Ladyfingers)</string>
+    <string name="app_version" translatable="false">v2.9.5 (3dfx - Madeleine)</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -411,7 +411,9 @@
     <string name="check_from_the_Beta_channel_instead_of_the_Stable_channel">Check from the Beta channel instead of the Stable channel</string>
     <string name="update">Update</string>
     <string name="new_version_is_now_available">New version is now available</string>
-
+    <string name="ok">OK</string>
+    <string name="you_are_using_beta_version">You are using Beta version</string>
+    <string name="switch_to_check_for_updates_on_the_Beta_channel_now">Switch to check for updates on the Beta channel now.</string>
 
     <!--======================TERMUX STRINGS====================-->
     <string name="application_name" translatable="false">Vterm</string>

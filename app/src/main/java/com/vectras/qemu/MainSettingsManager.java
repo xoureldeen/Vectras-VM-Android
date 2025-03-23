@@ -788,4 +788,16 @@ public class MainSettingsManager extends AppCompatActivity
         return prefs.getInt("SelectedMirror", 0);
     }
 
+    public static void setDontShowAgainJoinBetaUpdateChannelDialog(Context context, Boolean _boolean) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putBoolean("dontShowAgainJoinBetaUpdateChannelDialog", _boolean);
+        edit.commit();
+    }
+
+    public static Boolean getDontShowAgainJoinBetaUpdateChannelDialog(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean("dontShowAgainJoinBetaUpdateChannelDialog", false);
+    }
+
 }

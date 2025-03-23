@@ -4,12 +4,14 @@ import static android.content.Intent.ACTION_OPEN_DOCUMENT;
 import static android.content.Intent.ACTION_VIEW;
 import static android.view.View.GONE;
 
+import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -33,9 +35,16 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.termux.app.TermuxService;
 import com.vectras.qemu.MainSettingsManager;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -308,6 +317,32 @@ public class Minitools extends AppCompatActivity {
             textViewLocation.setText(_data.get((int) _position).get("location"));
 
             return _view;
+        }
+    }
+
+    public void extractLoaderApk() {
+        String apkLoaderAssetPath = "bootstrap/loader.apk";
+        String apkLoaderextractedFilePath = TermuxService.PREFIX_PATH + "/libexec/termux-x11/loader.apk";
+
+        VectrasApp.deleteDirectory(apkLoaderextractedFilePath);
+        if (copyAssetToFile(apkLoaderAssetPath, apkLoaderextractedFilePath)) {
+            VectrasApp.copyAFile(TermuxService.PREFIX_PATH + "/libexec/termux-x11/loader.apk", AppConfig.maindirpath);
+        }
+    }
+
+    private boolean copyAssetToFile(String assetPath, String outputPath) {
+        try (InputStream in = getAssets().open(assetPath);
+             OutputStream out = new FileOutputStream(outputPath)) {
+            byte[] buffer = new byte[1024];
+            int read;
+            while ((read = in.read(buffer)) != -1) {
+                out.write(buffer, 0, read);
+            }
+            out.flush();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 }

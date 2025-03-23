@@ -1,15 +1,10 @@
 package com.vectras.qemu;
 
 import android.androidVNC.AbstractScaling;
-import android.androidVNC.RfbProto;
 import android.androidVNC.VncCanvasActivity;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.core.view.MenuItemCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
@@ -28,7 +23,6 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -39,8 +33,6 @@ import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,28 +51,20 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.text.TextWatcher;
 
 import com.vectras.vm.*;
 
-import com.vectras.qemu.utils.FileUtils;
 import com.vectras.vm.Fragment.ControlersOptionsFragment;
 import com.vectras.vm.Fragment.LoggerDialogFragment;
-import com.vectras.vm.MainActivity;
 import com.vectras.vm.R;
-import com.vectras.qemu.utils.QmpClient;
 import com.vectras.vm.utils.UIUtils;
 import com.vectras.vm.widgets.JoystickView;
-import com.vectras.vterm.Terminal;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.json.JSONObject;
 
@@ -1442,6 +1426,7 @@ public class MainVNCActivity extends VncCanvasActivity {
     }
 
     private void shutdownthisvm() {
+        sendtextEdittext.setEnabled(false);
         vncCanvas.sendMetaKey1(50, 6);
         timerTask = new TimerTask() {
             @Override
