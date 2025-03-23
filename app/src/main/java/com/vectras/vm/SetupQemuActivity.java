@@ -217,7 +217,9 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         String filesDir = getFilesDir().getAbsolutePath();
         String abi = getDeviceAbi();
         String assetPath = "bootstrap/" + abi + ".tar";
+        //String apkLoaderAssetPath = "bootstrap/loader.apk";
         String extractedFilePath = filesDir + "/" + abi + ".tar";
+        //String apkLoaderextractedFilePath = TermuxService.PREFIX_PATH + "/libexec/termux-x11/loader.apk";
 
         ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Extracting data...");
@@ -270,6 +272,10 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                     if (process != null) {
                         process.destroy();
                     }
+                    //VectrasApp.deleteDirectory(apkLoaderextractedFilePath);
+                    //if (!copyAssetToFile(apkLoaderAssetPath, apkLoaderextractedFilePath)) {
+                        //errorMessage = "Failed to copy loader.apk file.";
+                    //}
                 }
             }
 

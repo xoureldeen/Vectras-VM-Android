@@ -459,7 +459,7 @@ public class CustomRomActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 textName.setText(Objects.requireNonNull(title.getText()).toString());
 
-                if (!Objects.requireNonNull(icon.getText()).toString().isEmpty())
+                if (!thumbnailPath.isEmpty())
                     return;
 
                 VectrasApp.setIconWithName(ivIcon, title.getText().toString());

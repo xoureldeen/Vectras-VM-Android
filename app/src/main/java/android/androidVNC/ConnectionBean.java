@@ -26,6 +26,8 @@ public class ConnectionBean {
 	private String userName;
 	private long id = 0;
 
+	public static boolean pause = false;
+
 	public ConnectionBean() {
 		setAddress(Config.defaultVNCHost);
 		setUserName(Config.defaultVNCUsername);
