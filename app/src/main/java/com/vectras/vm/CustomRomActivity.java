@@ -2,6 +2,8 @@ package com.vectras.vm;
 
 import static android.content.Intent.ACTION_OPEN_DOCUMENT;
 
+import static com.vectras.vm.VectrasApp.isFileExists;
+
 import android.Manifest;
 import android.app.Dialog;
 import android.content.Context;
@@ -683,6 +685,7 @@ public class CustomRomActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent ReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, ReturnedIntent);
 
+        checkVMID();
         File romDir = new File(AppConfig.vmFolder + vmID);
         romDir.mkdirs();
 
@@ -1086,6 +1089,7 @@ public class CustomRomActivity extends AppCompatActivity {
     }
 
     private void importCVBI(String _filepath, String _filename) {
+        checkVMID();
         LinearLayout custom = findViewById(R.id.custom);
         ImageView ivIcon = findViewById(R.id.ivIcon);
         if (_filepath.endsWith(".cvbi") || _filepath.endsWith(".cvbi.zip")) {
@@ -1466,6 +1470,13 @@ public class CustomRomActivity extends AppCompatActivity {
             }
         } else {
             ivAddThubnail.setImageResource(R.drawable.round_add_24);
+        }
+    }
+
+    private void checkVMID() {
+        if (isFileExists(AppConfig.maindirpath + "/roms/" + vmID) || vmID.isEmpty()) {
+            vmID = VMManager.idGenerator();
+            port = VMManager.startRandomPort();
         }
     }
 }

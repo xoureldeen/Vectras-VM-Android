@@ -10,6 +10,7 @@ import static com.vectras.vm.VectrasApp.getAppInfo;
 import static com.vectras.vm.utils.LibraryChecker.isPackageInstalled2;
 import static com.vectras.vm.utils.UIUtils.UIAlert;
 
+import android.androidVNC.androidVNC;
 import android.app.ActivityManager;
 import android.app.Dialog;
 import android.app.NotificationManager;
@@ -29,6 +30,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.StrictMode;
 import android.provider.DocumentsContract;
 import android.provider.Settings;
 import android.text.Html;
@@ -1127,8 +1129,10 @@ public class MainActivity extends AppCompatActivity {
 
         //TEMPORARY FIX FOR VNC CLOSES
         //TODO: FIND FIX FOR CRASHING
-        if (MainSettingsManager.getVmUi(activity).equals("VNC") && MainVNCActivity.started && VectrasApp.isQemuRunning())
-            startActivity(new Intent(activity, MainVNCActivity.class));
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        //if (MainSettingsManager.getVmUi(activity).equals("VNC") && IOApplication.isPortOpen("127.0.0.1", Config.QMPPort, 100) && MainVNCActivity.started)
+            //startActivity(new Intent(activity, MainVNCActivity.class));
     }
 
     public static boolean isServiceRunning(Class<?> serviceClass, Context context) {
@@ -1509,13 +1513,11 @@ public class MainActivity extends AppCompatActivity {
                     });
                     alertDialog.show();
                 } else if (item.getItemId() == R.id.backtothedisplay) {
-                    if (VectrasApp.isQemuRunning()) {
-                        if (MainSettingsManager.getVmUi(activity).equals("VNC"))
-                            activity.startActivity(new Intent(activity, MainVNCActivity.class));
-                        else if (MainSettingsManager.getVmUi(activity).equals("X11"))
-                            activity.startActivity(new Intent(activity, X11Activity.class));
-                    } else {
-                        Toast.makeText(getApplicationContext(), activity.getResources().getString(R.string.there_is_nothing_here_because_there_is_no_vm_running), Toast.LENGTH_LONG).show();
+
+                    if (MainSettingsManager.getVmUi(activity).equals("VNC")) {
+                        activity.startActivity(new Intent(activity, MainVNCActivity.class));
+                    } else if (MainSettingsManager.getVmUi(activity).equals("X11")) {
+                        activity.startActivity(new Intent(activity, X11Activity.class));
                     }
                 } else if (item.getItemId() == R.id.importrom) {
                     Intent intent = new Intent();
