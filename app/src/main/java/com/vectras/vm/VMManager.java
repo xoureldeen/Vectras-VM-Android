@@ -1,6 +1,7 @@
 package com.vectras.vm;
 
 import static com.vectras.vm.VectrasApp.isFileExists;
+import static com.vectras.vm.VectrasApp.readFile;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -199,14 +200,22 @@ public class VMManager {
         } else if (randomAbc == 11) {
             addAdb = "l";
         }
-        return addAdb + String.valueOf((long)(random.nextInt(10001)));
+        return addAdb + String.valueOf((long)(random.nextInt(65535)));
     }
 
     public static int startRandomPort() {
+        int _result;
         Random _random = new Random();
         int _min = 10000;
         int _max = 65535;
-        return _random.nextInt(_max - _min + 1) + _min;
+        _result = _random.nextInt(_max - _min + 1) + _min;
+        if (readFile(AppConfig.romsdatajson).contains("\"qmpPort\":" + _result)) {
+            _result = _random.nextInt(_max - _min + 1) + _min;
+        }
+        if (readFile(AppConfig.romsdatajson).contains("\"qmpPort\":" + _result)) {
+            _result = _random.nextInt(_max - _min + 1) + _min;
+        }
+        return _result;
     }
 
     public static void deleteVM() {

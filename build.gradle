@@ -6,7 +6,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.9.0' // Android Gradle plugin
+        classpath 'com.android.tools.build:gradle:8.9.1' // Android Gradle plugin
         // Add other classpaths like Google Services and Firebase Crashlytics if needed here.
         classpath 'com.google.gms:google-services:4.4.2'  // assuming you need it for your project
         classpath 'com.google.firebase:firebase-crashlytics-gradle:3.0.3'

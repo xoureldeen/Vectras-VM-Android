@@ -26,6 +26,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.StrictMode;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -722,6 +723,7 @@ public class MainVNCActivity extends VncCanvasActivity {
         sendkeylayout.setVisibility(View.GONE);
         sendtextButton.setVisibility(View.GONE);
         sendkeydialog();
+        isQMPPortOpening();
     }
 
     public boolean rightClick(final MotionEvent e, final int i) {
@@ -916,7 +918,7 @@ public class MainVNCActivity extends VncCanvasActivity {
     }
 
     public void onDestroy() {
-        if (VectrasApp.isQemuRunning() && started) {
+        if (IOApplication.isPortOpen("127.0.0.1", Config.QMPPort, 100) && started) {
             activity.startActivity(new Intent(activity, MainVNCActivity.class));
         }
         super.onDestroy();
@@ -1426,6 +1428,7 @@ public class MainVNCActivity extends VncCanvasActivity {
     }
 
     private void shutdownthisvm() {
+        started = false;
         sendtextEdittext.setEnabled(false);
         vncCanvas.sendMetaKey1(50, 6);
         timerTask = new TimerTask() {
@@ -1454,6 +1457,15 @@ public class MainVNCActivity extends VncCanvasActivity {
         sendkeylist.setAdapter(new Recyclerview1Adapter(listmapForSendKey));
         sendkeylist.setLayoutManager(rvLayoutManager);
         sendkeylist.setHasFixedSize(true);
+    }
+
+    private void isQMPPortOpening() {
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        if (!IOApplication.isPortOpen("127.0.0.1", Config.QMPPort, 100)) {
+            started = false;
+            VectrasApp.oneDialog(getResources().getString(R.string.there_seems_to_be_no_signal), getResources().getString(R.string.do_you_want_to_exit),true, true, MainVNCActivity.this);
+        }
     }
 
     public class Recyclerview1Adapter extends RecyclerView.Adapter<Recyclerview1Adapter.ViewHolder> {
