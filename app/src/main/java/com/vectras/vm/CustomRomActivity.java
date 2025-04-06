@@ -575,6 +575,7 @@ public class CustomRomActivity extends AppCompatActivity {
 
             previousName = current.itemName;
         } else {
+            checkVMID();
             if (getIntent().hasExtra("addromnow")) {
                 title.setText(getIntent().getStringExtra("romname"));
                 if (Objects.requireNonNull(getIntent().getStringExtra("romextra")).isEmpty()) {
@@ -685,7 +686,6 @@ public class CustomRomActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent ReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, ReturnedIntent);
 
-        checkVMID();
         File romDir = new File(AppConfig.vmFolder + vmID);
         romDir.mkdirs();
 
@@ -1089,7 +1089,6 @@ public class CustomRomActivity extends AppCompatActivity {
     }
 
     private void importCVBI(String _filepath, String _filename) {
-        checkVMID();
         LinearLayout custom = findViewById(R.id.custom);
         ImageView ivIcon = findViewById(R.id.ivIcon);
         if (_filepath.endsWith(".cvbi") || _filepath.endsWith(".cvbi.zip")) {
