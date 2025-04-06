@@ -2,21 +2,27 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/update"
+        android:icon="@drawable/update48"
+        android:title="@string/update"
+        android:contentDescription="@string/update"
+        app:showAsAction="always"/>
+    <item
         android:id="@+id/shutdown"
         android:icon="@drawable/power_settings_new_24px"
         android:title="@string/killqemu"
         android:contentDescription="@string/killqemu"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
     <item
         android:id="@+id/backtothedisplay"
         android:icon="@drawable/desktop_windows_24px"
         android:title="@string/display"
         android:contentDescription="@string/display"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
     <item
         android:id="@+id/importrom"
         android:icon="@drawable/publish_24px"
         android:title="@string/importRom"
         android:contentDescription="@string/importRom"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
 </menu>

@@ -141,6 +141,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean doneonstart = false;
     public static boolean isActivate = false;
     public boolean skipIDEwithARM64DialogInStartVM = false;
+    BottomAppBar bottomAppBar;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -154,9 +155,6 @@ public class MainActivity extends AppCompatActivity {
 
         NotificationManager notificationManager = (NotificationManager) activity.getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancelAll();
-
-        if (MainSettingsManager.getPromptUpdateVersion(activity))
-            updateApp(false);
 
         new LibraryChecker(activity).checkMissingLibraries(activity);
 
@@ -705,6 +703,9 @@ public class MainActivity extends AppCompatActivity {
 
         setupBottomAppBar();
 
+        if (MainSettingsManager.getPromptUpdateVersion(activity))
+            updateApp(false);
+
         String command = "qemu-system-x86_64 --version";
         new Terminal(activity).extractQemuVersion(command, false, activity, (output, errors) -> {
             if (errors.isEmpty()) {
@@ -775,6 +776,7 @@ public class MainActivity extends AppCompatActivity {
                             versionNameonUpdate = obj.getString("versionNameBeta");
 
                             if (versionCode < obj.getInt("versionCode") || !versionNameonUpdate.equals(versionName)) {
+                                if (showDialog) {
                                 AlertDialog.Builder alert = new AlertDialog.Builder(activity, R.style.MainDialogTheme);
                                 alert.setTitle("Install the latest version")
                                         .setMessage(Html.fromHtml(obj.getString("MessageBeta") + "<br><br>Update size:<br>" + obj.getString("sizeBeta")))
@@ -788,12 +790,16 @@ public class MainActivity extends AppCompatActivity {
                                                 }
                                             }
                                         }).show();
-
+                                } else {
+                                    View _update = findViewById(R.id.update);
+                                    _update.setVisibility(View.VISIBLE);
+                                }
                             }
                         } else {
                             versionNameonUpdate = obj.getString("versionName");
 
                             if (versionCode < obj.getInt("versionCode") || !versionNameonUpdate.contains(versionName)) {
+                                if (showDialog) {
                                 AlertDialog.Builder alert = new AlertDialog.Builder(activity, R.style.MainDialogTheme);
                                 alert.setTitle("Install the latest version")
                                         .setMessage(Html.fromHtml(obj.getString("Message") + "<br><br>Update size:<br>" + obj.getString("size")))
@@ -807,7 +813,10 @@ public class MainActivity extends AppCompatActivity {
                                                 }
                                             }
                                         }).show();
-
+                                } else {
+                                    View _update = findViewById(R.id.update);
+                                    _update.setVisibility(View.VISIBLE);
+                                }
                             }
                         }
                     } else if (result.contains("Error on getting data") && showDialog) {
@@ -1496,11 +1505,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupBottomAppBar() {
-        BottomAppBar bottomAppBar = findViewById(R.id.bottomAppBar);
+        bottomAppBar = findViewById(R.id.bottomAppBar);
         bottomAppBar.setOnMenuItemClickListener(new BottomAppBar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if (item.getItemId() == R.id.shutdown) {
+                if (item.getItemId() == R.id.update) {
+                    updateApp(true);
+                } else if (item.getItemId() == R.id.shutdown) {
                     alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
                     alertDialog.setTitle(getResources().getString(R.string.do_you_want_to_kill_all_qemu_processes));
                     alertDialog.setMessage(getResources().getString(R.string.all_running_vms_will_be_forcibly_shut_down));
@@ -1528,6 +1539,8 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+        View _update = findViewById(R.id.update);
+        _update.setVisibility(View.GONE);
     }
 
 }
