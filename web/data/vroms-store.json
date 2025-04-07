@@ -65,6 +65,19 @@
         "desc":"From marstraveler01 on GitHub.\n\nOS/2 is a proprietary computer operating system for x86 and PowerPC based personal computers. It was created and initially developed jointly by IBM and Microsoft, under the leadership of IBM software designer Ed Iacobucci, intended as a replacement for DOS. The first version was released in 1987. A feud between the two companies beginning in 1990 led to Microsoft’s leaving development solely to IBM, which continued development on its own. OS/2 Warp 4 in 1996 was the last major upgrade, after which IBM slowly halted the product as it failed to compete against Microsoft's Windows; updated versions of OS/2 were released by IBM until 2001."
     },
     {
+        "rom_name":"NetBSD",
+        "rom_icon":"https://media.licdn.com/dms/image/D4E12AQEdTG-WPc-GXg/article-cover_image-shrink_600_2000/0/1708992537786?e=2147483647&v=beta&t=3FDiRUhohJB7SsZ4YWSfn8A9UFQ3ESafOChHkJdaDXc",
+        "rom_url":"https://archive.org/download/blackberry-os/NetBSD.cvbi",
+        "rom_path":"NetBSD.cvbi",
+        "rom_avail":true,
+        "rom_size":"354MB",
+        "rom_arch":"X86_64",
+        "rom_kernel":"linux",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"From @SilentGamer191 on Telegram.\n\nUser: root\nPassword:\n\nNetBSD is a free and open-source Unix-like operating system based on the Berkeley Software Distribution (BSD). It is known for its portability, clean design, and advanced networking features. NetBSD is developed by a worldwide community of developers and is used in a wide variety of systems, from embedded devices to high-performance servers."
+    },
+    {
         "rom_name":"Windows 98 Plus!",
         "rom_icon":"https://www.getmyos.com/upload/files/2018/10/04/windows_logo_1995_1_21eb221818c6620a5391a14ce1b0fc51.png",
         "rom_url":"https://www.mediafire.com/file/8cndpbaaallbqws/98PLUS%2521.qcow2/file",
@@ -115,6 +128,19 @@
         "rom_extra":"",
         "final_rom_file_name":"",
         "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 7 is a major release of the Windows NT operating system developed by Microsoft. It was released to manufacturing on July 22, 2009, and became generally available on October 22, 2009. It is the successor to Windows Vista, released nearly three years earlier. Windows 7's server counterpart, Windows Server 2008 R2, was released at the same time. It was succeeded by Windows 8 in October 2012."
+    },
+    {
+        "rom_name":"Windows 10 buid 10074",
+        "rom_icon":"https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/09/17/windows-logo_1_926ed76111646acbbe332bc5af0cf2ce.png",
+        "rom_url":"https://youtu.be/c71AE77gdBk",
+        "rom_path":"Windows 10 buid 10074.cvbi",
+        "rom_avail":true,
+        "rom_size":"9GB",
+        "rom_arch":"X86_64",
+        "rom_kernel":"windows",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 10 is a major release of Microsoft's Windows NT operating system. The successor to Windows 8.1, it was released to manufacturing on July 15, 2015, and later to retail on July 29, 2015. Windows 10 was made available for download via MSDN and TechNet, as a free upgrade for retail copies of Windows 8 and Windows 8.1 users via the Microsoft Store, and to Windows 7 users via Windows Update. Unlike previous Windows NT releases, Windows 10 receives new builds on an ongoing basis, which are available at no additional cost to users; devices in enterprise environments can alternatively use long-term support milestones that only receive critical updates, such as security patches."
     },
     {
         "rom_name":"Windows 10 LTSB 2015",
