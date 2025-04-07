@@ -46,6 +46,11 @@ or
 
 [![OpenAPK](https://www.openapk.net/images/openapk-badge.png)](https://www.openapk.net/vectras-vm/com.vectras.vm/)
 
+## Beta Releases
+
+We publish a **new beta release after every commit** — so you can always test the latest features and improvements!
+
+[![Download Beta](https://img.shields.io/badge/Download-Beta-blue?style=for-the-badge&logo=github)](https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases)
 
 ### Minimum System Requirements
 - Android 6.0 and up.
