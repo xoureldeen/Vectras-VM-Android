@@ -55,7 +55,9 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        UIController.edgeToEdge(this);
         setContentView(R.layout.activity_about);
+        UIController.setOnApplyWindowInsetsListener(findViewById(R.id.main));
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -157,6 +159,13 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
                 Log.e(TAG, "Errors: " + errors);
             }
         });
+
+        UIController.simpleAnimationScale(findViewById(R.id.card_yagiz), 250);
+        UIController.simpleTranslationUpToDown(findViewById(R.id.card_yagiz), 250);
+        UIController.simpleAnimationScale(findViewById(R.id.card_social), 500);
+        UIController.simpleTranslationUpToDown(findViewById(R.id.card_social), 500);
+        UIController.simpleAnimationScale(findViewById(R.id.developers), 750);
+        UIController.simpleTranslationUpToDown(findViewById(R.id.developers), 750);
     }
 
     @Override

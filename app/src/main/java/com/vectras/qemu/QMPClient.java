@@ -46,7 +46,7 @@ public class QMPClient {
             
             client.sendCommand(new JSONObject().put("execute", "query-status"));
             System.out.println("Response: " + client.receiveResponse());
-            com.vectras.vm.logger.VectrasStatus.logError("<font color='yellow'>VTERM: >" + "Response: " + client.receiveResponse() + "</font>");
+            com.vectras.vm.logger.VectrasStatus.logError("<font color='#FFC107'>VTERM: >" + "Response: " + client.receiveResponse() + "</font>");
             
             client.close();
         } catch (Exception e) {

@@ -16,7 +16,9 @@ public class EditActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        UIController.edgeToEdge(this);
         setContentView(R.layout.activity_edit);
+        UIController.setOnApplyWindowInsetsListener(findViewById(R.id.main));
         buttondone = findViewById(R.id.materialbutton1);
         editcontent = findViewById(R.id.edittext1);
         if (getIntent().hasExtra("content")) {

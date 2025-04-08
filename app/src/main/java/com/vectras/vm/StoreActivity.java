@@ -67,7 +67,9 @@ public class StoreActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        UIController.edgeToEdge(this);
         setContentView(R.layout.activity_store);
+        UIController.setOnApplyWindowInsetsListener(findViewById(R.id.main));
         loadingPb = findViewById(R.id.loadingPb);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

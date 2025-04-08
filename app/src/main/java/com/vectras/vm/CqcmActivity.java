@@ -31,7 +31,9 @@ public class CqcmActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         VectrasApp.prepareDataForAppConfig(this);
         if(!VectrasApp.checkpermissionsgranted(this,false)) {
+            UIController.edgeToEdge(this);
             setContentView(R.layout.activity_cqcm);
+            UIController.setOnApplyWindowInsetsListener(findViewById(R.id.main));
             buttonallow = findViewById(R.id.buttonallow);
             buttonallow.setOnClickListener(new View.OnClickListener() {
                 @Override

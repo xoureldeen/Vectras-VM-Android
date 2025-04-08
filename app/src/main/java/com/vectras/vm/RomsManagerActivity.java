@@ -204,7 +204,9 @@ public class RomsManagerActivity extends AppCompatActivity {
         boolean isAccessed = prefs.getBoolean("isFirstLaunch", false);
         //if (!isAccessed && !checkConnection(activity))
             //UIUtils.UIAlert(activity, "for first time you need internet connection to load app data!", "No internet connection!");
+        UIController.edgeToEdge(this);
         setContentView(R.layout.activity_roms_manager);
+        UIController.setOnApplyWindowInsetsListener(findViewById(R.id.main));
         linearload = findViewById(R.id.linearload);
         linearnothinghere = findViewById(R.id.linearnothinghere);
         buttontryagain = findViewById(R.id.buttontryagain);

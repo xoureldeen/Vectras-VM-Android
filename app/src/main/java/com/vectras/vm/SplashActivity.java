@@ -59,7 +59,9 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         activity = this;
+        UIController.edgeToEdge(this);
         setContentView(R.layout.activity_splash);
+        UIController.setOnApplyWindowInsetsListener(findViewById(R.id.main));
 
         //TextView textversionname;
         //textversionname = findViewById(R.id.versionname);

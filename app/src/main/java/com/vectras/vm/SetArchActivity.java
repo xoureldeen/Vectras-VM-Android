@@ -23,7 +23,9 @@ public class SetArchActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mHandler = new Handler();
+        UIController.edgeToEdge(this);
         setContentView(R.layout.activity_set_arch);
+        UIController.setOnApplyWindowInsetsListener(findViewById(R.id.main));
         activity = this;
         Button archi386 = findViewById(R.id.archi386);
         Button archx86_64 = findViewById(R.id.archx86_64);

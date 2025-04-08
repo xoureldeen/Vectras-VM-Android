@@ -58,13 +58,9 @@ public class ExportRomActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
+        UIController.edgeToEdge(this);
         setContentView(R.layout.activity_export_rom);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        UIController.setOnApplyWindowInsetsListener(findViewById(R.id.main));
 
         linearone = findViewById(R.id.linearall);
         linearload = findViewById(R.id.linearload);

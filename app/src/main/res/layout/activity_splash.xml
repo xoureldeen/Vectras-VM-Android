@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     android:gravity="center_vertical|center|center_horizontal"
     android:orientation="vertical"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    android:id="@+id/main" >
 
     <ImageView
         android:layout_width="wrap_content"
