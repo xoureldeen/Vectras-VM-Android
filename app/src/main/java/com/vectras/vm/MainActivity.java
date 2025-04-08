@@ -525,7 +525,7 @@ public class MainActivity extends AppCompatActivity {
                                                 String logLine = bufferedReader.readLine();
                                                 String logLine2 = bufferedReader2.readLine();
                                                 VectrasStatus.logError("<font color='red'>[E] " + logLine + "</font>");
-                                                VectrasStatus.logError("<font color='yellow'>[W] " + logLine2 + "</font>");
+                                                VectrasStatus.logError("<font color='#FFC107'>[W] " + logLine2 + "</font>");
                                             }
                                         } catch (IOException e) {
                                             throw new RuntimeException(e);
@@ -1524,11 +1524,10 @@ public class MainActivity extends AppCompatActivity {
                     });
                     alertDialog.show();
                 } else if (item.getItemId() == R.id.backtothedisplay) {
-
                     if (MainSettingsManager.getVmUi(activity).equals("VNC")) {
-                        activity.startActivity(new Intent(activity, MainVNCActivity.class));
+                        startActivity(new Intent(activity, MainVNCActivity.class));
                     } else if (MainSettingsManager.getVmUi(activity).equals("X11")) {
-                        activity.startActivity(new Intent(activity, X11Activity.class));
+                        startActivity(new Intent(activity, X11Activity.class));
                     }
                 } else if (item.getItemId() == R.id.importrom) {
                     Intent intent = new Intent();

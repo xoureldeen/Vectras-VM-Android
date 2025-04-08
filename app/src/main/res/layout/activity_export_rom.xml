@@ -50,7 +50,7 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/description"
+            android:hint="@string/description_html_supported"
             app:startIconDrawable="@drawable/notes_24px"
             android:layout_margin="8px">
             <com.google.android.material.textfield.TextInputEditText

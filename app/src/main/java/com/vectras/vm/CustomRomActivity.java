@@ -204,7 +204,9 @@ public class CustomRomActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        UIController.edgeToEdge(this);
         setContentView(R.layout.activity_custom_rom);
+        UIController.setOnApplyWindowInsetsListener(findViewById(R.id.main));
         activity = this;
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -341,9 +343,8 @@ public class CustomRomActivity extends AppCompatActivity {
                     });
                     ad.setButton(Dialog.BUTTON_NEUTRAL, getString(R.string.create), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            File vDir = new File(com.vectras.vm.AppConfig.maindirpath + "IMG");
-                            if (!vDir.exists()) {
-                                vDir.mkdirs();
+                            if (!createVMFolder()) {
+                                return;
                             }
                             CreateImageDialogFragment dialogFragment = new CreateImageDialogFragment();
                             dialogFragment.customRom = true;
@@ -629,8 +630,9 @@ public class CustomRomActivity extends AppCompatActivity {
                 title.setText("New VM");
                 setDefault();
                 if (MainSettingsManager.autoCreateDisk(CustomRomActivity.this)) {
-                    File myDir = new File(AppConfig.vmFolder + vmID);
-                    myDir.mkdirs();
+                    if (!createVMFolder()) {
+                        return;
+                    }
                     Terminal vterm = new Terminal(CustomRomActivity.this);
                     vterm.executeShellCommand2("qemu-img create -f qcow2 " + AppConfig.vmFolder + vmID + "/disk.qcow2 128G", false, CustomRomActivity.this);
                     drive.setText(AppConfig.vmFolder + vmID + "/disk.qcow2");
@@ -686,8 +688,9 @@ public class CustomRomActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent ReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, ReturnedIntent);
 
-        File romDir = new File(AppConfig.vmFolder + vmID);
-        romDir.mkdirs();
+        if (!createVMFolder()) {
+            return;
+        }
 
         LinearLayout custom = findViewById(R.id.custom);
         if (requestCode == 1001 && resultCode == RESULT_OK) {
@@ -942,7 +945,7 @@ public class CustomRomActivity extends AppCompatActivity {
                 output.write(MainActivity.jArray.toString());
                 output.close();
             } catch (Exception e) {
-                UIUtils.toastLong(MainActivity.activity, e.toString());
+                UIUtils.toastLong(CustomRomActivity.this, e.toString());
             } finally {
                 MainActivity.loadDataVbi();
                 finish();
@@ -961,7 +964,7 @@ public class CustomRomActivity extends AppCompatActivity {
                 try {
                     List<DataMainRoms> data = new ArrayList<>();
                     JSONArray jArray = null;
-                    jArray = new JSONArray(FileUtils.readFromFile(MainActivity.activity, jsonFile));
+                    jArray = new JSONArray(FileUtils.readFromFile(CustomRomActivity.this, jsonFile));
 
                     try {
                         // Extract data from json and store into ArrayList as class objects
@@ -976,7 +979,7 @@ public class CustomRomActivity extends AppCompatActivity {
                         }
 
                     } catch (JSONException e) {
-                        Toast.makeText(MainActivity.activity, e.toString(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(CustomRomActivity.this, e.toString(), Toast.LENGTH_LONG).show();
                     }
 
                     JSONObject jsonObject = obj.makeJSONObject(Objects.requireNonNull(title.getText()).toString(), Objects.requireNonNull(icon.getText()).toString(), MainSettingsManager.getArch(activity), drive.getText().toString(), qemu.getText().toString());
@@ -1049,13 +1052,21 @@ public class CustomRomActivity extends AppCompatActivity {
         }
 
         modify = false;
+        if(!MainActivity.isActivate) {
+            startActivity(new Intent(CustomRomActivity.this, SplashActivity.class));
+        } else {
+            Intent openURL = new Intent();
+            openURL.setAction(Intent.ACTION_VIEW);
+            openURL.setData(Uri.parse("android-app://com.vectras.vm"));
+            startActivity(openURL);
+        }
         finish();
     }
 
     private void setDefault() {
         String defQemuParams;
         if (AppConfig.getSetupFiles().contains("arm64-v8a") || AppConfig.getSetupFiles().contains("x86_64")) {
-            switch (MainSettingsManager.getArch(MainActivity.activity)) {
+            switch (MainSettingsManager.getArch(CustomRomActivity.this)) {
                 case "ARM64":
                     defQemuParams = "-M virt,virtualization=true -cpu cortex-a76 -accel tcg,thread=multi -net nic,model=e1000 -net user -device nec-usb-xhci -device usb-kbd -device usb-mouse -device VGA";
                     break;
@@ -1070,7 +1081,7 @@ public class CustomRomActivity extends AppCompatActivity {
                     break;
             }
         } else {
-            switch (MainSettingsManager.getArch(MainActivity.activity)) {
+            switch (MainSettingsManager.getArch(CustomRomActivity.this)) {
                 case "ARM64":
                     defQemuParams = "-M virt -cpu cortex-a76 -net nic,model=e1000 -net user -device nec-usb-xhci -device usb-kbd -device usb-mouse -device VGA";
                     break;
@@ -1101,6 +1112,11 @@ public class CustomRomActivity extends AppCompatActivity {
                 }
                 return;
             }
+
+            if (!createVMFolder()) {
+                return;
+            }
+
             whenProcessing(true);
             custom.setVisibility(View.GONE);
             ivIcon.setEnabled(false);
@@ -1197,7 +1213,7 @@ public class CustomRomActivity extends AppCompatActivity {
                                                 }
                                             }
                                         } else {
-                                            JSONObject jObj = new JSONObject(FileUtils.readFromFile(MainActivity.activity, new File(AppConfig.vmFolder + vmID + "/rom-data.json")));
+                                            JSONObject jObj = new JSONObject(FileUtils.readFromFile(CustomRomActivity.this, new File(AppConfig.vmFolder + vmID + "/rom-data.json")));
 
                                             if (jObj.has("vmID")) {
                                                 if (!jObj.isNull("vmID")) {
@@ -1264,7 +1280,11 @@ public class CustomRomActivity extends AppCompatActivity {
                                             }
 
                                             if (jObj.has("author") && !jObj.isNull("author") && jObj.has("desc") && !jObj.isNull("desc")) {
-                                                UIUtils.UIAlert(activity, getResources().getString(R.string.from) + ": " + jObj.getString("author"), getResources().getString(R.string.description) + ":\n\n" + Html.fromHtml(jObj.getString("desc")));
+                                                if (jObj.getString("desc").contains("<") && jObj.getString("desc").contains(">")) {
+                                                    UIUtils.UIAlert(activity, getResources().getString(R.string.from) + ": " + jObj.getString("author"), jObj.getString("desc"));
+                                                } else {
+                                                    VectrasApp.oneDialog(getResources().getString(R.string.from) + ": " + jObj.getString("author"), jObj.getString("desc"), true, false, CustomRomActivity.this);
+                                                }
                                             }
                                         }
                                         TextView arch = findViewById(R.id.textArch);
@@ -1335,8 +1355,9 @@ public class CustomRomActivity extends AppCompatActivity {
             }
             whenProcessing(true);
             custom.setVisibility(View.GONE);
-            File romDir = new File(AppConfig.vmFolder + vmID);
-            romDir.mkdirs();
+            if (!createVMFolder()) {
+                return;
+            }
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -1476,6 +1497,24 @@ public class CustomRomActivity extends AppCompatActivity {
         if (isFileExists(AppConfig.maindirpath + "/roms/" + vmID) || vmID.isEmpty()) {
             vmID = VMManager.idGenerator();
             port = VMManager.startRandomPort();
+        }
+    }
+
+    private boolean createVMFolder() {
+        File romDir = new File(AppConfig.vmFolder + vmID);
+        if (!romDir.exists()) {
+            if (!romDir.mkdirs()) {
+                if (getIntent().hasExtra("addromnow")) {
+                    VectrasApp.oneDialog(getResources().getString(R.string.oops), getResources().getString(R.string.unable_to_create_the_directory_to_create_the_vm), false, true, this);
+                } else {
+                    VectrasApp.oneDialog(getResources().getString(R.string.oops), getResources().getString(R.string.unable_to_create_the_directory_to_create_the_vm), true, false, this);
+                }
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return true;
         }
     }
 }

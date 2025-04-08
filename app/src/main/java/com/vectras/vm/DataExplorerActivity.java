@@ -97,8 +97,9 @@ public class DataExplorerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         activity = this;
-
+        UIController.edgeToEdge(this);
         setContentView(R.layout.activity_data_explorer);
+        UIController.setOnApplyWindowInsetsListener(findViewById(R.id.main));
 
         loadingPb = findViewById(R.id.loadingPb);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

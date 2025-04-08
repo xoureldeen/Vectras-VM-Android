@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">v2.9.5 (3dfx - Orange cake)</string>
+    <string name="app_version" translatable="false">v2.9.5 (3dfx - Profiterole)</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -101,7 +101,7 @@
     <string name="rom_icon">ROM ICON</string>
     <string name="add">ADD</string>
     <string name="import_iso">Import ISO</string>
-    <string name="importRom">IMPORT</string>
+    <string name="importRom">Import ROM</string>
     <string name="privacy_amp_policy"><![CDATA[Privacy & Policy]]></string>
     <string name="permission_title">Permission Required!</string>
     <string name="permission_notification_text">Due to android policy, notification permissions are needed, to send vm notifications!</string>
@@ -274,7 +274,7 @@
     <string name="i386_qemu" translatable="false">i386</string>
     <string name="export_rom">Export Rom</string>
     <string name="are_you_sure">Are you sure?</string>
-    <string name="description_html_supported">DESCRIPTION (html supported)</string>
+    <string name="description_html_supported">Description (HTML supported)</string>
     <string name="compressing_cvbi">Compressing CVBI</string>
     <string name="please_wait_dialog">Please wait…</string>
     <string name="error">ERROR!</string>
@@ -416,6 +416,9 @@
     <string name="switch_to_check_for_updates_on_the_Beta_channel_now">Switch to check for updates on the Beta channel now.</string>
     <string name="there_seems_to_be_no_signal">There seems to be no signal</string>
     <string name="do_you_want_to_exit">Do you want to exit?</string>
+    <string name="you_need_to_complete_vectras_vm_setup_before_importing_this_file">You need to complete Vectras VM setup before importing this file.</string>
+    <string name="unable_to_create_the_directory_to_create_the_vm">Unable to create directory to create virtual machine, this may be because you have not granted permission, there is not enough free space of internal storage or other.</string>
+    <string name="with">With</string>
 
     <!--======================TERMUX STRINGS====================-->
     <string name="application_name" translatable="false">Vterm</string>

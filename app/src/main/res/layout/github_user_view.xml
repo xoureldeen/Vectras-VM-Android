@@ -7,16 +7,16 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal"
     android:gravity="center_vertical"
-    android:padding="8dp">
+    android:paddingRight="8sp">
 
     <androidx.cardview.widget.CardView
         android:layout_width="56dp"
         android:layout_height="56dp"
-        android:layout_marginEnd="8dp"
         android:clipToPadding="false"
         android:focusable="true"
         app:cardCornerRadius="28dp"
-        app:cardPreventCornerOverlap="true">
+        app:cardPreventCornerOverlap="true"
+        android:layout_margin="8sp">
         <ImageView
             android:id="@+id/profile_image"
             android:layout_width="match_parent"
@@ -28,7 +28,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1.0"
-        android:orientation="vertical">
+        android:orientation="vertical" >
 
         <TextView
             android:id="@+id/user_name"
@@ -52,6 +52,6 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:tint="?attr/colorControlNormal"
-        android:id="@+id/githubProfile" />
+        android:id="@+id/githubProfile"
+        app:tint="?attr/colorControlNormal" />
 </LinearLayout>

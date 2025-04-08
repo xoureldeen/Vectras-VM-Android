@@ -95,7 +95,7 @@ public class UIUtils {
 
 				Toast toast = Toast.makeText(activity, errStr, Toast.LENGTH_LONG);
 				toast.show();
-                VectrasStatus.logInfo("<font color='yellow'>[I] "+errStr+"</font>");
+                VectrasStatus.logInfo("<font color='#009688'>[I] "+errStr+"</font>");
 
 			}
 		});

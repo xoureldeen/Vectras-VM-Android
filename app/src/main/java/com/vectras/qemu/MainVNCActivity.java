@@ -1464,7 +1464,7 @@ public class MainVNCActivity extends VncCanvasActivity {
         StrictMode.setThreadPolicy(policy);
         if (!IOApplication.isPortOpen("127.0.0.1", Config.QMPPort, 100)) {
             started = false;
-            VectrasApp.oneDialog(getResources().getString(R.string.there_seems_to_be_no_signal), getResources().getString(R.string.do_you_want_to_exit),true, true, MainVNCActivity.this);
+            VectrasApp.oneDialog(getResources().getString(R.string.there_seems_to_be_no_signal), getResources().getString(R.string.do_you_want_to_exit), true, true, MainVNCActivity.this);
         }
     }
 

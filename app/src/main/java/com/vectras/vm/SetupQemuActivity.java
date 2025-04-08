@@ -108,7 +108,9 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        UIController.edgeToEdge(this);
         setContentView(R.layout.activity_setup_qemu);
+        UIController.setOnApplyWindowInsetsListener(findViewById(R.id.main));
         activity = this;
 
         linearload = findViewById(R.id.linearload);

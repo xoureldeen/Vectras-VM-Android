@@ -92,7 +92,7 @@ public class Terminal {
         StringBuilder output = new StringBuilder();
         StringBuilder errors = new StringBuilder();
         Log.d(TAG, userCommand);
-        com.vectras.vm.logger.VectrasStatus.logError("<font color='yellow'>VTERM: >" + userCommand + "</font>");
+        com.vectras.vm.logger.VectrasStatus.logError("<font color='#4db6ac'>VTERM: >" + userCommand + "</font>");
 
         // Show ProgressDialog
         ProgressDialog progressDialog = new ProgressDialog(dialogActivity);
@@ -150,7 +150,7 @@ public class Terminal {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     Log.d(TAG, line);
-                    com.vectras.vm.logger.VectrasStatus.logError("<font color='yellow'>VTERM: >" + line + "</font>");
+                    com.vectras.vm.logger.VectrasStatus.logError("<font color='#4db6ac'>VTERM: >" + line + "</font>");
                     output.append(line).append("\n");
                 }
 
@@ -186,7 +186,7 @@ public class Terminal {
         StringBuilder output = new StringBuilder();
         StringBuilder errors = new StringBuilder();
         Log.d(TAG, userCommand);
-        com.vectras.vm.logger.VectrasStatus.logError("<font color='yellow'>VTERM: >" + userCommand + "</font>");
+        com.vectras.vm.logger.VectrasStatus.logError("<font color='#4db6ac'>VTERM: >" + userCommand + "</font>");
         new Thread(() -> {
             try {
                 // Setup the qemuProcess builder to start PRoot with environmental variables and commands
@@ -248,7 +248,7 @@ public class Terminal {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     Log.d(TAG, line);
-                    com.vectras.vm.logger.VectrasStatus.logError("<font color='yellow'>VTERM: >" + line + "</font>");
+                    com.vectras.vm.logger.VectrasStatus.logError("<font color='#4db6ac'>VTERM: >" + line + "</font>");
                     output.append(line).append("\n");
                 }
 
@@ -297,7 +297,7 @@ public class Terminal {
         StringBuilder output = new StringBuilder();
         StringBuilder errors = new StringBuilder();
         Log.d(TAG, userCommand);
-        com.vectras.vm.logger.VectrasStatus.logError("<font color='yellow'>VTERM: >" + userCommand + "</font>");
+        com.vectras.vm.logger.VectrasStatus.logError("<font color='#4db6ac'>VTERM: >" + userCommand + "</font>");
 
         new Thread(() -> {
             try {
@@ -404,7 +404,7 @@ public class Terminal {
         StringBuilder output = new StringBuilder();
         StringBuilder errors = new StringBuilder();
         Log.d(TAG, userCommand);
-        com.vectras.vm.logger.VectrasStatus.logError("<font color='yellow'>VTERM: >" + userCommand + "</font>");
+        com.vectras.vm.logger.VectrasStatus.logError("<font color='#4db6ac'>VTERM: >" + userCommand + "</font>");
 
         // Show ProgressDialog on the main thread
         ProgressDialog progressDialog = new ProgressDialog(dialogActivity);
@@ -464,7 +464,7 @@ public class Terminal {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     Log.d(TAG, line);
-                    com.vectras.vm.logger.VectrasStatus.logError("<font color='yellow'>VTERM: >" + line + "</font>");
+                    com.vectras.vm.logger.VectrasStatus.logError("<font color='#4db6ac'>VTERM: >" + line + "</font>");
                     output.append(line).append("\n");
                 }
 

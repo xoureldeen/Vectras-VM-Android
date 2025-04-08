@@ -209,12 +209,16 @@ public class VMManager {
         int _min = 10000;
         int _max = 65535;
         _result = _random.nextInt(_max - _min + 1) + _min;
-        if (readFile(AppConfig.romsdatajson).contains("\"qmpPort\":" + _result)) {
-            _result = _random.nextInt(_max - _min + 1) + _min;
+
+        if (VectrasApp.isFileExists(AppConfig.romsdatajson)) {
+            if (readFile(AppConfig.romsdatajson).contains("\"qmpPort\":" + _result)) {
+                _result = _random.nextInt(_max - _min + 1) + _min;
+            }
+            if (readFile(AppConfig.romsdatajson).contains("\"qmpPort\":" + _result)) {
+                _result = _random.nextInt(_max - _min + 1) + _min;
+            }
         }
-        if (readFile(AppConfig.romsdatajson).contains("\"qmpPort\":" + _result)) {
-            _result = _random.nextInt(_max - _min + 1) + _min;
-        }
+
         return _result;
     }
 

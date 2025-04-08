@@ -71,7 +71,7 @@ public class LoggerDialogFragment extends DialogFragment {
                                     String logLine = bufferedReader.readLine();
                                     String logLine2 = bufferedReader2.readLine();
                                     VectrasStatus.logError("<font color='red'>[E] "+logLine+"</font>");
-                                    VectrasStatus.logError("<font color='yellow'>[W] "+logLine2+"</font>");
+                                    VectrasStatus.logError("<font color='#FFC107'>[W] "+logLine2+"</font>");
                                 }
                             } catch (IOException e) {
                                 throw new RuntimeException(e);
