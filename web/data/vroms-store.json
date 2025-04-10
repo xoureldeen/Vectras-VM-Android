@@ -234,6 +234,19 @@
         "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 11 is the latest major release of Microsoft's Windows NT operating system, released on October 5, 2021 as the successor to Windows 10 (2015). It is provided free for any Windows 10 devices that meet the new Windows 11 system requirements. A server version, Windows Server 2025, was released in 2024. Windows 11 is the first major version of Windows NT without a companion mobile version following the discontinuations of Windows Phone with Windows 10 Mobile."
     },
     {
+        "rom_name":"ReactOS",
+        "rom_icon":"https://www.linuxinsider.com/wp-content/uploads/sites/2/2021/05/2016-react-os-1.jpg",
+        "rom_url":"https://archive.org/download/vectras-vm-free-open-source-roms-nbab/ReactOS.cvbi",
+        "rom_path":"ReactOS.cvbi",
+        "rom_avail":true,
+        "rom_size":"400 MB",
+        "rom_arch":"X86_64",
+        "rom_kernel":"windows",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"From @SilentGamer191 on Telegram.\n\nUser: Vectras\nPassword: 1234567890\n\nReactOS is a free and open-source operating system based on the Windows NT architecture. It aims to provide a binary-compatible alternative to Microsoft Windows, allowing users to run Windows applications and drivers. ReactOS is developed by a community of volunteers and is designed to be lightweight and efficient, making it suitable for both modern and older hardware."
+    },
+    {
         "rom_name":"PonyOS",
         "rom_icon":"https://ponyos.org/assets/img/logo-new.png",
         "rom_url":"https://archive.org/download/blackberry-os/PonyOS.cvbi",
