@@ -91,6 +91,19 @@
         "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows Server 2003 is a major release of Windows Server family, released to manufacturing on 24 April 2003. It is the server counterpart of Windows XP, although it was released nearly 18 months after its original release and is built on a slightly newer codebase (NT kernel version is 5.2). It was released in several editions, including Web Edition, Standard Edition, Datacenter Edition and Enterprise Edition. It replaces Windows 2000 Server and was eventually succeeded by Windows Server 2008."
     },
     {
+        "rom_name":"Windows XP Lite x64",
+        "rom_icon":"https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/10/12/windows_2001_logo_1_abcd7f82240a9d6d4ef94d5c6223130b.png",
+        "rom_url":"https://archive.org/download/vectras-vm-free-open-source-roms-nbab/XP%20Lite%20X64%20By%20Firsebox.cvbi",
+        "rom_path":"XP Lite X64 By Firsebox.cvbi",
+        "rom_avail":true,
+        "rom_size":"1.3 GB",
+        "rom_arch":"X86_64",
+        "rom_kernel":"windows",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"From @Firsebox on YouTube and fixed by Nguyen Bao An Bui.\n\nWindows XP is a personal computer operating system produced by Microsoft as part of the Windows NT family of operating systems. It was released to manufacturing on August 24, 2001, and later to retail on October 25, 2001. It is the successor to both Windows 2000 and Windows Me. Windows XP was the first version of Windows to be based on the Windows NT kernel and was the first consumer-oriented version of Windows to be built on that architecture."
+    },
+    {
         "rom_name":"Windows Server 2003",
         "rom_icon":"https://4kwallpapers.com/images/wallpapers/microsoft-windows-2880x1800-17236.png",
         "rom_url":"https://youtu.be/EvY-5Xhm0sY",
