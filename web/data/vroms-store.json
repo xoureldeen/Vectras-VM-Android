@@ -391,6 +391,19 @@
         "desc":"User: root\nPassword: 1234\n\nUltralight Linux optimized for custom ARM / RISC-V or Intel / AMD hardware\nComes with powerful system config tools.\nFor production: Noble, Bookworm. For testing: Trixie, Plucky"
     },
     {
+        "rom_name":"elementary OS 5.1",
+        "rom_icon":"https://static-00.iconduck.com/assets.00/elementary-os-icon-2048x2048-r076wdiz.png",
+        "rom_url":"https://archive.org/download/vectras-vm-free-open-source-roms-nbab/elementary%20OS%205.1.cvbi",
+        "rom_path":"elementary OS 5.1.cvbi",
+        "rom_avail":true,
+        "rom_size":"5.4 GB",
+        "rom_arch":"X86_64",
+        "rom_kernel":"linux",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"From @SilentGamer191 on Telegram.\n\nUser: Vectras\nPassword: 1234567890\n\nelementary OS is a Linux distribution based on Ubuntu. It is designed to be easy to use and visually appealing, with a focus on simplicity and elegance. elementary OS features its own desktop environment called Pantheon, which provides a clean and modern user interface. The distribution comes with a curated selection of applications and emphasizes privacy and security."
+    },
+    {
         "rom_name":"Android 1.6 R2",
         "rom_icon":"https://static.wikia.nocookie.net/android/images/f/f4/Androiddonut.jpg/revision/latest?cb=20111216213427",
         "rom_url":"https://youtu.be/x4RYF0iOncs",
