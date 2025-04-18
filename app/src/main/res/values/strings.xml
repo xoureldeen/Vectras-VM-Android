@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">v2.9.5 (3dfx - Profiterole)</string>
+    <string name="app_version" translatable="false">v2.9.5 (3dfx - Quince Jelly)</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -419,6 +419,13 @@
     <string name="you_need_to_complete_vectras_vm_setup_before_importing_this_file">You need to complete Vectras VM setup before importing this file.</string>
     <string name="unable_to_create_the_directory_to_create_the_vm">Unable to create directory to create virtual machine, this may be because you have not granted permission, there is not enough free space of internal storage or other.</string>
     <string name="with">With</string>
+    <string name="not_the_command_to_run_qemu">Not the command to run Qemu.</string>
+    <string name="command_are_not_allowed_to_contain_amp">Commands are not allowed to contain \"&amp;\".</string>
+    <string name="command_are_not_allowed_to_contain_multiple_lines">Commands are not allowed to contain multiple lines.</string>
+    <string name="command_are_not_allowed_to_contain_semicolons">Commands are not allowed to contain \";\".</string>
+    <string name="command_are_not_allowed_to_contain_vertical_bars">Commands are not allowed to contain \"|\".</string>
+    <string name="reason">Reason</string>
+    <string name="size_too_large_try_qcow2_format">Size too large, try qcow2 format.</string>
 
     <!--======================TERMUX STRINGS====================-->
     <string name="application_name" translatable="false">Vterm</string>

@@ -45,6 +45,8 @@ public class VMManager {
     public static int restoredVMs = 0;
     public static boolean isKeptSomeFiles = false;
 
+    public static String latestUnsafeCommandReason = "";
+
     public static void createNewVM(String name, String thumbnail, String drive, String arch, String cdrom, String params, String vmID, int port) {
         mapForCreateNewVM.clear();
         mapForCreateNewVM.put("imgName", name);
@@ -717,35 +719,61 @@ public class VMManager {
         movetoRecycleBin();
     }
 
-    public static boolean isthiscommandsafe(String _command) {
+    public static boolean isthiscommandsafe(String _command, Context _context) {
         if (_command.startsWith("qemu")) {
             if (!_command.contains("&")) {
                 if (!_command.contains("\n")) {
                     if (!_command.contains(";")) {
                         if (!_command.contains("|")) {
                             return true;
+                        } else {
+                            latestUnsafeCommandReason = _context.getString(R.string.command_are_not_allowed_to_contain_vertical_bars);
                         }
+                    } else {
+                        latestUnsafeCommandReason = _context.getString(R.string.command_are_not_allowed_to_contain_semicolons);
                     }
+                } else {
+                    latestUnsafeCommandReason = _context.getString(R.string.command_are_not_allowed_to_contain_multiple_lines);
                 }
+            } else {
+                latestUnsafeCommandReason = _context.getString(R.string.command_are_not_allowed_to_contain_amp);
             }
+        } else {
+            latestUnsafeCommandReason = _context.getString(R.string.not_the_command_to_run_qemu);
         }
         return false;
     }
 
-    public static boolean isthiscommandsafeimg(String _command) {
+    public static boolean isthiscommandsafeimg(String _command, Context _context) {
         if (!_command.contains("qcow2")) {
             String _getsize = _command.substring(_command.lastIndexOf(" ") + 1);
             if (_getsize.toLowerCase().endsWith("t") || _getsize.toLowerCase().endsWith("p")  || _getsize.toLowerCase().endsWith("e")) {
+                latestUnsafeCommandReason = _context.getString(R.string.size_too_large_try_qcow2_format);
                 return false;
             }
             if (_getsize.toLowerCase().endsWith("g")) {
-                return _getsize.length() <= 2;
+                if (_getsize.length() <= 2) {
+                    return true;
+                } else {
+                    latestUnsafeCommandReason = _context.getString(R.string.size_too_large_try_qcow2_format);
+                    return false;
+                }
             }
             if (_getsize.toLowerCase().endsWith("m")) {
-                return _getsize.length() <= 4;
+                if (_getsize.length() <= 4) {
+                    return true;
+                } else {
+                    latestUnsafeCommandReason = _context.getString(R.string.size_too_large_try_qcow2_format);
+                    return false;
+                }
             }
             if (_getsize.toLowerCase().endsWith("k")) {
-                return _getsize.length() <= 8;
+                if (_getsize.length() <= 8) {
+                    return true;
+                } else {
+                    latestUnsafeCommandReason = _context.getString(R.string.size_too_large_try_qcow2_format);
+                    return false;
+                }
             }
         }
         return true;

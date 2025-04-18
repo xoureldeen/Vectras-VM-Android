@@ -990,8 +990,8 @@ public class MainActivity extends AppCompatActivity {
         File romDir = new File(Config.getCacheDir()+ "/" + Config.vmID);
         romDir.mkdirs();
 
-        if (!VMManager.isthiscommandsafe(env)) {
-            VectrasApp.oneDialog(activity.getResources().getString(R.string.problem_has_been_detected), activity.getResources().getString(R.string.harmful_command_was_detected), true, false, activity);
+        if (!VMManager.isthiscommandsafe(env, activity.getApplicationContext())) {
+            VectrasApp.oneDialog(activity.getResources().getString(R.string.problem_has_been_detected), activity.getResources().getString(R.string.harmful_command_was_detected) + " " + activity.getResources().getString(R.string.reason) + ": " + VMManager.latestUnsafeCommandReason, true, false, activity);
             return;
         }
 
@@ -1197,22 +1197,23 @@ public class MainActivity extends AppCompatActivity {
         doneonstart = true;
 
         if (!AppConfig.pendingCommand.isEmpty()) {
-            if (!VMManager.isthiscommandsafe(AppConfig.pendingCommand)) {
+            if (!VMManager.isthiscommandsafe(AppConfig.pendingCommand, getApplicationContext())) {
                 AppConfig.pendingCommand = "";
-                VectrasApp.oneDialog(activity.getResources().getString(R.string.problem_has_been_detected), activity.getResources().getString(R.string.harmful_command_was_detected), true, false, activity);
-                return;
-            }
-            if (AppConfig.pendingCommand.startsWith("qemu-img")) {
-                if (!VMManager.isthiscommandsafeimg(AppConfig.pendingCommand)) {
-                    return;
-                }
-                Terminal _vterm = new Terminal(MainActivity.this);
-                _vterm.executeShellCommand2(AppConfig.pendingCommand, false, MainActivity.activity);
-                Toast.makeText(getApplicationContext(), getResources().getString(R.string.done), Toast.LENGTH_LONG).show();
+                VectrasApp.oneDialog(activity.getResources().getString(R.string.problem_has_been_detected), activity.getResources().getString(R.string.harmful_command_was_detected) + " " + activity.getResources().getString(R.string.reason) + ": " + VMManager.latestUnsafeCommandReason, true, false, activity);
             } else {
-                StartVM.cdrompath = "";
-                String env = StartVM.env(MainActivity.activity, AppConfig.pendingCommand, "", "1");
-                MainActivity.startVM("Quick run", env, AppConfig.pendingCommand, "");
+                if (AppConfig.pendingCommand.startsWith("qemu-img")) {
+                    if (!VMManager.isthiscommandsafeimg(AppConfig.pendingCommand, getApplicationContext())) {
+                        VectrasApp.oneDialog(activity.getResources().getString(R.string.problem_has_been_detected), activity.getResources().getString(R.string.size_too_large_try_qcow2_format), true, false, activity);
+                    } else {
+                        Terminal _vterm = new Terminal(MainActivity.this);
+                        _vterm.executeShellCommand2(AppConfig.pendingCommand, false, MainActivity.activity);
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.done), Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    StartVM.cdrompath = "";
+                    String env = StartVM.env(MainActivity.activity, AppConfig.pendingCommand, "", "1");
+                    MainActivity.startVM("Quick run", env, AppConfig.pendingCommand, "");
+                }
             }
             AppConfig.pendingCommand = "";
         }
