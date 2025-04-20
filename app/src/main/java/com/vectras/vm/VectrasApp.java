@@ -720,6 +720,23 @@ public class VectrasApp extends Application {
 		alertDialog.show();
 	}
 
+	public static void oneDialogNew(String _title, String _message, String _buttontext,boolean _cancel, boolean _finish, Activity _activity) {
+		AlertDialog alertDialog = new AlertDialog.Builder(_activity, R.style.MainDialogTheme).create();
+		alertDialog.setTitle(_title);
+		alertDialog.setMessage(_message);
+		if (!_cancel) {
+			alertDialog.setCancelable(false);
+		}
+		alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, _buttontext, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				if (_finish) {
+					_activity.finish();
+				}
+			}
+		});
+		alertDialog.show();
+	}
+
 	public static void oneDialogWithContext(String _title, String _message, boolean _cancel, Context _context) {
 		AlertDialog alertDialog = new AlertDialog.Builder(_context, R.style.MainDialogTheme).create();
 		alertDialog.setTitle(_title);

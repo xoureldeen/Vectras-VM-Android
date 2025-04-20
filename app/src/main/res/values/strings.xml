@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">v2.9.5 (3dfx - Quince Jelly)</string>
+    <string name="app_version" translatable="false">v2.9.5 (3dfx - Rugelach)</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -426,6 +426,10 @@
     <string name="command_are_not_allowed_to_contain_vertical_bars">Commands are not allowed to contain \"|\".</string>
     <string name="reason">Reason</string>
     <string name="size_too_large_try_qcow2_format">Size too large, try qcow2 format.</string>
+    <string name="disclaimer_when_using_rom">By using any files of this ROM or any files containing anything in any way, you agree that we (developers or contributors to Vectras VM) and the creator or creators of this ROM or these files will not be responsible for any unintended problems that will happen to you and your things. But if the creator or creators of this ROM or these files are confirmed to intentionally want to cause harm to you or anyone else, the creator or creators of this ROM or these files will be responsible. And it also means that you have agreed to the Terms and Policies of the owner, provider or owners, providers of the operating system or operating systems contained in this ROM.</string>
+    <string name="i_agree">I agree</string>
+    <string name="dont_miss_out">Don\'t miss out!</string>
+    <string name="disclaimer_here">When you import any ROM or use files that contain anything, you accept all of this. Click here to read it all.</string>
 
     <!--======================TERMUX STRINGS====================-->
     <string name="application_name" translatable="false">Vterm</string>
