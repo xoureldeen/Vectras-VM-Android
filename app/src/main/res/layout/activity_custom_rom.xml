@@ -229,13 +229,23 @@
                     android:text="@string/add"
                     android:visibility="gone"/>
 
-                <TextView
-                    android:id="@+id/textview1"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:text="@string/adddrivenote"
-                    android:textSize="12sp" />
+                    android:gravity="center_vertical"
+                    android:padding="8sp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:id="@+id/lineardisclaimer">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/verified_user_24px"
+                        android:layout_marginRight="8sp"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/disclaimer_here"/>
+                </LinearLayout>
             </LinearLayout>
         </ScrollView>
 

@@ -538,6 +538,14 @@ public class CustomRomActivity extends AppCompatActivity {
             }
         });
 
+        LinearLayout lineardisclaimer = findViewById(R.id.lineardisclaimer);
+        lineardisclaimer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                VectrasApp.oneDialogNew(getString(R.string.dont_miss_out), getString(R.string.disclaimer_when_using_rom), getString(R.string.i_agree), false, false, CustomRomActivity.this);
+            }
+        });
+
         modify = getIntent().getBooleanExtra("MODIFY", false);
         if (modify) {
             created = true;
