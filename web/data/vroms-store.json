@@ -378,6 +378,32 @@
         "desc":"Anonymous-OS is an Ubuntu-based Linux distribution Ubuntu. The operating system was released in March 2012. Anonymous-OS uses MATE as a desktop environment, and contains many essential software for hackers, such as Tor browser, Hash Identifier, XChat, SQL Poison, IP server finder, ParolaPass Password Generator, and HOIC. Similar to Backtrack, Anonymous-OS has been speculated that it contains trojans and malware. This operating system is not published by AnonymousAnonymous. After downloading and running Anonymous-OS, Rik Ferguson, director of the European Trend Micro cybersecurity research director, said it was \"a functional operating system with a range of pre-installed tools that could be used for purposes such as finding vulnerabilities or breaking passwords.\""
     },
     {
+        "rom_name":"Ubuntu 18.04",
+        "rom_icon":"https://img.beget.com/cp/plain/shared/7Um-b5Q4nUooUrhtmYGD9ZofUPM7cKtw/ubuntu2x.png@.webp",
+        "rom_url":"https://archive.org/download/vectras-vm-free-open-source-roms-nbab/Ubuntu.cvbi",
+        "rom_path":"Ubuntu.cvbi",
+        "rom_avail":true,
+        "rom_size":"1.9 GB",
+        "rom_arch":"X86_64",
+        "rom_kernel":"linux",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"From @SilentGamer191 on Telegram.\n\nUser: Vectras\nPassword: 1234567890\n\nUbuntu is a popular Linux distribution based on Debian. It is designed to be user-friendly and accessible, with a focus on ease of use and installation. Ubuntu features a modern desktop environment and comes with a wide range of pre-installed applications for productivity, multimedia, and internet browsing. The distribution is known for its strong community support and regular release cycle."
+    },
+    {
+        "rom_name":"Red Star OS",
+        "rom_icon":"https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Red_Star_OS_Logo.svg/263px-Red_Star_OS_Logo.svg.png",
+        "rom_url":"https://archive.org/download/vectras-vm-free-open-source-roms-nbab/RedStar%20OS.cvbi",
+        "rom_path":"RedStar OS.cvbi",
+        "rom_avail":true,
+        "rom_size":"2.3 GB",
+        "rom_arch":"X86_64",
+        "rom_kernel":"linux",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"From @SilentGamer191 on Telegram.\n\nRed Start OS is a Linux-based operating system developed by the Democratic People's Republic of Korea (North Korea). It is designed to be user-friendly and visually appealing, with a focus on security and privacy. Red Star OS features a custom desktop environment and includes a variety of applications for productivity, multimedia, and internet browsing. The operating system is heavily modified to align with North Korean government policies and censorship practices."
+    },
+    {
         "rom_name":"Armbian",
         "rom_icon":"https://raw.githubusercontent.com/armbian/.github/master/profile/tux-three.png",
         "rom_url":"https://archive.org/download/blackberry-os/armbian.cvbi",
