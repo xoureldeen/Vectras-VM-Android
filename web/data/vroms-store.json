@@ -273,6 +273,19 @@
         "desc":"PonyOS is a hobby Unix-like operating system, designed for ponies like you!"
     },
     {
+        "rom_name":"TempleOS",
+        "rom_icon":"https://upload.wikimedia.org/wikipedia/en/thumb/d/d1/TempleOS.jpg/250px-TempleOS.jpg",
+        "rom_url":"https://archive.org/download/temple-os_202504/TempleOS.cvbi",
+        "rom_path":"TempleOS.cvbi",
+        "rom_avail":true,
+        "rom_size":"41 MB",
+        "rom_arch":"X86_64",
+        "rom_kernel":"linux",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"From @SilentGamer191 on Telegram.\n\nTempleOS is a biblical-themed lightweight operating system designed to be the Third Temple prophesized in the Bible. It was created by American programmer Terry A. Davis, who developed it alone over the course of a decade after a series of manic episodes that he later described as a revelation from God."
+    },
+    {
         "rom_name":"BSDeviant",
         "rom_icon":"https://archiveos.org/wp-content/uploads/2019/03/bsdeviant.webp",
         "rom_url":"https://archive.org/download/blackberry-os/BSDeviant.cvbi",
@@ -376,6 +389,19 @@
         "rom_extra":"",
         "final_rom_file_name":"",
         "desc":"Anonymous-OS is an Ubuntu-based Linux distribution Ubuntu. The operating system was released in March 2012. Anonymous-OS uses MATE as a desktop environment, and contains many essential software for hackers, such as Tor browser, Hash Identifier, XChat, SQL Poison, IP server finder, ParolaPass Password Generator, and HOIC. Similar to Backtrack, Anonymous-OS has been speculated that it contains trojans and malware. This operating system is not published by AnonymousAnonymous. After downloading and running Anonymous-OS, Rik Ferguson, director of the European Trend Micro cybersecurity research director, said it was \"a functional operating system with a range of pre-installed tools that could be used for purposes such as finding vulnerabilities or breaking passwords.\""
+    },
+    {
+        "rom_name":"Linux Mint 17",
+        "rom_icon":"https://shirishkadam.com/wp-content/uploads/2014/10/logo_linux_mint.png",
+        "rom_url":"https://archive.org/download/temple-os_202504/Linux%20Mint.cvbi",
+        "rom_path":"Linux Mint.cvbi",
+        "rom_avail":true,
+        "rom_size":"1.5 GB",
+        "rom_arch":"X86_64",
+        "rom_kernel":"linux",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"From @SilentGamer191 on Telegram.\n\nUser: vectras\nPassword: 1234567890\n\nLinux Mint is an operating system for desktop and laptop computers. It is designed to work 'out of the box' and comes fully equipped with the apps most people need."
     },
     {
         "rom_name":"Ubuntu 18.04",
