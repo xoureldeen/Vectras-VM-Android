@@ -275,7 +275,7 @@
     {
         "rom_name":"PonyOS",
         "rom_icon":"https://ponyos.org/assets/img/logo-new.png",
-        "rom_url":"https://archive.org/download/blackberry-os/PonyOS.cvbi",
+        "rom_url":"https://anbui.ovh/get/vec/community/other/ponyos.html",
         "rom_path":"PonyOS.cvbi",
         "rom_avail":true,
         "rom_size":"6 MB",
@@ -301,7 +301,7 @@
     {
         "rom_name":"BSDeviant",
         "rom_icon":"https://archiveos.org/wp-content/uploads/2019/03/bsdeviant.webp",
-        "rom_url":"https://archive.org/download/blackberry-os/BSDeviant.cvbi",
+        "rom_url":"https://anbui.ovh/get/vec/community/bsd/bsdeviant.html",
         "rom_path":"BSDeviant.cvbi",
         "rom_avail":true,
         "rom_size":"81 MB",
@@ -327,7 +327,7 @@
     {
         "rom_name":"Anonym.OS",
         "rom_icon":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQlezHOdq-S2UjgmEoIcVxBA4jlDO6bPGsLA&usqp=CAU",
-        "rom_url":"https://archive.org/download/blackberry-os/Anonym.OS.cvbi",
+        "rom_url":"https://anbui.ovh/get/vec/community/linux/anonymos.html",
         "rom_path":"Anonym.OS.cvbi",
         "rom_avail":true,
         "rom_size":"196 MB",
@@ -340,7 +340,7 @@
     {
         "rom_name":"NetBSD",
         "rom_icon":"https://media.licdn.com/dms/image/D4E12AQEdTG-WPc-GXg/article-cover_image-shrink_600_2000/0/1708992537786?e=2147483647&v=beta&t=3FDiRUhohJB7SsZ4YWSfn8A9UFQ3ESafOChHkJdaDXc",
-        "rom_url":"https://archive.org/download/blackberry-os/NetBSD.cvbi",
+        "rom_url":"https://anbui.ovh/get/vec/community/bsd/netbsd.html",
         "rom_path":"NetBSD.cvbi",
         "rom_avail":true,
         "rom_size":"354 MB",
@@ -353,7 +353,7 @@
     {
         "rom_name":"Debian",
         "rom_icon":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRw2CcpHNKIioANF5MV4H-Zw2H3S7hPDMaqeA&s",
-        "rom_url":"https://archive.org/download/blackberry-os/debian.cvbi",
+        "rom_url":"https://anbui.ovh/get/vec/community/linux/debian.html",
         "rom_path":"debian.cvbi",
         "rom_avail":true,
         "rom_size":"400 MB",
@@ -367,7 +367,7 @@
         "rom_name":"antiX Linux",
         "rom_icon":"https://ih1.redbubble.net/image.911335319.0057/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg",
         "rom_url":"https://pixeldrain.com/u/HmyGapux",
-        "rom_url2":"https://archive.org/download/blackberry-os/antiX.cvbi",
+        "rom_url2":"https://anbui.ovh/get/vec/community/linux/antix.html",
         "rom_path":"antiX.cvbi",
         "rom_avail":true,
         "rom_size":"800 MB",
@@ -380,7 +380,7 @@
     {
         "rom_name":"Haiku OS Beta 5",
         "rom_icon":"https://www.haiku-os.org/files/wallpaper-call/braelin_michelus_shining_harmony.png",
-        "rom_url":"https://archive.org/download/blackberry-os/Haiku-beta5.cvbi",
+        "rom_url":"https://anbui.ovh/get/vec/community/other/haikuos.html",
         "rom_path":"Haiku-beta5.cvbi",
         "rom_avail":true,
         "rom_size":"1 GB",
@@ -393,7 +393,7 @@
     {
         "rom_name":"Anonymous OS",
         "rom_icon":"https://i0.wp.com/securityaffairs.com/wp-content/uploads/2012/03/anonymous-os.jpg?fit=498%2C459&ssl=1&resize=1280%2C720",
-        "rom_url":"https://archive.org/download/blackberry-os/Anonymous%20OS.cvbi",
+        "rom_url":"https://anbui.ovh/get/vec/community/linux/anonymousos.html",
         "rom_path":"Anonymous OS.cvbi",
         "rom_avail":true,
         "rom_size":"1.34 GB",
@@ -445,7 +445,7 @@
     {
         "rom_name":"Armbian",
         "rom_icon":"https://raw.githubusercontent.com/armbian/.github/master/profile/tux-three.png",
-        "rom_url":"https://archive.org/download/blackberry-os/armbian.cvbi",
+        "rom_url":"https://anbui.ovh/get/vec/community/linux/armbian.html",
         "rom_path":"armbian.cvbi",
         "rom_avail":true,
         "rom_size":"3.5 GB",
@@ -484,7 +484,7 @@
     {
         "rom_name":"Android 3.2",
         "rom_icon":"https://static.wikia.nocookie.net/android/images/d/d2/Honeycomb-logo2-e1298681115525.png/revision/latest?cb=20111216204245",
-        "rom_url":"https://archive.org/download/blackberry-os/Android%203.2.cvbi",
+        "rom_url":"https://youtu.be/IDQL6dWLZhw",
         "rom_path":"Android 3.2.cvbi",
         "rom_avail":true,
         "rom_size":"180 MB",
@@ -492,12 +492,12 @@
         "rom_kernel":"android",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"Android Honeycomb is the codename for the third major version of Android, designed for devices with larger screen sizes, particularly tablets, however has been unofficially ported to the Nexus One. It is the eighth version of Android and is no longer supported. Honeycomb debuted with the Motorola Xoom in February 2011. Besides the addition of new features, Honeycomb introduced a new so-called \"holographic\" user interface theme and an interaction model that built on the main features of Android, such as multitasking, notifications and widgets."
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nAndroid Honeycomb is the codename for the third major version of Android, designed for devices with larger screen sizes, particularly tablets, however has been unofficially ported to the Nexus One. It is the eighth version of Android and is no longer supported. Honeycomb debuted with the Motorola Xoom in February 2011. Besides the addition of new features, Honeycomb introduced a new so-called \"holographic\" user interface theme and an interaction model that built on the main features of Android, such as multitasking, notifications and widgets."
     },
     {
         "rom_name":"BlackberryOS (Android 7.1.2)",
         "rom_icon":"https://d-cb.jc-cdn.com/sites/crackberry.com/files/topic_images/2013/blackberry-OS.png",
-        "rom_url":"https://archive.org/download/blackberry-os/BlackberryOS.cvbi",
+        "rom_url":"https://anbui.ovh/get/vec/community/android/blackberryos.html",
         "rom_path":"BlackberryOS.cvbi",
         "rom_avail":true,
         "rom_size":"763 MB",
@@ -510,7 +510,7 @@
     {
         "rom_name":"GXDE OS: Continues (Aarch64)",
         "rom_icon":"https://www.gxde.org/logo.png",
-        "rom_url":"https://archive.org/download/blackberry-os/GXDE%20OS.cvbi",
+        "rom_url":"https://anbui.ovh/get/vec/community/linux/gxdecontinues.html",
         "rom_path":"GXDE OS.cvbi",
         "rom_avail":true,
         "rom_size":"4 GB",
