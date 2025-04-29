@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -34,6 +35,7 @@ import android.os.StrictMode;
 import android.provider.DocumentsContract;
 import android.provider.Settings;
 import android.text.Html;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -211,6 +213,8 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });*/
+
+
 
         Button gotoromstore = findViewById(R.id.gotoromstorebutton);
         gotoromstore.setOnClickListener(new View.OnClickListener() {
@@ -996,7 +1000,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (VectrasApp.isThisVMRunning(itemExtra, itemPath)) {
-            Toast.makeText(activity, "This VM is already running.", Toast.LENGTH_LONG).show();
+            Toast.makeText(activity, activity.getString(R.string.this_vm_is_already_running), Toast.LENGTH_LONG).show();
             if (MainSettingsManager.getVmUi(activity).equals("VNC"))
                 activity.startActivity(new Intent(activity, MainVNCActivity.class));
             else if (MainSettingsManager.getVmUi(activity).equals("X11"))

@@ -72,7 +72,7 @@ public class Terminal {
             return;
 
         AlertDialog dialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
-        dialog.setTitle("Execution Result");
+        dialog.setTitle(activity.getResources().getString(R.string.execution_result));
         dialog.setMessage(message);
         //.setPositiveButton("OK", (dialogInterface, i) -> dialogInterface.dismiss())
         dialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {

@@ -980,11 +980,11 @@ public class MainVNCActivity extends VncCanvasActivity {
 
     public void onMouseMode() {
 
-        String[] items = {"Trackpad Mouse (Phone)",
-                "Bluetooth/USB Mouse (Desktop mode)", //Physical mouse for Chromebook, Android x86 PC, or Bluetooth Mouse
+        String[] items = {getString(R.string.trackpad_mouse_phone),
+                getString(R.string.bluetooth_mouse_desktop), //Physical mouse for Chromebook, Android x86 PC, or Bluetooth Mouse
         };
         final AlertDialog.Builder mBuilder = new AlertDialog.Builder(this, R.style.MainDialogTheme);
-        mBuilder.setTitle("Mouse mode");
+        mBuilder.setTitle(getString(R.string.mouse_mode));
         mBuilder.setSingleChoiceItems(items, Config.mouseMode.ordinal(), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int i) {

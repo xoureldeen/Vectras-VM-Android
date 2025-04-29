@@ -16,6 +16,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -24,6 +25,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.Toast;
 import android.widget.TextView;
@@ -59,6 +61,8 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         activity = this;
+
+
         UIController.edgeToEdge(this);
         setContentView(R.layout.activity_splash);
         UIController.setOnApplyWindowInsetsListener(findViewById(R.id.main));
@@ -92,14 +96,15 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
     }
 
     private void updateLocale() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String languageCode = sharedPreferences.getString("language", "en");
-
-        Locale locale = new Locale(languageCode);
-        Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        config.setLocale(locale);
-        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+        // SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        File file = new File(activity.getFilesDir(), "language");
+        if (!file.exists()) {
+            Locale locale = Locale.getDefault();
+            Locale.setDefault(locale);
+            Configuration config = new Configuration();
+            config.setLocale(locale);
+            getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+        }
     }
 
     public void setupFiles() {

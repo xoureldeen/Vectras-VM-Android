@@ -886,15 +886,15 @@ public class CustomRomActivity extends AppCompatActivity {
     }
 
     private void checkJsonFile() {
-        if (isFileExists(AppConfig.romsdatajson)) {
-            if (VMManager.isRomsDataJsonNormal(true, CustomRomActivity.this)) {
+            if (isFileExists(AppConfig.romsdatajson)) {
+                if (VMManager.isRomsDataJsonNormal(true, CustomRomActivity.this)) {
+                    startCreateNewVM();
+                }
+
+            } else {
+                VectrasApp.writeToFile(AppConfig.maindirpath, "roms-data.json", "[]");
                 startCreateNewVM();
             }
-
-        } else {
-            VectrasApp.writeToFile(AppConfig.maindirpath, "roms-data.json", "[]");
-            startCreateNewVM();
-        }
     }
 
     private String readFile(String filePath) {
@@ -1066,7 +1066,11 @@ public class CustomRomActivity extends AppCompatActivity {
             Intent openURL = new Intent();
             openURL.setAction(Intent.ACTION_VIEW);
             openURL.setData(Uri.parse("android-app://com.vectras.vm"));
-            startActivity(openURL);
+            try {
+                startActivity(openURL);
+            }catch (Exception e){
+                startActivity(new Intent(CustomRomActivity.this, SplashActivity.class));
+            }
         }
         finish();
     }

@@ -67,6 +67,7 @@ import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
+import android.content.res.Resources;
 
 public class VectrasApp extends Application {
 	public static VectrasApp vectrasapp;
@@ -786,10 +787,10 @@ public class VectrasApp extends Application {
 		}
 	}
 
-	public static void setupMirrorListForListmap(ArrayList<HashMap<String, String>> listmapForSelectMirrors) {
+	public void setupMirrorListForListmap(ArrayList<HashMap<String, String>> listmapForSelectMirrors) {
 		HashMap<String, String> mapForAddItems = new HashMap<>();
 
-		mapForAddItems.put("location", "United States (Default)");
+		mapForAddItems.put("location", getResources().getString(R.string.united_states_default));
 		mapForAddItems.put("mirror", createCommandForSelectedMirror(true, "dl-cdn.alpinelinux.org", "/alpine"));
 		listmapForSelectMirrors.add(mapForAddItems);
 

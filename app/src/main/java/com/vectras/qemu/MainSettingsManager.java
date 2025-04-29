@@ -38,6 +38,10 @@ import com.vectras.vm.SplashActivity;
 import com.vectras.vm.StoreActivity;
 import com.vectras.vm.VectrasApp;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -170,7 +174,13 @@ public class MainSettingsManager extends AppCompatActivity
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             if (preference.getKey().equals("language")) {
                 String newLocale = (String) newValue;
+                File customDir = new File(activity.getFilesDir(), "language");
+                if (!customDir.exists()) {
+                    customDir.mkdirs(); // 创建目录（包括不存在的父目录）
+                }
                 updateLocale(newLocale);
+
+
                 return true;
             }
             return false;

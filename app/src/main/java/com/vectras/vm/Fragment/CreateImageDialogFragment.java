@@ -44,7 +44,7 @@ public class CreateImageDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.MainDialogTheme);
 
-        builder.setTitle("Create Image");
+        builder.setTitle(getString(R.string.create_image));
 
         View view = getActivity().getLayoutInflater().inflate(R.layout.create_vhd, null);
 
