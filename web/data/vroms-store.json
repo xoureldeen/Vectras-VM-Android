@@ -54,7 +54,7 @@
     {
         "rom_name":"OS/2",
         "rom_icon":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBiMkh0JObb3TtXY5Mat_qaGuwM6GQzuthcQ&s",
-        "rom_url":"https://github.com/marstraveler01/vm-stuff/releases/tag/v4",
+        "rom_url":"https://anbui.ovh/get/vec/community/other/os2.html",
         "rom_path":"os4.cvbi",
         "rom_avail":true,
         "rom_size":"77 MB",
@@ -93,7 +93,7 @@
     {
         "rom_name":"Windows XP Lite x64",
         "rom_icon":"https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/10/12/windows_2001_logo_1_abcd7f82240a9d6d4ef94d5c6223130b.png",
-        "rom_url":"https://archive.org/download/vectras-vm-free-open-source-roms-nbab/XP%20Lite%20X64%20By%20Firsebox.cvbi",
+        "rom_url":"https://anbui.ovh/get/vec/community/win/nt5/xpx64.html",
         "rom_path":"XP Lite X64 By Firsebox.cvbi",
         "rom_avail":true,
         "rom_size":"1.3 GB",
@@ -262,7 +262,7 @@
     {
         "rom_name":"ReactOS",
         "rom_icon":"https://www.linuxinsider.com/wp-content/uploads/sites/2/2021/05/2016-react-os-1.jpg",
-        "rom_url":"https://archive.org/download/vectras-vm-free-open-source-roms-nbab/ReactOS.cvbi",
+        "rom_url":"https://anbui.ovh/get/vec/community/linux/reactos.html",
         "rom_path":"ReactOS.cvbi",
         "rom_avail":true,
         "rom_size":"400 MB",
@@ -288,7 +288,7 @@
     {
         "rom_name":"TempleOS",
         "rom_icon":"https://upload.wikimedia.org/wikipedia/en/thumb/d/d1/TempleOS.jpg/250px-TempleOS.jpg",
-        "rom_url":"https://archive.org/download/temple-os_202504/TempleOS.cvbi",
+        "rom_url":"https://anbui.ovh/get/vec/community/other/templeos.html",
         "rom_path":"TempleOS.cvbi",
         "rom_avail":true,
         "rom_size":"41 MB",
@@ -406,7 +406,7 @@
     {
         "rom_name":"Linux Mint 17",
         "rom_icon":"https://shirishkadam.com/wp-content/uploads/2014/10/logo_linux_mint.png",
-        "rom_url":"https://archive.org/download/temple-os_202504/Linux%20Mint.cvbi",
+        "rom_url":"https://anbui.ovh/get/vec/community/linux/linuxmint.html",
         "rom_path":"Linux Mint.cvbi",
         "rom_avail":true,
         "rom_size":"1.5 GB",
@@ -419,7 +419,7 @@
     {
         "rom_name":"Ubuntu 18.04",
         "rom_icon":"https://img.beget.com/cp/plain/shared/7Um-b5Q4nUooUrhtmYGD9ZofUPM7cKtw/ubuntu2x.png@.webp",
-        "rom_url":"https://archive.org/download/vectras-vm-free-open-source-roms-nbab/Ubuntu.cvbi",
+        "rom_url":"https://anbui.ovh/get/vec/community/linux/ubuntu1804.html",
         "rom_path":"Ubuntu.cvbi",
         "rom_avail":true,
         "rom_size":"1.9 GB",
@@ -432,7 +432,7 @@
     {
         "rom_name":"Red Star OS",
         "rom_icon":"https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Red_Star_OS_Logo.svg/263px-Red_Star_OS_Logo.svg.png",
-        "rom_url":"https://archive.org/download/vectras-vm-free-open-source-roms-nbab/RedStar%20OS.cvbi",
+        "rom_url":"https://anbui.ovh/get/vec/community/linux/redstaros.html",
         "rom_path":"RedStar OS.cvbi",
         "rom_avail":true,
         "rom_size":"2.3 GB",
@@ -458,7 +458,7 @@
     {
         "rom_name":"elementary OS 5.1",
         "rom_icon":"https://static-00.iconduck.com/assets.00/elementary-os-icon-2048x2048-r076wdiz.png",
-        "rom_url":"https://archive.org/download/vectras-vm-free-open-source-roms-nbab/elementary%20OS%205.1.cvbi",
+        "rom_url":"https://anbui.ovh/get/vec/community/linux/elementaryos51.html",
         "rom_path":"elementary OS 5.1.cvbi",
         "rom_avail":true,
         "rom_size":"5.4 GB",
