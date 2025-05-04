@@ -1,7 +1,6 @@
 package com.vectras.vm;
 
-import static com.vectras.vm.VectrasApp.isFileExists;
-import static com.vectras.vm.VectrasApp.readFile;
+import static com.vectras.vm.utils.FileUtils.isFileExists;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -10,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -19,7 +19,10 @@ import com.google.gson.reflect.TypeToken;
 import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.MainRoms.AdapterMainRoms;
+import com.vectras.vm.utils.FileUtils;
+import com.vectras.vm.utils.JSONUtils;
 import com.vectras.vm.utils.UIUtils;
+import com.vectras.vterm.Terminal;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -59,20 +62,20 @@ public class VMManager {
         mapForCreateNewVM.put("qmpPort", port);
 
         listmapForCreateNewVM.clear();
-        listmapForCreateNewVM = new Gson().fromJson(VectrasApp.readFile(AppConfig.romsdatajson), new TypeToken<ArrayList<HashMap<String, Object>>>(){}.getType());
+        listmapForCreateNewVM = new Gson().fromJson(FileUtils.readAFile(AppConfig.romsdatajson), new TypeToken<ArrayList<HashMap<String, Object>>>(){}.getType());
 
         listmapForCreateNewVM.add(0,mapForCreateNewVM);
         finalJson = new Gson().toJson(listmapForCreateNewVM);
 
-        VectrasApp.writeToFile(AppConfig.maindirpath, "roms-data.json", finalJson);
+        FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", finalJson);
         finalJson = new Gson().toJson(mapForCreateNewVM);
-        VectrasApp.writeToFile(AppConfig.maindirpath + "/roms/" + Objects.requireNonNull(mapForCreateNewVM.get("vmID")).toString(), "rom-data.json", finalJson.replace("\\u003d", "="));
-        VectrasApp.writeToFile(AppConfig.maindirpath + "/roms/" + Objects.requireNonNull(mapForCreateNewVM.get("vmID")).toString(), "vmID.txt", Objects.requireNonNull(mapForCreateNewVM.get("vmID")).toString());
+        FileUtils.writeToFile(AppConfig.maindirpath + "/roms/" + Objects.requireNonNull(mapForCreateNewVM.get("vmID")).toString(), "rom-data.json", finalJson.replace("\\u003d", "="));
+        FileUtils.writeToFile(AppConfig.maindirpath + "/roms/" + Objects.requireNonNull(mapForCreateNewVM.get("vmID")).toString(), "vmID.txt", Objects.requireNonNull(mapForCreateNewVM.get("vmID")).toString());
     }
 
     public static void editVM(String name, String thumbnail, String drive, String arch, String cdrom, String params, int position) {
         listmapForCreateNewVM.clear();
-        listmapForCreateNewVM = new Gson().fromJson(VectrasApp.readFile(AppConfig.romsdatajson), new TypeToken<ArrayList<HashMap<String, Object>>>(){}.getType());
+        listmapForCreateNewVM = new Gson().fromJson(FileUtils.readAFile(AppConfig.romsdatajson), new TypeToken<ArrayList<HashMap<String, Object>>>(){}.getType());
 
         mapForCreateNewVM.clear();
         mapForCreateNewVM.put("imgName", name);
@@ -95,10 +98,10 @@ public class VMManager {
 
         listmapForCreateNewVM.set(position,mapForCreateNewVM);
         finalJson = new Gson().toJson(listmapForCreateNewVM);
-        VectrasApp.writeToFile(AppConfig.maindirpath, "roms-data.json", finalJson);
+        FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", finalJson);
         finalJson = new Gson().toJson(mapForCreateNewVM);
-        VectrasApp.writeToFile(AppConfig.maindirpath + "/roms/" + Objects.requireNonNull(mapForCreateNewVM.get("vmID")).toString(), "rom-data.json", finalJson.replace("\\u003d", "="));
-        VectrasApp.writeToFile(AppConfig.maindirpath + "/roms/" + Objects.requireNonNull(mapForCreateNewVM.get("vmID")).toString(), "vmID.txt", Objects.requireNonNull(mapForCreateNewVM.get("vmID")).toString());
+        FileUtils.writeToFile(AppConfig.maindirpath + "/roms/" + Objects.requireNonNull(mapForCreateNewVM.get("vmID")).toString(), "rom-data.json", finalJson.replace("\\u003d", "="));
+        FileUtils.writeToFile(AppConfig.maindirpath + "/roms/" + Objects.requireNonNull(mapForCreateNewVM.get("vmID")).toString(), "vmID.txt", Objects.requireNonNull(mapForCreateNewVM.get("vmID")).toString());
     }
 
     public static void deleteVMDialog(String _vmName, int _position, Activity _activity) {
@@ -108,7 +111,7 @@ public class VMManager {
         ad.setButton(Dialog.BUTTON_NEGATIVE, _activity.getString(R.string.remove) + " " + _vmName, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 pendingPosition = _position;
-                pendingJsonContent = VectrasApp.readFile(AppConfig.maindirpath + "roms-data.json");
+                pendingJsonContent = FileUtils.readAFile(AppConfig.maindirpath + "roms-data.json");
 
                 AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.activity, R.style.MainDialogTheme).create();
                 alertDialog.setTitle(_activity.getString(R.string.keep_files_question_mark));
@@ -124,8 +127,8 @@ public class VMManager {
                         isKeptSomeFiles = false;
                         deleteVM();
 
-                        if (isKeptSomeFiles && VectrasApp.readFile(AppConfig.maindirpath + "roms-data.json").contains("{")) {
-                            VectrasApp.oneDialog(_activity.getString(R.string.keep), _activity.getString(R.string.kept_some_files), true, false, _activity);
+                        if (isKeptSomeFiles && FileUtils.readAFile(AppConfig.maindirpath + "roms-data.json").contains("{")) {
+                            UIUtils.oneDialog(_activity.getString(R.string.keep), _activity.getString(R.string.kept_some_files), true, false, _activity);
                         }
                     }
                 });
@@ -146,7 +149,7 @@ public class VMManager {
                     UIUtils.toastLong(_activity, e.toString());
                 }
                 UIUtils.toastLong(_activity, _vmName + _activity.getString(R.string.are_removed_successfully));
-                if (!VectrasApp.readFile(AppConfig.maindirpath + "roms-data.json").contains("{")) {
+                if (!FileUtils.readAFile(AppConfig.maindirpath + "roms-data.json").contains("{")) {
                     MainActivity.mdatasize2();
                 }
             }
@@ -199,7 +202,7 @@ public class VMManager {
             addAdb = "j";
         } else if (randomAbc == 10) {
             addAdb = "k";
-        } else if (randomAbc == 11) {
+        } else {
             addAdb = "l";
         }
         return addAdb + String.valueOf((long)(random.nextInt(65535)));
@@ -212,11 +215,11 @@ public class VMManager {
         int _max = 65535;
         _result = _random.nextInt(_max - _min + 1) + _min;
 
-        if (VectrasApp.isFileExists(AppConfig.romsdatajson)) {
-            if (readFile(AppConfig.romsdatajson).contains("\"qmpPort\":" + _result)) {
+        if (FileUtils.isFileExists(AppConfig.romsdatajson)) {
+            if (FileUtils.readAFile(AppConfig.romsdatajson).contains("\"qmpPort\":" + _result)) {
                 _result = _random.nextInt(_max - _min + 1) + _min;
             }
-            if (readFile(AppConfig.romsdatajson).contains("\"qmpPort\":" + _result)) {
+            if (FileUtils.readAFile(AppConfig.romsdatajson).contains("\"qmpPort\":" + _result)) {
                 _result = _random.nextInt(_max - _min + 1) + _min;
             }
         }
@@ -229,7 +232,7 @@ public class VMManager {
         listmapForRemoveVM = new Gson().fromJson(pendingJsonContent, new TypeToken<ArrayList<HashMap<String, Object>>>(){}.getType());
         if (listmapForRemoveVM.get(pendingPosition).containsKey("vmID")) {
             pendingVMID = Objects.requireNonNull(listmapForRemoveVM.get(pendingPosition).get("vmID")).toString();
-            VectrasApp.deleteDirectory(Config.getCacheDir()+ "/" + pendingVMID);
+            FileUtils.deleteDirectory(Config.getCacheDir()+ "/" + pendingVMID);
             Log.i("VMManager", "deleteVM: ID obtained: " + pendingVMID);
         } else {
             Log.e("VMManager", "deleteVM: Cannot get ID.");
@@ -241,16 +244,16 @@ public class VMManager {
             int _startRepeat = 0;
             String _currentVMIDToScan = "";
             ArrayList<String> _filelist = new ArrayList<>();
-            VectrasApp.listDir(AppConfig.vmFolder, _filelist);
+            FileUtils.getAListOfAllFilesAndFoldersInADirectory(AppConfig.vmFolder, _filelist);
             if (!_filelist.isEmpty()) {
                 for (int _repeat = 0; _repeat < (int)(_filelist.size()); _repeat++) {
                     if (_startRepeat < _filelist.size()) {
                         if (isFileExists(_filelist.get((int)(_startRepeat)) + "/vmID.txt")) {
-                            _currentVMIDToScan = VectrasApp.readFile(_filelist.get((int)(_startRepeat)) + "/vmID.txt").replace("\n", "");
+                            _currentVMIDToScan = FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/vmID.txt").replace("\n", "");
                             if (!_currentVMIDToScan.isEmpty()) {
                                 if (_currentVMIDToScan.equals(pendingVMID)) {
                                     if (!finalJson.contains(_filelist.get((int)(_startRepeat)))) {
-                                        VectrasApp.deleteDirectory(_filelist.get((int)(_startRepeat)));
+                                        FileUtils.deleteDirectory(_filelist.get((int)(_startRepeat)));
                                     } else {
                                         isKeptSomeFiles = true;
                                         hideVMID(pendingVMID);
@@ -270,15 +273,15 @@ public class VMManager {
             int _startRepeat = 0;
             String _currentVMIDToScan = "";
             ArrayList<String> _filelist = new ArrayList<>();
-            VectrasApp.listDir(AppConfig.vmFolder, _filelist);
+            FileUtils.getAListOfAllFilesAndFoldersInADirectory(AppConfig.vmFolder, _filelist);
             if (!_filelist.isEmpty()) {
                 for (int _repeat = 0; _repeat < (int)(_filelist.size()); _repeat++) {
                     if (_startRepeat < _filelist.size()) {
                         if (isFileExists(_filelist.get((int)(_startRepeat)) + "/vmID.txt")) {
-                            _currentVMIDToScan = VectrasApp.readFile(_filelist.get((int)(_startRepeat)) + "/vmID.txt").replace("\n", "");
+                            _currentVMIDToScan = FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/vmID.txt").replace("\n", "");
                             if (!_currentVMIDToScan.isEmpty()) {
                                 if (_currentVMIDToScan.equals(_vmID)) {
-                                    VectrasApp.moveAFile(_filelist.get((int)(_startRepeat)) + "/vmID.txt", _filelist.get((int)(_startRepeat)) + "/vmID.old.txt");
+                                    FileUtils.moveAFile(_filelist.get((int)(_startRepeat)) + "/vmID.txt", _filelist.get((int)(_startRepeat)) + "/vmID.old.txt");
                                 }
                             }
                         }
@@ -301,15 +304,15 @@ public class VMManager {
             int _startRepeat = 0;
             String _currentVMIDToScan = "";
             ArrayList<String> _filelist = new ArrayList<>();
-            VectrasApp.listDir(AppConfig.vmFolder, _filelist);
+            FileUtils.getAListOfAllFilesAndFoldersInADirectory(AppConfig.vmFolder, _filelist);
             if (!_filelist.isEmpty()) {
                 for (int _repeat = 0; _repeat < (int)(_filelist.size()); _repeat++) {
                     if (_startRepeat < _filelist.size()) {
                         if (isFileExists(_filelist.get((int)(_startRepeat)) + "/vmID.txt")) {
-                            _currentVMIDToScan = VectrasApp.readFile(_filelist.get((int)(_startRepeat)) + "/vmID.txt").replace("\n", "");
+                            _currentVMIDToScan = FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/vmID.txt").replace("\n", "");
                             if (!_currentVMIDToScan.isEmpty()) {
                                 if (_currentVMIDToScan.equals(pendingVMID)) {
-                                    VectrasApp.moveAFile(_filelist.get((int)(_startRepeat)) + "/vmID.txt", _filelist.get((int)(_startRepeat)) + "/vmID.old.txt");
+                                    FileUtils.moveAFile(_filelist.get((int)(_startRepeat)) + "/vmID.txt", _filelist.get((int)(_startRepeat)) + "/vmID.old.txt");
                                 }
                             }
                         }
@@ -321,17 +324,17 @@ public class VMManager {
     }
 
     public static void cleanUp() {
-        finalJson = VectrasApp.readFile(AppConfig.romsdatajson);
+        finalJson = FileUtils.readAFile(AppConfig.romsdatajson);
         if (!finalJson.isEmpty()) {
             int _startRepeat = 0;
             ArrayList<String> _filelist = new ArrayList<>();
-            VectrasApp.listDir(AppConfig.vmFolder, _filelist);
+            FileUtils.getAListOfAllFilesAndFoldersInADirectory(AppConfig.vmFolder, _filelist);
             if (!_filelist.isEmpty()) {
                 for (int _repeat = 0; _repeat < (int)(_filelist.size()); _repeat++) {
                     if (_startRepeat < _filelist.size()) {
                         if (!isFileExists(_filelist.get((int)(_startRepeat)) + "/vmID.txt")) {
                             if (!finalJson.contains(_filelist.get((int) (_startRepeat)))) {
-                                VectrasApp.deleteDirectory(_filelist.get((int) (_startRepeat)));
+                                FileUtils.deleteDirectory(_filelist.get((int) (_startRepeat)));
                             }
                         }
                     }
@@ -347,44 +350,44 @@ public class VMManager {
         String _result ="";
         restoredVMs = 0;
         ArrayList<String> _filelist = new ArrayList<>();
-        VectrasApp.listDir(AppConfig.vmFolder, _filelist);
+        FileUtils.getAListOfAllFilesAndFoldersInADirectory(AppConfig.vmFolder, _filelist);
         if (!_filelist.isEmpty()) {
             for (int _repeat = 0; _repeat < (int)(_filelist.size()); _repeat++) {
                 if (_startRepeat < _filelist.size()) {
                     if (!isFileExists(_filelist.get((int)(_startRepeat)) + "/vmID.txt")) {
                         if (isFileExists(_filelist.get((int)(_startRepeat)) + "/rom-data.json")) {
-                            if (VectrasApp.checkJSONMapIsNormalFromString(VectrasApp.readFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json"))) {
+                            if (JSONUtils.isMapValidFromString(FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json"))) {
                                 if (_resulttemp.contains("}")) {
-                                    _resulttemp += "," + VectrasApp.readFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
+                                    _resulttemp += "," + FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
                                 } else {
-                                    _resulttemp = VectrasApp.readFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
+                                    _resulttemp = FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
                                 }
-                                if (VectrasApp.checkJSONIsNormalFromString(VectrasApp.readFile(AppConfig.maindirpath + "/roms-data.json").replaceAll("]", _resulttemp + "]"))) {
+                                if (JSONUtils.isValidFromString(FileUtils.readAFile(AppConfig.maindirpath + "/roms-data.json").replaceAll("]", _resulttemp + "]"))) {
                                     if (_result.contains("}")) {
-                                        _result += "," + VectrasApp.readFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
+                                        _result += "," + FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
                                     } else {
-                                        _result = VectrasApp.readFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
+                                        _result = FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
                                     }
                                     if (isFileExists(_filelist.get((int)(_startRepeat)) + "/vmID.old.txt")) {
-                                        enableVMID(VectrasApp.readFile(_filelist.get((int)(_startRepeat)) + "/vmID.old.txt"));
+                                        enableVMID(FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/vmID.old.txt"));
                                     } else {
-                                        VectrasApp.writeToFile(_filelist.get((int)(_startRepeat)), "/vmID.txt", VMManager.idGenerator());
+                                        FileUtils.writeToFile(_filelist.get((int)(_startRepeat)), "/vmID.txt", VMManager.idGenerator());
                                     }
                                     restoredVMs++;
-                                } else if (VectrasApp.checkJSONIsNormalFromString(VectrasApp.readFile(AppConfig.maindirpath + "/roms-data.json").replaceAll("]", "," + _resulttemp + "]"))) {
+                                } else if (JSONUtils.isValidFromString(FileUtils.readAFile(AppConfig.maindirpath + "/roms-data.json").replaceAll("]", "," + _resulttemp + "]"))) {
                                     if (_result.contains("}")) {
-                                        _result += "," + VectrasApp.readFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
+                                        _result += "," + FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
                                     } else {
-                                        _result = "," + VectrasApp.readFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
+                                        _result = "," + FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
                                     }
                                     if (isFileExists(_filelist.get((int)(_startRepeat)) + "/vmID.old.txt")) {
-                                        enableVMID(VectrasApp.readFile(_filelist.get((int)(_startRepeat)) + "/vmID.old.txt"));
+                                        enableVMID(FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/vmID.old.txt"));
                                     } else {
-                                        VectrasApp.writeToFile(_filelist.get((int)(_startRepeat)), "/vmID.txt", VMManager.idGenerator());
+                                        FileUtils.writeToFile(_filelist.get((int)(_startRepeat)), "/vmID.txt", VMManager.idGenerator());
                                     }
                                     restoredVMs++;
                                 } else {
-                                    Log.i("CqcmActivity", VectrasApp.readFile(AppConfig.maindirpath + "/roms-data.json").replaceAll("]", _resulttemp + "]"));
+                                    Log.i("CqcmActivity", FileUtils.readAFile(AppConfig.maindirpath + "/roms-data.json").replaceAll("]", _resulttemp + "]"));
                                 }
                             }
                         }
@@ -393,13 +396,13 @@ public class VMManager {
                     _startRepeat++;
                     if (_startRepeat == _filelist.size()) {
                         if (!_result.isEmpty()) {
-                            if (VectrasApp.checkJSONIsNormalFromString("[" + _result + "]")) {
+                            if (JSONUtils.isValidFromString("[" + _result + "]")) {
                                 if (isFileExists(AppConfig.romsdatajson)) {
-                                    if (VectrasApp.checkJSONIsNormal(AppConfig.romsdatajson)) {
-                                        String _JSONcontent = VectrasApp.readFile(AppConfig.romsdatajson);
+                                    if (JSONUtils.isValidFromFile(AppConfig.romsdatajson)) {
+                                        String _JSONcontent = FileUtils.readAFile(AppConfig.romsdatajson);
                                         String _JSONcontentnew = _JSONcontent.replaceAll("]", _result + "]");
-                                        if (VectrasApp.checkJSONIsNormalFromString(_JSONcontentnew)) {
-                                            VectrasApp.writeToFile(AppConfig.maindirpath, "roms-data.json", _JSONcontentnew);
+                                        if (JSONUtils.isValidFromString(_JSONcontentnew)) {
+                                            FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", _JSONcontentnew);
                                         } else {
                                             restoredVMs = 0;
                                         }
@@ -407,7 +410,7 @@ public class VMManager {
                                         restoredVMs = 0;
                                     }
                                 } else {
-                                    VectrasApp.writeToFile(AppConfig.maindirpath, "roms-data.json", "[" + _result + "]");
+                                    FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", "[" + _result + "]");
                                 }
                             } else {
                                 restoredVMs = 0;
@@ -428,34 +431,34 @@ public class VMManager {
         String _result ="";
         restoredVMs = 0;
         ArrayList<String> _filelist = new ArrayList<>();
-        VectrasApp.listDir(AppConfig.vmFolder, _filelist);
+        FileUtils.getAListOfAllFilesAndFoldersInADirectory(AppConfig.vmFolder, _filelist);
         if (!_filelist.isEmpty()) {
             for (int _repeat = 0; _repeat < (int)(_filelist.size()); _repeat++) {
                 if (_startRepeat < _filelist.size()) {
                     if (isFileExists(_filelist.get((int)(_startRepeat)) + "/vmID.txt")) {
                         if (isFileExists(_filelist.get((int)(_startRepeat)) + "/rom-data.json")) {
-                            if (VectrasApp.checkJSONMapIsNormalFromString(VectrasApp.readFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json"))) {
+                            if (JSONUtils.isMapValidFromString(FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json"))) {
                                 if (_resulttemp.contains("}")) {
-                                    _resulttemp += "," + VectrasApp.readFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
+                                    _resulttemp += "," + FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
                                 } else {
-                                    _resulttemp = VectrasApp.readFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
+                                    _resulttemp = FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
                                 }
-                                if (VectrasApp.checkJSONIsNormalFromString(VectrasApp.readFile(AppConfig.maindirpath + "/roms-data.json").replaceAll("]", _resulttemp + "]"))) {
+                                if (JSONUtils.isValidFromString(FileUtils.readAFile(AppConfig.maindirpath + "/roms-data.json").replaceAll("]", _resulttemp + "]"))) {
                                     if (_result.contains("}")) {
-                                        _result += "," + VectrasApp.readFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
+                                        _result += "," + FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
                                     } else {
-                                        _result = VectrasApp.readFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
+                                        _result = FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
                                     }
                                     restoredVMs++;
-                                } else if (VectrasApp.checkJSONIsNormalFromString(VectrasApp.readFile(AppConfig.maindirpath + "/roms-data.json").replaceAll("]", "," + _resulttemp + "]"))) {
+                                } else if (JSONUtils.isValidFromString(FileUtils.readAFile(AppConfig.maindirpath + "/roms-data.json").replaceAll("]", "," + _resulttemp + "]"))) {
                                     if (_result.contains("}")) {
-                                        _result += "," + VectrasApp.readFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
+                                        _result += "," + FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
                                     } else {
-                                        _result = "," + VectrasApp.readFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
+                                        _result = "," + FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
                                     }
                                     restoredVMs++;
                                 } else {
-                                    Log.i("CqcmActivity", VectrasApp.readFile(AppConfig.maindirpath + "/roms-data.json").replaceAll("]", _resulttemp + "]"));
+                                    Log.i("CqcmActivity", FileUtils.readAFile(AppConfig.maindirpath + "/roms-data.json").replaceAll("]", _resulttemp + "]"));
                                 }
                             }
                         }
@@ -464,13 +467,13 @@ public class VMManager {
                     _startRepeat++;
                     if (_startRepeat == _filelist.size()) {
                         if (!_result.isEmpty()) {
-                            if (VectrasApp.checkJSONIsNormalFromString("[" + _result + "]")) {
+                            if (JSONUtils.isValidFromString("[" + _result + "]")) {
                                 if (isFileExists(AppConfig.romsdatajson)) {
-                                    if (VectrasApp.checkJSONIsNormal(AppConfig.romsdatajson)) {
-                                        String _JSONcontent = VectrasApp.readFile(AppConfig.romsdatajson);
+                                    if (JSONUtils.isValidFromFile(AppConfig.romsdatajson)) {
+                                        String _JSONcontent = FileUtils.readAFile(AppConfig.romsdatajson);
                                         String _JSONcontentnew = _JSONcontent.replaceAll("]", _result + "]");
-                                        if (VectrasApp.checkJSONIsNormalFromString(_JSONcontentnew)) {
-                                            VectrasApp.writeToFile(AppConfig.maindirpath, "roms-data.json", _JSONcontentnew);
+                                        if (JSONUtils.isValidFromString(_JSONcontentnew)) {
+                                            FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", _JSONcontentnew);
                                         } else {
                                             restoredVMs = 0;
                                         }
@@ -478,7 +481,7 @@ public class VMManager {
                                         restoredVMs = 0;
                                     }
                                 } else {
-                                    VectrasApp.writeToFile(AppConfig.maindirpath, "roms-data.json", "[" + _result + "]");
+                                    FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", "[" + _result + "]");
                                 }
                             } else {
                                 restoredVMs = 0;
@@ -498,13 +501,13 @@ public class VMManager {
             return;
         int _startRepeat = 0;
         ArrayList<String> _filelist = new ArrayList<>();
-        VectrasApp.listDir(AppConfig.vmFolder, _filelist);
+        FileUtils.getAListOfAllFilesAndFoldersInADirectory(AppConfig.vmFolder, _filelist);
         if (!_filelist.isEmpty()) {
             for (int _repeat = 0; _repeat < (int)(_filelist.size()); _repeat++) {
                 if (_startRepeat < _filelist.size()) {
                     if (isFileExists(_filelist.get((int)(_startRepeat)) + "/vmID.old.txt")) {
-                        if (VectrasApp.readFile(_filelist.get((int)(_startRepeat)) + "/vmID.old.txt").equals(_vmID)) {
-                            VectrasApp.moveAFile(_filelist.get((int)(_startRepeat)) + "/vmID.old.txt", _filelist.get((int)(_startRepeat)) + "/vmID.txt");
+                        if (FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/vmID.old.txt").equals(_vmID)) {
+                            FileUtils.moveAFile(_filelist.get((int)(_startRepeat)) + "/vmID.old.txt", _filelist.get((int)(_startRepeat)) + "/vmID.txt");
                         }
                     }
                 }
@@ -520,16 +523,16 @@ public class VMManager {
                 return;
             }
         }
-        finalJson = VectrasApp.readFile(AppConfig.romsdatajson);
+        finalJson = FileUtils.readAFile(AppConfig.romsdatajson);
         if (!finalJson.isEmpty()) {
             int _startRepeat = 0;
             ArrayList<String> _filelist = new ArrayList<>();
-            VectrasApp.listDir(AppConfig.vmFolder, _filelist);
+            FileUtils.getAListOfAllFilesAndFoldersInADirectory(AppConfig.vmFolder, _filelist);
             if (!_filelist.isEmpty()) {
                 for (int _repeat = 0; _repeat < (int)(_filelist.size()); _repeat++) {
                     if (_startRepeat < _filelist.size()) {
-                        if (!finalJson.contains(Uri.parse(_filelist.get((int) (_startRepeat))).getLastPathSegment())) {
-                            VectrasApp.moveAFile(_filelist.get((int) (_startRepeat)), AppConfig.recyclebin + Uri.parse(_filelist.get((int) (_startRepeat))).getLastPathSegment());
+                        if (!finalJson.contains(Objects.requireNonNull(Uri.parse(_filelist.get((int) (_startRepeat))).getLastPathSegment()))) {
+                            FileUtils.moveAFile(_filelist.get((int) (_startRepeat)), AppConfig.recyclebin + Uri.parse(_filelist.get((int) (_startRepeat))).getLastPathSegment());
                         }
                     }
                     _startRepeat++;
@@ -542,7 +545,7 @@ public class VMManager {
         if (!_foderpath.isEmpty()) {
             int _startRepeat = 0;
             ArrayList<String> _filelist = new ArrayList<>();
-            VectrasApp.listDir(_foderpath, _filelist);
+            FileUtils.getAListOfAllFilesAndFoldersInADirectory(_foderpath, _filelist);
             if (!_filelist.isEmpty()) {
                 for (int _repeat = 0; _repeat < (int)(_filelist.size()); _repeat++) {
                     if (_startRepeat < _filelist.size()) {
@@ -561,9 +564,7 @@ public class VMManager {
         if (_filepath.contains(".")) {
             String _getFileName = Objects.requireNonNull(Uri.parse(_filepath).getLastPathSegment()).toLowerCase();
             String _getFileFormat = _getFileName.substring((int)(_getFileName.lastIndexOf(".") + 1), (int)(_getFileName.length()));
-            if ("qcow2,img,vhd,vhdx,vdi,qcow,vmdk,vpc".contains(_getFileFormat)){
-                return true;
-            }
+            return "qcow2,img,vhd,vhdx,vdi,qcow,vmdk,vpc".contains(_getFileFormat);
         }
         return false;
     }
@@ -572,7 +573,7 @@ public class VMManager {
         if (!_foderpath.isEmpty()) {
             int _startRepeat = 0;
             ArrayList<String> _filelist = new ArrayList<>();
-            VectrasApp.listDir(_foderpath, _filelist);
+            FileUtils.getAListOfAllFilesAndFoldersInADirectory(_foderpath, _filelist);
             if (!_filelist.isEmpty()) {
                 for (int _repeat = 0; _repeat < (int)(_filelist.size()); _repeat++) {
                     if (_startRepeat < _filelist.size()) {
@@ -591,9 +592,7 @@ public class VMManager {
         if (_filepath.contains(".")) {
             String _getFileName = Objects.requireNonNull(Uri.parse(_filepath).getLastPathSegment()).toLowerCase();
             String _getFileFormat = _getFileName.substring((int)(_getFileName.lastIndexOf(".") + 1), (int)(_getFileName.length()));
-            if ("iso".contains(_getFileFormat)){
-                return true;
-            }
+            return "iso".contains(_getFileFormat);
         }
         return false;
     }
@@ -629,9 +628,9 @@ public class VMManager {
             alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, _activity.getResources().getString(R.string.continuetext), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     MainActivity.isActivate = false;
-                    VectrasApp.deleteDirectory(_activity.getFilesDir().getAbsolutePath() + "/data");
-                    VectrasApp.deleteDirectory(_activity.getFilesDir().getAbsolutePath() + "/distro");
-                    VectrasApp.deleteDirectory(_activity.getFilesDir().getAbsolutePath() + "/usr");
+                    FileUtils.deleteDirectory(_activity.getFilesDir().getAbsolutePath() + "/data");
+                    FileUtils.deleteDirectory(_activity.getFilesDir().getAbsolutePath() + "/distro");
+                    FileUtils.deleteDirectory(_activity.getFilesDir().getAbsolutePath() + "/usr");
                     Intent intent = new Intent();
                     intent.setClass(_activity, SplashActivity.class);
                     _activity.startActivity(intent);
@@ -647,7 +646,7 @@ public class VMManager {
             return true;
         } else if (_result.contains(") exists") && _result.contains("drive with bus")) {
             //Error code: DRIVE_INDEX_0_EXISTS
-            VectrasApp.oneDialog(_activity.getResources().getString(R.string.problem_has_been_detected), _activity.getResources().getString(R.string.error_DRIVE_INDEX_0_EXISTS), true, false, _activity);
+            UIUtils.oneDialog(_activity.getResources().getString(R.string.problem_has_been_detected), _activity.getResources().getString(R.string.error_DRIVE_INDEX_0_EXISTS), true, false, _activity);
             return true;
         } else if (_result.contains("gtk initialization failed") || _result.contains("x11 not available")) {
             //Error code: X11_NOT_AVAILABLE
@@ -658,7 +657,7 @@ public class VMManager {
             alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, _activity.getResources().getString(R.string.continuetext), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     MainSettingsManager.setVmUi(_activity, "VNC");
-                    VectrasApp.oneDialog(_activity.getResources().getString(R.string.done), _activity.getResources().getString(R.string.switched_to_VNC), true, false, _activity);
+                    UIUtils.oneDialog(_activity.getResources().getString(R.string.done), _activity.getResources().getString(R.string.switched_to_VNC), true, false, _activity);
                 }
             });
             alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, _activity.getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -670,7 +669,7 @@ public class VMManager {
             return true;
         } else if (_result.contains("No such file or directory1")) {
             //Error code: NO_SUCH_FILE_OR_DIRECTORY
-            VectrasApp.oneDialog(_activity.getResources().getString(R.string.problem_has_been_detected), _activity.getResources().getString(R.string.error_NO_SUCH_FILE_OR_DIRECTORY), true, false, _activity);
+            UIUtils.oneDialog(_activity.getResources().getString(R.string.problem_has_been_detected), _activity.getResources().getString(R.string.error_NO_SUCH_FILE_OR_DIRECTORY), true, false, _activity);
             _activity.stopService(new Intent(_activity, MainService.class));
             return true;
         } else {
@@ -680,15 +679,15 @@ public class VMManager {
 
     public static boolean isRomsDataJsonNormal(Boolean _needfix, Context _context) {
         if (isFileExists(AppConfig.romsdatajson)) {
-            if (!VectrasApp.checkJSONIsNormal(AppConfig.romsdatajson)) {
+            if (!JSONUtils.isValidFromFile(AppConfig.romsdatajson)) {
                 if (_needfix) {
                     AlertDialog alertDialog = new AlertDialog.Builder(_context, R.style.MainDialogTheme).create();
                     alertDialog.setTitle(_context.getResources().getString(R.string.oops));
                     alertDialog.setMessage(_context.getResources().getString(R.string.need_fix_json_before_create));
                     alertDialog.setCancelable(true);
                     alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, _context.getResources().getString(R.string.continuetext), (dialog, which) -> {
-                        VectrasApp.moveAFile(AppConfig.maindirpath + "roms-data.json", AppConfig.maindirpath + "roms-data.old.json");
-                        VectrasApp.writeToFile(AppConfig.maindirpath, "roms-data.json", "[]");
+                        FileUtils.moveAFile(AppConfig.maindirpath + "roms-data.json", AppConfig.maindirpath + "roms-data.old.json");
+                        FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", "[]");
                         startFixRomsDataJson();
                         fixRomsDataJsonResult(_context);
                     });
@@ -703,16 +702,16 @@ public class VMManager {
                 return true;
             }
         } else {
-            VectrasApp.writeToFile(AppConfig.maindirpath, "roms-data.json", "[]");
+            FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", "[]");
             return true;
         }
     }
 
     public static void fixRomsDataJsonResult(Context _context) {
         if (restoredVMs == 0) {
-            VectrasApp.oneDialogWithContext(_context.getString(R.string.done), _context.getString(R.string.roms_data_json_fixed_unsuccessfully),true, _context);
+            UIUtils.oneDialogWithContext(_context.getString(R.string.done), _context.getString(R.string.roms_data_json_fixed_unsuccessfully),true, _context);
         } else {
-            VectrasApp.oneDialogWithContext(_context.getString(R.string.done), _context.getString(R.string.roms_data_json_fixed_successfully),true, _context);
+            UIUtils.oneDialogWithContext(_context.getString(R.string.done), _context.getString(R.string.roms_data_json_fixed_successfully),true, _context);
         }
         MainActivity.loadDataVbi();
         MainActivity.mdatasize2();
@@ -777,5 +776,78 @@ public class VMManager {
             }
         }
         return true;
+    }
+
+    public static boolean isThisVMRunning(String intemExtra, String itemPath) {
+        Terminal vterm = new Terminal(MainActivity.activity);
+        vterm.executeShellCommand2("ps -e", false, MainActivity.activity);
+        if (AppConfig.temporaryLastedTerminalOutput.contains(intemExtra) && AppConfig.temporaryLastedTerminalOutput.contains(itemPath)) {
+            Log.d("VMManager.isThisVMRunning", "Yes");
+            return true;
+        } else {
+            Log.d("VMManager.isThisVMRunning", "No");
+            return false;
+        }
+    }
+
+    public static boolean isQemuRunning() {
+        Terminal vterm = new Terminal(MainActivity.activity);
+        vterm.executeShellCommand2("ps -e", false, MainActivity.activity);
+        if (AppConfig.temporaryLastedTerminalOutput.contains("qemu-system")) {
+            Log.d("VMManager.isQemuRunning", "Yes");
+            return true;
+        } else {
+            Log.d("VMManager.isQemuRunning", "No");
+            return false;
+        }
+    }
+
+    public static boolean isHaveADisk(String env) {
+        if (env.contains("-drive") || env.contains("-hda")  || env.contains("-hdb") || env.contains("-cdrom") || env.contains("-fda") || env.contains("-fdb"))
+            return true;
+        return false;
+    }
+
+    public static void setIconWithName(ImageView imageview, String name) {
+        String itemName = name.toLowerCase();
+        if (itemName.contains("linux") || itemName.contains("ubuntu")  || itemName.contains("debian") || itemName.contains("arch") || itemName.contains("kali")) {
+            imageview.setImageResource(R.drawable.linux);
+        } else if (itemName.contains("windows")) {
+            imageview.setImageResource(R.drawable.windows);
+        } else if (itemName.contains("macos") || itemName.contains("mac os")) {
+            imageview.setImageResource(R.drawable.macos);
+        } else if (itemName.contains("android")) {
+            imageview.setImageResource(R.drawable.android);
+        } else {
+            imageview.setImageResource(R.drawable.no_machine_image);
+        }
+    }
+
+    public static void killcurrentqemuprocess(Context context) {
+        Terminal vterm = new Terminal(context);
+        String env = "killall -9 ";
+        switch (MainSettingsManager.getArch(MainActivity.activity)) {
+            case "ARM64":
+                env += "qemu-system-aarch64";
+                break;
+            case "PPC":
+                env += "qemu-system-ppc";
+                break;
+            case "I386":
+                env += "qemu-system-i386";
+                break;
+            default:
+                env += "qemu-system-x86_64";
+                break;
+        }
+        vterm.executeShellCommand2(env, false, MainActivity.activity);
+    }
+
+    public static void killallqemuprocesses(Context context) {
+        Terminal vterm = new Terminal(context);
+        vterm.executeShellCommand2("killall -9 qemu-system-i386", false, MainActivity.activity);
+        vterm.executeShellCommand2("killall -9 qemu-system-x86_64", false, MainActivity.activity);
+        vterm.executeShellCommand2("killall -9 qemu-system-aarch64", false, MainActivity.activity);
+        vterm.executeShellCommand2("killall -9 qemu-system-ppc", false, MainActivity.activity);
     }
 }

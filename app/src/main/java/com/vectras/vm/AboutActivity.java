@@ -21,6 +21,7 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.vectras.vm.adapters.GithubUserAdapter;
+import com.vectras.vm.utils.SimpleAnimations;
 import com.vectras.vm.utils.UIUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -55,9 +56,9 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UIController.edgeToEdge(this);
+        UIUtils.edgeToEdge(this);
         setContentView(R.layout.activity_about);
-        UIController.setOnApplyWindowInsetsListener(findViewById(R.id.main));
+        UIUtils.setOnApplyWindowInsetsListener(findViewById(R.id.main));
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -85,7 +86,6 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
         //AdView mAdView = findViewById(R.id.adView);
         //AdRequest adRequest = new AdRequest.Builder().build();
         //mAdView.loadAd(adRequest);
-        VectrasApp.prepareDataForAppConfig(this);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -160,12 +160,12 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
             }
         });
 
-        UIController.simpleAnimationScale(findViewById(R.id.card_yagiz), 250);
-        UIController.simpleTranslationUpToDown(findViewById(R.id.card_yagiz), 250);
-        UIController.simpleAnimationScale(findViewById(R.id.card_social), 500);
-        UIController.simpleTranslationUpToDown(findViewById(R.id.card_social), 500);
-        UIController.simpleAnimationScale(findViewById(R.id.developers), 750);
-        UIController.simpleTranslationUpToDown(findViewById(R.id.developers), 750);
+        SimpleAnimations.scale(findViewById(R.id.card_yagiz), 250);
+        SimpleAnimations.translationUpToDown(findViewById(R.id.card_yagiz), 250);
+        SimpleAnimations.scale(findViewById(R.id.card_social), 500);
+        SimpleAnimations.translationUpToDown(findViewById(R.id.card_social), 500);
+        SimpleAnimations.scale(findViewById(R.id.developers), 750);
+        SimpleAnimations.translationUpToDown(findViewById(R.id.developers), 750);
     }
 
     @Override

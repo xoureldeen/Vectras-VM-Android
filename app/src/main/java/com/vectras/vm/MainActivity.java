@@ -6,9 +6,9 @@ import static android.os.Build.VERSION.SDK_INT;
 import com.termux.app.TermuxService;
 
 import static com.vectras.vm.VectrasApp.getApp;
-import static com.vectras.vm.VectrasApp.getAppInfo;
 import static com.vectras.vm.utils.LibraryChecker.isPackageInstalled2;
 import static com.vectras.vm.utils.UIUtils.UIAlert;
+import com.vectras.vm.utils.PermissionUtils;
 
 import android.androidVNC.androidVNC;
 import android.app.ActivityManager;
@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -86,6 +87,7 @@ import com.vectras.vm.logger.VectrasStatus;
 import com.vectras.vm.utils.AppUpdater;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.LibraryChecker;
+import com.vectras.vm.utils.PackageUtils;
 import com.vectras.vm.utils.UIUtils;
 import com.vectras.vterm.Terminal;
 
@@ -150,7 +152,6 @@ public class MainActivity extends AppCompatActivity {
         RamInfo.activity = this;
         setContentView(R.layout.activity_main);
         isActivate = true;
-        VectrasApp.prepareDataForAppConfig(activity);
         setupFolders();
 
         NotificationManager notificationManager = (NotificationManager) activity.getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
@@ -745,9 +746,8 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     if (!result.contains("Error on getting data")) {
                         final JSONObject obj = new JSONObject(result);
-                        PackageInfo pinfo = getAppInfo(getApplicationContext());
-                        int versionCode = pinfo.versionCode;
-                        String versionName = pinfo.versionName;
+                        int versionCode = PackageUtils.getThisVersionCode(getApplicationContext());
+                        String versionName = PackageUtils.getThisVersionName(getApplicationContext());
                         String versionNameonUpdate;
 
                         if (obj.getString("versionNameBetas").equals(versionName) && !MainSettingsManager.getcheckforupdatesfromthebetachannel(activity) && !MainSettingsManager.getDontShowAgainJoinBetaUpdateChannelDialog(activity)) {
@@ -886,7 +886,8 @@ public class MainActivity extends AppCompatActivity {
             mRVMainRoms = (RecyclerView) activity.findViewById(R.id.mRVMainRoms);
             mMainAdapter = new AdapterMainRoms(MainActivity.activity, data);
             mRVMainRoms.setAdapter(mMainAdapter);
-            mRVMainRoms.setLayoutManager(new GridLayoutManager(MainActivity.activity, 2));
+            int spanCount = activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 2;
+            mRVMainRoms.setLayoutManager(new GridLayoutManager(MainActivity.activity, spanCount));
         } catch (JSONException e) {
         }
     }
@@ -917,14 +918,14 @@ public class MainActivity extends AppCompatActivity {
             alertDialog.setMessage(getResources().getString(R.string.all_running_vms_will_be_forcibly_shut_down));
             alertDialog.setCancelable(true);
             alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.kill_all), (dialog, which) -> {
-                VectrasApp.killallqemuprocesses(getApplicationContext());
+                VMManager.killallqemuprocesses(getApplicationContext());
             });
             alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), (dialog, which) -> {
 
             });
             alertDialog.show();
         } else if (id == R.id.backtothedisplay) {
-            if (VectrasApp.isQemuRunning()) {
+            if (VMManager.isQemuRunning()) {
                 if (MainSettingsManager.getVmUi(activity).equals("VNC"))
                     activity.startActivity(new Intent(activity, MainVNCActivity.class));
                 else if (MainSettingsManager.getVmUi(activity).equals("X11"))
@@ -991,11 +992,11 @@ public class MainActivity extends AppCompatActivity {
         romDir.mkdirs();
 
         if (!VMManager.isthiscommandsafe(env, activity.getApplicationContext())) {
-            VectrasApp.oneDialog(activity.getResources().getString(R.string.problem_has_been_detected), activity.getResources().getString(R.string.harmful_command_was_detected) + " " + activity.getResources().getString(R.string.reason) + ": " + VMManager.latestUnsafeCommandReason, true, false, activity);
+            UIUtils.oneDialog(activity.getResources().getString(R.string.problem_has_been_detected), activity.getResources().getString(R.string.harmful_command_was_detected) + " " + activity.getResources().getString(R.string.reason) + ": " + VMManager.latestUnsafeCommandReason, true, false, activity);
             return;
         }
 
-        if (VectrasApp.isThisVMRunning(itemExtra, itemPath)) {
+        if (VMManager.isThisVMRunning(itemExtra, itemPath)) {
             Toast.makeText(activity, "This VM is already running.", Toast.LENGTH_LONG).show();
             if (MainSettingsManager.getVmUi(activity).equals("VNC"))
                 activity.startActivity(new Intent(activity, MainVNCActivity.class));
@@ -1199,11 +1200,11 @@ public class MainActivity extends AppCompatActivity {
         if (!AppConfig.pendingCommand.isEmpty()) {
             if (!VMManager.isthiscommandsafe(AppConfig.pendingCommand, getApplicationContext())) {
                 AppConfig.pendingCommand = "";
-                VectrasApp.oneDialog(activity.getResources().getString(R.string.problem_has_been_detected), activity.getResources().getString(R.string.harmful_command_was_detected) + " " + activity.getResources().getString(R.string.reason) + ": " + VMManager.latestUnsafeCommandReason, true, false, activity);
+                UIUtils.oneDialog(activity.getResources().getString(R.string.problem_has_been_detected), activity.getResources().getString(R.string.harmful_command_was_detected) + " " + activity.getResources().getString(R.string.reason) + ": " + VMManager.latestUnsafeCommandReason, true, false, activity);
             } else {
                 if (AppConfig.pendingCommand.startsWith("qemu-img")) {
                     if (!VMManager.isthiscommandsafeimg(AppConfig.pendingCommand, getApplicationContext())) {
-                        VectrasApp.oneDialog(activity.getResources().getString(R.string.problem_has_been_detected), activity.getResources().getString(R.string.size_too_large_try_qcow2_format), true, false, activity);
+                        UIUtils.oneDialog(activity.getResources().getString(R.string.problem_has_been_detected), activity.getResources().getString(R.string.size_too_large_try_qcow2_format), true, false, activity);
                     } else {
                         Terminal _vterm = new Terminal(MainActivity.this);
                         _vterm.executeShellCommand2(AppConfig.pendingCommand, false, MainActivity.activity);
@@ -1443,13 +1444,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void errorjsondialog() {
-        if (VectrasApp.isFileExists(AppConfig.romsdatajson)) {
+        if (FileUtils.isFileExists(AppConfig.romsdatajson)) {
             if (VMManager.isRomsDataJsonNormal(true, MainActivity.this)) {
                 loadDataVbi();
                 mdatasize();
             }
         } else {
-            VectrasApp.writeToFile(AppConfig.maindirpath, "roms-data.json", "[]");
+            FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", "[]");
             loadDataVbi();
             mdatasize();
         }
@@ -1500,7 +1501,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkpermissions() {
-        if (VectrasApp.checkpermissionsgranted(activity, true)) {
+        if (PermissionUtils.storagepermission(activity, true)) {
             errorjsondialog();
         }
     }
@@ -1518,7 +1519,7 @@ public class MainActivity extends AppCompatActivity {
                     alertDialog.setMessage(getResources().getString(R.string.all_running_vms_will_be_forcibly_shut_down));
                     alertDialog.setCancelable(true);
                     alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.kill_all), (dialog, which) -> {
-                        VectrasApp.killallqemuprocesses(getApplicationContext());
+                        VMManager.killallqemuprocesses(getApplicationContext());
                     });
                     alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), (dialog, which) -> {
 

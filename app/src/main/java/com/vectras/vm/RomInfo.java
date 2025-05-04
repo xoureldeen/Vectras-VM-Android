@@ -25,6 +25,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.bumptech.glide.Glide;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.utils.FileUtils;
+import com.vectras.vm.utils.UIUtils;
 
 import java.io.File;
 import java.util.Objects;
@@ -38,7 +39,7 @@ public class RomInfo extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_rom_info);
-        UIController.setOnApplyWindowInsetsListener(findViewById(R.id.main));
+        UIUtils.setOnApplyWindowInsetsListener(findViewById(R.id.main));
 
         ImageView ivIcon;
         TextView textName;
@@ -135,7 +136,7 @@ public class RomInfo extends AppCompatActivity {
                 }
                 startActivity(intent);
             } else {
-                VectrasApp.oneDialog(getString(R.string.problem_has_been_detected), getString(R.string.please_select) + " " + getIntent().getStringExtra("filename"), true, false, this);
+                UIUtils.oneDialog(getString(R.string.problem_has_been_detected), getString(R.string.please_select) + " " + getIntent().getStringExtra("filename"), true, false, this);
             }
 
         }

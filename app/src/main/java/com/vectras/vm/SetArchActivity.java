@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import com.vectras.qemu.MainSettingsManager;
+import com.vectras.vm.utils.UIUtils;
 
 public class SetArchActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -23,9 +24,9 @@ public class SetArchActivity extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mHandler = new Handler();
-        UIController.edgeToEdge(this);
+        UIUtils.edgeToEdge(this);
         setContentView(R.layout.activity_set_arch);
-        UIController.setOnApplyWindowInsetsListener(findViewById(R.id.main));
+        UIUtils.setOnApplyWindowInsetsListener(findViewById(R.id.main));
         activity = this;
         Button archi386 = findViewById(R.id.archi386);
         Button archx86_64 = findViewById(R.id.archx86_64);

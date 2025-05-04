@@ -196,7 +196,6 @@ public class RomsManagerActivity extends AppCompatActivity {
         activity = this;
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        VectrasApp.prepareDataForAppConfig(activity);
         sAvailable = getResources().getString(R.string.available);
         sUnavailable = getResources().getString(R.string.unavailable);
         sInstalled = getResources().getString(R.string.installed);
@@ -204,9 +203,9 @@ public class RomsManagerActivity extends AppCompatActivity {
         boolean isAccessed = prefs.getBoolean("isFirstLaunch", false);
         //if (!isAccessed && !checkConnection(activity))
             //UIUtils.UIAlert(activity, "for first time you need internet connection to load app data!", "No internet connection!");
-        UIController.edgeToEdge(this);
+        UIUtils.edgeToEdge(this);
         setContentView(R.layout.activity_roms_manager);
-        UIController.setOnApplyWindowInsetsListener(findViewById(R.id.main));
+        UIUtils.setOnApplyWindowInsetsListener(findViewById(R.id.main));
         linearload = findViewById(R.id.linearload);
         linearnothinghere = findViewById(R.id.linearnothinghere);
         buttontryagain = findViewById(R.id.buttontryagain);

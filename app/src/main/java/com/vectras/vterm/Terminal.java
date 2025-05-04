@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -28,14 +27,12 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.vectras.qemu.MainSettingsManager;
 import com.vectras.qemu.MainVNCActivity;
 import com.vectras.vm.MainActivity;
 import com.vectras.vm.MainService;
 import com.vectras.vm.R;
-import com.vectras.vm.SplashActivity;
 import com.vectras.vm.VMManager;
-import com.vectras.vm.VectrasApp;
+import com.vectras.vm.AppConfig;
 
 public class Terminal {
     private static final String TAG = "Vterm";
@@ -171,7 +168,7 @@ public class Terminal {
             } finally {
                 new Handler(Looper.getMainLooper()).post(() -> {
                     progressDialog.dismiss(); // Dismiss ProgressDialog
-                    VectrasApp.TerminalOutput = output.toString();
+                    AppConfig.temporaryLastedTerminalOutput = output.toString();
                     if (showResultDialog) {
                         String finalOutput = output.toString();
                         String finalErrors = errors.toString();
@@ -280,7 +277,7 @@ public class Terminal {
             } finally {
                 // Switch to main thread after execution
                 new Handler(Looper.getMainLooper()).post(() -> {
-                    VectrasApp.TerminalOutput = output.toString();
+                    AppConfig.temporaryLastedTerminalOutput = output.toString();
                     // If showResultDialog is enabled, show the dialog with the result or errors
                     if (showResultDialog) {
                         String finalOutput = output.toString();

@@ -47,6 +47,10 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.utils.FileUtils;
+import com.vectras.vm.utils.JSONUtils;
+import com.vectras.vm.utils.ListUtils;
+import com.vectras.vm.utils.UIUtils;
+import com.vectras.vm.utils.PermissionUtils;
 import com.vectras.vterm.view.ZoomableTextView;
 
 import java.io.BufferedReader;
@@ -108,9 +112,9 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UIController.edgeToEdge(this);
+        UIUtils.edgeToEdge(this);
         setContentView(R.layout.activity_setup_qemu);
-        UIController.setOnApplyWindowInsetsListener(findViewById(R.id.main));
+        UIUtils.setOnApplyWindowInsetsListener(findViewById(R.id.main));
         activity = this;
 
         linearload = findViewById(R.id.linearload);
@@ -150,7 +154,6 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         setupSpiner();
 
         tarPath = getExternalFilesDir("data") + "/data.tar.gz";
-        VectrasApp.prepareDataForAppConfig(activity);
 
         spinnerselectmirror.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -172,7 +175,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
             public void onResponse(String tag, String response, HashMap<String, Object> responseHeaders) {
                 linearload.setVisibility(View.GONE);
                 contentJSON = response;
-                if (VectrasApp.checkJSONMapIsNormalFromString(contentJSON)) {
+                if (JSONUtils.isMapValidFromString(contentJSON)) {
                     mmap.clear();
                     mmap= new Gson().fromJson(contentJSON, new TypeToken<HashMap<String, Object>>(){}.getType());
                     if(mmap.containsKey("arm64") && mmap.containsKey("x86_64")) {
@@ -274,7 +277,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                     if (process != null) {
                         process.destroy();
                     }
-                    //VectrasApp.deleteDirectory(apkLoaderextractedFilePath);
+                    //FileUtils.deleteDirectory(apkLoaderextractedFilePath);
                     //if (!copyAssetToFile(apkLoaderAssetPath, apkLoaderextractedFilePath)) {
                         //errorMessage = "Failed to copy loader.apk file.";
                     //}
@@ -739,7 +742,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
     private void checkabi() {
         if (!AppConfig.getSetupFiles().contains("arm64-v8a")) {
             if (!AppConfig.getSetupFiles().contains("x86_64")) {
-                VectrasApp.oneDialog(getResources().getString(R.string.warning), getResources().getString(R.string.cpu_not_support_64), true, false, activity);
+                UIUtils.oneDialog(getResources().getString(R.string.warning), getResources().getString(R.string.cpu_not_support_64), true, false, activity);
             }
         }
 
@@ -777,7 +780,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void checkpermissions() {
-        if (VectrasApp.checkpermissionsgranted(activity, true)) {
+        if (PermissionUtils.storagepermission(activity, true)) {
             if (!settingup) {
                 settingup = true;
                 checkabi();
@@ -884,7 +887,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void setupSpiner() {
-        VectrasApp.setupMirrorListForListmap(listmapForSelectMirrors);
+        ListUtils.setupMirrorListForListmap(listmapForSelectMirrors);
 
         spinnerselectmirror.setAdapter(new SpinnerSelectMirrorAdapter(listmapForSelectMirrors));
         spinnerselectmirror.setSelection(MainSettingsManager.getSelectedMirror(activity));

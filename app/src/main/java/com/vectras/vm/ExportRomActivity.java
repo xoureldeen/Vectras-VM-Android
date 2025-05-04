@@ -1,7 +1,5 @@
 package com.vectras.vm;
 
-import static com.vectras.vm.VectrasApp.getAppInfo;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
@@ -24,6 +22,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.vectras.vm.utils.FileUtils;
+import com.vectras.vm.utils.PackageUtils;
 import com.vectras.vm.utils.UIUtils;
 
 import org.checkerframework.checker.guieffect.qual.UI;
@@ -58,9 +57,9 @@ public class ExportRomActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UIController.edgeToEdge(this);
+        UIUtils.edgeToEdge(this);
         setContentView(R.layout.activity_export_rom);
-        UIController.setOnApplyWindowInsetsListener(findViewById(R.id.main));
+        UIUtils.setOnApplyWindowInsetsListener(findViewById(R.id.main));
 
         linearone = findViewById(R.id.linearall);
         linearload = findViewById(R.id.linearload);
@@ -143,7 +142,7 @@ public class ExportRomActivity extends AppCompatActivity {
         listmapForGetData.clear();
         mapForGetData.clear();
 
-        listmapForGetData = new Gson().fromJson(VectrasApp.readFile(AppConfig.romsdatajson), new TypeToken<ArrayList<HashMap<String, Object>>>(){}.getType());
+        listmapForGetData = new Gson().fromJson(FileUtils.readAFile(AppConfig.romsdatajson), new TypeToken<ArrayList<HashMap<String, Object>>>(){}.getType());
 
         getRomPath = AppConfig.vmFolder + Objects.requireNonNull(listmapForGetData.get(pendingPosition).get("vmID")).toString() + "/";
 
@@ -205,10 +204,9 @@ public class ExportRomActivity extends AppCompatActivity {
             mapForGetData.put("desc", editdesc.getText().toString());
         }
 
-        PackageInfo pinfo = getAppInfo(getApplicationContext());
-        mapForGetData.put("versioncode", pinfo.versionCode);
+        mapForGetData.put("versioncode", PackageUtils.getThisVersionCode(getApplicationContext()));
 
-        VectrasApp.writeToFile(new File(String.valueOf(getApplicationContext().getExternalFilesDir("data"))).getPath(), "rom-data.json", new Gson().toJson(mapForGetData));
+        FileUtils.writeToFile(new File(String.valueOf(getApplicationContext().getExternalFilesDir("data"))).getPath(), "rom-data.json", new Gson().toJson(mapForGetData));
 
         Thread t = new Thread() {
             @Override

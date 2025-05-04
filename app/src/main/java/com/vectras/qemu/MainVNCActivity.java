@@ -58,6 +58,8 @@ import com.vectras.vm.*;
 import com.vectras.vm.Fragment.ControlersOptionsFragment;
 import com.vectras.vm.Fragment.LoggerDialogFragment;
 import com.vectras.vm.R;
+import com.vectras.vm.utils.ListUtils;
+import com.vectras.vm.utils.NetworkUtils;
 import com.vectras.vm.utils.UIUtils;
 import com.vectras.vm.widgets.JoystickView;
 
@@ -918,7 +920,7 @@ public class MainVNCActivity extends VncCanvasActivity {
     }
 
     public void onDestroy() {
-        if (IOApplication.isPortOpen("127.0.0.1", Config.QMPPort, 100) && started) {
+        if (NetworkUtils.isPortOpen("127.0.0.1", Config.QMPPort, 100) && started) {
             activity.startActivity(new Intent(activity, MainVNCActivity.class));
         }
         super.onDestroy();
@@ -1452,7 +1454,7 @@ public class MainVNCActivity extends VncCanvasActivity {
     }
 
     private void sendkeydialog() {
-        VectrasApp.setupSendKeyListForListmap(listmapForSendKey);
+        ListUtils.setupSendKeyListForListmap(listmapForSendKey);
         rvLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,false);
         sendkeylist.setAdapter(new Recyclerview1Adapter(listmapForSendKey));
         sendkeylist.setLayoutManager(rvLayoutManager);
@@ -1462,9 +1464,9 @@ public class MainVNCActivity extends VncCanvasActivity {
     private void isQMPPortOpening() {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        if (!IOApplication.isPortOpen("127.0.0.1", Config.QMPPort, 100)) {
+        if (!NetworkUtils.isPortOpen("127.0.0.1", Config.QMPPort, 100)) {
             started = false;
-            VectrasApp.oneDialog(getResources().getString(R.string.there_seems_to_be_no_signal), getResources().getString(R.string.do_you_want_to_exit), true, true, MainVNCActivity.this);
+            UIUtils.oneDialog(getResources().getString(R.string.there_seems_to_be_no_signal), getResources().getString(R.string.do_you_want_to_exit), true, true, MainVNCActivity.this);
         }
     }
 

@@ -37,6 +37,11 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.termux.app.TermuxService;
 import com.vectras.qemu.MainSettingsManager;
+import com.vectras.vm.utils.CommandUtils;
+import com.vectras.vm.utils.FileUtils;
+import com.vectras.vm.utils.ListUtils;
+import com.vectras.vm.utils.PackageUtils;
+import com.vectras.vm.utils.UIUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -59,7 +64,7 @@ public class Minitools extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_minitools);
-        UIController.setOnApplyWindowInsetsListener(findViewById(R.id.main));
+        UIUtils.setOnApplyWindowInsetsListener(findViewById(R.id.main));
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -76,7 +81,7 @@ public class Minitools extends AppCompatActivity {
         spinnerselectmirror = findViewById(R.id.spinnerselectmirror);
 
         setupsoundfortermux.setOnClickListener(v -> {
-            if (VectrasApp.isAppInstalled("com.termux", getApplicationContext())) {
+            if (PackageUtils.isInstalled("com.termux", getApplicationContext())) {
                 AlertDialog alertDialog = new AlertDialog.Builder(Minitools.this, R.style.MainDialogTheme).create();
                 alertDialog.setTitle(getResources().getString(R.string.setup_sound));
                 alertDialog.setMessage(getResources().getString(R.string.setup_sound_guide_content));
@@ -149,7 +154,7 @@ public class Minitools extends AppCompatActivity {
             alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.continuetext), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     VMManager.restoreVMs();
-                    VectrasApp.oneDialog(getResources().getString(R.string.done), getResources().getString(R.string.restored) + " " + String.valueOf(VMManager.restoredVMs) + ".", true, false, Minitools.this);
+                    UIUtils.oneDialog(getResources().getString(R.string.done), getResources().getString(R.string.restored) + " " + String.valueOf(VMManager.restoredVMs) + ".", true, false, Minitools.this);
                     restore.setVisibility(GONE);
                 }
             });
@@ -167,13 +172,13 @@ public class Minitools extends AppCompatActivity {
             alertDialog.setMessage(getResources().getString(R.string.delete_all_vm_content));
             alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.delete_all), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    VectrasApp.killallqemuprocesses(getApplicationContext());
-                    VectrasApp.deleteDirectory(AppConfig.vmFolder);
-                    VectrasApp.deleteDirectory(AppConfig.recyclebin);
-                    VectrasApp.deleteDirectory(AppConfig.romsdatajson);
+                    VMManager.killallqemuprocesses(getApplicationContext());
+                    FileUtils.deleteDirectory(AppConfig.vmFolder);
+                    FileUtils.deleteDirectory(AppConfig.recyclebin);
+                    FileUtils.deleteDirectory(AppConfig.romsdatajson);
                     File vDir = new File(AppConfig.maindirpath);
                     vDir.mkdirs();
-                    VectrasApp.writeToFile(AppConfig.maindirpath, "roms-data.json", "[]");
+                    FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", "[]");
                     cleanup.setVisibility(GONE);
                     restore.setVisibility(GONE);
                     deleteallvm.setVisibility(GONE);
@@ -194,11 +199,11 @@ public class Minitools extends AppCompatActivity {
             alertDialog.setMessage(getResources().getString(R.string.delete_all_content));
             alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.delete_all), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    VectrasApp.killallqemuprocesses(getApplicationContext());
-                    VectrasApp.deleteDirectory(AppConfig.maindirpath);
+                    VMManager.killallqemuprocesses(getApplicationContext());
+                    FileUtils.deleteDirectory(AppConfig.maindirpath);
                     File vDir = new File(AppConfig.maindirpath);
                     vDir.mkdirs();
-                    VectrasApp.writeToFile(AppConfig.maindirpath, "roms-data.json", "[]");
+                    FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", "[]");
                     cleanup.setVisibility(GONE);
                     restore.setVisibility(GONE);
                     deleteallvm.setVisibility(GONE);
@@ -222,10 +227,10 @@ public class Minitools extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     MainActivity.isActivate = false;
                     AppConfig.needreinstallsystem = true;
-                    VectrasApp.killallqemuprocesses(Minitools.this);
-                    VectrasApp.deleteDirectory(getFilesDir().getAbsolutePath() + "/data");
-                    VectrasApp.deleteDirectory(getFilesDir().getAbsolutePath() + "/distro");
-                    VectrasApp.deleteDirectory(getFilesDir().getAbsolutePath() + "/usr");
+                    VMManager.killallqemuprocesses(Minitools.this);
+                    FileUtils.deleteDirectory(getFilesDir().getAbsolutePath() + "/data");
+                    FileUtils.deleteDirectory(getFilesDir().getAbsolutePath() + "/distro");
+                    FileUtils.deleteDirectory(getFilesDir().getAbsolutePath() + "/usr");
                     Intent intent = new Intent();
                     intent.setClass(Minitools.this, SetupQemuActivity.class);
                     startActivity(intent);
@@ -245,7 +250,7 @@ public class Minitools extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedMirrorCommand = listmapForSelectMirrors.get(position).get("mirror");
                 MainSettingsManager.setSelectedMirror(Minitools.this, position);
-                VectrasApp.runACommand(selectedMirrorCommand + "&& exit", Minitools.this);
+                CommandUtils.run(selectedMirrorCommand + "&& exit", false, Minitools.this);
             }
 
             @Override
@@ -271,7 +276,7 @@ public class Minitools extends AppCompatActivity {
     }
 
     private void setupSpiner() {
-        VectrasApp.setupMirrorListForListmap(listmapForSelectMirrors);
+        ListUtils.setupMirrorListForListmap(listmapForSelectMirrors);
 
         spinnerselectmirror.setAdapter(new SpinnerSelectMirrorAdapter(listmapForSelectMirrors));
         spinnerselectmirror.setSelection(MainSettingsManager.getSelectedMirror(Minitools.this));
@@ -320,9 +325,9 @@ public class Minitools extends AppCompatActivity {
         String apkLoaderAssetPath = "bootstrap/loader.apk";
         String apkLoaderextractedFilePath = TermuxService.PREFIX_PATH + "/libexec/termux-x11/loader.apk";
 
-        VectrasApp.deleteDirectory(apkLoaderextractedFilePath);
+        FileUtils.deleteDirectory(apkLoaderextractedFilePath);
         if (copyAssetToFile(apkLoaderAssetPath, apkLoaderextractedFilePath)) {
-            VectrasApp.copyAFile(TermuxService.PREFIX_PATH + "/libexec/termux-x11/loader.apk", AppConfig.maindirpath);
+            FileUtils.copyAFile(TermuxService.PREFIX_PATH + "/libexec/termux-x11/loader.apk", AppConfig.maindirpath);
         }
     }
 

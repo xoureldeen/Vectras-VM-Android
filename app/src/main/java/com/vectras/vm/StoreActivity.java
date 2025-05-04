@@ -67,9 +67,9 @@ public class StoreActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        UIController.edgeToEdge(this);
+        UIUtils.edgeToEdge(this);
         setContentView(R.layout.activity_store);
-        UIController.setOnApplyWindowInsetsListener(findViewById(R.id.main));
+        UIUtils.setOnApplyWindowInsetsListener(findViewById(R.id.main));
         loadingPb = findViewById(R.id.loadingPb);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -78,7 +78,6 @@ public class StoreActivity extends AppCompatActivity {
         toolbar.setTitle(getString(R.string.app_name));
 
         activity = this;
-        VectrasApp.prepareDataForAppConfig(activity);
         //AdView mAdView = findViewById(R.id.adView);
         //AdRequest adRequest = new AdRequest.Builder().build();
         //mAdView.loadAd(adRequest);

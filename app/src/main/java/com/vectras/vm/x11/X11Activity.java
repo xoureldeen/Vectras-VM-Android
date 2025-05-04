@@ -19,6 +19,7 @@ import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.Fragment.ControlersOptionsFragment;
 import com.vectras.vm.Fragment.LoggerDialogFragment;
 import com.vectras.vm.MainService;
+import com.vectras.vm.VMManager;
 import com.vectras.vm.VectrasApp;
 import com.vectras.vm.widgets.JoystickView;
 import com.vectras.qemu.MainSettingsManager;
@@ -598,7 +599,7 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                             // Stop the service
                             MainService.stopService();
                             //Terminal.killQemuProcess();
-                            VectrasApp.killcurrentqemuprocess(getApplicationContext());
+                            VMManager.killcurrentqemuprocess(getApplicationContext());
                             finish();
                         })
                         .setNegativeButton(getString(R.string.no), null)
