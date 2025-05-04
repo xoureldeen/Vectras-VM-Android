@@ -1,10 +1,10 @@
-package com.vectras.vm;
+package com.vectras.vm.utils;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
-public class IOApplication {
+public class NetworkUtils {
     public static boolean isPortOpen(String host, int port, int timeout) {
         Socket socket = new Socket();
         try {

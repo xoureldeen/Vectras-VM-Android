@@ -1,30 +1,11 @@
-package com.vectras.vm;
+package com.vectras.vm.utils;
 
 import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 
-import androidx.activity.ComponentActivity;
-import androidx.activity.EdgeToEdge;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
-public class UIController {
-    public static void edgeToEdge(ComponentActivity _activity) {
-        EdgeToEdge.enable(_activity);
-    }
-
-    public static void setOnApplyWindowInsetsListener(View _view) {
-        ViewCompat.setOnApplyWindowInsetsListener(_view, (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout() | WindowInsetsCompat.Type.ime());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-    }
-
-    public static void simpleAnimationScale(View _view, int _duration) {
+public class SimpleAnimations {
+    public static void scale(View _view, int _duration) {
         ObjectAnimator ani1 = new ObjectAnimator();
         ani1.setTarget(_view);
         ani1.setPropertyName("scaleX");
@@ -42,7 +23,7 @@ public class UIController {
         ani2.start();
     }
 
-    public static void simpleTranslationUpToDown(View _view, int _duration) {
+    public static void translationUpToDown(View _view, int _duration) {
         ObjectAnimator ani1 = new ObjectAnimator();
         ani1.setTarget(_view);
         ani1.setPropertyName("translationY");

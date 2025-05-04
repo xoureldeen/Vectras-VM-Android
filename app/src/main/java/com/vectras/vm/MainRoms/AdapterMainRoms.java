@@ -104,7 +104,7 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
         myHolder.textName.setText(current.itemName);
         myHolder.textArch.setText(current.itemArch);
         if (current.itemIcon.isEmpty()){
-            VectrasApp.setIconWithName(myHolder.ivIcon, current.itemName);
+            VMManager.setIconWithName(myHolder.ivIcon, current.itemName);
         } else {
             Bitmap bmImg = BitmapFactory.decodeFile(current.itemIcon);
             myHolder.ivIcon.setImageBitmap(bmImg);

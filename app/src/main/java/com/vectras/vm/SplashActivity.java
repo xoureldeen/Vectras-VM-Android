@@ -39,6 +39,7 @@ import androidx.preference.PreferenceManager;
 
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.utils.FileUtils;
+import com.vectras.vm.utils.UIUtils;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -59,15 +60,14 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         activity = this;
-        UIController.edgeToEdge(this);
+        UIUtils.edgeToEdge(this);
         setContentView(R.layout.activity_splash);
-        UIController.setOnApplyWindowInsetsListener(findViewById(R.id.main));
+        UIUtils.setOnApplyWindowInsetsListener(findViewById(R.id.main));
 
         //TextView textversionname;
         //textversionname = findViewById(R.id.versionname);
         //PackageInfo pinfo = MainActivity.activity.getAppInfo(getApplicationContext());
         //textversionname.setText(pinfo.versionName);
-        VectrasApp.prepareDataForAppConfig(activity);
         setupFolders();
         SharedPreferences prefs = getSharedPreferences(CREDENTIAL_SHARED_PREF, Context.MODE_PRIVATE);
 

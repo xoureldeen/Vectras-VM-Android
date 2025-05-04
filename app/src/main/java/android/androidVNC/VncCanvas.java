@@ -499,7 +499,7 @@ public class VncCanvas extends AppCompatImageView {
 		} catch (Exception e) {
 			throw e;
 		} finally {
-			if (!com.vectras.vm.VectrasApp.isQemuRunning()) {
+			if (!com.vectras.vm.VMManager.isQemuRunning()) {
 				Log.v(TAG, "Closing VNC Connection");
 				rfb.close();
 			}

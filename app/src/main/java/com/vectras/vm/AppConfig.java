@@ -19,7 +19,8 @@ import java.util.Objects;
 public class AppConfig {
 
     // App Config
-    public static String vectrasVersion = "2.9.4";
+    public static String vectrasVersion = "2.9.5";
+    public static int vectrasVersionCode = 21;
     public static String vectrasWebsite = "https://vectras.vercel.app/";
     public static String vectrasWebsiteRaw = "https://raw.githubusercontent.com/xoureldeen/Vectras-VM-Android/refs/heads/master/web/";
     public static String bootstrapfileslink = vectrasWebsite + "/data/setupfiles.json";
@@ -58,7 +59,7 @@ public class AppConfig {
     }
 
     // App config
-    public static String datadirpath(Activity activity) {
+    public static String datadirpath(Context activity) {
         File f = new File(activity.getExternalFilesDir("data") + "/Vectras");
         return activity.getExternalFilesDir("data") + "/Vectras";
         //return FileUtils.getExternalFilesDirectory(activity).getPath();
@@ -80,5 +81,7 @@ public class AppConfig {
             " mesa-dri-gallium mesa-vulkan-swrast vulkan-loader mesa-utils mesa-egl mesa-gbm mesa-vulkan-ati mesa-vulkan-broadcom mesa-vulkan-freedreno mesa-vulkan-panfrost";
 
     public static boolean needreinstallsystem = false;
+
+    public static String temporaryLastedTerminalOutput = "";
 
 }

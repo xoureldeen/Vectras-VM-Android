@@ -17,14 +17,17 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Objects;
 
+import com.vectras.vm.utils.UIUtils;
+import com.vectras.vm.utils.PermissionUtils;
+
 public class ReceiveRomFileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (VectrasApp.checkpermissionsgranted(this, false)) {
-            UIController.edgeToEdge(this);
+        if (PermissionUtils.storagepermission(this, false)) {
+            UIUtils.edgeToEdge(this);
             setContentView(R.layout.activity_cqcm);
-            UIController.setOnApplyWindowInsetsListener(findViewById(R.id.main));
+            UIUtils.setOnApplyWindowInsetsListener(findViewById(R.id.main));
             Button buttonallow;
             buttonallow = findViewById(R.id.buttonallow);
             buttonallow.setOnClickListener(v -> {
@@ -43,7 +46,7 @@ public class ReceiveRomFileActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        if (VectrasApp.checkpermissionsgranted(this, false)) {
+        if (PermissionUtils.storagepermission(this, false)) {
             String filesDir = getFilesDir().getAbsolutePath();
             if ((new File(filesDir, "/distro/usr/local/bin/qemu-system-x86_64").exists()) || (new File(filesDir, "/distro/usr/bin/qemu-system-x86_64").exists())) {
                 Intent intent = getIntent();

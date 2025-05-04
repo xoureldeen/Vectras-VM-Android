@@ -15,6 +15,10 @@ import androidx.core.app.ActivityCompat;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.vectras.vm.utils.FileUtils;
+import com.vectras.vm.utils.JSONUtils;
+import com.vectras.vm.utils.PermissionUtils;
+import com.vectras.vm.utils.UIUtils;
 
 import java.io.File;
 import java.util.HashMap;
@@ -29,11 +33,10 @@ public class CqcmActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        VectrasApp.prepareDataForAppConfig(this);
-        if(!VectrasApp.checkpermissionsgranted(this,false)) {
-            UIController.edgeToEdge(this);
+        if(!PermissionUtils.storagepermission(this,false)) {
+            UIUtils.edgeToEdge(this);
             setContentView(R.layout.activity_cqcm);
-            UIController.setOnApplyWindowInsetsListener(findViewById(R.id.main));
+            UIUtils.setOnApplyWindowInsetsListener(findViewById(R.id.main));
             buttonallow = findViewById(R.id.buttonallow);
             buttonallow.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -55,7 +58,7 @@ public class CqcmActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         Log.i("CqcmActivity", "Checking access to storage...");
-        if(VectrasApp.checkpermissionsgranted(this,false)) {
+        if(PermissionUtils.storagepermission(this,false)) {
             if (getIntent().hasExtra("command")) {
                 runCommand(getIntent().getStringExtra("command"));
             } else {
@@ -75,18 +78,18 @@ public class CqcmActivity extends AppCompatActivity {
         String imgExtra = "";
         String vmID = VMManager.idGenerator();
 
-        if (!VectrasApp.isFileExists(AppConfig.romsdatajson)) {
-            VectrasApp.writeToFile(AppConfig.maindirpath, "roms-data.json", "[]");
+        if (!FileUtils.isFileExists(AppConfig.romsdatajson)) {
+            FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", "[]");
         }
 
-        if (VectrasApp.checkJSONIsNormal(AppConfig.romsdatajson)) {
+        if (JSONUtils.isValidFromFile(AppConfig.romsdatajson)) {
             if (getIntent().hasExtra("content")) {
                 if (Objects.requireNonNull(getIntent().getStringExtra("content")).endsWith("}]")) {
                     _map = Objects.requireNonNull(getIntent().getStringExtra("content")).substring((int) 0, (int)(Objects.requireNonNull(getIntent().getStringExtra("content")).length() - 1));
                 } else {
                     _map = Objects.requireNonNull(getIntent().getStringExtra("content"));
                 }
-                if (VectrasApp.checkJSONMapIsNormalFromString(_map)) {
+                if (JSONUtils.isMapValidFromString(_map)) {
                     mapForCreateNewVM = new Gson().fromJson(_map, new TypeToken<HashMap<String, Object>>(){}.getType());
                     if (mapForCreateNewVM.containsKey("imgName")) {
                         imgName = Objects.requireNonNull(mapForCreateNewVM.get("imgName")).toString();
@@ -132,7 +135,6 @@ public class CqcmActivity extends AppCompatActivity {
     }
 
     private void runCommand(String _command) {
-        VectrasApp.prepareDataForAppConfig(CqcmActivity.this);
         AppConfig.pendingCommand = _command;
 
         if(!MainActivity.isActivate) {

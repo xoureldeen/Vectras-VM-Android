@@ -599,15 +599,15 @@ public class FileUtils {
 		}
 		return contents;
 	}
-	
+
 	public static boolean moveFile(String oldfilename, String newFolderPath, String newFilename) {
 		File folder = new File(newFolderPath);
 		if (!folder.exists())
 		folder.mkdirs();
-		
+
 		File oldfile = new File(oldfilename);
 		File newFile = new File(newFolderPath, newFilename);
-		
+
 		if (!newFile.exists())
 		try {
 			newFile.createNewFile();
@@ -618,4 +618,119 @@ public class FileUtils {
 		return oldfile.renameTo(newFile);
 	}
 
+	public static boolean isFileExists(String filePath) {
+		File file = new File(filePath.replaceAll("\n", ""));
+		return file.exists();
+	}
+
+	public static void moveAFile(String _from, String _to) {
+		File oldFile = new File(_from);
+		File newFile = new File(_to);
+
+		boolean success = oldFile.renameTo(newFile);
+		if (success) {
+			Log.d("File", "Done!");
+		} else {
+			Log.e("File", "Failed!");
+		}
+	}
+
+	public static void copyAFile(String _sourceFile, String _destFile) {
+		File vDir = new File(_destFile.substring((int)0, (int)(_destFile.lastIndexOf("/"))));
+		if (!vDir.exists()) {
+			vDir.mkdirs();
+		}
+		try {
+			File source = new File(_sourceFile);
+			File dest = new File(_destFile);
+
+			if (!source.exists())
+			{
+				throw new IOException("Source file not found");
+			}
+
+			FileInputStream inStream = new FileInputStream(source);
+			FileOutputStream outStream = new FileOutputStream(dest);
+
+			byte[] buffer = new byte[1024];
+			int length;
+			while ((length = inStream.read(buffer))
+					> 0) {
+				outStream.write(buffer, 0, length);
+			}
+
+			inStream.close();
+			outStream.close();
+		} catch (IOException e) {
+
+		}
+
+	}
+
+	public static void deleteDirectory(String _pathToDelete) {
+		File _dir = new File(_pathToDelete);
+		if (_dir.isDirectory()) {
+			String[] children = _dir.list();
+
+			if (children == null) {
+				Log.e("ERROR", "Deletion failed. " + _dir);
+				return;
+			}
+
+			for (int i = 0; i < children.length; i++) {
+				File temp = new File(_dir, children[i]);
+				deleteDirectory(String.valueOf(temp));
+			}
+		}
+		boolean success = _dir.delete();
+		if (!success) {
+			Log.e("ERROR", "Deletion failed. " + _dir);
+		}
+	}
+
+	public static String readAFile(String filePath) {
+		StringBuilder content = new StringBuilder();
+		try (FileInputStream inputStream = new FileInputStream(filePath);
+			 BufferedReader reader = new BufferedReader(new
+					 InputStreamReader(inputStream))) {
+			String line;
+			while ((line = reader.readLine()) != null) {
+				content.append(line).append("\n");
+			}
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		return content.toString();
+
+	}
+
+	public static void writeToFile(String folderPath, String fileName, String content) {
+		File vDir = new File(folderPath);
+		if (!vDir.exists()) {
+			vDir.mkdirs();
+		}
+		File file = new File(folderPath, fileName);
+		FileOutputStream outputStream = null;
+		try {
+			outputStream = new FileOutputStream(file);
+			outputStream.write(content.getBytes());
+			outputStream.close();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public static void getAListOfAllFilesAndFoldersInADirectory(String path, ArrayList<String> list) {
+		File dir = new File(path);
+		if (!dir.exists() || dir.isFile()) return;
+
+		File[] listFiles = dir.listFiles();
+		if (listFiles == null || listFiles.length <= 0) return;
+
+		if (list == null) return;
+		list.clear();
+		for (File file : listFiles) {
+			list.add(file.getAbsolutePath());
+		}
+	}
 }

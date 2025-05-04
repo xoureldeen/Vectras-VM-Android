@@ -68,9 +68,9 @@ public class StoreItemActivity extends AppCompatActivity {
 	protected void onCreate(Bundle bundle) {
 		activity = this;
 		super.onCreate(bundle);
-		UIController.edgeToEdge(this);
+		UIUtils.edgeToEdge(this);
 		setContentView(R.layout.activity_store_item);
-		UIController.setOnApplyWindowInsetsListener(findViewById(R.id.main));
+		UIUtils.setOnApplyWindowInsetsListener(findViewById(R.id.main));
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -207,7 +207,6 @@ public class StoreItemActivity extends AppCompatActivity {
 				startActivity(new Intent(activity, ImagePrvActivity.class));
 			}
 		});
-		VectrasApp.prepareDataForAppConfig(activity);
 	}
 
 	public static final int DIALOG_DOWNLOAD_PROGRESS = 0;
