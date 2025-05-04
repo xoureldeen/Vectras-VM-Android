@@ -46,6 +46,15 @@
     <string name="action_sign_up">注册</string>
     <string name="action_sign_with_google">使用 google 登录</string>
     <string name="welcome">欢迎！</string>
+    <string name="welcome_to_vectras_vm_lets_get_started">欢迎使用 Vectras VM。让我们开始吧！</string>
+    <string name="mirror">服务器</string>
+    <string name="letstart">开始</string>
+    <string name="processing_this_may_take_a_few_minutes">正在处理……\n这可能需要几分钟。</string>
+    <string name="check_for_updates_from_the_beta_channel">检查Beta版本更新</string>
+    <string name="check_from_the_Beta_channel_instead_of_the_Stable_channel">不做过多解释</string>
+    <string name="do_you_want_to_change_create_or_remove">朕给你三个钦定选项： ⚔️ 易容术（改） ✨ 虚空造物（创） 🔥 诛九族（删）</string>
+    <string name="do_you_want_to_change_the_mirror_before_setting_up_the_current_mirror_is">在开始设置之前，先选一个下载服务器吧（你不会连China是什么意思都不知道吧😅）。</string>
+    <string name="united_states_default">美国（默认）</string>
     <string name="invalid_username">无效用户名</string>
     <string name="invalid_password">密码必须大于5个字符</string>
     <string name="login_failed">登录失败</string>
@@ -304,7 +313,7 @@
     <string name="allow">授权</string>
     <string name="cannot_create_VM_at_this_time">此时无法创建 VM</string>
     <string name="no_data">无内容</string>
-    <string name="roms_store">虚拟机商店</string>
+    <string name="roms_store">ROM商店</string>
     <string name="available">可用</string>
     <string name="unavailable">不可用</string>
     <string name="installed">已安装</string>
@@ -327,7 +336,7 @@
     <string name="format_not_supported_please_select_file_with_format_cvbi">不支持的格式，请选择 cvbi 格式的文件</string>
     <string name="error_CR_CVBI1">出现一个问题，无法继续，因为找不到 cbvi 文件。错误代码：CR_CVBI1</string>
     <string name="error_CR_CVBI2">发生错误但提取成功，cvbi 文件不包含有关此 ROM 的信息，因此将使用一些默认设置。错误代码：CR_CVBI2</string>
-    <string name="from">从</string>
+    <string name="from">来自</string>
     <string name="error_CR_CVBI3">发生错误无法继续，但提取成功，此cvbi文件不包含此 ROM 的信息，也不包含任何 ROM 文件。错误代码：CR_CVBI3</string>
     <string name="kept_some_files">一些文件被保留，因为其他虚拟机需要它们</string>
     <string name="clean_up">打扫一下</string>
@@ -356,8 +365,12 @@
     <string name="roms_data_json_fixed_successfully">成功修复. 部分虚拟机可能被移至回收站 (Recycle bin) 文件夹</string>
     <string name="roms_data_json_fixed_unsuccessfully">"修复失败. 所有虚拟机均被移至回收站 (Recycle bin) "</string>
     <string name="use_memory_overcommit">允许分配大于实际空间的运行内存(memory overcommit)</string>
-    <string name="harmful_command_was_detected">A potentially harmful command was detected and it has been blocked. Please check this virtual machine and try again.</string>
+    <string name="harmful_command_was_detected">检测到可能有害的命令，并且该命令已被阻止。请检查此虚拟机，然后重试。</string>
     <string name="copy_file">复制文件</string>
+    <string name="create_image">创建镜像</string>
+    <string name="trackpad_mouse_phone">触控板鼠标（手机）</string>
+    <string name="bluetooth_mouse_desktop">蓝牙/USB 鼠标</string>
+    <string name="ui_interface">用户界面</string>
     <string name="copy_file_content">总是复制文件至虚拟机而非直接使用</string>
     <string name="reinstall_system">重装系统（Proot）</string>
     <string name="reinstall_system_content">如果你发现Vectras出现严重问题, 你可以重新安装系统. 所有虚拟机都将保留</string>
@@ -467,16 +480,19 @@
     <string name="a_href_https_github_com_epicstudios856_vectras_vm_android_issues_github_issues_page_a_br"><![CDATA[<a href=\"https://github.com/epicstudios856/Vectras-VM-Android/issues\">github issues页面</a><br>]]></string>
     <string name="getting_ready_for_you_please_don_t_disconnect_the_network">正在准备中…请保持网络连接</string>
     <string name="it_won_t_take_long">不会很久的…</string>
-    <string name="completed_10_it_won_t_take_long">已完成 10%\\n请坐和放宽</string>
-    <string name="completed_20_it_won_t_take_long">已完成 20%\\n别着急</string>
-    <string name="completed_30_it_won_t_take_long">已完成 30%\\n再等等</string>
-    <string name="completed_40_it_won_t_take_long">已完成 40%\\n**少女祈祷中**</string>
-    <string name="completed_50_it_won_t_take_long">已完成 50%\\n在下了在下了</string>
+    <string name="delete_all_content">除系统外，所有数据都将被擦除。</string>
+    <string name="hide_advanced_setup">隐藏日志</string>
+    <string name="connecting_to_mirror_in">正在连接服务器……</string>
+    <string name="completed_10_it_won_t_take_long">已完成 10%\n请坐和放宽</string>
+    <string name="completed_20_it_won_t_take_long">已完成 20%\n别着急</string>
+    <string name="completed_30_it_won_t_take_long">已完成 30%\n再等等</string>
+    <string name="completed_40_it_won_t_take_long">已完成 40%\n少女祈祷中</string>
+    <string name="completed_50_it_won_t_take_long">已完成 50%\n在下了在下了</string>
     <string name="don_t_disconnect">保持网络连接</string>
     <string name="completed_75_don_t_disconnect">已完成 75%\n快了快了</string>
     <string name="keep_it_up">只要能到达那个地方…</string>
     <string name="completed_80_keep_it_up">已完成 80%\n你别急让我先急</string>
-    <string name="completed_95_keep_it_up">Completed 95%\nKeep it up…</string>
+    <string name="completed_95_keep_it_up">已完成 95%\n八嘎呀路！</string>
     <string name="almost_there">已完成 95%</string>
     <string name="show_advanced_setup">显示详细日志</string>
     <string name="allow_permissions">请授予必要权限</string>
@@ -492,6 +508,10 @@
     <string name="bootstrap_required">需要初始化！</string>
     <string name="you_can_choose_between_auto_download_and_setup_or_manual_setup_by_choosing_bootstrap_file">你可以选择让软件自动下载或者选择初始化包完成手动设置</string>
     <string name="manual_setup">手动安装</string>
+    <string name="unable_to_create_the_directory_to_create_the_vm">创建虚拟机失败！您的手机可能正在修仙： \n• 📵 地盘没买门票（权限不够） \n• 📱 肚腩空间不足（存储已吃撑） \n• 👻 玄学BUG出没（其他神秘力量）</string>
+    <string name="with">基于</string>
+    <string name="our_social">寻找我们</string>
+    <string name="developers">开发者</string>
 
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
@@ -532,7 +552,7 @@
     <string name="title_activity_rom_info">RomInfo</string>
     <string name="alpine_desktop">Alpine Xfce4</string>
     <string name="discord">Discord</string>
-    <string name="extraction_complete">Extraction complete!</string>
+    <string name="extraction_complete">提取完成！</string>
     <string name="settings_x11_display_resolution_mode">分辨率模式</string>
     <string name="settings_x11_display_scale">缩放值（%）</string>
     <string name="settings_x11_display_resolution">显示分辨率</string>
@@ -575,6 +595,7 @@
     <string name="settings_extra_keys_config">附加按键设置</string>
     <string name="settings_clipboard_sharing">开启剪贴板共享</string>
     <string name="settings_x11_request_notification_permission">请求通知权限</string>
+    <string name="request_notification_permission">请求通知权限</string>
     <string name="x11_feature_not_supported">不兼容X11</string>
     <string name="the_x11_feature_is_currently_not_supported_on_android_14_and_above_please_use_a_device_with_android_13_or_below_for_x11_functionality">在安卓14及以上版本里X11不被支持. 请在运行安卓13及以下的设备上使用X11功能</string>
     <string name="booting_up">正在启动…</string>
@@ -595,4 +616,31 @@
     <string name="settings_tag_keyboard">键盘</string>
     <string name="settings_tag_other">杂项</string>
     <string name="executing_command_please_wait">正在执行命令，请稍后…</string>
+    <string name="free_palistine">解放巴勒斯坦</string>
+    <string name="reason">原因</string>
+    <string name="size_too_large_try_qcow2_format">文件太大，请尝试 qcow2 格式。</string>
+    <string name="i_agree">我同意</string>
+    <string name="dont_miss_out">不容忽视！</string>
+    <string name="disclaimer_here">警告！导入您的ROM\\文件即视为您已修炼《背锅宝典》📖 （友情提示：点击查看说明，建议搭配\'量子波动速读法\'使用）</string>
+    <string name="not_the_command_to_run_qemu">不是 Qemu 的运行命令。</string>
+    <string name="command_are_not_allowed_to_contain_amp">命令不允许包含 “&amp;”。</string>
+    <string name="command_are_not_allowed_to_contain_multiple_lines">不允许多行命令。</string>
+    <string name="command_are_not_allowed_to_contain_semicolons">命令不允许包含 “;”。</string>
+    <string name="command_are_not_allowed_to_contain_vertical_bars">命令不允许包含 “|”。</string>
+    <string name="update">更新</string>
+    <string name="new_version_is_now_available">新的版本可用</string>
+    <string name="you_are_using_beta_version">您正在使用测试版。</string>
+    <string name="switch_to_check_for_updates_on_the_Beta_channel_now">现在切换到测试版频道检查更新。</string>
+    <string name="there_seems_to_be_no_signal">信号去流浪地球了，您的手机正在上演《星际迷航：404未找到》🚀</string>
+    <string name="do_you_want_to_exit">退下吧，爱卿？👉（确认键：狠心抛弃）</string>
+    <string name="you_need_to_complete_vectras_vm_setup_before_importing_this_file">先给Vectras VM喂饱配置，文件才肯进门！🍜</string>
+    <string name="this_vm_is_already_running">这虚拟机正在摸鱼（字面：已运行），建议老板安装防双开补丁👨💻</string>
+    <string name="disclaimer_when_using_rom">各位老少爷们儿听好了： 您这点\"同意\"相当于—— \n• 给开发者买了免责金牌🏅 •\n 除非能证明作者是法海（故意水漫金山）🌊 \n• 操作系统条款已自动加入您的《当代吃瘪实录》📖</string>
+    <string name="change_thumbnail">封面太丑？点我换头！👻</string>
+    <string name="do_you_want_to_change_or_remove">少侠，这头是要： \n⚔️ 回炉重造（易容术+1） \n🗑️ 一掌拍碎（化骨绵掌体验卡）</string>
+    <string name="change">更换</string>
+    <string name="change_hard_drive">更换硬盘</string>
+    <string name="permission_denied">权限被拒绝</string>
+    <string name="adb_permission_command">安卓娘娘发话了：没密令别想改设定！\n速速施展ADB咒语👉\nadb shell pm grant com.vectras.vm.x11 android.permission.WRITE_SECURE_SETTINGS\n（友情提示：此操作堪比给手机喂鹤顶红，慎用！）</string>
+    <string name="execution_result">执行结果</string>
 </resources>

@@ -271,7 +271,8 @@ public class Minitools extends AppCompatActivity {
     }
 
     private void setupSpiner() {
-        VectrasApp.setupMirrorListForListmap(listmapForSelectMirrors);
+        VectrasApp appInstance = (VectrasApp) getApplication();
+        appInstance.setupMirrorListForListmap(listmapForSelectMirrors);
 
         spinnerselectmirror.setAdapter(new SpinnerSelectMirrorAdapter(listmapForSelectMirrors));
         spinnerselectmirror.setSelection(MainSettingsManager.getSelectedMirror(Minitools.this));

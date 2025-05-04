@@ -132,11 +132,12 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/our_social"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:padding="8dp"
-                    android:text="Our Social"
+                    android:text="@string/our_social"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -256,7 +257,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:padding="8dp"
-                    android:text="Developers"
+                    android:text="@string/developers"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 

@@ -270,10 +270,8 @@ public class LoriePreferences extends AppCompatActivity {
                 } catch (Exception e) {
                     if (e instanceof SecurityException) {
                         new AlertDialog.Builder(requireActivity())
-                                .setTitle("Permission denied")
-                                .setMessage("Android requires WRITE_SECURE_SETTINGS permission to change this setting.\n" +
-                                            "Please, launch this command using ADB:\n" +
-                                            "adb shell pm grant com.vectras.vm.x11 android.permission.WRITE_SECURE_SETTINGS")
+                                .setTitle(getString(R.string.permission_denied))
+                                .setMessage(getString(R.string.adb_permission_command))
                                 .setNegativeButton("OK", null)
                                 .create()
                                 .show();
@@ -328,10 +326,8 @@ public class LoriePreferences extends AppCompatActivity {
                     KeyInterceptor.shutdown();
                 if (requireContext().checkSelfPermission(WRITE_SECURE_SETTINGS) != PERMISSION_GRANTED) {
                     new AlertDialog.Builder(requireContext())
-                            .setTitle("Permission denied")
-                            .setMessage("Android requires WRITE_SECURE_SETTINGS permission to start accessibility service automatically.\n" +
-                                    "Please, launch this command using ADB:\n" +
-                                    "adb shell pm grant com.vectras.vm.x11 android.permission.WRITE_SECURE_SETTINGS")
+                            .setTitle(getString(R.string.permission_denied))
+                            .setMessage(getString(R.string.adb_permission_command))
                             .setNegativeButton("OK", null)
                             .create()
                             .show();

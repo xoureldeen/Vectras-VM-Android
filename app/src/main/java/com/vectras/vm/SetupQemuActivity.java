@@ -64,6 +64,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Objects;
 
 public class SetupQemuActivity extends AppCompatActivity implements View.OnClickListener {
@@ -398,8 +399,8 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
             title.setText("Getting ready for you...");
             textviewsettingup.setText(R.string.getting_ready_for_you_please_don_t_disconnect_the_network);
         } else if (textToAdd.contains("fetch http")) {
-            title.setText(getString(R.string.connecting_to_mirror_in) + "\n" + selectedMirrorLocation + "...");
-            textviewsettingup.setText(getString(R.string.connecting_to_mirror_in) + "\n" + selectedMirrorLocation + "...");
+            title.setText(getString(R.string.connecting_to_mirror_in));
+            textviewsettingup.setText(getString(R.string.connecting_to_mirror_in));
         } else if (textToAdd.contains("Installing packages...")) {
             title.setText(R.string.it_won_t_take_long);
             textviewsettingup.setText(R.string.completed_10_it_won_t_take_long);
@@ -522,7 +523,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                         appendTextAndScroll("Error: " + toastMessage + "\n");
                         Toast.makeText(activity, toastMessage, Toast.LENGTH_LONG).show();
                         inBtn.setVisibility(View.VISIBLE);
-                        title.setText("Failed!");
+                        title.setText(getString(R.string.failed));
                         simpleSetupUIControler(2);
                     });
                     if (libprooterror) {
@@ -656,7 +657,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
             if (result != null) {
                 Toast.makeText(context, "Download error: " + result, Toast.LENGTH_LONG).show();
                 inBtn.setVisibility(View.VISIBLE);
-                title.setText("Failed!");
+                title.setText(getString(R.string.failed));
             } else
                 setupVectras();
         }
@@ -719,6 +720,11 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         String cmd = "";
         cmd += selectedMirrorCommand + ";";
         executeShellCommand(cmd);
+        if(Locale.getDefault().getLanguage().equals("zh") && Build.SUPPORTED_ABIS[0].contains("arm64")){
+            bootstrapfilelink = "https://ty.ly93.cc/1587/524221192309403026/vectras-vm-arm64-v8a.tar.gz";
+        } else if (Locale.getDefault().getLanguage().equals("zh")) {
+            bootstrapfilelink = "https://ty.ly93.cc/1587/924181192306548961/vectras-vm-x86_64.tar.gz";
+        }
         executeShellCommand("set -e;" +
                 " echo \"Starting setup...\";" +
                 " apk update;" +
@@ -884,7 +890,8 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void setupSpiner() {
-        VectrasApp.setupMirrorListForListmap(listmapForSelectMirrors);
+        VectrasApp appInstance = (VectrasApp) getApplication();
+        appInstance.setupMirrorListForListmap(listmapForSelectMirrors);
 
         spinnerselectmirror.setAdapter(new SpinnerSelectMirrorAdapter(listmapForSelectMirrors));
         spinnerselectmirror.setSelection(MainSettingsManager.getSelectedMirror(activity));

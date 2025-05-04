@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">v2.9.5 (3dfx - Rugelach)</string>
+    <string name="app_version" translatable="false">v2.9.5 (3dfx - Rugelachd)</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -401,12 +401,13 @@
     <string name="change_hard_drive">Change hard drive</string>
     <string name="do_you_want_to_change_create_or_remove">Do you want to change, create or remove?</string>
     <string name="do_you_want_to_change_the_mirror_before_setting_up_the_current_mirror_is">Do you want to change the mirror before setting up?\nThe current mirror is:</string>
-    <string name="connecting_to_mirror_in">Connecting to mirror in</string>
+    <string name="connecting_to_mirror_in">Connecting to mirror...</string>
+    <string name="united_states_default">United States (Default)</string>
     <string name="mirror">Mirror</string>
     <string name="letstart">Let\'s start</string>
     <string name="welcome">Welcome!</string>
     <string name="welcome_to_vectras_vm_lets_get_started">Welcome to Vectras VM. Let\'s get started!</string>
-    <string name="processing_this_may_take_a_few_minutes">Processing...\nThis may take a few minutes.</string>
+    <string name="processing_this_may_take_a_few_minutes">Processing... This may take a few minutes.</string>
     <string name="check_for_updates_from_the_beta_channel">Check for updates from the Beta channel</string>
     <string name="check_from_the_Beta_channel_instead_of_the_Stable_channel">Check from the Beta channel instead of the Stable channel</string>
     <string name="update">Update</string>
@@ -419,6 +420,8 @@
     <string name="you_need_to_complete_vectras_vm_setup_before_importing_this_file">You need to complete Vectras VM setup before importing this file.</string>
     <string name="unable_to_create_the_directory_to_create_the_vm">Unable to create directory to create virtual machine, this may be because you have not granted permission, there is not enough free space of internal storage or other.</string>
     <string name="with">With</string>
+    <string name="our_social">Our Social</string>
+    <string name="developers">Developers</string>
     <string name="not_the_command_to_run_qemu">Not the command to run Qemu.</string>
     <string name="command_are_not_allowed_to_contain_amp">Commands are not allowed to contain \"&amp;\".</string>
     <string name="command_are_not_allowed_to_contain_multiple_lines">Commands are not allowed to contain multiple lines.</string>
@@ -426,7 +429,6 @@
     <string name="command_are_not_allowed_to_contain_vertical_bars">Commands are not allowed to contain \"|\".</string>
     <string name="reason">Reason</string>
     <string name="size_too_large_try_qcow2_format">Size too large, try qcow2 format.</string>
-    <string name="disclaimer_when_using_rom">By using any files of this ROM or any files containing anything in any way, you agree that we (developers or contributors to Vectras VM) and the creator or creators of this ROM or these files will not be responsible for any unintended problems that will happen to you and your things. But if the creator or creators of this ROM or these files are confirmed to intentionally want to cause harm to you or anyone else, the creator or creators of this ROM or these files will be responsible. And it also means that you have agreed to the Terms and Policies of the owner, provider or owners, providers of the operating system or operating systems contained in this ROM.</string>
     <string name="i_agree">I agree</string>
     <string name="dont_miss_out">Don\'t miss out!</string>
     <string name="disclaimer_here">When you import any ROM or use files that contain anything, you accept all of this. Click here to read it all.</string>
@@ -653,7 +655,12 @@
     <string name="settings_x11_opacity_extra_keys_bar">Opacity of extra keys bar, %</string>
     <string name="settings_extra_keys_config">Extra keys config</string>
     <string name="settings_clipboard_sharing">Clipboard sharing</string>
+    <string name="create_image">Create Image</string>
+    <string name="trackpad_mouse_phone">Trackpad Mouse (Phone)</string>
+    <string name="bluetooth_mouse_desktop">Bluetooth/USB Mouse (Desktop mode)</string>
+    <string name="ui_interface">UI INTERFACE</string>
     <string name="settings_x11_request_notification_permission">Request notification permission</string>
+    <string name="request_notification_permission">Request notification permission</string>
     <string name="x11_feature_not_supported">X11 Feature Not Supported</string>
     <string name="the_x11_feature_is_currently_not_supported_on_android_14_and_above_please_use_a_device_with_android_13_or_below_for_x11_functionality">The X11 feature is currently not supported on Android 14 and above. Please use a device with Android 13 or below for X11 functionality.</string>
     <string name="booting_up">Booting up…</string>
@@ -674,4 +681,9 @@
     <string name="settings_tag_keyboard">Keyboard</string>
     <string name="settings_tag_other">Other</string>
     <string name="executing_command_please_wait">Executing command, please wait…</string>
+    <string name="this_vm_is_already_running">This VM is already running.</string>
+    <string name="execution_result">Execution Result</string>
+    <string name="permission_denied">Permission denied</string>
+    <string name="adb_permission_command">Android requires WRITE_SECURE_SETTINGS permission to change this setting.\nPlease, launch this command using ADB:\nadb shell pm grant com.vectras.vm.x11 android.permission.WRITE_SECURE_SETTINGS</string>
+    <string name="disclaimer_when_using_rom">By using any files of this ROM or any files containing anything in any way, you agree that we (developers or contributors to Vectras VM) and the creator or creators of this ROM or these files will not be responsible for any unintended problems that will happen to you and your things. But if the creator or creators of this ROM or these files are confirmed to intentionally want to cause harm to you or anyone else, the creator or creators of this ROM or these files will be responsible. And it also means that you have agreed to the Terms and Policies of the owner, provider or owners, providers of the operating system or operating systems contained in this ROM.</string>
 </resources>

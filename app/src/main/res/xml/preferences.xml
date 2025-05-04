@@ -228,6 +228,6 @@
 
         <Preference
             android:key="requestNotificationPermission"
-            android:title="Request notification permission" />
+            android:title="@string/request_notification_permission" />
     </PreferenceCategory>
 </PreferenceScreen>
