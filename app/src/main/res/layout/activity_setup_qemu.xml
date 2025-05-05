@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:fitsSystemWindows="true"
     android:animateLayoutChanges="true"
     android:id="@+id/main" >
@@ -259,7 +259,8 @@
     style="@style/CardViewStyle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="18dp">
+    android:layout_margin="18dp"
+    android:id="@+id/advancedsetup">
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/progressBar"
@@ -345,4 +346,5 @@
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>
+    <include layout="@layout/setup_qemu_done"/>
 </LinearLayout>

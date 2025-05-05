@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">v2.9.5 (3dfx - Scone)</string>
+    <string name="app_version" translatable="false">v2.9.5 (3dfx - Tart)</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -278,7 +278,7 @@
     <string name="compressing_cvbi">Compressing CVBI</string>
     <string name="please_wait_dialog">Please wait…</string>
     <string name="error">ERROR!</string>
-    <string name="done">DONE!</string>
+    <string name="done">Done</string>
     <string name="are_removed_successfully">" are removed successfully!"</string>
     <string name="teams" translatable="false">Vectras VM team and Nguyen Bao An Bui</string>
     <string name="repository">Repository</string>
@@ -430,6 +430,12 @@
     <string name="i_agree">I agree</string>
     <string name="dont_miss_out">Don\'t miss out!</string>
     <string name="disclaimer_here">When you import any ROM or use files that contain anything, you accept all of this. Click here to read it all.</string>
+    <string name="join_now_on_telegram_if_you_want">Join now on Telegram if you want.</string>
+    <string name="skip">Skip</string>
+    <string name="donate">Donate</string>
+    <string name="donatecontent">If you really like Vectras VM, you can donate to us on Patreon. Thanks a lot!</string>
+    <string name="visit_now">Visit now</string>
+    <string name="you_are_ready_to_go">You are ready to go!</string>
 
     <!--======================TERMUX STRINGS====================-->
     <string name="application_name" translatable="false">Vterm</string>
@@ -536,7 +542,7 @@
     <string name="about_app">About App</string>
     <string name="join_us_on_telegram">JOIN US ON TELEGRAM</string>
     <string name="join_us_on_telegram_where_we_publish_all_the_news_and_updates_and_receive_your_opinions_and_bugs">Join us on Telegram where we publish all the news and updates and receive your opinions and bugs</string>
-    <string name="join">JOIN</string>
+    <string name="join">Join</string>
     <string name="dont_show_again">DONT SHOW AGAIN</string>
     <string name="this_version_unstable_and_has_alot_of_bugs_br"><![CDATA[this version unstable and has a lot of bugs<br>]]></string>
     <string name="debug_testing_build_5">DEBUG TESTING BUILD 5</string>

@@ -1,5 +1,0 @@
-Hello! Thank you for your interest in our application.
-
-This application helps you to quickly generate qemu-system-x86_64 command. This application only supports basic command generation and does not have advanced command creation items. You can easily copy the command after creating it with the click of a button.
-
-If you want to give us suggestions about this app. Please leave a review of yours here.
