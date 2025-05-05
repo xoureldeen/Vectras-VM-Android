@@ -20,3 +20,9 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 -dontobfuscate
+-dontwarn org.slf4j.impl.StaticLoggerBinder
+-dontwarn android.media.LoudnessCodecController$OnLoudnessCodecUpdateListener
+-dontwarn android.media.LoudnessCodecController
+-keepclassmembers class com.google.firebase.database.GenericTypeIndicator{*;}
+-keep class * extends com.google.firebase.database.GenericTypeIndicator{*;}
+-keep class com.google.firebase.database.GenericTypeIndicator{*;}

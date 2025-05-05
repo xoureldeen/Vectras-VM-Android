@@ -2,6 +2,7 @@ package com.vectras.vm;
 
 import static android.content.Intent.ACTION_OPEN_DOCUMENT;
 import static android.content.Intent.ACTION_VIEW;
+import static android.view.View.GONE;
 
 import com.termux.app.TermuxService;
 import static com.vectras.vm.utils.UIUtils.UIAlert;
@@ -15,12 +16,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.opengl.Visibility;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +41,7 @@ import android.widget.BaseAdapter;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
@@ -108,6 +112,8 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
     private ArrayList<HashMap<String, String>> listmapForSelectMirrors = new ArrayList<>();
     private String selectedMirrorCommand = "";
     private String selectedMirrorLocation = "";
+    private String downloadBootstrapsCommand = "";
+    private boolean aria2Error = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -173,7 +179,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         _net_request_listener = new RequestNetwork.RequestListener() {
             @Override
             public void onResponse(String tag, String response, HashMap<String, Object> responseHeaders) {
-                linearload.setVisibility(View.GONE);
+                linearload.setVisibility(GONE);
                 contentJSON = response;
                 if (JSONUtils.isMapValidFromString(contentJSON)) {
                     mmap.clear();
@@ -184,28 +190,29 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                         } else {
                             bootstrapfilelink = mmap.get("x86_64").toString();
                         }
-                        linearcannotconnecttoserver.setVisibility(View.GONE);
-                    }
-                    if (AppConfig.needreinstallsystem) {
-                        AppConfig.needreinstallsystem = false;
-                        if (!MainSettingsManager.getsetUpWithManualSetupBefore(SetupQemuActivity.this)) {
-                            if (AppConfig.getSetupFiles().contains("arm64-v8a") || AppConfig.getSetupFiles().contains("x86_64")) {
-                                setupVectras64();
-                            } else {
-                                setupVectras32();
-                            }
-                            textviewsettingup.setText(getResources().getString(R.string.reinstalling));
-                            simpleSetupUIControler(1);
+                        downloadBootstrapsCommand = " aria2c -x 4 -o setup.tar.gz " + bootstrapfilelink;
+                        if (!bootstrapfilelink.isEmpty()) {
+                            linearcannotconnecttoserver.setVisibility(GONE);
                         }
                     }
-                } else {
-                    linearload.setVisibility(View.GONE);
+//                    if (AppConfig.needreinstallsystem) {
+//                        AppConfig.needreinstallsystem = false;
+//                        if (!MainSettingsManager.getsetUpWithManualSetupBefore(SetupQemuActivity.this)) {
+//                            if (AppConfig.getSetupFiles().contains("arm64-v8a") || AppConfig.getSetupFiles().contains("x86_64")) {
+//                                setupVectras64();
+//                            } else {
+//                                setupVectras32();
+//                            }
+//                            textviewsettingup.setText(getResources().getString(R.string.reinstalling));
+//                            simpleSetupUIControler(1);
+//                        }
+//                    }
                 }
             }
 
             @Override
             public void onErrorResponse(String tag, String message) {
-                linearload.setVisibility(View.GONE);
+                linearload.setVisibility(GONE);
             }
         };
         
@@ -216,6 +223,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
             extractBootstraps();
 
         }
+        setupOnClick();
     }
 
     public void extractBootstraps() {
@@ -362,9 +370,9 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         } else if (id == R.id.buttonsetuptryagain) {
             simpleSetupUIControler(0);
         } else if (id == R.id.buttonsetupshowlog) {
-            linearsimplesetupui.setVisibility(View.GONE);
+            linearsimplesetupui.setVisibility(GONE);
         } else if (id == R.id.textviewshowadvancedsetup) {
-            linearsimplesetupui.setVisibility(View.GONE);
+            linearsimplesetupui.setVisibility(GONE);
             if (linearstartsetup.getVisibility() == View.VISIBLE) {
                 alertDialog.show();
             }
@@ -375,7 +383,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
             linearsimplesetupui.setVisibility(View.VISIBLE);
             alertDialog.dismiss();
         } else if (id == R.id.buttonletstart) {
-            linearwelcome.setVisibility(View.GONE);
+            linearwelcome.setVisibility(GONE);
             net.startRequestNetwork(RequestNetworkController.GET,AppConfig.bootstrapfileslink,"anbui",_net_request_listener);
         }
     }
@@ -391,10 +399,13 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         vterm.append(textToAdd);
 
         if (textToAdd.contains("xssFjnj58Id")) {
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
+            linearsimplesetupui.setVisibility(GONE);
+            CardView advancedsetup = findViewById(R.id.advancedsetup);
+            advancedsetup.setVisibility(GONE);
         } else if (textToAdd.contains("libproot.so --help")){
             libprooterror = true;
+        } else if (textToAdd.contains("not complete: /root/setup.tar.gz")){
+            aria2Error = true;
         }
 
         if (textToAdd.contains("Starting setup...")) {
@@ -520,14 +531,16 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                 // Check if the exit value indicates an error
                 if (exitValue != 0) {
                     // If exit value is not zero, display a toast message
-                    String toastMessage = "Command failed with exit code: " + exitValue;
-                    activity.runOnUiThread(() -> {
-                        appendTextAndScroll("Error: " + toastMessage + "\n");
-                        Toast.makeText(activity, toastMessage, Toast.LENGTH_LONG).show();
-                        inBtn.setVisibility(View.VISIBLE);
-                        title.setText("Failed!");
-                        simpleSetupUIControler(2);
-                    });
+                    if (!aria2Error) {
+                        String toastMessage = "Command failed with exit code: " + exitValue;
+                        activity.runOnUiThread(() -> {
+                            appendTextAndScroll("Error: " + toastMessage + "\n");
+                            Toast.makeText(activity, toastMessage, Toast.LENGTH_LONG).show();
+                            inBtn.setVisibility(View.VISIBLE);
+                            title.setText("Failed!");
+                            simpleSetupUIControler(2);
+                        });
+                    }
                     if (libprooterror) {
                         AlertDialog alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
                         alertDialog.setTitle(getResources().getString(R.string.oops));
@@ -548,6 +561,14 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                         });
 
                         alertDialog.show();
+                    } else if (aria2Error && downloadBootstrapsCommand.contains("aria2c")) {
+                        downloadBootstrapsCommand = " curl -o setup.tar.gz -L " + bootstrapfilelink;
+                        if (AppConfig.getSetupFiles().contains("arm64-v8a") || AppConfig.getSetupFiles().contains("x86_64")) {
+                            setupVectras64();
+                        } else {
+                            setupVectras32();
+                        }
+                        inBtn.setVisibility(GONE);
                     }
                 }
             } catch (IOException | InterruptedException e) {
@@ -668,7 +689,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
 
     private void setupVectras() {
         simpleSetupUIControler(1);
-        inBtn.setVisibility(View.GONE);
+        inBtn.setVisibility(GONE);
         progressBar.setVisibility(View.VISIBLE);
         String filesDir = activity.getFilesDir().getAbsolutePath();
         String neededPkgs = AppConfig.neededPkgs;
@@ -694,7 +715,8 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void setupVectras32() {
-        inBtn.setVisibility(View.GONE);
+        aria2Error = false;
+        inBtn.setVisibility(GONE);
         progressBar.setVisibility(View.VISIBLE);
         String filesDir = activity.getFilesDir().getAbsolutePath();
         String cmd = "";
@@ -716,7 +738,8 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void setupVectras64() {
-        inBtn.setVisibility(View.GONE);
+        aria2Error = false;
+        inBtn.setVisibility(GONE);
         progressBar.setVisibility(View.VISIBLE);
         String filesDir = activity.getFilesDir().getAbsolutePath();
         String cmd = "";
@@ -728,7 +751,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                 " echo \"Installing packages...\";" +
                 " apk add " + AppConfig.neededPkgs + ";" +
                 " echo \"Downloading Qemu...\";" +
-                " curl -o setup.tar.gz -L " + bootstrapfilelink + ";" +
+                downloadBootstrapsCommand + ";" +
                 " echo \"Installing Qemu...\";" +
                 " tar -xzvf setup.tar.gz -C /;" +
                 " rm setup.tar.gz;" +
@@ -789,7 +812,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                 if (tarGZ.exists()) {
                     setupVectras();
                 } else {
-                    if (linearsimplesetupui.getVisibility() == View.GONE) {
+                    if (linearsimplesetupui.getVisibility() == GONE) {
                         alertDialog.show();
                     }
                 }
@@ -800,15 +823,15 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
     private void simpleSetupUIControler(int status) {
         if (status == 0) {
             linearstartsetup.setVisibility(View.VISIBLE);
-            linearsettingup.setVisibility(View.GONE);
-            linearsetupfailed.setVisibility(View.GONE);
+            linearsettingup.setVisibility(GONE);
+            linearsetupfailed.setVisibility(GONE);
         } else if (status == 1) {
-            linearstartsetup.setVisibility(View.GONE);
+            linearstartsetup.setVisibility(GONE);
             linearsettingup.setVisibility(View.VISIBLE);
-            linearsetupfailed.setVisibility(View.GONE);
+            linearsetupfailed.setVisibility(GONE);
         } else if (status == 2) {
-            linearstartsetup.setVisibility(View.GONE);
-            linearsettingup.setVisibility(View.GONE);
+            linearstartsetup.setVisibility(GONE);
+            linearsettingup.setVisibility(GONE);
             linearsetupfailed.setVisibility(View.VISIBLE);
         }
     }
@@ -853,7 +876,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                                 Runnable runnable = new Runnable() {
                                     @Override
                                     public void run() {
-                                        loading.setVisibility(View.GONE);
+                                        loading.setVisibility(GONE);
                                         alertDialog.dismiss();
                                         setupVectras();
                                         MainSettingsManager.setsetUpWithManualSetupBefore(SetupQemuActivity.this, true);
@@ -866,7 +889,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                             Runnable runnable = new Runnable() {
                                 @Override
                                 public void run() {
-                                    loading.setVisibility(View.GONE);
+                                    loading.setVisibility(GONE);
                                     UIAlert(activity, e.toString(), "error");
                                 }
                             };
@@ -875,13 +898,13 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                     }
                 }).start();
             } else {
-                if (linearsimplesetupui.getVisibility() == View.GONE) {
+                if (linearsimplesetupui.getVisibility() == GONE) {
                     alertDialog.show();
                 }
                 UIAlert(activity, "INVALID FILE", "please select vectras-vm-" + abi + ".tar.gz file");
             }
         } else
-        if (linearsimplesetupui.getVisibility() == View.GONE) {
+        if (linearsimplesetupui.getVisibility() == GONE) {
             alertDialog.show();
         }
     }
@@ -891,6 +914,65 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
 
         spinnerselectmirror.setAdapter(new SpinnerSelectMirrorAdapter(listmapForSelectMirrors));
         spinnerselectmirror.setSelection(MainSettingsManager.getSelectedMirror(activity));
+    }
+
+    private void setupOnClick() {
+        LinearLayout linearcommunity = findViewById(R.id.linearcommunity);
+        LinearLayout lineardonate = findViewById(R.id.lineardonate);
+
+        Button dontjointtelegrambutton = findViewById(R.id.dontjointtelegrambutton);
+        dontjointtelegrambutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                linearcommunity.setVisibility(View.GONE);
+            }
+        });
+
+        Button jointelegrambutton = findViewById(R.id.jointelegrambutton);
+        jointelegrambutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                linearcommunity.setVisibility(GONE);
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(AppConfig.telegramLink));
+                startActivity(intent);
+                //Don't show join Telegram dialog again
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+                SharedPreferences.Editor edit = prefs.edit();
+                edit.putBoolean("tgDialog", true);
+                edit.apply();
+            }
+        });
+
+        Button dontdonatebutton = findViewById(R.id.dontdonatebutton);
+        dontdonatebutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lineardonate.setVisibility(View.GONE);
+            }
+        });
+
+        Button donatebuuton = findViewById(R.id.donatebutton);
+        donatebuuton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lineardonate.setVisibility(View.GONE);
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(AppConfig.patreonLink));
+                startActivity(intent);
+            }
+        });
+
+        Button done100 = findViewById(R.id.done100);
+        done100.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!AppConfig.needreinstallsystem) {
+                    startActivity(new Intent(SetupQemuActivity.this, MainActivity.class));
+                } else {
+                    AppConfig.needreinstallsystem = false;
+                }
+                finish();
+            }
+        });
     }
 
     public class SpinnerSelectMirrorAdapter extends BaseAdapter {

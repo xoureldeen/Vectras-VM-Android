@@ -23,7 +23,7 @@ public class AppConfig {
     public static int vectrasVersionCode = 21;
     public static String vectrasWebsite = "https://vectras.vercel.app/";
     public static String vectrasWebsiteRaw = "https://raw.githubusercontent.com/xoureldeen/Vectras-VM-Android/refs/heads/master/web/";
-    public static String bootstrapfileslink = vectrasWebsite + "/data/setupfiles.json";
+    public static String bootstrapfileslink = vectrasWebsiteRaw + "/data/setupfiles.json";
     public static String vectrasHelp = vectrasWebsite + "how.html";
     public static String community = vectrasWebsite + "community.html";
     public static String vectrasRaw = vectrasWebsiteRaw + "data/";
@@ -75,7 +75,7 @@ public class AppConfig {
     public static String vmFolder = maindirpath + "roms/";
     public static String pendingCommand = "";
 
-    public static String neededPkgs = "tar dwm xfce4-terminal libslirp libslirp-dev pulseaudio-dev glib-dev pixman-dev zlib-dev spice-dev" +
+    public static String neededPkgs = "aria2 tar dwm xfce4-terminal libslirp libslirp-dev pulseaudio-dev glib-dev pixman-dev zlib-dev spice-dev" +
             " libusbredirparser usbredir-dev libiscsi-dev  sdl2 sdl2-dev libepoxy-dev virglrenderer-dev rdma-core" +
             " libusb ncurses-libs curl libnfs sdl2 gtk+3.0 fuse libpulse libseccomp jack pipewire liburing" +
             " mesa-dri-gallium mesa-vulkan-swrast vulkan-loader mesa-utils mesa-egl mesa-gbm mesa-vulkan-ati mesa-vulkan-broadcom mesa-vulkan-freedreno mesa-vulkan-panfrost";
@@ -83,5 +83,9 @@ public class AppConfig {
     public static boolean needreinstallsystem = false;
 
     public static String temporaryLastedTerminalOutput = "";
+
+    public static String telegramLink = "https://t.me/vectras_os";
+
+    public static String patreonLink = "https://www.patreon.com/VectrasTeam";
 
 }
