@@ -2,20 +2,7 @@
 <project version="4">
   <component name="deploymentTargetSelector">
     <selectionStates>
-      <SelectionState runConfigName="app">
-        <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2025-05-05T05:10:20.917282500Z">
-          <Target type="DEFAULT_BOOT">
-            <handle>
-              <DeviceId pluginId="PhysicalDevice" identifier="serial=8c847fb6" />
-            </handle>
-          </Target>
-        </DropdownSelection>
-        <DialogSelection />
-      </SelectionState>
-      <SelectionState runConfigName="shell-loader">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
+      <SelectionState runConfigName="app">rhr
     </selectionStates>
   </component>
 </project>
