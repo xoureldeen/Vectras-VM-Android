@@ -168,6 +168,12 @@
             android:name=".MainService"
             android:exported="false" />
 
+        <service
+            android:name=".AudioStreamService"
+            android:enabled="true"
+            android:foregroundServiceType="mediaPlayback" >
+        </service>
+
         <activity
             android:name="com.termux.app.TermuxActivity"
             android:configChanges="orientation|screenSize|smallestScreenSize|density|screenLayout|uiMode|keyboard|keyboardHidden|navigation"

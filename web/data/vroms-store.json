@@ -78,6 +78,19 @@
         "desc":"Windows 98 is a consumer-oriented operating system developed by Microsoft as part of its Windows 9x family of Microsoft Windows operating systems. It was the second operating system in the 9x line, as the successor to Windows 95. It was released to manufacturing on May 15, 1998, and generally to retail on June 25, 1998. Like its predecessor, it is a hybrid 16-bit and 32-bit monolithic product with the boot stage based on MS-DOS."
     },
     {
+        "rom_name":"Tiny XP",
+        "rom_icon":"https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/10/12/windows_2001_logo_1_abcd7f82240a9d6d4ef94d5c6223130b.png",
+        "rom_url":"https://anbui.ovh/get/vec/community/win/nt5/tinyxp.html",
+        "rom_path":"tiny.xp.cvbi",
+        "rom_avail":true,
+        "rom_size":"220 MB",
+        "rom_arch":"X86_64",
+        "rom_kernel":"windows",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"From @Stiven2016 on Telegram and fixed by Nguyen Bao An Bui.\n\nWindows XP is a personal computer operating system produced by Microsoft as part of the Windows NT family of operating systems. It was released to manufacturing on August 24, 2001, and later to retail on October 25, 2001. It is the successor to both Windows 2000 and Windows Me. Windows XP was the first version of Windows to be based on the Windows NT kernel and was the first consumer-oriented version of Windows to be built on that architecture."
+    },
+    {
         "rom_name":"Windows XP x64",
         "rom_icon":"https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/10/12/windows_2001_logo_1_abcd7f82240a9d6d4ef94d5c6223130b.png",
         "rom_url":"https://youtu.be/BAgBNcRAgc4",
@@ -160,6 +173,19 @@
         "rom_icon":"https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/09/17/windows-logo_1_926ed76111646acbbe332bc5af0cf2ce.png",
         "rom_url":"https://youtu.be/9AMJ1UB5NeY",
         "rom_path":"Windows 10 LTSB 2015.cvbi",
+        "rom_avail":true,
+        "rom_size":"9 GB",
+        "rom_arch":"X86_64",
+        "rom_kernel":"windows",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 10 is a major release of Microsoft's Windows NT operating system. The successor to Windows 8.1, it was released to manufacturing on July 15, 2015, and later to retail on July 29, 2015. Windows 10 was made available for download via MSDN and TechNet, as a free upgrade for retail copies of Windows 8 and Windows 8.1 users via the Microsoft Store, and to Windows 7 users via Windows Update. Unlike previous Windows NT releases, Windows 10 receives new builds on an ongoing basis, which are available at no additional cost to users; devices in enterprise environments can alternatively use long-term support milestones that only receive critical updates, such as security patches."
+    },
+    {
+        "rom_name":"Windows 10 LTSC 2019",
+        "rom_icon":"https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/09/17/windows-logo_1_926ed76111646acbbe332bc5af0cf2ce.png",
+        "rom_url":"https://youtu.be/s1d_-2e9fpY",
+        "rom_path":"Windows 10 LTSC 2019.cvbi",
         "rom_avail":true,
         "rom_size":"9 GB",
         "rom_arch":"X86_64",
