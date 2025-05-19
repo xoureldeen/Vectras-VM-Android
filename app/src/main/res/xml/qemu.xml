@@ -105,6 +105,13 @@
         <SwitchPreferenceCompat
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:defaultValue="false"
+            android:key="useUEFI"
+            android:title="@string/use_uefi_for_x64_only"
+            app:icon="@drawable/hard_disk_24px" />
+        <SwitchPreferenceCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:defaultValue="true"
             android:key="useMemoryOvercommit"
             android:title="@string/use_memory_overcommit"
