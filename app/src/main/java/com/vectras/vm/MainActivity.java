@@ -8,6 +8,8 @@ import com.termux.app.TermuxService;
 import static com.vectras.vm.VectrasApp.getApp;
 import static com.vectras.vm.utils.LibraryChecker.isPackageInstalled2;
 import static com.vectras.vm.utils.UIUtils.UIAlert;
+
+import com.vectras.vm.utils.CommandUtils;
 import com.vectras.vm.utils.PermissionUtils;
 
 import android.androidVNC.androidVNC;
@@ -987,6 +989,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void startVM(String vmName, String env, String itemExtra, String itemPath) {
+
+        ActivityManager manager = (ActivityManager) activity.getSystemService(ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (!AudioStreamService.class.getName().equals(service.service.getClassName())) {
+                if (SDK_INT >= Build.VERSION_CODES.O) {
+                    activity.startForegroundService(new Intent(activity, AudioStreamService.class));
+                } else {
+                    activity.startService(new Intent(activity, AudioStreamService.class));
+                }
+           }
+        }
 
         File romDir = new File(Config.getCacheDir()+ "/" + Config.vmID);
         romDir.mkdirs();
