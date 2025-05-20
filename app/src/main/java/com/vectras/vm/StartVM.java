@@ -164,7 +164,7 @@ public class StartVM {
                     boot += "c";
                 }
 
-                String soundDevice = "-audiodev pa,id=pa -device AC97,audiodev=pa";
+                //String soundDevice = "-audiodev pa,id=pa -device AC97,audiodev=pa";
 
                 //params.add(soundDevice);
 
