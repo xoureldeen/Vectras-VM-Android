@@ -287,13 +287,47 @@ public class MainSettingsManager extends AppCompatActivity
                     prefAVX.setVisible(false);
                 }
 
-            if (Objects.equals(getArch(activity), "I386")) { // I386 DOES NOT SUPPORT SHARED FOLDER
-                SwitchPreferenceCompat sharedPref = findPreference("sharedFolder");
-                sharedPref.setEnabled(false);
-                sharedPref.setChecked(false);
-                setSharedFolder(activity, false);
+//            if (Objects.equals(getArch(activity), "I386")) { // I386 DOES NOT SUPPORT SHARED FOLDER
+//                SwitchPreferenceCompat sharedPref = findPreference("sharedFolder");
+//                sharedPref.setEnabled(false);
+//                sharedPref.setChecked(false);
+//                setSharedFolder(activity, false);
+//
+//            }
 
+            if (!getuseDefaultBios(getActivity())) {
+                SwitchPreferenceCompat useUEFIPref = findPreference("useUEFI");
+                assert useUEFIPref != null;
+                if (!getuseDefaultBios(getActivity())) {
+                    useUEFIPref.setChecked(false);
+                    setuseUEFI(getActivity(), false);
+                }
+                useUEFIPref.setEnabled(false);
             }
+
+            SwitchPreferenceCompat useDefaultBiosPref = findPreference("useDefaultBios");
+            assert useDefaultBiosPref != null;
+            useDefaultBiosPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(@NonNull Preference preference, Object newValue) {
+                    SwitchPreferenceCompat useUEFIPref = findPreference("useUEFI");
+                    assert useUEFIPref != null;
+                    if (!(Boolean) newValue) {
+                        if (getuseUEFI(getActivity())) {
+                            useUEFIPref.setChecked(false);
+                            setuseUEFI(getActivity(), false);
+                        }
+                        if (useUEFIPref.isEnabled()) {
+                            useUEFIPref.setEnabled(false);
+                        }
+                    } else {
+                        if (!useUEFIPref.isEnabled()) {
+                            useUEFIPref.setEnabled(true);
+                        }
+                    }
+                    return true;
+                }
+            });
         }
 
         private void onMemory() {
@@ -798,6 +832,30 @@ public class MainSettingsManager extends AppCompatActivity
     public static Boolean getDontShowAgainJoinBetaUpdateChannelDialog(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean("dontShowAgainJoinBetaUpdateChannelDialog", false);
+    }
+
+    public static void setuseDefaultBios(Context context, Boolean _boolean) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putBoolean("useDefaultBios", _boolean);
+        edit.commit();
+    }
+
+    public static Boolean getuseDefaultBios(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean("useDefaultBios", true);
+    }
+
+    public static void setuseUEFI(Context context, Boolean _boolean) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putBoolean("useUEFI", _boolean);
+        edit.commit();
+    }
+
+    public static Boolean getuseUEFI(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean("useUEFI", false);
     }
 
 }

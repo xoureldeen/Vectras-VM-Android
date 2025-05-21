@@ -1059,6 +1059,10 @@ public class MainActivity extends AppCompatActivity {
             activity.skipIDEwithARM64DialogInStartVM = false;
         }
 
+        if (MainSettingsManager.getSharedFolder(activity) && MainSettingsManager.getArch(activity).equals("I386")) {
+            Toast.makeText(activity, R.string.shared_folder_is_not_used_because_i386_does_not_support_it, Toast.LENGTH_LONG).show();
+        }
+
         boolean isRunning = isMyServiceRunning(MainService.class);
 
         ProgressDialog progressDialog = new ProgressDialog(activity, R.style.MainDialogTheme);

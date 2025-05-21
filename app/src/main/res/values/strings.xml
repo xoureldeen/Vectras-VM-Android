@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">v2.9.5 (3dfx - Tart)</string>
+    <string name="app_version" translatable="false">v2.9.5 (3dfx - Victoria Sponge)</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -436,6 +436,8 @@
     <string name="donatecontent">If you really like Vectras VM, you can donate to us on Patreon. Thanks a lot!</string>
     <string name="visit_now">Visit now</string>
     <string name="you_are_ready_to_go">You are ready to go!</string>
+    <string name="shared_folder_is_not_used_because_i386_does_not_support_it">Shared Folder is not used because i386 does not support it.</string>
+    <string name="use_uefi_for_x64_only">Use UEFI (x64 only)</string>
 
     <!--======================TERMUX STRINGS====================-->
     <string name="application_name" translatable="false">Vterm</string>

@@ -137,7 +137,7 @@ public class StartVM {
                     params.add(hdd1);
                 }
 
-                if (MainSettingsManager.getSharedFolder(activity)) {
+                if (MainSettingsManager.getSharedFolder(activity) && !MainSettingsManager.getArch(activity).equals("I386")) {
                     String driveParams = "-drive ";
                     if (ifType.isEmpty()) {
                         driveParams += "media=disk,file=fat:";
@@ -164,7 +164,7 @@ public class StartVM {
                     boot += "c";
                 }
 
-                String soundDevice = "-audiodev pa,id=pa -device AC97,audiodev=pa";
+                //String soundDevice = "-audiodev pa,id=pa -device AC97,audiodev=pa";
 
                 //params.add(soundDevice);
 
@@ -177,6 +177,11 @@ public class StartVM {
                         bios += "file=" + AppConfig.basefiledir + "QEMU_EFI.img,format=raw,readonly=on,if=pflash";
                         bios += " -drive ";
                         bios += "file=" + AppConfig.basefiledir + "QEMU_VARS.img,format=raw,if=pflash";
+                    } else if (MainSettingsManager.getArch(activity).equals("X86_64") && MainSettingsManager.getuseUEFI(activity)) {
+                        bios = "-drive ";
+                        bios += "file=" + AppConfig.basefiledir + "RELEASEX64_OVMF.fd,format=raw,readonly=on,if=pflash";
+                        bios += " -drive ";
+                        bios += "file=" + AppConfig.basefiledir + "RELEASEX64_OVMF_VARS.fd,format=raw,if=pflash";
                     } else {
                         bios = "-bios ";
                         bios += AppConfig.basefiledir + "bios-vectras.bin";
