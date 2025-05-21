@@ -1,3 +1,0 @@
-rootProject.name = "Vectras VM"
-
-include ':app', ':terminal-emulator', ':terminal-view', ':shell-loader:stub', ':shell-loader'

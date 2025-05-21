@@ -1,5 +1,0 @@
-https://youtu.be/j4JWzjrI2bc 
-
-Add to Qemu params: 
-
--drive file=/storage/emulated/0/Documents/WS200364.qcow2,aio=threads,cache=unsafe -cpu core2duo -smp sockets=1,cores=4,threads=1 -m 756M -vga std -device rtl8139,netdev=n0 -netdev user,id=n0 -accel tcg,thread=multi -rtc base=2022-01-02t00:00:00
