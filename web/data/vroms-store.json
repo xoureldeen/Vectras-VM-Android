@@ -130,6 +130,19 @@
         "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows Server 2003 is a major release of Windows Server family, released to manufacturing on 24 April 2003. It is the server counterpart of Windows XP, although it was released nearly 18 months after its original release and is built on a slightly newer codebase (NT kernel version is 5.2). It was released in several editions, including Web Edition, Standard Edition, Datacenter Edition and Enterprise Edition. It replaces Windows 2000 Server and was eventually succeeded by Windows Server 2008."
     },
     {
+        "rom_name":"Windows 7 build 6801",
+        "rom_icon":"https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/10/15/windows_logo_2006_1_c0e5e8a8271301cfed289ab6118e38b2.png",
+        "rom_url":"https://youtu.be/d-dwK7gFZas",
+        "rom_path":"Windows 7 build 6801.cvbi",
+        "rom_avail":true,
+        "rom_size":"5 GB",
+        "rom_arch":"X86_64",
+        "rom_kernel":"windows",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 7 is a major release of the Windows NT operating system developed by Microsoft. It was released to manufacturing on July 22, 2009, and became generally available on October 22, 2009. It is the successor to Windows Vista, released nearly three years earlier. Windows 7's server counterpart, Windows Server 2008 R2, was released at the same time. It was succeeded by Windows 8 in October 2012."
+    },
+    {
         "rom_name":"Windows 7 build 7600",
         "rom_icon":"https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/10/15/windows_logo_2006_1_c0e5e8a8271301cfed289ab6118e38b2.png",
         "rom_url":"https://youtu.be/2m4tZ_a8b3g",
