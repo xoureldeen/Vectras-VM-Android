@@ -544,7 +544,7 @@
         "rom_kernel":"linux",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nUbuntu is a popular Linux distribution based on Debian. It is designed to be user-friendly and accessible, with a focus on ease of use and installation. Ubuntu features a modern desktop environment and comes with a wide range of pre-installed applications for productivity, multimedia, and internet browsing. The distribution is known for its strong community support and regular release cycle."
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nDebian (/ˈdɛbiən/) is a free and open source Linux distribution, developed by the Debian Project, which was established by Ian Murdock in August 1993. Debian is one of the oldest operating systems based on the Linux kernel, and is the basis of many other Linux distributions."
     },
     {
         "rom_name":"Ubuntu 9.10",
