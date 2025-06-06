@@ -534,6 +534,19 @@
         "desc":"From @SilentGamer191 on Telegram.\n\nUser: Vectras\nPassword: 1234567890\n\nelementary OS is a Linux distribution based on Ubuntu. It is designed to be easy to use and visually appealing, with a focus on simplicity and elegance. elementary OS features its own desktop environment called Pantheon, which provides a clean and modern user interface. The distribution comes with a curated selection of applications and emphasizes privacy and security."
     },
     {
+        "rom_name":"Debian 12",
+        "rom_icon":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRw2CcpHNKIioANF5MV4H-Zw2H3S7hPDMaqeA&s",
+        "rom_url":"https://youtu.be/sa_PZy8q3n8",
+        "rom_path":"Debian 12.cvbi",
+        "rom_avail":true,
+        "rom_size":"7 GB",
+        "rom_arch":"X86_64",
+        "rom_kernel":"linux",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nUbuntu is a popular Linux distribution based on Debian. It is designed to be user-friendly and accessible, with a focus on ease of use and installation. Ubuntu features a modern desktop environment and comes with a wide range of pre-installed applications for productivity, multimedia, and internet browsing. The distribution is known for its strong community support and regular release cycle."
+    },
+    {
         "rom_name":"Ubuntu 9.10",
         "rom_icon":"https://img.beget.com/cp/plain/shared/7Um-b5Q4nUooUrhtmYGD9ZofUPM7cKtw/ubuntu2x.png@.webp",
         "rom_url":"https://youtu.be/fURj6W92nOg",
