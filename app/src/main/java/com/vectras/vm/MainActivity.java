@@ -147,6 +147,9 @@ public class MainActivity extends AppCompatActivity {
     public boolean skipIDEwithARM64DialogInStartVM = false;
     BottomAppBar bottomAppBar;
 
+    public static Timer timer = new Timer();
+    public static TimerTask timerTask;
+
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
@@ -990,16 +993,22 @@ public class MainActivity extends AppCompatActivity {
 
     public static void startVM(String vmName, String env, String itemExtra, String itemPath) {
 
-        ActivityManager manager = (ActivityManager) activity.getSystemService(ACTIVITY_SERVICE);
-        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-            if (!AudioStreamService.class.getName().equals(service.service.getClassName())) {
-                if (SDK_INT >= Build.VERSION_CODES.O) {
-                    activity.startForegroundService(new Intent(activity, AudioStreamService.class));
-                } else {
-                    activity.startService(new Intent(activity, AudioStreamService.class));
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                ActivityManager manager = (ActivityManager) activity.getSystemService(ACTIVITY_SERVICE);
+                for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+                    if (!AudioStreamService.class.getName().equals(service.service.getClassName())) {
+                        if (SDK_INT >= Build.VERSION_CODES.O) {
+                            activity.startForegroundService(new Intent(activity, AudioStreamService.class));
+                        } else {
+                            activity.startService(new Intent(activity, AudioStreamService.class));
+                        }
+                    }
                 }
-           }
-        }
+            }
+        };
+        timer.schedule(timerTask, 5000);
 
         File romDir = new File(Config.getCacheDir()+ "/" + Config.vmID);
         romDir.mkdirs();

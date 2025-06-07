@@ -6,32 +6,65 @@
     android:orientation="vertical"
     android:padding="15dp">
 
-    <TextView
+    <LinearLayout
+        android:layout_width="30dp"
+        android:layout_height="5dp"
+        android:background="@drawable/handle_bar_style"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"/>
+
+<!--    <TextView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/options"-->
+<!--        android:textSize="22sp"/>-->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linear4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/options"
-        android:padding="8dp"
-        android:textSize="22sp" />
+        android:padding="20dp"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/modifyRomBtn"
+            style="@style/MaterialAlertDialog.NeutralButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/modify"
+            app:icon="@drawable/round_edit_24"
+            app:iconTint="?attr/colorSurfaceInverse"
+            android:textColor="?attr/colorSurfaceInverse"
+            app:iconGravity="top"
+            app:iconPadding="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/exportRomBtn"/>
 
-    <Button
-        android:id="@+id/modifyRomBtn"
-        style="@style/MaterialAlertDialog.NeutralButtonStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/modify" />
+        <Button
+            android:id="@+id/exportRomBtn"
+            style="@style/MaterialAlertDialog.NegativeButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/export"
+            app:icon="@drawable/arrow_upward_24px"
+            app:iconTint="?attr/colorSurfaceInverse"
+            android:textColor="?attr/colorSurfaceInverse"
+            app:iconGravity="top"
+            app:iconPadding="8dp"
+            app:layout_constraintStart_toEndOf="@+id/modifyRomBtn"
+            app:layout_constraintEnd_toStartOf="@+id/removeRomBtn"/>
 
-    <Button
-        android:id="@+id/exportRomBtn"
-        style="@style/MaterialAlertDialog.NegativeButtonStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/export" />
-
-    <Button
-        android:id="@+id/removeRomBtn"
-        style="@style/MaterialAlertDialog.NegativeButtonStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/remove" />
-
+        <Button
+            android:id="@+id/removeRomBtn"
+            style="@style/MaterialAlertDialog.NegativeButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/remove"
+            app:icon="@drawable/delete_24px"
+            app:iconTint="@color/red_error"
+            android:textColor="@color/red_error"
+            app:iconGravity="top"
+            app:iconPadding="8dp"
+            app:layout_constraintStart_toEndOf="@+id/exportRomBtn"
+            app:layout_constraintEnd_toEndOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

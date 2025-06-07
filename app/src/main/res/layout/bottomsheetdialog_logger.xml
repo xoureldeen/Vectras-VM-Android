@@ -10,12 +10,20 @@
         android:orientation="vertical"
         android:padding="18dp">
 
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/logs"
-            style="@style/MaterialAlertDialog.Material3.Title.Text"/>
+        <LinearLayout
+            android:layout_width="30dp"
+            android:layout_height="5dp"
+            android:background="@drawable/handle_bar_style"
+            android:layout_gravity="center"
+            android:layout_marginBottom="18dp"/>
+
+<!--        <TextView-->
+<!--            android:id="@+id/title"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginBottom="8dp"-->
+<!--            android:text="@string/logs"-->
+<!--            style="@style/MaterialAlertDialog.Material3.Title.Text"/>-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerLog"

@@ -88,7 +88,7 @@ public class RomInfo extends AppCompatActivity {
             Glide.with(this).load(getIntent().getStringExtra("icon")).into(ivIcon);
         }
 
-        btn_pick.setText(getString(R.string.select) + " " + getIntent().getStringExtra("filename"));
+//        btn_pick.setText(getString(R.string.select) + " " + getIntent().getStringExtra("filename"));
     }
 
     public void onResume() {

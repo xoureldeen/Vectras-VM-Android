@@ -30,7 +30,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         style="@style/CardViewStyle"
-                        app:cardCornerRadius="10dp"
+                        app:cardCornerRadius="20dp"
                         app:cardUseCompatPadding="true">
                         <ImageView
                             android:id="@+id/ivIcon"

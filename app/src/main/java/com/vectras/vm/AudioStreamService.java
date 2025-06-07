@@ -24,6 +24,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class AudioStreamService extends Service {
 
@@ -40,13 +42,13 @@ public class AudioStreamService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        createNotificationChannel();
-        Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("Audio Streaming")
-                .setContentText("Receiving audio stream...")
-                .setSmallIcon(R.drawable.volume_up_24px)
-                .build();
-        startForeground(1, notification);
+//        createNotificationChannel();
+//        Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+//                .setContentTitle("Audio Streaming")
+//                .setContentText("Receiving audio stream...")
+//                .setSmallIcon(R.drawable.volume_up_24px)
+//                .build();
+//        startForeground(1, notification);
     }
 
     @Override
