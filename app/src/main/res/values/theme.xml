@@ -13,7 +13,7 @@
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
         <!-- Customize your theme here. -->
         <item name="checkboxStyle">@style/MyCheckBoxStyle</item>
-        <item name="android:windowAnimationStyle">@style/ActivityAnimation</item>
+<!--        <item name="android:windowAnimationStyle">@style/ActivityAnimation</item>-->
         <item name="actionOverflowButtonStyle">@style/AppTheme.Toolbar.OverflowButton</item>
         <!--<item name="fontFamily">@font/josefin_sans</item>-->
         <item name="chipStyle">@style/AppTheme.WidgetGroupChip</item>

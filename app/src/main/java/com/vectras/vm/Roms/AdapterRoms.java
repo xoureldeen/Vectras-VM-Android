@@ -14,6 +14,7 @@ import android.view.animation.AnimationUtils;
 import android.webkit.URLUtil;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
@@ -81,18 +82,18 @@ public class AdapterRoms extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         Glide.with(RomsManagerActivity.activity).load(current.itemIcon).placeholder(R.drawable.no_machine_image).error(R.drawable.no_machine_image).into(myHolder.ivIcon);
         myHolder.textName.setText(current.itemName);
         myHolder.textSize.setText(current.itemSize);
-        myHolder.checkBox.setChecked(position == mSelectedItem);
+        //myHolder.checkBox.setChecked(position == mSelectedItem);
         if (current.itemAvail) {
             if (FileUtils.fileValid(RomsManagerActivity.activity, AppConfig.maindirpath + current.itemPath)) {
-                myHolder.checkBox.setEnabled(false);
+                //myHolder.checkBox.setEnabled(false);
                 myHolder.textAvail.setTextColor(Color.BLUE);
                 myHolder.textAvail.setText(RomsManagerActivity.sInstalled);
             } else {
-                myHolder.checkBox.setEnabled(true);
+                //myHolder.checkBox.setEnabled(true);
                 myHolder.textAvail.setTextColor(Color.GREEN);
                 myHolder.textAvail.setText(RomsManagerActivity.sAvailable);
             }
-            myHolder.checkBox.setOnClickListener(new View.OnClickListener() {
+            myHolder.linearItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mSelectedItem = position;
@@ -147,7 +148,7 @@ public class AdapterRoms extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         } else {
             myHolder.textAvail.setText(RomsManagerActivity.sUnavailable);
             myHolder.textAvail.setTextColor(Color.RED);
-            myHolder.checkBox.setEnabled(false);
+            //myHolder.checkBox.setEnabled(false);
         }
 
     }
@@ -163,7 +164,9 @@ public class AdapterRoms extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         TextView textName, textAvail, textSize;
         ImageView ivIcon;
 
-        RadioButton checkBox;
+        //RadioButton checkBox;
+
+        LinearLayout linearItem;
 
         // create constructor to get widget reference
         public MyHolder(View itemView) {
@@ -173,7 +176,8 @@ public class AdapterRoms extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             textSize = (TextView) itemView.findViewById(R.id.textSize);
             textAvail = (TextView) itemView.findViewById(R.id.textAvail);
 
-            checkBox = (RadioButton) itemView.findViewById(R.id.checkBox);
+            //checkBox = (RadioButton) itemView.findViewById(R.id.checkBox);
+            linearItem = itemView.findViewById(R.id.linearItem);
         }
 
     }

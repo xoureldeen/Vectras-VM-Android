@@ -17,4 +17,6 @@
     <color name="red_error_link">#FC143C</color>
 
     <color name="cursor">#FF000000</color>
+
+    <color name="colorMonoChromeInverted50">#80000000</color>
 </resources>

@@ -82,8 +82,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1.0"
-        android:orientation="vertical"
-        android:padding="10dp">
+        android:orientation="vertical">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cdCustom"
@@ -127,71 +126,80 @@
             android:textSize="20sp"
             android:visibility="gone" />
 
-        <HorizontalScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="4dp"
-            android:gravity="center_horizontal">
-
-            <com.google.android.material.button.MaterialButtonToggleGroup
-                android:id="@+id/filterToggle"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                app:singleSelection="true">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/windowsToggle"
-                    style="@style/Widget.Material3.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/windows"
-                    app:icon="@drawable/ic_windows"
-                    app:strokeColor="?attr/colorPrimary" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/linuxToggle"
-                    style="@style/Widget.Material3.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/linux"
-                    app:icon="@drawable/ic_linux"
-                    app:strokeColor="?attr/colorPrimary" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/appleToggle"
-                    style="@style/Widget.Material3.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/apple"
-                    app:icon="@drawable/ic_apple"
-                    app:strokeColor="?attr/colorPrimary" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/androidToggle"
-                    style="@style/Widget.Material3.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/android"
-                    app:icon="@drawable/ic_android"
-                    app:strokeColor="?attr/colorPrimary" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/otherToggle"
-                    style="@style/Widget.Material3.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/other"
-                    app:icon="@drawable/ic_other"
-                    app:strokeColor="?attr/colorPrimary" />
-            </com.google.android.material.button.MaterialButtonToggleGroup>
-        </HorizontalScrollView>
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/romsRv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1.0"/>
+            android:layout_weight="1"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+            <HorizontalScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center_horizontal"
+                android:scrollbars="none">
+
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/filterToggle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    app:singleSelection="true"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/windowsToggle"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/windows"
+                        app:icon="@drawable/ic_windows"
+                        app:strokeColor="?attr/colorPrimary" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/linuxToggle"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/linux"
+                        app:icon="@drawable/ic_linux"
+                        app:strokeColor="?attr/colorPrimary" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/appleToggle"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/apple"
+                        app:icon="@drawable/ic_apple"
+                        app:strokeColor="?attr/colorPrimary" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/androidToggle"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/android"
+                        app:icon="@drawable/ic_android"
+                        app:strokeColor="?attr/colorPrimary" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/otherToggle"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/other"
+                        app:icon="@drawable/ic_other"
+                        app:strokeColor="?attr/colorPrimary" />
+                </com.google.android.material.button.MaterialButtonToggleGroup>
+            </HorizontalScrollView>
+        </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/goBtn"

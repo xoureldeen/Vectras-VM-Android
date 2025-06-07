@@ -3,7 +3,7 @@
 
 	<item
 		android:id="@+id/info"
-		android:icon="@drawable/round_info_24"
+		android:icon="@drawable/monitor_heart_24px"
 		app:showAsAction="ifRoom"
 		android:title="@string/info"/>
 	<item
