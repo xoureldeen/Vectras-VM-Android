@@ -377,6 +377,19 @@
         "desc":"From @SilentGamer191 on Telegram.\n\nTempleOS is a biblical-themed lightweight operating system designed to be the Third Temple prophesized in the Bible. It was created by American programmer Terry A. Davis, who developed it alone over the course of a decade after a series of manic episodes that he later described as a revelation from God."
     },
     {
+        "rom_name":"Damn Small Linux",
+        "rom_icon":"https://freesvg.org/img/1634872349damn_small_linux.png",
+        "rom_url":"https://anbui.ovh/get/vec/community/linux/dsl.html",
+        "rom_path":"Damn Small Linux.cvbi",
+        "rom_avail":true,
+        "rom_size":"50 MB",
+        "rom_arch":"X86_64",
+        "rom_kernel":"linux",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"From @tokaevUser on Telegram.\n\nDamn Small Linux (DSL) is a minimalist Linux distribution that is designed to run on older hardware. It is known for its small size, typically around 50 MB, and its ability to run entirely in RAM, making it extremely fast and efficient. DSL includes a variety of lightweight applications and tools, making it suitable for basic computing tasks while still being user-friendly."
+    },
+    {
         "rom_name":"BSDeviant",
         "rom_icon":"https://archiveos.org/wp-content/uploads/2019/03/bsdeviant.webp",
         "rom_url":"https://anbui.ovh/get/vec/community/bsd/bsdeviant.html",
