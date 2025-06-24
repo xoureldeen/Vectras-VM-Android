@@ -19,6 +19,7 @@ import com.google.gson.reflect.TypeToken;
 import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.MainRoms.AdapterMainRoms;
+import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.JSONUtils;
 import com.vectras.vm.utils.UIUtils;
@@ -105,61 +106,44 @@ public class VMManager {
     }
 
     public static void deleteVMDialog(String _vmName, int _position, Activity _activity) {
-        AlertDialog ad = new AlertDialog.Builder(_activity, R.style.MainDialogTheme).create();
-        ad.setTitle(_activity.getString(R.string.remove)+ " " + _vmName);
-        ad.setMessage(_activity.getString(R.string.are_you_sure));
-        ad.setButton(Dialog.BUTTON_NEGATIVE, _activity.getString(R.string.remove) + " " + _vmName, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                pendingPosition = _position;
-                pendingJsonContent = FileUtils.readAFile(AppConfig.maindirpath + "roms-data.json");
+        pendingPosition = _position;
+        pendingJsonContent = FileUtils.readAFile(AppConfig.maindirpath + "roms-data.json");
 
-                AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.activity, R.style.MainDialogTheme).create();
-                alertDialog.setTitle(_activity.getString(R.string.keep_files_question_mark));
-                alertDialog.setMessage(_activity.getString(R.string.do_you_want_to_keep_this_ROM_file_and_CD_ROM_file));
-                alertDialog.setCancelable(false);
-                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, _activity.getString(R.string.keep), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        hideVMIDWithPosition();
-                    }
-                });
-                alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, _activity.getString(R.string.remove_all), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        isKeptSomeFiles = false;
-                        deleteVM();
+        DialogUtils.threeDialog(_activity, _activity.getString(R.string.remove)+ " " + _vmName, _activity.getString(R.string.remove_vm_content), _activity.getString(R.string.remove_and_do_not_keep_files), _activity.getString(R.string.remove_but_keep_files), _activity.getString(R.string.cancel),true, R.drawable.delete_24px, true,
+                () -> {
+                    isKeptSomeFiles = false;
+                    deleteVM();
+                    removeInRomsDataJson(_activity, _vmName, _position);
+                },
+                () -> {
+                    hideVMIDWithPosition();
+                    removeInRomsDataJson(_activity, _vmName, _position);
+                },
+                () -> {
 
-                        if (isKeptSomeFiles && FileUtils.readAFile(AppConfig.maindirpath + "roms-data.json").contains("{")) {
-                            UIUtils.oneDialog(_activity.getString(R.string.keep), _activity.getString(R.string.kept_some_files), true, false, _activity);
-                        }
-                    }
-                });
-                alertDialog.show();
+                },
+                null);
+    }
 
-                MainActivity.mMainAdapter = new AdapterMainRoms(MainActivity.activity, MainActivity.data);
-                MainActivity.data.remove(_position);
-                MainActivity.mRVMainRoms.setAdapter(MainActivity.mMainAdapter);
-                MainActivity.mRVMainRoms.setLayoutManager(new GridLayoutManager(MainActivity.activity, 2));
-                MainActivity.jArray.remove(_position);
-                try {
-                    Writer output = null;
-                    File jsonFile = new File(AppConfig.maindirpath + "roms-data" + ".json");
-                    output = new BufferedWriter(new FileWriter(jsonFile));
-                    output.write(MainActivity.jArray.toString());
-                    output.close();
-                } catch (Exception e) {
-                    UIUtils.toastLong(_activity, e.toString());
-                }
-                UIUtils.toastLong(_activity, _vmName + _activity.getString(R.string.are_removed_successfully));
-                if (!FileUtils.readAFile(AppConfig.maindirpath + "roms-data.json").contains("{")) {
-                    MainActivity.mdatasize2();
-                }
-            }
-        });
-        ad.setButton(Dialog.BUTTON_POSITIVE, _activity.getString(R.string.cancel), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                ad.dismiss();
-            }
-        });
-        ad.show();
+    public static void removeInRomsDataJson(Activity _activity, String _vmName, int _position) {
+        MainActivity.mMainAdapter = new AdapterMainRoms(MainActivity.activity, MainActivity.data);
+        MainActivity.data.remove(_position);
+        MainActivity.mRVMainRoms.setAdapter(MainActivity.mMainAdapter);
+        MainActivity.mRVMainRoms.setLayoutManager(new GridLayoutManager(MainActivity.activity, 2));
+        MainActivity.jArray.remove(_position);
+        try {
+            Writer output = null;
+            File jsonFile = new File(AppConfig.maindirpath + "roms-data" + ".json");
+            output = new BufferedWriter(new FileWriter(jsonFile));
+            output.write(MainActivity.jArray.toString());
+            output.close();
+        } catch (Exception e) {
+            UIUtils.toastLong(_activity, e.toString());
+        }
+        UIUtils.toastLong(_activity, _vmName + _activity.getString(R.string.are_removed_successfully));
+        if (!FileUtils.readAFile(AppConfig.maindirpath + "roms-data.json").contains("{")) {
+            MainActivity.mdatasize2();
+        }
     }
 
     public static String idGenerator() {
@@ -621,55 +605,35 @@ public class VMManager {
             return true;
         //Error code: PROOT_IS_MISSING_0
         if (_result.contains("proot\": error=2,")) {
-            AlertDialog alertDialog = new AlertDialog.Builder(_activity, R.style.MainDialogTheme).create();
-            alertDialog.setTitle(_activity.getResources().getString(R.string.problem_has_been_detected));
-            alertDialog.setMessage(_activity.getResources().getString(R.string.error_PROOT_IS_MISSING_0));
-            alertDialog.setCancelable(false);
-            alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, _activity.getResources().getString(R.string.continuetext), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    MainActivity.isActivate = false;
-                    FileUtils.deleteDirectory(_activity.getFilesDir().getAbsolutePath() + "/data");
-                    FileUtils.deleteDirectory(_activity.getFilesDir().getAbsolutePath() + "/distro");
-                    FileUtils.deleteDirectory(_activity.getFilesDir().getAbsolutePath() + "/usr");
-                    Intent intent = new Intent();
-                    intent.setClass(_activity, SplashActivity.class);
-                    _activity.startActivity(intent);
-                    _activity.finish();
-                }
-            });
-            alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, _activity.getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-
-                }
-            });
-            alertDialog.show();
+            DialogUtils.twoDialog(_activity, _activity.getResources().getString(R.string.problem_has_been_detected), _activity.getResources().getString(R.string.error_PROOT_IS_MISSING_0), _activity.getString(R.string.continuetext), _activity.getString(R.string.cancel), true, R.drawable.build_24px, true,
+                    () -> {
+                        MainActivity.isActivate = false;
+                        FileUtils.deleteDirectory(_activity.getFilesDir().getAbsolutePath() + "/data");
+                        FileUtils.deleteDirectory(_activity.getFilesDir().getAbsolutePath() + "/distro");
+                        FileUtils.deleteDirectory(_activity.getFilesDir().getAbsolutePath() + "/usr");
+                        Intent intent = new Intent();
+                        intent.setClass(_activity, SplashActivity.class);
+                        _activity.startActivity(intent);
+                        _activity.finish();
+                    },
+                    null, null);
             return true;
         } else if (_result.contains(") exists") && _result.contains("drive with bus")) {
             //Error code: DRIVE_INDEX_0_EXISTS
-            UIUtils.oneDialog(_activity.getResources().getString(R.string.problem_has_been_detected), _activity.getResources().getString(R.string.error_DRIVE_INDEX_0_EXISTS), true, false, _activity);
+            DialogUtils.oneDialog(_activity, _activity.getString(R.string.problem_has_been_detected), _activity.getString(R.string.error_DRIVE_INDEX_0_EXISTS), _activity.getString(R.string.ok),true, R.drawable.hard_drive_24px, true,null, null);
             return true;
         } else if (_result.contains("gtk initialization failed") || _result.contains("x11 not available")) {
             //Error code: X11_NOT_AVAILABLE
-            AlertDialog alertDialog = new AlertDialog.Builder(_activity, R.style.MainDialogTheme).create();
-            alertDialog.setTitle(_activity.getResources().getString(R.string.problem_has_been_detected));
-            alertDialog.setMessage(_activity.getResources().getString(R.string.error_X11_NOT_AVAILABLE));
-            alertDialog.setCancelable(false);
-            alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, _activity.getResources().getString(R.string.continuetext), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    MainSettingsManager.setVmUi(_activity, "VNC");
-                    UIUtils.oneDialog(_activity.getResources().getString(R.string.done), _activity.getResources().getString(R.string.switched_to_VNC), true, false, _activity);
-                }
-            });
-            alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, _activity.getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-
-                }
-            });
-            alertDialog.show();
+            DialogUtils.twoDialog(_activity, _activity.getString(R.string.problem_has_been_detected), _activity.getString(R.string.error_X11_NOT_AVAILABLE), _activity.getString(R.string.continuetext), _activity.getString(R.string.cancel), true, R.drawable.cast_24px, true,
+                    () -> {
+                        MainSettingsManager.setVmUi(_activity, "VNC");
+                        DialogUtils.oneDialog(_activity, _activity.getString(R.string.done), _activity.getString(R.string.switched_to_VNC), _activity.getString(R.string.ok),true, R.drawable.check_24px, true,null, null);
+                    },
+                    null, null);
             return true;
-        } else if (_result.contains("No such file or directory1")) {
+        } else if (_result.contains("No such file or directory")) {
             //Error code: NO_SUCH_FILE_OR_DIRECTORY
-            UIUtils.oneDialog(_activity.getResources().getString(R.string.problem_has_been_detected), _activity.getResources().getString(R.string.error_NO_SUCH_FILE_OR_DIRECTORY), true, false, _activity);
+            DialogUtils.oneDialog(_activity, _activity.getString(R.string.problem_has_been_detected), _activity.getString(R.string.error_NO_SUCH_FILE_OR_DIRECTORY), _activity.getString(R.string.ok),true, R.drawable.file_copy_24px, true,null, null);
             _activity.stopService(new Intent(_activity, MainService.class));
             return true;
         } else {
@@ -677,25 +641,18 @@ public class VMManager {
         }
     }
 
-    public static boolean isRomsDataJsonNormal(Boolean _needfix, Context _context) {
+    public static boolean isRomsDataJsonNormal(Boolean _needfix, Activity _context) {
         if (isFileExists(AppConfig.romsdatajson)) {
             if (!JSONUtils.isValidFromFile(AppConfig.romsdatajson)) {
                 if (_needfix) {
-                    AlertDialog alertDialog = new AlertDialog.Builder(_context, R.style.MainDialogTheme).create();
-                    alertDialog.setTitle(_context.getResources().getString(R.string.oops));
-                    alertDialog.setMessage(_context.getResources().getString(R.string.need_fix_json_before_create));
-                    alertDialog.setCancelable(true);
-                    alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, _context.getResources().getString(R.string.continuetext), (dialog, which) -> {
-                        FileUtils.moveAFile(AppConfig.maindirpath + "roms-data.json", AppConfig.maindirpath + "roms-data.old.json");
-                        FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", "[]");
-                        startFixRomsDataJson();
-                        fixRomsDataJsonResult(_context);
-                    });
-                    alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, _context.getResources().getString(R.string.cancel), (dialog, which) -> {
-
-                    });
-                    alertDialog.show();
-
+                    DialogUtils.twoDialog(_context, _context.getString(R.string.problem_has_been_detected), _context.getString(R.string.need_fix_json_before_create), _context.getString(R.string.continuetext), _context.getString(R.string.cancel), true, R.drawable.build_24px, true,
+                            () -> {
+                                FileUtils.moveAFile(AppConfig.maindirpath + "roms-data.json", AppConfig.maindirpath + "roms-data.old.json");
+                                FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", "[]");
+                                startFixRomsDataJson();
+                                fixRomsDataJsonResult(_context);
+                            },
+                            null, null);
                 }
                 return false;
             } else {
@@ -707,11 +664,11 @@ public class VMManager {
         }
     }
 
-    public static void fixRomsDataJsonResult(Context _context) {
+    public static void fixRomsDataJsonResult(Activity _context) {
         if (restoredVMs == 0) {
-            UIUtils.oneDialogWithContext(_context.getString(R.string.done), _context.getString(R.string.roms_data_json_fixed_unsuccessfully),true, _context);
+            DialogUtils.oneDialog(_context, _context.getString(R.string.done), _context.getString(R.string.roms_data_json_fixed_unsuccessfully), _context.getString(R.string.ok),true, R.drawable.error_96px, true,null, null);
         } else {
-            UIUtils.oneDialogWithContext(_context.getString(R.string.done), _context.getString(R.string.roms_data_json_fixed_successfully),true, _context);
+            DialogUtils.oneDialog(_context, _context.getString(R.string.done), _context.getString(R.string.roms_data_json_fixed_successfully), _context.getString(R.string.ok),true, R.drawable.check_24px, true,null, null);
         }
         MainActivity.loadDataVbi();
         MainActivity.mdatasize2();

@@ -78,7 +78,9 @@
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:indeterminate="true"
-            app:showAnimationBehavior="inward"/>
+            android:max="100"
+            app:showAnimationBehavior="inward"
+            android:id="@+id/linearprogress"/>
     </LinearLayout>
     <LinearLayout
         android:id="@+id/lineardone"

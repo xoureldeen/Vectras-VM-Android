@@ -438,6 +438,9 @@
     <string name="you_are_ready_to_go">You are ready to go!</string>
     <string name="shared_folder_is_not_used_because_i386_does_not_support_it">Shared Folder is not used because i386 does not support it.</string>
     <string name="use_uefi_for_x64_only">Use UEFI (x64 only)</string>
+    <string name="remove_and_do_not_keep_files">Remove and don\'t keep files</string>
+    <string name="remove_but_keep_files">Remove and keep files</string>
+    <string name="remove_vm_content">Do you want to remove it? You can choose to keep or not keep the files.</string>
 
     <!--======================TERMUX STRINGS====================-->
     <string name="application_name" translatable="false">Vterm</string>

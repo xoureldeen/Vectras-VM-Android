@@ -30,6 +30,7 @@ import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
+import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -286,17 +287,8 @@ public class StoreItemActivity extends AppCompatActivity {
 		@Override
 		protected void onPostExecute(String unused) {
 			dismissDialog(DIALOG_DOWNLOAD_PROGRESS);
-			AlertDialog ad;
-			ad = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
-			ad.setTitle(getString(R.string.downloaded_successfully));
 			String fileName = URLUtil.guessFileName(link,null,null);
-			ad.setMessage(getString(R.string.downloaded_to_path)+AppConfig.downloadsFolder+fileName);
-			ad.setButton(Dialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int which) {
-					return;
-				}
-			});
-			ad.show();
+			DialogUtils.oneDialog(StoreItemActivity.this, getString(R.string.downloaded_successfully), getString(R.string.downloaded_to_path) + AppConfig.downloadsFolder +  fileName, getString(R.string.ok), true, R.drawable.check_24px, true, null, null);
 		}
 	}
 
