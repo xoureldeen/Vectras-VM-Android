@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -19,6 +20,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.vectras.vm.utils.FileUtils;
@@ -34,9 +36,13 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ExportRomActivity extends AppCompatActivity {
 
+    private Timer _timer = new Timer();
+    private TimerTask timerTask;
     private LinearLayout linearone;
     private LinearLayout linearload;
     private LinearLayout lineardone;
@@ -53,6 +59,14 @@ public class ExportRomActivity extends AppCompatActivity {
     public String iconfile = "";
     public String diskfile = "";
     public String cdromfile = "";
+    private int folderSize = 0;
+    private int zipFileSize = 0;
+    private double zipprogress = 0;
+    private double zipprogresslast = 0;
+    private double folderSizeMB = 0;
+    private LinearProgressIndicator progressBar;
+    private TextView textviewsettingup;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +83,8 @@ public class ExportRomActivity extends AppCompatActivity {
         textviewerrorcontent = findViewById(R.id.textviewerrorcontent);
         editauthor = findViewById(R.id.edittext1);
         editdesc = findViewById(R.id.edittext2);
+        progressBar = findViewById(R.id.linearprogress);
+        textviewsettingup = findViewById(R.id.textviewsettingup);
 
         Button buttondone;
         buttondone = findViewById(R.id.materialbutton1);
@@ -208,6 +224,39 @@ public class ExportRomActivity extends AppCompatActivity {
 
         FileUtils.writeToFile(new File(String.valueOf(getApplicationContext().getExternalFilesDir("data"))).getPath(), "rom-data.json", new Gson().toJson(mapForGetData));
 
+        folderSize = FileUtils.getFolderSize(getRomPath);
+        folderSizeMB = (folderSize / (1024 * 10.24)) / 2;
+
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        zipFileSize = FileUtils.getFileSize(FileUtils.getExternalFilesDirectory(getApplicationContext()).getPath() + "/cvbi/" + Objects.requireNonNull(mapForGetData.get("title")).toString() + ".cvbi");
+                        double zipFileSizeMB = zipFileSize / (1024 * 1024);
+                        double currentProgress = (100 / folderSizeMB) * zipFileSizeMB;
+                        if ((100 / folderSizeMB) * zipFileSizeMB < 0) {
+                            if ((int)currentProgress != (int)zipprogresslast) {
+                                zipprogress++ ;
+                            }
+                        } else {
+                            zipprogress = currentProgress;
+                        }
+                        if (zipprogress > 99) {
+                            zipprogress = 99;
+                        }
+                        zipprogresslast = currentProgress;
+                        if (folderSize > 0 || zipFileSize > 0) {
+                            progressBar.setProgressCompat((int) zipprogress, true);
+                            textviewsettingup.setText(String.valueOf((int) zipprogress) + "% completed.");
+                        }
+                    }
+                });
+            }
+        };
+        _timer.schedule(timerTask, 0, 1000);
+
         Thread t = new Thread() {
             @Override
             public void run() {
@@ -270,6 +319,9 @@ public class ExportRomActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             UIControler(1, FileUtils.getExternalFilesDirectory(getApplicationContext()).getPath() + "/cvbi/" + Objects.requireNonNull(mapForGetData.get("title")).toString() + ".cvbi");
+                            if (timerTask != null) {
+                                timerTask.cancel();
+                            }
                         }
                     });
                 } catch (Exception e) {

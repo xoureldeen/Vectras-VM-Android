@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import android.app.Activity;
@@ -731,6 +732,50 @@ public class FileUtils {
 		list.clear();
 		for (File file : listFiles) {
 			list.add(file.getAbsolutePath());
+		}
+	}
+
+	public static int getFileSize (String _path) {
+		try {
+			File file = new File(_path);
+			return (int) file.length();
+		} catch (Exception _e) {
+			return 0;
+		}
+	}
+
+	public static int getFolderSize(String _path) {
+		try {
+			File file;
+			file = new File(_path);
+			if (file == null || !file.exists()) {
+				return 0;
+			}
+			if (!file.isDirectory()) {
+				return (int) file.length();
+			}
+			final List<File> dirs = new LinkedList<>();
+			dirs.add(file);
+			long result = 0;
+			while (!dirs.isEmpty()) {
+				final File dir = dirs.remove(0);
+				if (!dir.exists()) {
+					continue;
+				}
+				final File[] listFiles = dir.listFiles();
+				if (listFiles == null || listFiles.length == 0) {
+					continue;
+				}
+				for (final File child : listFiles) {
+					result += child.length();
+					if (child.isDirectory()) {
+						dirs.add(child);
+					}
+				}
+			}
+			return (int) result;
+		} catch (Exception _e) {
+			return 0;
 		}
 	}
 }
