@@ -687,8 +687,8 @@ public class MainVNCActivity extends VncCanvasActivity {
             }
         });
 
-                ArrayAdapter < String > adapter = new ArrayAdapter<>(this,
-                        R.layout.container_function, functionsArray);
+        ArrayAdapter < String > adapter = new ArrayAdapter<>(this,
+                R.layout.container_function, functionsArray);
 
         ListView listView = findViewById(R.id.functions);
         listView.setAdapter(adapter);
@@ -1109,18 +1109,18 @@ public class MainVNCActivity extends VncCanvasActivity {
 
         try {
             MotionEvent a = MotionEvent.obtain(0, 0, MotionEvent.ACTION_DOWN, 0, 0, 0);
+
             Config.mouseMode = Config.MouseMode.External;
             MainSettingsManager.setDesktopMode(this, true);
-            if (Config.showToast)
-                UIUtils.toastShort(MainVNCActivity.this, "External Mouse Enabled");
-            onNormalScreen();
-            AbstractScaling.getById(R.id.itemOneToOne).setScaleTypeForActivity(MainVNCActivity.this);
+            onFitToScreen();
             showPanningState();
-
             onMouse();
-        } catch (Exception e) {
+
+            //UIUtils.toastShort(MainVNCActivity.this, "Trackpad Calibrating");
+            invalidateOptionsMenu();
+        } catch (Exception ex) {
             if (Config.debug)
-                e.printStackTrace();
+                ex.printStackTrace();
         }
         //vncCanvas.reSize(false);
         invalidateOptionsMenu();
@@ -1166,7 +1166,6 @@ public class MainVNCActivity extends VncCanvasActivity {
     }
 
     private boolean onNormalScreen() {
-
         try {
             //Force only landscape
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
