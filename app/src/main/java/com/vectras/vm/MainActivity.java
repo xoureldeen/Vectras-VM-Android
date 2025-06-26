@@ -10,6 +10,7 @@ import static com.vectras.vm.utils.LibraryChecker.isPackageInstalled2;
 import static com.vectras.vm.utils.UIUtils.UIAlert;
 
 import com.vectras.vm.utils.CommandUtils;
+import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.PermissionUtils;
 
 import android.androidVNC.androidVNC;
@@ -582,43 +583,8 @@ public class MainActivity extends AppCompatActivity {
             public void onInitializationComplete(InitializationStatus initializationStatus) {
             }
         });
-        if (Config.debug)
-            UIAlert(activity, getString(R.string.debug_testing_build_5), getString(R.string.welcome_to_debug_build_of_vectras_vm_br) +
-                    getString(R.string.this_version_unstable_and_has_alot_of_bugs_br) +
-                    getString(R.string.don_t_forget_to_tell_us_on_github_issues_or_telegram_bot_br) +
-                    getString(R.string.a_href_https_t_me_vectras_protect_bot_telegram_report_bot_a_br) +
-                    getString(R.string.a_href_https_github_com_epicstudios856_vectras_vm_android_issues_github_issues_page_a_br));
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        if (!prefs.getBoolean("tgDialog", false)) {
-            AlertDialog alertDialog;
-            alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
-            alertDialog.setTitle(getString(R.string.join_us_on_telegram));
-            alertDialog.setMessage(getString(R.string.join_us_on_telegram_where_we_publish_all_the_news_and_updates_and_receive_your_opinions_and_bugs));
-            alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.join), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    String tg = "https://t.me/vectras_os";
-                    Intent f = new Intent(ACTION_VIEW);
-                    f.setData(Uri.parse(tg));
-                    startActivity(f);
-                    return;
-                }
-            });
-            alertDialog.setButton(DialogInterface.BUTTON_NEUTRAL, getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    return;
-                }
-            });
-            alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.dont_show_again), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-                    SharedPreferences.Editor edit = prefs.edit();
-                    edit.putBoolean("tgDialog", true);
-                    edit.apply();
-                    return;
-                }
-            });
-            alertDialog.show();
-        }
+
+        DialogUtils.joinTelegram(activity);
 
         totalRam = findViewById(R.id.totalRam);
         usedRam = findViewById(R.id.usedRam);
@@ -993,22 +959,22 @@ public class MainActivity extends AppCompatActivity {
 
     public static void startVM(String vmName, String env, String itemExtra, String itemPath) {
 
-        timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                ActivityManager manager = (ActivityManager) activity.getSystemService(ACTIVITY_SERVICE);
-                for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-                    if (!AudioStreamService.class.getName().equals(service.service.getClassName())) {
-                        if (SDK_INT >= Build.VERSION_CODES.O) {
-                            activity.startForegroundService(new Intent(activity, AudioStreamService.class));
-                        } else {
-                            activity.startService(new Intent(activity, AudioStreamService.class));
-                        }
-                    }
-                }
-            }
-        };
-        timer.schedule(timerTask, 5000);
+//        timerTask = new TimerTask() {
+//            @Override
+//            public void run() {
+//                ActivityManager manager = (ActivityManager) activity.getSystemService(ACTIVITY_SERVICE);
+//                for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+//                    if (!AudioStreamService.class.getName().equals(service.service.getClassName())) {
+//                        if (SDK_INT >= Build.VERSION_CODES.O) {
+//                            activity.startForegroundService(new Intent(activity, AudioStreamService.class));
+//                        } else {
+//                            activity.startService(new Intent(activity, AudioStreamService.class));
+//                        }
+//                    }
+//                }
+//            }
+//        };
+//        timer.schedule(timerTask, 5000);
 
         File romDir = new File(Config.getCacheDir()+ "/" + Config.vmID);
         romDir.mkdirs();

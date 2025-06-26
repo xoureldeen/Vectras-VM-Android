@@ -61,10 +61,9 @@
                         android:layout_marginLeft="8dp"
                         android:layout_weight="1"/>
 
-                    <LinearLayout
+                    <com.google.android.material.card.MaterialCardView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/backgroud_stroke_for_spinner">
+                        android:layout_height="wrap_content">
 
                         <Spinner
                             android:id="@+id/spinnerselectmirror"
@@ -72,7 +71,7 @@
                             android:layout_height="wrap_content"
                             android:spinnerMode="dialog"
                             tools:listitem="@layout/simple_layout_for_spiner"/>
-                    </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
                 </LinearLayout>
 
                 <LinearLayout

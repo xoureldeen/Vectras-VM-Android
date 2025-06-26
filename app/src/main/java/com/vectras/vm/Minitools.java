@@ -38,6 +38,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.termux.app.TermuxService;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.utils.CommandUtils;
+import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.ListUtils;
 import com.vectras.vm.utils.PackageUtils;
@@ -82,167 +83,95 @@ public class Minitools extends AppCompatActivity {
 
         setupsoundfortermux.setOnClickListener(v -> {
             if (PackageUtils.isInstalled("com.termux", getApplicationContext())) {
-                AlertDialog alertDialog = new AlertDialog.Builder(Minitools.this, R.style.MainDialogTheme).create();
-                alertDialog.setTitle(getResources().getString(R.string.setup_sound));
-                alertDialog.setMessage(getResources().getString(R.string.setup_sound_guide_content));
-                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.start_setup), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                        ClipData clip = ClipData.newPlainText("Setup", "curl -o setup.sh https://raw.githubusercontent.com/AnBui2004/termux/refs/heads/main/installpulseaudio.sh && chmod +rwx setup.sh && ./setup.sh && rm setup.sh");
-                        clipboard.setPrimaryClip(clip);
-                        Intent intent = new Intent();
-                        intent.setAction(ACTION_VIEW);
-                        intent.setData(Uri.parse("android-app://com.termux"));
-                        startActivity(intent);
-                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.copied), Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                });
-                alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        alertDialog.dismiss();
-                    }
-                });
-                alertDialog.show();
+                DialogUtils.twoDialog(Minitools.this, getString(R.string.setup_sound), getResources().getString(R.string.setup_sound_guide_content), getString(R.string.start_setup), getString(R.string.cancel), true, R.drawable.volume_up_24px, true,
+                        () -> {
+                            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                            ClipData clip = ClipData.newPlainText("Setup", "curl -o setup.sh https://raw.githubusercontent.com/AnBui2004/termux/refs/heads/main/installpulseaudio.sh && chmod +rwx setup.sh && ./setup.sh && rm setup.sh");
+                            clipboard.setPrimaryClip(clip);
+                            Intent intent = new Intent();
+                            intent.setAction(ACTION_VIEW);
+                            intent.setData(Uri.parse("android-app://com.termux"));
+                            startActivity(intent);
+                            Toast.makeText(getApplicationContext(), getResources().getString(R.string.copied), Toast.LENGTH_LONG).show();
+                        }, null, null);
             } else {
-                AlertDialog alertDialog = new AlertDialog.Builder(Minitools.this, R.style.MainDialogTheme).create();
-                alertDialog.setTitle(getResources().getString(R.string.termux_is_not_installed));
-                alertDialog.setMessage(getResources().getString(R.string.you_need_to_install_termux));
-                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.install), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent();
-                        intent.setAction(ACTION_VIEW);
-                        intent.setData(Uri.parse("https://github.com/termux/termux-app/releases"));
-                        startActivity(intent);
-                        return;
-                    }
-                });
-                alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        alertDialog.dismiss();
-                    }
-                });
-                alertDialog.show();
+                DialogUtils.twoDialog(Minitools.this, getString(R.string.termux_is_not_installed), getResources().getString(R.string.you_need_to_install_termux), getString(R.string.install), getString(R.string.cancel), true, R.drawable.arrow_downward_24px, true,
+                        () -> {
+                            Intent intent = new Intent();
+                            intent.setAction(ACTION_VIEW);
+                            intent.setData(Uri.parse("https://github.com/termux/termux-app/releases"));
+                            startActivity(intent);
+                        }, null, null);
             }
 
         });
 
         cleanup.setOnClickListener(v -> {
-            AlertDialog alertDialog = new AlertDialog.Builder(Minitools.this, R.style.MainDialogTheme).create();
-            alertDialog.setTitle(getResources().getString(R.string.clean_up));
-            alertDialog.setMessage(getResources().getString(R.string.clean_up_content));
-            alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.clean_up), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    VMManager.cleanUp();
-                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.done), Toast.LENGTH_LONG).show();
-                    restore.setVisibility(GONE);
-                    cleanup.setVisibility(GONE);
-                }
-            });
-            alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    alertDialog.dismiss();
-                }
-            });
-            alertDialog.show();
+            DialogUtils.twoDialog(Minitools.this, getResources().getString(R.string.clean_up), getResources().getString(R.string.clean_up_content), getResources().getString(R.string.clean_up), getResources().getString(R.string.cancel), true, R.drawable.cleaning_services_24px, true,
+                    () -> {
+                        VMManager.cleanUp();
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.done), Toast.LENGTH_LONG).show();
+                        restore.setVisibility(GONE);
+                        cleanup.setVisibility(GONE);
+                    }, null, null);
         });
 
         restore.setOnClickListener(v -> {
-            AlertDialog alertDialog = new AlertDialog.Builder(Minitools.this, R.style.MainDialogTheme).create();
-            alertDialog.setTitle(getResources().getString(R.string.restore));
-            alertDialog.setMessage(getResources().getString(R.string.restore_content));
-            alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.continuetext), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    VMManager.restoreVMs();
-                    UIUtils.oneDialog(getResources().getString(R.string.done), getResources().getString(R.string.restored) + " " + String.valueOf(VMManager.restoredVMs) + ".", true, false, Minitools.this);
-                    restore.setVisibility(GONE);
-                }
-            });
-            alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    alertDialog.dismiss();
-                }
-            });
-            alertDialog.show();
+            DialogUtils.twoDialog(Minitools.this, getResources().getString(R.string.restore), getResources().getString(R.string.restore_content), getResources().getString(R.string.continuetext), getResources().getString(R.string.cancel), true, R.drawable.settings_backup_restore_24px, true,
+                    () -> {
+                        VMManager.restoreVMs();
+                        UIUtils.oneDialog(getResources().getString(R.string.done), getResources().getString(R.string.restored) + " " + String.valueOf(VMManager.restoredVMs) + ".", true, false, Minitools.this);
+                        restore.setVisibility(GONE);
+                    }, null, null);
         });
 
         deleteallvm.setOnClickListener(v -> {
-            AlertDialog alertDialog = new AlertDialog.Builder(Minitools.this, R.style.MainDialogTheme).create();
-            alertDialog.setTitle(getResources().getString(R.string.delete_all_vm));
-            alertDialog.setMessage(getResources().getString(R.string.delete_all_vm_content));
-            alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.delete_all), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    VMManager.killallqemuprocesses(getApplicationContext());
-                    FileUtils.deleteDirectory(AppConfig.vmFolder);
-                    FileUtils.deleteDirectory(AppConfig.recyclebin);
-                    FileUtils.deleteDirectory(AppConfig.romsdatajson);
-                    File vDir = new File(AppConfig.maindirpath);
-                    vDir.mkdirs();
-                    FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", "[]");
-                    cleanup.setVisibility(GONE);
-                    restore.setVisibility(GONE);
-                    deleteallvm.setVisibility(GONE);
-                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.done), Toast.LENGTH_LONG).show();
-                }
-            });
-            alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    alertDialog.dismiss();
-                }
-            });
-            alertDialog.show();
+            DialogUtils.twoDialog(Minitools.this, getResources().getString(R.string.delete_all_vm), getResources().getString(R.string.delete_all_vm_content), getResources().getString(R.string.delete_all), getResources().getString(R.string.cancel), true, R.drawable.delete_24px, true,
+                    () -> {
+                        VMManager.killallqemuprocesses(getApplicationContext());
+                        FileUtils.deleteDirectory(AppConfig.vmFolder);
+                        FileUtils.deleteDirectory(AppConfig.recyclebin);
+                        FileUtils.deleteDirectory(AppConfig.romsdatajson);
+                        File vDir = new File(AppConfig.maindirpath);
+                        vDir.mkdirs();
+                        FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", "[]");
+                        cleanup.setVisibility(GONE);
+                        restore.setVisibility(GONE);
+                        deleteallvm.setVisibility(GONE);
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.done), Toast.LENGTH_LONG).show();
+                    }, null, null);
         });
 
         deleteall.setOnClickListener(v -> {
-            AlertDialog alertDialog = new AlertDialog.Builder(Minitools.this, R.style.MainDialogTheme).create();
-            alertDialog.setTitle(getResources().getString(R.string.delete_all));
-            alertDialog.setMessage(getResources().getString(R.string.delete_all_content));
-            alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.delete_all), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    VMManager.killallqemuprocesses(getApplicationContext());
-                    FileUtils.deleteDirectory(AppConfig.maindirpath);
-                    File vDir = new File(AppConfig.maindirpath);
-                    vDir.mkdirs();
-                    FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", "[]");
-                    cleanup.setVisibility(GONE);
-                    restore.setVisibility(GONE);
-                    deleteallvm.setVisibility(GONE);
-                    deleteall.setVisibility(GONE);
-                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.done), Toast.LENGTH_LONG).show();
-                }
-            });
-            alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    alertDialog.dismiss();
-                }
-            });
-            alertDialog.show();
+            DialogUtils.twoDialog(Minitools.this, getResources().getString(R.string.delete_all), getResources().getString(R.string.delete_all_content), getResources().getString(R.string.delete_all), getResources().getString(R.string.cancel), true, R.drawable.delete_forever_24px, true,
+                    () -> {
+                        VMManager.killallqemuprocesses(getApplicationContext());
+                        FileUtils.deleteDirectory(AppConfig.maindirpath);
+                        File vDir = new File(AppConfig.maindirpath);
+                        vDir.mkdirs();
+                        FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", "[]");
+                        cleanup.setVisibility(GONE);
+                        restore.setVisibility(GONE);
+                        deleteallvm.setVisibility(GONE);
+                        deleteall.setVisibility(GONE);
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.done), Toast.LENGTH_LONG).show();
+                    }, null, null);
         });
 
         reinstallsystem.setOnClickListener(v -> {
-            AlertDialog alertDialog = new AlertDialog.Builder(Minitools.this, R.style.MainDialogTheme).create();
-            alertDialog.setTitle(getResources().getString(R.string.reinstall_system));
-            alertDialog.setMessage(getResources().getString(R.string.reinstall_system_content));
-            alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.continuetext), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    MainActivity.isActivate = false;
-                    AppConfig.needreinstallsystem = true;
-                    VMManager.killallqemuprocesses(Minitools.this);
-                    FileUtils.deleteDirectory(getFilesDir().getAbsolutePath() + "/data");
-                    FileUtils.deleteDirectory(getFilesDir().getAbsolutePath() + "/distro");
-                    FileUtils.deleteDirectory(getFilesDir().getAbsolutePath() + "/usr");
-                    Intent intent = new Intent();
-                    intent.setClass(Minitools.this, SetupQemuActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            });
-            alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    alertDialog.dismiss();
-                }
-            });
-            alertDialog.show();
+            DialogUtils.twoDialog(Minitools.this, getResources().getString(R.string.reinstall_system), getResources().getString(R.string.reinstall_system_content), getResources().getString(R.string.continuetext), getResources().getString(R.string.cancel), true, R.drawable.system_update_24px, true,
+                    () -> {
+                        MainActivity.isActivate = false;
+                        AppConfig.needreinstallsystem = true;
+                        VMManager.killallqemuprocesses(Minitools.this);
+                        FileUtils.deleteDirectory(getFilesDir().getAbsolutePath() + "/data");
+                        FileUtils.deleteDirectory(getFilesDir().getAbsolutePath() + "/distro");
+                        FileUtils.deleteDirectory(getFilesDir().getAbsolutePath() + "/usr");
+                        Intent intent = new Intent();
+                        intent.setClass(Minitools.this, SetupQemuActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }, null, null);
         });
 
         spinnerselectmirror.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

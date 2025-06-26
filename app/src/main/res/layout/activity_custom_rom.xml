@@ -271,17 +271,20 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center">
-        <com.google.android.material.progressindicator.CircularProgressIndicator
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:indeterminate="true"
-            app:showAnimationBehavior="inward"/>
         <TextView
+            android:id="@+id/textviewprogress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:gravity="center"
             android:text="@string/processing_this_may_take_a_few_minutes" />
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:indeterminate="true"
+            android:max="100"
+            app:showAnimationBehavior="inward"
+            android:id="@+id/linearprogress"/>
     </LinearLayout>
 </LinearLayout>

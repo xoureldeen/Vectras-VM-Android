@@ -159,7 +159,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/windows"
-                        app:icon="@drawable/ic_windows"
+                        app:icon="@drawable/grid_view_24px"
                         app:strokeColor="?attr/colorPrimary" />
 
                     <com.google.android.material.button.MaterialButton
@@ -168,7 +168,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/linux"
-                        app:icon="@drawable/ic_linux"
+                        app:icon="@drawable/devices_other_24px"
                         app:strokeColor="?attr/colorPrimary" />
 
                     <com.google.android.material.button.MaterialButton
@@ -176,8 +176,8 @@
                         style="@style/Widget.Material3.Button.OutlinedButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/apple"
-                        app:icon="@drawable/ic_apple"
+                        android:text="@string/macos"
+                        app:icon="@drawable/desktop_mac_24px"
                         app:strokeColor="?attr/colorPrimary" />
 
                     <com.google.android.material.button.MaterialButton
@@ -186,7 +186,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/android"
-                        app:icon="@drawable/ic_android"
+                        app:icon="@drawable/android_24px"
                         app:strokeColor="?attr/colorPrimary" />
 
                     <com.google.android.material.button.MaterialButton
@@ -195,7 +195,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/other"
-                        app:icon="@drawable/ic_other"
+                        app:icon="@drawable/menu_24px"
                         app:strokeColor="?attr/colorPrimary" />
                 </com.google.android.material.button.MaterialButtonToggleGroup>
             </HorizontalScrollView>
