@@ -159,17 +159,16 @@
                         android:paddingTop="20dp"
                         android:paddingBottom="8dp"
                         android:text="@string/do_you_want_to_change_the_mirror_before_setting_up_the_current_mirror_is" />
-                    <LinearLayout
+                    <com.google.android.material.card.MaterialCardView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/backgroud_stroke_for_spinner">
+                        android:layout_height="wrap_content">
                         <Spinner
                             android:id="@+id/spinnerselectmirror"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:spinnerMode="dialog"
                             tools:listitem="@layout/simple_layout_for_spiner"/>
-                    </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
 
                 </LinearLayout>
             </LinearLayout>

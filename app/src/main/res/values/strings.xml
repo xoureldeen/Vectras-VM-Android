@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">v2.9.5 (3dfx - Waffle)</string>
+    <string name="app_version" translatable="false">v2.9.5 (3dfx - Xangos)</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -441,6 +441,8 @@
     <string name="remove_and_do_not_keep_files">Remove and don\'t keep files</string>
     <string name="remove_but_keep_files">Remove and keep files</string>
     <string name="remove_vm_content">Do you want to remove it? You can choose to keep or not keep the files.</string>
+    <string name="macos">macOS</string>
+    <string name="seconds_left">seconds left</string>
 
     <!--======================TERMUX STRINGS====================-->
     <string name="application_name" translatable="false">Vterm</string>
@@ -545,10 +547,10 @@
     <string name="x11">X11</string>
     <string name="rom_options">Rom Options</string>
     <string name="about_app">About App</string>
-    <string name="join_us_on_telegram">JOIN US ON TELEGRAM</string>
-    <string name="join_us_on_telegram_where_we_publish_all_the_news_and_updates_and_receive_your_opinions_and_bugs">Join us on Telegram where we publish all the news and updates and receive your opinions and bugs</string>
+    <string name="join_us_on_telegram">Join us on Telegram</string>
+    <string name="join_us_on_telegram_where_we_publish_all_the_news_and_updates_and_receive_your_opinions_and_bugs">Join us on Telegram where we publish all the news and updates and receive your opinions and bugs.</string>
     <string name="join">Join</string>
-    <string name="dont_show_again">DONT SHOW AGAIN</string>
+    <string name="dont_show_again">Don\'t show again</string>
     <string name="this_version_unstable_and_has_alot_of_bugs_br"><![CDATA[this version unstable and has a lot of bugs<br>]]></string>
     <string name="debug_testing_build_5">DEBUG TESTING BUILD 5</string>
     <string name="welcome_to_debug_build_of_vectras_vm_br"><![CDATA[welcome to debug build of vectras vm :)<br>]]></string>

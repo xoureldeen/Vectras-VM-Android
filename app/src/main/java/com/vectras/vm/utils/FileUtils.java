@@ -735,9 +735,12 @@ public class FileUtils {
 		}
 	}
 
-	public static int getFileSize (String _path) {
+	public static int getFileSize(String _path) {
 		try {
 			File file = new File(_path);
+			if (!file.exists()) {
+				return 0;
+			}
 			return (int) file.length();
 		} catch (Exception _e) {
 			return 0;

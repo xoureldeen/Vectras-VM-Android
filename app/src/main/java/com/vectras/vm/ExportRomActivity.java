@@ -26,6 +26,7 @@ import com.google.gson.reflect.TypeToken;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.PackageUtils;
 import com.vectras.vm.utils.UIUtils;
+import com.vectras.vm.utils.ZipUtils;
 
 import org.checkerframework.checker.guieffect.qual.UI;
 import org.zeroturnaround.zip.FileSource;
@@ -66,6 +67,7 @@ public class ExportRomActivity extends AppCompatActivity {
     private double folderSizeMB = 0;
     private LinearProgressIndicator progressBar;
     private TextView textviewsettingup;
+    private int compressionProgress = 0;
 
 
     @Override
@@ -224,8 +226,12 @@ public class ExportRomActivity extends AppCompatActivity {
 
         FileUtils.writeToFile(new File(String.valueOf(getApplicationContext().getExternalFilesDir("data"))).getPath(), "rom-data.json", new Gson().toJson(mapForGetData));
 
-        folderSize = FileUtils.getFolderSize(getRomPath);
-        folderSizeMB = (folderSize / (1024 * 10.24)) / 2;
+        //folderSize = FileUtils.getFolderSize(getRomPath);
+        //folderSizeMB = (folderSize / (1024 * 10.24)) / 2;
+        folderSize = FileUtils.getFileSize(diskfile);
+        folderSize += FileUtils.getFileSize(cdromfile);
+        folderSize += FileUtils.getFileSize(iconfile);
+        ZipUtils.reset();
 
         timerTask = new TimerTask() {
             @Override
@@ -234,22 +240,14 @@ public class ExportRomActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         zipFileSize = FileUtils.getFileSize(FileUtils.getExternalFilesDirectory(getApplicationContext()).getPath() + "/cvbi/" + Objects.requireNonNull(mapForGetData.get("title")).toString() + ".cvbi");
-                        double zipFileSizeMB = zipFileSize / (1024 * 1024);
-                        double currentProgress = (100 / folderSizeMB) * zipFileSizeMB;
-                        if ((100 / folderSizeMB) * zipFileSizeMB < 0) {
-                            if ((int)currentProgress != (int)zipprogresslast) {
-                                zipprogress++ ;
+                        compressionProgress = ZipUtils.getCompressionProgress(folderSize, zipFileSize);
+                        if (compressionProgress > 0) {
+                            if (compressionProgress > 98) {
+                                progressBar.setIndeterminate(true);
+                            } else {
+                                progressBar.setProgressCompat(compressionProgress, true);
                             }
-                        } else {
-                            zipprogress = currentProgress;
-                        }
-                        if (zipprogress > 99) {
-                            zipprogress = 99;
-                        }
-                        zipprogresslast = currentProgress;
-                        if (folderSize > 0 || zipFileSize > 0) {
-                            progressBar.setProgressCompat((int) zipprogress, true);
-                            textviewsettingup.setText(String.valueOf((int) zipprogress) + "% completed.");
+                            textviewsettingup.setText(getResources().getString(R.string.about) + " " + String.valueOf(ZipUtils.getRemainingCompressionTime(folderSize, zipFileSize)) + " " + getResources().getString(R.string.seconds_left));
                         }
                     }
                 });

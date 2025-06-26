@@ -1,9 +1,17 @@
 package com.vectras.vm.utils;
 
+import static android.content.Intent.ACTION_VIEW;
+
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
+
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.vectras.vm.R;
 
 public class DialogUtils {
 
@@ -94,5 +102,26 @@ public class DialogUtils {
             if (_onDismiss != null) _onDismiss.run();
         });
         dialog.show();
+    }
+
+    public static void joinTelegram(Activity _activity) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(_activity);
+        if (!prefs.getBoolean("tgDialog", false)) {
+            threeDialog(_activity, _activity.getResources().getString(R.string.join_us_on_telegram),
+                    _activity.getResources().getString(R.string.join_us_on_telegram_where_we_publish_all_the_news_and_updates_and_receive_your_opinions_and_bugs),
+                    _activity.getResources().getString(R.string.join), _activity.getResources().getString(R.string.cancel), _activity.getResources().getString(R.string.dont_show_again),
+                    true, R.drawable.send_24px, true,
+                    () -> {
+                        String tg = "https://t.me/vectras_os";
+                        Intent f = new Intent(ACTION_VIEW);
+                        f.setData(Uri.parse(tg));
+                        _activity.startActivity(f);
+                    }, null,
+                    () -> {
+                        SharedPreferences.Editor edit = prefs.edit();
+                        edit.putBoolean("tgDialog", true);
+                        edit.apply();
+                    }, null);
+        }
     }
 }

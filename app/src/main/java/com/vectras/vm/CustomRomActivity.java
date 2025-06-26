@@ -47,6 +47,7 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.vectras.qemu.MainSettingsManager;
@@ -54,6 +55,7 @@ import com.vectras.vm.Fragment.CreateImageDialogFragment;
 import com.vectras.vm.MainRoms.DataMainRoms;
 import com.vectras.vm.logger.VectrasStatus;
 import com.vectras.vm.utils.DeviceUtils;
+import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.UIUtils;
 
@@ -79,12 +81,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.vectras.vm.utils.ZipUtils;
 import com.vectras.vterm.Terminal;
 import com.vectras.vm.utils.PermissionUtils;
 
@@ -112,6 +118,14 @@ public class CustomRomActivity extends AppCompatActivity {
     private ImageView ivIcon;
     public static TextInputLayout driveLayout;
 
+    LinearProgressIndicator linearprogress;
+    TextView textviewprogress;
+    private Timer _timer = new Timer();
+    private TimerTask timerTask;
+    double zipFileSize = 0;
+    double folderSize = 0;
+    int decompressionProgress = 0;
+
     private boolean isFilled(TextInputEditText TXT) {
         if (TXT.getText().toString().trim().length() > 0)
             return true;
@@ -134,7 +148,7 @@ public class CustomRomActivity extends AppCompatActivity {
         super.onCreateOptionsMenu(menu);
 
         //if (!modify)
-            menu.add(1, 1, 1, getString(R.string.create)).setShortcut('3', 'c').setIcon(R.drawable.check_24px).setShowAsAction(1);
+        menu.add(1, 1, 1, getString(R.string.create)).setShortcut('3', 'c').setIcon(R.drawable.check_24px).setShowAsAction(1);
 
         return true;
     }
@@ -156,41 +170,7 @@ public class CustomRomActivity extends AppCompatActivity {
 //
 //                startActivityForResult(intent, 0);
                 //if (mainlayout.getVisibility() == View.VISIBLE) {
-                    if (Objects.requireNonNull(title.getText()).toString().isEmpty()) {
-                        UIUtils.oneDialog(getResources().getString(R.string.oops), getResources().getString(R.string.need_set_name),true, false, activity);
-                    } else if ((!Objects.requireNonNull(drive.getText()).toString().isEmpty()) || (!Objects.requireNonNull(cdrom.getText()).toString().isEmpty())) {
-                        checkJsonFile();
-                    } else {
-                        if (VMManager.isHaveADisk(Objects.requireNonNull(qemu.getText()).toString())) {
-                            checkJsonFile();
-                        } else {
-                            if (qemu.getText().toString().isEmpty()) {
-                                AlertDialog alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
-                                alertDialog.setTitle(getResources().getString(R.string.problem_has_been_detected));
-                                alertDialog.setMessage(getResources().getString(R.string.qemu_params_is_empty));
-                                alertDialog.setCancelable(true);
-                                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.continuetext), (dialog, which) -> {
-                                    checkJsonFile();
-                                });
-                                alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), (dialog, which) -> {
-
-                                });
-                                alertDialog.show();
-                            } else {
-                                AlertDialog alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
-                                alertDialog.setTitle(getResources().getString(R.string.problem_has_been_detected));
-                                alertDialog.setMessage(getResources().getString(R.string.you_have_not_added_any_storage_devices));
-                                alertDialog.setCancelable(true);
-                                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.continuetext), (dialog, which) -> {
-                                    checkJsonFile();
-                                });
-                                alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), (dialog, which) -> {
-
-                                });
-                                alertDialog.show();
-                            }
-                        }
-                    }
+                startCreateVM();
                 //}
                 return true;
             case android.R.id.home:
@@ -234,6 +214,10 @@ public class CustomRomActivity extends AppCompatActivity {
         TextInputLayout iconLayout = findViewById(R.id.iconField);
         TextInputLayout qemuLayout = findViewById(R.id.qemuField);
         TextView arch = findViewById(R.id.textArch);
+
+        linearprogress = findViewById(R.id.linearprogress);
+        textviewprogress = findViewById(R.id.textviewprogress);
+
         arch.setText(MainSettingsManager.getArch(this));
         icon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -314,45 +298,35 @@ public class CustomRomActivity extends AppCompatActivity {
                     dialogFragment.customRom = true;
                     dialogFragment.show(getSupportFragmentManager(), "CreateImageDialogFragment");
                 } else {
-                    AlertDialog ad = new AlertDialog.Builder(CustomRomActivity.this, R.style.MainDialogTheme).create();
-                    ad.setTitle(getString(R.string.change_hard_drive));
-                    ad.setMessage(getString(R.string.do_you_want_to_change_create_or_remove));
-                    ad.setButton(Dialog.BUTTON_NEGATIVE, getString(R.string.change), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
-                            intent.addCategory(Intent.CATEGORY_OPENABLE);
-                            intent.setType("*/*");
+                    DialogUtils.threeDialog(CustomRomActivity.this, getString(R.string.change_hard_drive), getString(R.string.do_you_want_to_change_create_or_remove), getString(R.string.change), getString(R.string.remove), getString(R.string.create), true, R.drawable.hard_drive_24px, true,
+                            () -> {
+                                Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
+                                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                                intent.setType("*/*");
 
-                            // Optionally, specify a URI for the file that should appear in the
-                            // system file picker when it loads.
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
-                            }
+                                // Optionally, specify a URI for the file that should appear in the
+                                // system file picker when it loads.
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
+                                }
 
-                            startActivityForResult(intent, 1002);
-                            ad.dismiss();
-                        }
-                    });
-                    ad.setButton(Dialog.BUTTON_POSITIVE, getString(R.string.remove), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            FileUtils.deleteDirectory(drive.getText().toString());
-                            drive.setText("");
-                            driveLayout.setEndIconDrawable(R.drawable.round_add_24);
-                            ad.dismiss();
-                        }
-                    });
-                    ad.setButton(Dialog.BUTTON_NEUTRAL, getString(R.string.create), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (!createVMFolder()) {
-                                return;
-                            }
-                            CreateImageDialogFragment dialogFragment = new CreateImageDialogFragment();
-                            dialogFragment.customRom = true;
-                            dialogFragment.show(getSupportFragmentManager(), "CreateImageDialogFragment");
-                            ad.dismiss();
-                        }
-                    });
-                    ad.show();
+                                startActivityForResult(intent, 1002);
+                            },
+                            () -> {
+                                if (drive.getText().toString().contains(AppConfig.vmFolder + vmID)) {
+                                    FileUtils.deleteDirectory(drive.getText().toString());
+                                }
+                                drive.setText("");
+                                driveLayout.setEndIconDrawable(R.drawable.round_add_24);
+                            },
+                            () -> {
+                                if (!createVMFolder()) {
+                                    return;
+                                }
+                                CreateImageDialogFragment dialogFragment = new CreateImageDialogFragment();
+                                dialogFragment.customRom = true;
+                                dialogFragment.show(getSupportFragmentManager(), "CreateImageDialogFragment");
+                            }, null);
                 }
             }
         });
@@ -391,41 +365,7 @@ public class CustomRomActivity extends AppCompatActivity {
         addRomBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Objects.requireNonNull(title.getText()).toString().isEmpty()) {
-                    UIUtils.oneDialog(getResources().getString(R.string.oops), getResources().getString(R.string.need_set_name),true, false, activity);
-                } else if ((!Objects.requireNonNull(drive.getText()).toString().isEmpty()) || (!Objects.requireNonNull(cdrom.getText()).toString().isEmpty())) {
-                    checkJsonFile();
-                } else {
-                    if (VMManager.isHaveADisk(Objects.requireNonNull(qemu.getText()).toString())) {
-                        checkJsonFile();
-                    } else {
-                        if (qemu.getText().toString().isEmpty()) {
-                            AlertDialog alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
-                            alertDialog.setTitle(getResources().getString(R.string.problem_has_been_detected));
-                            alertDialog.setMessage(getResources().getString(R.string.qemu_params_is_empty));
-                            alertDialog.setCancelable(true);
-                            alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.continuetext), (dialog, which) -> {
-                                checkJsonFile();
-                            });
-                            alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), (dialog, which) -> {
-
-                            });
-                            alertDialog.show();
-                        } else {
-                            AlertDialog alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
-                            alertDialog.setTitle(getResources().getString(R.string.problem_has_been_detected));
-                            alertDialog.setMessage(getResources().getString(R.string.you_have_not_added_any_storage_devices));
-                            alertDialog.setCancelable(true);
-                            alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.continuetext), (dialog, which) -> {
-                                checkJsonFile();
-                            });
-                            alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), (dialog, which) -> {
-
-                            });
-                            alertDialog.show();
-                        }
-                    }
-                }
+                startCreateVM();
             }
         });
 
@@ -506,34 +446,25 @@ public class CustomRomActivity extends AppCompatActivity {
 
                     startActivityForResult(intent, 1001);
                 } else {
-                    AlertDialog ad = new AlertDialog.Builder(CustomRomActivity.this, R.style.MainDialogTheme).create();
-                    ad.setTitle(getString(R.string.change_thumbnail));
-                    ad.setMessage(getString(R.string.do_you_want_to_change_or_remove));
-                    ad.setButton(Dialog.BUTTON_NEGATIVE, getString(R.string.change), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
-                            intent.addCategory(Intent.CATEGORY_OPENABLE);
-                            intent.setType("image/*");
+                    DialogUtils.twoDialog(CustomRomActivity.this, getString(R.string.change_thumbnail), getString(R.string.do_you_want_to_change_or_remove), getString(R.string.change), getString(R.string.remove), true, R.drawable.photo_24px, true,
+                            () -> {
+                                Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
+                                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                                intent.setType("image/*");
 
-                            // Optionally, specify a URI for the file that should appear in the
-                            // system file picker when it loads.
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
-                            }
+                                // Optionally, specify a URI for the file that should appear in the
+                                // system file picker when it loads.
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
+                                }
 
-                            startActivityForResult(intent, 1001);
-                            ad.dismiss();
-                        }
-                    });
-                    ad.setButton(Dialog.BUTTON_POSITIVE, getString(R.string.remove), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            thumbnailPath = "";
-                            ivAddThubnail.setImageResource(R.drawable.round_add_24);
-                            VMManager.setIconWithName(ivIcon, Objects.requireNonNull(title.getText()).toString());
-                            ad.dismiss();
-                        }
-                    });
-                    ad.show();
+                                startActivityForResult(intent, 1001);
+                            },
+                            () -> {
+                                thumbnailPath = "";
+                                ivAddThubnail.setImageResource(R.drawable.round_add_24);
+                                VMManager.setIconWithName(ivIcon, Objects.requireNonNull(title.getText()).toString());
+                            }, null);
                 }
             }
         });
@@ -542,7 +473,7 @@ public class CustomRomActivity extends AppCompatActivity {
         lineardisclaimer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UIUtils.oneDialogWithCustomButtonPositive(getString(R.string.dont_miss_out), getString(R.string.disclaimer_when_using_rom), getString(R.string.i_agree), false, false, CustomRomActivity.this);
+                DialogUtils.oneDialog(CustomRomActivity.this, getResources().getString(R.string.oops), getResources().getString(R.string.disclaimer_when_using_rom), getResources().getString(R.string.i_agree), true, R.drawable.verified_user_24px, true, null, null);
             }
         });
 
@@ -564,8 +495,8 @@ public class CustomRomActivity extends AppCompatActivity {
             //Matcher matcher = pattern.matcher(current.itemExtra);
 
             //if (matcher.find()) {
-                //String cdromPath = matcher.group(1);
-                //cdrom.setText(cdromPath);
+            //String cdromPath = matcher.group(1);
+            //cdrom.setText(cdromPath);
             //}
 
             qemu.setText(current.itemExtra);
@@ -922,126 +853,34 @@ public class CustomRomActivity extends AppCompatActivity {
     }
 
     private void startCreateVM() {
-        //errorjsondialog();
-
-        File isoFile = new File(Objects.requireNonNull(cdrom.getText()).toString());
-        if (isoFile.exists() && !Objects.requireNonNull(qemu.getText()).toString().contains(cdrom.getText().toString())) {
-            isoFile.delete();
-        }
-
-        if (modify) {
-
-            int position = getIntent().getIntExtra("POS", 0);
-            final File jsonFile = new File(AppConfig.romsdatajson);
-            current.itemDrv1 = Objects.requireNonNull(drive.getText()).toString();
-            current.itemExtra = Objects.requireNonNull(qemu.getText()).toString();
-            try {
-                JSONObject jObj = MainActivity.jArray.getJSONObject(position);
-                jObj.put("imgName", Objects.requireNonNull(title.getText()).toString());
-                jObj.put("imgIcon", Objects.requireNonNull(icon.getText()).toString());
-                jObj.put("imgPath", drive.getText().toString());
-                jObj.put("imgExtra", qemu.getText().toString());
-
-                MainActivity.jArray.put(position, jObj);
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
-            try {
-                Writer output = null;
-                output = new BufferedWriter(new FileWriter(jsonFile));
-                output.write(MainActivity.jArray.toString());
-                output.close();
-            } catch (Exception e) {
-                UIUtils.toastLong(CustomRomActivity.this, e.toString());
-            } finally {
-                MainActivity.loadDataVbi();
-                finish();
-                //activity.startActivity(new Intent(activity, SplashActivity.class));
-            }
+        if (Objects.requireNonNull(title.getText()).toString().isEmpty()) {
+            DialogUtils.oneDialog(CustomRomActivity.this, getString(R.string.oops), getString(R.string.need_set_name), getString(R.string.ok), true, R.drawable.error_96px, true, null, null);
         } else {
-            String CREDENTIAL_SHARED_PREF = "settings_prefs";
-            SharedPreferences credentials = activity.getSharedPreferences(CREDENTIAL_SHARED_PREF, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = credentials.edit();
-            editor.putBoolean("isFirstLaunch", Boolean.TRUE);
-            editor.apply();
-            whenProcessing(true);
-            final File jsonFile = new File(AppConfig.romsdatajson);
-            RomsJso obj = new RomsJso();
-            if (jsonFile.exists()) {
-                try {
-                    List<DataMainRoms> data = new ArrayList<>();
-                    JSONArray jArray = null;
-                    jArray = new JSONArray(FileUtils.readFromFile(CustomRomActivity.this, jsonFile));
+            String _contentDialog = "";
+            if (qemu.getText().toString().isEmpty()) {
+                _contentDialog = getResources().getString(R.string.qemu_params_is_empty);
+            }
 
-                    try {
-                        // Extract data from json and store into ArrayList as class objects
-                        for (int i = 0; i < jArray.length(); i++) {
-                            JSONObject json_data = jArray.getJSONObject(i);
-                            DataMainRoms romsMainData = new DataMainRoms();
-                            romsMainData.itemName = json_data.getString("imgName");
-                            romsMainData.itemIcon = json_data.getString("imgIcon");
-                            romsMainData.itemPath = json_data.getString("imgPath");
-                            romsMainData.itemExtra = json_data.getString("imgExtra");
-                            data.add(romsMainData);
-                        }
-
-                    } catch (JSONException e) {
-                        Toast.makeText(CustomRomActivity.this, e.toString(), Toast.LENGTH_LONG).show();
+            if ((Objects.requireNonNull(drive.getText()).toString().isEmpty()) && (Objects.requireNonNull(cdrom.getText()).toString().isEmpty())) {
+                if (!VMManager.isHaveADisk(Objects.requireNonNull(qemu.getText()).toString())) {
+                    if (!_contentDialog.isEmpty()) {
+                        _contentDialog += "\n\n";
                     }
+                    _contentDialog += getResources().getString(R.string.you_have_not_added_any_storage_devices);
+                }
 
-                    JSONObject jsonObject = obj.makeJSONObject(Objects.requireNonNull(title.getText()).toString(), Objects.requireNonNull(icon.getText()).toString(), MainSettingsManager.getArch(activity), drive.getText().toString(), qemu.getText().toString());
-                    jArray.put(jsonObject);
-                    try {
-                        Writer output = null;
-                        output = new BufferedWriter(new FileWriter(jsonFile));
-                        //output.write(jArray.toString().replace("\\", "").replace("//", "/"));
-                        output.write(jArray.toString());
-                        output.close();
-                    } catch (Exception e) {
-                        UIUtils.toastLong(activity, e.toString());
-                        whenProcessing(false);
-                    }
-                } catch (JSONException e) {
-                    whenProcessing(false);
-                    throw new RuntimeException(e);
-                }
-            } else {
-                JSONObject jsonObject = obj.makeJSONObject(Objects.requireNonNull(title.getText()).toString(), Objects.requireNonNull(icon.getText()).toString(), MainSettingsManager.getArch(activity), drive.getText().toString(), qemu.getText().toString());
-                JSONArray jsonArray = new JSONArray();
-                jsonArray.put(jsonObject);
-                try {
-                    Writer output = null;
-                    output = new BufferedWriter(new FileWriter(jsonFile));
-                    //output.write(jsonArray.toString().replace("\\", "").replace("//", "/"));
-                    output.write(jsonArray.toString());
-                    output.close();
-                } catch (Exception e) {
-                    UIUtils.toastLong(activity, e.toString());
-                }
-                VectrasStatus.logInfo("Welcome to Vectras ♡");
-            }
-            if (getIntent().hasExtra("addromnow")) {
-                RomsManagerActivity.isFinishNow = true;
             }
 
-            finish();
-            //activity.startActivity(new Intent(activity, SplashActivity.class));
-        }
-        if (!previousName.isEmpty() && !title.getText().toString().equals(previousName)) {
-            if (FileUtils.isFileExists(AppConfig.vmFolder + previousName + "/vmID.txt")) {
-                FileUtils.copyAFile(AppConfig.vmFolder + previousName + "/vmID.txt", AppConfig.vmFolder + vmID + "/vmID.txt");
+            if (_contentDialog.isEmpty()) {
+                checkJsonFile();
             } else {
-                FileUtils.writeToFile(AppConfig.vmFolder + title.getText().toString(), "/vmID.txt", VMManager.idGenerator());
-                FileUtils.copyAFile(AppConfig.vmFolder + vmID + "/vmID.txt", AppConfig.vmFolder + previousName + "/vmID.txt");
+                DialogUtils.twoDialog(CustomRomActivity.this, getString(R.string.problem_has_been_detected), _contentDialog, getString(R.string.continuetext), getString(R.string.cancel), true, R.drawable.warning_48px, true,
+                        () ->{
+                            checkJsonFile();
+                            finish();
+                        }, null, null);
             }
-        } else {
-            FileUtils.writeToFile(AppConfig.vmFolder + title.getText().toString(), "/vmID.txt", VMManager.idGenerator());
         }
-        if ((!secondVMdirectory.isEmpty()) && FileUtils.isFileExists(AppConfig.vmFolder + vmID + "/vmID.txt")) {
-            if (!(AppConfig.vmFolder + title.getText().toString()).equals(secondVMdirectory)) {
-                FileUtils.copyAFile(AppConfig.vmFolder + vmID + "/vmID.txt", secondVMdirectory + "/vmID.txt");
-            }
-       }
     }
 
     private void startCreateNewVM() {
@@ -1059,7 +898,7 @@ public class CustomRomActivity extends AppCompatActivity {
         }
 
         modify = false;
-        if(!MainActivity.isActivate) {
+        if (!MainActivity.isActivate) {
             startActivity(new Intent(CustomRomActivity.this, SplashActivity.class));
         } else {
             Intent openURL = new Intent();
@@ -1113,9 +952,10 @@ public class CustomRomActivity extends AppCompatActivity {
             //Error code: CR_CVBI1
             if (!FileUtils.isFileExists(_filepath)) {
                 if (getIntent().hasExtra("addromnow")) {
-                    UIUtils.oneDialog(getResources().getString(R.string.oops), getResources().getString(R.string.error_CR_CVBI1), false, true, this);
+                    DialogUtils.oneDialog(CustomRomActivity.this, getResources().getString(R.string.oops), getResources().getString(R.string.error_CR_CVBI1), getResources().getString(R.string.ok), true, R.drawable.error_96px, true,
+                            this::finish, this::finish);
                 } else {
-                    UIUtils.oneDialog(getResources().getString(R.string.oops), getResources().getString(R.string.error_CR_CVBI1), true, false, this);
+                    DialogUtils.oneDialog(CustomRomActivity.this, getResources().getString(R.string.oops), getResources().getString(R.string.error_CR_CVBI1), getResources().getString(R.string.ok), true, R.drawable.error_96px, true, null, null);
                 }
                 return;
             }
@@ -1127,6 +967,33 @@ public class CustomRomActivity extends AppCompatActivity {
             whenProcessing(true);
             custom.setVisibility(View.GONE);
             ivIcon.setEnabled(false);
+
+            zipFileSize = FileUtils.getFileSize(_filepath);
+            ZipUtils.reset();
+
+            timerTask = new TimerTask() {
+                @Override
+                public void run() {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            folderSize = FileUtils.getFolderSize(AppConfig.vmFolder + vmID);
+                            decompressionProgress = ZipUtils.getDecompressionProgress(folderSize, zipFileSize);
+                            if (decompressionProgress > 0) {
+                                if (decompressionProgress > 98) {
+                                    linearprogress.setIndeterminate(true);
+                                } else {
+                                    linearprogress.setProgressCompat(ZipUtils.getDecompressionProgress(folderSize, zipFileSize), true);
+                                }
+
+                                textviewprogress.setText(getResources().getString(R.string.about) + " " + String.valueOf(ZipUtils.getRemainingDecompressionTime(folderSize, zipFileSize)) + " " + getResources().getString(R.string.seconds_left));
+                            }
+                        }
+                    });
+                }
+            };
+            _timer.schedule(timerTask, 0, 1000);
+
             Thread t = new Thread() {
                 public void run() {
                     FileInputStream zipFile = null;
@@ -1192,9 +1059,10 @@ public class CustomRomActivity extends AppCompatActivity {
             t.start();
         } else {
             if (getIntent().hasExtra("addromnow")) {
-                UIUtils.oneDialog(getResources().getString(R.string.problem_has_been_detected), getResources().getString(R.string.format_not_supported_please_select_file_with_format_cvbi), false, true, this);
+                DialogUtils.oneDialog(CustomRomActivity.this, getResources().getString(R.string.problem_has_been_detected), getResources().getString(R.string.format_not_supported_please_select_file_with_format_cvbi), getResources().getString(R.string.ok), true, R.drawable.error_96px, true,
+                        this::finish, this::finish);
             } else {
-                UIUtils.oneDialog(getResources().getString(R.string.problem_has_been_detected), getResources().getString(R.string.format_not_supported_please_select_file_with_format_cvbi), true, false, this);
+                DialogUtils.oneDialog(CustomRomActivity.this, getResources().getString(R.string.problem_has_been_detected), getResources().getString(R.string.format_not_supported_please_select_file_with_format_cvbi), getResources().getString(R.string.ok), true, R.drawable.error_96px, true, null, null);
             }
         }
 
@@ -1210,24 +1078,14 @@ public class CustomRomActivity extends AppCompatActivity {
         if (VMManager.isADiskFile(selectedFilePath.getPath())) {
             startProcessingHardDriveFile(_content_describer, _addtodrive);
         } else {
-            alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
-            alertDialog.setTitle(getResources().getString(R.string.problem_has_been_detected));
-            alertDialog.setMessage(getResources().getString(R.string.file_format_is_not_supported));
-            alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.continuetext), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    startProcessingHardDriveFile(_content_describer, _addtodrive);
-                }
-            });
-            alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    alertDialog.dismiss();
-                }
-            });
-            alertDialog.show();
+            DialogUtils.twoDialog(CustomRomActivity.this, getString(R.string.problem_has_been_detected), getString(R.string.file_format_is_not_supported), getResources().getString(R.string.continuetext), getResources().getString(R.string.cancel), true, R.drawable.hard_drive_24px, true,
+                    () -> {
+                        startProcessingHardDriveFile(_content_describer, _addtodrive);
+                    }, null, null);
         }
     }
 
-    private void startProcessingHardDriveFile (Uri _content_describer, boolean _addtodrive) {
+    private void startProcessingHardDriveFile(Uri _content_describer, boolean _addtodrive) {
         File selectedFilePath = new File(getPath(_content_describer));
         if (MainSettingsManager.copyFile(activity)) {
             LinearLayout custom = findViewById(R.id.custom);
@@ -1298,9 +1156,9 @@ public class CustomRomActivity extends AppCompatActivity {
     private String cdromPatternCompile() {
         //Matches any string of characters that does not contain single quotes
         if (MainSettingsManager.getArch(activity).equals("ARM64")) {
-            return  "-device usb-storage,drive=cdrom -drive if=none,id=cdrom,format=raw,media=cdrom,file='([^']*)'";
+            return "-device usb-storage,drive=cdrom -drive if=none,id=cdrom,format=raw,media=cdrom,file='([^']*)'";
         } else if (MainSettingsManager.getIfType(activity).isEmpty()) {
-            return  "-cdrom '([^']*)'";
+            return "-cdrom '([^']*)'";
         } else {
             return "-drive index=1,media=cdrom,file='([^']*)'";
         }
@@ -1309,9 +1167,9 @@ public class CustomRomActivity extends AppCompatActivity {
     private String cdromPatternCompile2() {
         //Matches any string of characters, but will try to match the shortest string possible
         if (MainSettingsManager.getArch(activity).equals("ARM64")) {
-            return  "-device usb-storage,drive=cdrom -drive if=none,id=cdrom,format=raw,media=cdrom,file='(.*?)'";
+            return "-device usb-storage,drive=cdrom -drive if=none,id=cdrom,format=raw,media=cdrom,file='(.*?)'";
         } else if (MainSettingsManager.getIfType(activity).isEmpty()) {
-            return  "-cdrom '(.*?)'";
+            return "-cdrom '(.*?)'";
         } else {
             return "-drive index=1,media=cdrom,file='(.*?)'";
         }
@@ -1352,6 +1210,8 @@ public class CustomRomActivity extends AppCompatActivity {
         if (_isProcessing) {
             mainlayout.setVisibility(View.GONE);
             appbar.setVisibility(View.GONE);
+            linearprogress.setIndeterminate(true);
+            textviewprogress.setText(getResources().getString(R.string.processing_this_may_take_a_few_minutes));
         } else {
             mainlayout.setVisibility(View.VISIBLE);
             appbar.setVisibility(View.VISIBLE);
@@ -1361,9 +1221,9 @@ public class CustomRomActivity extends AppCompatActivity {
     private void thumbnailProcessing() {
         if (!thumbnailPath.isEmpty()) {
             ivAddThubnail.setImageResource(R.drawable.round_edit_24);
-            File imgFile = new  File(thumbnailPath);
+            File imgFile = new File(thumbnailPath);
 
-            if(imgFile.exists()){
+            if (imgFile.exists()) {
                 Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                 ivIcon.setImageBitmap(myBitmap);
             } else {
@@ -1387,9 +1247,10 @@ public class CustomRomActivity extends AppCompatActivity {
         if (!romDir.exists()) {
             if (!romDir.mkdirs()) {
                 if (getIntent().hasExtra("addromnow")) {
-                    UIUtils.oneDialog(getResources().getString(R.string.oops), getResources().getString(R.string.unable_to_create_the_directory_to_create_the_vm), false, true, this);
+                    DialogUtils.oneDialog(CustomRomActivity.this, getResources().getString(R.string.oops), getResources().getString(R.string.unable_to_create_the_directory_to_create_the_vm), getResources().getString(R.string.ok), true, R.drawable.error_96px, true,
+                            this::finish, this::finish);
                 } else {
-                    UIUtils.oneDialog(getResources().getString(R.string.oops), getResources().getString(R.string.unable_to_create_the_directory_to_create_the_vm), true, false, this);
+                    DialogUtils.oneDialog(CustomRomActivity.this, getResources().getString(R.string.oops), getResources().getString(R.string.unable_to_create_the_directory_to_create_the_vm), getResources().getString(R.string.ok), true, R.drawable.error_96px, true, null, null);
                 }
                 return false;
             } else {
@@ -1401,6 +1262,9 @@ public class CustomRomActivity extends AppCompatActivity {
     }
 
     private void afterExtractCVBIFile(String _filename) {
+        if (timerTask != null) {
+            timerTask.cancel();
+        }
         LinearLayout custom = findViewById(R.id.custom);
         whenProcessing(false);
         custom.setVisibility(View.VISIBLE);
@@ -1442,13 +1306,14 @@ public class CustomRomActivity extends AppCompatActivity {
                         VMManager.setArch("X86_64", CustomRomActivity.this);
                     }
 
-                    UIUtils.oneDialog(getResources().getString(R.string.oops), getResources().getString(R.string.error_CR_CVBI2), true, false, CustomRomActivity.this);
+                    DialogUtils.oneDialog(CustomRomActivity.this, getResources().getString(R.string.oops), getResources().getString(R.string.error_CR_CVBI2), getResources().getString(R.string.ok), true, R.drawable.warning_48px, true, null, null);
                 } else {
                     //Error code: CR_CVBI3
                     if (getIntent().hasExtra("addromnow")) {
-                        UIUtils.oneDialog(getResources().getString(R.string.oops), getResources().getString(R.string.error_CR_CVBI3), false, true, CustomRomActivity.this);
+                        DialogUtils.oneDialog(CustomRomActivity.this, getResources().getString(R.string.oops), getResources().getString(R.string.error_CR_CVBI3), getResources().getString(R.string.ok), true, R.drawable.error_96px, true,
+                                this::finish, this::finish);
                     } else {
-                        UIUtils.oneDialog(getResources().getString(R.string.oops), getResources().getString(R.string.error_CR_CVBI3), true, false, CustomRomActivity.this);
+                        DialogUtils.oneDialog(CustomRomActivity.this, getResources().getString(R.string.oops), getResources().getString(R.string.error_CR_CVBI3), getResources().getString(R.string.ok), true, R.drawable.error_96px, true, null, null);
                     }
                 }
             } else {

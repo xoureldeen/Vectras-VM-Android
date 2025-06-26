@@ -110,7 +110,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
     private HashMap<String, Object> mmap = new HashMap<>();
     private String bootstrapfilelink = "";
     private ArrayList<HashMap<String, String>> listmapForSelectMirrors = new ArrayList<>();
-    private String selectedMirrorCommand = "";
+    private String selectedMirrorCommand = "echo ";
     private String selectedMirrorLocation = "";
     private String downloadBootstrapsCommand = "";
     private boolean aria2Error = false;
