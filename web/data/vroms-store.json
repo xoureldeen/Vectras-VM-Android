@@ -143,6 +143,19 @@
         "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 7 is a major release of the Windows NT operating system developed by Microsoft. It was released to manufacturing on July 22, 2009, and became generally available on October 22, 2009. It is the successor to Windows Vista, released nearly three years earlier. Windows 7's server counterpart, Windows Server 2008 R2, was released at the same time. It was succeeded by Windows 8 in October 2012."
     },
     {
+        "rom_name":"Windows 7 build 7000",
+        "rom_icon":"https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/10/15/windows_logo_2006_1_c0e5e8a8271301cfed289ab6118e38b2.png",
+        "rom_url":"https://youtu.be/edhGBdK8SB8",
+        "rom_path":"Windows 7 build 7000.cvbi",
+        "rom_avail":true,
+        "rom_size":"5 GB",
+        "rom_arch":"X86_64",
+        "rom_kernel":"windows",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 7 is a major release of the Windows NT operating system developed by Microsoft. It was released to manufacturing on July 22, 2009, and became generally available on October 22, 2009. It is the successor to Windows Vista, released nearly three years earlier. Windows 7's server counterpart, Windows Server 2008 R2, was released at the same time. It was succeeded by Windows 8 in October 2012."
+    },
+    {
         "rom_name":"Windows 7 build 7600",
         "rom_icon":"https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/10/15/windows_logo_2006_1_c0e5e8a8271301cfed289ab6118e38b2.png",
         "rom_url":"https://youtu.be/2m4tZ_a8b3g",
