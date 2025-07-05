@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/update"
-        android:icon="@drawable/update48"
+        android:icon="@drawable/syncglass96"
         android:title="@string/update"
         android:contentDescription="@string/update"
         app:showAsAction="always"/>
@@ -12,7 +12,8 @@
         android:icon="@drawable/power_settings_new_24px"
         android:title="@string/killqemu"
         android:contentDescription="@string/killqemu"
-        app:showAsAction="always"/>
+        app:showAsAction="always"
+        android:iconTint="@color/red_error"/>
     <item
         android:id="@+id/backtothedisplay"
         android:icon="@drawable/desktop_windows_24px"
