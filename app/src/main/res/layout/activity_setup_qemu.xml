@@ -44,12 +44,9 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center">
-        <com.google.android.material.progressindicator.CircularProgressIndicator
+        <com.google.android.material.loadingindicator.LoadingIndicator
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:indeterminate="true"
-            app:showAnimationBehavior="inward"/>
+            android:layout_height="wrap_content"/>
         <TextView
             android:id="@+id/textviewconnecting"
             android:layout_width="wrap_content"
@@ -180,13 +177,9 @@
                 android:gravity="center_horizontal|center_vertical"
                 android:orientation="vertical"
                 android:visibility="gone">
-                <com.google.android.material.progressindicator.CircularProgressIndicator
-                    android:id="@+id/progressbar1"
+                <com.google.android.material.loadingindicator.LoadingIndicator
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:indeterminate="true"
-                    app:showAnimationBehavior="inward"/>
+                    android:layout_height="wrap_content"/>
                 <TextView
                     android:id="@+id/textviewsettingup"
                     android:layout_width="wrap_content"
@@ -267,6 +260,10 @@
         android:layout_width="match_parent"
         android:indeterminate="true"
         app:showAnimationBehavior="inward"
+        app:indeterminateAnimationType="disjoint"
+        app:wavelength="40dp"
+        app:waveAmplitude="3dp"
+        app:waveSpeed="10dp"
         android:visibility="gone" />
 
     <LinearLayout

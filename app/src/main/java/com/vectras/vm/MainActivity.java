@@ -3,6 +3,8 @@ package com.vectras.vm;
 import static android.content.Intent.ACTION_OPEN_DOCUMENT;
 import static android.content.Intent.ACTION_VIEW;
 import static android.os.Build.VERSION.SDK_INT;
+
+import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.termux.app.TermuxService;
 
 import static com.vectras.vm.VectrasApp.getApp;
@@ -656,7 +658,7 @@ public class MainActivity extends AppCompatActivity {
                                                         + activity.getResources()
                                                                 .getString(R.string.used)
                                                         + ")");
-                                        ProgressBar progressBar = findViewById(R.id.progressBar);
+                                        LinearProgressIndicator progressBar = findViewById(R.id.progressBar);
                                         progressBar.setMax((int) totalMemory);
                                         if (SDK_INT >= Build.VERSION_CODES.N) {
                                             progressBar.setProgress((int) usedMemory, true);

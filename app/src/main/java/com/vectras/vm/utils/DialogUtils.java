@@ -16,7 +16,7 @@ import com.vectras.vm.R;
 public class DialogUtils {
 
     public static void oneDialog(Activity _context, String _title, String _message, String _textPositiveButton, boolean _isicon, int _iconid, boolean _cancel, Runnable _onPositive, Runnable _onDismiss) {
-        MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(_context);
+        MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(_context, R.style.CenteredDialogTheme);
         dialog.setTitle(_title);
         dialog.setMessage(_message);
         if (_isicon) {
@@ -38,7 +38,7 @@ public class DialogUtils {
         dialog.show();
     }
     public static void twoDialog(Activity _context, String _title, String _message, String _textPositiveButton, String _textNegativeButton, boolean _isicon, int _iconid, boolean _cancel, Runnable _onPositive, Runnable _onNegative, Runnable _onDismiss) {
-        MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(_context);
+        MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(_context, R.style.CenteredDialogTheme);
         dialog.setTitle(_title);
         dialog.setMessage(_message);
         if (_isicon) {
@@ -68,7 +68,7 @@ public class DialogUtils {
     }
 
     public static void threeDialog(Activity _context, String _title, String _message, String _textPositiveButton, String _textNegativeButton, String _textNeutralButton ,boolean _isicon, int _iconid, boolean _cancel, Runnable _onPositive, Runnable _onNegative, Runnable _onNeutral, Runnable _onDismiss) {
-        MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(_context);
+        MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(_context, R.style.CenteredDialogTheme);
         dialog.setTitle(_title);
         dialog.setMessage(_message);
         if (_isicon) {

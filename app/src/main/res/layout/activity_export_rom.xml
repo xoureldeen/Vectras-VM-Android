@@ -80,7 +80,11 @@
             android:indeterminate="true"
             android:max="100"
             app:showAnimationBehavior="inward"
-            android:id="@+id/linearprogress"/>
+            android:id="@+id/linearprogress"
+            app:indeterminateAnimationType="disjoint"
+            app:wavelength="40dp"
+            app:waveAmplitude="3dp"
+            app:waveSpeed="10dp"/>
     </LinearLayout>
     <LinearLayout
         android:id="@+id/lineardone"
