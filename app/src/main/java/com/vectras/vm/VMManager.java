@@ -776,7 +776,7 @@ public class VMManager {
         } else if (itemName.contains("android")) {
             imageview.setImageResource(R.drawable.android);
         } else {
-            imageview.setImageResource(R.drawable.no_machine_image);
+            imageview.setImageResource(R.drawable.ic_computer_180dp_with_padding);
         }
     }
 

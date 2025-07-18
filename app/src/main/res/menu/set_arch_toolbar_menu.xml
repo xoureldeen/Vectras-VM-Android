@@ -1,0 +1,8 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/roms_store"
+        android:icon="@drawable/home_storage_24px"
+        android:title="@string/roms_store"
+        app:showAsAction="always" />
+</menu>
