@@ -32,6 +32,7 @@
             android:text="@string/welcome_to_vectras_vm_lets_get_started" />
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonletstart"
+            style="@style/Widget.Material3Expressive.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8dp"
@@ -83,6 +84,7 @@
             android:layout_marginBottom="8dp" />
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttontryconnectagain"
+            style="@style/Widget.Material3Expressive.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8dp"
@@ -129,6 +131,7 @@
                     android:orientation="horizontal">
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/buttonautosetup"
+                        style="@style/Widget.Material3Expressive.Button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="4dp"
@@ -137,6 +140,7 @@
                         android:text="@string/auto_setup" />
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/buttonmanualsetup"
+                        style="@style/Widget.Material3Expressive.Button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="8dp"
@@ -217,6 +221,7 @@
                     android:orientation="horizontal">
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/buttonsetuptryagain"
+                        style="@style/Widget.Material3Expressive.Button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="4dp"
@@ -225,6 +230,7 @@
                         android:text="@string/try_again" />
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/buttonsetupshowlog"
+                        style="@style/Widget.Material3Expressive.Button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="8dp"
@@ -326,6 +332,7 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnInstall"
+                    style="@style/Widget.Material3Expressive.Button"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone"

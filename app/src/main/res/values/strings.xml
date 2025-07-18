@@ -271,6 +271,7 @@
     <string name="powerpc_qemu" translatable="false">PowerPC</string>
     <string name="arm64_qemu" translatable="false">ARM64</string>
     <string name="x86_64_qemu_recommended">x86_64 (Recommended)</string>
+    <string name="x86_64">x86_64</string>
     <string name="i386_qemu" translatable="false">i386</string>
     <string name="export_rom">Export Rom</string>
     <string name="are_you_sure">Are you sure?</string>
@@ -443,6 +444,8 @@
     <string name="remove_vm_content">Do you want to remove it? You can choose to keep or not keep the files.</string>
     <string name="macos">macOS</string>
     <string name="seconds_left">seconds left</string>
+    <string name="learn_more">Learn more</string>
+    <string name="open">Open</string>
 
     <!--======================TERMUX STRINGS====================-->
     <string name="application_name" translatable="false">Vterm</string>

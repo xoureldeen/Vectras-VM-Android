@@ -21,6 +21,7 @@
 
         <Button
             android:id="@+id/select_button"
+            style="@style/Widget.Material3Expressive.Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"

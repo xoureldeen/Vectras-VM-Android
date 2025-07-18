@@ -1,211 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:fitsSystemWindows="true"
-    android:id="@+id/main" >
+    android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:layout_height="56dp"
-        android:layout_width="match_parent"
-        android:gravity="center"
         android:id="@+id/appbar"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$Behavior"
-        android:layout_margin="8dp">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$Behavior">
 
-        <LinearLayout
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            style="?attr/collapsingToolbarLayoutLargeStyle"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            android:fitsSystemWindows="true"
+            app:title="@string/create"
+            app:subtitle="@string/choose_qemu_architecture"
+            app:collapsedTitleTextAppearance="@style/TextAppearance.Material3.TitleMedium"
+            app:expandedTitleTextAppearance="@style/TextAppearance.Material3.DisplaySmall">
 
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/ic_qemu" />
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:elevation="0dp"
+                app:layout_collapseMode="pin"
+                app:navigationIcon="@drawable/arrow_back_24px"/>
 
-            <TextView
-                android:id="@+id/toolbar_header"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="false"
-                android:focusable="false"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:paddingLeft="8dp"
-                android:text="EMU"
-                android:textColor="?attr/colorControlNormal"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                tools:ignore="HardcodedText" />
-
-        </LinearLayout>
-
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="8dp">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/choose_qemu_architecture"
-            android:textSize="16sp"
-            android:layout_margin="8dp"
-            android:gravity="center" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical">
-            <Button
-                android:id="@+id/archx86_64"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/x86_64_qemu_recommended"
-                app:icon="@drawable/round_memory_24"
-                android:layout_marginRight="4dp"
-                android:layout_weight="1"
-                app:iconGravity="textStart" />
-            <Button
-                android:id="@+id/archarm64"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/arm64_qemu"
-                app:icon="@drawable/round_memory_24"
-                android:layout_weight="1"
-                app:iconGravity="textStart" />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical">
-            <Button
-                android:id="@+id/archi386"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/i386_qemu"
-                app:icon="@drawable/round_memory_24"
-                android:layout_marginRight="4dp"
-                android:layout_weight="1"
-                app:iconGravity="textStart" />
-
-            <Button
-                android:id="@+id/archppc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/powerpc_qemu"
-                app:icon="@drawable/round_memory_24"
-                android:layout_weight="1"
-                app:iconGravity="textStart"/>
-        </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="1dp"
-        android:background="#9e9e9e"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp" />
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cdCustom"
-        style="@style/CardViewStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:padding="8dp"
-        app:cardCornerRadius="10dp"
-        app:cardUseCompatPadding="true"
-        android:focusable="true" >
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_horizontal"
             android:orientation="vertical"
-            android:rotationX="25">
+            android:padding="8dp">
 
-            <ImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/input_circle" />
-
-            <TextView
+            <com.google.android.material.button.MaterialButtonGroup
+                android:id="@+id/buttonGroup"
+                style="@style/Widget.Material3.MaterialButtonGroup.Connected"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="@string/importRom" />
+                android:layout_gravity="center">
+                <Button
+                    style="@style/Widget.Material3Expressive.Button"
+                    android:id="@+id/archx86_64"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/x86_64" />
+                <Button
+                    style="@style/Widget.Material3Expressive.Button"
+                    android:id="@+id/archarm64"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/arm64_qemu" />
+                <Button
+                    style="@style/Widget.Material3Expressive.Button"
+                    android:id="@+id/archi386"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/i386_qemu" />
+                <Button
+                    style="@style/Widget.Material3Expressive.Button"
+                    android:id="@+id/archppc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/powerpc_qemu" />
+            </com.google.android.material.button.MaterialButtonGroup>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/bntimport"
+                style="@style/Widget.Material3Expressive.Button.TonalButton"
+                android:layout_width="wrap_content"
+                android:layout_height="136dp"
+                android:text="@string/importRom"
+                android:textSize="20sp"
+                app:icon="@drawable/input_circle"
+                app:iconGravity="textStart"
+                app:iconSize="40dp"
+                android:layout_gravity="center"
+                android:minWidth="360dp"/>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="8dp"
+                    android:text="@string/want_to_learn_more_about_qemu" />
+
+                <Button
+                    android:id="@+id/webBtn"
+                    style="@style/Widget.Material3Expressive.Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/learn_more"
+                    android:textAlignment="textStart"
+                    app:icon="@drawable/open_in_new_24px" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="8dp"
+                    android:text="@string/suggested_use_of_create_command" />
+
+                <Button
+                    android:id="@+id/buttongetcm"
+                    style="@style/Widget.Material3Expressive.Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:text="@string/getit"
+                    app:icon="@drawable/open_in_new_24px" />
+            </LinearLayout>
         </LinearLayout>
-    </androidx.cardview.widget.CardView>
+    </androidx.core.widget.NestedScrollView>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="1dp"
-        android:background="#9e9e9e"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="8dp"
-            android:text="@string/want_to_learn_more_about_qemu" />
-
-        <Button
-            android:id="@+id/webBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/qemu_website"
-            android:textAlignment="textStart"
-            app:icon="@drawable/round_public_24" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="8dp"
-            android:text="@string/suggested_use_of_create_command" />
-
-        <Button
-            android:id="@+id/buttongetcm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:text="@string/getit" />
-    </LinearLayout>
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

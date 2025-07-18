@@ -701,5 +701,18 @@
         "rom_extra":"",
         "final_rom_file_name":"",
         "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nMac OS X Jaguar, or Mac OS X 10.2, is the third major release of Mac OS X, Apple's desktop and server operating system. It superseded Mac OS X Puma and preceded Mac OS X Panther. The operating system was initially available on 23 August 2002 either for single-computer installations, and in a \"family pack\", which allowed five installations on separate computers in one household. Most builds of Jaguar were compiled for PPC (for public use) and x86 (for testing purposes for the upcoming partnership with Intel, which would continue until the announcement in 2005). It is the last version of Mac OS to ship with Internet Explorer as the default browser, as it was replaced with Safari as of Mac OS X Panther, though it was still available as an optional component until Mac OS X Tiger."
+    },
+    {
+        "rom_name":"Mac OS X Leopard",
+        "rom_icon":"https://blog.greggant.com/images/posts/2021-09-25-preview/aurora-preview.jpg",
+        "rom_url":"https://youtu.be/iZVmHLeqw4E",
+        "rom_path":"Mac OS X Leopard.cvbi",
+        "rom_avail":true,
+        "rom_size":"6 GB",
+        "rom_arch":"PPC",
+        "rom_kernel":"apple",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nMac OS X Jaguar, or Mac OS X 10.2, is the third major release of Mac OS X, Apple's desktop and server operating system. It superseded Mac OS X Puma and preceded Mac OS X Panther. The operating system was initially available on 23 August 2002 either for single-computer installations, and in a \"family pack\", which allowed five installations on separate computers in one household. Most builds of Jaguar were compiled for PPC (for public use) and x86 (for testing purposes for the upcoming partnership with Intel, which would continue until the announcement in 2005). It is the last version of Mac OS to ship with Internet Explorer as the default browser, as it was replaced with Safari as of Mac OS X Panther, though it was still available as an optional component until Mac OS X Tiger."
     }
 ]

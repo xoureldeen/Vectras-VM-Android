@@ -43,15 +43,12 @@
                 android:orientation="vertical"
                 android:padding="8dp">
 
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cdItem"
-                    style="@style/CardViewStyle"
                     android:layout_width="match_parent"
-                    android:layout_height="120dp"
+                    android:layout_height="wrap_content"
                     android:clickable="true"
                     android:focusable="true"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    app:cardCornerRadius="10dp"
                     app:cardUseCompatPadding="true">
 
                     <LinearLayout
@@ -59,30 +56,33 @@
                         android:layout_height="match_parent"
                         android:orientation="horizontal">
 
-                        <RelativeLayout
-                            android:layout_width="142dp"
-                            android:layout_height="match_parent" >
-                            <ImageView
-                                android:id="@+id/ivIcon"
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="120dp"
+                            android:layout_height="120dp">
+                            <RelativeLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:scaleType="centerCrop"
-                                app:srcCompat="@drawable/no_machine_image" />
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:gravity="bottom|right">
+                                android:layout_height="match_parent" >
                                 <ImageView
-                                    android:id="@+id/ivAddThubnail"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:padding="4dp"
-                                    app:tint="@android:color/white"
-                                    app:srcCompat="@drawable/round_add_24"
-                                    android:background="@drawable/backgroud_round_only_left_25_black_50_style"/>
-                            </LinearLayout>
-                        </RelativeLayout>
-
+                                    android:id="@+id/ivIcon"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:scaleType="centerCrop"
+                                    app:srcCompat="@drawable/ic_computer_180dp_with_padding" />
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:gravity="bottom|right">
+                                    <ImageView
+                                        android:id="@+id/ivAddThubnail"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:padding="4dp"
+                                        app:tint="@android:color/white"
+                                        app:srcCompat="@drawable/round_add_24"
+                                        android:background="@drawable/backgroud_round_only_left_25_black_50_style"/>
+                                </LinearLayout>
+                            </RelativeLayout>
+                        </com.google.android.material.card.MaterialCardView>
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -93,30 +93,25 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="bottom"
-                                android:maxLines="1"
                                 android:padding="8dp"
                                 android:singleLine="true"
                                 android:text="Title"
-                                android:textSize="25sp"
-                                android:textStyle="bold" />
+                                android:textSize="25sp" />
 
                             <TextView
                                 android:id="@+id/textArch"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="top"
-                                android:gravity="left"
-                                android:maxLines="1"
                                 android:padding="8dp"
                                 android:singleLine="true"
                                 android:text="arch"
                                 android:textAlignment="gravity"
                                 android:textColor="?attr/colorPrimary"
-                                android:textSize="16sp"
-                                android:textStyle="bold" />
+                                android:textSize="16sp" />
                         </LinearLayout>
                     </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/titleField"
@@ -218,8 +213,28 @@
                         android:id="@+id/qemu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="text"
-                        android:selectAllOnFocus="true" />
+                        android:selectAllOnFocus="true"
+                        android:focusable="false"
+                        android:clickable="true"
+                        android:inputType="none"
+                        android:singleLine="true"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentBottom="true"
+                        android:gravity="center_horizontal|bottom"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+                        <com.google.android.gms.ads.AdView
+                            android:id="@+id/adView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            app:adSize="BANNER"
+                            app:adUnitId="ca-app-pub-3568137780412047/8936512089" />
+                    </LinearLayout>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
@@ -249,21 +264,6 @@
             </LinearLayout>
         </ScrollView>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentBottom="true"
-            android:gravity="center_horizontal|bottom"
-            android:orientation="horizontal">
-
-            <com.google.android.gms.ads.AdView
-                android:id="@+id/adView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                app:adSize="BANNER"
-                app:adUnitId="ca-app-pub-3568137780412047/8936512089" />
-        </LinearLayout>
     </FrameLayout>
     <LinearLayout
         android:id="@+id/linearload"

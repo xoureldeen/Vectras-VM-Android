@@ -77,7 +77,7 @@ dependencies {
     implementation "androidx.core:core:1.16.0"
     implementation "androidx.drawerlayout:drawerlayout:1.2.0"
     implementation "androidx.preference:preference:1.2.1"
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-beta01"
     implementation "androidx.viewpager:viewpager:1.1.0"
     implementation platform('com.google.firebase:firebase-bom:33.16.0')
     implementation 'com.google.firebase:firebase-analytics'
@@ -90,7 +90,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.16.0'
     implementation 'com.google.guava:guava:33.4.8-jre'
     implementation 'com.google.code.gson:gson:2.13.1'
-    implementation 'com.squareup.okhttp3:okhttp:5.0.0'
+    implementation 'com.squareup.okhttp3:okhttp:5.1.0'
     implementation "androidx.window:window:1.4.0"
     implementation "commons-io:commons-io:2.19.0"
     implementation 'org.zeroturnaround:zt-zip:1.17'

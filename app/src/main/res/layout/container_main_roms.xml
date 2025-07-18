@@ -1,14 +1,12 @@
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cdItem"
-    style="@style/CardViewStyle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
-    app:cardCornerRadius="10dp"
     app:cardUseCompatPadding="true">
 
     <LinearLayout
@@ -16,74 +14,61 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <FrameLayout
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <FrameLayout
+            android:layout_height="200dp">
+            <ImageView
+                android:id="@+id/ivIcon"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/ic_computer_180dp_with_padding" />
+        </com.google.android.material.card.MaterialCardView>
 
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:id="@+id/ivIcon"
-                        android:layout_width="match_parent"
-                        android:layout_height="200dp"
-                        android:scaleType="centerCrop"
-                        app:srcCompat="@drawable/no_machine_image" />
-
-                </FrameLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:background="#20000000"
-                    android:backgroundTint="@android:color/black">
-                    <TextView
-                        android:id="@+id/textArch"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="left"
-                        android:maxLines="1"
-                        android:padding="8dp"
-                        android:singleLine="true"
-                        android:text="arch"
-                        android:textAlignment="gravity"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@android:color/white"
-                        android:layout_weight="1"/>
-
-                    <ImageButton
-                        android:id="@+id/optionsButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right|top"
-                        android:background="@android:color/transparent"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:padding="10dp"
-                        android:src="@drawable/more_vert_24px"
-                        app:tint="@android:color/white" />
-                </LinearLayout>
-
-            </FrameLayout>
-
-        </FrameLayout>
-
-        <TextView
-            android:id="@+id/textName"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:maxLines="1"
-            android:padding="8dp"
-            android:singleLine="true"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:gravity="center_vertical"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp">
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingBottom="8dp"
+                    android:singleLine="true"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textArch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="@string/x86_64"
+                    android:textAlignment="gravity"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"/>
+            </LinearLayout>
+
+
+            <ImageButton
+                android:id="@+id/optionsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="8dp"
+                android:src="@drawable/more_vert_24px" />
+        </LinearLayout>
     </LinearLayout>
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>
