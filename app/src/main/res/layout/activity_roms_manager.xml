@@ -3,27 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     android:orientation="vertical"
     android:id="@+id/main" >
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize" />
-
-        <ProgressBar
-            android:id="@+id/loadingPb"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:visibility="gone" />
-    </com.google.android.material.appbar.AppBarLayout>
     <LinearLayout
         android:id="@+id/linearload"
         android:layout_width="match_parent"
@@ -75,11 +57,6 @@
             android:gravity="center_horizontal|center_vertical"
             android:text="@string/try_again" />
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1.0"
-        android:orientation="vertical">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cdCustom"
@@ -123,16 +100,54 @@
             android:textSize="20sp"
             android:visibility="gone" />
 
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/coordinatorLayout"
+        android:layout_weight="1"
+        android:fitsSystemWindows="true">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$Behavior">
+
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                style="?attr/collapsingToolbarLayoutLargeStyle"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                android:fitsSystemWindows="true"
+                app:title="@string/roms_store"
+                app:collapsedTitleTextAppearance="@style/TextAppearance.Material3.TitleMedium"
+                app:expandedTitleTextAppearance="@style/TextAppearance.Material3.DisplaySmall">
+
+                <com.google.android.material.appbar.MaterialToolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:elevation="0dp"
+                    app:layout_collapseMode="pin"
+                    app:navigationIcon="@drawable/arrow_back_24px"/>
+
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/romsRv"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:layout_marginTop="1dp"/>
 
-        <LinearLayout
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center">
+            android:layout_height="wrap_content">
             <HorizontalScrollView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -205,6 +220,5 @@
             android:text="@string/continuetext"
             app:backgroundTint="@drawable/btn_state"
             android:visibility="gone"/>
-    </LinearLayout>
 
 </LinearLayout>

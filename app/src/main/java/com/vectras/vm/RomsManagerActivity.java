@@ -205,11 +205,11 @@ public class RomsManagerActivity extends AppCompatActivity {
             //UIUtils.UIAlert(activity, "for first time you need internet connection to load app data!", "No internet connection!");
         UIUtils.edgeToEdge(this);
         setContentView(R.layout.activity_roms_manager);
-        UIUtils.setOnApplyWindowInsetsListener(findViewById(R.id.main));
+//        UIUtils.setOnApplyWindowInsetsListener(findViewById(R.id.main));
         linearload = findViewById(R.id.linearload);
         linearnothinghere = findViewById(R.id.linearnothinghere);
         buttontryagain = findViewById(R.id.buttontryagain);
-        loadingPb = findViewById(R.id.loadingPb);
+//        loadingPb = findViewById(R.id.loadingPb);
         filterToggle = findViewById(R.id.filterToggle);
         windowsToggle = findViewById(R.id.windowsToggle);
         linuxToggle = findViewById(R.id.linuxToggle);
