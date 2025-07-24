@@ -39,7 +39,7 @@ public class RomInfo extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_rom_info);
-        UIUtils.setOnApplyWindowInsetsListener(findViewById(R.id.main));
+//        UIUtils.setOnApplyWindowInsetsListener(findViewById(R.id.main));
 
         ImageView ivIcon;
         TextView textName;
@@ -47,6 +47,7 @@ public class RomInfo extends AppCompatActivity {
         Button btn_download;
         Button btn_pick;
         TextView descTxt;
+        Toolbar toolbar;
 
         ivIcon = findViewById(R.id.ivIcon);
         textName = findViewById(R.id.textName);
@@ -54,6 +55,12 @@ public class RomInfo extends AppCompatActivity {
         btn_download = findViewById(R.id.btn_download);
         btn_pick = findViewById(R.id.btn_pick);
         descTxt = findViewById(R.id.descTxt);
+        toolbar = findViewById(R.id.toolbar);
+
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(v -> {
+            onBackPressed();
+        });
 
         btn_download.setOnClickListener(v -> {
             Intent openurl = new Intent();
@@ -85,7 +92,7 @@ public class RomInfo extends AppCompatActivity {
         }
 
         if (getIntent().hasExtra("icon")) {
-            Glide.with(this).load(getIntent().getStringExtra("icon")).into(ivIcon);
+            Glide.with(this).load(getIntent().getStringExtra("icon")).placeholder(R.drawable.ic_computer_180dp_with_padding).error(R.drawable.ic_computer_180dp_with_padding).into(ivIcon);
         }
 
 //        btn_pick.setText(getString(R.string.select) + " " + getIntent().getStringExtra("filename"));

@@ -37,6 +37,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -185,7 +186,7 @@ public class CustomRomActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         UIUtils.edgeToEdge(this);
         setContentView(R.layout.activity_custom_rom);
-        UIUtils.setOnApplyWindowInsetsListener(findViewById(R.id.main));
+//        UIUtils.setOnApplyWindowInsetsListener(findViewById(R.id.main));
         activity = this;
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -1205,7 +1206,7 @@ public class CustomRomActivity extends AppCompatActivity {
 
     private void whenProcessing(boolean _isProcessing) {
         AppBarLayout appbar = findViewById(R.id.appbar);
-        FrameLayout mainlayout = findViewById(R.id.mainlayout);
+        CoordinatorLayout mainlayout = findViewById(R.id.mainlayout);
         if (_isProcessing) {
             mainlayout.setVisibility(View.GONE);
             appbar.setVisibility(View.GONE);

@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <LinearLayout
@@ -10,9 +11,8 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/card_yagiz"
-            style="@style/CardViewStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -113,10 +113,9 @@
 
             </LinearLayout>
 
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
-        <androidx.cardview.widget.CardView
-            style="@style/CardViewStyle"
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -146,7 +145,7 @@
                     android:gravity="center"
                     android:orientation="horizontal">
 
-                    <Button
+                    <ImageButton
                         android:id="@+id/btn_github"
                         style="@style/Widget.Material3.Button.TextButton"
                         android:layout_width="48dp"
@@ -154,9 +153,10 @@
                         android:layout_margin="8dp"
                         android:padding="8dp"
                         android:textAlignment="textStart"
-                        app:icon="@drawable/ic_github" />
+                        android:src="@drawable/ic_github"
+                        app:tint="?attr/colorControlNormal"/>
 
-                    <Button
+                    <ImageButton
                         android:id="@+id/btn_discord"
                         style="@style/Widget.Material3.Button.TextButton"
                         android:layout_width="48dp"
@@ -164,9 +164,10 @@
                         android:layout_margin="8dp"
                         android:padding="8dp"
                         android:textAlignment="textStart"
-                        app:icon="@drawable/ic_discord" />
+                        android:src="@drawable/ic_discord"
+                        app:tint="?attr/colorControlNormal" />
 
-                    <Button
+                    <ImageButton
                         android:id="@+id/btn_telegram"
                         style="@style/Widget.Material3.Button.TextButton"
                         android:layout_width="48dp"
@@ -174,9 +175,10 @@
                         android:layout_margin="8dp"
                         android:padding="8dp"
                         android:textAlignment="textStart"
-                        app:icon="@drawable/ic_telegram" />
+                        android:src="@drawable/ic_telegram"
+                        app:tint="?attr/colorControlNormal"/>
 
-                    <Button
+                    <ImageButton
                         android:id="@+id/btn_youtube"
                         style="@style/Widget.Material3.Button.TextButton"
                         android:layout_width="48dp"
@@ -184,9 +186,10 @@
                         android:layout_margin="8dp"
                         android:padding="8dp"
                         android:textAlignment="textStart"
-                        app:icon="@drawable/ic_youtube" />
+                        android:src="@drawable/ic_youtube"
+                        app:tint="?attr/colorControlNormal"/>
 
-                    <Button
+                    <ImageButton
                         android:id="@+id/btn_instagram"
                         style="@style/Widget.Material3.Button.TextButton"
                         android:layout_width="48dp"
@@ -194,9 +197,10 @@
                         android:layout_margin="8dp"
                         android:padding="8dp"
                         android:textAlignment="textStart"
-                        app:icon="@drawable/ic_instagram" />
+                        android:src="@drawable/ic_instagram"
+                        app:tint="?attr/colorControlNormal"/>
 
-                    <Button
+                    <ImageButton
                         android:id="@+id/btn_facebook"
                         style="@style/Widget.Material3.Button.TextButton"
                         android:layout_width="48dp"
@@ -205,7 +209,8 @@
                         android:padding="8dp"
                         android:textAlignment="textStart"
                         android:visibility="gone"
-                        app:icon="@drawable/ic_facebook" />
+                        android:src="@drawable/ic_facebook"
+                        app:tint="?attr/colorControlNormal"/>
 
                 </LinearLayout>
 
@@ -234,10 +239,9 @@
                     app:icon="@drawable/round_info_24" />
 
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
-        <androidx.cardview.widget.CardView
-            style="@style/CardViewStyle"
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
@@ -268,7 +272,7 @@
                     android:nestedScrollingEnabled="false" />
 
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
 
     </LinearLayout>

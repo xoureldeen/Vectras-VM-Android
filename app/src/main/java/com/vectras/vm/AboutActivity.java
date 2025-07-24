@@ -35,6 +35,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,7 +49,9 @@ import java.net.URL;
 
 public class AboutActivity extends AppCompatActivity implements View.OnClickListener{
 
-    Button btn_osl, btn_clog, btn_discord, btn_youtube, btn_github, btn_telegram, btn_instagram, btn_facebook;
+    Button btn_osl, btn_clog;
+    ImageButton btn_discord, btn_youtube, btn_github, btn_telegram, btn_instagram, btn_facebook;
+
     String appInfo;
 
     public String TAG = "AboutActivity";
@@ -58,21 +61,21 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         UIUtils.edgeToEdge(this);
         setContentView(R.layout.activity_about);
-        UIUtils.setOnApplyWindowInsetsListener(findViewById(R.id.main));
+//        UIUtils.setOnApplyWindowInsetsListener(findViewById(R.id.main));
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         toolbar.setTitle(getResources().getString(R.string.about));
         //btn
-        btn_telegram = (Button) findViewById(R.id.btn_telegram);
-        btn_youtube = (Button) findViewById(R.id.btn_youtube);
-        btn_github = (Button) findViewById(R.id.btn_github);
-        btn_instagram = (Button) findViewById(R.id.btn_instagram);
-        btn_facebook = (Button) findViewById(R.id.btn_facebook);
-        btn_discord = (Button) findViewById(R.id.btn_discord);
-        btn_osl = (Button) findViewById(R.id.btn_osl);
-        btn_clog = (Button) findViewById(R.id.btn_changelog);
+        btn_telegram = findViewById(R.id.btn_telegram);
+        btn_youtube = findViewById(R.id.btn_youtube);
+        btn_github = findViewById(R.id.btn_github);
+        btn_instagram = findViewById(R.id.btn_instagram);
+        btn_facebook = findViewById(R.id.btn_facebook);
+        btn_discord = findViewById(R.id.btn_discord);
+        btn_osl = findViewById(R.id.btn_osl);
+        btn_clog = findViewById(R.id.btn_changelog);
         //onclicklistener
         btn_telegram.setOnClickListener(this);
         btn_github.setOnClickListener(this);
@@ -160,12 +163,12 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
             }
         });
 
-        SimpleAnimations.scale(findViewById(R.id.card_yagiz), 250);
-        SimpleAnimations.translationUpToDown(findViewById(R.id.card_yagiz), 250);
-        SimpleAnimations.scale(findViewById(R.id.card_social), 500);
-        SimpleAnimations.translationUpToDown(findViewById(R.id.card_social), 500);
-        SimpleAnimations.scale(findViewById(R.id.developers), 750);
-        SimpleAnimations.translationUpToDown(findViewById(R.id.developers), 750);
+//        SimpleAnimations.scale(findViewById(R.id.card_yagiz), 250);
+//        SimpleAnimations.translationUpToDown(findViewById(R.id.card_yagiz), 250);
+//        SimpleAnimations.scale(findViewById(R.id.card_social), 500);
+//        SimpleAnimations.translationUpToDown(findViewById(R.id.card_social), 500);
+//        SimpleAnimations.scale(findViewById(R.id.developers), 750);
+//        SimpleAnimations.translationUpToDown(findViewById(R.id.developers), 750);
     }
 
     @Override

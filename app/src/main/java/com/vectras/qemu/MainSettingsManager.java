@@ -250,8 +250,8 @@ public class MainSettingsManager extends AppCompatActivity
                 VectrasApp.getApp().setTheme(R.style.AppTheme);
             }
 
-            activity.finish();
             startActivity(new Intent(activity, SplashActivity.class));
+            activity.finishAffinity();
         }
 
         @Override
