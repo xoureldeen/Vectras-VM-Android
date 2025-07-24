@@ -5,31 +5,31 @@
     <Preference
         android:fragment="com.vectras.qemu.MainSettingsManager$AppPreferencesFragment"
         android:key="app"
-        android:summary="@string/main_app_settings"
-        android:title="@string/app_settings"
+        android:summary="@string/system_settings_description"
+        android:title="@string/system"
         app:iconSpaceReserved="false" />
     <Preference
         android:key="userinterface"
         android:fragment="com.vectras.qemu.MainSettingsManager$UserInterfacePreferencesFragment"
-        android:title="@string/user_interface"
-        android:summary="@string/themes_and_ui"
+        android:title="@string/personalization"
+        android:summary="@string/personalization_settings_description"
         app:iconSpaceReserved="false" />
     <Preference
         android:key="qemu"
         android:fragment="com.vectras.qemu.MainSettingsManager$QemuPreferencesFragment"
         android:title="@string/qemu"
-        android:summary="@string/emulation_settings"
+        android:summary="@string/qemu_settings_description"
         app:iconSpaceReserved="false" />
     <Preference
         android:key="vnc"
         android:fragment="com.vectras.qemu.MainSettingsManager$VncPreferencesFragment"
-        android:title="@string/vnc"
-        android:summary="@string/vnc_ui_environment"
+        android:title="@string/vnc_server"
+        android:summary="@string/vnc_settings_description"
         app:iconSpaceReserved="false" />
     <Preference
         android:key="x11"
         android:fragment="com.vectras.vm.x11.LoriePreferences$LoriePreferenceFragment"
         android:title="@string/x11"
-        android:summary="@string/x11_ui_environment"
+        android:summary="@string/x11_settings_description"
         app:iconSpaceReserved="false" />
 </PreferenceScreen>

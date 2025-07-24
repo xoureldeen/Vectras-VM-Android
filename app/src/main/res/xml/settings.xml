@@ -2,9 +2,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:title="@string/app_settings"
-        app:icon="@drawable/round_settings_24">
+        android:layout_height="wrap_content">
+<!--        android:title="@string/app_settings"-->
+<!--        app:icon="@drawable/round_settings_24">-->
 
         <SwitchPreferenceCompat
             android:id="@+id/switchPreferenceCompat"
@@ -12,17 +12,18 @@
             android:layout_height="wrap_content"
             android:defaultValue="true"
             android:key="updateVersionPrompt"
-            android:summary="@string/check_for_software_updates_on_startup"
-            android:title="@string/check_for_software_updates"
+            android:summary="@string/check_on_startup"
+            android:title="@string/automatically_check_for_updates"
             app:icon="@drawable/round_update_24" />
 
         <SwitchPreferenceCompat
+            android:id="@+id/switchJoinBetaChannel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:defaultValue="false"
             android:key="checkforupdatesfromthebetachannel"
-            android:summary="@string/check_from_the_Beta_channel_instead_of_the_Stable_channel"
-            android:title="@string/check_for_updates_from_the_beta_channel"
+            android:summary="@string/you_will_receive_updates_to_experience_the_latest_features_early"
+            android:title="@string/join_the_beta_channel"
             app:icon="@drawable/science_24px" />
 
         <ListPreference
@@ -31,7 +32,7 @@
             android:entries="@array/languageLabels"
             android:entryValues="@array/languageValues"
             android:defaultValue="en"
-            android:summary="@string/change_app_locale"
+            android:summary="@string/tap_here_to_select_language"
             app:isPreferenceVisible="true"
             app:icon="@drawable/round_language_24" />
 

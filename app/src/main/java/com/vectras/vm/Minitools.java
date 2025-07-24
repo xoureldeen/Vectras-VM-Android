@@ -65,7 +65,7 @@ public class Minitools extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_minitools);
-        UIUtils.setOnApplyWindowInsetsListener(findViewById(R.id.main));
+//        UIUtils.setOnApplyWindowInsetsListener(findViewById(R.id.main));
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

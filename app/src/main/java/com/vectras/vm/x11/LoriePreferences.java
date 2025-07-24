@@ -45,6 +45,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.vectras.vm.x11.utils.KeyInterceptor;
 import com.vectras.vm.x11.utils.SamsungDexUtils;
 import com.vectras.vm.x11.utils.TermuxX11ExtraKeys;
@@ -133,6 +134,14 @@ public class LoriePreferences extends AppCompatActivity {
             }
 
             addPreferencesFromResource(R.xml.preferences);
+
+            //Set Subtitle for CollapsingToolbarLayout in MainSettingsManager
+            CollapsingToolbarLayout collapsingToolbarLayout =
+                    requireActivity().findViewById(R.id.collapsingToolbarLayout);
+
+            if (collapsingToolbarLayout != null) {
+                collapsingToolbarLayout.setSubtitle(getString(R.string.x11));
+            }
         }
 
         @SuppressWarnings("ConstantConditions")

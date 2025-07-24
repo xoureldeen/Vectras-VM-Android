@@ -3,231 +3,272 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <PreferenceCategory
         android:key="output"
-        android:title="@string/settings_tag_output">
+        android:title="@string/settings_tag_output"
+        app:iconSpaceReserved="false">
         <ListPreference
             android:defaultValue="native"
             android:entries="@array/displayResolutionVariants"
             android:entryValues="@array/displayResolutionVariants"
             android:key="displayResolutionMode"
-            android:title="@string/settings_x11_display_resolution_mode" />
+            android:title="@string/settings_x11_display_resolution_mode"
+            app:iconSpaceReserved="false"/>
 
         <SeekBarPreference
             android:defaultValue="100"
             android:key="displayScale"
             android:max="200"
-            android:title="@string/settings_x11_display_scale" />
+            android:title="@string/settings_x11_display_scale"
+            app:iconSpaceReserved="false" />
 
         <ListPreference
             android:defaultValue="1280x1024"
             android:entries="@array/displayResolution"
             android:entryValues="@array/displayResolution"
             android:key="displayResolutionExact"
-            android:title="@string/settings_x11_display_resolution" />
+            android:title="@string/settings_x11_display_resolution"
+            app:iconSpaceReserved="false" />
 
         <EditTextPreference
             android:defaultValue="1280x1024"
             android:key="displayResolutionCustom"
             android:summary="Example: 1280x1024"
-            android:title="@string/settings_x11_display_resolution" />
+            android:title="@string/settings_x11_display_resolution"
+            app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="displayStretch"
-            android:title="@string/settings_x11_stretch" />
+            android:title="@string/settings_x11_stretch"
+            app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="Reseed"
             android:summary="@string/settings_x11_reseed_screen_summary"
-            android:title="@string/settings_x11_reseed_screen_title" />
+            android:title="@string/settings_x11_reseed_screen_title"
+            app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="PIP"
             android:summary="@string/settings_x11_pip_summary"
-            android:title="@string/settings_x11_pip_title" />
+            android:title="@string/settings_x11_pip_title"
+            app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="fullscreen"
             android:summary="@string/settings_x11_full_screen_summary"
-            android:title="@string/settings_x11_full_screen_title" />
+            android:title="@string/settings_x11_full_screen_title"
+            app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="forceLandscape"
             android:title="Force landscape orientation"
-            app:isPreferenceVisible="false" />
+            app:isPreferenceVisible="false"
+            app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="hideCutout"
-            android:title="@string/settings_x11_cutout" />
+            android:title="@string/settings_x11_cutout"
+            app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="keepScreenOn"
-            android:title="@string/settings_x11_keep_screen_on" />
+            android:title="@string/settings_x11_keep_screen_on"
+            app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="adjustHeightForEK"
             android:summary="@string/settings_x11_adjust_display_summary"
-            android:title="@string/settings_x11_adjust_display_title" />
+            android:title="@string/settings_x11_adjust_display_title"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
     <PreferenceCategory
         android:key="pointer"
-        android:title="@string/settings_tag_point">
+        android:title="@string/settings_tag_point"
+        app:iconSpaceReserved="false" >
         <ListPreference
             android:defaultValue="1"
             android:entries="@array/touchscreenInputModesEntries"
             android:entryValues="@array/touchscreenInputModesValues"
             android:key="touchMode"
-            android:title="@string/settings_x11_touchscreen_input_mode" />
+            android:title="@string/settings_x11_touchscreen_input_mode"
+            app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="scaleTouchpad"
-            android:title="@string/settings_x11_display_scale_factor_to_touchpad" />
+            android:title="@string/settings_x11_display_scale_factor_to_touchpad"
+            app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="showStylusClickOverride"
             android:summary="@string/settings_x11_stylus_option_summary"
-            android:title="@string/settings_x11_stylus_option_title" />
+            android:title="@string/settings_x11_stylus_option_title"
+            app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="showMouseHelper"
             android:summary="@string/settings_x11_mouse_overlay_summary"
-            android:title="@string/settings_x11_mouse_overlay_title" />
+            android:title="@string/settings_x11_mouse_overlay_title"
+            app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="pointerCapture"
             android:summary="@string/settings_x11_capture_mouse_summary"
-            android:title="@string/settings_x11_capture_mouse_title" />
+            android:title="@string/settings_x11_capture_mouse_title"
+            app:iconSpaceReserved="false" />
 
         <ListPreference
             android:defaultValue="no"
             android:entries="@array/transformCapturedPointerEntries"
             android:entryValues="@array/transformCapturedPointerValues"
             android:key="transformCapturedPointer"
-            android:title="@string/settings_x11_capture_pointer_move" />
+            android:title="@string/settings_x11_capture_pointer_move"
+            app:iconSpaceReserved="false" />
 
         <SeekBarPreference
             android:defaultValue="100"
             android:key="capturedPointerSpeedFactor"
             android:max="200"
-            android:title="@string/settings_x11_capture_pointer_move_factor" />
+            android:title="@string/settings_x11_capture_pointer_move_factor"
+            app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="tapToMove"
-            android:title="@string/settings_x11_tap_to_move" />
+            android:title="@string/settings_x11_tap_to_move"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
     <PreferenceCategory
         android:key="kbd"
-        android:title="@string/settings_tag_keyboard">
+        android:title="@string/settings_tag_keyboard"
+        app:iconSpaceReserved="false" >
         <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="toggleIMEUsingBackKey"
             android:title="@string/settings_x11_back_toggle"
-            app:isPreferenceVisible="false" />
+            app:isPreferenceVisible="false"
+            app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="showAdditionalKbd"
             android:summary="@string/settings_x11_ext_keyboard_summary"
             android:title="@string/settings_x11_ext_keyboard_title"
-            app:isPreferenceVisible="false" />
+            app:isPreferenceVisible="false"
+            app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="captureVolumeKeys"
-            android:title="@string/settiongs_capture_volkey" />
+            android:title="@string/settiongs_capture_volkey"
+            app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="hideEKOnVolDown"
             android:title="@string/settings_x11_hide_extkey_vol"
-            app:isPreferenceVisible="false" />
+            app:isPreferenceVisible="false"
+            app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="useTermuxEKBarBehaviour"
             android:summary="@string/settings_x11_deact_speckey_summary"
-            android:title="@string/settings_x11_deact_speckey_title" />
+            android:title="@string/settings_x11_deact_speckey_title"
+            app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="showIMEWhileExternalConnected"
             android:summary="@string/settings_x11_ime_with_hardkeyboard_summary"
-            android:title="@string/settings_x11_ime_with_hardkeyboard_title" />
+            android:title="@string/settings_x11_ime_with_hardkeyboard_title"
+            app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="preferScancodes"
             android:summary="@string/settings_x11_prefer_scancode_summary"
-            android:title="@string/settings_x11_prefer_scancode_title" />
+            android:title="@string/settings_x11_prefer_scancode_title"
+            app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="hardwareKbdScancodesWorkaround"
             android:summary="@string/settings_x11_fix_hard_keyboard_scancode_summary"
-            android:title="@string/settings_x11_fix_hard_keyboard_scancode_title" />
+            android:title="@string/settings_x11_fix_hard_keyboard_scancode_title"
+            app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="dexMetaKeyCapture"
             android:summary="@string/settings_x11_full_screen_summary"
-            android:title="@string/settings_x11_full_screen_title" />
+            android:title="@string/settings_x11_full_screen_title"
+            app:iconSpaceReserved="false" />
 
         <Preference
             android:key="enableAccessibilityService"
             android:summary="@string/settings_x11_capture_shortcut_manually_summary"
-            android:title="@string/settings_x11_capture_shortcut_manually_title" />
+            android:title="@string/settings_x11_capture_shortcut_manually_title"
+            app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="enableAccessibilityServiceAutomatically"
             android:summary="@string/settings_x11_auto_intercept_shortcut_summary"
-            android:title="@string/settings_x11_auto_intercept_shortcut_title" />
+            android:title="@string/settings_x11_auto_intercept_shortcut_title"
+            app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="pauseKeyInterceptingWithEsc"
-            android:title="@string/settings_x11_intercepting_esc" />
+            android:title="@string/settings_x11_intercepting_esc"
+            app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
             android:defaultValue="false"
             android:key="filterOutWinkey"
             android:summary="@string/settings_x11_ignore_win_key_summary"
-            android:title="@string/settings_x11_ignore_win_key_title" />
+            android:title="@string/settings_x11_ignore_win_key_title"
+            app:iconSpaceReserved="false" />
 
         <SeekBarPreference
             android:defaultValue="100"
             android:key="opacityEKBar"
             android:max="100"
             android:title="@string/settings_x11_opacity_extra_keys_bar"
-            app:isPreferenceVisible="false" />
+            app:isPreferenceVisible="false"
+            app:iconSpaceReserved="false" />
 
         <Preference
             android:key="extra_keys_config"
             android:title="@string/settings_extra_keys_config"
-            app:isPreferenceVisible="false" />
+            app:isPreferenceVisible="false"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 
     <PreferenceCategory
         android:key="other"
-        android:title="@string/settings_tag_other">
+        android:title="@string/settings_tag_other"
+        app:iconSpaceReserved="false" >
         <SwitchPreferenceCompat
             android:defaultValue="true"
             android:key="clipboardEnable"
-            android:title="@string/settings_clipboard_sharing" />
+            android:title="@string/settings_clipboard_sharing"
+            app:iconSpaceReserved="false" />
 
         <Preference
             android:key="requestNotificationPermission"
-            android:title="Request notification permission" />
+            android:title="Request notification permission"
+            app:iconSpaceReserved="false" />
     </PreferenceCategory>
 </PreferenceScreen>

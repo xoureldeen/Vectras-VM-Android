@@ -208,6 +208,19 @@
         "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 8 is a major release of the Windows NT operating system developed by Microsoft. It was released to manufacturing on August 1, 2012, made available for download via MSDN and TechNet on August 15, 2012, and generally released for retail on October 26, 2012."
     },
     {
+        "rom_name":"Windows Server 2012 build 7788",
+        "rom_icon":"https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/09/17/windows-logo_1_926ed76111646acbbe332bc5af0cf2ce.png",
+        "rom_url":"https://youtu.be/N9fqaqLW5ow",
+        "rom_path":"Windows Server 2012 build 7788.cvbi",
+        "rom_avail":true,
+        "rom_size":"7 GB",
+        "rom_arch":"X86_64",
+        "rom_kernel":"windows",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows Server 2012 build 7904 is a build of Windows Server 2012, which was originally uploaded on 30 September 2021 as a free (retail) compile, while its checked (debug) compile was later shared on 3 November 2024 along with its client counterpart and public Symbol MSIs."
+    },
+    {
         "rom_name":"Windows Server 2012 build 7904",
         "rom_icon":"https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/09/17/windows-logo_1_926ed76111646acbbe332bc5af0cf2ce.png",
         "rom_url":"https://youtu.be/Urwn2XVEYp8",

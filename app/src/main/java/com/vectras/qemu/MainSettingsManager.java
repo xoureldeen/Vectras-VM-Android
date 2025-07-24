@@ -30,6 +30,7 @@ import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 import androidx.preference.SwitchPreferenceCompat;
 
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.vectras.vm.AboutActivity;
 import com.vectras.vm.MainActivity;
 import com.vectras.vm.R;
@@ -108,7 +109,12 @@ public class MainSettingsManager extends AppCompatActivity
         @Override
         public void onResume() {
             super.onResume();
+            CollapsingToolbarLayout collapsingToolbarLayout =
+                    requireActivity().findViewById(R.id.collapsingToolbarLayout);
 
+            if (collapsingToolbarLayout != null) {
+                collapsingToolbarLayout.setSubtitle(getString(R.string.general));
+            }
         }
 
         @Override
@@ -122,7 +128,6 @@ public class MainSettingsManager extends AppCompatActivity
         public void onCreatePreferences(Bundle bundle, String root_key) {
             // Load the Preferences from the XML file
             setPreferencesFromResource(R.xml.headers_preference, root_key);
-
         }
 
         @Override
@@ -159,11 +164,40 @@ public class MainSettingsManager extends AppCompatActivity
             // Load the Preferences from the XML file
             setPreferencesFromResource(R.xml.settings, rootKey);
 
+            CollapsingToolbarLayout collapsingToolbarLayout =
+                    requireActivity().findViewById(R.id.collapsingToolbarLayout);
+
+            if (collapsingToolbarLayout != null) {
+                collapsingToolbarLayout.setSubtitle(getString(R.string.system));
+            }
+
             // Find the ListPreference and set the change listener
             ListPreference languagePref = findPreference("language");
             if (languagePref != null) {
                 languagePref.setOnPreferenceChangeListener(this);
             }
+
+            SwitchPreferenceCompat switchPreferenceCompat = findPreference("updateVersionPrompt");
+            assert switchPreferenceCompat != null;
+            SwitchPreferenceCompat switchJoinBetaChannel = findPreference("checkforupdatesfromthebetachannel");
+            assert switchJoinBetaChannel != null;
+
+            if (!switchPreferenceCompat.isChecked()) {
+                switchJoinBetaChannel.setEnabled(false);
+            }
+
+            switchPreferenceCompat.setOnPreferenceChangeListener((preference, newValue) -> {
+                if (!(Boolean) newValue) {
+                    if (switchJoinBetaChannel.isEnabled())
+                        switchJoinBetaChannel.setEnabled(false);
+                } else {
+                    if (!switchJoinBetaChannel.isEnabled())
+                        switchJoinBetaChannel.setEnabled(true);
+
+                }
+                return true;
+            });
+
         }
 
         @Override
@@ -200,15 +234,9 @@ public class MainSettingsManager extends AppCompatActivity
             mHandler = new Handler();
             Preference pref = findPreference("modeNight");
             if (pref != null) {
-                pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-
-                    @Override
-                    public boolean onPreferenceChange(@NonNull Preference preference,
-                                                      Object newValue) {
-                        onNightMode();
-                        return true;
-                    }
-
+                pref.setOnPreferenceChangeListener((preference, newValue) -> {
+                    onNightMode();
+                    return true;
                 });
             }
         }
@@ -243,7 +271,12 @@ public class MainSettingsManager extends AppCompatActivity
         public void onCreatePreferences(Bundle bundle, String root_key) {
             // Load the Preferences from the XML file
             setPreferencesFromResource(R.xml.userinterface, root_key);
+            CollapsingToolbarLayout collapsingToolbarLayout =
+                    requireActivity().findViewById(R.id.collapsingToolbarLayout);
 
+            if (collapsingToolbarLayout != null) {
+                collapsingToolbarLayout.setSubtitle(getString(R.string.personalization));
+            }
         }
 
         @Override
@@ -269,15 +302,9 @@ public class MainSettingsManager extends AppCompatActivity
 
             Preference pref = findPreference("vmArch");
             if (pref != null) {
-                pref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-
-                    @Override
-                    public boolean onPreferenceChange(@NonNull Preference preference,
-                                                      Object newValue) {
-                        onArch();
-                        return true;
-                    }
-
+                pref.setOnPreferenceChangeListener((preference, newValue) -> {
+                    onArch();
+                    return true;
                 });
             }
 
@@ -307,26 +334,23 @@ public class MainSettingsManager extends AppCompatActivity
 
             SwitchPreferenceCompat useDefaultBiosPref = findPreference("useDefaultBios");
             assert useDefaultBiosPref != null;
-            useDefaultBiosPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(@NonNull Preference preference, Object newValue) {
-                    SwitchPreferenceCompat useUEFIPref = findPreference("useUEFI");
-                    assert useUEFIPref != null;
-                    if (!(Boolean) newValue) {
-                        if (getuseUEFI(getActivity())) {
-                            useUEFIPref.setChecked(false);
-                            setuseUEFI(getActivity(), false);
-                        }
-                        if (useUEFIPref.isEnabled()) {
-                            useUEFIPref.setEnabled(false);
-                        }
-                    } else {
-                        if (!useUEFIPref.isEnabled()) {
-                            useUEFIPref.setEnabled(true);
-                        }
+            useDefaultBiosPref.setOnPreferenceChangeListener((preference, newValue) -> {
+                SwitchPreferenceCompat useUEFIPref = findPreference("useUEFI");
+                assert useUEFIPref != null;
+                if (!(Boolean) newValue) {
+                    if (getuseUEFI(getActivity())) {
+                        useUEFIPref.setChecked(false);
+                        setuseUEFI(getActivity(), false);
                     }
-                    return true;
+                    if (useUEFIPref.isEnabled()) {
+                        useUEFIPref.setEnabled(false);
+                    }
+                } else {
+                    if (!useUEFIPref.isEnabled()) {
+                        useUEFIPref.setEnabled(true);
+                    }
                 }
+                return true;
             });
         }
 
@@ -360,6 +384,32 @@ public class MainSettingsManager extends AppCompatActivity
         public void onCreatePreferences(Bundle bundle, String root_key) {
             // Load the Preferences from the XML file
             setPreferencesFromResource(R.xml.qemu, root_key);
+            CollapsingToolbarLayout collapsingToolbarLayout =
+                    requireActivity().findViewById(R.id.collapsingToolbarLayout);
+
+            if (collapsingToolbarLayout != null) {
+                collapsingToolbarLayout.setSubtitle(getString(R.string.qemu));
+            }
+
+            SwitchPreferenceCompat customMemory = findPreference("customMemory");
+            assert customMemory != null;
+            EditTextPreference memory = findPreference("memory");
+            assert memory != null;
+
+            if (!customMemory.isChecked()) {
+                memory.setEnabled(false);
+            }
+            customMemory.setOnPreferenceChangeListener((preference, newValue) -> {
+                if (!(Boolean) newValue) {
+                    if (memory.isEnabled())
+                        memory.setEnabled(false);
+                } else {
+                    if (!memory.isEnabled())
+                        memory.setEnabled(true);
+
+                }
+                return true;
+            });
         }
 
         @Override
@@ -394,6 +444,12 @@ public class MainSettingsManager extends AppCompatActivity
         public void onCreatePreferences(Bundle bundle, String root_key) {
             // Load the Preferences from the XML file
             setPreferencesFromResource(R.xml.vnc, root_key);
+            CollapsingToolbarLayout collapsingToolbarLayout =
+                    requireActivity().findViewById(R.id.collapsingToolbarLayout);
+
+            if (collapsingToolbarLayout != null) {
+                collapsingToolbarLayout.setSubtitle(getString(R.string.vnc_server));
+            }
 
         }
 
