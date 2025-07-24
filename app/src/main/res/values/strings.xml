@@ -72,7 +72,7 @@
     <string name="linux" translatable="false">Linux</string>
     <string name="windows" translatable="false">Windows</string>
     <string name="apple" translatable="false">Apple</string>
-    <string name="external_vnc">EXTERNAL VNC</string>
+    <string name="external_vnc">External VNC</string>
     <string name="hosted_successfully">HOSTED SUCCESSFULLY!</string>
     <string name="ip" translatable="false">IP: 127.0.0.1:9</string>
     <string name="install_rom">Install Rom</string>
@@ -247,7 +247,7 @@
     <string name="vnc_ui_environment">vnc ui environment.</string>
     <string name="vm_arch">VM ARCH</string>
     <string name="cpu_model">CPU MODEL</string>
-    <string name="custom_memory">CUSTOM MEMORY</string>
+    <string name="custom_memory">Custom memory</string>
     <string name="memory_mb">MEMORY (MB)</string>
     <string name="sound_card">SOUND CARD</string>
     <string name="tb_size_kb">TB SIZE (KB)</string>
@@ -257,15 +257,15 @@
     <string name="kvm" translatable="false">KVM</string>
     <string name="cpu_cores">CPU CORES</string>
     <string name="harddisk_type">HARDDISK TYPE</string>
-    <string name="boot_from">BOOT FROM</string>
-    <string name="shared_folder">SHARED FOLDER</string>
-    <string name="custom_params">CUSTOM PARAMS</string>
+    <string name="boot_from">Boot from</string>
+    <string name="shared_folder">Shared folder</string>
+    <string name="custom_params">Custom params</string>
     <string name="vm_ui_environment">VM UI ENVIRONMENT</string>
     <string name="x11_resolution">X11 Resolution</string>
     <string name="mouse">MOUSE</string>
     <string name="check_for_software_updates_on_startup">CHECK FOR SOFTWARE UPDATES ON STARTUP</string>
     <string name="check_for_software_updates">CHECK FOR SOFTWARE UPDATES</string>
-    <string name="night_mode">NIGHT MODE</string>
+    <string name="night_mode">Night mode</string>
     <string name="description">Description</string>
     <string name="qemu_website">QEMU website</string>
     <string name="powerpc_qemu" translatable="false">PowerPC</string>
@@ -288,7 +288,7 @@
     <string name="instagram">Instagram</string>
     <string name="facebook">Facebook</string>
     <string name="change_log">Change Log</string>
-    <string name="language">LANGUAGE</string>
+    <string name="language">Language</string>
     <string name="set">SET</string>
     <string name="change_app_locale">CHANGE APP LOCALE</string>
     <string name="are_you_sure_you_want_to_shutdown_vm">Are you sure you want to shutdown vm? To leave this but keep everything running, tap and hold the Shut down button.</string>
@@ -409,7 +409,7 @@
     <string name="welcome_to_vectras_vm_lets_get_started">Welcome to Vectras VM. Let\'s get started!</string>
     <string name="processing_this_may_take_a_few_minutes">Processing...\nThis may take a few minutes.</string>
     <string name="check_for_updates_from_the_beta_channel">Check for updates from the Beta channel</string>
-    <string name="check_from_the_Beta_channel_instead_of_the_Stable_channel">Check from the Beta channel instead of the Stable channel</string>
+    <string name="check_from_the_Beta_channel_instead_of_the_Stable_channel">Check from the Beta channel instead of the Stable channel.</string>
     <string name="update">Update</string>
     <string name="new_version_is_now_available">New version is now available</string>
     <string name="ok">OK</string>
@@ -446,6 +446,25 @@
     <string name="seconds_left">seconds left</string>
     <string name="learn_more">Learn more</string>
     <string name="open">Open</string>
+    <string name="general">General</string>
+    <string name="personalization">Personalization</string>
+    <string name="system">System</string>
+    <string name="vnc_server">VNC Server</string>
+    <string name="system_settings_description">Language, check for updates and files.</string>
+    <string name="personalization_settings_description">Themes and user interface.</string>
+    <string name="qemu_settings_description">Settings for the emulator.</string>
+    <string name="vnc_settings_description">Using VNC Server for external.</string>
+    <string name="x11_settings_description">X11 user interface environment.</string>
+    <string name="automatically_check_for_updates">Automatically check for updates</string>
+    <string name="check_on_startup">Check on startup.</string>
+    <string name="join_the_beta_channel">Join the Beta channel</string>
+    <string name="you_will_receive_updates_to_experience_the_latest_features_early">You will receive updates to experience the latest features early.</string>
+    <string name="tap_here_to_select_language">Tap here to select language.</string>
+    <string name="memory">Memory</string>
+    <string name="memory_capacity_mb">Memory capacity (MB)</string>
+    <string name="hard_drive_interface">Hard drive interface</string>
+    <string name="ui_environment">UI environment</string>
+
 
     <!--======================TERMUX STRINGS====================-->
     <string name="application_name" translatable="false">Vterm</string>

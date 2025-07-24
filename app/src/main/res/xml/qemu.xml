@@ -3,20 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <PreferenceCategory
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:title="QEMU"
-        app:icon="@drawable/ic_qemu">
+        android:layout_height="wrap_content">
+<!--        android:title="QEMU"-->
+<!--        app:icon="@drawable/ic_qemu">-->
 
-        <ListPreference
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:defaultValue="X86_64"
-            android:entries="@array/vmArchLabels"
-            android:entryValues="@array/vmArchValues"
-            android:key="vmArch"
-            android:title="@string/vm_arch"
-            app:icon="@drawable/ic_arch"
-            app:useSimpleSummaryProvider="true" />
+<!--        <ListPreference-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:defaultValue="X86_64"-->
+<!--            android:entries="@array/vmArchLabels"-->
+<!--            android:entryValues="@array/vmArchValues"-->
+<!--            android:key="vmArch"-->
+<!--            android:title="@string/vm_arch"-->
+<!--            app:icon="@drawable/ic_arch"-->
+<!--            app:useSimpleSummaryProvider="true" />-->
 
         <SwitchPreferenceCompat
             android:layout_width="wrap_content"
@@ -33,7 +33,7 @@
             android:key="memory"
             android:selectAllOnFocus="true"
             android:singleLine="true"
-            android:title="@string/memory_mb"
+            android:title="@string/memory_capacity_mb"
             app:useSimpleSummaryProvider="true"
             app:icon="@drawable/round_memory_24" />
         <ListPreference
@@ -53,7 +53,7 @@
             android:defaultValue=""
             android:entries="@array/iftypeLabels"
             android:entryValues="@array/iftypeValues"
-            android:title="@string/harddisk_type"
+            android:title="@string/hard_drive_interface"
             android:key="ifType"
             app:useSimpleSummaryProvider="true"
             app:icon="@drawable/round_dns_24" />
@@ -127,7 +127,7 @@
     <PreferenceCategory
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:title="@string/vm_ui_environment"
+        android:title="@string/ui_environment"
         app:isPreferenceVisible="true"
         app:iconSpaceReserved="false">
 
