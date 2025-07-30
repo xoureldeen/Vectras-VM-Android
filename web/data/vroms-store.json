@@ -599,6 +599,19 @@
         "desc":"User: root\nPassword: 1234\n\nUltralight Linux optimized for custom ARM / RISC-V or Intel / AMD hardware\nComes with powerful system config tools.\nFor production: Noble, Bookworm. For testing: Trixie, Plucky"
     },
     {
+        "rom_name":"Ubuntu 10.04.4 LTS",
+        "rom_icon":"https://img.beget.com/cp/plain/shared/7Um-b5Q4nUooUrhtmYGD9ZofUPM7cKtw/ubuntu2x.png@.webp",
+        "rom_url":"https://youtu.be/qWojQ1jhFpE",
+        "rom_path":"Ubuntu 10.04.4 LTS.cvbi",
+        "rom_avail":true,
+        "rom_size":"4 GB",
+        "rom_arch":"X86_64",
+        "rom_kernel":"linux",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nUbuntu is a popular Linux distribution based on Debian. It is designed to be user-friendly and accessible, with a focus on ease of use and installation. Ubuntu features a modern desktop environment and comes with a wide range of pre-installed applications for productivity, multimedia, and internet browsing. The distribution is known for its strong community support and regular release cycle."
+    },
+    {
         "rom_name":"elementary OS 5.1",
         "rom_icon":"https://static-00.iconduck.com/assets.00/elementary-os-icon-2048x2048-r076wdiz.png",
         "rom_url":"https://anbui.ovh/get/vec/community/linux/elementaryos51.html",

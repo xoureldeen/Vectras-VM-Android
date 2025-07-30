@@ -58,6 +58,7 @@ import com.vectras.vm.*;
 import com.vectras.vm.Fragment.ControlersOptionsFragment;
 import com.vectras.vm.Fragment.LoggerDialogFragment;
 import com.vectras.vm.R;
+import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.ListUtils;
 import com.vectras.vm.utils.NetworkUtils;
 import com.vectras.vm.utils.UIUtils;
@@ -349,37 +350,26 @@ public class MainVNCActivity extends VncCanvasActivity {
         shutdownBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(activity, R.style.MainDialogTheme)
-                        .setTitle(getString(R.string.shutdown))
-                        .setMessage(getString(R.string.are_you_sure_you_want_to_shutdown_vm))
-                        .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
+                DialogUtils.twoDialog(activity, getString(R.string.shutdown), getString(R.string.are_you_sure_you_want_to_shutdown_vm), getString(R.string.yes), getString(R.string.cancel), true, R.drawable.power_settings_new_24px, true,
+                        () -> {
                             started = false;
                             // Stop the service
                             MainService.stopService();
                             //Terminal.killQemuProcess();
                             //VectrasApp.killcurrentqemuprocess(getApplicationContext());
                             shutdownthisvm();
-                        })
-                        .setNegativeButton(getString(R.string.no), null)
-                        .show();
+                        }, null, null);
             }
         });
 
         shutdownBtn.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                AlertDialog alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
-                alertDialog.setTitle("Exit");
-                alertDialog.setMessage("You will be left here but the virtual machine will continue to run.");
-                alertDialog.setCancelable(true);
-                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Exit", (dialog, which) -> {
-                    started = false;
-                    finish();
-                });
-                alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", (dialog, which) -> {
-
-                });
-                alertDialog.show();
+                DialogUtils.twoDialog(activity, "Exit", "You will be left here but the virtual machine will continue to run.", "Exit", getString(R.string.cancel), true, R.drawable.exit_to_app_24px, true,
+                        () -> {
+                            started = false;
+                            finish();
+                        }, null, null);
                 return false;
             }
         });
@@ -1466,7 +1456,8 @@ public class MainVNCActivity extends VncCanvasActivity {
         StrictMode.setThreadPolicy(policy);
         if (!NetworkUtils.isPortOpen("127.0.0.1", Config.QMPPort, 100)) {
             started = false;
-            UIUtils.oneDialog(getResources().getString(R.string.there_seems_to_be_no_signal), getResources().getString(R.string.do_you_want_to_exit), true, true, MainVNCActivity.this);
+            DialogUtils.oneDialog(activity, getResources().getString(R.string.there_seems_to_be_no_signal), getResources().getString(R.string.do_you_want_to_exit), getString(R.string.ok), true, R.drawable.cast_24px, true,
+                    this::finish, null);
         }
     }
 

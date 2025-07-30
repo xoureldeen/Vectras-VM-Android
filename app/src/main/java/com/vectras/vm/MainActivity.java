@@ -4,6 +4,7 @@ import static android.content.Intent.ACTION_OPEN_DOCUMENT;
 import static android.content.Intent.ACTION_VIEW;
 import static android.os.Build.VERSION.SDK_INT;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.termux.app.TermuxService;
 
@@ -41,6 +42,7 @@ import android.provider.DocumentsContract;
 import android.provider.Settings;
 import android.text.Html;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -149,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
     public static boolean isActivate = false;
     public boolean skipIDEwithARM64DialogInStartVM = false;
     BottomAppBar bottomAppBar;
+    AlertDialog progressDialog;
 
     public static Timer timer = new Timer();
     public static TimerTask timerTask;
@@ -450,51 +453,7 @@ public class MainActivity extends AppCompatActivity {
                         startActivityForResult(intent, 1006);
                     }
                 } else if (id == R.id.navigation_item_desktop) {
-                    if (SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                        builder.setTitle(R.string.x11_feature_not_supported)
-                                .setMessage(R.string.the_x11_feature_is_currently_not_supported_on_android_14_and_above_please_use_a_device_with_android_13_or_below_for_x11_functionality)
-                                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
-                                .create()
-                                .show();
-                    } else {
-                        // XFCE4 meta-package
-                        String xfce4Package = "xfce4";
-
-                        // Check if XFCE4 is installed
-                        isPackageInstalled2(activity, xfce4Package, (output, errors) -> {
-                            boolean isInstalled = false;
-
-                            // Check if the package exists in the installed packages output
-                            if (output != null) {
-                                Set<String> installedPackages = new HashSet<>();
-                                for (String installedPackage : output.split("\n")) {
-                                    installedPackages.add(installedPackage.trim());
-                                }
-
-                                isInstalled = installedPackages.contains(xfce4Package.trim());
-                            }
-
-                            // If not installed, show a dialog to install it
-                            if (!isInstalled) {
-                                new AlertDialog.Builder(activity, R.style.MainDialogTheme)
-                                        .setTitle("Install XFCE4")
-                                        .setMessage("XFCE4 is not installed. Would you like to install it?")
-                                        .setCancelable(false)
-                                        .setPositiveButton("Install", (dialog, which) -> {
-                                            String installCommand = "apk add " + xfce4Package;
-                                            new Terminal(activity).executeShellCommand(installCommand, true, activity);
-                                        })
-                                        .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
-                                        .show();
-                            } else {
-                                new Terminal(activity).executeShellCommand2("killall xfce4-session", false, activity);
-                                startActivity(new Intent(activity, X11Activity.class));
-                                new Terminal(activity).executeShellCommand2("xfce4-session", false, MainActivity.activity);
-                            }
-                        });
-
-                    }
+                    launchX11(true);
                 } else if (id == R.id.navigation_item_terminal) {
                     /*com.vectras.vterm.TerminalBottomSheetDialog VTERM = new com.vectras.vterm.TerminalBottomSheetDialog(activity);
                     VTERM.showVterm();*/
@@ -902,7 +861,7 @@ public class MainActivity extends AppCompatActivity {
                 if (MainSettingsManager.getVmUi(activity).equals("VNC"))
                     activity.startActivity(new Intent(activity, MainVNCActivity.class));
                 else if (MainSettingsManager.getVmUi(activity).equals("X11"))
-                    activity.startActivity(new Intent(activity, X11Activity.class));
+                    launchX11(false);
             } else {
                 Toast.makeText(getApplicationContext(), activity.getResources().getString(R.string.there_is_nothing_here_because_there_is_no_vm_running), Toast.LENGTH_LONG).show();
             }
@@ -982,7 +941,7 @@ public class MainActivity extends AppCompatActivity {
         romDir.mkdirs();
 
         if (!VMManager.isthiscommandsafe(env, activity.getApplicationContext())) {
-            UIUtils.oneDialog(activity.getResources().getString(R.string.problem_has_been_detected), activity.getResources().getString(R.string.harmful_command_was_detected) + " " + activity.getResources().getString(R.string.reason) + ": " + VMManager.latestUnsafeCommandReason, true, false, activity);
+            DialogUtils.oneDialog(activity, activity.getString(R.string.problem_has_been_detected), activity.getString(R.string.harmful_command_was_detected) + " " + activity.getResources().getString(R.string.reason) + ": " + VMManager.latestUnsafeCommandReason, activity.getString(R.string.ok), true, R.drawable.verified_user_24px, true, null, null);
             return;
         }
 
@@ -991,46 +950,24 @@ public class MainActivity extends AppCompatActivity {
             if (MainSettingsManager.getVmUi(activity).equals("VNC"))
                 activity.startActivity(new Intent(activity, MainVNCActivity.class));
             else if (MainSettingsManager.getVmUi(activity).equals("X11"))
-                activity.startActivity(new Intent(activity, X11Activity.class));
+                activity.launchX11(false);
             return;
         }
 
         if (AppConfig.getSetupFiles().contains("arm") && !AppConfig.getSetupFiles().contains("arm64")) {
             if (env.contains("tcg,thread=multi")) {
-                AlertDialog abiAlertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
-                abiAlertDialog.setTitle(activity.getResources().getString(R.string.oops));
-                abiAlertDialog.setMessage(activity.getResources().getString(R.string.can_not_use_mttcg));
-                abiAlertDialog.setButton(DialogInterface.BUTTON_POSITIVE, activity.getResources().getString(R.string.continuetext), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        startVM(vmName, env.replace("tcg,thread=multi", "tcg,thread=single"), itemExtra, itemPath);
-                    }
-                });
-                abiAlertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, activity.getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-                abiAlertDialog.show();
+                DialogUtils.twoDialog(activity, activity.getResources().getString(R.string.problem_has_been_detected), activity.getResources().getString(R.string.can_not_use_mttcg), activity.getString(R.string.ok), activity.getString(R.string.cancel), true, R.drawable.warning_48px, true,
+                        () -> startVM(vmName, env.replace("tcg,thread=multi", "tcg,thread=single"), itemExtra, itemPath), null, null);
                 return;
             }
         }
 
         if (MainSettingsManager.getArch(activity).equals("ARM64") && MainSettingsManager.getIfType(activity).equals("ide") && !activity.skipIDEwithARM64DialogInStartVM) {
-            AlertDialog abiAlertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
-            abiAlertDialog.setTitle(activity.getResources().getString(R.string.problem_has_been_detected));
-            abiAlertDialog.setMessage(activity.getResources().getString(R.string.you_cannot_use_IDE_hard_drive_type_with_ARM64));
-            abiAlertDialog.setButton(DialogInterface.BUTTON_POSITIVE, activity.getResources().getString(R.string.continuetext), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    activity.skipIDEwithARM64DialogInStartVM = true;
-                    startVM(vmName, env, itemExtra, itemPath);
-                }
-            });
-            abiAlertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, activity.getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-
-                }
-            });
-            abiAlertDialog.show();
+            DialogUtils.twoDialog(activity, activity.getString(R.string.problem_has_been_detected), activity.getString(R.string.you_cannot_use_IDE_hard_drive_type_with_ARM64), activity.getString(R.string.continuetext), activity.getString(R.string.cancel), true, R.drawable.warning_48px, true,
+                    () -> {
+                        activity.skipIDEwithARM64DialogInStartVM = true;
+                        startVM(vmName, env, itemExtra, itemPath);
+                    }, null, null);
             return;
         } else if (activity.skipIDEwithARM64DialogInStartVM) {
             activity.skipIDEwithARM64DialogInStartVM = false;
@@ -1041,11 +978,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         boolean isRunning = isMyServiceRunning(MainService.class);
-
-        ProgressDialog progressDialog = new ProgressDialog(activity, R.style.MainDialogTheme);
-        progressDialog.setMessage(activity.getString(R.string.booting_up));
-        progressDialog.setCancelable(false);
-        progressDialog.show();
+        activity.showProgressDialog(activity.getString(R.string.booting_up));
         Handler handler = new Handler();
         handler.postDelayed(
                 new Runnable() {
@@ -1068,9 +1001,8 @@ public class MainActivity extends AppCompatActivity {
                             if (MainSettingsManager.getVncExternal(MainActivity.activity)) {
                                 extVncLayout.setVisibility(View.VISIBLE);
                                 appbar.setExpanded(true);
-                                progressDialog.dismiss();
+                                activity.progressDialog.dismiss();
                             } else {
-                                progressDialog.show();
                                 Handler handler = new Handler();
                                 handler.postDelayed(
                                         new Runnable() {
@@ -1079,7 +1011,7 @@ public class MainActivity extends AppCompatActivity {
                                                 activity.startActivity(
                                                         new Intent(
                                                                 activity, MainVNCActivity.class));
-                                                progressDialog.dismiss();
+                                                activity.progressDialog.dismiss();
                                             }
                                         },
                                         2000);
@@ -1088,14 +1020,12 @@ public class MainActivity extends AppCompatActivity {
                             // activity.startActivity(new Intent(activity,
                             // RemoteCanvasActivity.class));
                         } else if (MainSettingsManager.getVmUi(activity).equals("X11")) {
-                            progressDialog.show();
                             Handler handler = new Handler();
                             handler.postDelayed(
                                     new Runnable() {
                                         public void run() {
-                                            activity.startActivity(
-                                                    new Intent(activity, X11Activity.class));
-                                            progressDialog.dismiss();
+                                            activity.progressDialog.dismiss();
+                                            activity.launchX11(false);
                                         }
                                     },
                                     3000);
@@ -1194,11 +1124,11 @@ public class MainActivity extends AppCompatActivity {
         if (!AppConfig.pendingCommand.isEmpty()) {
             if (!VMManager.isthiscommandsafe(AppConfig.pendingCommand, getApplicationContext())) {
                 AppConfig.pendingCommand = "";
-                UIUtils.oneDialog(activity.getResources().getString(R.string.problem_has_been_detected), activity.getResources().getString(R.string.harmful_command_was_detected) + " " + activity.getResources().getString(R.string.reason) + ": " + VMManager.latestUnsafeCommandReason, true, false, activity);
+                DialogUtils.oneDialog(activity, getString(R.string.problem_has_been_detected), getString(R.string.harmful_command_was_detected) + " " + activity.getResources().getString(R.string.reason) + ": " + VMManager.latestUnsafeCommandReason, getString(R.string.ok), true, R.drawable.verified_user_24px, true, null, null);
             } else {
                 if (AppConfig.pendingCommand.startsWith("qemu-img")) {
                     if (!VMManager.isthiscommandsafeimg(AppConfig.pendingCommand, getApplicationContext())) {
-                        UIUtils.oneDialog(activity.getResources().getString(R.string.problem_has_been_detected), activity.getResources().getString(R.string.size_too_large_try_qcow2_format), true, false, activity);
+                        DialogUtils.oneDialog(activity, getString(R.string.problem_has_been_detected), getString(R.string.size_too_large_try_qcow2_format), getString(R.string.ok), true, R.drawable.warning_48px, true, null, null);
                     } else {
                         Terminal _vterm = new Terminal(MainActivity.this);
                         _vterm.executeShellCommand2(AppConfig.pendingCommand, false, MainActivity.activity);
@@ -1508,22 +1438,12 @@ public class MainActivity extends AppCompatActivity {
                 if (item.getItemId() == R.id.update) {
                     updateApp(true);
                 } else if (item.getItemId() == R.id.shutdown) {
-                    alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
-                    alertDialog.setTitle(getResources().getString(R.string.do_you_want_to_kill_all_qemu_processes));
-                    alertDialog.setMessage(getResources().getString(R.string.all_running_vms_will_be_forcibly_shut_down));
-                    alertDialog.setCancelable(true);
-                    alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.kill_all), (dialog, which) -> {
-                        VMManager.killallqemuprocesses(getApplicationContext());
-                    });
-                    alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), (dialog, which) -> {
-
-                    });
-                    alertDialog.show();
+                    VMManager.requestKillAllQemuProcess(activity);
                 } else if (item.getItemId() == R.id.backtothedisplay) {
                     if (MainSettingsManager.getVmUi(activity).equals("VNC")) {
                         startActivity(new Intent(activity, MainVNCActivity.class));
                     } else if (MainSettingsManager.getVmUi(activity).equals("X11")) {
-                        startActivity(new Intent(activity, X11Activity.class));
+                        launchX11(false);
                     }
                 } else if (item.getItemId() == R.id.importrom) {
                     Intent intent = new Intent();
@@ -1536,6 +1456,57 @@ public class MainActivity extends AppCompatActivity {
         });
         View _update = findViewById(R.id.update);
         _update.setVisibility(View.GONE);
+    }
+
+    private void launchX11(boolean isKillXFCE) {
+        if (SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            DialogUtils.oneDialog(activity, getString(R.string.x11_feature_not_supported), getString(R.string.the_x11_feature_is_currently_not_supported_on_android_14_and_above_please_use_a_device_with_android_13_or_below_for_x11_functionality), getString(R.string.ok), true, R.drawable.error_96px, true, null, null);
+        } else {
+            // XFCE4 meta-package
+            String xfce4Package = "xfce4";
+
+            // Check if XFCE4 is installed
+            isPackageInstalled2(activity, xfce4Package, (output, errors) -> {
+                boolean isInstalled = false;
+
+                // Check if the package exists in the installed packages output
+                if (output != null) {
+                    Set<String> installedPackages = new HashSet<>();
+                    for (String installedPackage : output.split("\n")) {
+                        installedPackages.add(installedPackage.trim());
+                    }
+
+                    isInstalled = installedPackages.contains(xfce4Package.trim());
+                }
+
+                // If not installed, show a dialog to install it
+                if (!isInstalled) {
+                    DialogUtils.twoDialog(activity, "Install XFCE4", "XFCE4 is not installed. Would you like to install it?", getString(R.string.install), getString(R.string.cancel), true, R.drawable.desktop_24px, true,
+                            () -> {
+                                String installCommand = "apk add " + xfce4Package;
+                                new Terminal(activity).executeShellCommand(installCommand, true, activity);
+                            }, null, null);
+                } else {
+                    if (isKillXFCE)
+                        new Terminal(activity).executeShellCommand2("killall xfce4-session", false, activity);
+                    startActivity(new Intent(activity, X11Activity.class));
+                    new Terminal(activity).executeShellCommand2("xfce4-session", false, MainActivity.activity);
+                }
+            });
+
+        }
+    }
+
+    private void showProgressDialog(String _content) {
+        View progressView = LayoutInflater.from(activity).inflate(R.layout.dialog_progress_style, null);
+        TextView progress_text = progressView.findViewById(R.id.progress_text);
+        progress_text.setText(_content);
+        progressDialog = new MaterialAlertDialogBuilder(activity, R.style.CenteredDialogTheme)
+                .setView(progressView)
+                .setCancelable(false)
+                .create();
+
+        progressDialog.show();
     }
 
 }
