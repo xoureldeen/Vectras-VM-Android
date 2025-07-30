@@ -6,7 +6,7 @@ android {
     compileSdkVersion 34
 
     dependencies {
-        implementation "androidx.annotation:annotation:1.1.0"
+        implementation "androidx.annotation:annotation:1.9.1"
         api project(":terminal-emulator")
     }
 
