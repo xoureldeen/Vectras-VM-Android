@@ -780,6 +780,11 @@ public class VMManager {
         }
     }
 
+    public static void requestKillAllQemuProcess(Activity activity) {
+        DialogUtils.twoDialog(activity, activity.getString(R.string.do_you_want_to_kill_all_qemu_processes), activity.getString(R.string.all_running_vms_will_be_forcibly_shut_down), activity.getString(R.string.kill_all), activity.getString(R.string.cancel), true, R.drawable.power_settings_new_24px, true,
+                () -> killallqemuprocesses(activity), null, null);
+    }
+
     public static void killcurrentqemuprocess(Context context) {
         Terminal vterm = new Terminal(context);
         String env = "killall -9 ";

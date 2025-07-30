@@ -30,7 +30,8 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:layout_margin="8dp"
-        app:cardCornerRadius="15dp">
+        style="?attr/materialCardViewFilledStyle"
+        app:cardBackgroundColor="?attr/colorSurface">
         <ImageView
             android:id="@+id/ivIcon"
             android:layout_width="70dp"

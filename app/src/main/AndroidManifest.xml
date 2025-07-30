@@ -88,10 +88,12 @@
             android:exported="false"
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="stateHidden" />
+        <!--uiMode so that FlashActivity does not automatically restart when changing themes, causing MainActivity to be called twice.-->
         <activity
             android:name=".SplashActivity"
             android:exported="true"
-            android:hardwareAccelerated="false">
+            android:hardwareAccelerated="true"
+            android:configChanges="uiMode|orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

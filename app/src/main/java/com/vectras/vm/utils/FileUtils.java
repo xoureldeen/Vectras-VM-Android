@@ -781,4 +781,28 @@ public class FileUtils {
 			return 0;
 		}
 	}
+
+	public static String getFilePathFromUri(Context context, Uri uri) {
+		String filePath = null;
+		if ("content".equalsIgnoreCase(uri.getScheme())) {
+			String[] projection = {MediaStore.Files.FileColumns.DATA};
+			Cursor cursor = null;
+			try {
+				cursor = context.getContentResolver().query(uri, projection, null, null, null);
+				if (cursor != null && cursor.moveToFirst()) {
+					int index = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATA);
+					filePath = cursor.getString(index);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				if (cursor != null)
+					cursor.close();
+			}
+		} else if ("file".equalsIgnoreCase(uri.getScheme())) {
+			filePath = uri.getPath();
+		}
+		return filePath;
+	}
+
 }

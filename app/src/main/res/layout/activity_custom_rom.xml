@@ -20,6 +20,7 @@
             app:layout_behavior="com.google.android.material.appbar.AppBarLayout$Behavior">
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/collapsingToolbarLayout"
                 style="?attr/collapsingToolbarLayoutLargeStyle"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
@@ -53,22 +54,13 @@
                 android:orientation="vertical"
                 android:padding="8dp">
 
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cdItem"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:focusable="true"
-                    app:cardUseCompatPadding="true">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="horizontal">
-
                         <com.google.android.material.card.MaterialCardView
+                            style="?attr/materialCardViewFilledStyle"
                             android:layout_width="120dp"
-                            android:layout_height="120dp">
+                            android:layout_height="120dp"
+                            app:cardBackgroundColor="?attr/colorSurfaceContainer"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginVertical="8dp">
                             <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent" >
@@ -77,6 +69,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:scaleType="centerCrop"
+                                    android:background="?attr/selectableItemBackground"
                                     app:srcCompat="@drawable/ic_computer_180dp_with_padding" />
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -93,35 +86,6 @@
                                 </LinearLayout>
                             </RelativeLayout>
                         </com.google.android.material.card.MaterialCardView>
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/textName"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="bottom"
-                                android:padding="8dp"
-                                android:singleLine="true"
-                                android:text="Title"
-                                android:textSize="25sp" />
-
-                            <TextView
-                                android:id="@+id/textArch"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="top"
-                                android:padding="8dp"
-                                android:singleLine="true"
-                                android:text="arch"
-                                android:textAlignment="gravity"
-                                android:textColor="?attr/colorPrimary"
-                                android:textSize="16sp" />
-                        </LinearLayout>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/titleField"

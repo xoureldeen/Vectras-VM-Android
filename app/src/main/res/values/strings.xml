@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">v2.9.5 (3dfx - Yorkshire Pudding)</string>
+    <string name="app_version" translatable="false">v2.9.5 (3dfx - Zeppole)</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -464,6 +464,17 @@
     <string name="memory_capacity_mb">Memory capacity (MB)</string>
     <string name="hard_drive_interface">Hard drive interface</string>
     <string name="ui_environment">UI environment</string>
+    <string name="note_for_selecting_x86_64">We recommend you to use it. You can run Windows, Linux and more with the highest performance compared to other architectures.</string>
+    <string name="note_for_selecting_aarch64">You can run Windows, Linux and other operating systems intended for ARM.</string>
+    <string name="note_for_selecting_i386">You can run older x86 operating systems with greater compatibility than x86_64.</string>
+    <string name="note_for_selecting_ppc">You can run older versions of Mac OS and other operating systems intended for the PowerPC architecture.</string>
+    <string name="note_for_selecting_import">You can import now by selecting the file in cvbi format.</string>
+    <string name="note_for_selecting_qemu">Learn more about this open source emulator.</string>
+    <string name="create_command">Create command</string>
+    <string name="note_for_selecting_create_command">Create new virtual machines for Vectras VM with easier customization.</string>
+    <string name="import_or_choose_an_architecture_to_start_creating">Import or choose an architecture to start creating.</string>
+    <string name="set_arch_universal_note">You can drag and drop cvbi file and Import card to import.</string>
+    <string name="copy">Copy</string>
 
 
     <!--======================TERMUX STRINGS====================-->
@@ -561,7 +572,7 @@
     <string name="log_level_verbose">Verbose</string>
     <string name="log_level_unknown">*Unknown*</string>
     <string name="log_level_value">Logcat log level set to \"%1$s\"</string>
-    <string name="yes">yes</string>
+    <string name="yes">Yes</string>
     <string name="no">Cancel</string>
     <string name="cancel">Cancel</string>
     <string name="back_to_the_display">Back to the Display</string>

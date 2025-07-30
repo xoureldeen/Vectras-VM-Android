@@ -66,8 +66,6 @@ public class AudioStreamService extends Service {
                         AudioTrack.MODE_STREAM
                 );
 
-                audioTrack.play();
-
                 new Thread(() -> {
                     try {
                     LocalSocket socket = new LocalSocket();
@@ -82,6 +80,8 @@ public class AudioStreamService extends Service {
                         while ((bytesRead = in.read(buffer)) != -1) {
                             // If raw PCM data
                             audioTrack.write(buffer, 0, bytesRead);
+                            if (audioTrack != null)
+                                audioTrack.play();
                         }
 
                         in.close();
@@ -100,6 +100,7 @@ public class AudioStreamService extends Service {
     public void onDestroy() {
         super.onDestroy();
         isPlaying = false;
+        assert audioTrack != null;
         audioTrack.stop();
         audioTrack.release();
     }

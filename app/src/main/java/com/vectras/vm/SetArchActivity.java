@@ -1,27 +1,25 @@
 package com.vectras.vm;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
+import android.content.ClipData;
+import android.content.ClipDescription;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
+import android.view.DragEvent;
 import android.view.Menu;
 import android.view.View;
-import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 
-import com.google.android.material.appbar.MaterialToolbar;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.databinding.ActivitySetArchBinding;
-import com.vectras.vm.utils.PackageUtils;
+import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.UIUtils;
 
-import java.util.Objects;
+import java.io.File;
 
 public class SetArchActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -61,9 +59,48 @@ public class SetArchActivity extends AppCompatActivity implements View.OnClickLi
             return false;
         });
 
-        if (PackageUtils.isInstalled("com.anbui.cqcm.app", this)) {
-            binding.buttongetcm.setText(getResources().getString(R.string.open));
-        }
+//        if (PackageUtils.isInstalled("com.anbui.cqcm.app", this)) {
+//            binding.buttongetcm.setText(getResources().getString(R.string.open));
+//        }
+
+        binding.bntimport.setOnDragListener(new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                Log.i("Drag", "onDrag: " + event.getAction());
+                switch (event.getAction()) {
+                    case DragEvent.ACTION_DRAG_STARTED:
+                        ClipDescription description = event.getClipDescription();
+                        if (description != null) {
+                            Log.d("DRAG", "MIME: " + description.getMimeType(0));
+                            return true; // Accept to go to event DragEvent.ACTION_DROP
+                        }
+                        return false;
+
+                    case DragEvent.ACTION_DROP:
+                        ClipData clipData = event.getClipData();
+                        if (clipData != null && clipData.getItemCount() > 0) {
+                            Uri uri = clipData.getItemAt(0).getUri();
+                            String filePath = FileUtils.getFilePathFromUri(getApplicationContext(), uri);
+
+                            File file = new File(filePath);
+
+                            Intent intent = new Intent();
+                            intent.setClass(getApplicationContext(), CustomRomActivity.class);
+                            intent.putExtra("addromnow", "");
+                            intent.putExtra("romextra", "");
+                            intent.putExtra("romname", "");
+                            intent.putExtra("romicon", "");
+                            intent.putExtra("rompath", filePath);
+                            intent.putExtra("romfilename", file.getName());
+                            startActivity(intent);
+                            finish();
+                        }
+                        return true;
+                }
+                return true;
+            }
+        });
+
     }
 
     public void onClick(View v) {

@@ -218,9 +218,10 @@ public class MainSettingsManager extends AppCompatActivity
 
             getResources().updateConfiguration(config, getResources().getDisplayMetrics());
 
-            MainActivity.activity.finish();
-            activity.finish();
-            startActivity(new Intent(activity, SplashActivity.class));
+            Intent intent = new Intent(requireActivity().getApplicationContext(), SplashActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            requireActivity().finishAffinity();
         }
 
     }
@@ -250,8 +251,10 @@ public class MainSettingsManager extends AppCompatActivity
                 VectrasApp.getApp().setTheme(R.style.AppTheme);
             }
 
-            startActivity(new Intent(activity, SplashActivity.class));
-            activity.finishAffinity();
+            Intent intent = new Intent(requireActivity().getApplicationContext(), SplashActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            requireActivity().finishAffinity();
         }
 
         @Override

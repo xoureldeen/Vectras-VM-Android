@@ -48,6 +48,7 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -139,6 +140,8 @@ public class CustomRomActivity extends AppCompatActivity {
 
     private AlertDialog alertDialog;
 
+    CollapsingToolbarLayout collapsingToolbarLayout;
+
     public void onStart() {
         super.onStart();
     }
@@ -192,16 +195,19 @@ public class CustomRomActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        setTitle(getString(R.string.rom_options));
         //AdView mAdView = findViewById(R.id.adView);
         //AdRequest adRequest = new AdRequest.Builder().build();
         //mAdView.loadAd(adRequest);
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
+//        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+//            @Override
+//            public void onInitializationComplete(InitializationStatus initializationStatus) {
+//
+//            }
+//        });
 
-            }
-        });
+        collapsingToolbarLayout = findViewById(R.id.collapsingToolbarLayout);
+        collapsingToolbarLayout.setSubtitle(MainSettingsManager.getArch(this));
+
         ivAddThubnail = findViewById(R.id.ivAddThubnail);
         cdromLayout = findViewById(R.id.cdromField);
         driveLayout = findViewById(R.id.driveField);
@@ -217,8 +223,6 @@ public class CustomRomActivity extends AppCompatActivity {
 
         linearprogress = findViewById(R.id.linearprogress);
         textviewprogress = findViewById(R.id.textviewprogress);
-
-        arch.setText(MainSettingsManager.getArch(this));
         icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -391,7 +395,6 @@ public class CustomRomActivity extends AppCompatActivity {
             }
         });
 
-        TextView textName = findViewById(R.id.textName);
         TextWatcher afterTextChangedListener = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -400,7 +403,6 @@ public class CustomRomActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                textName.setText(Objects.requireNonNull(title.getText()).toString());
 
                 if (!thumbnailPath.isEmpty())
                     return;
@@ -659,13 +661,13 @@ public class CustomRomActivity extends AppCompatActivity {
                         try {
                             if (MainSettingsManager.copyFile(activity)) {
                                 try {
-                                    SaveImage(selectedImage, new File(AppConfig.vmFolder + vmID), "thumbnail.webp");
+                                    SaveImage(selectedImage, new File(AppConfig.vmFolder + vmID), "thumbnail.png");
                                 } finally {
                                     Runnable runnable = new Runnable() {
                                         @Override
                                         public void run() {
                                             whenProcessing(false);
-                                            thumbnailPath = AppConfig.vmFolder + vmID + "/thumbnail.webp";
+                                            thumbnailPath = AppConfig.vmFolder + vmID + "/thumbnail.png";
                                             thumbnailProcessing();
                                         }
                                     };
@@ -806,7 +808,7 @@ public class CustomRomActivity extends AppCompatActivity {
         if (file.exists()) file.delete();
         try {
             FileOutputStream out = new FileOutputStream(file);
-            finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            finalBitmap.compress(Bitmap.CompressFormat.PNG, 90, out);
             out.flush();
             out.close();
 

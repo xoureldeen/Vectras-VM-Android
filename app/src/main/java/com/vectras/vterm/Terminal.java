@@ -8,9 +8,13 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.termux.app.TermuxService;
 
 import java.io.BufferedReader;
@@ -33,6 +37,8 @@ import com.vectras.vm.MainService;
 import com.vectras.vm.R;
 import com.vectras.vm.VMManager;
 import com.vectras.vm.AppConfig;
+import com.vectras.vm.utils.ClipboardUltils;
+import com.vectras.vm.utils.DialogUtils;
 
 public class Terminal {
     private static final String TAG = "Vterm";
@@ -68,20 +74,8 @@ public class Terminal {
         if (VMManager.isExecutedCommandError(usercommand, message, activity))
             return;
 
-        AlertDialog dialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
-        dialog.setTitle("Execution Result");
-        dialog.setMessage(message);
-        //.setPositiveButton("OK", (dialogInterface, i) -> dialogInterface.dismiss())
-        dialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                //killQemuProcess();
-                MainService.stopService();
-                dialog.dismiss();
-            }
-        });
-        dialog.create();
-
-        dialog.show();
+        DialogUtils.twoDialog(activity, "Execution Result", message, activity.getString(R.string.copy), activity.getString(R.string.close),true, R.drawable.round_terminal_24, true,
+                () -> ClipboardUltils.copyToClipboard(activity, message), null,null);
     }
 
     // Method to execute the shell command
@@ -92,9 +86,14 @@ public class Terminal {
         com.vectras.vm.logger.VectrasStatus.logError("<font color='#4db6ac'>VTERM: >" + userCommand + "</font>");
 
         // Show ProgressDialog
-        ProgressDialog progressDialog = new ProgressDialog(dialogActivity);
-        progressDialog.setMessage(dialogActivity.getString(R.string.executing_command_please_wait));
-        progressDialog.setCancelable(false);
+        View progressView = LayoutInflater.from(dialogActivity).inflate(R.layout.dialog_progress_style, null);
+        TextView progress_text = progressView.findViewById(R.id.progress_text);
+        progress_text.setText(dialogActivity.getString(R.string.executing_command_please_wait));
+        AlertDialog progressDialog = new MaterialAlertDialogBuilder(dialogActivity, R.style.CenteredDialogTheme)
+                .setView(progressView)
+                .setCancelable(false)
+                .create();
+
         progressDialog.show();
 
         new Thread(() -> {
@@ -404,12 +403,16 @@ public class Terminal {
         com.vectras.vm.logger.VectrasStatus.logError("<font color='#4db6ac'>VTERM: >" + userCommand + "</font>");
 
         // Show ProgressDialog on the main thread
-        ProgressDialog progressDialog = new ProgressDialog(dialogActivity);
-        progressDialog.setMessage(dialogActivity.getString(R.string.executing_command_please_wait));
-        progressDialog.setCancelable(false);
+        View progressView = LayoutInflater.from(dialogActivity).inflate(R.layout.dialog_progress_style, null);
+        TextView progress_text = progressView.findViewById(R.id.progress_text);
+        progress_text.setText(dialogActivity.getString(R.string.executing_command_please_wait));
+        AlertDialog progressDialog = new MaterialAlertDialogBuilder(dialogActivity, R.style.CenteredDialogTheme)
+                .setView(progressView)
+                .setCancelable(false)
+                .create();
 
         // Make sure to show the dialog on the main thread
-        new Handler(Looper.getMainLooper()).post(() -> progressDialog.show());
+        new Handler(Looper.getMainLooper()).post(progressDialog::show);
 
         new Thread(() -> {
             try {
