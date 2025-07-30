@@ -11,5 +11,5 @@ updates:
     registries:
       - maven-google
     schedule:
-      interval: "every-3-days"
+      interval: "weekly"
     open-pull-requests-limit: 3
