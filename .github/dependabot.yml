@@ -1,0 +1,15 @@
+version: 2
+registries:
+  maven-google:
+    type: maven-repository
+    url: https://maven.google.com
+    username: ""
+    password: ""
+updates:
+  - package-ecosystem: "gradle"
+    directory: "/"
+    registries:
+      - maven-google
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 3
