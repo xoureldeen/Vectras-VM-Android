@@ -91,6 +91,19 @@
         "desc":"From @Stiven2016 on Telegram and fixed by Nguyen Bao An Bui.\n\nWindows XP is a personal computer operating system produced by Microsoft as part of the Windows NT family of operating systems. It was released to manufacturing on August 24, 2001, and later to retail on October 25, 2001. It is the successor to both Windows 2000 and Windows Me. Windows XP was the first version of Windows to be based on the Windows NT kernel and was the first consumer-oriented version of Windows to be built on that architecture."
     },
     {
+        "rom_name":"Windows FLP",
+        "rom_icon":"https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/10/12/windows_2001_logo_1_abcd7f82240a9d6d4ef94d5c6223130b.png",
+        "rom_url":"https://youtu.be/O0xwtHC72W0",
+        "rom_path":"Windows FLP.cvbi",
+        "rom_avail":true,
+        "rom_size":"800 MB",
+        "rom_arch":"X86_64",
+        "rom_kernel":"windows",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows Fundamentals for Legacy PCs (also known as Windows FLP or shortly WFLP) is a lightweight version of Windows XP, exclusively released to manufacturing on 8 July 2006 to Microsoft Software Assurance customers only."
+    },
+    {
         "rom_name":"Windows XP x64",
         "rom_icon":"https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/10/12/windows_2001_logo_1_abcd7f82240a9d6d4ef94d5c6223130b.png",
         "rom_url":"https://youtu.be/BAgBNcRAgc4",
