@@ -78,6 +78,19 @@
         "desc":"Windows 98 is a consumer-oriented operating system developed by Microsoft as part of its Windows 9x family of Microsoft Windows operating systems. It was the second operating system in the 9x line, as the successor to Windows 95. It was released to manufacturing on May 15, 1998, and generally to retail on June 25, 1998. Like its predecessor, it is a hybrid 16-bit and 32-bit monolithic product with the boot stage based on MS-DOS."
     },
     {
+        "rom_name":"Windows 2000",
+        "rom_icon":"https://static.wikia.nocookie.net/freakylogo/images/c/c6/Windows_2000-0.png/revision/latest?cb=20181116231840",
+        "rom_url":"https://anbui.ovh/get/vec/community/win/nt5/2000.html",
+        "rom_path":"Windows 2000.cvbi",
+        "rom_avail":true,
+        "rom_size":"700 MB",
+        "rom_arch":"X86_64",
+        "rom_kernel":"windows",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"From @tokaevUser on Telegram.\n\nWindows 2000 is a major release of the Windows NT operating system developed by Microsoft, targeting the server and business markets. It is the direct successor to Windows NT 4.0, and was released to manufacturing on December 15, 1999, and then to retail on February 17, 2000 for all versions, with Windows 2000 Datacenter Server being released to retail on September 26, 2000."
+    },
+    {
         "rom_name":"Tiny XP",
         "rom_icon":"https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/10/12/windows_2001_logo_1_abcd7f82240a9d6d4ef94d5c6223130b.png",
         "rom_url":"https://anbui.ovh/get/vec/community/win/nt5/tinyxp.html",
