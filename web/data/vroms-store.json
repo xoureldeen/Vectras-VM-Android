@@ -156,6 +156,19 @@
         "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows Server 2003 is a major release of Windows Server family, released to manufacturing on 24 April 2003. It is the server counterpart of Windows XP, although it was released nearly 18 months after its original release and is built on a slightly newer codebase (NT kernel version is 5.2). It was released in several editions, including Web Edition, Standard Edition, Datacenter Edition and Enterprise Edition. It replaces Windows 2000 Server and was eventually succeeded by Windows Server 2008."
     },
     {
+        "rom_name":"Windows 7 Super Nano Lite (x86)",
+        "rom_icon":"https://upload.wikimedia.org/wikipedia/de/thumb/c/c2/Microsoft_Windows_7_logo.svg/2296px-Microsoft_Windows_7_logo.svg.png",
+        "rom_url":"https://anbui.ovh/get/vec/community/win/nt6/7snlx86.html",
+        "rom_path":"Windows 7 Super Nano Lite (x86).cvbi",
+        "rom_avail":true,
+        "rom_size":"570 MB",
+        "rom_arch":"X86_64",
+        "rom_kernel":"windows",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"From @tokaevUser on Telegram\n\nindows 7 is a major release of the Windows NT operating system developed by Microsoft. It was released to manufacturing on July 22, 2009, and became generally available on October 22, 2009. It is the successor to Windows Vista, released nearly three years earlier. Windows 7's server counterpart, Windows Server 2008 R2, was released at the same time. It sold over 630 million copies before it was succeeded by Windows 8 in October 2012."
+    },
+    {
         "rom_name":"Windows 7 build 6801",
         "rom_icon":"https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/10/15/windows_logo_2006_1_c0e5e8a8271301cfed289ab6118e38b2.png",
         "rom_url":"https://youtu.be/d-dwK7gFZas",
@@ -544,6 +557,19 @@
         "rom_extra":"",
         "final_rom_file_name":"",
         "desc":"User: root\nPassword: [None]\nDebian (/ˈdɛbiən/), also known as Debian GNU/Linux, is a free and open source Linux distribution, developed by the Debian Project, which was established by Ian Murdock in August 1993. Debian is one of the oldest operating systems based on the Linux kernel, and is the basis for many other Linux distributions."
+    },
+    {
+        "rom_name":"Gentoo Linux",
+        "rom_icon":"https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Gentoo_Linux_logo_matte.svg/1200px-Gentoo_Linux_logo_matte.svg.png",
+        "rom_url":"https://anbui.ovh/get/vec/community/linux/gentoo.html",
+        "rom_path":"Gentoo Linux.cvbi",
+        "rom_avail":true,
+        "rom_size":"580 MB",
+        "rom_arch":"X86_64",
+        "rom_kernel":"linux",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"From @tokaevUser on Telegram\n\nGentoo Linux is a Linux distribution built using the Portage package management system. Unlike a binary software distribution, the source code is compiled locally according to the user's preferences and is often optimized for the specific type of computer. Precompiled binaries are available for some packages. Gentoo runs on a wide variety of processor architectures."
     },
     {
         "rom_name":"antiX Linux",
