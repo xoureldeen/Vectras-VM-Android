@@ -221,6 +221,19 @@
         "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 7 is a major release of the Windows NT operating system developed by Microsoft. It was released to manufacturing on July 22, 2009, and became generally available on October 22, 2009. It is the successor to Windows Vista, released nearly three years earlier. Windows 7's server counterpart, Windows Server 2008 R2, was released at the same time. It was succeeded by Windows 8 in October 2012."
     },
     {
+        "rom_name":"Windows Embedded POSReady 7",
+        "rom_icon":"https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/10/15/windows_logo_2006_1_c0e5e8a8271301cfed289ab6118e38b2.png",
+        "rom_url":"https://youtu.be/AojnrgMgemM",
+        "rom_path":"Windows Embedded POSReady 7.cvbi",
+        "rom_avail":true,
+        "rom_size":"6 GB",
+        "rom_arch":"X86_64",
+        "rom_kernel":"windows",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows Embedded POSReady 7 is a Windows 7-based operating system developed by Microsoft, designed for use in point of sale machines such as cash registers, automated teller machines and self-checkouts. It succeeded the Windows XP-based Windows Embedded POSReady 2009, and was later replaced by Windows Embedded 8 Industry in 2013. It forms the base of Windows Thin PC."
+    },
+    {
         "rom_name":"Windows 8 build 7777",
         "rom_icon":"https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/09/17/windows-logo_1_926ed76111646acbbe332bc5af0cf2ce.png",
         "rom_url":"https://youtu.be/ahT8cT2F-hI",
