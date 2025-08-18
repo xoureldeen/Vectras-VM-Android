@@ -434,4 +434,31 @@ public class UIUtils {
             return insets;
         });
     }
+
+    public static void setOnApplyWindowInsetsListenerTop(View _view) {
+        int originalPaddingLeft = _view.getPaddingLeft();
+        int originalPaddingTop = _view.getPaddingTop();
+        int originalPaddingRight = _view.getPaddingRight();
+        int originalPaddingBottom = _view.getPaddingBottom();
+
+
+        ViewCompat.setOnApplyWindowInsetsListener(_view, (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout() | WindowInsetsCompat.Type.ime());
+            v.setPadding(systemBars.left + originalPaddingLeft  , systemBars.top + originalPaddingTop, systemBars.right + originalPaddingRight, originalPaddingBottom);
+            return insets;
+        });
+    }
+
+    public static void setOnApplyWindowInsetsListenerBottom(View _view) {
+        int originalPaddingLeft = _view.getPaddingLeft();
+        int originalPaddingTop = _view.getPaddingTop();
+        int originalPaddingRight = _view.getPaddingRight();
+        int originalPaddingBottom = _view.getPaddingBottom();
+
+        ViewCompat.setOnApplyWindowInsetsListener(_view, (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout() | WindowInsetsCompat.Type.ime());
+            v.setPadding(systemBars.left + originalPaddingLeft, originalPaddingTop, systemBars.right + originalPaddingRight, systemBars.bottom + originalPaddingBottom);
+            return insets;
+        });
+    }
 }

@@ -70,6 +70,7 @@
             android:label="@string/mini_tools" />
         <activity
             android:name=".RomInfo"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
             android:exported="false"
             android:hardwareAccelerated="true" />
         <activity
@@ -111,7 +112,9 @@
             tools:ignore="DiscouragedApi" /> <!-- stupid android issue -->
         <activity
             android:name=".RomsManagerActivity"
-            android:exported="true"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:windowSoftInputMode="adjustResize"
+            android:exported="false"
             android:hardwareAccelerated="true"
             android:label="Roms" />
         <activity

@@ -10,7 +10,10 @@
         "rom_kernel":"windows",
         "rom_extra":"-cpu n270 -smp 1 -m 2M -vga cirrus -device sb16",
         "final_rom_file_name":"MSDOS.img",
-        "desc":"MS-DOS (/ˌɛmˌɛsˈdɒs/ em-es-DOSS; acronym for Microsoft Disk Operating System, also known as Microsoft DOS) is an operating system for x86-based personal computers mostly developed by Microsoft. Collectively, MS-DOS, its rebranding as IBM PC DOS, and a few operating systems attempting to be compatible with MS-DOS, are sometimes referred to as \"DOS\" (which is also the generic acronym for disk operating system). MS-DOS was the main operating system for IBM PC compatibles during the 1980s, from which point it was gradually superseded by operating systems offering a graphical user interface (GUI), in various generations of the graphical Microsoft Windows operating system."
+        "desc":"MS-DOS (/ˌɛmˌɛsˈdɒs/ em-es-DOSS; acronym for Microsoft Disk Operating System, also known as Microsoft DOS) is an operating system for x86-based personal computers mostly developed by Microsoft. Collectively, MS-DOS, its rebranding as IBM PC DOS, and a few operating systems attempting to be compatible with MS-DOS, are sometimes referred to as \"DOS\" (which is also the generic acronym for disk operating system). MS-DOS was the main operating system for IBM PC compatibles during the 1980s, from which point it was gradually superseded by operating systems offering a graphical user interface (GUI), in various generations of the graphical Microsoft Windows operating system.",
+        "file_size": "128 MB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
     },
     {
         "rom_name":"Windows 1.01",
@@ -23,7 +26,10 @@
         "rom_kernel":"windows",
         "rom_extra":"-cpu n270 -smp 1 -m 16M -vga cirrus -device sb16 -fda 'OhnoIjustrealizeditsmidnightandIstillhavetodothisWindows1.0.ima'",
         "final_rom_file_name":"Windows1.0.ima",
-        "desc":"Windows 1.0 is the first major release of Microsoft Windows, a family of graphical operating systems for personal computers developed by Microsoft. It was first released to manufacturing in the United States on November 20, 1985, while the European version was released as Windows 1.02 in May 1986."
+        "desc":"Windows 1.0 is the first major release of Microsoft Windows, a family of graphical operating systems for personal computers developed by Microsoft. It was first released to manufacturing in the United States on November 20, 1985, while the European version was released as Windows 1.02 in May 1986.",
+        "file_size": "2 MB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
     },
     {
         "rom_name":"Windows 2.03",
@@ -36,7 +42,10 @@
         "rom_kernel":"windows",
         "rom_extra":"-cpu n270 -smp 1 -m 16M -vga cirrus -device sb16",
         "final_rom_file_name":"Windows2.0.vdi",
-        "desc":"Windows 2.0 is a major release of Microsoft Windows, a family of graphical operating systems for personal computers developed by Microsoft. It was released to manufacturing on December 9, 1987, as a successor to Windows 1.0."
+        "desc":"Windows 2.0 is a major release of Microsoft Windows, a family of graphical operating systems for personal computers developed by Microsoft. It was released to manufacturing on December 9, 1987, as a successor to Windows 1.0.",
+        "file_size": "14 MB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
     },
     {
         "rom_name":"Windows 3.0",
@@ -49,7 +58,10 @@
         "rom_kernel":"windows",
         "rom_extra":"-cpu n270 -smp 1 -m 16M -vga cirrus -device sb16",
         "final_rom_file_name":"Windows 3.0.vdi",
-        "desc":"Windows 3.0 is the third major release of Microsoft Windows, launched on May 22, 1990. It introduces a new graphical user interface (GUI) that represents applications as clickable icons, instead of the list of file names in its predecessors. Later updates expand capabilities, such as multimedia support for sound recording and playback, and support for CD-ROMs."
+        "desc":"Windows 3.0 is the third major release of Microsoft Windows, launched on May 22, 1990. It introduces a new graphical user interface (GUI) that represents applications as clickable icons, instead of the list of file names in its predecessors. Later updates expand capabilities, such as multimedia support for sound recording and playback, and support for CD-ROMs.",
+        "file_size": "17 MB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
     },
     {
         "rom_name":"OS/2",
@@ -62,7 +74,10 @@
         "rom_kernel":"other",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"From marstraveler01 on GitHub.\n\nOS/2 is a proprietary computer operating system for x86 and PowerPC based personal computers. It was created and initially developed jointly by IBM and Microsoft, under the leadership of IBM software designer Ed Iacobucci, intended as a replacement for DOS. The first version was released in 1987. A feud between the two companies beginning in 1990 led to Microsoft’s leaving development solely to IBM, which continued development on its own. OS/2 Warp 4 in 1996 was the last major upgrade, after which IBM slowly halted the product as it failed to compete against Microsoft's Windows; updated versions of OS/2 were released by IBM until 2001."
+        "desc":"From marstraveler01 on GitHub.\n\nOS/2 is a proprietary computer operating system for x86 and PowerPC based personal computers. It was created and initially developed jointly by IBM and Microsoft, under the leadership of IBM software designer Ed Iacobucci, intended as a replacement for DOS. The first version was released in 1987. A feud between the two companies beginning in 1990 led to Microsoft’s leaving development solely to IBM, which continued development on its own. OS/2 Warp 4 in 1996 was the last major upgrade, after which IBM slowly halted the product as it failed to compete against Microsoft's Windows; updated versions of OS/2 were released by IBM until 2001.",
+        "file_size": "77 MB",
+        "creator": "marstraveler01",
+        "verified": true
     },
     {
         "rom_name":"Windows 98 Plus!",
@@ -75,7 +90,10 @@
         "rom_kernel":"windows",
         "rom_extra":"-cpu qemu32 -smp sockets=1,cores=1,threads=1 -m 128M -hda 'OhnoIjustrealizeditsmidnightandIstillhavetodothis98PLUS!.qcow2' -vga cirrus -device sb16 -device pcnet,netdev=n0 -netdev user,id=n0 -accel tcg,thread=multi",
         "final_rom_file_name":"98PLUS!.qcow2",
-        "desc":"Windows 98 is a consumer-oriented operating system developed by Microsoft as part of its Windows 9x family of Microsoft Windows operating systems. It was the second operating system in the 9x line, as the successor to Windows 95. It was released to manufacturing on May 15, 1998, and generally to retail on June 25, 1998. Like its predecessor, it is a hybrid 16-bit and 32-bit monolithic product with the boot stage based on MS-DOS."
+        "desc":"Windows 98 is a consumer-oriented operating system developed by Microsoft as part of its Windows 9x family of Microsoft Windows operating systems. It was the second operating system in the 9x line, as the successor to Windows 95. It was released to manufacturing on May 15, 1998, and generally to retail on June 25, 1998. Like its predecessor, it is a hybrid 16-bit and 32-bit monolithic product with the boot stage based on MS-DOS.",
+        "file_size": "537 MB",
+        "creator": "ketuja",
+        "verified": true
     },
     {
         "rom_name":"Windows 2000",
@@ -88,7 +106,10 @@
         "rom_kernel":"windows",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"From @tokaevUser on Telegram.\n\nWindows 2000 is a major release of the Windows NT operating system developed by Microsoft, targeting the server and business markets. It is the direct successor to Windows NT 4.0, and was released to manufacturing on December 15, 1999, and then to retail on February 17, 2000 for all versions, with Windows 2000 Datacenter Server being released to retail on September 26, 2000."
+        "desc":"From @tokaevUser on Telegram.\n\nWindows 2000 is a major release of the Windows NT operating system developed by Microsoft, targeting the server and business markets. It is the direct successor to Windows NT 4.0, and was released to manufacturing on December 15, 1999, and then to retail on February 17, 2000 for all versions, with Windows 2000 Datacenter Server being released to retail on September 26, 2000.",
+        "file_size": "700 MB",
+        "creator": "tokaevUser",
+        "verified": true
     },
     {
         "rom_name":"Tiny XP",
@@ -101,7 +122,10 @@
         "rom_kernel":"windows",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"From @Stiven2016 on Telegram and fixed by Nguyen Bao An Bui.\n\nWindows XP is a personal computer operating system produced by Microsoft as part of the Windows NT family of operating systems. It was released to manufacturing on August 24, 2001, and later to retail on October 25, 2001. It is the successor to both Windows 2000 and Windows Me. Windows XP was the first version of Windows to be based on the Windows NT kernel and was the first consumer-oriented version of Windows to be built on that architecture."
+        "desc":"From @Stiven2016 on Telegram and fixed by Nguyen Bao An Bui.\n\nWindows XP is a personal computer operating system produced by Microsoft as part of the Windows NT family of operating systems. It was released to manufacturing on August 24, 2001, and later to retail on October 25, 2001. It is the successor to both Windows 2000 and Windows Me. Windows XP was the first version of Windows to be based on the Windows NT kernel and was the first consumer-oriented version of Windows to be built on that architecture.",
+        "file_size": "220 MB",
+        "creator": "Stiven2016",
+        "verified": true
     },
     {
         "rom_name":"Windows FLP",
@@ -114,7 +138,10 @@
         "rom_kernel":"windows",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows Fundamentals for Legacy PCs (also known as Windows FLP or shortly WFLP) is a lightweight version of Windows XP, exclusively released to manufacturing on 8 July 2006 to Microsoft Software Assurance customers only."
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows Fundamentals for Legacy PCs (also known as Windows FLP or shortly WFLP) is a lightweight version of Windows XP, exclusively released to manufacturing on 8 July 2006 to Microsoft Software Assurance customers only.",
+        "file_size": "800 MB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
     },
     {
         "rom_name":"Windows XP x64",
@@ -127,7 +154,10 @@
         "rom_kernel":"windows",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows Server 2003 is a major release of Windows Server family, released to manufacturing on 24 April 2003. It is the server counterpart of Windows XP, although it was released nearly 18 months after its original release and is built on a slightly newer codebase (NT kernel version is 5.2). It was released in several editions, including Web Edition, Standard Edition, Datacenter Edition and Enterprise Edition. It replaces Windows 2000 Server and was eventually succeeded by Windows Server 2008."
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows Server 2003 is a major release of Windows Server family, released to manufacturing on 24 April 2003. It is the server counterpart of Windows XP, although it was released nearly 18 months after its original release and is built on a slightly newer codebase (NT kernel version is 5.2). It was released in several editions, including Web Edition, Standard Edition, Datacenter Edition and Enterprise Edition. It replaces Windows 2000 Server and was eventually succeeded by Windows Server 2008.",
+        "file_size": "1 GB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
     },
     {
         "rom_name":"Windows XP Lite x64",
@@ -140,7 +170,10 @@
         "rom_kernel":"windows",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"From @Firsebox on YouTube and fixed by Nguyen Bao An Bui.\n\nWindows XP is a personal computer operating system produced by Microsoft as part of the Windows NT family of operating systems. It was released to manufacturing on August 24, 2001, and later to retail on October 25, 2001. It is the successor to both Windows 2000 and Windows Me. Windows XP was the first version of Windows to be based on the Windows NT kernel and was the first consumer-oriented version of Windows to be built on that architecture."
+        "desc":"From @Firsebox on YouTube and fixed by Nguyen Bao An Bui.\n\nWindows XP is a personal computer operating system produced by Microsoft as part of the Windows NT family of operating systems. It was released to manufacturing on August 24, 2001, and later to retail on October 25, 2001. It is the successor to both Windows 2000 and Windows Me. Windows XP was the first version of Windows to be based on the Windows NT kernel and was the first consumer-oriented version of Windows to be built on that architecture.",
+        "file_size": "1.3 GB",
+        "creator": "Firsebox",
+        "verified": true
     },
     {
         "rom_name":"Windows Server 2003",
@@ -153,7 +186,10 @@
         "rom_kernel":"windows",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows Server 2003 is a major release of Windows Server family, released to manufacturing on 24 April 2003. It is the server counterpart of Windows XP, although it was released nearly 18 months after its original release and is built on a slightly newer codebase (NT kernel version is 5.2). It was released in several editions, including Web Edition, Standard Edition, Datacenter Edition and Enterprise Edition. It replaces Windows 2000 Server and was eventually succeeded by Windows Server 2008."
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows Server 2003 is a major release of Windows Server family, released to manufacturing on 24 April 2003. It is the server counterpart of Windows XP, although it was released nearly 18 months after its original release and is built on a slightly newer codebase (NT kernel version is 5.2). It was released in several editions, including Web Edition, Standard Edition, Datacenter Edition and Enterprise Edition. It replaces Windows 2000 Server and was eventually succeeded by Windows Server 2008.",
+        "file_size": "2 GB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
     },
     {
         "rom_name":"Windows 7 Super Nano Lite (x86)",
@@ -166,7 +202,10 @@
         "rom_kernel":"windows",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"From @tokaevUser on Telegram\n\nindows 7 is a major release of the Windows NT operating system developed by Microsoft. It was released to manufacturing on July 22, 2009, and became generally available on October 22, 2009. It is the successor to Windows Vista, released nearly three years earlier. Windows 7's server counterpart, Windows Server 2008 R2, was released at the same time. It sold over 630 million copies before it was succeeded by Windows 8 in October 2012."
+        "desc":"From @tokaevUser on Telegram\n\nindows 7 is a major release of the Windows NT operating system developed by Microsoft. It was released to manufacturing on July 22, 2009, and became generally available on October 22, 2009. It is the successor to Windows Vista, released nearly three years earlier. Windows 7's server counterpart, Windows Server 2008 R2, was released at the same time. It sold over 630 million copies before it was succeeded by Windows 8 in October 2012.",
+        "file_size": "570 MB",
+        "creator": "tokaevUser",
+        "verified": true
     },
     {
         "rom_name":"Windows 7 build 6801",
@@ -179,7 +218,10 @@
         "rom_kernel":"windows",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 7 is a major release of the Windows NT operating system developed by Microsoft. It was released to manufacturing on July 22, 2009, and became generally available on October 22, 2009. It is the successor to Windows Vista, released nearly three years earlier. Windows 7's server counterpart, Windows Server 2008 R2, was released at the same time. It was succeeded by Windows 8 in October 2012."
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 7 is a major release of the Windows NT operating system developed by Microsoft. It was released to manufacturing on July 22, 2009, and became generally available on October 22, 2009. It is the successor to Windows Vista, released nearly three years earlier. Windows 7's server counterpart, Windows Server 2008 R2, was released at the same time. It was succeeded by Windows 8 in October 2012.",
+        "file_size": "5 GB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
     },
     {
         "rom_name":"Windows 7 build 7000",
@@ -192,7 +234,10 @@
         "rom_kernel":"windows",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 7 is a major release of the Windows NT operating system developed by Microsoft. It was released to manufacturing on July 22, 2009, and became generally available on October 22, 2009. It is the successor to Windows Vista, released nearly three years earlier. Windows 7's server counterpart, Windows Server 2008 R2, was released at the same time. It was succeeded by Windows 8 in October 2012."
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 7 is a major release of the Windows NT operating system developed by Microsoft. It was released to manufacturing on July 22, 2009, and became generally available on October 22, 2009. It is the successor to Windows Vista, released nearly three years earlier. Windows 7's server counterpart, Windows Server 2008 R2, was released at the same time. It was succeeded by Windows 8 in October 2012.",
+        "file_size": "5 GB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
     },
     {
         "rom_name":"Windows 7 build 7600",
@@ -205,7 +250,10 @@
         "rom_kernel":"windows",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 7 is a major release of the Windows NT operating system developed by Microsoft. It was released to manufacturing on July 22, 2009, and became generally available on October 22, 2009. It is the successor to Windows Vista, released nearly three years earlier. Windows 7's server counterpart, Windows Server 2008 R2, was released at the same time. It was succeeded by Windows 8 in October 2012."
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 7 is a major release of the Windows NT operating system developed by Microsoft. It was released to manufacturing on July 22, 2009, and became generally available on October 22, 2009. It is the successor to Windows Vista, released nearly three years earlier. Windows 7's server counterpart, Windows Server 2008 R2, was released at the same time. It was succeeded by Windows 8 in October 2012.",
+        "file_size": "4 GB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
     },
     {
         "rom_name":"Windows 7",
@@ -218,7 +266,10 @@
         "rom_kernel":"windows",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 7 is a major release of the Windows NT operating system developed by Microsoft. It was released to manufacturing on July 22, 2009, and became generally available on October 22, 2009. It is the successor to Windows Vista, released nearly three years earlier. Windows 7's server counterpart, Windows Server 2008 R2, was released at the same time. It was succeeded by Windows 8 in October 2012."
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 7 is a major release of the Windows NT operating system developed by Microsoft. It was released to manufacturing on July 22, 2009, and became generally available on October 22, 2009. It is the successor to Windows Vista, released nearly three years earlier. Windows 7's server counterpart, Windows Server 2008 R2, was released at the same time. It was succeeded by Windows 8 in October 2012.",
+        "file_size": "4 GB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
     },
     {
         "rom_name":"Windows Embedded POSReady 7",
@@ -231,7 +282,10 @@
         "rom_kernel":"windows",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows Embedded POSReady 7 is a Windows 7-based operating system developed by Microsoft, designed for use in point of sale machines such as cash registers, automated teller machines and self-checkouts. It succeeded the Windows XP-based Windows Embedded POSReady 2009, and was later replaced by Windows Embedded 8 Industry in 2013. It forms the base of Windows Thin PC."
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows Embedded POSReady 7 is a Windows 7-based operating system developed by Microsoft, designed for use in point of sale machines such as cash registers, automated teller machines and self-checkouts. It succeeded the Windows XP-based Windows Embedded POSReady 2009, and was later replaced by Windows Embedded 8 Industry in 2013. It forms the base of Windows Thin PC.",
+        "file_size": "6 GB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
     },
     {
         "rom_name":"Windows 8 build 7777",
@@ -244,7 +298,10 @@
         "rom_kernel":"windows",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 8 is a major release of the Windows NT operating system developed by Microsoft. It was released to manufacturing on August 1, 2012, made available for download via MSDN and TechNet on August 15, 2012, and generally released for retail on October 26, 2012."
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 8 is a major release of the Windows NT operating system developed by Microsoft. It was released to manufacturing on August 1, 2012, made available for download via MSDN and TechNet on August 15, 2012, and generally released for retail on October 26, 2012.",
+        "file_size": "8 GB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
     },
     {
         "rom_name":"Windows 8",
@@ -257,7 +314,10 @@
         "rom_kernel":"windows",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 8 is a major release of the Windows NT operating system developed by Microsoft. It was released to manufacturing on August 1, 2012, made available for download via MSDN and TechNet on August 15, 2012, and generally released for retail on October 26, 2012."
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 8 is a major release of the Windows NT operating system developed by Microsoft. It was released to manufacturing on August 1, 2012, made available for download via MSDN and TechNet on August 15, 2012, and generally released for retail on October 26, 2012.",
+        "file_size": "9 GB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
     },
     {
         "rom_name":"Windows 8.1 build 9431",
@@ -270,7 +330,10 @@
         "rom_kernel":"windows",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 8.1 build 9431 is the official Preview build of Windows 8.1, also known as the Milestone Preview. This build was released on 26 June 2013 with the occasion of the Build 2013 conference taking place. At the time of its release, it was possible to upgrade to this build from a Windows 8 copy by using the Windows Store or by downloading an ISO from TechNet or MSDN. The ISOs were made publicly available the day after, on 27 June 2013 in multiple languages, when the day 2 keynote started. An ARM version of the build was also available, but it was only obtainable through the Microsoft Store (repair content packages were also made available)."
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 8.1 build 9431 is the official Preview build of Windows 8.1, also known as the Milestone Preview. This build was released on 26 June 2013 with the occasion of the Build 2013 conference taking place. At the time of its release, it was possible to upgrade to this build from a Windows 8 copy by using the Windows Store or by downloading an ISO from TechNet or MSDN. The ISOs were made publicly available the day after, on 27 June 2013 in multiple languages, when the day 2 keynote started. An ARM version of the build was also available, but it was only obtainable through the Microsoft Store (repair content packages were also made available).",
+        "file_size": "8 GB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
     },
     {
         "rom_name":"Windows Server 2012 build 7788",
@@ -283,7 +346,10 @@
         "rom_kernel":"windows",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows Server 2012 build 7904 is a build of Windows Server 2012, which was originally uploaded on 30 September 2021 as a free (retail) compile, while its checked (debug) compile was later shared on 3 November 2024 along with its client counterpart and public Symbol MSIs."
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows Server 2012 build 7904 is a build of Windows Server 2012, which was originally uploaded on 30 September 2021 as a free (retail) compile, while its checked (debug) compile was later shared on 3 November 2024 along with its client counterpart and public Symbol MSIs.",
+        "file_size": "7 GB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
     },
     {
         "rom_name":"Windows Server 2012 build 7904",
@@ -296,7 +362,10 @@
         "rom_kernel":"windows",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows Server 2012 build 7904 is a build of Windows Server 2012, which was originally uploaded on 30 September 2021 as a free (retail) compile, while its checked (debug) compile was later shared on 3 November 2024 along with its client counterpart and public Symbol MSIs."
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows Server 2012 build 7904 is a build of Windows Server 2012, which was originally uploaded on 30 September 2021 as a free (retail) compile, while its checked (debug) compile was later shared on 3 November 2024 along with its client counterpart and public Symbol MSIs.",
+        "file_size": "8 GB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
     },
     {
         "rom_name":"Windows 10 buid 10074",
@@ -309,7 +378,10 @@
         "rom_kernel":"windows",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 10 is a major release of Microsoft's Windows NT operating system. The successor to Windows 8.1, it was released to manufacturing on July 15, 2015, and later to retail on July 29, 2015. Windows 10 was made available for download via MSDN and TechNet, as a free upgrade for retail copies of Windows 8 and Windows 8.1 users via the Microsoft Store, and to Windows 7 users via Windows Update. Unlike previous Windows NT releases, Windows 10 receives new builds on an ongoing basis, which are available at no additional cost to users; devices in enterprise environments can alternatively use long-term support milestones that only receive critical updates, such as security patches."
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 10 is a major release of Microsoft's Windows NT operating system. The successor to Windows 8.1, it was released to manufacturing on July 15, 2015, and later to retail on July 29, 2015. Windows 10 was made available for download via MSDN and TechNet, as a free upgrade for retail copies of Windows 8 and Windows 8.1 users via the Microsoft Store, and to Windows 7 users via Windows Update. Unlike previous Windows NT releases, Windows 10 receives new builds on an ongoing basis, which are available at no additional cost to users; devices in enterprise environments can alternatively use long-term support milestones that only receive critical updates, such as security patches.",
+        "file_size": "9 GB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
     },
     {
         "rom_name":"Windows 10 LTSB 2015",
@@ -322,7 +394,10 @@
         "rom_kernel":"windows",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 10 is a major release of Microsoft's Windows NT operating system. The successor to Windows 8.1, it was released to manufacturing on July 15, 2015, and later to retail on July 29, 2015. Windows 10 was made available for download via MSDN and TechNet, as a free upgrade for retail copies of Windows 8 and Windows 8.1 users via the Microsoft Store, and to Windows 7 users via Windows Update. Unlike previous Windows NT releases, Windows 10 receives new builds on an ongoing basis, which are available at no additional cost to users; devices in enterprise environments can alternatively use long-term support milestones that only receive critical updates, such as security patches."
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 10 is a major release of Microsoft's Windows NT operating system. The successor to Windows 8.1, it was released to manufacturing on July 15, 2015, and later to retail on July 29, 2015. Windows 10 was made available for download via MSDN and TechNet, as a free upgrade for retail copies of Windows 8 and Windows 8.1 users via the Microsoft Store, and to Windows 7 users via Windows Update. Unlike previous Windows NT releases, Windows 10 receives new builds on an ongoing basis, which are available at no additional cost to users; devices in enterprise environments can alternatively use long-term support milestones that only receive critical updates, such as security patches.",
+        "file_size": "9 GB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
     },
     {
         "rom_name":"Windows 10 LTSC 2019",
@@ -335,7 +410,10 @@
         "rom_kernel":"windows",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 10 is a major release of Microsoft's Windows NT operating system. The successor to Windows 8.1, it was released to manufacturing on July 15, 2015, and later to retail on July 29, 2015. Windows 10 was made available for download via MSDN and TechNet, as a free upgrade for retail copies of Windows 8 and Windows 8.1 users via the Microsoft Store, and to Windows 7 users via Windows Update. Unlike previous Windows NT releases, Windows 10 receives new builds on an ongoing basis, which are available at no additional cost to users; devices in enterprise environments can alternatively use long-term support milestones that only receive critical updates, such as security patches."
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 10 is a major release of Microsoft's Windows NT operating system. The successor to Windows 8.1, it was released to manufacturing on July 15, 2015, and later to retail on July 29, 2015. Windows 10 was made available for download via MSDN and TechNet, as a free upgrade for retail copies of Windows 8 and Windows 8.1 users via the Microsoft Store, and to Windows 7 users via Windows Update. Unlike previous Windows NT releases, Windows 10 receives new builds on an ongoing basis, which are available at no additional cost to users; devices in enterprise environments can alternatively use long-term support milestones that only receive critical updates, such as security patches.",
+        "file_size": "9 GB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
     },
     {
         "rom_name":"Windows 10 LTSC 2021",
@@ -348,7 +426,10 @@
         "rom_kernel":"windows",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 10 is a major release of Microsoft's Windows NT operating system. The successor to Windows 8.1, it was released to manufacturing on July 15, 2015, and later to retail on July 29, 2015. Windows 10 was made available for download via MSDN and TechNet, as a free upgrade for retail copies of Windows 8 and Windows 8.1 users via the Microsoft Store, and to Windows 7 users via Windows Update. Unlike previous Windows NT releases, Windows 10 receives new builds on an ongoing basis, which are available at no additional cost to users; devices in enterprise environments can alternatively use long-term support milestones that only receive critical updates, such as security patches."
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 10 is a major release of Microsoft's Windows NT operating system. The successor to Windows 8.1, it was released to manufacturing on July 15, 2015, and later to retail on July 29, 2015. Windows 10 was made available for download via MSDN and TechNet, as a free upgrade for retail copies of Windows 8 and Windows 8.1 users via the Microsoft Store, and to Windows 7 users via Windows Update. Unlike previous Windows NT releases, Windows 10 receives new builds on an ongoing basis, which are available at no additional cost to users; devices in enterprise environments can alternatively use long-term support milestones that only receive critical updates, such as security patches.",
+        "file_size": "8 GB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
     },
     {
         "rom_name":"Windows 10 22H2",
@@ -361,7 +442,10 @@
         "rom_kernel":"windows",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 11 is the latest major release of Microsoft's Windows NT operating system, released on October 5, 2021 as the successor to Windows 10 (2015). It is provided free for any Windows 10 devices that meet the new Windows 11 system requirements. A server version, Windows Server 2025, was released in 2024. Windows 11 is the first major version of Windows NT without a companion mobile version following the discontinuations of Windows Phone with Windows 10 Mobile."
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 11 is the latest major release of Microsoft's Windows NT operating system, released on October 5, 2021 as the successor to Windows 10 (2015). It is provided free for any Windows 10 devices that meet the new Windows 11 system requirements. A server version, Windows Server 2025, was released in 2024. Windows 11 is the first major version of Windows NT without a companion mobile version following the discontinuations of Windows Phone with Windows 10 Mobile.",
+        "file_size": "7 GB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
     },
     {
         "rom_name":"Windows 11 LTSC build 22000.1",
@@ -374,7 +458,10 @@
         "rom_kernel":"windows",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 11 is the latest major release of Microsoft's Windows NT operating system, released on October 5, 2021 as the successor to Windows 10 (2015). It is provided free for any Windows 10 devices that meet the new Windows 11 system requirements. A server version, Windows Server 2025, was released in 2024. Windows 11 is the first major version of Windows NT without a companion mobile version following the discontinuations of Windows Phone with Windows 10 Mobile."
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 11 is the latest major release of Microsoft's Windows NT operating system, released on October 5, 2021 as the successor to Windows 10 (2015). It is provided free for any Windows 10 devices that meet the new Windows 11 system requirements. A server version, Windows Server 2025, was released in 2024. Windows 11 is the first major version of Windows NT without a companion mobile version following the discontinuations of Windows Phone with Windows 10 Mobile.",
+        "file_size": "9 GB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
     },
     {
         "rom_name":"Windows 11 LTSC build 22000.51",
@@ -387,7 +474,10 @@
         "rom_kernel":"windows",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 11 is the latest major release of Microsoft's Windows NT operating system, released on October 5, 2021 as the successor to Windows 10 (2015). It is provided free for any Windows 10 devices that meet the new Windows 11 system requirements. A server version, Windows Server 2025, was released in 2024. Windows 11 is the first major version of Windows NT without a companion mobile version following the discontinuations of Windows Phone with Windows 10 Mobile."
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 11 is the latest major release of Microsoft's Windows NT operating system, released on October 5, 2021 as the successor to Windows 10 (2015). It is provided free for any Windows 10 devices that meet the new Windows 11 system requirements. A server version, Windows Server 2025, was released in 2024. Windows 11 is the first major version of Windows NT without a companion mobile version following the discontinuations of Windows Phone with Windows 10 Mobile.",
+        "file_size": "11 GB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
     },
     {
         "rom_name":"Windows 11 build 22000.65",
@@ -400,7 +490,10 @@
         "rom_kernel":"windows",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 11 is the latest major release of Microsoft's Windows NT operating system, released on October 5, 2021 as the successor to Windows 10 (2015). It is provided free for any Windows 10 devices that meet the new Windows 11 system requirements. A server version, Windows Server 2025, was released in 2024. Windows 11 is the first major version of Windows NT without a companion mobile version following the discontinuations of Windows Phone with Windows 10 Mobile."
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 11 is the latest major release of Microsoft's Windows NT operating system, released on October 5, 2021 as the successor to Windows 10 (2015). It is provided free for any Windows 10 devices that meet the new Windows 11 system requirements. A server version, Windows Server 2025, was released in 2024. Windows 11 is the first major version of Windows NT without a companion mobile version following the discontinuations of Windows Phone with Windows 10 Mobile.",
+        "file_size": "11 GB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
     },
     {
         "rom_name":"Windows 11 21H2",
@@ -413,7 +506,10 @@
         "rom_kernel":"windows",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 11 is the latest major release of Microsoft's Windows NT operating system, released on October 5, 2021 as the successor to Windows 10 (2015). It is provided free for any Windows 10 devices that meet the new Windows 11 system requirements. A server version, Windows Server 2025, was released in 2024. Windows 11 is the first major version of Windows NT without a companion mobile version following the discontinuations of Windows Phone with Windows 10 Mobile."
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 11 is the latest major release of Microsoft's Windows NT operating system, released on October 5, 2021 as the successor to Windows 10 (2015). It is provided free for any Windows 10 devices that meet the new Windows 11 system requirements. A server version, Windows Server 2025, was released in 2024. Windows 11 is the first major version of Windows NT without a companion mobile version following the discontinuations of Windows Phone with Windows 10 Mobile.",
+        "file_size": "5 GB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
     },
     {
         "rom_name":"Windows 11 22H2",
@@ -426,7 +522,10 @@
         "rom_kernel":"windows",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 11 is the latest major release of Microsoft's Windows NT operating system, released on October 5, 2021 as the successor to Windows 10 (2015). It is provided free for any Windows 10 devices that meet the new Windows 11 system requirements. A server version, Windows Server 2025, was released in 2024. Windows 11 is the first major version of Windows NT without a companion mobile version following the discontinuations of Windows Phone with Windows 10 Mobile."
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 11 is the latest major release of Microsoft's Windows NT operating system, released on October 5, 2021 as the successor to Windows 10 (2015). It is provided free for any Windows 10 devices that meet the new Windows 11 system requirements. A server version, Windows Server 2025, was released in 2024. Windows 11 is the first major version of Windows NT without a companion mobile version following the discontinuations of Windows Phone with Windows 10 Mobile.",
+        "file_size": "10 GB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
     },
     {
         "rom_name":"Windows 11 23H2",
@@ -439,7 +538,10 @@
         "rom_kernel":"windows",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 11 is the latest major release of Microsoft's Windows NT operating system, released on October 5, 2021 as the successor to Windows 10 (2015). It is provided free for any Windows 10 devices that meet the new Windows 11 system requirements. A server version, Windows Server 2025, was released in 2024. Windows 11 is the first major version of Windows NT without a companion mobile version following the discontinuations of Windows Phone with Windows 10 Mobile."
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 11 is the latest major release of Microsoft's Windows NT operating system, released on October 5, 2021 as the successor to Windows 10 (2015). It is provided free for any Windows 10 devices that meet the new Windows 11 system requirements. A server version, Windows Server 2025, was released in 2024. Windows 11 is the first major version of Windows NT without a companion mobile version following the discontinuations of Windows Phone with Windows 10 Mobile.",
+        "file_size": "8 GB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
     },
     {
         "rom_name":"Windows 11 24H2",
@@ -452,7 +554,10 @@
         "rom_kernel":"windows",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 11 is the latest major release of Microsoft's Windows NT operating system, released on October 5, 2021 as the successor to Windows 10 (2015). It is provided free for any Windows 10 devices that meet the new Windows 11 system requirements. A server version, Windows Server 2025, was released in 2024. Windows 11 is the first major version of Windows NT without a companion mobile version following the discontinuations of Windows Phone with Windows 10 Mobile."
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 11 is the latest major release of Microsoft's Windows NT operating system, released on October 5, 2021 as the successor to Windows 10 (2015). It is provided free for any Windows 10 devices that meet the new Windows 11 system requirements. A server version, Windows Server 2025, was released in 2024. Windows 11 is the first major version of Windows NT without a companion mobile version following the discontinuations of Windows Phone with Windows 10 Mobile.",
+        "file_size": "6 GB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
     },
     {
         "rom_name":"ReactOS",
@@ -465,7 +570,10 @@
         "rom_kernel":"windows",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"From @SilentGamer191 on Telegram.\n\nUser: Vectras\nPassword: 1234567890\n\nReactOS is a free and open-source operating system based on the Windows NT architecture. It aims to provide a binary-compatible alternative to Microsoft Windows, allowing users to run Windows applications and drivers. ReactOS is developed by a community of volunteers and is designed to be lightweight and efficient, making it suitable for both modern and older hardware."
+        "desc":"From @SilentGamer191 on Telegram.\n\nUser: Vectras\nPassword: 1234567890\n\nReactOS is a free and open-source operating system based on the Windows NT architecture. It aims to provide a binary-compatible alternative to Microsoft Windows, allowing users to run Windows applications and drivers. ReactOS is developed by a community of volunteers and is designed to be lightweight and efficient, making it suitable for both modern and older hardware.",
+        "file_size": "400 MB",
+        "creator": "SilentGamer191",
+        "verified": true
     },
     {
         "rom_name":"PonyOS",
@@ -478,7 +586,10 @@
         "rom_kernel":"linux",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"PonyOS is a hobby Unix-like operating system, designed for ponies like you!"
+        "desc":"PonyOS is a hobby Unix-like operating system, designed for ponies like you!",
+        "file_size": "6 MB",
+        "creator": "Hacks, Coding and more",
+        "verified": true
     },
     {
         "rom_name":"TempleOS",
@@ -491,7 +602,10 @@
         "rom_kernel":"linux",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"From @SilentGamer191 on Telegram.\n\nTempleOS is a biblical-themed lightweight operating system designed to be the Third Temple prophesized in the Bible. It was created by American programmer Terry A. Davis, who developed it alone over the course of a decade after a series of manic episodes that he later described as a revelation from God."
+        "desc":"From @SilentGamer191 on Telegram.\n\nTempleOS is a biblical-themed lightweight operating system designed to be the Third Temple prophesized in the Bible. It was created by American programmer Terry A. Davis, who developed it alone over the course of a decade after a series of manic episodes that he later described as a revelation from God.",
+        "file_size": "41 MB",
+        "creator": "SilentGamer191",
+        "verified": true
     },
     {
         "rom_name":"Damn Small Linux",
@@ -504,7 +618,10 @@
         "rom_kernel":"linux",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"From @tokaevUser on Telegram.\n\nDamn Small Linux (DSL) is a minimalist Linux distribution that is designed to run on older hardware. It is known for its small size, typically around 50 MB, and its ability to run entirely in RAM, making it extremely fast and efficient. DSL includes a variety of lightweight applications and tools, making it suitable for basic computing tasks while still being user-friendly."
+        "desc":"From @tokaevUser on Telegram.\n\nDamn Small Linux (DSL) is a minimalist Linux distribution that is designed to run on older hardware. It is known for its small size, typically around 50 MB, and its ability to run entirely in RAM, making it extremely fast and efficient. DSL includes a variety of lightweight applications and tools, making it suitable for basic computing tasks while still being user-friendly.",
+        "file_size": "50 MB",
+        "creator": "tokaevUser",
+        "verified": true
     },
     {
         "rom_name":"BSDeviant",
@@ -517,7 +634,10 @@
         "rom_kernel":"linux",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"BSDeviant – a free, FreeBSD-based UNIX-like operating system. The distribution is currently (as of June 2004) under 210MB and fully operates from a mini-CDR (or regular CDR) without the need to install anything on the hard drive."
+        "desc":"BSDeviant – a free, FreeBSD-based UNIX-like operating system. The distribution is currently (as of June 2004) under 210MB and fully operates from a mini-CDR (or regular CDR) without the need to install anything on the hard drive.",
+        "file_size": "81 MB",
+        "creator": "Hacks, Coding and more",
+        "verified": true
     },
     {
         "rom_name":"KolibriOS",
@@ -530,7 +650,10 @@
         "rom_kernel":"linux",
         "rom_extra":"-cpu qemu64 -smp sockets=1,cores=2,threads=1 -m 1G -drive file='OhnoIjustrealizeditsmidnightandIstillhavetodothisKolibriOS.qcow',aio=threads,cache=unsafe -vga std -device intel-hda -device hda-duplex -device e1000,netdev=n0 -netdev user,id=n0 -accel tcg,tb-size=2048",
         "final_rom_file_name":"KolibriOS.qcow",
-        "desc":"KolibriOS is a tiny yet incredibly powerful and fast operating system. This power requires only a few megabyte disk space and 8MB of RAM to run. KolibriOS features a rich set of applications that include word processor, image viewer, graphical editor, web browser and well over 30 exciting games. Full FAT12/16/32 support is implemented, as well as read-only support for NTFS, exFAT, ISO9660 and Ext2/3/4. Drivers are written for popular sound, network and graphics cards."
+        "desc":"KolibriOS is a tiny yet incredibly powerful and fast operating system. This power requires only a few megabyte disk space and 8MB of RAM to run. KolibriOS features a rich set of applications that include word processor, image viewer, graphical editor, web browser and well over 30 exciting games. Full FAT12/16/32 support is implemented, as well as read-only support for NTFS, exFAT, ISO9660 and Ext2/3/4. Drivers are written for popular sound, network and graphics cards.",
+        "file_size": "103 MB",
+        "creator": "Nomis_official",
+        "verified": true
     },
     {
         "rom_name":"Anonym.OS",
@@ -543,7 +666,10 @@
         "rom_kernel":"linux",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"Anonym.OS was a Live CD operating system based on OpenBSD 3.8 with strong encryption and anonymization tools. The goal of the project was to provide secure, anonymous web browsing access to everyday users.[1] The operating system was OpenBSD 3.8, although many packages have been added to facilitate its goal. It used Fluxbox as its window manager.\n\nThe project was discontinued after the release of Beta 4 (2006)."
+        "desc":"Anonym.OS was a Live CD operating system based on OpenBSD 3.8 with strong encryption and anonymization tools. The goal of the project was to provide secure, anonymous web browsing access to everyday users.[1] The operating system was OpenBSD 3.8, although many packages have been added to facilitate its goal. It used Fluxbox as its window manager.\n\nThe project was discontinued after the release of Beta 4 (2006).",
+        "file_size": "196 MB",
+        "creator": "Hacks, Coding and more",
+        "verified": true
     },
     {
         "rom_name":"NetBSD",
@@ -556,7 +682,10 @@
         "rom_kernel":"linux",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"From @SilentGamer191 on Telegram and fixed by Nguyen Bao An Bui.\n\nUser: root\nPassword:\n\nNetBSD is a free and open-source Unix-like operating system based on the Berkeley Software Distribution (BSD). It is known for its portability, clean design, and advanced networking features. NetBSD is developed by a worldwide community of developers and is used in a wide variety of systems, from embedded devices to high-performance servers."
+        "desc":"From @SilentGamer191 on Telegram and fixed by Nguyen Bao An Bui.\n\nUser: root\nPassword:\n\nNetBSD is a free and open-source Unix-like operating system based on the Berkeley Software Distribution (BSD). It is known for its portability, clean design, and advanced networking features. NetBSD is developed by a worldwide community of developers and is used in a wide variety of systems, from embedded devices to high-performance servers.",
+        "file_size": "354 MB",
+        "creator": "SilentGamer191",
+        "verified": true
     },
     {
         "rom_name":"Debian",
@@ -569,7 +698,10 @@
         "rom_kernel":"linux",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"User: root\nPassword: [None]\nDebian (/ˈdɛbiən/), also known as Debian GNU/Linux, is a free and open source Linux distribution, developed by the Debian Project, which was established by Ian Murdock in August 1993. Debian is one of the oldest operating systems based on the Linux kernel, and is the basis for many other Linux distributions."
+        "desc":"User: root\nPassword: [None]\nDebian (/ˈdɛbiən/), also known as Debian GNU/Linux, is a free and open source Linux distribution, developed by the Debian Project, which was established by Ian Murdock in August 1993. Debian is one of the oldest operating systems based on the Linux kernel, and is the basis for many other Linux distributions.",
+        "file_size": "400 MB",
+        "creator": "steven",
+        "verified": true
     },
     {
         "rom_name":"Gentoo Linux",
@@ -582,7 +714,10 @@
         "rom_kernel":"linux",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"From @tokaevUser on Telegram\n\nGentoo Linux is a Linux distribution built using the Portage package management system. Unlike a binary software distribution, the source code is compiled locally according to the user's preferences and is often optimized for the specific type of computer. Precompiled binaries are available for some packages. Gentoo runs on a wide variety of processor architectures."
+        "desc":"From @tokaevUser on Telegram\n\nGentoo Linux is a Linux distribution built using the Portage package management system. Unlike a binary software distribution, the source code is compiled locally according to the user's preferences and is often optimized for the specific type of computer. Precompiled binaries are available for some packages. Gentoo runs on a wide variety of processor architectures.",
+        "file_size": "580 MB",
+        "creator": "tokaevUser",
+        "verified": true
     },
     {
         "rom_name":"antiX Linux",
@@ -596,7 +731,10 @@
         "rom_kernel":"linux",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"From @SilentGamer191 on Telegram and fixed by Nguyen Bao An Bui.\n\nUser: root\nPassword: Password\n\nUser: Vectras\nPassword: 1234567890\n\nantiX is a fast, lightweight and easy to install systemd-free Linux live CD distribution based on Debian. It is designed for low-end computers and can run on older hardware with limited resources. antiX provides a full-featured desktop environment with a variety of applications, while maintaining a small footprint."
+        "desc":"From @SilentGamer191 on Telegram and fixed by Nguyen Bao An Bui.\n\nUser: root\nPassword: Password\n\nUser: Vectras\nPassword: 1234567890\n\nantiX is a fast, lightweight and easy to install systemd-free Linux live CD distribution based on Debian. It is designed for low-end computers and can run on older hardware with limited resources. antiX provides a full-featured desktop environment with a variety of applications, while maintaining a small footprint.",
+        "file_size": "800 MB",
+        "creator": "SilentGamer191",
+        "verified": true
     },
     {
         "rom_name":"Haiku OS Beta 5",
@@ -609,7 +747,10 @@
         "rom_kernel":"linux",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"From marstraveler01 at https://github.com/marstraveler01/vm-stuff/releases/tag/beta-5 and fixed by Nguyen Bao An Bui."
+        "desc":"From marstraveler01 at https://github.com/marstraveler01/vm-stuff/releases/tag/beta-5 and fixed by Nguyen Bao An Bui.",
+        "file_size": "1 GB",
+        "creator": "marstraveler01",
+        "verified": true
     },
     {
         "rom_name":"Anonymous OS",
@@ -622,7 +763,10 @@
         "rom_kernel":"linux",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"Anonymous-OS is an Ubuntu-based Linux distribution Ubuntu. The operating system was released in March 2012. Anonymous-OS uses MATE as a desktop environment, and contains many essential software for hackers, such as Tor browser, Hash Identifier, XChat, SQL Poison, IP server finder, ParolaPass Password Generator, and HOIC. Similar to Backtrack, Anonymous-OS has been speculated that it contains trojans and malware. This operating system is not published by AnonymousAnonymous. After downloading and running Anonymous-OS, Rik Ferguson, director of the European Trend Micro cybersecurity research director, said it was \"a functional operating system with a range of pre-installed tools that could be used for purposes such as finding vulnerabilities or breaking passwords.\""
+        "desc":"Anonymous-OS is an Ubuntu-based Linux distribution Ubuntu. The operating system was released in March 2012. Anonymous-OS uses MATE as a desktop environment, and contains many essential software for hackers, such as Tor browser, Hash Identifier, XChat, SQL Poison, IP server finder, ParolaPass Password Generator, and HOIC. Similar to Backtrack, Anonymous-OS has been speculated that it contains trojans and malware. This operating system is not published by AnonymousAnonymous. After downloading and running Anonymous-OS, Rik Ferguson, director of the European Trend Micro cybersecurity research director, said it was \"a functional operating system with a range of pre-installed tools that could be used for purposes such as finding vulnerabilities or breaking passwords.\"",
+        "file_size": "1.34 GB",
+        "creator": "Hacks, Coding and more",
+        "verified": true
     },
     {
         "rom_name":"Linux Mint 17",
@@ -635,7 +779,10 @@
         "rom_kernel":"linux",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"From @SilentGamer191 on Telegram.\n\nUser: vectras\nPassword: 1234567890\n\nLinux Mint is an operating system for desktop and laptop computers. It is designed to work 'out of the box' and comes fully equipped with the apps most people need."
+        "desc":"From @SilentGamer191 on Telegram.\n\nUser: vectras\nPassword: 1234567890\n\nLinux Mint is an operating system for desktop and laptop computers. It is designed to work 'out of the box' and comes fully equipped with the apps most people need.",
+        "file_size": "1.5 GB",
+        "creator": "SilentGamer191",
+        "verified": true
     },
     {
         "rom_name":"Ubuntu 18.04",
@@ -648,7 +795,10 @@
         "rom_kernel":"linux",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"From @SilentGamer191 on Telegram.\n\nUser: Vectras\nPassword: 1234567890\n\nUbuntu is a popular Linux distribution based on Debian. It is designed to be user-friendly and accessible, with a focus on ease of use and installation. Ubuntu features a modern desktop environment and comes with a wide range of pre-installed applications for productivity, multimedia, and internet browsing. The distribution is known for its strong community support and regular release cycle."
+        "desc":"From @SilentGamer191 on Telegram.\n\nUser: Vectras\nPassword: 1234567890\n\nUbuntu is a popular Linux distribution based on Debian. It is designed to be user-friendly and accessible, with a focus on ease of use and installation. Ubuntu features a modern desktop environment and comes with a wide range of pre-installed applications for productivity, multimedia, and internet browsing. The distribution is known for its strong community support and regular release cycle.",
+        "file_size": "1.9 GB",
+        "creator": "SilentGamer191",
+        "verified": true
     },
     {
         "rom_name":"Red Star OS",
@@ -661,7 +811,10 @@
         "rom_kernel":"linux",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"From @SilentGamer191 on Telegram.\n\nRed Start OS is a Linux-based operating system developed by the Democratic People's Republic of Korea (North Korea). It is designed to be user-friendly and visually appealing, with a focus on security and privacy. Red Star OS features a custom desktop environment and includes a variety of applications for productivity, multimedia, and internet browsing. The operating system is heavily modified to align with North Korean government policies and censorship practices."
+        "desc":"From @SilentGamer191 on Telegram.\n\nRed Start OS is a Linux-based operating system developed by the Democratic People's Republic of Korea (North Korea). It is designed to be user-friendly and visually appealing, with a focus on security and privacy. Red Star OS features a custom desktop environment and includes a variety of applications for productivity, multimedia, and internet browsing. The operating system is heavily modified to align with North Korean government policies and censorship practices.",
+        "file_size": "2.3 GB",
+        "creator": "SilentGamer191",
+        "verified": true
     },
     {
         "rom_name":"Armbian",
@@ -674,7 +827,10 @@
         "rom_kernel":"linux",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"User: root\nPassword: 1234\n\nUltralight Linux optimized for custom ARM / RISC-V or Intel / AMD hardware\nComes with powerful system config tools.\nFor production: Noble, Bookworm. For testing: Trixie, Plucky"
+        "desc":"User: root\nPassword: 1234\n\nUltralight Linux optimized for custom ARM / RISC-V or Intel / AMD hardware\nComes with powerful system config tools.\nFor production: Noble, Bookworm. For testing: Trixie, Plucky",
+        "file_size": "3.5 GB",
+        "creator": "steven",
+        "verified": true
     },
     {
         "rom_name":"Ubuntu 10.04.4 LTS",
@@ -687,7 +843,10 @@
         "rom_kernel":"linux",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nUbuntu is a popular Linux distribution based on Debian. It is designed to be user-friendly and accessible, with a focus on ease of use and installation. Ubuntu features a modern desktop environment and comes with a wide range of pre-installed applications for productivity, multimedia, and internet browsing. The distribution is known for its strong community support and regular release cycle."
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nUbuntu is a popular Linux distribution based on Debian. It is designed to be user-friendly and accessible, with a focus on ease of use and installation. Ubuntu features a modern desktop environment and comes with a wide range of pre-installed applications for productivity, multimedia, and internet browsing. The distribution is known for its strong community support and regular release cycle.",
+        "file_size": "4 GB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
     },
     {
         "rom_name":"elementary OS 5.1",
@@ -700,7 +859,10 @@
         "rom_kernel":"linux",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"From @SilentGamer191 on Telegram.\n\nUser: Vectras\nPassword: 1234567890\n\nelementary OS is a Linux distribution based on Ubuntu. It is designed to be easy to use and visually appealing, with a focus on simplicity and elegance. elementary OS features its own desktop environment called Pantheon, which provides a clean and modern user interface. The distribution comes with a curated selection of applications and emphasizes privacy and security."
+        "desc":"From @SilentGamer191 on Telegram.\n\nUser: Vectras\nPassword: 1234567890\n\nelementary OS is a Linux distribution based on Ubuntu. It is designed to be easy to use and visually appealing, with a focus on simplicity and elegance. elementary OS features its own desktop environment called Pantheon, which provides a clean and modern user interface. The distribution comes with a curated selection of applications and emphasizes privacy and security.",
+        "file_size": "5.4 GB",
+        "creator": "SilentGamer191",
+        "verified": true
     },
     {
         "rom_name":"Debian 12",
@@ -713,7 +875,10 @@
         "rom_kernel":"linux",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nDebian (/ˈdɛbiən/) is a free and open source Linux distribution, developed by the Debian Project, which was established by Ian Murdock in August 1993. Debian is one of the oldest operating systems based on the Linux kernel, and is the basis of many other Linux distributions."
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nDebian (/ˈdɛbiən/) is a free and open source Linux distribution, developed by the Debian Project, which was established by Ian Murdock in August 1993. Debian is one of the oldest operating systems based on the Linux kernel, and is the basis of many other Linux distributions.",
+        "file_size": "7 GB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
     },
     {
         "rom_name":"Ubuntu 9.10",
@@ -726,7 +891,10 @@
         "rom_kernel":"linux",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nUbuntu is a popular Linux distribution based on Debian. It is designed to be user-friendly and accessible, with a focus on ease of use and installation. Ubuntu features a modern desktop environment and comes with a wide range of pre-installed applications for productivity, multimedia, and internet browsing. The distribution is known for its strong community support and regular release cycle."
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nUbuntu is a popular Linux distribution based on Debian. It is designed to be user-friendly and accessible, with a focus on ease of use and installation. Ubuntu features a modern desktop environment and comes with a wide range of pre-installed applications for productivity, multimedia, and internet browsing. The distribution is known for its strong community support and regular release cycle.",
+        "file_size": "10 GB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
     },
     {
         "rom_name":"Android 1.6 R2",
@@ -739,7 +907,10 @@
         "rom_kernel":"android",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nAndroid 1.6 Donut is a version of Android that was released on 15 September 2009, based on Linux kernel 2.6.29. Its predecessor was Android 1.5 Cupcake and its successor was Android 2.0 Eclair. Included in the update were numerous new features."
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nAndroid 1.6 Donut is a version of Android that was released on 15 September 2009, based on Linux kernel 2.6.29. Its predecessor was Android 1.5 Cupcake and its successor was Android 2.0 Eclair. Included in the update were numerous new features.",
+        "file_size": "1 GB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
     },
     {
         "rom_name":"Android 3.2",
@@ -752,7 +923,10 @@
         "rom_kernel":"android",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nAndroid Honeycomb is the codename for the third major version of Android, designed for devices with larger screen sizes, particularly tablets, however has been unofficially ported to the Nexus One. It is the eighth version of Android and is no longer supported. Honeycomb debuted with the Motorola Xoom in February 2011. Besides the addition of new features, Honeycomb introduced a new so-called \"holographic\" user interface theme and an interaction model that built on the main features of Android, such as multitasking, notifications and widgets."
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nAndroid Honeycomb is the codename for the third major version of Android, designed for devices with larger screen sizes, particularly tablets, however has been unofficially ported to the Nexus One. It is the eighth version of Android and is no longer supported. Honeycomb debuted with the Motorola Xoom in February 2011. Besides the addition of new features, Honeycomb introduced a new so-called \"holographic\" user interface theme and an interaction model that built on the main features of Android, such as multitasking, notifications and widgets.",
+        "file_size": "180 MB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
     },
     {
         "rom_name":"BlackberryOS (Android 7.1.2)",
@@ -765,7 +939,10 @@
         "rom_kernel":"android",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"BlackBerry OS is a discontinued proprietary mobile operating system developed by Canadian company BlackBerry Limited for its BlackBerry line of smartphone handheld devices. The operating system provides multitasking and supports specialized input devices adopted by BlackBerry for use in its handhelds, particularly the trackwheel, trackball, and most recently, the trackpad and touchscreen."
+        "desc":"BlackBerry OS is a discontinued proprietary mobile operating system developed by Canadian company BlackBerry Limited for its BlackBerry line of smartphone handheld devices. The operating system provides multitasking and supports specialized input devices adopted by BlackBerry for use in its handhelds, particularly the trackwheel, trackball, and most recently, the trackpad and touchscreen.",
+        "file_size": "763 MB",
+        "creator": "Hacks, Coding and more",
+        "verified": true
     },
     {
         "rom_name":"GXDE OS: Continues (Aarch64)",
@@ -778,7 +955,10 @@
         "rom_kernel":"linux",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"GXDE OS: Continues\n\nWith the updated kernel GXDE, DDE 15 returns to focus\n\nGXDE, Gorgeous eXtended Deepin Environment\n\nMinimum Requirements:\n\n- Quad-core processor or higher.\n- At least 16GB of free storage.\n- At least 5GB of free memory.\n\nDefault user: sudoers\nPassword: 123456"
+        "desc":"GXDE OS: Continues\n\nWith the updated kernel GXDE, DDE 15 returns to focus\n\nGXDE, Gorgeous eXtended Deepin Environment\n\nMinimum Requirements:\n\n- Quad-core processor or higher.\n- At least 16GB of free storage.\n- At least 5GB of free memory.\n\nDefault user: sudoers\nPassword: 123456",
+        "file_size": "4 GB",
+        "creator": "GXDE OS",
+        "verified": true
     },
     {
         "rom_name":"Mac OS 9.1",
@@ -791,7 +971,10 @@
         "rom_kernel":"apple",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nMac OS 9.x, based on Mac OS 8 was the final product based on the classic MacOS architecture. Like previous version, it lacks true protected memory or pre-emptive multitasking. MacOS 9 was abandoned in favor of of the Unix-ish NextStep/Openstep based Mac OS X."
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nMac OS 9.x, based on Mac OS 8 was the final product based on the classic MacOS architecture. Like previous version, it lacks true protected memory or pre-emptive multitasking. MacOS 9 was abandoned in favor of of the Unix-ish NextStep/Openstep based Mac OS X.",
+        "file_size": "300 MB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
     },
     {
         "rom_name":"Mac OS X Jaguar",
@@ -804,7 +987,10 @@
         "rom_kernel":"apple",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nMac OS X Jaguar, or Mac OS X 10.2, is the third major release of Mac OS X, Apple's desktop and server operating system. It superseded Mac OS X Puma and preceded Mac OS X Panther. The operating system was initially available on 23 August 2002 either for single-computer installations, and in a \"family pack\", which allowed five installations on separate computers in one household. Most builds of Jaguar were compiled for PPC (for public use) and x86 (for testing purposes for the upcoming partnership with Intel, which would continue until the announcement in 2005). It is the last version of Mac OS to ship with Internet Explorer as the default browser, as it was replaced with Safari as of Mac OS X Panther, though it was still available as an optional component until Mac OS X Tiger."
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nMac OS X Jaguar, or Mac OS X 10.2, is the third major release of Mac OS X, Apple's desktop and server operating system. It superseded Mac OS X Puma and preceded Mac OS X Panther. The operating system was initially available on 23 August 2002 either for single-computer installations, and in a \"family pack\", which allowed five installations on separate computers in one household. Most builds of Jaguar were compiled for PPC (for public use) and x86 (for testing purposes for the upcoming partnership with Intel, which would continue until the announcement in 2005). It is the last version of Mac OS to ship with Internet Explorer as the default browser, as it was replaced with Safari as of Mac OS X Panther, though it was still available as an optional component until Mac OS X Tiger.",
+        "file_size": "1.3 GB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
     },
     {
         "rom_name":"Mac OS X Leopard",
@@ -817,6 +1003,9 @@
         "rom_kernel":"apple",
         "rom_extra":"",
         "final_rom_file_name":"",
-        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nMac OS X Jaguar, or Mac OS X 10.2, is the third major release of Mac OS X, Apple's desktop and server operating system. It superseded Mac OS X Puma and preceded Mac OS X Panther. The operating system was initially available on 23 August 2002 either for single-computer installations, and in a \"family pack\", which allowed five installations on separate computers in one household. Most builds of Jaguar were compiled for PPC (for public use) and x86 (for testing purposes for the upcoming partnership with Intel, which would continue until the announcement in 2005). It is the last version of Mac OS to ship with Internet Explorer as the default browser, as it was replaced with Safari as of Mac OS X Panther, though it was still available as an optional component until Mac OS X Tiger."
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nMac OS X Jaguar, or Mac OS X 10.2, is the third major release of Mac OS X, Apple's desktop and server operating system. It superseded Mac OS X Puma and preceded Mac OS X Panther. The operating system was initially available on 23 August 2002 either for single-computer installations, and in a \"family pack\", which allowed five installations on separate computers in one household. Most builds of Jaguar were compiled for PPC (for public use) and x86 (for testing purposes for the upcoming partnership with Intel, which would continue until the announcement in 2005). It is the last version of Mac OS to ship with Internet Explorer as the default browser, as it was replaced with Safari as of Mac OS X Panther, though it was still available as an optional component until Mac OS X Tiger.",
+        "file_size": "6 MB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
     }
 ]

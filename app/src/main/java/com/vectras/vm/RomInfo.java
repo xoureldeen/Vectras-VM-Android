@@ -24,6 +24,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
 import com.vectras.qemu.MainSettingsManager;
+import com.vectras.vm.databinding.ActivityRomInfoBinding;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.UIUtils;
 
@@ -32,13 +33,15 @@ import java.util.Objects;
 
 public class RomInfo extends AppCompatActivity {
 
+    ActivityRomInfoBinding binding;
     public static boolean isFinishNow = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_rom_info);
+        binding = ActivityRomInfoBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 //        UIUtils.setOnApplyWindowInsetsListener(findViewById(R.id.main));
 
         ImageView ivIcon;
@@ -151,5 +154,41 @@ public class RomInfo extends AppCompatActivity {
 
     public String getPath(Uri uri) {
         return FileUtils.getPath(RomInfo.this, uri);
+    }
+
+    private void initialize() {
+        if (getIntent().hasExtra("verified")) {
+            if (!getIntent().getBooleanExtra("verified", false)) {
+                binding.ivVerified.setImageResource(R.drawable.gpp_maybe_24px);
+                binding.tvVerified.setText(getString(R.string.not_verified));
+            }
+        }
+
+        if (getIntent().hasExtra("creator")) {
+            binding.tvCreator.setText(getIntent().getStringExtra("creator"));
+        }
+
+        switch (Objects.requireNonNull(getIntent().getStringExtra("arch"))) {
+            case "X86_64":
+                binding.tvArch.setText("x86_64");
+                break;
+            case "i386":
+                binding.tvArch.setText("i386");
+                break;
+            case "ARM64":
+                binding.tvArch.setText("ARM64");
+                break;
+            case "PowerPC":
+                binding.tvArch.setText("PowerPC");
+                break;
+        }
+
+        if (getIntent().hasExtra("size")) {
+            binding.tvSize.setText(getIntent().getStringExtra("size"));
+        }
+
+        if (getIntent().hasExtra("filename")) {
+            binding.tvFilename.setText(getIntent().getStringExtra("filename"));
+        }
     }
 }

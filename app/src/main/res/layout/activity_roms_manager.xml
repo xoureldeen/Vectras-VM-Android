@@ -1,224 +1,135 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:id="@+id/main" >
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        app:liftOnScrollColor="@android:color/transparent"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$Behavior">
+
+        <com.google.android.material.search.SearchBar
+            android:id="@+id/search_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:hint="@string/search"
+            app:defaultMarginsEnabled="true"
+            app:layout_collapseMode="pin"
+            app:navigationIcon="@drawable/arrow_back_24px" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/romsRv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="8dp"
+        android:clipToPadding="false"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <com.google.android.material.search.SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:hint="@string/search"
+        app:layout_anchor="@id/search_bar">
+
+        <LinearLayout
+            android:id="@+id/linear_search_emty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/search_96px" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center"
+                android:text="@string/no_matching_results_found" />
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/romsSearch"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/colorSurfaceContainerHigh"
+            android:paddingVertical="8dp"
+            android:clipToPadding="false"/>
+    </com.google.android.material.search.SearchView>
 
     <LinearLayout
         android:id="@+id/linearload"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="?attr/colorSurface"
+        android:gravity="center"
         android:orientation="vertical"
-        android:gravity="center">
+        android:visibility="visible">
+
         <com.google.android.material.loadingindicator.LoadingIndicator
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
+
         <TextView
             android:id="@+id/textviewsettingup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="8dp"
             android:gravity="center"
+            android:padding="8dp"
             android:text="@string/just_a_moment" />
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/linearnothinghere"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:background="?attr/colorSurface"
         android:gravity="center"
+        android:orientation="vertical"
         android:visibility="gone">
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/cloud_off_96px" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="8dp"
             android:gravity="center"
             android:text="@string/oops"
-            android:layout_margin="8dp"
             android:textSize="18sp" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/unable_to_connect_to_server"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:text="@string/unable_to_connect_to_server" />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttontryagain"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="8dp"
             android:gravity="center_horizontal|center_vertical"
+            android:padding="8dp"
             android:text="@string/try_again" />
     </LinearLayout>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cdCustom"
-            style="@style/CardViewStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:foreground="?android:attr/selectableItemBackground"
-            android:padding="8dp"
-            app:cardCornerRadius="10dp"
-            app:cardUseCompatPadding="true"
-            android:focusable="true"
-            android:visibility="gone" >
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:rotationX="25">
-
-                <ImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/input_circle" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:text="CUSTOM ROM" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Kernel"
-            android:textSize="20sp"
-            android:visibility="gone" />
-
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:id="@+id/coordinatorLayout"
-        android:layout_weight="1"
-        android:fitsSystemWindows="true">
-
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$Behavior">
-
-            <com.google.android.material.appbar.CollapsingToolbarLayout
-                style="?attr/collapsingToolbarLayoutLargeStyle"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                android:fitsSystemWindows="true"
-                app:title="@string/roms_store"
-                app:collapsedTitleTextAppearance="@style/TextAppearance.Material3.TitleMedium"
-                app:expandedTitleTextAppearance="@style/TextAppearance.Material3.DisplaySmall">
-
-                <com.google.android.material.appbar.MaterialToolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:elevation="0dp"
-                    app:layout_collapseMode="pin"
-                    app:navigationIcon="@drawable/arrow_back_24px"/>
-
-            </com.google.android.material.appbar.CollapsingToolbarLayout>
-        </com.google.android.material.appbar.AppBarLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/romsRv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:layout_marginTop="1dp"/>
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <HorizontalScrollView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:gravity="center_horizontal"
-                android:scrollbars="none">
-
-                <com.google.android.material.button.MaterialButtonToggleGroup
-                    android:id="@+id/filterToggle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    app:singleSelection="true"
-                    android:paddingLeft="4dp"
-                    android:paddingRight="4dp">
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/windowsToggle"
-                        style="@style/Widget.Material3.Button.OutlinedButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/windows"
-                        app:icon="@drawable/grid_view_24px"
-                        app:strokeColor="?attr/colorPrimary" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/linuxToggle"
-                        style="@style/Widget.Material3.Button.OutlinedButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/linux"
-                        app:icon="@drawable/devices_other_24px"
-                        app:strokeColor="?attr/colorPrimary" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/appleToggle"
-                        style="@style/Widget.Material3.Button.OutlinedButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/macos"
-                        app:icon="@drawable/desktop_mac_24px"
-                        app:strokeColor="?attr/colorPrimary" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/androidToggle"
-                        style="@style/Widget.Material3.Button.OutlinedButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/android"
-                        app:icon="@drawable/android_24px"
-                        app:strokeColor="?attr/colorPrimary" />
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/otherToggle"
-                        style="@style/Widget.Material3.Button.OutlinedButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/other"
-                        app:icon="@drawable/menu_24px"
-                        app:strokeColor="?attr/colorPrimary" />
-                </com.google.android.material.button.MaterialButtonToggleGroup>
-            </HorizontalScrollView>
-        </LinearLayout>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/goBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/continuetext"
-            app:backgroundTint="@drawable/btn_state"
-            android:visibility="gone"/>
-
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
