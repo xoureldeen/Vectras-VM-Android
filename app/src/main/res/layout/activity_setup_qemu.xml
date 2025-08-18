@@ -2,113 +2,133 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:fitsSystemWindows="true"
     android:animateLayoutChanges="true"
-    android:id="@+id/main" >
+    android:fitsSystemWindows="true"
+    android:orientation="horizontal">
+
     <LinearLayout
         android:id="@+id/linearwelcome"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="8dp"
+        android:gravity="center"
         android:orientation="vertical"
-        android:gravity="center">
+        android:padding="8dp"
+        android:visibility="visible">
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/emoticon_96px" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:text="@string/welcome"
             android:textSize="18sp" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:text="@string/welcome_to_vectras_vm_lets_get_started" />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttonletstart"
             style="@style/Widget.Material3Expressive.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="8dp"
             android:gravity="center_horizontal|center_vertical"
+            android:padding="8dp"
             android:text="@string/letstart" />
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/linearload"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:gravity="center"
         android:orientation="vertical"
-        android:gravity="center">
+        android:visibility="visible">
+
         <com.google.android.material.loadingindicator.LoadingIndicator
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
+
         <TextView
             android:id="@+id/textviewconnecting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="8dp"
             android:gravity="center"
+            android:padding="8dp"
             android:text="@string/just_a_moment" />
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/linearcannotconnecttoserver"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:gravity="center"
+        android:orientation="vertical"
         android:visibility="gone">
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/cloud_off_96px" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="8dp"
             android:gravity="center"
             android:text="@string/oops"
-            android:layout_margin="8dp"
             android:textSize="18sp" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/unable_to_connect_to_server"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:text="@string/unable_to_connect_to_server" />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/buttontryconnectagain"
             style="@style/Widget.Material3Expressive.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="8dp"
             android:gravity="center_horizontal|center_vertical"
+            android:padding="8dp"
             android:text="@string/try_again" />
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/linearsimplesetupui"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="visible">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal|center_vertical"
-            android:orientation="vertical"
             android:layout_gravity="center_horizontal|center_vertical"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:gravity="center_horizontal|center_vertical"
+            android:orientation="vertical">
+
             <LinearLayout
                 android:id="@+id/linearstartsetup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="8dp">
+
                 <TextView
                     android:id="@+id/textview2"
                     android:layout_width="wrap_content"
@@ -116,89 +136,102 @@
                     android:padding="8dp"
                     android:text="@string/start_setup"
                     android:textSize="18sp" />
+
                 <TextView
                     android:id="@+id/textview3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
                     android:text="@string/do_you_want_to_set_it_up_automatically_or_select_the_bootstrap_file_manually" />
+
                 <LinearLayout
                     android:id="@+id/linear5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="8dp"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/buttonautosetup"
                         style="@style/Widget.Material3Expressive.Button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="4dp"
-                        android:padding="8dp"
                         android:gravity="center_horizontal|center_vertical"
+                        android:padding="8dp"
                         android:text="@string/auto_setup" />
+
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/buttonmanualsetup"
                         style="@style/Widget.Material3Expressive.Button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="8dp"
                         android:gravity="center_horizontal|center_vertical"
+                        android:padding="8dp"
                         android:text="@string/manual" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/linear6"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="8dp"
                     android:gravity="center_vertical"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingTop="20dp"
                         android:paddingBottom="8dp"
                         android:text="@string/do_you_want_to_change_the_mirror_before_setting_up_the_current_mirror_is" />
+
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
+
                         <Spinner
                             android:id="@+id/spinnerselectmirror"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:spinnerMode="dialog"
-                            tools:listitem="@layout/simple_layout_for_spiner"/>
+                            tools:listitem="@layout/simple_layout_for_spiner" />
                     </com.google.android.material.card.MaterialCardView>
 
                 </LinearLayout>
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/linearsettingup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
                 android:gravity="center_horizontal|center_vertical"
                 android:orientation="vertical"
+                android:padding="8dp"
                 android:visibility="gone">
+
                 <com.google.android.material.loadingindicator.LoadingIndicator
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content" />
+
                 <TextView
                     android:id="@+id/textviewsettingup"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="8dp"
                     android:gravity="center"
+                    android:padding="8dp"
                     android:text="@string/getting_ready_for_you" />
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/linearsetupfailed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
                 android:orientation="vertical"
+                android:padding="8dp"
                 android:visibility="gone">
+
                 <TextView
                     android:id="@+id/textview5"
                     android:layout_width="wrap_content"
@@ -206,45 +239,51 @@
                     android:padding="8dp"
                     android:text="@string/failed"
                     android:textSize="18sp" />
+
                 <TextView
                     android:id="@+id/textview6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="8dp"
                     android:text="@string/something_went_wrong_during_setup_would_you_like_to_try_again" />
+
                 <LinearLayout
                     android:id="@+id/linear8"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="8dp"
                     android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/buttonsetuptryagain"
                         style="@style/Widget.Material3Expressive.Button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="4dp"
-                        android:padding="8dp"
                         android:gravity="center_horizontal|center_vertical"
+                        android:padding="8dp"
                         android:text="@string/try_again" />
+
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/buttonsetupshowlog"
                         style="@style/Widget.Material3Expressive.Button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="8dp"
                         android:gravity="center_horizontal|center_vertical"
+                        android:padding="8dp"
                         android:text="@string/show_log" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp"
             android:gravity="center_horizontal|center_vertical"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="8dp">
+
             <TextView
                 android:id="@+id/textviewshowadvancedsetup"
                 android:layout_width="wrap_content"
@@ -253,101 +292,10 @@
                 android:text="@string/show_advanced_setup" />
         </LinearLayout>
     </LinearLayout>
-<androidx.cardview.widget.CardView
-    style="@style/CardViewStyle"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="18dp"
-    android:id="@+id/advancedsetup">
 
-    <com.google.android.material.progressindicator.LinearProgressIndicator
-        android:id="@+id/progressBar"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:indeterminate="true"
-        app:showAnimationBehavior="inward"
-        app:indeterminateAnimationType="disjoint"
-        app:wavelength="40dp"
-        app:waveAmplitude="3dp"
-        app:waveSpeed="10dp"
-        android:visibility="gone" />
+    <include
+        android:id="@+id/advancedsetup"
+        layout="@layout/setup_qemu_advanced" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="18dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/title"
-            style="@style/MaterialAlertDialog.Material3.Title.Text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/wating_for_you" />
-
-        <LinearLayout
-            android:id="@+id/mainTerminal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1.0">
-
-                <ScrollView
-                    android:id="@+id/scrollView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:fillViewport="true"
-                    android:nestedScrollingEnabled="true"
-                    android:padding="5dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <com.vectras.vterm.view.ZoomableTextView
-                            android:id="@+id/tvTerminalOutput"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textIsSelectable="true"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-                </ScrollView>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="2dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"/>
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnInstall"
-                    style="@style/Widget.Material3Expressive.Button"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone"
-                    android:text="@string/try_again" />
-                <TextView
-                    android:id="@+id/textviewhideadvancedsetup"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="8dp"
-                    android:text="@string/hide_advanced_setup"
-                    android:gravity="center" />
-
-            </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
-</androidx.cardview.widget.CardView>
-    <include layout="@layout/setup_qemu_done"/>
+    <include layout="@layout/setup_qemu_done" />
 </LinearLayout>

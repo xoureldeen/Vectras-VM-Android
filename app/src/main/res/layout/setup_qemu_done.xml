@@ -47,8 +47,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                app:icon="@drawable/close_24px"
-                android:text="@string/skip"
+                app:icon="@drawable/arrow_forward_24px"
+                android:text="@string/later"
                 style="@style/Widget.Material3Expressive.Button.OutlinedButton"/>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -107,8 +107,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                app:icon="@drawable/close_24px"
-                android:text="@string/skip"
+                app:icon="@drawable/arrow_forward_24px"
+                android:text="@string/later"
                 style="@style/Widget.Material3Expressive.Button.OutlinedButton"/>
             <LinearLayout
                 android:layout_width="match_parent"
