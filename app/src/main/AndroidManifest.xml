@@ -109,7 +109,8 @@
             android:hardwareAccelerated="true" />
         <activity
             android:name=".SetupQemuActivity"
-            android:exported="true"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:exported="false"
             android:hardwareAccelerated="true"
             tools:ignore="DiscouragedApi" /> <!-- stupid android issue -->
         <activity

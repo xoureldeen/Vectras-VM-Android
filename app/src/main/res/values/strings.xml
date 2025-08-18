@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">v2.9.5.1-3dfx</string>
+    <string name="app_version" translatable="false">v2.9.5.2-3dfx</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -487,6 +487,8 @@
     <string name="sizetext">Size</string>
     <string name="file_name">File name</string>
     <string name="who_created_this_rom">Who created this rom?</string>
+    <string name="setup_command">Setup command</string>
+    <string name="later">Later</string>
 
 
     <!--======================TERMUX STRINGS====================-->
@@ -626,9 +628,9 @@
     <string name="failed">Failed!</string>
     <string name="something_went_wrong_during_setup_would_you_like_to_try_again">Something went wrong during setup. Would you like to try again?</string>
     <string name="show_log">Show log</string>
-    <string name="bootstrap_required">BOOTSTRAP REQUIRED!</string>
+    <string name="bootstrap_required">Bootstrap required!</string>
     <string name="you_can_choose_between_auto_download_and_setup_or_manual_setup_by_choosing_bootstrap_file">You can choose between auto download and setup or manual setup by choosing bootstrap file.</string>
-    <string name="manual_setup">MANUAL SETUP</string>
+    <string name="manual_setup">Manual setup</string>
 
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris

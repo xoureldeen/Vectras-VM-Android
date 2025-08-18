@@ -11,7 +11,7 @@ android {
         minSdk minApi
         targetSdk targetApi
         versionCode 21
-        versionName "v2.9.5.1-3dfx"
+        versionName "v2.9.5.2-3dfx"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -34,7 +34,7 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.release
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {

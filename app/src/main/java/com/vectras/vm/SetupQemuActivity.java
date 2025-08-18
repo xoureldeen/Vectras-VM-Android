@@ -10,25 +10,20 @@ import static com.vectras.vm.utils.UIUtils.UIAlert;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.DialogInterface;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.opengl.Visibility;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
-import android.provider.Settings;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -36,21 +31,18 @@ import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.Manifest;
 import android.widget.BaseAdapter;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.vectras.qemu.MainSettingsManager;
-import com.vectras.vm.utils.FileUtils;
+import com.vectras.vm.databinding.ActivitySetupQemuBinding;
+import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.JSONUtils;
 import com.vectras.vm.utils.ListUtils;
 import com.vectras.vm.utils.UIUtils;
@@ -68,13 +60,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
 public class SetupQemuActivity extends AppCompatActivity implements View.OnClickListener {
+    ActivitySetupQemuBinding binding;
     Activity activity;
     private final String TAG = "SetupQemuActivity";
     ZoomableTextView vterm;
@@ -95,12 +86,10 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
     MaterialButton buttonsetuptryagain;
     MaterialButton buttonsetupshowlog;
     TextView textviewshowadvancedsetup;
-    TextView textviewhideadvancedsetup;
     Spinner spinnerselectmirror;
     LinearLayout linearwelcome;
     Button buttonletstart;
 
-    AlertDialog alertDialog;
     private boolean settingup = false;
     private boolean libprooterror = false;
 
@@ -114,12 +103,14 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
     private String selectedMirrorLocation = "";
     private String downloadBootstrapsCommand = "";
     private boolean aria2Error = false;
+    private boolean isexecutingCommand = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         UIUtils.edgeToEdge(this);
-        setContentView(R.layout.activity_setup_qemu);
+        binding = ActivitySetupQemuBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         UIUtils.setOnApplyWindowInsetsListener(findViewById(R.id.main));
         activity = this;
 
@@ -136,7 +127,6 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         buttonsetuptryagain = findViewById(R.id.buttonsetuptryagain);
         buttonsetupshowlog = findViewById(R.id.buttonsetupshowlog);
         textviewshowadvancedsetup = findViewById(R.id.textviewshowadvancedsetup);
-        textviewhideadvancedsetup = findViewById(R.id.textviewhideadvancedsetup);
         spinnerselectmirror = findViewById(R.id.spinnerselectmirror);
         linearwelcome = findViewById(R.id.linearwelcome);
         buttonletstart = findViewById(R.id.buttonletstart);
@@ -147,7 +137,6 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         buttonsetuptryagain.setOnClickListener(this);
         buttonsetupshowlog.setOnClickListener(this);
         textviewshowadvancedsetup.setOnClickListener(this);
-        textviewhideadvancedsetup.setOnClickListener(this);
         buttonletstart.setOnClickListener(this);
 
         progressBar = findViewById(R.id.progressBar);
@@ -347,7 +336,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
             if (tarGZ.exists()) {
                 tarGZ.delete();
             }
-            alertDialog.show();
+            showAdvancedSetupDialog();
         } else if (id == R.id.buttonautosetup) {
             if (AppConfig.getSetupFiles().contains("arm64-v8a") || AppConfig.getSetupFiles().contains("x86_64")) {
                 setupVectras64();
@@ -374,17 +363,14 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         } else if (id == R.id.textviewshowadvancedsetup) {
             linearsimplesetupui.setVisibility(GONE);
             if (linearstartsetup.getVisibility() == View.VISIBLE) {
-                alertDialog.show();
+                showAdvancedSetupDialog();
             }
         } else if (id == R.id.buttontryconnectagain) {
             linearload.setVisibility(View.VISIBLE);
-            net.startRequestNetwork(RequestNetworkController.GET,AppConfig.bootstrapfileslink,"anbui",_net_request_listener);
-        } else if (id == R.id.textviewhideadvancedsetup) {
-            linearsimplesetupui.setVisibility(View.VISIBLE);
-            alertDialog.dismiss();
+            net.startRequestNetwork(RequestNetworkController.GET,AppConfig.bootstrapfileslink,"",_net_request_listener);
         } else if (id == R.id.buttonletstart) {
             linearwelcome.setVisibility(GONE);
-            net.startRequestNetwork(RequestNetworkController.GET,AppConfig.bootstrapfileslink,"anbui",_net_request_listener);
+            net.startRequestNetwork(RequestNetworkController.GET,AppConfig.bootstrapfileslink,"",_net_request_listener);
         }
     }
 
@@ -399,9 +385,9 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         vterm.append(textToAdd);
 
         if (textToAdd.contains("xssFjnj58Id")) {
+            isexecutingCommand = false;
             linearsimplesetupui.setVisibility(GONE);
-            CardView advancedsetup = findViewById(R.id.advancedsetup);
-            advancedsetup.setVisibility(GONE);
+            binding.advancedsetup.lnAdvancedsetup.setVisibility(GONE);
         } else if (textToAdd.contains("libproot.so --help")){
             libprooterror = true;
         } else if (textToAdd.contains("not complete: /root/setup.tar.gz")){
@@ -448,12 +434,17 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
     }
 
     public void onBackPressed() {
-        super.onBackPressed();
-        return;
+        if (isexecutingCommand) {
+            if (binding.linearsimplesetupui.getVisibility() == GONE)
+                binding.linearsimplesetupui.setVisibility(View.VISIBLE);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     // Method to execute the shell command
     public void executeShellCommand(String userCommand) {
+        isexecutingCommand = true;
         new Thread(() -> {
             try {
                 // Setup the process builder to start PRoot with environmental variables and commands
@@ -530,54 +521,55 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
 
                 // Check if the exit value indicates an error
                 if (exitValue != 0) {
+                    isexecutingCommand = false;
                     // If exit value is not zero, display a toast message
                     if (!aria2Error) {
                         String toastMessage = "Command failed with exit code: " + exitValue;
                         activity.runOnUiThread(() -> {
                             appendTextAndScroll("Error: " + toastMessage + "\n");
                             Toast.makeText(activity, toastMessage, Toast.LENGTH_LONG).show();
-                            inBtn.setVisibility(View.VISIBLE);
+                            uiControllerAdvancedSetup(false);
                             title.setText("Failed!");
                             simpleSetupUIControler(2);
                         });
                     }
                     if (libprooterror) {
-                        AlertDialog alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
-                        alertDialog.setTitle(getResources().getString(R.string.oops));
-                        alertDialog.setMessage(getResources().getString(R.string.a_serious_problem_has_occurred));
-                        alertDialog.setCancelable(false);
-                        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.join_our_community), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent();
-                                intent.setAction(ACTION_VIEW);
-                                intent.setData(Uri.parse(AppConfig.community));
-                                startActivity(intent);
-                            }
-                        });
-                        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.close), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-
-                            }
-                        });
-
-                        alertDialog.show();
+                        DialogUtils.twoDialog(
+                                this,
+                                getResources().getString(R.string.oops),
+                                getResources().getString(R.string.a_serious_problem_has_occurred),
+                                getString(R.string.join_our_community),
+                                getString(R.string.close),
+                                true, R.drawable.system_update_24px,
+                                true,
+                                () -> {
+                                    Intent intent = new Intent();
+                                    intent.setAction(ACTION_VIEW);
+                                    intent.setData(Uri.parse(AppConfig.community));
+                                    startActivity(intent);
+                                },
+                                null,
+                                null);
                     } else if (aria2Error && downloadBootstrapsCommand.contains("aria2c")) {
-                        downloadBootstrapsCommand = " curl -o setup.tar.gz -L " + bootstrapfilelink;
-                        if (AppConfig.getSetupFiles().contains("arm64-v8a") || AppConfig.getSetupFiles().contains("x86_64")) {
-                            setupVectras64();
-                        } else {
-                            setupVectras32();
-                        }
-                        inBtn.setVisibility(GONE);
+                        activity.runOnUiThread(() -> {
+                            downloadBootstrapsCommand = " curl -o setup.tar.gz -L " + bootstrapfilelink;
+                            if (AppConfig.getSetupFiles().contains("arm64-v8a") || AppConfig.getSetupFiles().contains("x86_64")) {
+                                setupVectras64();
+                            } else {
+                                setupVectras32();
+                            }
+                        });
+
                     }
                 }
             } catch (IOException | InterruptedException e) {
+                isexecutingCommand = false;
                 // Handle exceptions by printing the stack trace in the terminal output
                 final String errorMessage = e.getMessage();
                 activity.runOnUiThread(() -> {
                     appendTextAndScroll("Error: " + errorMessage + "\n");
                     Toast.makeText(activity, "Error executing command: " + errorMessage, Toast.LENGTH_LONG).show();
-                    inBtn.setVisibility(View.VISIBLE);
+                    uiControllerAdvancedSetup(false);
                     title.setText("Failed!");
                     simpleSetupUIControler(2);
                 });
@@ -585,111 +577,9 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         }).start(); // Execute the command in a separate thread to prevent blocking the UI thread
     }
 
-    private void startDownload() {
-        new DownloadFileTask(activity).execute(AppConfig.getSetupFiles());
-    }
-
-    private class DownloadFileTask extends AsyncTask<String, Integer, String> {
-
-        private Context context;
-        private ProgressDialog progressDialog;
-        private int fileLength;
-
-        public DownloadFileTask(Context context) {
-            this.context = context;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            progressDialog = new ProgressDialog(context, R.style.MainDialogTheme);
-            progressDialog.setTitle("Downloading... Please do not disconnect from the network.");
-            progressDialog.setMessage(null);
-            progressDialog.setIndeterminate(true);
-            progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-            progressDialog.setCancelable(false); // Allow canceling with back button
-            progressDialog.show();
-        }
-
-        @Override
-        protected String doInBackground(String... sUrl) {
-            InputStream input = null;
-            OutputStream output = null;
-            HttpURLConnection connection = null;
-            try {
-                URL url = new URL(sUrl[0]);
-                connection = (HttpURLConnection) url.openConnection();
-                connection.connect();
-
-                if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                    return "Server returned HTTP " + connection.getResponseCode()
-                            + " " + connection.getResponseMessage();
-                }
-
-                fileLength = connection.getContentLength();
-                input = connection.getInputStream();
-                output = new FileOutputStream(tarPath);
-                byte data[] = new byte[4096];
-                long total = 0;
-                int count;
-                while ((count = input.read(data)) != -1) {
-                    if (isCancelled()) {
-                        input.close();
-                        return null;
-                    }
-                    total += count;
-                    if (fileLength > 0) {
-                        publishProgress((int) (total * 100 / fileLength));
-                    }
-                    output.write(data, 0, count);
-                }
-            } catch (Exception e) {
-                return e.toString();
-            } finally {
-                try {
-                    if (output != null)
-                        output.close();
-                    if (input != null)
-                        input.close();
-                } catch (IOException ignored) {
-                }
-
-                if (connection != null)
-                    connection.disconnect();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... progress) {
-            super.onProgressUpdate(progress);
-
-            // If you get here, the length of the file is known.
-            progressDialog.setIndeterminate(false);
-            progressDialog.setMax(100);
-            progressDialog.setProgress(progress[0]);
-
-            // Convert the bytes downloaded to MB and update the dialog message accordingly.
-            int progressMB = (int) ((progress[0] / 100.0) * fileLength / (1024 * 1024));
-            progressDialog.setMessage(progressMB + " MB/" + fileLength / (1024 * 1024) + " MB");
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            progressDialog.dismiss(); // Dismiss the progress dialog
-
-            if (result != null) {
-                Toast.makeText(context, "Download error: " + result, Toast.LENGTH_LONG).show();
-                inBtn.setVisibility(View.VISIBLE);
-                title.setText("Failed!");
-            } else
-                setupVectras();
-        }
-
-    }
-
     private void setupVectras() {
         simpleSetupUIControler(1);
-        inBtn.setVisibility(GONE);
+        uiControllerAdvancedSetup(true);
         progressBar.setVisibility(View.VISIBLE);
         String filesDir = activity.getFilesDir().getAbsolutePath();
         String neededPkgs = AppConfig.neededPkgs;
@@ -698,8 +588,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         }
         String cmd = "";
         cmd += selectedMirrorCommand + ";";
-        executeShellCommand(cmd);
-        executeShellCommand("set -e;" +
+        String cmd2 = "set -e;" +
                 " echo \"Starting setup...\";" +
                 " apk update;" +
                 " echo \"Installing packages...\";" +
@@ -711,18 +600,22 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                 " apk add qemu-audio-sdl pulseaudio;" +
                 " echo export PULSE_SERVER=127.0.0.1 >> /etc/profile;" +
                 " mkdir -p ~/.vnc && echo -e \"555555\\n555555\" | vncpasswd -f > ~/.vnc/passwd && chmod 0600 ~/.vnc/passwd;" +
-                " echo \"installation successful! xssFjnj58Id\"");
+                " echo \"installation successful! xssFjnj58Id\"";
+
+        executeShellCommand(cmd);
+        executeShellCommand(cmd2);
+
+        binding.advancedsetup.tvCommandsetup.setText(cmd + cmd2);
     }
 
     private void setupVectras32() {
         aria2Error = false;
-        inBtn.setVisibility(GONE);
+        uiControllerAdvancedSetup(true);
         progressBar.setVisibility(View.VISIBLE);
         String filesDir = activity.getFilesDir().getAbsolutePath();
         String cmd = "";
         cmd += selectedMirrorCommand + ";";
-        executeShellCommand(cmd);
-        executeShellCommand("set -e;" +
+        String cmd2 = "set -e;" +
                 " echo \"Starting setup...\";" +
                 " apk update;" +
                 " echo \"Installing packages...\";" +
@@ -734,18 +627,22 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                 " echo export PULSE_SERVER=127.0.0.1 >> /etc/profile;" +
                 //" rm " + tarPath + ";" +
                 " mkdir -p ~/.vnc && echo -e \"555555\\n555555\" | vncpasswd -f > ~/.vnc/passwd && chmod 0600 ~/.vnc/passwd;" +
-                " echo \"installation successful! xssFjnj58Id\"");
+                " echo \"installation successful! xssFjnj58Id\"";
+
+        executeShellCommand(cmd);
+        executeShellCommand(cmd2);
+
+        binding.advancedsetup.tvCommandsetup.setText(cmd + cmd2);
     }
 
     private void setupVectras64() {
         aria2Error = false;
-        inBtn.setVisibility(GONE);
+        uiControllerAdvancedSetup(true);
         progressBar.setVisibility(View.VISIBLE);
         String filesDir = activity.getFilesDir().getAbsolutePath();
         String cmd = "";
         cmd += selectedMirrorCommand + ";";
-        executeShellCommand(cmd);
-        executeShellCommand("set -e;" +
+        String cmd2 = "set -e;" +
                 " echo \"Starting setup...\";" +
                 " apk update;" +
                 " echo \"Installing packages...\";" +
@@ -759,7 +656,12 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                 " apk add qemu-audio-sdl pulseaudio;" +
                 " echo export PULSE_SERVER=127.0.0.1 >> /etc/profile;" +
                 " mkdir -p ~/.vnc && echo -e \"555555\\n555555\" | vncpasswd -f > ~/.vnc/passwd && chmod 0600 ~/.vnc/passwd;" +
-                " echo \"installation successful! xssFjnj58Id\"");
+                " echo \"installation successful! xssFjnj58Id\"";
+
+        executeShellCommand(cmd);
+        executeShellCommand(cmd2);
+
+        binding.advancedsetup.tvCommandsetup.setText(cmd + cmd2);
     }
 
     private void checkabi() {
@@ -768,38 +670,6 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                 UIUtils.oneDialog(getResources().getString(R.string.warning), getResources().getString(R.string.cpu_not_support_64), true, false, activity);
             }
         }
-
-        alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
-        alertDialog.setTitle(getString(R.string.bootstrap_required));
-        alertDialog.setMessage(getString(R.string.you_can_choose_between_auto_download_and_setup_or_manual_setup_by_choosing_bootstrap_file));
-        alertDialog.setCancelable(false);
-        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.auto_setup), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                //startDownload();
-                if (AppConfig.getSetupFiles().contains("arm64-v8a") || AppConfig.getSetupFiles().contains("x86_64")) {
-                    setupVectras64();
-                } else {
-                    setupVectras32();
-                }
-                simpleSetupUIControler(1);
-                return;
-            }
-        });
-        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.manual_setup), new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType("*/*");
-
-                // Optionally, specify a URI for the file that should appear in the
-                // system file picker when it loads.
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
-                }
-
-                startActivityForResult(intent, 1001);
-            }
-        });
     }
 
     private void checkpermissions() {
@@ -813,7 +683,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                     setupVectras();
                 } else {
                     if (linearsimplesetupui.getVisibility() == GONE) {
-                        alertDialog.show();
+                        showAdvancedSetupDialog();
                     }
                 }
             }
@@ -877,7 +747,6 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                                     @Override
                                     public void run() {
                                         loading.setVisibility(GONE);
-                                        alertDialog.dismiss();
                                         setupVectras();
                                         MainSettingsManager.setsetUpWithManualSetupBefore(SetupQemuActivity.this, true);
                                     }
@@ -899,13 +768,13 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                 }).start();
             } else {
                 if (linearsimplesetupui.getVisibility() == GONE) {
-                    alertDialog.show();
+                    showAdvancedSetupDialog();
                 }
                 UIAlert(activity, "INVALID FILE", "please select vectras-vm-" + abi + ".tar.gz file");
             }
         } else
         if (linearsimplesetupui.getVisibility() == GONE) {
-            alertDialog.show();
+            showAdvancedSetupDialog();
         }
     }
 
@@ -973,6 +842,51 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                 finish();
             }
         });
+
+        binding.advancedsetup.ivClose.setOnClickListener(v -> {
+            linearsimplesetupui.setVisibility(View.VISIBLE);
+        });
+
+        binding.advancedsetup.ivCopycommandsetup.setOnClickListener(v -> copyToClipboard(binding.advancedsetup.tvCommandsetup.getText().toString()));
+    }
+
+    private void uiControllerAdvancedSetup(boolean isStartSetup) {
+        binding.advancedsetup.lnBntinstall.setVisibility(isStartSetup ? View.GONE : View.VISIBLE);
+        binding.advancedsetup.progressBar.setVisibility(isStartSetup ? View.VISIBLE : View.GONE);
+    }
+
+    private void showAdvancedSetupDialog() {
+        DialogUtils.twoDialog(
+                this,
+                getResources().getString(R.string.bootstrap_required),
+                getResources().getString(R.string.you_can_choose_between_auto_download_and_setup_or_manual_setup_by_choosing_bootstrap_file),
+                getString(R.string.auto_setup),
+                getString(R.string.manual_setup),
+                true, R.drawable.system_update_24px,
+                false,
+                () -> {
+                    //startDownload();
+                    if (AppConfig.getSetupFiles().contains("arm64-v8a") || AppConfig.getSetupFiles().contains("x86_64")) {
+                        setupVectras64();
+                    } else {
+                        setupVectras32();
+                    }
+                    simpleSetupUIControler(1);
+                },
+                () -> {
+                    Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    intent.setType("*/*");
+
+                    // Optionally, specify a URI for the file that should appear in the
+                    // system file picker when it loads.
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
+                    }
+
+                    startActivityForResult(intent, 1001);
+                },
+                null);
     }
 
     public class SpinnerSelectMirrorAdapter extends BaseAdapter {
@@ -1012,5 +926,12 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
 
             return _view;
         }
+    }
+
+    private void copyToClipboard(String text) {
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("Vectras VM", text);
+        clipboard.setPrimaryClip(clip);
+        Toast.makeText(this, getString(R.string.copied), Toast.LENGTH_SHORT).show();
     }
 }
