@@ -25,6 +25,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.bumptech.glide.Glide;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.databinding.ActivityRomInfoBinding;
+import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.UIUtils;
 
@@ -99,6 +100,7 @@ public class RomInfo extends AppCompatActivity {
         }
 
 //        btn_pick.setText(getString(R.string.select) + " " + getIntent().getStringExtra("filename"));
+        initialize();
     }
 
     public void onResume() {
@@ -157,10 +159,18 @@ public class RomInfo extends AppCompatActivity {
     }
 
     private void initialize() {
+        int currentVerifyIcon = R.drawable.verified_user_24px;
+        String currentVerifyText = getString(R.string.verified);
+        String currentVerifyContent = getString(R.string.verified_content);
+
         if (getIntent().hasExtra("verified")) {
             if (!getIntent().getBooleanExtra("verified", false)) {
                 binding.ivVerified.setImageResource(R.drawable.gpp_maybe_24px);
                 binding.tvVerified.setText(getString(R.string.not_verified));
+
+                currentVerifyIcon = R.drawable.gpp_maybe_24px;
+                currentVerifyText = getString(R.string.not_verified);
+                currentVerifyContent = getString(R.string.not_verified_content);
             }
         }
 
@@ -168,20 +178,7 @@ public class RomInfo extends AppCompatActivity {
             binding.tvCreator.setText(getIntent().getStringExtra("creator"));
         }
 
-        switch (Objects.requireNonNull(getIntent().getStringExtra("arch"))) {
-            case "X86_64":
-                binding.tvArch.setText("x86_64");
-                break;
-            case "i386":
-                binding.tvArch.setText("i386");
-                break;
-            case "ARM64":
-                binding.tvArch.setText("ARM64");
-                break;
-            case "PowerPC":
-                binding.tvArch.setText("PowerPC");
-                break;
-        }
+        binding.tvArch.setText(getArchName(Objects.requireNonNull(getIntent().getStringExtra("arch"))));
 
         if (getIntent().hasExtra("size")) {
             binding.tvSize.setText(getIntent().getStringExtra("size"));
@@ -190,5 +187,73 @@ public class RomInfo extends AppCompatActivity {
         if (getIntent().hasExtra("filename")) {
             binding.tvFilename.setText(getIntent().getStringExtra("filename"));
         }
+
+        String finalCurrentVerifyText = currentVerifyText;
+        String finalCurrentVerifyContent = currentVerifyContent;
+        int finalCurrentVerifyIcon = currentVerifyIcon;
+        binding.lnVerified.setOnClickListener((v -> DialogUtils.oneDialog(
+                RomInfo.this,
+                finalCurrentVerifyText,
+                finalCurrentVerifyContent,
+                getString(R.string.ok),
+                true,
+                finalCurrentVerifyIcon,
+                true,
+                null,
+                null)));
+
+        binding.lnCreator.setOnClickListener((v -> DialogUtils.oneDialog(
+                RomInfo.this,
+                getString(R.string.creator),
+                getIntent().getStringExtra("creator"),
+                getString(R.string.ok),
+                true,
+                R.drawable.account_circle_24px,
+                true,
+                null,
+                null)));
+
+        binding.lnArch.setOnClickListener((v -> DialogUtils.oneDialog(
+                RomInfo.this,
+                getString(R.string.architecture),
+                getArchName(Objects.requireNonNull(getIntent().getStringExtra("arch"))),
+                getString(R.string.ok),
+                true,
+                R.drawable.devices_other_24px,
+                true,
+                null,
+                null)));
+
+        binding.lnSize.setOnClickListener((v -> DialogUtils.oneDialog(
+                RomInfo.this,
+                getString(R.string.sizetext),
+                getIntent().getStringExtra("size"),
+                getString(R.string.ok),
+                true,
+                R.drawable.hard_drive_24px,
+                true,
+                null,
+                null)));
+
+        binding.lnFilename.setOnClickListener((v -> DialogUtils.oneDialog(
+                RomInfo.this,
+                getString(R.string.file_name),
+                getIntent().getStringExtra("filename"),
+                getString(R.string.ok),
+                true,
+                R.drawable.file_copy_24px,
+                true,
+                null,
+                null)));
+    }
+
+    private String getArchName(String arch) {
+        return switch (arch) {
+            case "X86_64" -> getString(R.string.x86_64);
+            case "i386" -> getString(R.string.i386_qemu);
+            case "ARM64" -> getString(R.string.arm64_qemu);
+            case "PowerPC" -> getString(R.string.powerpc_qemu);
+            default -> getString(R.string.unknow);
+        };
     }
 }

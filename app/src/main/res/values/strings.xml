@@ -479,7 +479,13 @@
     <string name="no_matching_results_found">No matching results found.</string>
     <string name="unknow">Unknow</string>
     <string name="verified">Verified</string>
+    <string name="verified_content">It has been tested to work and is not harmful to the device. But it may not work on your device.</string>
     <string name="not_verified">Not verified</string>
+    <string name="not_verified_content">Untested, it may not work or have unexpected behavior.</string>
+    <string name="creator">Creator</string>
+    <string name="architecture">Architecture</string>
+    <string name="sizetext">Size</string>
+    <string name="file_name">File name</string>
 
 
     <!--======================TERMUX STRINGS====================-->
