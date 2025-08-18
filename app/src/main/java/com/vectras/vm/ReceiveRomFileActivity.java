@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.Settings;
 import android.util.Log;
 import android.widget.Button;
@@ -97,6 +98,7 @@ public class ReceiveRomFileActivity extends AppCompatActivity {
         }
     }
     private String getFilePath(Uri _uri) {
+        String result = "";
         if (_uri.toString().contains("/file%253A%252F%252F%252F")) {
             //Decrypt 2 times by FileProvider
             try {
@@ -104,16 +106,22 @@ public class ReceiveRomFileActivity extends AppCompatActivity {
                 String decoded2 = URLDecoder.decode(decoded1, "UTF-8");
                 //No need to check and works perfectly with return decoded2.replace("file://", "");
                 if (decoded2.startsWith("/file://")) {
-                    return decoded2.replace("/file://", "");
+                    result = decoded2.replace("/file://", "");
                 } else {
-                    return decoded2.replace("file://", "");
+                    result = decoded2.replace("file://", "");
                 }
             } catch (UnsupportedEncodingException _e) {
                 _e.printStackTrace();
             }
         } else {
-            return _uri.getPath();
+            result = _uri.getPath();
         }
-        return null;
+
+        assert result != null;
+        if (result.startsWith("/external_files")) {
+            result = result.replace("/external_files", Environment.getExternalStorageDirectory().getAbsolutePath());
+        }
+
+        return result;
     }
 }

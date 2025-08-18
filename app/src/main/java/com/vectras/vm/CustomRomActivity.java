@@ -959,6 +959,7 @@ public class CustomRomActivity extends AppCompatActivity {
                 } else {
                     DialogUtils.oneDialog(CustomRomActivity.this, getResources().getString(R.string.oops), getResources().getString(R.string.error_CR_CVBI1), getResources().getString(R.string.ok), true, R.drawable.error_96px, true, null, null);
                 }
+                Log.e("Error", "CR_CVBI1: " + _filepath);
                 return;
             }
 
