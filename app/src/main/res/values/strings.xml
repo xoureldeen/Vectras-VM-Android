@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">v2.9.5 (3dfx - Zeppole)</string>
+    <string name="app_version" translatable="false">v2.9.5.1-3dfx</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -486,6 +486,7 @@
     <string name="architecture">Architecture</string>
     <string name="sizetext">Size</string>
     <string name="file_name">File name</string>
+    <string name="who_created_this_rom">Who created this rom?</string>
 
 
     <!--======================TERMUX STRINGS====================-->

@@ -56,12 +56,14 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data
-                    android:scheme="file"
-                    android:mimeType="application/x-cvbi"/>
-                <data
-                    android:scheme="content"
-                    android:mimeType="application/x-cvbi"/>
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+                <data android:mimeType="*/*" />
+                <data android:host="*" />
+                <data android:pathPattern=".*\\.cvbi" />
+                <data android:pathPattern=".*\\..*\\.cvbi" />
+                <data android:pathPattern=".*\\..*\\..*\\.cvbi" />
+                <data android:pathPattern=".*\\..*\\..*\\..*\\.cvbi" />
             </intent-filter>
         </activity>
         <activity

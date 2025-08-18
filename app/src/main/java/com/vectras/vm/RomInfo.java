@@ -8,26 +8,18 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.bumptech.glide.Glide;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.databinding.ActivityRomInfoBinding;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
-import com.vectras.vm.utils.UIUtils;
 
 import java.io.File;
 import java.util.Objects;
@@ -43,37 +35,20 @@ public class RomInfo extends AppCompatActivity {
         EdgeToEdge.enable(this);
         binding = ActivityRomInfoBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-//        UIUtils.setOnApplyWindowInsetsListener(findViewById(R.id.main));
 
-        ImageView ivIcon;
-        TextView textName;
-        TextView textSize;
-        Button btn_download;
-        Button btn_pick;
-        TextView descTxt;
-        Toolbar toolbar;
-
-        ivIcon = findViewById(R.id.ivIcon);
-        textName = findViewById(R.id.textName);
-        textSize = findViewById(R.id.textSize);
-        btn_download = findViewById(R.id.btn_download);
-        btn_pick = findViewById(R.id.btn_pick);
-        descTxt = findViewById(R.id.descTxt);
-        toolbar = findViewById(R.id.toolbar);
-
-        setSupportActionBar(toolbar);
-        toolbar.setNavigationOnClickListener(v -> {
+        setSupportActionBar(binding.toolbar);
+        binding.toolbar.setNavigationOnClickListener(v -> {
             onBackPressed();
         });
 
-        btn_download.setOnClickListener(v -> {
+        binding.btnDownload.setOnClickListener(v -> {
             Intent openurl = new Intent();
             openurl.setAction(Intent.ACTION_VIEW);
             openurl.setData(Uri.parse(getIntent().getStringExtra("getrom")));
             startActivity(openurl);
         });
 
-        btn_pick.setOnClickListener(new View.OnClickListener() {
+        binding.btnPick.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
@@ -86,20 +61,19 @@ public class RomInfo extends AppCompatActivity {
         });
 
         if (getIntent().hasExtra("title")) {
-            textName.setText(getIntent().getStringExtra("title"));
+            binding.textName.setText(getIntent().getStringExtra("title"));
         }
         if (getIntent().hasExtra("shortdesc")) {
-            textSize.setText(getIntent().getStringExtra("shortdesc"));
+            binding.textSize.setText(getIntent().getStringExtra("shortdesc"));
         }
         if (getIntent().hasExtra("desc")) {
-            descTxt.setText(getIntent().getStringExtra("desc"));
+            binding.descTxt.setText(getIntent().getStringExtra("desc"));
         }
 
         if (getIntent().hasExtra("icon")) {
-            Glide.with(this).load(getIntent().getStringExtra("icon")).placeholder(R.drawable.ic_computer_180dp_with_padding).error(R.drawable.ic_computer_180dp_with_padding).into(ivIcon);
+            Glide.with(this).load(getIntent().getStringExtra("icon")).placeholder(R.drawable.ic_computer_180dp_with_padding).error(R.drawable.ic_computer_180dp_with_padding).into(binding.ivIcon);
         }
 
-//        btn_pick.setText(getString(R.string.select) + " " + getIntent().getStringExtra("filename"));
         initialize();
     }
 
@@ -148,7 +122,14 @@ public class RomInfo extends AppCompatActivity {
                 }
                 startActivity(intent);
             } else {
-                UIUtils.oneDialog(getString(R.string.problem_has_been_detected), getString(R.string.please_select) + " " + getIntent().getStringExtra("filename"), true, false, this);
+                DialogUtils.oneDialog(RomInfo.this,
+                        getString(R.string.problem_has_been_detected),
+                        getString(R.string.please_select) + " " + getIntent().getStringExtra("filename"),
+                        getString(R.string.ok),
+                        true, R.drawable.warning_48px,
+                        true,
+                        null,
+                        null);
             }
 
         }
@@ -204,8 +185,8 @@ public class RomInfo extends AppCompatActivity {
 
         binding.lnCreator.setOnClickListener((v -> DialogUtils.oneDialog(
                 RomInfo.this,
-                getString(R.string.creator),
-                getIntent().getStringExtra("creator"),
+                getString(R.string.who_created_this_rom),
+                getIntent().getStringExtra("creator") + ".",
                 getString(R.string.ok),
                 true,
                 R.drawable.account_circle_24px,
@@ -216,7 +197,7 @@ public class RomInfo extends AppCompatActivity {
         binding.lnArch.setOnClickListener((v -> DialogUtils.oneDialog(
                 RomInfo.this,
                 getString(R.string.architecture),
-                getArchName(Objects.requireNonNull(getIntent().getStringExtra("arch"))),
+                getArchName(Objects.requireNonNull(getIntent().getStringExtra("arch"))) + ".",
                 getString(R.string.ok),
                 true,
                 R.drawable.devices_other_24px,
@@ -227,7 +208,7 @@ public class RomInfo extends AppCompatActivity {
         binding.lnSize.setOnClickListener((v -> DialogUtils.oneDialog(
                 RomInfo.this,
                 getString(R.string.sizetext),
-                getIntent().getStringExtra("size"),
+                getIntent().getStringExtra("size") + ".",
                 getString(R.string.ok),
                 true,
                 R.drawable.hard_drive_24px,
@@ -238,7 +219,7 @@ public class RomInfo extends AppCompatActivity {
         binding.lnFilename.setOnClickListener((v -> DialogUtils.oneDialog(
                 RomInfo.this,
                 getString(R.string.file_name),
-                getIntent().getStringExtra("filename"),
+                getIntent().getStringExtra("filename") + ".",
                 getString(R.string.ok),
                 true,
                 R.drawable.file_copy_24px,
@@ -247,6 +228,7 @@ public class RomInfo extends AppCompatActivity {
                 null)));
     }
 
+    @NonNull
     private String getArchName(String arch) {
         return switch (arch) {
             case "X86_64" -> getString(R.string.x86_64);
