@@ -25,10 +25,10 @@ public class DataRoms {
     public String romExtra;
     @SerializedName("desc")
     public String desc;
-    @SerializedName("filesize")
+    @SerializedName("file_size")
     public String fileSize;
     @SerializedName("creator")
     public String creator;
     @SerializedName("verified")
-    public String verified;
+    public boolean verified;
 }

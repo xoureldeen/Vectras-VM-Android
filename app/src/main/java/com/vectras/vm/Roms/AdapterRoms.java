@@ -60,7 +60,7 @@ public class AdapterRoms extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         final DataRoms current = dataRom.get(position);
         Glide.with(RomsManagerActivity.activity).load(current.romIcon).placeholder(R.drawable.ic_computer_180dp_with_padding).error(R.drawable.ic_computer_180dp_with_padding).into(myHolder.ivIcon);
         myHolder.textName.setText(current.romName);
-        myHolder.textSize.setText(current.romArch + " - " + current.romSize);
+        myHolder.textSize.setText(current.romArch + " - " + current.fileSize);
         if (current.romAvail) {
             myHolder.linearItem.setOnClickListener(v -> {
                 notifyItemRangeChanged(0, dataRom.size());
@@ -68,7 +68,7 @@ public class AdapterRoms extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 Intent intent = new Intent();
                 intent.setClass(RomsManagerActivity.activity, RomInfo.class);
                 intent.putExtra("title", current.romName);
-                intent.putExtra("shortdesc", current.romArch + " - " + current.romSize);
+                intent.putExtra("shortdesc", current.romSize);
                 intent.putExtra("getrom", current.romUrl);
                 intent.putExtra("desc", current.desc);
                 intent.putExtra("icon", current.romIcon);

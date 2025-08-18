@@ -103,13 +103,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:paddingVertical="16dp">
+                    android:paddingVertical="16dp"
+                    android:paddingHorizontal="8dp">
 
                     <LinearLayout
-                        android:layout_width="100dp"
+                        android:id="@+id/ln_verified"
+                        android:layout_width="110dp"
                         android:layout_height="wrap_content"
+                        android:paddingHorizontal="8dp"
                         android:gravity="center"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:background="?attr/selectableItemBackground">
 
                         <ImageView
                             android:id="@+id/iv_verified"
@@ -128,14 +132,17 @@
 
                     <View
                         android:layout_width="1dp"
-                        android:layout_height="20dp"
+                        android:layout_height="25dp"
                         android:background="?attr/colorSurfaceContainerHigh"/>
 
                     <LinearLayout
-                        android:layout_width="100dp"
+                        android:id="@+id/ln_creator"
+                        android:layout_width="110dp"
                         android:layout_height="wrap_content"
+                        android:paddingHorizontal="8dp"
                         android:gravity="center"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:background="?attr/selectableItemBackground">
 
                         <ImageView
                             android:layout_width="wrap_content"
@@ -153,14 +160,17 @@
 
                     <View
                         android:layout_width="1dp"
-                        android:layout_height="20dp"
+                        android:layout_height="25dp"
                         android:background="?attr/colorSurfaceContainerHigh"/>
 
                     <LinearLayout
-                        android:layout_width="100dp"
+                        android:id="@+id/ln_arch"
+                        android:layout_width="110dp"
                         android:layout_height="wrap_content"
+                        android:paddingHorizontal="8dp"
                         android:gravity="center"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:background="?attr/selectableItemBackground">
 
                         <ImageView
                             android:layout_width="wrap_content"
@@ -178,14 +188,17 @@
 
                     <View
                         android:layout_width="1dp"
-                        android:layout_height="20dp"
+                        android:layout_height="25dp"
                         android:background="?attr/colorSurfaceContainerHigh"/>
 
                     <LinearLayout
-                        android:layout_width="100dp"
+                        android:id="@+id/ln_size"
+                        android:layout_width="110dp"
                         android:layout_height="wrap_content"
+                        android:paddingHorizontal="8dp"
                         android:gravity="center"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:background="?attr/selectableItemBackground">
 
                         <ImageView
                             android:layout_width="wrap_content"
@@ -203,14 +216,17 @@
 
                     <View
                         android:layout_width="1dp"
-                        android:layout_height="20dp"
+                        android:layout_height="25dp"
                         android:background="?attr/colorSurfaceContainerHigh"/>
 
                     <LinearLayout
-                        android:layout_width="100dp"
+                        android:id="@+id/ln_filename"
+                        android:layout_width="110dp"
                         android:layout_height="wrap_content"
+                        android:paddingHorizontal="8dp"
                         android:gravity="center"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:background="?attr/selectableItemBackground">
 
                         <ImageView
                             android:layout_width="wrap_content"
