@@ -19,11 +19,11 @@
             style="?attr/collapsingToolbarLayoutLargeStyle"
             android:layout_width="match_parent"
             android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
             android:fitsSystemWindows="true"
-            app:title="@string/info"
             app:collapsedTitleTextAppearance="@style/TextAppearance.Material3.TitleMedium"
-            app:expandedTitleTextAppearance="@style/TextAppearance.Material3.DisplaySmall">
+            app:expandedTitleTextAppearance="@style/TextAppearance.Material3.DisplaySmall"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:title="@string/info">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"
@@ -31,7 +31,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:elevation="0dp"
                 app:layout_collapseMode="pin"
-                app:navigationIcon="@drawable/arrow_back_24px"/>
+                app:navigationIcon="@drawable/arrow_back_24px" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -41,95 +41,236 @@
         android:layout_height="match_parent"
         android:fillViewport="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical" >
+            android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:orientation="vertical" >
+                android:orientation="horizontal"
+                android:padding="16dp">
+
+                <com.google.android.material.card.MaterialCardView
+                    style="?attr/materialCardViewFilledStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:cardBackgroundColor="?attr/colorSurfaceContainer">
+
+                    <ImageView
+                        android:id="@+id/ivIcon"
+                        android:layout_width="84dp"
+                        android:layout_height="84dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_computer_180dp_with_padding" />
+                </com.google.android.material.card.MaterialCardView>
+
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:gravity="center"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp">
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        style="?attr/materialCardViewFilledStyle"
-                        app:cardBackgroundColor="?attr/colorSurfaceContainer">
-                        <ImageView
-                            android:id="@+id/ivIcon"
-                            android:layout_width="84dp"
-                            android:layout_height="84dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/ic_computer_180dp_with_padding"/>
-                    </com.google.android.material.card.MaterialCardView>
+                    android:paddingLeft="16dp">
+
                     <TextView
                         android:id="@+id/textName"
                         style="@android:style/Widget.TextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:paddingBottom="4dp"
                         android:text="name"
-                        android:textSize="18sp"
-                        android:gravity="center"
-                        android:padding="8dp"/>
+                        android:textSize="25sp" />
 
                     <TextView
                         android:id="@+id/textSize"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:gravity="center"
                         android:text="size"
-                        android:textSize="14sp"
-                        android:gravity="center" />
+                        android:textSize="14sp" />
                 </LinearLayout>
+
+            </LinearLayout>
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal" >
-                    <Button
-                        android:id="@+id/btn_download"
-                        style="@style/Widget.Material3Expressive.Button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:text="@string/getit"
-                        android:layout_weight="1" />
+                    android:gravity="center_vertical"
+                    android:paddingVertical="16dp">
 
-                    <Button
-                        android:id="@+id/btn_pick"
-                        style="@style/Widget.Material3Expressive.Button"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="100dp"
                         android:layout_height="wrap_content"
-                        android:layout_margin="8dp"
-                        android:text="@string/select"
-                        android:layout_weight="1" />
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/iv_verified"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/verified_user_24px" />
+
+                        <TextView
+                            android:id="@+id/tv_verified"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:singleLine="true"
+                            android:text="@string/verified" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="20dp"
+                        android:background="?attr/colorSurfaceContainerHigh"/>
+
+                    <LinearLayout
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/account_circle_24px" />
+
+                        <TextView
+                            android:id="@+id/tv_creator"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:singleLine="true"
+                            android:text="@string/unknow" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="20dp"
+                        android:background="?attr/colorSurfaceContainerHigh"/>
+
+                    <LinearLayout
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/devices_other_24px" />
+
+                        <TextView
+                            android:id="@+id/tv_arch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:singleLine="true"
+                            android:text="@string/unknow" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="20dp"
+                        android:background="?attr/colorSurfaceContainerHigh"/>
+
+                    <LinearLayout
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/hard_drive_24px" />
+
+                        <TextView
+                            android:id="@+id/tv_size"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:singleLine="true"
+                            android:text="@string/unknow" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="20dp"
+                        android:background="?attr/colorSurfaceContainerHigh"/>
+
+                    <LinearLayout
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/file_copy_24px" />
+
+                        <TextView
+                            android:id="@+id/tv_filename"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:singleLine="true"
+                            android:text="@string/unknow" />
+                    </LinearLayout>
                 </LinearLayout>
+            </HorizontalScrollView>
 
-                <TextView
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="8dp"
+                android:paddingHorizontal="16dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_download"
+                    style="@style/Widget.Material3Expressive.Button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:text="@string/description"
-                    android:textSize="18sp"
-                    android:layout_margin="8dp" />
+                    android:layout_marginRight="4dp"
+                    android:layout_weight="1"
+                    android:text="@string/getit" />
 
-                <TextView
-                    android:id="@+id/descTxt"
+                <Button
+                    android:id="@+id/btn_pick"
+                    style="@style/Widget.Material3Expressive.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:autoLink="all"
-                    android:linksClickable="true"
-                    android:textIsSelectable="true"
-                    android:textSize="14sp"
-                    android:layout_margin="8dp" />
+                    android:layout_marginLeft="4dp"
+                    android:layout_weight="1"
+                    android:text="@string/import_settings" />
             </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="8dp"
+                android:paddingHorizontal="16dp"
+                android:text="@string/description"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/descTxt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="8dp"
+                android:paddingHorizontal="16dp"
+                android:autoLink="all"
+                android:linksClickable="true"
+                android:textIsSelectable="true" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

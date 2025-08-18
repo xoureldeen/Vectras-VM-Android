@@ -475,6 +475,11 @@
     <string name="import_or_choose_an_architecture_to_start_creating">Import or choose an architecture to start creating.</string>
     <string name="set_arch_universal_note">You can drag and drop cvbi file and Import card to import.</string>
     <string name="copy">Copy</string>
+    <string name="search">Search</string>
+    <string name="no_matching_results_found">No matching results found.</string>
+    <string name="unknow">Unknow</string>
+    <string name="verified">Verified</string>
+    <string name="not_verified">Not verified</string>
 
 
     <!--======================TERMUX STRINGS====================-->
