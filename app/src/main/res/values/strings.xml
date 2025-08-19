@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">v2.9.5.2-3dfx</string>
+    <string name="app_version" translatable="false">v2.9.5.3-3dfx</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -105,7 +105,7 @@
     <string name="privacy_amp_policy"><![CDATA[Privacy & Policy]]></string>
     <string name="permission_title">Permission Required!</string>
     <string name="permission_notification_text">Due to android policy, notification permissions are needed, to send vm notifications!</string>
-    <string name="mouse_mode">Mouse Mode</string>
+    <string name="mouse_mode">Mouse mode</string>
     <string name="export">Export</string>
     <string name="email_verification_sent">Email Verification Sent.</string>
     <string name="sign_out">Sign out</string>
@@ -240,7 +240,7 @@
     <string name="downloaded_successfully">Downloaded Successfully!</string>
     <string name="app_settings">APP SETTINGS</string>
     <string name="main_app_settings">main app settings.</string>
-    <string name="user_interface">USER INTERFACE</string>
+    <string name="user_interface">User interface</string>
     <string name="themes_and_ui">themes and ui.</string>
     <string name="emulation_settings">emulation settings.</string>
     <string name="vnc" translatable="false">VNC</string>
@@ -489,6 +489,17 @@
     <string name="who_created_this_rom">Who created this rom?</string>
     <string name="setup_command">Setup command</string>
     <string name="later">Later</string>
+    <string name="cdrom">CDROM</string>
+    <string name="floppy_drive">Floppy drive</string>
+    <string name="floppy_drive_a">Floppy drive A</string>
+    <string name="floppy_drive_b">Floppy drive B</string>
+    <string name="sd_card">SD card</string>
+    <string name="no_support_for_arm">No support for ARM.</string>
+    <string name="change_removable_devices">Change removable devices</string>
+    <string name="ejected">Ejected.</string>
+    <string name="eject_failed">Eject failed.</string>
+    <string name="changed">Changed.</string>
+    <string name="change_failed">Change failed.</string>
 
 
     <!--======================TERMUX STRINGS====================-->

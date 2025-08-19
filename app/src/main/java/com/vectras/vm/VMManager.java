@@ -1,23 +1,31 @@
 package com.vectras.vm;
 
+import static android.content.Intent.ACTION_OPEN_DOCUMENT;
 import static com.vectras.vm.utils.FileUtils.isFileExists;
 
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.GridLayoutManager;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
+import com.vectras.qemu.utils.QmpClient;
 import com.vectras.vm.MainRoms.AdapterMainRoms;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
@@ -33,11 +41,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class VMManager {
 
+    public static final String TAG = "VMManager";
     public static HashMap<String, Object> mapForCreateNewVM = new HashMap<>();
     public static ArrayList<HashMap<String, Object>> listmapForCreateNewVM = new ArrayList<>();
     public static ArrayList<HashMap<String, Object>> listmapForRemoveVM = new ArrayList<>();
@@ -50,6 +57,7 @@ public class VMManager {
     public static boolean isKeptSomeFiles = false;
 
     public static String latestUnsafeCommandReason = "";
+    public static String lastQemuCommand = "";
 
     public static void createNewVM(String name, String thumbnail, String drive, String arch, String cdrom, String params, String vmID, int port) {
         mapForCreateNewVM.clear();
@@ -330,8 +338,8 @@ public class VMManager {
 
     public static void restoreVMs() {
         int _startRepeat = 0;
-        String _resulttemp ="";
-        String _result ="";
+        StringBuilder _resulttemp = new StringBuilder();
+        StringBuilder _result = new StringBuilder();
         restoredVMs = 0;
         ArrayList<String> _filelist = new ArrayList<>();
         FileUtils.getAListOfAllFilesAndFoldersInADirectory(AppConfig.vmFolder, _filelist);
@@ -341,16 +349,16 @@ public class VMManager {
                     if (!isFileExists(_filelist.get((int)(_startRepeat)) + "/vmID.txt")) {
                         if (isFileExists(_filelist.get((int)(_startRepeat)) + "/rom-data.json")) {
                             if (JSONUtils.isMapValidFromString(FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json"))) {
-                                if (_resulttemp.contains("}")) {
-                                    _resulttemp += "," + FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
+                                if (_resulttemp.toString().contains("}")) {
+                                    _resulttemp.append(",").append(FileUtils.readAFile(_filelist.get((int) (_startRepeat)) + "/rom-data.json"));
                                 } else {
-                                    _resulttemp = FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
+                                    _resulttemp = new StringBuilder(FileUtils.readAFile(_filelist.get((int) (_startRepeat)) + "/rom-data.json"));
                                 }
                                 if (JSONUtils.isValidFromString(FileUtils.readAFile(AppConfig.maindirpath + "/roms-data.json").replaceAll("]", _resulttemp + "]"))) {
-                                    if (_result.contains("}")) {
-                                        _result += "," + FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
+                                    if (_result.toString().contains("}")) {
+                                        _result.append(",").append(FileUtils.readAFile(_filelist.get((int) (_startRepeat)) + "/rom-data.json"));
                                     } else {
-                                        _result = FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
+                                        _result = new StringBuilder(FileUtils.readAFile(_filelist.get((int) (_startRepeat)) + "/rom-data.json"));
                                     }
                                     if (isFileExists(_filelist.get((int)(_startRepeat)) + "/vmID.old.txt")) {
                                         enableVMID(FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/vmID.old.txt"));
@@ -359,10 +367,10 @@ public class VMManager {
                                     }
                                     restoredVMs++;
                                 } else if (JSONUtils.isValidFromString(FileUtils.readAFile(AppConfig.maindirpath + "/roms-data.json").replaceAll("]", "," + _resulttemp + "]"))) {
-                                    if (_result.contains("}")) {
-                                        _result += "," + FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
+                                    if (_result.toString().contains("}")) {
+                                        _result.append(",").append(FileUtils.readAFile(_filelist.get((int) (_startRepeat)) + "/rom-data.json"));
                                     } else {
-                                        _result = "," + FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
+                                        _result = new StringBuilder("," + FileUtils.readAFile(_filelist.get((int) (_startRepeat)) + "/rom-data.json"));
                                     }
                                     if (isFileExists(_filelist.get((int)(_startRepeat)) + "/vmID.old.txt")) {
                                         enableVMID(FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/vmID.old.txt"));
@@ -379,7 +387,7 @@ public class VMManager {
 
                     _startRepeat++;
                     if (_startRepeat == _filelist.size()) {
-                        if (!_result.isEmpty()) {
+                        if (_result.length() > 0) {
                             if (JSONUtils.isValidFromString("[" + _result + "]")) {
                                 if (isFileExists(AppConfig.romsdatajson)) {
                                     if (JSONUtils.isValidFromFile(AppConfig.romsdatajson)) {
@@ -411,8 +419,8 @@ public class VMManager {
 
     public static void startFixRomsDataJson() {
         int _startRepeat = 0;
-        String _resulttemp ="";
-        String _result ="";
+        StringBuilder _resulttemp = new StringBuilder();
+        StringBuilder _result = new StringBuilder();
         restoredVMs = 0;
         ArrayList<String> _filelist = new ArrayList<>();
         FileUtils.getAListOfAllFilesAndFoldersInADirectory(AppConfig.vmFolder, _filelist);
@@ -422,23 +430,23 @@ public class VMManager {
                     if (isFileExists(_filelist.get((int)(_startRepeat)) + "/vmID.txt")) {
                         if (isFileExists(_filelist.get((int)(_startRepeat)) + "/rom-data.json")) {
                             if (JSONUtils.isMapValidFromString(FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json"))) {
-                                if (_resulttemp.contains("}")) {
-                                    _resulttemp += "," + FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
+                                if (_resulttemp.toString().contains("}")) {
+                                    _resulttemp.append(",").append(FileUtils.readAFile(_filelist.get((int) (_startRepeat)) + "/rom-data.json"));
                                 } else {
-                                    _resulttemp = FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
+                                    _resulttemp = new StringBuilder(FileUtils.readAFile(_filelist.get((int) (_startRepeat)) + "/rom-data.json"));
                                 }
                                 if (JSONUtils.isValidFromString(FileUtils.readAFile(AppConfig.maindirpath + "/roms-data.json").replaceAll("]", _resulttemp + "]"))) {
-                                    if (_result.contains("}")) {
-                                        _result += "," + FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
+                                    if (_result.toString().contains("}")) {
+                                        _result.append(",").append(FileUtils.readAFile(_filelist.get((int) (_startRepeat)) + "/rom-data.json"));
                                     } else {
-                                        _result = FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
+                                        _result = new StringBuilder(FileUtils.readAFile(_filelist.get((int) (_startRepeat)) + "/rom-data.json"));
                                     }
                                     restoredVMs++;
                                 } else if (JSONUtils.isValidFromString(FileUtils.readAFile(AppConfig.maindirpath + "/roms-data.json").replaceAll("]", "," + _resulttemp + "]"))) {
-                                    if (_result.contains("}")) {
-                                        _result += "," + FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
+                                    if (_result.toString().contains("}")) {
+                                        _result.append(",").append(FileUtils.readAFile(_filelist.get((int) (_startRepeat)) + "/rom-data.json"));
                                     } else {
-                                        _result = "," + FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json");
+                                        _result = new StringBuilder("," + FileUtils.readAFile(_filelist.get((int) (_startRepeat)) + "/rom-data.json"));
                                     }
                                     restoredVMs++;
                                 } else {
@@ -450,7 +458,7 @@ public class VMManager {
 
                     _startRepeat++;
                     if (_startRepeat == _filelist.size()) {
-                        if (!_result.isEmpty()) {
+                        if (_result.length() > 0) {
                             if (JSONUtils.isValidFromString("[" + _result + "]")) {
                                 if (isFileExists(AppConfig.romsdatajson)) {
                                     if (JSONUtils.isValidFromFile(AppConfig.romsdatajson)) {
@@ -670,7 +678,7 @@ public class VMManager {
         } else {
             DialogUtils.oneDialog(_context, _context.getString(R.string.done), _context.getString(R.string.roms_data_json_fixed_successfully), _context.getString(R.string.ok),true, R.drawable.check_24px, true,null, null);
         }
-        MainActivity.loadDataVbi();
+        MainActivity.mMainAdapter.notifyDataSetChanged();
         MainActivity.mdatasize2();
         movetoRecycleBin();
     }
@@ -760,9 +768,7 @@ public class VMManager {
     }
 
     public static boolean isHaveADisk(String env) {
-        if (env.contains("-drive") || env.contains("-hda")  || env.contains("-hdb") || env.contains("-cdrom") || env.contains("-fda") || env.contains("-fdb"))
-            return true;
-        return false;
+        return env.contains("-drive") || env.contains("-hda") || env.contains("-hdb") || env.contains("-cdrom") || env.contains("-fda") || env.contains("-fdb");
     }
 
     public static void setIconWithName(ImageView imageview, String name) {
@@ -811,5 +817,262 @@ public class VMManager {
         vterm.executeShellCommand2("killall -9 qemu-system-x86_64", false, MainActivity.activity);
         vterm.executeShellCommand2("killall -9 qemu-system-aarch64", false, MainActivity.activity);
         vterm.executeShellCommand2("killall -9 qemu-system-ppc", false, MainActivity.activity);
+    }
+
+    public static void shutdownCurrentVM() {
+        QmpClient.sendCommand("quit");
+    }
+
+    public static void showChangeRemovableDevicesDialog(Activity _activity, boolean isMainVNCActivity) {
+
+        View _view = LayoutInflater.from(_activity).inflate(R.layout.dialog_change_removable_devices, null);
+        AlertDialog _dialog = new MaterialAlertDialogBuilder(_activity, R.style.CenteredDialogTheme)
+                .setView(_view)
+                .create();
+
+        if (getAllDevicesInQemu().contains("ide1-cd0")
+                || getAllDevicesInQemu().contains("ide2-cd0")
+                || getAllDevicesInQemu().contains("floppy0")
+                || getAllDevicesInQemu().contains("floppy1")
+                || getAllDevicesInQemu().contains("sd0")) {
+
+            if (getAllDevicesInQemu().contains("ide1-cd0")
+                    || getAllDevicesInQemu().contains("ide2-cd0")) {
+
+                _view.findViewById(R.id.ln_cdrom).setOnClickListener(v -> {
+                    Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    intent.setType("*/*");
+                    _activity.startActivityForResult(intent, 120);
+                    _dialog.dismiss();
+                });
+
+                _view.findViewById(R.id.iv_ejectcdrom).setOnClickListener(v -> {
+                    ejectCDROM(_activity);
+                    _dialog.dismiss();
+                });
+            } else {
+                _view.findViewById(R.id.ln_cdrom).setVisibility(View.GONE);
+            }
+
+            if (getAllDevicesInQemu().contains("floppy0")) {
+                _view.findViewById(R.id.ln_fda).setOnClickListener(v -> {
+                    Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    intent.setType("*/*");
+                    _activity.startActivityForResult(intent, 889);
+                    _dialog.dismiss();
+                });
+
+                _view.findViewById(R.id.iv_ejectfda).setOnClickListener(v -> {
+                    ejectFloppyDriveA(_activity);
+                    _dialog.dismiss();
+                });
+
+                if (!getAllDevicesInQemu().contains("floppy1")) {
+                    TextView tvFda = _view.findViewById(R.id.tv_fda);
+                    tvFda.setText(R.string.floppy_drive);
+                }
+            } else {
+                _view.findViewById(R.id.ln_fda).setVisibility(View.GONE);
+            }
+
+            if (getAllDevicesInQemu().contains("floppy1")) {
+                _view.findViewById(R.id.ln_fdb).setOnClickListener(v -> {
+                    Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    intent.setType("*/*");
+                    _activity.startActivityForResult(intent, 13335);
+                    _dialog.dismiss();
+                });
+
+                _view.findViewById(R.id.iv_ejectfdb).setOnClickListener(v -> {
+                    ejectFloppyDriveB(_activity);
+                    _dialog.dismiss();
+                });
+
+                if (!getAllDevicesInQemu().contains("floppy0")) {
+                    TextView tvFdb = _view.findViewById(R.id.tv_fdb);
+                    tvFdb.setText(R.string.floppy_drive);
+                }
+            } else {
+                _view.findViewById(R.id.ln_fdb).setVisibility(View.GONE);
+            }
+
+            if (getAllDevicesInQemu().contains("sd0")) {
+                _view.findViewById(R.id.ln_sd).setOnClickListener(v -> {
+                    Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
+                    intent.addCategory(Intent.CATEGORY_OPENABLE);
+                    intent.setType("*/*");
+                    _activity.startActivityForResult(intent, 32);
+                    _dialog.dismiss();
+                });
+
+                _view.findViewById(R.id.iv_ejectsd).setOnClickListener(v -> {
+                    ejectSDCard(_activity);
+                    _dialog.dismiss();
+                });
+            } else {
+                _view.findViewById(R.id.ln_sd).setVisibility(View.GONE);
+            }
+        } else {
+            _view.findViewById(R.id.ln_removable_devices).setVisibility(View.GONE);
+        }
+
+        if (isMainVNCActivity) {
+            _view.findViewById(R.id.ln_mouse).setOnClickListener(v -> {
+                final Dialog alertDialog = new Dialog(_activity, R.style.MainDialogTheme);
+                alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                Objects.requireNonNull(alertDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                alertDialog.setContentView(R.layout.dialog_setting);
+                alertDialog.show();
+                _dialog.dismiss();
+            });
+        } else {
+            _view.findViewById(R.id.ln_user_interface).setVisibility(View.GONE);
+        }
+
+        _dialog.show();
+    }
+
+    public static void changeCDROM(String _path, Activity _activity) {
+        if (isUsingQ35(lastQemuCommand)) {
+            if (isQMPCommandSuccess(QmpClient.sendCommand(changeRemovableDevicesQMPCommand("ide2-cd0", _path)))) {
+                if (_activity != null && !_activity.isFinishing())
+                    Toast.makeText(_activity, _activity.getString(R.string.changed), Toast.LENGTH_SHORT).show();
+            } else {
+                if (_activity != null && !_activity.isFinishing())
+                    Toast.makeText(_activity, _activity.getString(R.string.change_failed), Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            if (isQMPCommandSuccess(QmpClient.sendCommand(changeRemovableDevicesQMPCommand("ide1-cd0", _path)))) {
+                if (_activity != null && !_activity.isFinishing())
+                    Toast.makeText(_activity, _activity.getString(R.string.changed), Toast.LENGTH_SHORT).show();
+            } else {
+                if (_activity != null && !_activity.isFinishing())
+                    Toast.makeText(_activity, _activity.getString(R.string.change_failed), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    public static void changeFloppyDriveA(String _path, Activity _activity) {
+        if (isQMPCommandSuccess(QmpClient.sendCommand(changeRemovableDevicesQMPCommand("floppy0", _path)))) {
+            if (_activity != null && !_activity.isFinishing())
+                Toast.makeText(_activity, _activity.getString(R.string.changed), Toast.LENGTH_SHORT).show();
+        } else {
+            if (_activity != null && !_activity.isFinishing())
+                Toast.makeText(_activity, _activity.getString(R.string.change_failed), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public static void changeFloppyDriveB(String _path, Activity _activity) {
+        if (isQMPCommandSuccess(QmpClient.sendCommand(changeRemovableDevicesQMPCommand("floppy1", _path)))) {
+            if (_activity != null && !_activity.isFinishing())
+                Toast.makeText(_activity, _activity.getString(R.string.changed), Toast.LENGTH_SHORT).show();
+        } else {
+            if (_activity != null && !_activity.isFinishing())
+                Toast.makeText(_activity, _activity.getString(R.string.change_failed), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public static void changeSDCard(String _path, Activity _activity) {
+        if (isQMPCommandSuccess(QmpClient.sendCommand(changeRemovableDevicesQMPCommand("sd0", _path)))) {
+            if (_activity != null && !_activity.isFinishing())
+                Toast.makeText(_activity, _activity.getString(R.string.changed), Toast.LENGTH_SHORT).show();
+        } else {
+            if (_activity != null && !_activity.isFinishing())
+                Toast.makeText(_activity, _activity.getString(R.string.change_failed), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public static void ejectCDROM(Activity _activity) {
+        if (isUsingQ35(lastQemuCommand)) {
+            if (isQMPCommandSuccess(QmpClient.sendCommand(ejectRemovableDevicesQMPCommand("ide2-cd0")))) {
+                if (_activity != null && !_activity.isFinishing())
+                    Toast.makeText(_activity, _activity.getString(R.string.ejected), Toast.LENGTH_SHORT).show();
+            } else {
+                if (_activity != null && !_activity.isFinishing())
+                    Toast.makeText(_activity, _activity.getString(R.string.eject_failed), Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            if (isQMPCommandSuccess(QmpClient.sendCommand(ejectRemovableDevicesQMPCommand("ide1-cd0")))) {
+                if (_activity != null && !_activity.isFinishing())
+                    Toast.makeText(_activity, _activity.getString(R.string.ejected), Toast.LENGTH_SHORT).show();
+            } else {
+                if (_activity != null && !_activity.isFinishing())
+                    Toast.makeText(_activity, _activity.getString(R.string.eject_failed), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    public static void ejectFloppyDriveA(Activity _activity) {
+        if (isQMPCommandSuccess(QmpClient.sendCommand(ejectRemovableDevicesQMPCommand("floppy0")))) {
+            if (_activity != null && !_activity.isFinishing())
+                Toast.makeText(_activity, _activity.getString(R.string.ejected), Toast.LENGTH_SHORT).show();
+        } else {
+            if (_activity != null && !_activity.isFinishing())
+                Toast.makeText(_activity, _activity.getString(R.string.eject_failed), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public static void ejectFloppyDriveB(Activity _activity) {
+        if (isQMPCommandSuccess(QmpClient.sendCommand(ejectRemovableDevicesQMPCommand("floppy1")))) {
+            if (_activity != null && !_activity.isFinishing())
+                Toast.makeText(_activity, _activity.getString(R.string.ejected), Toast.LENGTH_SHORT).show();
+        } else {
+            if (_activity != null && !_activity.isFinishing())
+                Toast.makeText(_activity, _activity.getString(R.string.eject_failed), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public static void ejectSDCard(Activity _activity) {
+        if (isQMPCommandSuccess(QmpClient.sendCommand(ejectRemovableDevicesQMPCommand("sd0")))) {
+            if (_activity != null && !_activity.isFinishing())
+                Toast.makeText(_activity, _activity.getString(R.string.ejected), Toast.LENGTH_SHORT).show();
+        } else {
+            if (_activity != null && !_activity.isFinishing())
+                Toast.makeText(_activity, _activity.getString(R.string.eject_failed), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public static String changeRemovableDevicesQMPCommand(String device, String filePath) {
+        return "{ \n" +
+                "  \"execute\": \"blockdev-change-medium\", \n" +
+                "  \"arguments\": { \n" +
+                "    \"device\": \"" + device + "\", \n" +
+                "    \"filename\": \"" + filePath + "\", \n" +
+                "    \"format\": \"raw\" \n" +
+                "  } \n" +
+                "}";
+    }
+
+
+    public static String ejectRemovableDevicesQMPCommand(String device) {
+        return "{ \"execute\": \"eject\", \"arguments\": { \"device\": \""+ device +"\" } }";
+    }
+
+    public static String getAllDevicesInQemu() {
+        return QmpClient.sendCommand("{ \"execute\": \"query-block\" }");
+    }
+
+    public static boolean isQMPCommandSuccess(String _result) {
+        Log.d("VMManager", "isQMPCommandSuccess: " + _result);
+        return _result.contains("\"return\": {}");
+    }
+
+
+    public static boolean isUsingQemuARM(String _qemuCommand) {
+        return _qemuCommand.contains("qemu-system-a");
+    }
+
+    public static boolean isUsingQemuPowerPC(String _qemuCommand) {
+        return _qemuCommand.contains("qemu-system-p");
+    }
+
+    public static boolean isUsingQ35(String _qemuCommand) {
+        return _qemuCommand.contains("-M q35")
+                || _qemuCommand.contains("-machine q35")
+                || _qemuCommand.contains("-M pc-q35")
+                || _qemuCommand.contains("-machine pc-q35");
     }
 }

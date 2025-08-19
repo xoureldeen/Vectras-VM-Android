@@ -23,6 +23,7 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Point;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -59,11 +60,13 @@ import com.vectras.vm.Fragment.ControlersOptionsFragment;
 import com.vectras.vm.Fragment.LoggerDialogFragment;
 import com.vectras.vm.R;
 import com.vectras.vm.utils.DialogUtils;
+import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.ListUtils;
 import com.vectras.vm.utils.NetworkUtils;
 import com.vectras.vm.utils.UIUtils;
 import com.vectras.vm.widgets.JoystickView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -352,11 +355,6 @@ public class MainVNCActivity extends VncCanvasActivity {
             public void onClick(View v) {
                 DialogUtils.twoDialog(activity, getString(R.string.shutdown), getString(R.string.are_you_sure_you_want_to_shutdown_vm), getString(R.string.yes), getString(R.string.cancel), true, R.drawable.power_settings_new_24px, true,
                         () -> {
-                            started = false;
-                            // Stop the service
-                            MainService.stopService();
-                            //Terminal.killQemuProcess();
-                            //VectrasApp.killcurrentqemuprocess(getApplicationContext());
                             shutdownthisvm();
                         }, null, null);
             }
@@ -417,11 +415,7 @@ public class MainVNCActivity extends VncCanvasActivity {
         settingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Dialog alertDialog = new Dialog(activity, R.style.MainDialogTheme);
-                alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                alertDialog.setContentView(R.layout.dialog_setting);
-                alertDialog.show();
+                VMManager.showChangeRemovableDevicesDialog(MainVNCActivity.this, true);
             }
         });
         upBtn.setOnTouchListener(new View.OnTouchListener() {
@@ -1422,25 +1416,10 @@ public class MainVNCActivity extends VncCanvasActivity {
     private void shutdownthisvm() {
         started = false;
         sendtextEdittext.setEnabled(false);
-        vncCanvas.sendMetaKey1(50, 6);
-        timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_Q));
-                dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_Q));
-                dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_U));
-                dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_U));
-                dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_I));
-                dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_I));
-                dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_T));
-                dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_T));
-                dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
-                dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_ENTER));
-                Config.setDefault();
-                finish();
-            }
-        };
-        _timer.schedule(timerTask, 1000);
+        VMManager.shutdownCurrentVM();
+        Config.setDefault();
+        MainService.stopService();
+        finish();
     }
 
     private void sendkeydialog() {
@@ -1548,5 +1527,33 @@ public class MainVNCActivity extends VncCanvasActivity {
         }
 
         return super.onTouchEvent(event);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            Uri content_describer = data.getData();
+            File selectedFilePath = new File(getPath(content_describer));
+
+            switch (requestCode) {
+                case 120:
+                    VMManager.changeCDROM(selectedFilePath.getAbsolutePath(), MainVNCActivity.this);
+                    break;
+                case 889:
+                    VMManager.changeFloppyDriveA(selectedFilePath.getAbsolutePath(), MainVNCActivity.this);
+                    break;
+                case 13335:
+                    VMManager.changeFloppyDriveB(selectedFilePath.getAbsolutePath(), MainVNCActivity.this);
+                    break;
+                case 32:
+                    VMManager.changeSDCard(selectedFilePath.getAbsolutePath(), MainVNCActivity.this);
+                    break;
+            }
+        }
+    }
+
+    public String getPath(Uri uri) {
+        return FileUtils.getPath(this, uri);
     }
 }

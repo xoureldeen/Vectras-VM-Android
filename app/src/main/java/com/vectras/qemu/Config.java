@@ -150,7 +150,7 @@ public class Config {
     public static boolean processMouseHistoricalEvents = false;
 
     public static String getLocalQMPSocketPath() {
-        return Config.getCacheDir()+"/qmpsocket";
+        return Config.getCacheDir() + "/" + vmID + "/qmpsocket";
     }
 
     public static String getLocalVNCSocketPath() {

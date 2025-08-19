@@ -105,6 +105,8 @@
         </activity>
         <activity
             android:name=".MainActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:windowSoftInputMode="stateHidden"
             android:exported="true"
             android:hardwareAccelerated="true" />
         <activity
@@ -162,6 +164,7 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".CustomRomActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".DataExplorerActivity"
@@ -169,6 +172,7 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".SetArchActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
             android:label="Set Qemu Version"
             android:theme="@style/AppTheme" />
 
