@@ -654,6 +654,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        int spanCount = newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 2;
+        mRVMainRoms.setLayoutManager(new GridLayoutManager(this, spanCount));
+    }
+
+    @Override
     public void onDestroy() {
         isActivate = false;
         super.onDestroy();
@@ -765,7 +773,7 @@ public class MainActivity extends AppCompatActivity {
         VectrasStatus.logInfo(String.format(error));
     }
 
-    public static void loadDataVbi() {
+    private void loadDataVbi() {
         data = new ArrayList<>();
 
         try {
@@ -815,11 +823,11 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // Setup and Handover data to recyclerview
-            mRVMainRoms = (RecyclerView) activity.findViewById(R.id.mRVMainRoms);
-            mMainAdapter = new AdapterMainRoms(MainActivity.activity, data);
+            mRVMainRoms = findViewById(R.id.mRVMainRoms);
+            mMainAdapter = new AdapterMainRoms(this, data);
             mRVMainRoms.setAdapter(mMainAdapter);
-            int spanCount = activity.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 2;
-            mRVMainRoms.setLayoutManager(new GridLayoutManager(MainActivity.activity, spanCount));
+            int spanCount = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 2;
+            mRVMainRoms.setLayoutManager(new GridLayoutManager(this, spanCount));
         } catch (JSONException e) {
         }
     }
@@ -944,6 +952,8 @@ public class MainActivity extends AppCompatActivity {
             DialogUtils.oneDialog(activity, activity.getString(R.string.problem_has_been_detected), activity.getString(R.string.harmful_command_was_detected) + " " + activity.getResources().getString(R.string.reason) + ": " + VMManager.latestUnsafeCommandReason, activity.getString(R.string.ok), true, R.drawable.verified_user_24px, true, null, null);
             return;
         }
+
+        VMManager.lastQemuCommand = env;
 
         if (VMManager.isThisVMRunning(itemExtra, itemPath)) {
             Toast.makeText(activity, "This VM is already running.", Toast.LENGTH_LONG).show();
@@ -1138,6 +1148,7 @@ public class MainActivity extends AppCompatActivity {
                     StartVM.cdrompath = "";
                     String env = StartVM.env(MainActivity.activity, AppConfig.pendingCommand, "", "1");
                     MainActivity.startVM("Quick run", env, AppConfig.pendingCommand, "");
+                    VMManager.lastQemuCommand = AppConfig.pendingCommand;
                 }
             }
             AppConfig.pendingCommand = "";
