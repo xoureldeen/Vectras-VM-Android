@@ -152,6 +152,12 @@
                     android:src="@drawable/content_copy_24px"
                     android:background="?attr/selectableItemBackgroundBorderless"/>
             </LinearLayout>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"/>
+
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">

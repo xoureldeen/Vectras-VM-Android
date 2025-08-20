@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">v2.9.5.3-3dfx</string>
+    <string name="app_version" translatable="false">v2.9.5.4-3dfx</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -473,7 +473,7 @@
     <string name="create_command">Create command</string>
     <string name="note_for_selecting_create_command">Create new virtual machines for Vectras VM with easier customization.</string>
     <string name="import_or_choose_an_architecture_to_start_creating">Import or choose an architecture to start creating.</string>
-    <string name="set_arch_universal_note">You can drag and drop cvbi file and Import card to import.</string>
+    <string name="set_arch_universal_note">You can drag and drop cvbi file to Import card to import.</string>
     <string name="copy">Copy</string>
     <string name="search">Search</string>
     <string name="no_matching_results_found">No matching results found.</string>
@@ -500,6 +500,26 @@
     <string name="eject_failed">Eject failed.</string>
     <string name="changed">Changed.</string>
     <string name="change_failed">Change failed.</string>
+    <string name="enter_device_id">Enter device ID</string>
+    <string name="eject">Eject</string>
+    <string name="change_or_eject_other_device">Change or eject other device</string>
+    <string name="change_or_eject_a_device">Change or eject a device</string>
+    <string name="change_a_removable_device">Change a removable device</string>
+    <string name="change_disk_file">Change disk file</string>
+    <string name="you_need_to_enter_the_device_id">You need to enter the device ID.</string>
+    <string name="this_is_not_a_removable_device">This is not a removable device.</string>
+    <string name="power">Power</string>
+    <string name="shutdown_or_reset_content">Do you want to shut down or reset? This can cause some unexpected problems for the virtual machine. You can leave without shutting down by pressing and holding the exit button or pressing the back key.</string>
+    <string name="external">External</string>
+    <string name="use_external_vnc_server">Use external VNC Server</string>
+    <string name="enter_display_number_hint">Enter display number (Recommended 0 – 9)</string>
+    <string name="the_vnc_port_you_need_to_connect_to_is">The VNC port you need to connect to is</string>
+    <string name="need_to_set_smaller_screen_number">Need to set smaller screen number</string>
+    <string name="leave_password_blank_hint">Leave password blank if you do not want to set a password.</string>
+    <string name="the_vnc_server_port_you_set_is_currently_in_use_by_other">The VNC Server port you set is currently in use by another virtual machine, app, or service. You can change the settings and run the virtual machine again.</string>
+    <string name="go_to_settings">Go to settings</string>
+    <string name="you_need_to_set_a_number_for_the_display">You need to set a number for the display.</string>
+    <string name="stop">Stop</string>
 
 
     <!--======================TERMUX STRINGS====================-->

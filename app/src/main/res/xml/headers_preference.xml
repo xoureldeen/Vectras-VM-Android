@@ -22,10 +22,13 @@
         app:iconSpaceReserved="false" />
     <Preference
         android:key="vnc"
-        android:fragment="com.vectras.qemu.MainSettingsManager$VncPreferencesFragment"
         android:title="@string/vnc_server"
         android:summary="@string/vnc_settings_description"
-        app:iconSpaceReserved="false" />
+        app:iconSpaceReserved="false">
+        <intent
+            android:targetPackage="com.vectras.vm"
+            android:targetClass="com.vectras.vm.settings.VNCActivity" />
+    </Preference>
     <Preference
         android:key="x11"
         android:fragment="com.vectras.vm.x11.LoriePreferences$LoriePreferenceFragment"

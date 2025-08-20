@@ -49,13 +49,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name="com.vectras.vm.settings.VNCActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:exported="false"
+            android:hardwareAccelerated="true" />
+        <activity
             android:name=".ReceiveRomFileActivity"
             android:exported="true"
-            android:label="@string/importRom" >
+            android:label="@string/importRom">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="file" />
                 <data android:scheme="content" />
                 <data android:mimeType="*/*" />
@@ -90,13 +97,12 @@
             android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
             android:exported="false"
             android:hardwareAccelerated="true"
-            android:windowSoftInputMode="stateHidden" />
-        <!--uiMode so that FlashActivity does not automatically restart when changing themes, causing MainActivity to be called twice.-->
+            android:windowSoftInputMode="stateHidden" /> <!-- uiMode so that FlashActivity does not automatically restart when changing themes, causing MainActivity to be called twice. -->
         <activity
             android:name=".SplashActivity"
+            android:configChanges="uiMode|orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
             android:exported="true"
-            android:hardwareAccelerated="true"
-            android:configChanges="uiMode|orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout">
+            android:hardwareAccelerated="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -106,9 +112,9 @@
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
-            android:windowSoftInputMode="stateHidden"
             android:exported="true"
-            android:hardwareAccelerated="true" />
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".SetupQemuActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
@@ -118,10 +124,10 @@
         <activity
             android:name=".RomsManagerActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
-            android:windowSoftInputMode="adjustResize"
             android:exported="false"
             android:hardwareAccelerated="true"
-            android:label="Roms" />
+            android:label="Roms"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".AboutActivity"
             android:exported="true"
@@ -179,12 +185,10 @@
         <service
             android:name=".MainService"
             android:exported="false" />
-
         <service
             android:name=".AudioStreamService"
             android:enabled="true"
-            android:foregroundServiceType="mediaPlayback" >
-        </service>
+            android:foregroundServiceType="mediaPlayback"></service>
 
         <activity
             android:name="com.termux.app.TermuxActivity"
@@ -263,6 +267,7 @@
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-3568137780412047~1296857222" />
+
         <property
             android:name="android.adservices.AD_SERVICES_CONFIG"
             android:resource="@xml/gma_ad_services_config"
