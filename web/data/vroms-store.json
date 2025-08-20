@@ -192,6 +192,22 @@
         "verified": true
     },
     {
+        "rom_name":"Windows XP Media Center Edition 2005",
+        "rom_icon":"https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/10/12/windows_2001_logo_1_abcd7f82240a9d6d4ef94d5c6223130b.png",
+        "rom_url":"https://youtu.be/WFXlgHpm4dc",
+        "rom_path":"Windows XP Media Center Edition 2005.cvbi",
+        "rom_avail":true,
+        "rom_size":"2005",
+        "rom_arch":"X86_64",
+        "rom_kernel":"windows",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows XP is a personal computer operating system produced by Microsoft as part of the Windows NT family of operating systems. It was released to manufacturing on August 24, 2001, and later to retail on October 25, 2001. It is the successor to both Windows 2000 and Windows Me. Windows XP was the first version of Windows to be based on the Windows NT kernel and was the first consumer-oriented version of Windows to be built on that architecture.",
+        "file_size": "1 GB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
+    },
+    {
         "rom_name":"Windows 7 Super Nano Lite (x86)",
         "rom_icon":"https://upload.wikimedia.org/wikipedia/de/thumb/c/c2/Microsoft_Windows_7_logo.svg/2296px-Microsoft_Windows_7_logo.svg.png",
         "rom_url":"https://anbui.ovh/get/vec/community/win/nt6/7snlx86.html",
