@@ -353,10 +353,8 @@ public class MainVNCActivity extends VncCanvasActivity {
         shutdownBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogUtils.twoDialog(activity, getString(R.string.shutdown), getString(R.string.are_you_sure_you_want_to_shutdown_vm), getString(R.string.yes), getString(R.string.cancel), true, R.drawable.power_settings_new_24px, true,
-                        () -> {
-                            shutdownthisvm();
-                        }, null, null);
+                DialogUtils.threeDialog(activity, getString(R.string.power), getString(R.string.shutdown_or_reset_content), getString(R.string.shutdown), getString(R.string.close), getString(R.string.reset), true, R.drawable.power_settings_new_24px, true,
+                        () -> shutdownthisvm(), null, VMManager::resetCurrentVM, null);
             }
         });
 
@@ -1433,7 +1431,7 @@ public class MainVNCActivity extends VncCanvasActivity {
     private void isQMPPortOpening() {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        if (!NetworkUtils.isPortOpen("127.0.0.1", Config.QMPPort, 100)) {
+        if (!FileUtils.isFileExists(Config.getLocalQMPSocketPath())) {
             started = false;
             DialogUtils.oneDialog(activity, getResources().getString(R.string.there_seems_to_be_no_signal), getResources().getString(R.string.do_you_want_to_exit), getString(R.string.ok), true, R.drawable.cast_24px, true,
                     this::finish, null);
@@ -1548,6 +1546,9 @@ public class MainVNCActivity extends VncCanvasActivity {
                     break;
                 case 32:
                     VMManager.changeSDCard(selectedFilePath.getAbsolutePath(), MainVNCActivity.this);
+                    break;
+                case 1996:
+                    VMManager.changeRemovableDevice(VMManager.pendingDeviceID, selectedFilePath.getAbsolutePath(), MainVNCActivity.this);
                     break;
             }
         }

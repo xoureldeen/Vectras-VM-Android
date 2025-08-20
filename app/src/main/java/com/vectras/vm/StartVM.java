@@ -235,12 +235,23 @@ public class StartVM {
         params.add(finalextra);
 
         if (MainSettingsManager.getVmUi(activity).equals("VNC")) {
+
+            if (!MainSettingsManager.getVncExternalPassword(activity).isEmpty()) {
+                params.add("-object ");
+                params.add("secret,id=vncpass,data=\"" + MainSettingsManager.getVncExternalPassword(activity) + "\"");
+            }
+
             String vncStr = "-vnc ";
             params.add(vncStr);
             // Allow connections only from localhost using localsocket without a password
-            if (MainSettingsManager.getVncExternal(activity))
-                params.add(Config.defaultVNCHost + ":" + Config.defaultVNCPort);
-            else {
+            if (MainSettingsManager.getVncExternal(activity)) {
+
+                String vncParams = Config.defaultVNCHost + ":" + Config.defaultVNCPort;
+
+                if (!MainSettingsManager.getVncExternalPassword(activity).isEmpty()) vncParams += ",password-secret=vncpass";
+
+                params.add(vncParams);
+            } else {
                 String qmpParams = "unix:";
                 qmpParams += Config.getLocalVNCSocketPath();
                 params.add(qmpParams);
@@ -262,7 +273,7 @@ public class StartVM {
         //params.add("-full-screen");
 
         params.add("-qmp");
-        params.add("tcp:localhost:" + Config.QMPPort + ",server,nowait");
+        params.add("unix:" + Config.getLocalQMPSocketPath() + ",server,nowait");
 
         return String.join(" ", params);
     }

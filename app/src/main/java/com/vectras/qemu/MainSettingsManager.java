@@ -478,6 +478,30 @@ public class MainSettingsManager extends AppCompatActivity
         edit.apply();
     }
 
+    public static String getVncExternalDisplay(Activity activity) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        return prefs.getString("vncExternalDisplay", "1");
+    }
+
+    public static void setVncExternalDisplay(Activity activity, String vncExternalDisplay) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putString("vncExternalDisplay", vncExternalDisplay);
+        edit.apply();
+    }
+
+    public static String getVncExternalPassword(Activity activity) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        return prefs.getString("vncExternalPassword", "");
+    }
+
+    public static void setVncExternalPassword(Activity activity, String vncExternalPassword) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putString("vncExternalPassword", vncExternalPassword);
+        edit.apply();
+    }
+
     public static int getOrientationSetting(Activity activity) {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);

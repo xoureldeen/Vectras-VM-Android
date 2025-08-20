@@ -13,10 +13,10 @@
         android:text="@string/external_vnc"
         android:textSize="20sp" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/hosted_successfully" />
+<!--    <TextView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/hosted_successfully" />-->
 
     <TextView
         android:id="@+id/tvLogin"
@@ -27,5 +27,5 @@
         android:id="@+id/stopBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="STOP SERVICE" />
+        android:text="@string/stop" />
 </LinearLayout>

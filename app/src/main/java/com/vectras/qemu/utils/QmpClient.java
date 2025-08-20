@@ -19,7 +19,7 @@ public class QmpClient {
 
 	private static final String TAG = "QmpClient";
 	private static String requestCommandMode = "{ \"execute\": \"qmp_capabilities\" }";
-	public static boolean allow_external = true;
+	public static boolean allow_external = false;
 
 	public synchronized static String sendCommand(String command) {
 		String response = null;

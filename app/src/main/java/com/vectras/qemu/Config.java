@@ -127,7 +127,7 @@ public class Config {
     public static int MAX_DISPLAY_REFRESH_RATE = 100; //Hz
 
     // VNC Defaults
-    public static String defaultVNCHost = "localhost";
+    public static String defaultVNCHost = "0.0.0.0";
     public static String defaultVNCUsername = "vectras";
     public static String defaultVNCPasswd = "555555";
 

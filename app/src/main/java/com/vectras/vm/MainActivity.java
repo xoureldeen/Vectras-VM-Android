@@ -12,8 +12,10 @@ import static com.vectras.vm.VectrasApp.getApp;
 import static com.vectras.vm.utils.LibraryChecker.isPackageInstalled2;
 import static com.vectras.vm.utils.UIUtils.UIAlert;
 
+import com.vectras.vm.settings.VNCActivity;
 import com.vectras.vm.utils.CommandUtils;
 import com.vectras.vm.utils.DialogUtils;
+import com.vectras.vm.utils.NetworkUtils;
 import com.vectras.vm.utils.PermissionUtils;
 
 import android.androidVNC.androidVNC;
@@ -182,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
         linearnothinghere = findViewById(R.id.linearnothinghere);
 
         TextView tvLogin = findViewById(R.id.tvLogin);
-        tvLogin.setText("LOGIN --> " + Config.defaultVNCHost + ":" + (5901)/* + "\nPASSWORD --> " + Config.defaultVNCPasswd*/);
+        tvLogin.setText(activity.getString(R.string.port_caption) + ": " + (Config.defaultVNCPort + 5900)/* + "\nPASSWORD --> " + Config.defaultVNCPasswd*/);
 
         Button stopBtn = findViewById(R.id.stopBtn);
         stopBtn.setOnClickListener(new View.OnClickListener() {
@@ -987,6 +989,19 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(activity, R.string.shared_folder_is_not_used_because_i386_does_not_support_it, Toast.LENGTH_LONG).show();
         }
 
+        if (MainSettingsManager.getVncExternal(activity) &&
+                NetworkUtils.isPortOpen("localhost", Config.defaultVNCPort + 5900, 500)) {
+            DialogUtils.twoDialog(activity, activity.getString(R.string.problem_has_been_detected),
+                    activity.getString(R.string.the_vnc_server_port_you_set_is_currently_in_use_by_other),
+                    activity.getString(R.string.go_to_settings),
+                    activity.getString(R.string.close),
+                    true, R.drawable.warning_48px, true,
+                    () -> activity.startActivity(new Intent(activity, VNCActivity.class)),
+                    null,
+                    null);
+            return;
+        }
+
         boolean isRunning = isMyServiceRunning(MainService.class);
         activity.showProgressDialog(activity.getString(R.string.booting_up));
         Handler handler = new Handler();
@@ -1070,13 +1085,14 @@ public class MainActivity extends AppCompatActivity {
         checkpermissions();
         Log.d(TAG, "onResume");
         Config.ui = MainSettingsManager.getVmUi(activity);
+        Config.defaultVNCPort = Integer.parseInt(MainSettingsManager.getVncExternalDisplay(activity));
 
         //TEMPORARY FIX FOR VNC CLOSES
         //TODO: FIND FIX FOR CRASHING
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        //if (MainSettingsManager.getVmUi(activity).equals("VNC") && IOApplication.isPortOpen("127.0.0.1", Config.QMPPort, 100) && MainVNCActivity.started)
-            //startActivity(new Intent(activity, MainVNCActivity.class));
+        if (MainSettingsManager.getVmUi(activity).equals("VNC") && FileUtils.isFileExists(Config.getLocalQMPSocketPath()) && MainVNCActivity.started)
+            startActivity(new Intent(activity, MainVNCActivity.class));
     }
 
     public static boolean isServiceRunning(Class<?> serviceClass, Context context) {

@@ -6,6 +6,7 @@ import static com.vectras.vm.utils.FileUtils.isFileExists;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -13,14 +14,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.vectras.qemu.Config;
@@ -32,6 +36,8 @@ import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.JSONUtils;
 import com.vectras.vm.utils.UIUtils;
 import com.vectras.vterm.Terminal;
+
+import org.jetbrains.annotations.Contract;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -53,6 +59,7 @@ public class VMManager {
     public static String pendingJsonContent = "";
     public static String pendingVMID = "";
     public static int pendingPosition = 0;
+    public static String pendingDeviceID = "";
     public static int restoredVMs = 0;
     public static boolean isKeptSomeFiles = false;
 
@@ -168,6 +175,7 @@ public class VMManager {
         return _result;
     }
 
+    @NonNull
     public static String startRamdomVMID() {
         String addAdb = "";
         Random random = new Random();
@@ -260,7 +268,7 @@ public class VMManager {
         }
     }
 
-    public static void hideVMID(String _vmID) {
+    public static void hideVMID(@NonNull String _vmID) {
         if (!_vmID.isEmpty()) {
             int _startRepeat = 0;
             String _currentVMIDToScan = "";
@@ -488,7 +496,7 @@ public class VMManager {
         }
     }
 
-    public static void enableVMID(String _vmID) {
+    public static void enableVMID(@NonNull String _vmID) {
         if (_vmID.isEmpty())
             return;
         int _startRepeat = 0;
@@ -533,7 +541,7 @@ public class VMManager {
         }
     }
 
-    public static String quickScanDiskFileInFolder(String _foderpath) {
+    public static String quickScanDiskFileInFolder(@NonNull String _foderpath) {
         if (!_foderpath.isEmpty()) {
             int _startRepeat = 0;
             ArrayList<String> _filelist = new ArrayList<>();
@@ -552,7 +560,7 @@ public class VMManager {
         return "";
     }
 
-    public static boolean isADiskFile (String _filepath) {
+    public static boolean isADiskFile (@NonNull String _filepath) {
         if (_filepath.contains(".")) {
             String _getFileName = Objects.requireNonNull(Uri.parse(_filepath).getLastPathSegment()).toLowerCase();
             String _getFileFormat = _getFileName.substring((int)(_getFileName.lastIndexOf(".") + 1), (int)(_getFileName.length()));
@@ -561,7 +569,7 @@ public class VMManager {
         return false;
     }
 
-    public static String quickScanISOFileInFolder(String _foderpath) {
+    public static String quickScanISOFileInFolder(@NonNull String _foderpath) {
         if (!_foderpath.isEmpty()) {
             int _startRepeat = 0;
             ArrayList<String> _filelist = new ArrayList<>();
@@ -580,7 +588,7 @@ public class VMManager {
         return "";
     }
 
-    public static boolean isAISOFile (String _filepath) {
+    public static boolean isAISOFile (@NonNull String _filepath) {
         if (_filepath.contains(".")) {
             String _getFileName = Objects.requireNonNull(Uri.parse(_filepath).getLastPathSegment()).toLowerCase();
             String _getFileFormat = _getFileName.substring((int)(_getFileName.lastIndexOf(".") + 1), (int)(_getFileName.length()));
@@ -589,7 +597,7 @@ public class VMManager {
         return false;
     }
 
-    public static void setArch(String _arch, Activity _activity) {
+    public static void setArch(@NonNull String _arch, Activity _activity) {
         switch (_arch) {
             case "I386":
                 MainSettingsManager.setArch(_activity, "I386");
@@ -606,7 +614,7 @@ public class VMManager {
         }
     }
 
-    public static boolean isExecutedCommandError(String _command, String _result, Activity _activity) {
+    public static boolean isExecutedCommandError(@NonNull String _command, String _result, Activity _activity) {
         if (!_command.contains("qemu-system"))
             return false;
         if (_command.contains("qemu-system") && _result.contains("Killed"))
@@ -628,7 +636,7 @@ public class VMManager {
             return true;
         } else if (_result.contains(") exists") && _result.contains("drive with bus")) {
             //Error code: DRIVE_INDEX_0_EXISTS
-            DialogUtils.oneDialog(_activity, _activity.getString(R.string.problem_has_been_detected), _activity.getString(R.string.error_DRIVE_INDEX_0_EXISTS), _activity.getString(R.string.ok),true, R.drawable.hard_drive_24px, true,null, null);
+            DialogUtils.oneDialog(_activity, _activity.getString(R.string.problem_has_been_detected), _activity.getString(R.string.error_DRIVE_INDEX_0_EXISTS) + "\n\n" + _result, _activity.getString(R.string.ok),true, R.drawable.hard_drive_24px, true,null, null);
             return true;
         } else if (_result.contains("gtk initialization failed") || _result.contains("x11 not available")) {
             //Error code: X11_NOT_AVAILABLE
@@ -683,7 +691,7 @@ public class VMManager {
         movetoRecycleBin();
     }
 
-    public static boolean isthiscommandsafe(String _command, Context _context) {
+    public static boolean isthiscommandsafe(@NonNull String _command, Context _context) {
         if (_command.startsWith("qemu")) {
             if (!_command.contains("&")) {
                 if (!_command.contains("\n")) {
@@ -708,7 +716,7 @@ public class VMManager {
         return false;
     }
 
-    public static boolean isthiscommandsafeimg(String _command, Context _context) {
+    public static boolean isthiscommandsafeimg(@NonNull String _command, Context _context) {
         if (!_command.contains("qcow2")) {
             String _getsize = _command.substring(_command.lastIndexOf(" ") + 1);
             if (_getsize.toLowerCase().endsWith("t") || _getsize.toLowerCase().endsWith("p")  || _getsize.toLowerCase().endsWith("e")) {
@@ -820,24 +828,30 @@ public class VMManager {
     }
 
     public static void shutdownCurrentVM() {
-        QmpClient.sendCommand("quit");
+        QmpClient.sendCommand("{ \"execute\": \"quit\" }");
+    }
+
+    public static void resetCurrentVM() {
+        QmpClient.sendCommand("{ \"execute\": \"system_reset\" }");
     }
 
     public static void showChangeRemovableDevicesDialog(Activity _activity, boolean isMainVNCActivity) {
+
+        String allDevice = getAllDevicesInQemu();
 
         View _view = LayoutInflater.from(_activity).inflate(R.layout.dialog_change_removable_devices, null);
         AlertDialog _dialog = new MaterialAlertDialogBuilder(_activity, R.style.CenteredDialogTheme)
                 .setView(_view)
                 .create();
 
-        if (getAllDevicesInQemu().contains("ide1-cd0")
-                || getAllDevicesInQemu().contains("ide2-cd0")
-                || getAllDevicesInQemu().contains("floppy0")
-                || getAllDevicesInQemu().contains("floppy1")
-                || getAllDevicesInQemu().contains("sd0")) {
+        if (allDevice.contains("ide1-cd0")
+                || allDevice.contains("ide2-cd0")
+                || allDevice.contains("floppy0")
+                || allDevice.contains("floppy1")
+                || allDevice.contains("sd0")) {
 
-            if (getAllDevicesInQemu().contains("ide1-cd0")
-                    || getAllDevicesInQemu().contains("ide2-cd0")) {
+            if (allDevice.contains("ide1-cd0")
+                    || allDevice.contains("ide2-cd0")) {
 
                 _view.findViewById(R.id.ln_cdrom).setOnClickListener(v -> {
                     Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
@@ -855,7 +869,7 @@ public class VMManager {
                 _view.findViewById(R.id.ln_cdrom).setVisibility(View.GONE);
             }
 
-            if (getAllDevicesInQemu().contains("floppy0")) {
+            if (allDevice.contains("floppy0")) {
                 _view.findViewById(R.id.ln_fda).setOnClickListener(v -> {
                     Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
                     intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -869,7 +883,7 @@ public class VMManager {
                     _dialog.dismiss();
                 });
 
-                if (!getAllDevicesInQemu().contains("floppy1")) {
+                if (!allDevice.contains("floppy1")) {
                     TextView tvFda = _view.findViewById(R.id.tv_fda);
                     tvFda.setText(R.string.floppy_drive);
                 }
@@ -877,7 +891,7 @@ public class VMManager {
                 _view.findViewById(R.id.ln_fda).setVisibility(View.GONE);
             }
 
-            if (getAllDevicesInQemu().contains("floppy1")) {
+            if (allDevice.contains("floppy1")) {
                 _view.findViewById(R.id.ln_fdb).setOnClickListener(v -> {
                     Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
                     intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -891,7 +905,7 @@ public class VMManager {
                     _dialog.dismiss();
                 });
 
-                if (!getAllDevicesInQemu().contains("floppy0")) {
+                if (!allDevice.contains("floppy0")) {
                     TextView tvFdb = _view.findViewById(R.id.tv_fdb);
                     tvFdb.setText(R.string.floppy_drive);
                 }
@@ -899,7 +913,7 @@ public class VMManager {
                 _view.findViewById(R.id.ln_fdb).setVisibility(View.GONE);
             }
 
-            if (getAllDevicesInQemu().contains("sd0")) {
+            if (allDevice.contains("sd0")) {
                 _view.findViewById(R.id.ln_sd).setOnClickListener(v -> {
                     Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
                     intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -915,8 +929,14 @@ public class VMManager {
             } else {
                 _view.findViewById(R.id.ln_sd).setVisibility(View.GONE);
             }
+
+            _view.findViewById(R.id.ln_otherdevice).setOnClickListener(v -> {
+                showChangeRemovableDevicesWithIDDialog(_activity);
+                _dialog.dismiss();
+            });
         } else {
-            _view.findViewById(R.id.ln_removable_devices).setVisibility(View.GONE);
+            TextView tvFdb = _view.findViewById(R.id.tv_otherdevice);
+            tvFdb.setText(R.string.change_or_eject_a_device);
         }
 
         if (isMainVNCActivity) {
@@ -931,6 +951,45 @@ public class VMManager {
         } else {
             _view.findViewById(R.id.ln_user_interface).setVisibility(View.GONE);
         }
+
+        _dialog.show();
+    }
+
+    public static void showChangeRemovableDevicesWithIDDialog(Activity _activity) {
+        View _view = LayoutInflater.from(_activity).inflate(R.layout.widget_edittext_dialog, null);
+        AlertDialog _dialog = new MaterialAlertDialogBuilder(_activity, R.style.CenteredDialogTheme)
+                .setTitle(_activity.getString(R.string.change_a_removable_device))
+                .setView(_view)
+                .create();
+
+        EditText _edittext = _view.findViewById(R.id.editText);
+        TextInputLayout _textInputLayout = _view.findViewById(R.id.textInputLayout);
+        _textInputLayout.setHint(_activity.getString(R.string.enter_device_id));
+
+        _dialog.setButton(DialogInterface.BUTTON_POSITIVE, _activity.getString(R.string.change_disk_file), (dialog, which) -> {
+            if (!_edittext.getText().toString().isEmpty()) {
+                pendingDeviceID = _edittext.getText().toString();
+
+                Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("*/*");
+                _activity.startActivityForResult(intent, 1996);
+                _dialog.dismiss();
+            } else {
+                Toast.makeText(_activity, _activity.getString(R.string.you_need_to_enter_the_device_id), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        _dialog.setButton(DialogInterface.BUTTON_NEUTRAL, _activity.getString(R.string.eject), (dialog, which) -> {
+            if (!_edittext.getText().toString().isEmpty()) {
+                ejectRemovableDevice(_edittext.getText().toString(), _activity);
+                _dialog.dismiss();
+            } else {
+                Toast.makeText(_activity, _activity.getString(R.string.you_need_to_enter_the_device_id), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        _dialog.setButton(DialogInterface.BUTTON_NEGATIVE, _activity.getString(R.string.close), (dialog, which) -> _dialog.dismiss());
 
         _dialog.show();
     }
@@ -1035,41 +1094,105 @@ public class VMManager {
         }
     }
 
-    public static String changeRemovableDevicesQMPCommand(String device, String filePath) {
+    public static void changeRemovableDevice(String _deviceID, String _filepath, Activity _activity) {
+        String _result = QmpClient.sendCommand(changeRemovableDevicesQMPCommand(_deviceID, _filepath));
+        if (isQMPCommandSuccess(_result)) {
+            if (_activity != null && !_activity.isFinishing())
+                Toast.makeText(_activity, _activity.getString(R.string.changed), Toast.LENGTH_SHORT).show();
+        } else {
+            if (_activity != null && !_activity.isFinishing()) {
+                if (_result.contains("is not removable")) {
+                    Toast.makeText(_activity, _activity.getString(R.string.this_is_not_a_removable_device), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(_activity, _activity.getString(R.string.change_failed), Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
+    public static void ejectRemovableDevice(String _deviceID, Activity _activity) {
+        String _result = QmpClient.sendCommand(ejectRemovableDevicesQMPCommand(_deviceID));
+        if (isQMPCommandSuccess(_result)) {
+            if (_activity != null && !_activity.isFinishing())
+                Toast.makeText(_activity, _activity.getString(R.string.ejected), Toast.LENGTH_SHORT).show();
+        } else {
+            if (_activity != null && !_activity.isFinishing()) {
+                if (_result.contains("is not removable")) {
+                    Toast.makeText(_activity, _activity.getString(R.string.this_is_not_a_removable_device), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(_activity, _activity.getString(R.string.eject_failed), Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
+    public static void setVNCPasswordWithDelay(String _password, Activity _activity) {
+        new Thread(() -> {
+            try {
+                Thread.sleep(1000);
+                setVNCPassword(_password, _activity);
+            } catch (InterruptedException e) {
+                Log.d(TAG, "setVNCPasswordWithDelay: " + e.getMessage());
+            }
+        }).start();
+    }
+
+    public static void setVNCPassword(String _password, Activity _activity) {
+        String _result = QmpClient.sendCommand(changeVNCPasswordQMPCommand(_password));
+        if (isQMPCommandSuccess(_result)) {
+            Log.d(TAG, "setVNCPassword: Success");
+        } else {
+            Log.d(TAG, "setVNCPassword: Failed");
+        }
+    }
+
+    @NonNull
+    @Contract(pure = true)
+    public static String changeRemovableDevicesQMPCommand(String _device, String _filepath) {
         return "{ \n" +
                 "  \"execute\": \"blockdev-change-medium\", \n" +
                 "  \"arguments\": { \n" +
-                "    \"device\": \"" + device + "\", \n" +
-                "    \"filename\": \"" + filePath + "\", \n" +
+                "    \"device\": \"" + _device + "\", \n" +
+                "    \"filename\": \"" + _filepath + "\", \n" +
                 "    \"format\": \"raw\" \n" +
                 "  } \n" +
                 "}";
     }
 
 
-    public static String ejectRemovableDevicesQMPCommand(String device) {
-        return "{ \"execute\": \"eject\", \"arguments\": { \"device\": \""+ device +"\" } }";
+    @NonNull
+    @Contract(pure = true)
+    public static String ejectRemovableDevicesQMPCommand(String _device) {
+        return "{ \"execute\": \"eject\", \"arguments\": { \"device\": \""+ _device +"\" } }";
     }
 
     public static String getAllDevicesInQemu() {
         return QmpClient.sendCommand("{ \"execute\": \"query-block\" }");
     }
 
+    public static String changeVNCPasswordQMPCommand(String _password) {
+        return "{ \"execute\": \"change-vnc-password\", \"arguments\": { \"password\": \"" + _password +"\" } }";
+    }
+
     public static boolean isQMPCommandSuccess(String _result) {
+        if (_result == null) return false;
+
         Log.d("VMManager", "isQMPCommandSuccess: " + _result);
         return _result.contains("\"return\": {}");
     }
 
 
-    public static boolean isUsingQemuARM(String _qemuCommand) {
+    @Contract(pure = true)
+    public static boolean isUsingQemuARM(@NonNull String _qemuCommand) {
         return _qemuCommand.contains("qemu-system-a");
     }
 
-    public static boolean isUsingQemuPowerPC(String _qemuCommand) {
+    @Contract(pure = true)
+    public static boolean isUsingQemuPowerPC(@NonNull String _qemuCommand) {
         return _qemuCommand.contains("qemu-system-p");
     }
 
-    public static boolean isUsingQ35(String _qemuCommand) {
+    public static boolean isUsingQ35(@NonNull String _qemuCommand) {
         return _qemuCommand.contains("-M q35")
                 || _qemuCommand.contains("-machine q35")
                 || _qemuCommand.contains("-M pc-q35")
