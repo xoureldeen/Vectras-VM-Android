@@ -400,6 +400,22 @@
         "verified": true
     },
     {
+        "rom_name":"Windows 10 build 10240",
+        "rom_icon":"https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/09/17/windows-logo_1_926ed76111646acbbe332bc5af0cf2ce.png",
+        "rom_url":"https://youtu.be/5fMOYs12cRM",
+        "rom_path":"Windows 10 build 10240.cvbi",
+        "rom_avail":true,
+        "rom_size":"RTM build",
+        "rom_arch":"X86_64",
+        "rom_kernel":"windows",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 10 is a major release of Microsoft's Windows NT operating system. The successor to Windows 8.1, it was released to manufacturing on July 15, 2015, and later to retail on July 29, 2015. Windows 10 was made available for download via MSDN and TechNet, as a free upgrade for retail copies of Windows 8 and Windows 8.1 users via the Microsoft Store, and to Windows 7 users via Windows Update. Unlike previous Windows NT releases, Windows 10 receives new builds on an ongoing basis, which are available at no additional cost to users; devices in enterprise environments can alternatively use long-term support milestones that only receive critical updates, such as security patches.",
+        "file_size": "8 GB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
+    },
+    {
         "rom_name":"Windows 10 LTSB 2015",
         "rom_icon":"https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/09/17/windows-logo_1_926ed76111646acbbe332bc5af0cf2ce.png",
         "rom_url":"https://youtu.be/9AMJ1UB5NeY",
