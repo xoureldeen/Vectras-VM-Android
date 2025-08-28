@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.vectras.qemu.Config;
 import com.vectras.vm.AppConfig;
 import com.vectras.vm.CustomRomActivity;
@@ -30,6 +31,9 @@ public class CreateImageDialogFragment extends DialogFragment {
     public boolean customRom = false;
 
     public String folder = AppConfig.vmFolder + CustomRomActivity.vmID + "/";
+    public String filename = "disk";
+    public TextInputEditText drive;
+    public TextInputLayout driveLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,14 +57,14 @@ public class CreateImageDialogFragment extends DialogFragment {
         TextInputEditText imageName = view.findViewById(R.id.name);
 
         if (customRom)
-            imageName.setText(CustomRomActivity.title.getText().toString());
+            imageName.setText(filename);
 
         TextView createPath = view.findViewById(R.id.createPath);
 
         createPath.setText(folder);
 
         if (customRom)
-            createPath.append(CustomRomActivity.title.getText().toString() + ".qcow2");
+            createPath.append(filename + ".qcow2");
 
         Button createQcow2Btn = view.findViewById(R.id.createQcow2Btn);
 
@@ -91,26 +95,23 @@ public class CreateImageDialogFragment extends DialogFragment {
         imageName.addTextChangedListener(afterTextChangedListener);
         imageSize.addTextChangedListener(afterTextChangedListener);
 
-        createQcow2Btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                File vDir = new File(folder);
-                if (!vDir.exists()) {
-                    vDir.mkdirs();
-                }
-                Terminal vterm = new Terminal(getActivity());
-                vterm.executeShellCommand("qemu-img create -f qcow2 \"" + folder + imageName.getText().toString() + ".qcow2\" " +
-                        imageSize.getText().toString() + "G", true, getActivity());
-                if (customRom)
-                    CustomRomActivity.drive.setText(folder + imageName.getText().toString() + ".qcow2");
-                try {
-                    CustomRomActivity.driveLayout.setEndIconDrawable(R.drawable.more_vert_24px);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
-                }
-
-                dismiss();
+        createQcow2Btn.setOnClickListener(v -> {
+            File vDir = new File(folder);
+            if (!vDir.exists()) {
+                vDir.mkdirs();
             }
+            Terminal vterm = new Terminal(getActivity());
+            vterm.executeShellCommand("qemu-img create -f qcow2 \"" + folder + imageName.getText().toString() + ".qcow2\" " +
+                    imageSize.getText().toString() + "G", true, getActivity());
+            if (customRom) {
+                if(drive != null)
+                    drive.setText(folder + imageName.getText().toString() + ".qcow2");
+
+                if(driveLayout != null)
+                    driveLayout.setEndIconDrawable(R.drawable.more_vert_24px);
+            }
+
+            dismiss();
         });
 
         builder.setView(view);

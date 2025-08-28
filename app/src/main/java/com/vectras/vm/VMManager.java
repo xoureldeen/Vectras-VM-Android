@@ -29,6 +29,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
+import com.vectras.qemu.MainVNCActivity;
 import com.vectras.qemu.utils.QmpClient;
 import com.vectras.vm.MainRoms.AdapterMainRoms;
 import com.vectras.vm.utils.DialogUtils;
@@ -941,11 +942,7 @@ public class VMManager {
 
         if (isMainVNCActivity) {
             _view.findViewById(R.id.ln_mouse).setOnClickListener(v -> {
-                final Dialog alertDialog = new Dialog(_activity, R.style.MainDialogTheme);
-                alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                Objects.requireNonNull(alertDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                alertDialog.setContentView(R.layout.dialog_setting);
-                alertDialog.show();
+                MainVNCActivity.activity.onMouseMode();
                 _dialog.dismiss();
             });
         } else {

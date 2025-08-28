@@ -21,6 +21,7 @@ import android.widget.Toast;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -40,6 +41,8 @@ import androidx.annotation.NonNull;
 
 import com.vectras.vm.MainActivity;
 import com.vectras.vm.AppConfig;
+import com.vectras.vm.R;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -51,6 +54,7 @@ import java.io.OutputStreamWriter;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * 
@@ -241,10 +245,6 @@ public class FileUtils {
 				}
 			}
 		}
-
-
-
-
 		return null;
 	}
 
@@ -391,6 +391,8 @@ public class FileUtils {
 	}
 
 	private static String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
+		if (uri == null) return null;
+
 		Cursor cursor = null;
 		final String column = "_data";
 		final String[] projection = {column};
@@ -668,6 +670,62 @@ public class FileUtils {
 
 	}
 
+	public static void copyFileFromUri(Context context, Uri sourceUri, String destFile) throws IOException {
+
+		File file = new File(destFile);
+		if (!Objects.requireNonNull(file.getParentFile()).exists()) {
+			file.getParentFile().mkdirs();
+		}
+
+        try (InputStream inputStream = context.getContentResolver().openInputStream(sourceUri); OutputStream outputStream = new FileOutputStream(destFile)) {
+			byte[] buffer = new byte[32 * 1024];
+			if (DeviceUtils.totalMemoryCapacity(context) < 3L * 1024 * 1024 * 1024) {
+				buffer = new byte[4 * 1024];
+			} else if (DeviceUtils.totalMemoryCapacity(context) < 5L * 1024 * 1024 * 1024) {
+				buffer = new byte[8 * 1024];
+			} else if (DeviceUtils.totalMemoryCapacity(context) < 7L * 1024 * 1024 * 1024) {
+				buffer = new byte[16 * 1024];
+			}
+            int bytesRead;
+            while (true) {
+                assert inputStream != null;
+                if ((bytesRead = inputStream.read(buffer)) == -1) break;
+                outputStream.write(buffer, 0, bytesRead);
+            }
+
+            outputStream.flush();
+        }
+	}
+
+	public static String getFileNameFromUri(Context context, Uri uri) {
+		String result = null;
+
+		Cursor cursor = context.getContentResolver().query(
+				uri,
+				null,
+				null,
+				null,
+				null
+		);
+
+		try {
+			if (cursor != null && cursor.moveToFirst()) {
+				int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+				result = cursor.getString(nameIndex);
+			}
+		} finally {
+			if (cursor != null) {
+				cursor.close();
+			}
+		}
+
+		if (result == null) {
+			result = uri.getLastPathSegment();
+		}
+
+		return result;
+	}
+
 	public static void deleteDirectory(String _pathToDelete) {
 		File _dir = new File(_pathToDelete);
 		if (_dir.isDirectory()) {
@@ -805,4 +863,21 @@ public class FileUtils {
 		return filePath;
 	}
 
+	public static boolean isValidFilePath(Activity activity, String filePath, boolean isShowDialog) {
+		if (filePath == null || filePath.isEmpty()) {
+			if (isShowDialog) {
+				DialogUtils.oneDialog(activity,
+						activity.getString(R.string.problem_has_been_detected),
+						activity.getString(R.string.invalid_file_path_content),
+						activity.getString(R.string.ok),
+						true,
+						R.drawable.folder_24px,
+						true,
+						null,
+						null);
+			}
+			return false;
+		}
+		return true;
+	}
 }

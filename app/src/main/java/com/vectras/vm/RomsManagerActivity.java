@@ -1,5 +1,6 @@
 package com.vectras.vm;
 
+import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -9,22 +10,16 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.material.search.SearchBar;
-import com.google.android.material.search.SearchView;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.vectras.vm.Roms.AdapterRomStoreSearch;
 import com.vectras.vm.Roms.AdapterRoms;
 import com.vectras.vm.Roms.DataRoms;
+import com.vectras.vm.databinding.ActivityRomsManagerBinding;
 import com.vectras.vm.utils.UIUtils;
 
 import java.lang.reflect.Type;
@@ -35,22 +30,14 @@ import java.util.stream.Collectors;
 
 public class RomsManagerActivity extends AppCompatActivity {
 
+    ActivityRomsManagerBinding binding;
     private RequestNetwork net;
     private RequestNetwork.RequestListener _net_request_listener;
     private String contentJSON = "[]";
-    public static RomsManagerActivity activity;
     public static String license;
-    private SearchView searchView;
-    private RecyclerView romsSearch;
-    private AdapterRoms mAdapter;
     private AdapterRomStoreSearch mAdapterSearch;
     private List<DataRoms> data = new ArrayList<>();
     private List<DataRoms> dataSearch = new ArrayList<>();
-    private LinearLayout linearload;
-    private LinearLayout linearnothinghere;
-    public static String sAvailable = "";
-    public static String sUnavailable = "";
-    public static String sInstalled = "";
     public static boolean isFinishNow = false;
 
     @Override
@@ -75,43 +62,21 @@ public class RomsManagerActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        activity = this;
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        sAvailable = getResources().getString(R.string.available);
-        sUnavailable = getResources().getString(R.string.unavailable);
-        sInstalled = getResources().getString(R.string.installed);
-
         UIUtils.edgeToEdge(this);
-        setContentView(R.layout.activity_roms_manager);
+        binding = ActivityRomsManagerBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         UIUtils.setOnApplyWindowInsetsListenerTop(findViewById(R.id.appbar));
         UIUtils.setOnApplyWindowInsetsListenerBottom(findViewById(R.id.romsRv));
         UIUtils.setOnApplyWindowInsetsListenerBottom(findViewById(R.id.romsSearch));
         UIUtils.setOnApplyWindowInsetsListenerBottom(findViewById(R.id.linear_search_emty));
 
-        linearload = findViewById(R.id.linearload);
-        linearnothinghere = findViewById(R.id.linearnothinghere);
-        Button buttontryagain = findViewById(R.id.buttontryagain);
-        RecyclerView mRVRoms = findViewById(R.id.romsRv);
-        romsSearch = findViewById(R.id.romsSearch);
+        binding.searchBar.setNavigationOnClickListener(v -> onBackPressed());
 
-        mRVRoms = findViewById(R.id.romsRv);
-        mAdapter = new AdapterRoms(this, data);
-        mRVRoms.setAdapter(mAdapter);
-        mRVRoms.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-
-        romsSearch = findViewById(R.id.romsSearch);
-        mAdapterSearch = new AdapterRomStoreSearch(this, dataSearch);
-        romsSearch.setAdapter(mAdapterSearch);
-        romsSearch.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-
-        SearchBar searchBar = findViewById(R.id.search_bar);
-        searchBar.setNavigationOnClickListener(v -> onBackPressed());
-
-        searchView = findViewById(R.id.searchView);
-        searchView.getEditText().addTextChangedListener(new TextWatcher() {
+        binding.searchView.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -133,19 +98,18 @@ public class RomsManagerActivity extends AppCompatActivity {
                 if (!response.isEmpty())
                         contentJSON = response;
                 loadData();
-                loadDataSearch();
-                linearload.setVisibility(View.GONE);
+                binding.linearload.setVisibility(View.GONE);
             }
 
             @Override
             public void onErrorResponse(String tag, String message) {
-                linearload.setVisibility(View.GONE);
-                linearnothinghere.setVisibility(View.VISIBLE);
+                binding.linearload.setVisibility(View.GONE);
+                binding.linearnothinghere.setVisibility(View.VISIBLE);
             }
         };
 
-        buttontryagain.setOnClickListener(v -> {
-            linearload.setVisibility(View.VISIBLE);
+        binding.buttontryagain.setOnClickListener(v -> {
+            binding.linearload.setVisibility(View.VISIBLE);
             net.startRequestNetwork(RequestNetworkController.GET,AppConfig.vectrasRaw + "vroms-store.json","",_net_request_listener);
         });
 
@@ -159,38 +123,45 @@ public class RomsManagerActivity extends AppCompatActivity {
         isFinishNow = false;
     }
 
+    @Override
+    public void onBackPressed() {
+        if (binding.searchView.isShowing())
+            binding.searchView.hide();
+        else
+            super.onBackPressed();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
     private void loadData() {
-        try {
-            List<DataRoms> dataRoms;
-            Gson gson = new Gson();
-            Type listType = new TypeToken<List<DataRoms>>() {}.getType();
-            dataRoms = gson.fromJson(contentJSON, listType);
+        AdapterRoms mAdapter = new AdapterRoms(this, data);
+        binding.romsRv.setAdapter(mAdapter);
+        binding.romsRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
-            data.clear();
-            data.addAll(dataRoms);
-            mAdapter.notifyDataSetChanged();
-        } catch (Exception e) {
-            linearload.setVisibility(View.GONE);
-            linearnothinghere.setVisibility(View.VISIBLE);
-        }
-    }
+        mAdapterSearch = new AdapterRomStoreSearch(this, dataSearch);
+        binding.romsSearch.setAdapter(mAdapterSearch);
+        binding.romsSearch.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
-    private void loadDataSearch() {
-        List<DataRoms> dataRoms;
+        List<DataRoms> dataRoms = new ArrayList<>();
+
         try {
             Gson gson = new Gson();
             Type listType = new TypeToken<List<DataRoms>>() {}.getType();
             dataRoms = gson.fromJson(contentJSON, listType);
-
-            dataSearch.clear();
-            dataSearch.addAll(dataRoms);
-            mAdapterSearch.notifyDataSetChanged();
         } catch (Exception e) {
-            linearload.setVisibility(View.GONE);
-            linearnothinghere.setVisibility(View.VISIBLE);
+            binding.linearload.setVisibility(View.GONE);
+            binding.linearnothinghere.setVisibility(View.VISIBLE);
         }
+
+        data.clear();
+        data.addAll(dataRoms);
+        mAdapter.notifyDataSetChanged();
+
+        dataSearch.clear();
+        dataSearch.addAll(dataRoms);
+        mAdapterSearch.notifyDataSetChanged();
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void search(String keyword) {
         try {
             // Extract data from json and store into ArrayList as class objects
@@ -225,18 +196,10 @@ public class RomsManagerActivity extends AppCompatActivity {
         }
 
         if (dataSearch.isEmpty())
-            romsSearch.setVisibility(View.GONE);
+            binding.romsSearch.setVisibility(View.GONE);
         else
-            romsSearch.setVisibility(View.VISIBLE);
+            binding.romsSearch.setVisibility(View.VISIBLE);
 
         mAdapterSearch.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (searchView.isShowing())
-            searchView.hide();
-        else
-            super.onBackPressed();
     }
 }

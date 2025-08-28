@@ -1,5 +1,6 @@
 package com.vectras.vm.Roms;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -20,7 +21,6 @@ import com.bumptech.glide.Glide;
 
 import com.vectras.vm.AppConfig;
 import com.vectras.vm.RomInfo;
-import com.vectras.vm.RomsManagerActivity;
 import com.vectras.vm.R;
 
 import java.io.File;
@@ -33,12 +33,14 @@ import java.util.Objects;
 
 public class AdapterRomStoreSearch extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    Context context;
     private final LayoutInflater inflater;
     static List<DataRoms> dataRom = Collections.emptyList();
     private final String TAG = "AdapterRomStoreSearch";
 
     // create constructor to innitilize context and data sent from MainActivity
     public AdapterRomStoreSearch(Context context, List<DataRoms> data) {
+        this.context = context;
         inflater = LayoutInflater.from(context);
         dataRom = data;
     }
@@ -52,13 +54,14 @@ public class AdapterRomStoreSearch extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
     // Bind data
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
 
         // Get current position of item in recyclerview to bind data and assign values from list
         final MyHolder myHolder = (MyHolder) holder;
         final DataRoms current = dataRom.get(position);
-        Glide.with(RomsManagerActivity.activity).load(current.romIcon).placeholder(R.drawable.ic_computer_180dp_with_padding).error(R.drawable.ic_computer_180dp_with_padding).into(myHolder.ivIcon);
+        Glide.with(context).load(current.romIcon).placeholder(R.drawable.ic_computer_180dp_with_padding).error(R.drawable.ic_computer_180dp_with_padding).into(myHolder.ivIcon);
         myHolder.textName.setText(current.romName);
         myHolder.textSize.setText(current.romArch + " - " + current.fileSize);
         if (current.romAvail) {
@@ -66,7 +69,7 @@ public class AdapterRomStoreSearch extends RecyclerView.Adapter<RecyclerView.Vie
                 notifyItemRangeChanged(0, dataRom.size());
 
                 Intent intent = new Intent();
-                intent.setClass(RomsManagerActivity.activity, RomInfo.class);
+                intent.setClass(context, RomInfo.class);
                 intent.putExtra("title", current.romName);
                 intent.putExtra("shortdesc", current.romSize);
                 intent.putExtra("getrom", current.romUrl);
@@ -79,7 +82,7 @@ public class AdapterRomStoreSearch extends RecyclerView.Adapter<RecyclerView.Vie
                 intent.putExtra("verified", current.verified);
                 intent.putExtra("creator", current.creator);
                 intent.putExtra("size", current.fileSize);
-                RomsManagerActivity.activity.startActivity(intent);
+                context.startActivity(intent);
 
                 if (!current.romPath.endsWith(".cvbi")) {
                     //Save image to icon folder
@@ -109,16 +112,18 @@ public class AdapterRomStoreSearch extends RecyclerView.Adapter<RecyclerView.Vie
                 }
             });
         } else {
-            myHolder.textAvail.setText(RomsManagerActivity.sUnavailable);
+            myHolder.textAvail.setText(context.getString(R.string.unavailable));
             myHolder.textAvail.setTextColor(Color.RED);
         }
 
-        if (position == 0) {
-            myHolder.linearItem.setBackground(AppCompatResources.getDrawable(RomsManagerActivity.activity, R.drawable.object_shape_top_on_surface));
+        if (dataRom.size() == 1) {
+            myHolder.linearItem.setBackground(AppCompatResources.getDrawable(context, R.drawable.object_shape_single_on_surface));
+        } else if (position == 0) {
+            myHolder.linearItem.setBackground(AppCompatResources.getDrawable(context, R.drawable.object_shape_top_on_surface));
         } else if (position == dataRom.size() - 1) {
-            myHolder.linearItem.setBackground(AppCompatResources.getDrawable(RomsManagerActivity.activity, R.drawable.object_shape_bottom_on_surface));
+            myHolder.linearItem.setBackground(AppCompatResources.getDrawable(context, R.drawable.object_shape_bottom_on_surface));
         } else {
-            myHolder.linearItem.setBackground(AppCompatResources.getDrawable(RomsManagerActivity.activity, R.drawable.object_shape_middle_on_surface));
+            myHolder.linearItem.setBackground(AppCompatResources.getDrawable(context, R.drawable.object_shape_middle_on_surface));
         }
     }
 

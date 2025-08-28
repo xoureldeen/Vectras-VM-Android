@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">v2.9.5.4-3dfx</string>
+    <string name="app_version" translatable="false">v2.9.5.5-3dfx</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -520,6 +520,14 @@
     <string name="go_to_settings">Go to settings</string>
     <string name="you_need_to_set_a_number_for_the_display">You need to set a number for the display.</string>
     <string name="stop">Stop</string>
+    <string name="new_vm">New VM</string>
+    <string name="invalid_file_path_content">Invalid file path, please select a file from elsewhere.</string>
+    <string name="invalid_iso_file_path_content">The file you selected is not in the correct format, please select an iso file.</string>
+    <string name="unable_to_copy_iso_file_content">Unable to copy iso file, try selecting this iso file elsewhere.</string>
+    <string name="unable_to_copy_hard_drive_file_content">Unable to copy hard drive file, try selecting this iso file elsewhere.</string>
+    <string name="could_not_process_cvbi_file_content">Could not process cvbi file, the file path is invalid or the file may be corrupted.</string>
+    <string name="unable_to_cvbi_file_vm_dir_content">Unable to process cvbi file because virtual machine directory creation failed</string>
+    <string name="unable_to_process_thumbnail_content">Unable to process thumbnail.</string>
 
 
     <!--======================TERMUX STRINGS====================-->
