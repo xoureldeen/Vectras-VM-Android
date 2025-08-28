@@ -11,7 +11,7 @@ android {
         minSdk minApi
         targetSdk targetApi
         versionCode 21
-        versionName "v2.9.5.4-3dfx"
+        versionName "v2.9.5.5-3dfx"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -72,9 +72,9 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.7.1'
-    implementation 'com.google.android.material:material:1.14.0-alpha03'
+    implementation 'com.google.android.material:material:1.14.0-alpha04'
     implementation "androidx.annotation:annotation:1.9.1"
-    implementation "androidx.core:core:1.16.0"
+    implementation "androidx.core:core:1.17.0"
     implementation "androidx.drawerlayout:drawerlayout:1.2.0"
     implementation "androidx.preference:preference:1.2.1"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-beta01"
