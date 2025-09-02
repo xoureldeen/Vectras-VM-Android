@@ -87,7 +87,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-auth:21.4.0")
     implementation("com.google.firebase:firebase-crashlytics")
     implementation 'com.google.android.gms:play-services-ads:24.5.0'
-    implementation 'com.github.bumptech.glide:glide:4.16.0'
+    implementation 'com.github.bumptech.glide:glide:5.0.3'
     implementation 'com.google.guava:guava:33.4.8-jre'
     implementation 'com.google.code.gson:gson:2.13.1'
     implementation 'com.squareup.okhttp3:okhttp:5.1.0'
@@ -108,8 +108,8 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:3.0.0'
 
     // Glide
-    implementation 'com.github.bumptech.glide:glide:4.16.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.16.0'
+    implementation 'com.github.bumptech.glide:glide:5.0.3'
+    annotationProcessor 'com.github.bumptech.glide:compiler:5.0.3'
     
     // Test dependencies
     testImplementation 'junit:junit:4.13.2'
