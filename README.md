@@ -46,6 +46,8 @@ Works fine on devices manufactured in 2021 or later and devices equipped with Sn
 
 # Installation
 
+### Stable Releases
+
 You can download Vectras VM from the [releases](https://github.com/xoureldeen/Vectras-VM-Android/releases) page or the [official website](https://vectras.vercel.app/download.html).
 
 or
@@ -53,7 +55,7 @@ or
 
 [![OpenAPK](https://img.shields.io/badge/Get%20it%20on-OpenAPK-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://www.openapk.net/vectras-vm/com.vectras.vm/)
 
-## Beta Releases
+### Beta Releases
 
 We publish a **new beta release after every commit** — so you can always test the latest features and improvements!
 
