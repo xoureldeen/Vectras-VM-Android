@@ -5,6 +5,9 @@
 # Vectras VM
 [![Ceasefire Now](https://badge.techforpalestine.org/default)](https://techforpalestine.org/learn-more)
 
+![GitHub Repo stars](https://img.shields.io/github/stars/xoureldeen/Vectras-VM-Android)
+![GitHub watchers](https://img.shields.io/github/watchers/xoureldeen/Vectras-VM-Android)
+![GitHub forks](https://img.shields.io/github/forks/xoureldeen/Vectras-VM-Android)
 [![Total downloads](https://img.shields.io/github/downloads/xoureldeen/Vectras-VM-Android/total)](https://github.com/xoureldeen/Vectras-VM-Android/releases)
 [![Discord server](https://img.shields.io/discord/911060166810681345)][link-discord]
 [![Telegram Channel][ico-telegram]][link-telegram]
