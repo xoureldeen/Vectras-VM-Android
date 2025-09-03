@@ -5,9 +5,9 @@
 # Vectras VM
 [![Ceasefire Now](https://badge.techforpalestine.org/default)](https://techforpalestine.org/learn-more)
 
+[![Total downloads](https://img.shields.io/github/downloads/xoureldeen/Vectras-VM-Android/total)](https://github.com/xoureldeen/Vectras-VM-Android/releases)
+[![Discord server](https://img.shields.io/discord/911060166810681345)][link-discord]
 [![Telegram Channel][ico-telegram]][link-telegram]
-[![Discord][ico-discord]][link-discord]
-[![Latest Version][ico-version]][link-releases]
 [![Software License][ico-license]](LICENSE)
 
 Welcome to Vectras VM! A virtual machine app for Android based on QEMU that lets you emulate various OSes including: [![Windows](https://custom-icon-badges.demolab.com/badge/Windows-0078D6?logo=windows11&logoColor=white)](https://www.microsoft.com/en-us/windows) [![Linux](https://img.shields.io/badge/Linux-FCC624?logo=linux&logoColor=black)](https://www.linux.org/) [![macOS](https://img.shields.io/badge/macOS-000000?logo=apple&logoColor=F0F0F0)](https://www.apple.com/macos) [![Android](https://img.shields.io/badge/Android-3DDC84?logo=android&logoColor=white)](https://www.android.com/).
@@ -18,39 +18,17 @@ If you need help, check out [our documentation](https://vectras.vercel.app/how.h
 
 ## Device Compatibility
 
-Works fine on devices manufactured in 2021 or later and devices equipped with Snapdragon 855 CPU or better. Here are the devices tested:
+Works fine on devices manufactured in 2021 or later and devices equipped with Snapdragon 855 CPU or better. You can try running Vectras VM on unsupported devices, but we cannot guarantee stability or support. Here are the devices tested:
 
-### Works well
-
-- **Samsung**
-- **Google Pixel**
-- **Xiaomi**
-- **RedMagic**
-
-### Unstable
-
-- **Oppo**
-- **Realme**
-- **Huawei**
-- **Honor**
-- **Vivo**
-
-You can try running Vectras VM on unsupported devices, but we cannot guarantee stability or support.
-
-# Installation
-
-You can download Vectras VM from the [releases](https://github.com/xoureldeen/Vectras-VM-Android/releases) page or the [official website](https://vectras.vercel.app/download.html).
-
-or
-
-
-[![OpenAPK](https://www.openapk.net/images/openapk-badge.png)](https://www.openapk.net/vectras-vm/com.vectras.vm/)
-
-## Beta Releases
-
-We publish a **new beta release after every commit** — so you can always test the latest features and improvements!
-
-[![Download Beta](https://img.shields.io/badge/Download-Beta-blue?style=for-the-badge&logo=github)](https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases)
+| Stable           | Unstable                                        |
+| --------------- | ------------------------------------------- |
+| Samsung      | Oppo      |
+| Google Pixel      | Realme      |
+| Xiaomi      | OnePlus      |
+| Redmi      | Huawei      |
+| Poco      | Honor      |
+| ZTE      | vivo      |
+| RedMagic      | IQOO      |
 
 ### Minimum System Requirements
 - Android 6.0 and up.
@@ -65,6 +43,21 @@ We publish a **new beta release after every commit** — so you can always test 
 - Integrated or removable cooling system (if running operating systems from 2010 to present).
 > [!TIP]
 > If the OS you are trying to emulate crashes, try using an older version.
+
+# Installation
+
+You can download Vectras VM from the [releases](https://github.com/xoureldeen/Vectras-VM-Android/releases) page or the [official website](https://vectras.vercel.app/download.html).
+
+or
+
+
+[![OpenAPK](https://img.shields.io/badge/Get%20it%20on-OpenAPK-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://www.openapk.net/vectras-vm/com.vectras.vm/)
+
+## Beta Releases
+
+We publish a **new beta release after every commit** — so you can always test the latest features and improvements!
+
+[![Download Beta](https://img.shields.io/badge/Download-Beta-blue?style=for-the-badge&logo=github)](https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases)
 
 # Donate
 Help support the project by contributing!
