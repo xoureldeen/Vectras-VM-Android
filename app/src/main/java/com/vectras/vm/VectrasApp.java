@@ -15,6 +15,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
@@ -84,7 +85,6 @@ public class VectrasApp extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		setupAppConfig(getApplicationContext());
 		vectrasapp = this;
 		CrashHandler.getInstance().registerGlobal(this);
 		CrashHandler.getInstance().registerPart(this);
@@ -104,7 +104,7 @@ public class VectrasApp extends Application {
 		} else {
 			overrideFont("DEFAULT", R.font.gilroy);
 		}
-
+		setupAppConfig(getApplicationContext());
 	}
 
 	public void overrideFont(String defaultFontNameToOverride, int customFontResourceId) {
@@ -430,7 +430,7 @@ public class VectrasApp extends Application {
 		}
 	}
 
-	private static void setupAppConfig(Context _context) {
+	private void setupAppConfig(Context _context) {
 		AppConfig.vectrasVersion = PackageUtils.getThisVersionName(_context);
 		AppConfig.vectrasVersionCode = PackageUtils.getThisVersionCode(_context);
 		AppConfig.basefiledir = AppConfig.datadirpath(_context) + "/.qemu/";
@@ -440,5 +440,8 @@ public class VectrasApp extends Application {
 		AppConfig.romsdatajson = AppConfig.maindirpath + "roms-data.json";
 		AppConfig.vmFolder = AppConfig.maindirpath + "roms/";
 		AppConfig.recyclebin = AppConfig.maindirpath + "recyclebin/";
+
+		Config.cacheDir = _context.getCacheDir().getAbsolutePath();
+		Config.storagedir = Environment.getExternalStorageDirectory().toString();
 	}
 }

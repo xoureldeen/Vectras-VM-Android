@@ -83,33 +83,6 @@ public class AdapterRoms extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 intent.putExtra("creator", current.creator);
                 intent.putExtra("size", current.fileSize);
                 context.startActivity(intent);
-
-                if (!current.romPath.endsWith(".cvbi")) {
-                    //Save image to icon folder
-                    myHolder.ivIcon.buildDrawingCache();
-                    Bitmap bm = myHolder.ivIcon.getDrawingCache();
-                    OutputStream fOut = null;
-                    try {
-                        File root = new File(AppConfig.maindirpath + "/icons/");
-                        if(root.mkdirs()) {
-                            File sdImageMainDirectory = new File(root, current.romPath + ".png");
-                            fOut = new FileOutputStream(sdImageMainDirectory);
-                        } else {
-                            Log.e(TAG, "Directory: " + AppConfig.maindirpath + "/icons/");
-                        }
-                    } catch (FileNotFoundException e) {
-                        Log.e(TAG, "File: " + Objects.requireNonNull(e.getMessage()));
-                    }
-
-                    try {
-                        assert fOut != null;
-                        bm.compress(Bitmap.CompressFormat.PNG, 100, fOut);
-                        fOut.flush();
-                        fOut.close();
-                    } catch (Exception e) {
-                        Log.e(TAG, "Bitmap: " + Objects.requireNonNull(e.getMessage()));
-                    }
-                }
             });
         } else {
             myHolder.textAvail.setText(context.getString(R.string.unavailable));
