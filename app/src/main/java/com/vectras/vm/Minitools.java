@@ -1,21 +1,14 @@
 package com.vectras.vm;
 
-import static android.content.Intent.ACTION_OPEN_DOCUMENT;
 import static android.content.Intent.ACTION_VIEW;
 import static android.view.View.GONE;
 
-import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.DocumentsContract;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,12 +21,8 @@ import android.widget.Toast;
 import android.widget.BaseAdapter;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.termux.app.TermuxService;
 import com.vectras.qemu.MainSettingsManager;
@@ -44,19 +33,18 @@ import com.vectras.vm.utils.ListUtils;
 import com.vectras.vm.utils.PackageUtils;
 import com.vectras.vm.utils.UIUtils;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class Minitools extends AppCompatActivity {
 
-    private ArrayList<HashMap<String, String>> listmapForSelectMirrors = new ArrayList<>();
+    private final ArrayList<HashMap<String, String>> listmapForSelectMirrors = new ArrayList<>();
     private Spinner spinnerselectmirror;
     private String selectedMirrorCommand = "";
 
@@ -69,7 +57,7 @@ public class Minitools extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         toolbar.setTitle(getString(R.string.mini_tools));
 
@@ -194,14 +182,14 @@ public class Minitools extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId()) {
-            case 0:
-                return true;
-            case android.R.id.home:
+        return switch (item.getItemId()) {
+            case 0 -> true;
+            case android.R.id.home -> {
                 finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
+                yield true;
+            }
+            default -> super.onOptionsItemSelected(item);
+        };
     }
 
     private void setupSpiner() {

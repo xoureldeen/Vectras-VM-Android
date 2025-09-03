@@ -1,7 +1,10 @@
 package com.vectras.vm;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -11,7 +14,6 @@ import com.vectras.vm.utils.UIUtils;
 
 public class EditActivity extends AppCompatActivity {
 
-    private Button buttondone;
     private EditText editcontent;
     public static String result = "";
 
@@ -21,21 +23,23 @@ public class EditActivity extends AppCompatActivity {
         UIUtils.edgeToEdge(this);
         setContentView(R.layout.activity_edit);
         UIUtils.setOnApplyWindowInsetsListener(findViewById(R.id.main));
-        buttondone = findViewById(R.id.materialbutton1);
+        Button buttondone = findViewById(R.id.materialbutton1);
         editcontent = findViewById(R.id.edittext1);
         if (getIntent().hasExtra("content")) {
             result = getIntent().getStringExtra("content");
             editcontent.setText(result);
         }
 
-        buttondone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                result = editcontent.getText().toString();
-                finish();
-            }
+        buttondone.setOnClickListener(v -> {
+            result = editcontent.getText().toString();
+            finish();
         });
 
-        editcontent.requestFocus();
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            editcontent.requestFocus();
+            editcontent.setSelection(editcontent.getText().length());
+            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            imm.showSoftInput(editcontent, InputMethodManager.SHOW_IMPLICIT);
+        }, 200);
     }
 }

@@ -658,7 +658,7 @@ public class VMManager {
         }
     }
 
-    public static boolean isRomsDataJsonNormal(Boolean _needfix, Activity _context) {
+    public static boolean isRomsDataJsonValid(Boolean _needfix, Activity _context) {
         if (isFileExists(AppConfig.romsdatajson)) {
             if (!JSONUtils.isValidFromFile(AppConfig.romsdatajson)) {
                 if (_needfix) {

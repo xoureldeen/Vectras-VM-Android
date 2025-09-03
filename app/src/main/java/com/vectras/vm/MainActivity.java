@@ -8,29 +8,23 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.termux.app.TermuxService;
 
+import static com.vectras.vm.VMManager.startFixRomsDataJson;
 import static com.vectras.vm.VectrasApp.getApp;
 import static com.vectras.vm.utils.LibraryChecker.isPackageInstalled2;
 import static com.vectras.vm.utils.UIUtils.UIAlert;
 
 import com.vectras.vm.settings.VNCActivity;
-import com.vectras.vm.utils.CommandUtils;
+import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.NetworkUtils;
 import com.vectras.vm.utils.PermissionUtils;
 
-import android.androidVNC.androidVNC;
 import android.app.ActivityManager;
 import android.app.Dialog;
 import android.app.NotificationManager;
-import android.app.ProgressDialog;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -41,7 +35,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.provider.DocumentsContract;
-import android.provider.Settings;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -53,25 +46,20 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.Manifest;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
@@ -97,7 +85,6 @@ import com.vectras.vm.utils.AppUpdater;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.LibraryChecker;
 import com.vectras.vm.utils.PackageUtils;
-import com.vectras.vm.utils.UIUtils;
 import com.vectras.vterm.Terminal;
 
 import org.json.JSONArray;
@@ -113,15 +100,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import com.vectras.vm.core.ShellExecutor;
 
@@ -135,7 +118,6 @@ public class MainActivity extends AppCompatActivity {
     public static AdapterMainRoms mMainAdapter;
     public static JSONArray jArray;
     public static List<DataMainRoms> data;
-    public AlertDialog ad;
     public static MainActivity activity;
     private InterstitialAd mInterstitialAd;
     private AdRequest adRequest;
@@ -149,14 +131,10 @@ public class MainActivity extends AppCompatActivity {
     public static LinearLayout linearnothinghere;
     private final Timer _timer = new Timer();
     private AlertDialog alertDialog;
-    private boolean doneonstart = false;
     public static boolean isActivate = false;
     public boolean skipIDEwithARM64DialogInStartVM = false;
     BottomAppBar bottomAppBar;
     AlertDialog progressDialog;
-
-    public static Timer timer = new Timer();
-    public static TimerTask timerTask;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -165,7 +143,6 @@ public class MainActivity extends AppCompatActivity {
         RamInfo.activity = this;
         setContentView(R.layout.activity_main);
         isActivate = true;
-        setupFolders();
 
         NotificationManager notificationManager = (NotificationManager) activity.getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancelAll();
@@ -204,7 +181,6 @@ public class MainActivity extends AppCompatActivity {
         refreshRoms.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                errorjsondialog();
                 loadDataVbi();
                 mMainAdapter.notifyItemRangeChanged(0, mMainAdapter.data.size());
                 refreshRoms.setRefreshing(false);
@@ -598,26 +574,26 @@ public class MainActivity extends AppCompatActivity {
 
                                         totalRam.setText(
                                                 activity.getResources()
-                                                                .getString(R.string.total_memory)
+                                                        .getString(R.string.total_memory)
                                                         + " "
                                                         + totalMemory
                                                         + " MB");
                                         usedRam.setText(
                                                 activity.getResources()
-                                                                .getString(R.string.used_memory)
+                                                        .getString(R.string.used_memory)
                                                         + " "
                                                         + usedMemory
                                                         + " MB");
                                         freeRam.setText(
                                                 activity.getResources()
-                                                                .getString(R.string.free_memory)
+                                                        .getString(R.string.free_memory)
                                                         + " "
                                                         + freeMemory
                                                         + " MB ("
                                                         + vectrasMemory
                                                         + " "
                                                         + activity.getResources()
-                                                                .getString(R.string.used)
+                                                        .getString(R.string.used)
                                                         + ")");
                                         LinearProgressIndicator progressBar = findViewById(R.id.progressBar);
                                         progressBar.setMax((int) totalMemory);
@@ -719,19 +695,19 @@ public class MainActivity extends AppCompatActivity {
 
                             if (versionCode < obj.getInt("versionCode") || !versionNameonUpdate.equals(versionName)) {
                                 if (showDialog) {
-                                AlertDialog.Builder alert = new AlertDialog.Builder(activity, R.style.MainDialogTheme);
-                                alert.setTitle("Install the latest version")
-                                        .setMessage(Html.fromHtml(obj.getString("MessageBeta") + "<br><br>Update size:<br>" + obj.getString("sizeBeta")))
-                                        .setCancelable(obj.getBoolean("cancellableBeta"))
-                                        .setNegativeButton("Update", new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int id) {
-                                                try {
-                                                    startActivity(new Intent(ACTION_VIEW, Uri.parse(obj.getString("urlBeta"))));
-                                                } catch (JSONException e) {
+                                    AlertDialog.Builder alert = new AlertDialog.Builder(activity, R.style.MainDialogTheme);
+                                    alert.setTitle("Install the latest version")
+                                            .setMessage(Html.fromHtml(obj.getString("MessageBeta") + "<br><br>Update size:<br>" + obj.getString("sizeBeta")))
+                                            .setCancelable(obj.getBoolean("cancellableBeta"))
+                                            .setNegativeButton("Update", new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                    try {
+                                                        startActivity(new Intent(ACTION_VIEW, Uri.parse(obj.getString("urlBeta"))));
+                                                    } catch (JSONException e) {
 
+                                                    }
                                                 }
-                                            }
-                                        }).show();
+                                            }).show();
                                 } else {
                                     View _update = findViewById(R.id.update);
                                     _update.setVisibility(View.VISIBLE);
@@ -742,19 +718,19 @@ public class MainActivity extends AppCompatActivity {
 
                             if (versionCode < obj.getInt("versionCode") || !versionNameonUpdate.contains(versionName)) {
                                 if (showDialog) {
-                                AlertDialog.Builder alert = new AlertDialog.Builder(activity, R.style.MainDialogTheme);
-                                alert.setTitle("Install the latest version")
-                                        .setMessage(Html.fromHtml(obj.getString("Message") + "<br><br>Update size:<br>" + obj.getString("size")))
-                                        .setCancelable(obj.getBoolean("cancellable"))
-                                        .setNegativeButton("Update", new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int id) {
-                                                try {
-                                                    startActivity(new Intent(ACTION_VIEW, Uri.parse(obj.getString("url"))));
-                                                } catch (JSONException e) {
+                                    AlertDialog.Builder alert = new AlertDialog.Builder(activity, R.style.MainDialogTheme);
+                                    alert.setTitle("Install the latest version")
+                                            .setMessage(Html.fromHtml(obj.getString("Message") + "<br><br>Update size:<br>" + obj.getString("size")))
+                                            .setCancelable(obj.getBoolean("cancellable"))
+                                            .setNegativeButton("Update", new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                    try {
+                                                        startActivity(new Intent(ACTION_VIEW, Uri.parse(obj.getString("url"))));
+                                                    } catch (JSONException e) {
 
+                                                    }
                                                 }
-                                            }
-                                        }).show();
+                                            }).show();
                                 } else {
                                     View _update = findViewById(R.id.update);
                                     _update.setVisibility(View.VISIBLE);
@@ -776,6 +752,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadDataVbi() {
+
+        if (FileUtils.isFileExists(AppConfig.romsdatajson)) {
+            if (!VMManager.isRomsDataJsonValid(true, MainActivity.this)) {
+                DialogUtils.twoDialog(this,
+                        getString(R.string.problem_has_been_detected),
+                        getString(R.string.vm_list_data_is_corrupted_content),
+                        getString(R.string.continuetext),
+                        getString(R.string.cancel),
+                        true,
+                        R.drawable.build_24px,
+                        true,
+                        () -> {
+                            FileUtils.moveAFile(AppConfig.maindirpath + "roms-data.json", AppConfig.maindirpath + "roms-data.old.json");
+                            FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", "[]");
+                            startFixRomsDataJson();
+                        },
+                        null,
+                        null);
+            }
+        } else {
+            FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", "[]");
+        }
+
         data = new ArrayList<>();
 
         try {
@@ -808,7 +807,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     romsMainData.qmpPort = json_data.getInt("qmpPort");
                 } catch (JSONException ignored) {
-                    romsMainData.qmpPort= 0;
+                    romsMainData.qmpPort = 0;
                 }
                 try {
                     romsMainData.itemDrv1 = json_data.getString("imgDrv1");
@@ -817,10 +816,10 @@ public class MainActivity extends AppCompatActivity {
                 }
                 romsMainData.itemExtra = json_data.getString("imgExtra");
                 //try {
-                    //if (json_data.getString("imgArch").equals(MainSettingsManager.getArch(MainActivity.activity)))
-                        data.add(romsMainData);
+                //if (json_data.getString("imgArch").equals(MainSettingsManager.getArch(MainActivity.activity)))
+                data.add(romsMainData);
                 //} catch (JSONException ignored) {
-                    //data.add(romsMainData);
+                //data.add(romsMainData);
                 //}
             }
 
@@ -831,7 +830,9 @@ public class MainActivity extends AppCompatActivity {
             int spanCount = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 2;
             mRVMainRoms.setLayoutManager(new GridLayoutManager(this, spanCount));
         } catch (JSONException e) {
+            e.printStackTrace();
         }
+        mdatasize();
     }
 
     @Override
@@ -947,7 +948,7 @@ public class MainActivity extends AppCompatActivity {
 //        };
 //        timer.schedule(timerTask, 5000);
 
-        File romDir = new File(Config.getCacheDir()+ "/" + Config.vmID);
+        File romDir = new File(Config.getCacheDir() + "/" + Config.vmID);
         romDir.mkdirs();
 
         if (!VMManager.isthiscommandsafe(env, activity.getApplicationContext())) {
@@ -1068,18 +1069,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void setupFolders() {
-        Thread t = new Thread(new Runnable() {
-            public void run() {
-
-                Config.cacheDir = getCacheDir().getAbsolutePath();
-                Config.storagedir = Environment.getExternalStorageDirectory().toString();
-
-            }
-        });
-        t.start();
-    }
-
     public void onResume() {
         super.onResume();
         checkpermissions();
@@ -1121,7 +1110,7 @@ public class MainActivity extends AppCompatActivity {
         //TEMPORARY FIX FOR VNC CLOSES
         //TODO: FIND FIX FOR CRASHING
         //if (MainSettingsManager.getVmUi(activity).equals("VNC") && MainVNCActivity.started)
-            //startActivity(new Intent(activity, MainVNCActivity.class));
+        //startActivity(new Intent(activity, MainVNCActivity.class));
 
         InterstitialAd.load(this, "ca-app-pub-3568137780412047/7745973511", adRequest,
                 new InterstitialAdLoadCallback() {
@@ -1145,7 +1134,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Log.d("TAG", "The interstitial ad wasn't ready yet.");
         }
-        doneonstart = true;
 
         if (!AppConfig.pendingCommand.isEmpty()) {
             if (!VMManager.isthiscommandsafe(AppConfig.pendingCommand, getApplicationContext())) {
@@ -1394,49 +1382,8 @@ public class MainActivity extends AppCompatActivity {
         return FileUtils.getPath(this, uri);
     }
 
-    private void errorjsondialog() {
-        if (FileUtils.isFileExists(AppConfig.romsdatajson)) {
-            if (VMManager.isRomsDataJsonNormal(true, MainActivity.this)) {
-                loadDataVbi();
-                mdatasize();
-            }
-        } else {
-            FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", "[]");
-            loadDataVbi();
-            mdatasize();
-        }
-    }
-
-    private String readFile(String filePath) {
-        StringBuilder content = new StringBuilder();
-        try (FileInputStream inputStream = new FileInputStream(filePath);
-             BufferedReader reader = new BufferedReader(new
-                     InputStreamReader(inputStream))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                content.append(line).append("\n");
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return content.toString();
-
-    }
-
     private void mdatasize() {
         if (MainActivity.data.isEmpty()) {
-            if (!doneonstart) {
-                alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
-                alertDialog.setTitle(getResources().getString(R.string.nothing_here));
-                alertDialog.setMessage("Do you want to create a new virtual machine now?");
-                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getResources().getString(R.string.create), (dialog, which) -> {
-                    startActivity(new Intent(activity, SetArchActivity.class));
-                });
-                alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getResources().getString(R.string.cancel), (dialog, which) -> {
-
-                });
-                alertDialog.show();
-            }
             linearnothinghere.setVisibility(View.VISIBLE);
         } else {
             linearnothinghere.setVisibility(View.GONE);
@@ -1453,7 +1400,20 @@ public class MainActivity extends AppCompatActivity {
 
     private void checkpermissions() {
         if (PermissionUtils.storagepermission(activity, true)) {
-            errorjsondialog();
+            loadDataVbi();
+            if (DeviceUtils.isStorageLow(this)) {
+                DialogUtils.oneDialog(this,
+                        getResources().getString(R.string.oops),
+                        getResources().getString(R.string.very_low_available_storage_space_content),
+                        getResources().getString(R.string.ok),
+                        true,
+                        R.drawable.warning_48px,
+                        true,
+                        null,
+                        () -> {
+                            if (DeviceUtils.isStorageLow(this)) finish();
+                        });
+            }
         }
     }
 

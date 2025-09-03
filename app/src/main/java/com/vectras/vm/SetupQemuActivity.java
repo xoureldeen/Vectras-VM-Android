@@ -5,6 +5,7 @@ import static android.content.Intent.ACTION_VIEW;
 import static android.view.View.GONE;
 
 import com.termux.app.TermuxService;
+
 import static com.vectras.vm.utils.UIUtils.UIAlert;
 
 import android.annotation.SuppressLint;
@@ -42,6 +43,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.databinding.ActivitySetupQemuBinding;
+import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.JSONUtils;
 import com.vectras.vm.utils.ListUtils;
@@ -172,8 +174,9 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                 contentJSON = response;
                 if (JSONUtils.isMapValidFromString(contentJSON)) {
                     mmap.clear();
-                    mmap= new Gson().fromJson(contentJSON, new TypeToken<HashMap<String, Object>>(){}.getType());
-                    if(mmap.containsKey("arm64") && mmap.containsKey("x86_64")) {
+                    mmap = new Gson().fromJson(contentJSON, new TypeToken<HashMap<String, Object>>() {
+                    }.getType());
+                    if (mmap.containsKey("arm64") && mmap.containsKey("x86_64")) {
                         if (Build.SUPPORTED_ABIS[0].contains("arm64")) {
                             bootstrapfilelink = mmap.get("arm64").toString();
                         } else {
@@ -204,7 +207,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                 linearload.setVisibility(GONE);
             }
         };
-        
+
         String filesDir = activity.getFilesDir().getAbsolutePath();
         File distroDir = new File(filesDir + "/distro");
         File binDir = new File(distroDir + "/bin");
@@ -276,7 +279,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                     }
                     //FileUtils.deleteDirectory(apkLoaderextractedFilePath);
                     //if (!copyAssetToFile(apkLoaderAssetPath, apkLoaderextractedFilePath)) {
-                        //errorMessage = "Failed to copy loader.apk file.";
+                    //errorMessage = "Failed to copy loader.apk file.";
                     //}
                 }
             }
@@ -301,10 +304,12 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         }.execute();
     }
 
-    /** Copies the specified asset to the given file path. */
+    /**
+     * Copies the specified asset to the given file path.
+     */
     private boolean copyAssetToFile(String assetPath, String outputPath) {
         try (InputStream in = getAssets().open(assetPath);
-                OutputStream out = new FileOutputStream(outputPath)) {
+             OutputStream out = new FileOutputStream(outputPath)) {
             byte[] buffer = new byte[1024];
             int read;
             while ((read = in.read(buffer)) != -1) {
@@ -318,7 +323,9 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    /** Determines the ABI of the device. */
+    /**
+     * Determines the ABI of the device.
+     */
     private String getDeviceAbi() {
         return Build.SUPPORTED_ABIS[0];
     }
@@ -367,10 +374,10 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
             }
         } else if (id == R.id.buttontryconnectagain) {
             linearload.setVisibility(View.VISIBLE);
-            net.startRequestNetwork(RequestNetworkController.GET,AppConfig.bootstrapfileslink,"",_net_request_listener);
+            net.startRequestNetwork(RequestNetworkController.GET, AppConfig.bootstrapfileslink, "", _net_request_listener);
         } else if (id == R.id.buttonletstart) {
             linearwelcome.setVisibility(GONE);
-            net.startRequestNetwork(RequestNetworkController.GET,AppConfig.bootstrapfileslink,"",_net_request_listener);
+            net.startRequestNetwork(RequestNetworkController.GET, AppConfig.bootstrapfileslink, "", _net_request_listener);
         }
     }
 
@@ -388,9 +395,9 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
             isexecutingCommand = false;
             linearsimplesetupui.setVisibility(GONE);
             binding.advancedsetup.lnAdvancedsetup.setVisibility(GONE);
-        } else if (textToAdd.contains("libproot.so --help")){
+        } else if (textToAdd.contains("libproot.so --help")) {
             libprooterror = true;
-        } else if (textToAdd.contains("not complete: /root/setup.tar.gz")){
+        } else if (textToAdd.contains("not complete: /root/setup.tar.gz")) {
             aria2Error = true;
         }
 
@@ -458,7 +465,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
 
                 // Setup environment for the PRoot process
                 processBuilder.environment().put("PROOT_TMP_DIR", tmpDir.getAbsolutePath());
-                
+
                 processBuilder.environment().put("HOME", "/root");
                 processBuilder.environment().put("USER", "root");
                 processBuilder.environment().put("PATH", "/bin:/usr/bin:/sbin:/usr/sbin");
@@ -687,6 +694,20 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                     }
                 }
             }
+
+            if (DeviceUtils.isStorageLow(this)) {
+                DialogUtils.oneDialog(this,
+                        getResources().getString(R.string.oops),
+                        getResources().getString(R.string.very_low_available_storage_space_content),
+                        getResources().getString(R.string.ok),
+                        true,
+                        R.drawable.warning_48px,
+                        true,
+                        null,
+                        () -> {
+                            if (DeviceUtils.isStorageLow(this)) finish();
+                        });
+            }
         }
     }
 
@@ -718,7 +739,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
             File selectedFilePath = new File(getPath(content_describer));
             ProgressBar loading = progressBar;
             String abi = Build.SUPPORTED_ABIS[0];
-            if (selectedFilePath.toString().endsWith(abi+".tar.gz")) {
+            if (selectedFilePath.toString().endsWith(abi + ".tar.gz")) {
                 loading.setVisibility(View.VISIBLE);
                 new Thread(new Runnable() {
                     @Override
@@ -772,8 +793,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                 }
                 UIAlert(activity, "INVALID FILE", "please select vectras-vm-" + abi + ".tar.gz file");
             }
-        } else
-        if (linearsimplesetupui.getVisibility() == GONE) {
+        } else if (linearsimplesetupui.getVisibility() == GONE) {
             showAdvancedSetupDialog();
         }
     }

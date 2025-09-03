@@ -66,6 +66,7 @@ public class CustomRomActivity extends AppCompatActivity {
     int decompressionProgress = 0;
     boolean modify;
     public static DataMainRoms current;
+    private boolean isImportingCVBI = false;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -272,7 +273,7 @@ public class CustomRomActivity extends AppCompatActivity {
 
                 binding.title.setText(getIntent().getStringExtra("romname"));
 
-                if (getIntent().hasExtra("romicon")) {
+                if (getIntent().hasExtra("romicon") && !Objects.requireNonNull(getIntent().getStringExtra("romicon")).isEmpty()) {
                     startProcessingThumbnail(Uri.parse(getIntent().getStringExtra("romicon")));
                 }
 
@@ -361,7 +362,6 @@ public class CustomRomActivity extends AppCompatActivity {
 
                 if (MainSettingsManager.copyFile(this)) {
                     whenProcessing(true);
-                    binding.custom.setVisibility(View.GONE);
                     executor.execute(() -> {
                         try {
                             try {
@@ -383,13 +383,11 @@ public class CustomRomActivity extends AppCompatActivity {
                             } finally {
                                 runOnUiThread(() -> {
                                     whenProcessing(false);
-                                    binding.custom.setVisibility(View.VISIBLE);
                                 });
                             }
                         } catch (IOException e) {
                             runOnUiThread(() -> {
                                 whenProcessing(false);
-                                binding.custom.setVisibility(View.VISIBLE);
                                 DialogUtils.oneDialog(this,
                                         getString(R.string.oops),
                                         getString(R.string.unable_to_copy_iso_file_content),
@@ -537,7 +535,7 @@ public class CustomRomActivity extends AppCompatActivity {
 
     private void createNewVM() {
         if (FileUtils.isFileExists(AppConfig.romsdatajson)) {
-            if (!VMManager.isRomsDataJsonNormal(true, this)) {
+            if (!VMManager.isRomsDataJsonValid(true, this)) {
                 return;
             }
         } else {
@@ -600,7 +598,7 @@ public class CustomRomActivity extends AppCompatActivity {
                         null));
             } finally {
                 runOnUiThread(() -> {
-                    whenProcessing(false);
+                    if (!isImportingCVBI) whenProcessing(false);
                 });
             }
         });
@@ -613,7 +611,7 @@ public class CustomRomActivity extends AppCompatActivity {
 
             if (imgFile.exists()) {
                 Glide.with(this)
-                        .load(new File(AppConfig.vmFolder + vmID + "/thumbnail.png"))
+                        .load(new File(thumbnailPath))
                         .placeholder(R.drawable.ic_computer_180dp_with_padding)
                         .error(R.drawable.ic_computer_180dp_with_padding)
                         .into(binding.ivIcon);
@@ -644,7 +642,6 @@ public class CustomRomActivity extends AppCompatActivity {
     private void startProcessingHardDriveFile(Uri _content_describer, boolean _addtodrive) {
         if (MainSettingsManager.copyFile(this)) {
             whenProcessing(true);
-            binding.custom.setVisibility(View.GONE);
             if (!createVMFolder()) {
                 return;
             }
@@ -668,13 +665,11 @@ public class CustomRomActivity extends AppCompatActivity {
                     } finally {
                         runOnUiThread(() -> {
                             whenProcessing(false);
-                            binding.custom.setVisibility(View.VISIBLE);
                         });
                     }
                 } catch (IOException e) {
                     runOnUiThread(() -> {
                         whenProcessing(false);
-                        binding.custom.setVisibility(View.VISIBLE);
                         DialogUtils.oneDialog(this,
                                 getString(R.string.oops),
                                 getString(R.string.unable_to_copy_hard_drive_file_content),
@@ -742,8 +737,8 @@ public class CustomRomActivity extends AppCompatActivity {
                 return;
             }
 
+            isImportingCVBI = true;
             whenProcessing(true);
-            binding.custom.setVisibility(View.GONE);
             binding.ivIcon.setEnabled(false);
 
             zipFileSize = FileUtils.getFileSize(_filepath);
@@ -857,8 +852,8 @@ public class CustomRomActivity extends AppCompatActivity {
             timerTask.cancel();
         }
 
+        isImportingCVBI = false;
         whenProcessing(false);
-        binding.custom.setVisibility(View.VISIBLE);
         binding.ivIcon.setEnabled(true);
         try {
             if (!FileUtils.isFileExists(AppConfig.vmFolder + vmID + "/rom-data.json")) {
@@ -881,12 +876,8 @@ public class CustomRomActivity extends AppCompatActivity {
 
                         binding.title.setText(getIntent().getStringExtra("romname"));
 
-                        if (!Objects.requireNonNull(getIntent().getStringExtra("romicon")).isEmpty()) {
-                            File imgFile = new File(Objects.requireNonNull(getIntent().getStringExtra("romicon")));
-                            if (imgFile.exists()) {
-                                thumbnailPath = getIntent().getStringExtra("romicon");
-                                thumbnailProcessing();
-                            }
+                        if (getIntent().hasExtra("romicon") && !Objects.requireNonNull(getIntent().getStringExtra("romicon")).isEmpty()) {
+                            startProcessingThumbnail(Uri.parse(getIntent().getStringExtra("romicon")));
                         }
                     } else {
                         if (Objects.requireNonNull(binding.qemu.getText()).toString().isEmpty()) {

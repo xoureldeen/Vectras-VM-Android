@@ -3,6 +3,8 @@ package com.vectras.vm;
 import static android.content.Intent.ACTION_OPEN_DOCUMENT;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,14 +14,18 @@ import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.databinding.ActivityRomInfoBinding;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
+import com.vectras.vm.utils.ImageUtils;
 
 import java.io.File;
 import java.util.Objects;
@@ -92,6 +98,32 @@ public class RomInfo extends AppCompatActivity {
             File selectedFilePath = new File(getPath(content_describer));
             if (selectedFilePath.getName().equals(getIntent().getStringExtra("filename")) || (selectedFilePath.getName().endsWith(".cvbi.zip") && selectedFilePath.getName().equals(getIntent().getStringExtra("filename") + ".zip"))) {
                 Intent intent = new Intent();
+
+                if (getIntent().hasExtra("icon") &&
+                        !Objects.requireNonNull(getIntent().getStringExtra("icon")).isEmpty() &&
+                        (!selectedFilePath.getName().endsWith(".cvbi")
+                        || !selectedFilePath.getName().endsWith(".cvbi.zip"))) {
+
+                    Glide.with(this)
+                            .asBitmap()
+                            .load(getIntent().getStringExtra("icon"))
+                            .into(new CustomTarget<Bitmap>() {
+                                @Override
+                                public void onResourceReady(@NonNull Bitmap resource,
+                                                            @Nullable Transition<? super Bitmap> transition) {
+                                    ImageUtils.saveBitmapToPNGFile(resource, Objects.requireNonNull(getExternalCacheDir()).getAbsolutePath(), "thumbnail.png");
+                                    intent.putExtra("romicon", getExternalCacheDir().getAbsolutePath() + "/thumbnail.png");
+                                }
+
+                                @Override
+                                public void onLoadCleared(@Nullable Drawable placeholder) {
+                                    intent.putExtra("romicon", "");
+                                }
+                            });
+                } else {
+                    intent.putExtra("romicon", "");
+                }
+
                 intent.setClass(getApplicationContext(), CustomRomActivity.class);
                 intent.putExtra("addromnow", "");
                 intent.putExtra("romname", getIntent().getStringExtra("title"));
@@ -105,7 +137,6 @@ public class RomInfo extends AppCompatActivity {
                     intent.putExtra("addtodrive", "1");
                     intent.putExtra("romextra", getIntent().getStringExtra("extra"));
                 }
-                intent.putExtra("romicon", AppConfig.maindirpath + "icons/" + getIntent().getStringExtra("filename") + ".png");
                 switch (Objects.requireNonNull(getIntent().getStringExtra("arch"))) {
                     case "X86_64":
                         MainSettingsManager.setArch(this, "X86_64");
