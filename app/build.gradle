@@ -86,7 +86,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage'
     implementation("com.google.android.gms:play-services-auth:21.4.0")
     implementation("com.google.firebase:firebase-crashlytics")
-    implementation 'com.google.android.gms:play-services-ads:24.5.0'
+    implementation 'com.google.android.gms:play-services-ads:24.6.0'
     implementation 'com.google.guava:guava:33.4.8-jre'
     implementation 'com.google.code.gson:gson:2.13.1'
     implementation 'com.squareup.okhttp3:okhttp:5.1.0'
