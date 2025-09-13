@@ -304,6 +304,22 @@
         "verified": true
     },
     {
+        "rom_name":"Microsoft PixelSense",
+        "rom_icon":"https://maythecodebewithu.wordpress.com/wp-content/uploads/2013/07/ctafullhero_278x298_pixelsense.jpg",
+        "rom_url":"https://anbui.ovh/get/vec/community/win/nt6/7msps.html",
+        "rom_path":"Windows PixelSense .cvbi",
+        "rom_avail":true,
+        "rom_size":"Formerly called Microsoft Surface",
+        "rom_arch":"X86_64",
+        "rom_kernel":"windows",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"Microsoft PixelSense (formerly called Microsoft Surface) was an interactive surface computing platform that allowed one or more people to use and touch real-world objects, and share digital content at the same time. The PixelSense platform consists of software and hardware products that combine vision based multitouch PC hardware, 360-degree multiuser application design, and Windows software to create a natural user interface (NUI).",
+        "file_size": "12 GB",
+        "creator": "tokaevUser",
+        "verified": true
+    },
+    {
         "rom_name":"Windows 8 build 7777",
         "rom_icon":"https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/09/17/windows-logo_1_926ed76111646acbbe332bc5af0cf2ce.png",
         "rom_url":"https://youtu.be/ahT8cT2F-hI",
