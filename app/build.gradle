@@ -107,8 +107,8 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:3.0.0'
 
     // Glide
-    implementation 'com.github.bumptech.glide:glide:5.0.4'
-    annotationProcessor 'com.github.bumptech.glide:compiler:5.0.4'
+    implementation 'com.github.bumptech.glide:glide:5.0.5'
+    annotationProcessor 'com.github.bumptech.glide:compiler:5.0.5'
     
     // Test dependencies
     testImplementation 'junit:junit:4.13.2'
