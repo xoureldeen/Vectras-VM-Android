@@ -26,6 +26,16 @@
             android:title="@string/join_the_beta_channel"
             app:icon="@drawable/science_24px" />
 
+        <SwitchPreferenceCompat
+            android:id="@+id/copyfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="true"
+            android:key="copyFile"
+            android:summary="@string/copy_file_content"
+            android:title="@string/copy_file"
+            app:icon="@drawable/file_copy_24px" />
+
         <ListPreference
             android:key="language"
             android:title="@string/language"
@@ -36,15 +46,15 @@
             app:isPreferenceVisible="true"
             app:icon="@drawable/round_language_24" />
 
-        <SwitchPreferenceCompat
-            android:id="@+id/copyfile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:defaultValue="true"
-            android:key="copyFile"
-            android:summary="@string/copy_file_content"
-            android:title="@string/copy_file"
-            app:icon="@drawable/file_copy_24px" />
+        <Preference
+            android:key="checkforupdate"
+            android:title="@string/check_for_updates"
+            android:summary="@string/see_if_there_are_any_new_updates"
+            app:icon="@drawable/system_update_24px">
+            <intent
+                android:targetPackage="com.vectras.vm"
+                android:targetClass="com.vectras.vm.settings.UpdaterActivity" />
+        </Preference>
 
     </PreferenceCategory>
 </PreferenceScreen>

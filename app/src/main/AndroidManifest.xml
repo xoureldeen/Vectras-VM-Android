@@ -49,10 +49,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.vectras.vm.settings.VNCActivity"
+            android:name=".home.HomeActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
             android:exported="false"
-            android:hardwareAccelerated="true" />
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".settings.UpdaterActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:exported="false" />
+        <activity
+            android:name=".settings.VNCActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:exported="false" />
         <activity
             android:name=".ReceiveRomFileActivity"
             android:exported="true"
@@ -188,7 +196,7 @@
         <service
             android:name=".AudioStreamService"
             android:enabled="true"
-            android:foregroundServiceType="mediaPlayback"></service>
+            android:foregroundServiceType="mediaPlayback" />
 
         <activity
             android:name="com.termux.app.TermuxActivity"

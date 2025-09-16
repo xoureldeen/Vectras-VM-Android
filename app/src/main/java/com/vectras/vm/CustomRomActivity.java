@@ -21,6 +21,7 @@ import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.Fragment.CreateImageDialogFragment;
 import com.vectras.vm.MainRoms.DataMainRoms;
 import com.vectras.vm.databinding.ActivityCustomRomBinding;
+import com.vectras.vm.home.HomeActivity;
 import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
@@ -525,10 +526,7 @@ public class CustomRomActivity extends AppCompatActivity {
                 createNewVM();
             } else {
                 DialogUtils.twoDialog(this, getString(R.string.problem_has_been_detected), _contentDialog, getString(R.string.continuetext), getString(R.string.cancel), true, R.drawable.warning_48px, true,
-                        () -> {
-                            createNewVM();
-                            finish();
-                        }, null, null);
+                        this::createNewVM, null, null);
             }
         }
     }
@@ -567,7 +565,7 @@ public class CustomRomActivity extends AppCompatActivity {
         }
 
         modify = false;
-        if (!MainActivity.isActivate) {
+        if (!HomeActivity.isActivate) {
             startActivity(new Intent(this, SplashActivity.class));
         } else {
             Intent openURL = new Intent();

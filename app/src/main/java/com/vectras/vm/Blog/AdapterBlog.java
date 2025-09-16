@@ -10,15 +10,12 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.cardview.widget.CardView;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.vectras.vm.R;
-import com.vectras.vm.Fragment.HomeFragment;
 import com.vectras.vm.PostActivity;
 import java.util.Collections;
 import java.util.List;
-import com.vectras.vm.MainActivity;
 
 public class AdapterBlog extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -27,8 +24,7 @@ public class AdapterBlog extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 	List<DataBlog> data = Collections.emptyList();
 	DataBlog current;
 	int currentPos = 0;
-	
-	// create constructor to innitilize context and data sent from MainActivity
+
 	public AdapterBlog(Context context, List<DataBlog> data) {
 		this.context = context;
 		inflater = LayoutInflater.from(context);
@@ -52,9 +48,9 @@ public class AdapterBlog extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 		final DataBlog current = data.get(position);
 		myHolder.textTitle.setText(current.postTitle);
 		myHolder.textDate.setText("Date: " + current.postDate);
-		Glide.with(MainActivity.activity).load(current.postThumb).into(myHolder.ivThumb);
+		Glide.with(context).load(current.postThumb).into(myHolder.ivThumb);
 		Animation animation;
-		animation = AnimationUtils.loadAnimation(MainActivity.activity, android.R.anim.slide_in_left);
+		animation = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left);
 		animation.setDuration(300);
 
 		myHolder.cdPost.startAnimation(animation);
@@ -66,7 +62,7 @@ public class AdapterBlog extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 				PostActivity.content = current.postContent;
 				PostActivity.date = current.postDate;
 				PostActivity.thumb = current.postThumb;
-				MainActivity.activity.startActivity(new Intent(MainActivity.activity, PostActivity.class));
+				context.startActivity(new Intent(context, PostActivity.class));
 			}
 		});
 	}

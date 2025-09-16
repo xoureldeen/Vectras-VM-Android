@@ -1,5 +1,6 @@
 package com.vectras.vm.MainRoms;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -29,14 +30,15 @@ import java.util.List;
 
 public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private final Activity activity;
     private final Context context;
     private final LayoutInflater inflater;
     public List<DataMainRoms> data = Collections.emptyList();
     int currentPos = 0;
 
-    // create constructor to innitilize context and data sent from MainActivity
-    public AdapterMainRoms(Context context, List<DataMainRoms> data) {
-        this.context = context;
+    public AdapterMainRoms(Activity activity, List<DataMainRoms> data) {
+        this.activity = activity;
+        this.context = activity.getApplicationContext();
         inflater = LayoutInflater.from(context);
         this.data = data;
     }
@@ -69,15 +71,15 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
         myHolder.optionsBtn.setOnClickListener(view -> {
 
-            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(MainActivity.activity);
-            View v = MainActivity.activity.getLayoutInflater().inflate(R.layout.rom_options_dialog, null);
+            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(context);
+            View v = activity.getLayoutInflater().inflate(R.layout.rom_options_dialog, null);
             bottomSheetDialog.setContentView(v);
 
             Button modifyRomBtn = v.findViewById(R.id.modifyRomBtn);
             modifyRomBtn.setOnClickListener(v3 -> {
                 CustomRomActivity.current = data.get(position);
-                VMManager.setArch(current.itemArch, MainActivity.activity);
-                MainActivity.activity.startActivity(new Intent(MainActivity.activity, CustomRomActivity.class).putExtra("POS", position).putExtra("MODIFY", true).putExtra("VMID", current.vmID));
+                VMManager.setArch(current.itemArch, activity);
+                context.startActivity(new Intent(context, CustomRomActivity.class).putExtra("POS", position).putExtra("MODIFY", true).putExtra("VMID", current.vmID));
                 bottomSheetDialog.cancel();
             });
 
@@ -92,14 +94,14 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             Button removeRomBtn = v.findViewById(R.id.removeRomBtn);
             removeRomBtn.setOnClickListener(v1 -> {
-                VMManager.deleteVMDialog(current.itemName, position, MainActivity.activity);
+                VMManager.deleteVMDialog(current.itemName, position, activity);
                 bottomSheetDialog.cancel();
             });
             bottomSheetDialog.show();
         });
 
         myHolder.cdRoms.setOnClickListener(view -> {
-            VMManager.setArch(current.itemArch, MainActivity.activity);
+            VMManager.setArch(current.itemArch, activity);
             StartVM.cdrompath = current.imgCdrom;
             if (current.qmpPort == 0) {
                 Config.setDefault();
@@ -107,12 +109,12 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 Config.QMPPort = current.qmpPort;
             }
             Config.vmID = current.vmID;
-            String env = StartVM.env(MainActivity.activity, current.itemExtra, current.itemPath, "");
+            String env = StartVM.env(activity, current.itemExtra, current.itemPath, "");
             MainActivity.startVM(current.itemName, env, current.itemExtra, current.itemPath);
         });
 
         myHolder.cdRoms.setOnLongClickListener(v -> {
-            VMManager.deleteVMDialog(current.itemName, position, MainActivity.activity);
+            VMManager.deleteVMDialog(current.itemName, position, activity);
             return false;
         });
     }

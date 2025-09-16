@@ -1,24 +1,17 @@
 package com.vectras.qemu;
 
-import static android.os.Build.VERSION.SDK_INT;
-
 import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
@@ -27,22 +20,14 @@ import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.SwitchPreference;
 import androidx.preference.SwitchPreferenceCompat;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.vectras.vm.AboutActivity;
-import com.vectras.vm.MainActivity;
 import com.vectras.vm.R;
-import com.vectras.vm.RomsManagerActivity;
 import com.vectras.vm.SplashActivity;
-import com.vectras.vm.StoreActivity;
 import com.vectras.vm.VectrasApp;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 public class MainSettingsManager extends AppCompatActivity
         implements PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
@@ -939,6 +924,18 @@ public class MainSettingsManager extends AppCompatActivity
     public static Boolean getuseUEFI(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean("useUEFI", false);
+    }
+
+    public static void setSkipVersion(Context context, String version) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putString("skipVersion", version);
+        edit.commit();
+    }
+
+    public static String getSkipVersion(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString("skipVersion", "");
     }
 
 }

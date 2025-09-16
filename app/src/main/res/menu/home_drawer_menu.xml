@@ -8,11 +8,8 @@
     <item
         android:id="@+id/navigation_item_get_rom"
         android:icon="@drawable/home_storage_24px"
+        android:visible="false"
         android:title="@string/roms_store" />
-    <item
-        android:id="@+id/navigation_item_website"
-        android:icon="@drawable/round_public_24"
-        android:title="@string/vectras_website" />
     <item
         android:id="@+id/navigation_item_import_iso"
         android:icon="@drawable/round_album_24"
@@ -52,6 +49,10 @@
         android:id="@+id/mini_tools"
         android:icon="@drawable/home_repair_service_24px"
         android:title="@string/mini_tools"/>
+    <item
+        android:id="@+id/navigation_item_website"
+        android:icon="@drawable/round_public_24"
+        android:title="@string/vectras_website" />
     <item
         android:id="@+id/navigation_item_donate"
         android:icon="@drawable/ic_patreon"

@@ -599,7 +599,7 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                             // Stop the service
                             MainService.stopService();
                             //Terminal.killQemuProcess();
-                            VMManager.killcurrentqemuprocess(getApplicationContext());
+                            VMManager.killcurrentqemuprocess(X11Activity.this);
                             finish();
                         })
                         .setNegativeButton(getString(R.string.no), null)

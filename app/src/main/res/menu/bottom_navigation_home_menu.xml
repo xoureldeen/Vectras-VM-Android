@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/item_home"
+        android:enabled="true"
+        android:icon="@drawable/ic_home_selector"
+        android:title="@string/home"/>
+    <item
+        android:id="@+id/item_romstore"
+        android:enabled="true"
+        android:icon="@drawable/ic_home_storage_selector"
+        android:title="@string/roms_store"/>
+    <item
+        android:id="@+id/item_monitor"
+        android:enabled="true"
+        android:icon="@drawable/ic_monitor_heart_selector"
+        android:title="@string/system_monitor"/>
+</menu>

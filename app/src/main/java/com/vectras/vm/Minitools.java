@@ -26,6 +26,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.termux.app.TermuxService;
 import com.vectras.qemu.MainSettingsManager;
+import com.vectras.vm.home.HomeActivity;
 import com.vectras.vm.utils.CommandUtils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
@@ -149,7 +150,7 @@ public class Minitools extends AppCompatActivity {
         reinstallsystem.setOnClickListener(v -> {
             DialogUtils.twoDialog(Minitools.this, getResources().getString(R.string.reinstall_system), getResources().getString(R.string.reinstall_system_content), getResources().getString(R.string.continuetext), getResources().getString(R.string.cancel), true, R.drawable.system_update_24px, true,
                     () -> {
-                        MainActivity.isActivate = false;
+                        HomeActivity.isActivate = false;
                         AppConfig.needreinstallsystem = true;
                         VMManager.killallqemuprocesses(Minitools.this);
                         FileUtils.deleteDirectory(getFilesDir().getAbsolutePath() + "/data");

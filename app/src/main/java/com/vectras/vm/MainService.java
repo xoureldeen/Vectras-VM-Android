@@ -28,6 +28,7 @@ public class MainService extends Service {
     public static String env = null;
     private String TAG = "MainService";
     public static MainService service;
+    public static Activity activity;
 
     @Override
     public void onCreate() {
@@ -49,10 +50,9 @@ public class MainService extends Service {
 
         if (env != null) {
             if (service != null) {
-                String filesDir = MainActivity.activity.getFilesDir().getAbsolutePath();
-                Terminal vterm = new Terminal(this);
-                vterm.executeShellCommand2("dwm", false, MainActivity.activity);
-                vterm.executeShellCommand2(env, true, MainActivity.activity);
+                Terminal vterm = new Terminal(activity);
+                vterm.executeShellCommand2("dwm", false, activity);
+                vterm.executeShellCommand2(env, true, activity);
             }
         } else
             Log.e(TAG, "env is null");
@@ -69,12 +69,12 @@ public class MainService extends Service {
 
                     //TODO: Not Work
                     //Terminal.killQemuProcess();
-                    VMManager.killallqemuprocesses(MainActivity.activity);
+                    VMManager.killallqemuprocesses(activity);
                 }
 
             }
         });
-        t.setName("StartVM");
+        t.setName("HomeStartVM");
         t.start();
     }
 
@@ -86,7 +86,7 @@ public class MainService extends Service {
 
             //TODO: Not Work
             //Terminal.killQemuProcess();
-            VMManager.killallqemuprocesses(MainActivity.activity);
+            VMManager.killallqemuprocesses(this);
 
             return START_NOT_STICKY;
         }

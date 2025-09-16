@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">v2.9.5.6-3dfx</string>
+    <string name="app_version" translatable="false">v2.9.5.7-3dfx</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -224,9 +224,9 @@
     <string name="image_name">IMAGE NAME</string>
     <string name="make_image">MAKE IMAGE</string>
     <string name="imported_roms_will_be_shown_here">IMPORTED ROMS WILL BE SHOWN HERE</string>
-    <string name="version">VERSION:</string>
+    <string name="version">Version:</string>
     <string name="qemu" translatable="false">QEMU</string>
-    <string name="arch">ARCH:</string>
+    <string name="arch">Arch:</string>
     <string name="running">Running</string>
     <string name="stopped">Stopped</string>
     <string name="service">SERVICE:</string>
@@ -530,6 +530,27 @@
     <string name="unable_to_process_thumbnail_content">Unable to process thumbnail.</string>
     <string name="very_low_available_storage_space_content">The available storage space on your device is too low. Please clean up.</string>
     <string name="vm_list_data_is_corrupted_content">The virtual machine list data is corrupted, do you want to repair it?</string>
+    <string name="vm_cache_dir_failed_to_create_content">The virtual machine cache directory failed to create. Please try again later.</string>
+    <string name="checking_for_updates">Checking for updates</string>
+    <string name="just_a_sec">Just a sec…</string>
+    <string name="whats_new">What\'s new?</string>
+    <string name="new_update_available">New update available</string>
+    <string name="you_are_up_to_date">You\'re up to date</string>
+    <string name="check_for_updates">Check for updates</string>
+    <string name="see_if_there_are_any_new_updates">See if there are any new updates.</string>
+    <string name="home">Home</string>
+    <string name="skip_this_version">Skip this version</string>
+    <string name="update_now_content">Update now to experience the latest features and fix issues.</string>
+    <string name="more">More</string>
+    <string name="storage">Storage</string>
+    <string name="system_monitor">System monitor</string>
+    <string name="status_qemu">Status:</string>
+    <string name="port_qemu">Port:</string>
+    <string name="running_vm_with_vnc_server_content">You can shut down this virtual machine by clicking the Stop button in the System monitor. To control it, connect to this port:</string>
+    <string name="action_needed">Action needed</string>
+    <string name="repair_vm_list_content">Data about the virtual machines has been corrupted and needs to be repaired.</string>
+    <string name="start_repair">Start repair</string>
+
 
 
     <!--======================TERMUX STRINGS====================-->

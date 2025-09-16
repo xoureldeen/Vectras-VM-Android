@@ -1,9 +1,7 @@
 package com.vectras.vterm;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -32,18 +30,18 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.vectras.qemu.MainVNCActivity;
-import com.vectras.vm.MainActivity;
-import com.vectras.vm.MainService;
 import com.vectras.vm.R;
 import com.vectras.vm.VMManager;
 import com.vectras.vm.AppConfig;
+import com.vectras.vm.VectrasApp;
 import com.vectras.vm.utils.ClipboardUltils;
 import com.vectras.vm.utils.DialogUtils;
+import com.vectras.vm.utils.NotificationUtils;
 
 public class Terminal {
     private static final String TAG = "Vterm";
     private Context context;
-    private String user = "root";
+    private static String user = "root";
 
     public static Process qemuProcess;
     public static String DISPLAY = ":0";
@@ -74,12 +72,12 @@ public class Terminal {
         if (VMManager.isExecutedCommandError(usercommand, message, activity))
             return;
 
-        DialogUtils.twoDialog(activity, "Execution Result", message, activity.getString(R.string.copy), activity.getString(R.string.close),true, R.drawable.round_terminal_24, true,
-                () -> ClipboardUltils.copyToClipboard(activity, message), null,null);
+        DialogUtils.twoDialog(activity, "Execution Result", message, activity.getString(R.string.copy), activity.getString(R.string.close), true, R.drawable.round_terminal_24, true,
+                () -> ClipboardUltils.copyToClipboard(activity, message), null, null);
     }
 
     // Method to execute the shell command
-    public void executeShellCommand(String userCommand, boolean showResultDialog, Activity dialogActivity) {
+    public void executeShellCommand(String userCommand, boolean showResultDialog, boolean showProgressDialog, Activity dialogActivity) {
         StringBuilder output = new StringBuilder();
         StringBuilder errors = new StringBuilder();
         Log.d(TAG, userCommand);
@@ -94,7 +92,7 @@ public class Terminal {
                 .setCancelable(false)
                 .create();
 
-        progressDialog.show();
+        if (showProgressDialog) progressDialog.show();
 
         new Thread(() -> {
             try {
@@ -272,7 +270,7 @@ public class Terminal {
             } catch (IOException | InterruptedException e) {
                 output.append(e.getMessage());
                 errors.append(Log.getStackTraceString(e));
-                MainActivity.clearNotifications();
+                NotificationUtils.clearAll(VectrasApp.getContext());
             } finally {
                 // Switch to main thread after execution
                 new Handler(Looper.getMainLooper()).post(() -> {
@@ -287,6 +285,82 @@ public class Terminal {
                 });
             }
         }).start();
+    }
+
+    public static String executeShellCommandWithResult(String userCommand, Activity activity) {
+        StringBuilder output = new StringBuilder();
+        StringBuilder errors = new StringBuilder();
+        Log.d(TAG, userCommand);
+        com.vectras.vm.logger.VectrasStatus.logError("<font color='#4db6ac'>VTERM: >" + userCommand + "</font>");
+
+        try {
+            ProcessBuilder processBuilder = new ProcessBuilder();
+
+            String filesDir = Objects.requireNonNull(activity.getFilesDir().getAbsolutePath());
+            File tmpDir = new File(Objects.requireNonNull(activity.getFilesDir()), "usr/tmp");
+
+            processBuilder.environment().put("PROOT_TMP_DIR", tmpDir.getAbsolutePath());
+            processBuilder.environment().put("HOME", "/root");
+            processBuilder.environment().put("USER", user);
+            processBuilder.environment().put("TERM", "xterm-256color");
+            processBuilder.environment().put("TMPDIR", tmpDir.getAbsolutePath());
+            processBuilder.environment().put("SHELL", "/bin/sh");
+            processBuilder.environment().put("DISPLAY", DISPLAY);
+            processBuilder.environment().put("PULSE_SERVER", "127.0.0.1");
+
+            String[] prootCommand = {
+                    TermuxService.PREFIX_PATH + "/bin/proot",
+                    "--kill-on-exit",
+                    "--link2symlink",
+                    "-0",
+                    "-r", filesDir + "/distro",
+                    "-b", "/dev",
+                    "-b", "/proc",
+                    "-b", "/sys",
+                    "-b", "/data/data/com.vectras.vm/files/distro/root:/dev/shm",
+                    "-b", "/sdcard",
+                    "-b", "/storage",
+                    "-b", "/data",
+                    "-b", "/data/data/com.vectras.vm/files/usr/tmp:/tmp",
+                    "-w", "/root",
+                    "/bin/sh",
+                    "--login"
+            };
+
+            processBuilder.command(prootCommand);
+            qemuProcess = processBuilder.start();
+
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(qemuProcess.getOutputStream()));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(qemuProcess.getInputStream()));
+            BufferedReader errorReader = new BufferedReader(new InputStreamReader(qemuProcess.getErrorStream()));
+
+            writer.write(userCommand);
+            writer.newLine();
+            writer.flush();
+            writer.close();
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                Log.d(TAG, line);
+                com.vectras.vm.logger.VectrasStatus.logError("<font color='#4db6ac'>VTERM: >" + line + "</font>");
+                output.append(line).append("\n");
+            }
+
+            while ((line = errorReader.readLine()) != null) {
+                Log.w(TAG, line);
+                com.vectras.vm.logger.VectrasStatus.logError("<font color='red'>VTERM ERROR: >" + line + "</font>");
+                output.append(line).append("\n");
+            }
+
+            int exitCode = qemuProcess.waitFor();
+            if (exitCode != 0) {
+                output.append("Execution finished with exit code: ").append(exitCode).append("\n");
+            }
+        } catch (IOException | InterruptedException e) {
+            output.append(e.getMessage());
+            errors.append(Log.getStackTraceString(e));
+        }
+        return output.toString();
     }
 
     public void extractQemuVersion(String userCommand, boolean showResultDialog, Activity dialogActivity, CommandCallback callback) {
@@ -396,7 +470,7 @@ public class Terminal {
         void onCommandCompleted(String output, String errors);
     }
 
-    public String executeShellCommand(String userCommand, Activity dialogActivity, CommandCallback callback) {
+    public String executeShellCommand(String userCommand, Activity dialogActivity, boolean isShowProgressDialog, CommandCallback callback) {
         StringBuilder output = new StringBuilder();
         StringBuilder errors = new StringBuilder();
         Log.d(TAG, userCommand);
@@ -412,7 +486,7 @@ public class Terminal {
                 .create();
 
         // Make sure to show the dialog on the main thread
-        new Handler(Looper.getMainLooper()).post(progressDialog::show);
+        if (isShowProgressDialog) new Handler(Looper.getMainLooper()).post(progressDialog::show);
 
         new Thread(() -> {
             try {

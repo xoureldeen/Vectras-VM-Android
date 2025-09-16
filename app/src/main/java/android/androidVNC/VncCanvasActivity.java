@@ -44,14 +44,11 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 import android.widget.ZoomControls;
 
 import com.antlersoft.android.bc.BCFactory;
-import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.R;
 import com.vectras.qemu.Config;
-import com.vectras.vm.MainActivity;
 import com.vectras.vm.utils.UIUtils;
 
 import java.util.List;

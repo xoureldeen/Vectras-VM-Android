@@ -757,7 +757,7 @@ public class TouchInputHandler {
 
 
     /**
-     * Interface with a set of functions to control the behavior of the remote host renderer.
+     * CallbackInterface with a set of functions to control the behavior of the remote host renderer.
      */
     public interface RenderStub {
         /**

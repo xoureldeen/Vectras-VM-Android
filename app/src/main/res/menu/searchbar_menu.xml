@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/importrom"
+        android:icon="@drawable/publish_24px"
+        android:title="@string/importRom"
+        android:visible="true"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/backtothedisplay"
+        android:icon="@drawable/desktop_windows_24px"
+        android:title="@string/back_to_the_display"
+        android:visible="true"
+        app:showAsAction="always"/>
+
+</menu>

@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.vectras.vm.MainRoms.AdapterMainRoms;
 import com.vectras.vm.MainRoms.DataMainRoms;
+import com.vectras.vm.home.HomeActivity;
 import com.vectras.vm.utils.FileUtils;
 
 import org.json.JSONArray;
@@ -33,7 +34,7 @@ public class WidgetProvider extends AppWidgetProvider {
         for (int i=0; i < appWidgetIds.length; i++) {
             int appWidgetId = appWidgetIds[i];
             // Create an Intent to launch ExampleActivity
-            Intent intent = new Intent(context, MainActivity.class);
+            Intent intent = new Intent(context, HomeActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(
                     /* context = */ context,
                     /* requestCode = */ 0,

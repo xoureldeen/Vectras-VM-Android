@@ -26,12 +26,15 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.qemu.MainVNCActivity;
 import com.vectras.qemu.utils.QmpClient;
 import com.vectras.vm.MainRoms.AdapterMainRoms;
+import com.vectras.vm.home.HomeActivity;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.JSONUtils;
@@ -39,6 +42,7 @@ import com.vectras.vm.utils.UIUtils;
 import com.vectras.vterm.Terminal;
 
 import org.jetbrains.annotations.Contract;
+import org.json.JSONArray;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -142,24 +146,23 @@ public class VMManager {
     }
 
     public static void removeInRomsDataJson(Activity _activity, String _vmName, int _position) {
-        MainActivity.mMainAdapter = new AdapterMainRoms(MainActivity.activity, MainActivity.data);
-        MainActivity.data.remove(_position);
-        MainActivity.mRVMainRoms.setAdapter(MainActivity.mMainAdapter);
-        MainActivity.mRVMainRoms.setLayoutManager(new GridLayoutManager(MainActivity.activity, 2));
-        MainActivity.jArray.remove(_position);
         try {
+            JSONArray jSONArray = new JSONArray(FileUtils.readFromFile(_activity, new File(AppConfig.maindirpath
+                    + "roms-data.json")));
+            jSONArray.remove(_position);
+
+
             Writer output = null;
             File jsonFile = new File(AppConfig.maindirpath + "roms-data" + ".json");
             output = new BufferedWriter(new FileWriter(jsonFile));
-            output.write(MainActivity.jArray.toString());
+            output.write(jSONArray.toString());
             output.close();
         } catch (Exception e) {
             UIUtils.toastLong(_activity, e.toString());
         }
         UIUtils.toastLong(_activity, _vmName + _activity.getString(R.string.are_removed_successfully));
-        if (!FileUtils.readAFile(AppConfig.maindirpath + "roms-data.json").contains("{")) {
-            MainActivity.mdatasize2();
-        }
+
+        HomeActivity.refeshVMListNow();
     }
 
     public static String idGenerator() {
@@ -357,7 +360,7 @@ public class VMManager {
                 if (_startRepeat < _filelist.size()) {
                     if (!isFileExists(_filelist.get((int)(_startRepeat)) + "/vmID.txt")) {
                         if (isFileExists(_filelist.get((int)(_startRepeat)) + "/rom-data.json")) {
-                            if (JSONUtils.isMapValidFromString(FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json"))) {
+                            if (JSONUtils.isValidFromString(FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json"))) {
                                 if (_resulttemp.toString().contains("}")) {
                                     _resulttemp.append(",").append(FileUtils.readAFile(_filelist.get((int) (_startRepeat)) + "/rom-data.json"));
                                 } else {
@@ -428,67 +431,28 @@ public class VMManager {
 
     public static void startFixRomsDataJson() {
         int _startRepeat = 0;
-        StringBuilder _resulttemp = new StringBuilder();
-        StringBuilder _result = new StringBuilder();
+        String tempRomData;
+        JsonArray arr = new JsonArray();
         restoredVMs = 0;
         ArrayList<String> _filelist = new ArrayList<>();
         FileUtils.getAListOfAllFilesAndFoldersInADirectory(AppConfig.vmFolder, _filelist);
         if (!_filelist.isEmpty()) {
-            for (int _repeat = 0; _repeat < (int)(_filelist.size()); _repeat++) {
+            for (int _repeat = 0; _repeat < _filelist.size(); _repeat++) {
                 if (_startRepeat < _filelist.size()) {
-                    if (isFileExists(_filelist.get((int)(_startRepeat)) + "/vmID.txt")) {
-                        if (isFileExists(_filelist.get((int)(_startRepeat)) + "/rom-data.json")) {
-                            if (JSONUtils.isMapValidFromString(FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json"))) {
-                                if (_resulttemp.toString().contains("}")) {
-                                    _resulttemp.append(",").append(FileUtils.readAFile(_filelist.get((int) (_startRepeat)) + "/rom-data.json"));
-                                } else {
-                                    _resulttemp = new StringBuilder(FileUtils.readAFile(_filelist.get((int) (_startRepeat)) + "/rom-data.json"));
-                                }
-                                if (JSONUtils.isValidFromString(FileUtils.readAFile(AppConfig.maindirpath + "/roms-data.json").replaceAll("]", _resulttemp + "]"))) {
-                                    if (_result.toString().contains("}")) {
-                                        _result.append(",").append(FileUtils.readAFile(_filelist.get((int) (_startRepeat)) + "/rom-data.json"));
-                                    } else {
-                                        _result = new StringBuilder(FileUtils.readAFile(_filelist.get((int) (_startRepeat)) + "/rom-data.json"));
-                                    }
-                                    restoredVMs++;
-                                } else if (JSONUtils.isValidFromString(FileUtils.readAFile(AppConfig.maindirpath + "/roms-data.json").replaceAll("]", "," + _resulttemp + "]"))) {
-                                    if (_result.toString().contains("}")) {
-                                        _result.append(",").append(FileUtils.readAFile(_filelist.get((int) (_startRepeat)) + "/rom-data.json"));
-                                    } else {
-                                        _result = new StringBuilder("," + FileUtils.readAFile(_filelist.get((int) (_startRepeat)) + "/rom-data.json"));
-                                    }
-                                    restoredVMs++;
-                                } else {
-                                    Log.i("CqcmActivity", FileUtils.readAFile(AppConfig.maindirpath + "/roms-data.json").replaceAll("]", _resulttemp + "]"));
-                                }
+                    if (isFileExists(_filelist.get(_startRepeat) + "/vmID.txt")) {
+                        if (isFileExists(_filelist.get(_startRepeat) + "/rom-data.json")) {
+                            tempRomData = FileUtils.readAFile(_filelist.get(_startRepeat) + "/rom-data.json");
+                            if (JSONUtils.isValidFromString(tempRomData)) {
+                                arr.add(JsonParser.parseString(tempRomData));
+                                restoredVMs++;
                             }
                         }
                     }
 
                     _startRepeat++;
                     if (_startRepeat == _filelist.size()) {
-                        if (_result.length() > 0) {
-                            if (JSONUtils.isValidFromString("[" + _result + "]")) {
-                                if (isFileExists(AppConfig.romsdatajson)) {
-                                    if (JSONUtils.isValidFromFile(AppConfig.romsdatajson)) {
-                                        String _JSONcontent = FileUtils.readAFile(AppConfig.romsdatajson);
-                                        String _JSONcontentnew = _JSONcontent.replaceAll("]", _result + "]");
-                                        if (JSONUtils.isValidFromString(_JSONcontentnew)) {
-                                            FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", _JSONcontentnew);
-                                        } else {
-                                            restoredVMs = 0;
-                                        }
-                                    } else {
-                                        restoredVMs = 0;
-                                    }
-                                } else {
-                                    FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", "[" + _result + "]");
-                                }
-                            } else {
-                                restoredVMs = 0;
-                            }
-                        } else {
-                            restoredVMs = 0;
+                        if (restoredVMs > 0) {
+                            FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", arr.toString());
                         }
                     }
                 }
@@ -624,7 +588,7 @@ public class VMManager {
         if (_result.contains("proot\": error=2,")) {
             DialogUtils.twoDialog(_activity, _activity.getResources().getString(R.string.problem_has_been_detected), _activity.getResources().getString(R.string.error_PROOT_IS_MISSING_0), _activity.getString(R.string.continuetext), _activity.getString(R.string.cancel), true, R.drawable.build_24px, true,
                     () -> {
-                        MainActivity.isActivate = false;
+                        HomeActivity.isActivate = false;
                         FileUtils.deleteDirectory(_activity.getFilesDir().getAbsolutePath() + "/data");
                         FileUtils.deleteDirectory(_activity.getFilesDir().getAbsolutePath() + "/distro");
                         FileUtils.deleteDirectory(_activity.getFilesDir().getAbsolutePath() + "/usr");
@@ -650,7 +614,7 @@ public class VMManager {
             return true;
         } else if (_result.contains("No such file or directory")) {
             //Error code: NO_SUCH_FILE_OR_DIRECTORY
-            DialogUtils.oneDialog(_activity, _activity.getString(R.string.problem_has_been_detected), _activity.getString(R.string.error_NO_SUCH_FILE_OR_DIRECTORY), _activity.getString(R.string.ok),true, R.drawable.file_copy_24px, true,null, null);
+            DialogUtils.oneDialog(_activity, _activity.getString(R.string.problem_has_been_detected), _activity.getString(R.string.error_NO_SUCH_FILE_OR_DIRECTORY) + "\n\n" + _result, _activity.getString(R.string.ok),true, R.drawable.file_copy_24px, true,null, null);
             _activity.stopService(new Intent(_activity, MainService.class));
             return true;
         } else {
@@ -687,8 +651,7 @@ public class VMManager {
         } else {
             DialogUtils.oneDialog(_context, _context.getString(R.string.done), _context.getString(R.string.roms_data_json_fixed_successfully), _context.getString(R.string.ok),true, R.drawable.check_24px, true,null, null);
         }
-        MainActivity.mMainAdapter.notifyDataSetChanged();
-        MainActivity.mdatasize2();
+        HomeActivity.refeshVMListNow();
         movetoRecycleBin();
     }
 
@@ -752,9 +715,9 @@ public class VMManager {
         return true;
     }
 
-    public static boolean isThisVMRunning(String intemExtra, String itemPath) {
-        Terminal vterm = new Terminal(MainActivity.activity);
-        vterm.executeShellCommand2("ps -e", false, MainActivity.activity);
+    public static boolean isThisVMRunning(Activity activity, String intemExtra, String itemPath) {
+        Terminal vterm = new Terminal(activity);
+        vterm.executeShellCommand2("ps -e", false, activity);
         if (AppConfig.temporaryLastedTerminalOutput.contains(intemExtra) && AppConfig.temporaryLastedTerminalOutput.contains(itemPath)) {
             Log.d("VMManager.isThisVMRunning", "Yes");
             return true;
@@ -764,9 +727,9 @@ public class VMManager {
         }
     }
 
-    public static boolean isQemuRunning() {
-        Terminal vterm = new Terminal(MainActivity.activity);
-        vterm.executeShellCommand2("ps -e", false, MainActivity.activity);
+    public static boolean isQemuRunning(Activity activity) {
+        Terminal vterm = new Terminal(activity);
+        vterm.executeShellCommand2("ps -e", false, activity);
         if (AppConfig.temporaryLastedTerminalOutput.contains("qemu-system")) {
             Log.d("VMManager.isQemuRunning", "Yes");
             return true;
@@ -795,15 +758,18 @@ public class VMManager {
         }
     }
 
-    public static void requestKillAllQemuProcess(Activity activity) {
+    public static void requestKillAllQemuProcess(Activity activity, Runnable runnable) {
         DialogUtils.twoDialog(activity, activity.getString(R.string.do_you_want_to_kill_all_qemu_processes), activity.getString(R.string.all_running_vms_will_be_forcibly_shut_down), activity.getString(R.string.kill_all), activity.getString(R.string.cancel), true, R.drawable.power_settings_new_24px, true,
-                () -> killallqemuprocesses(activity), null, null);
+                () -> {
+                   killallqemuprocesses(activity);
+                   if (runnable != null) runnable.run();
+                }, null, null);
     }
 
-    public static void killcurrentqemuprocess(Context context) {
-        Terminal vterm = new Terminal(context);
+    public static void killcurrentqemuprocess(Activity activity) {
+        Terminal vterm = new Terminal(activity);
         String env = "killall -9 ";
-        switch (MainSettingsManager.getArch(MainActivity.activity)) {
+        switch (MainSettingsManager.getArch(activity)) {
             case "ARM64":
                 env += "qemu-system-aarch64";
                 break;
@@ -817,15 +783,15 @@ public class VMManager {
                 env += "qemu-system-x86_64";
                 break;
         }
-        vterm.executeShellCommand2(env, false, MainActivity.activity);
+        vterm.executeShellCommand2(env, false, null);
     }
 
     public static void killallqemuprocesses(Context context) {
         Terminal vterm = new Terminal(context);
-        vterm.executeShellCommand2("killall -9 qemu-system-i386", false, MainActivity.activity);
-        vterm.executeShellCommand2("killall -9 qemu-system-x86_64", false, MainActivity.activity);
-        vterm.executeShellCommand2("killall -9 qemu-system-aarch64", false, MainActivity.activity);
-        vterm.executeShellCommand2("killall -9 qemu-system-ppc", false, MainActivity.activity);
+        vterm.executeShellCommand2("killall -9 qemu-system-i386", false, null);
+        vterm.executeShellCommand2("killall -9 qemu-system-x86_64", false, null);
+        vterm.executeShellCommand2("killall -9 qemu-system-aarch64", false, null);
+        vterm.executeShellCommand2("killall -9 qemu-system-ppc", false, null);
     }
 
     public static void shutdownCurrentVM() {
@@ -1194,5 +1160,19 @@ public class VMManager {
                 || _qemuCommand.contains("-machine q35")
                 || _qemuCommand.contains("-M pc-q35")
                 || _qemuCommand.contains("-machine pc-q35");
+    }
+
+    public static boolean checkSharedFolder() { //TODO: not work idk why
+        File folder = new File(AppConfig.sharedFolder);
+        File[] listOfFiles = folder.listFiles();
+
+        if (listOfFiles != null) {
+            for (File file : listOfFiles) {
+                if (file.isFile() && file.length() > 500 * 1024 * 1024) { // 500MB
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
