@@ -43,6 +43,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.databinding.ActivitySetupQemuBinding;
+import com.vectras.vm.home.HomeActivity;
 import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.JSONUtils;
@@ -172,7 +173,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
             public void onResponse(String tag, String response, HashMap<String, Object> responseHeaders) {
                 linearload.setVisibility(GONE);
                 contentJSON = response;
-                if (JSONUtils.isMapValidFromString(contentJSON)) {
+                if (JSONUtils.isValidFromString(contentJSON)) {
                     mmap.clear();
                     mmap = new Gson().fromJson(contentJSON, new TypeToken<HashMap<String, Object>>() {
                     }.getType());
@@ -626,7 +627,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                 " echo \"Starting setup...\";" +
                 " apk update;" +
                 " echo \"Installing packages...\";" +
-                " apk add " + AppConfig.neededPkgs.replaceAll(" mesa-vulkan-broadcom mesa-vulkan-freedreno mesa-vulkan-panfrost", "") + ";" +
+                " apk add " + AppConfig.neededPkgs32bit + ";" +
                 //" tar -xzvf " + tarPath + " -C /;" +
                 " echo \"Installing Qemu...\";" +
                 " apk add qemu-system-x86_64 qemu-system-ppc qemu-system-i386 qemu-system-aarch64 qemu-pr-helper qemu-img qemu-audio-sdl pulseaudio mesa-dri-gallium;" +
@@ -855,7 +856,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onClick(View v) {
                 if (!AppConfig.needreinstallsystem) {
-                    startActivity(new Intent(SetupQemuActivity.this, MainActivity.class));
+                    startActivity(new Intent(SetupQemuActivity.this, HomeActivity.class));
                 } else {
                     AppConfig.needreinstallsystem = false;
                 }

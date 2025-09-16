@@ -135,10 +135,6 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
         } else {
             Log.d("TAG", "The interstitial ad wasn't ready yet.");
         }
-
-        //TextView textversionname = findViewById(R.id.versionname);
-        //PackageInfo pinfo = MainActivity.activity.getAppInfo(getApplicationContext());
-        //textversionname.setText(pinfo.versionName);
         
         RecyclerView recyclerView = findViewById(R.id.github_users_recycler_view);
         String[] usernames = {"vectras-team", "xoureldeen", "ahmedbarakat2007", "anbui2004"};

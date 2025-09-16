@@ -19,7 +19,7 @@ public class RamInfo {
         return (int) l;
     }
 
-    public static int vectrasMemory() {
+    public static int vectrasMemory(Activity activity) {
         ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
         ActivityManager activityManager = (ActivityManager) activity.getSystemService(ACTIVITY_SERVICE);
         activityManager.getMemoryInfo(mi);

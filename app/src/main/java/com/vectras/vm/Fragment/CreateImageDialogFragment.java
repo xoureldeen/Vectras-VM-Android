@@ -102,7 +102,7 @@ public class CreateImageDialogFragment extends DialogFragment {
             }
             Terminal vterm = new Terminal(getActivity());
             vterm.executeShellCommand("qemu-img create -f qcow2 \"" + folder + imageName.getText().toString() + ".qcow2\" " +
-                    imageSize.getText().toString() + "G", true, getActivity());
+                    imageSize.getText().toString() + "G", true, true, getActivity());
             if (customRom) {
                 if(drive != null)
                     drive.setText(folder + imageName.getText().toString() + ".qcow2");

@@ -41,6 +41,9 @@ public class StartVM {
                 else if (MainSettingsManager.getArch(activity).equals("PPC"))
                     params.add("qemu-system-ppc");
 
+                params.add("-qmp");
+                params.add("unix:" + Config.getLocalQMPSocketPath() + ",server,nowait");
+
                 String ifType;
                 ifType= MainSettingsManager.getIfType(activity);
 
@@ -150,10 +153,10 @@ public class StartVM {
                 }
 
                 String memoryStr = "-m ";
-                if (MainSettingsManager.getArch(activity).equals("PPC") && RamInfo.vectrasMemory() > 2048) {
+                if (MainSettingsManager.getArch(activity).equals("PPC") && RamInfo.vectrasMemory(activity) > 2048) {
                     memoryStr += 2048;
                 } else {
-                    memoryStr += RamInfo.vectrasMemory();
+                    memoryStr += RamInfo.vectrasMemory(activity);
                 }
 
                 String boot = "-boot ";
@@ -168,7 +171,7 @@ public class StartVM {
 
                 //params.add(soundDevice);
 
-                if (MainSettingsManager.useDefaultBios(MainActivity.activity)) {
+                if (MainSettingsManager.useDefaultBios(activity)) {
                     if (MainSettingsManager.getArch(activity).equals("PPC")) {
                         bios = "-L ";
                         bios += "pc-bios";
@@ -197,13 +200,13 @@ public class StartVM {
                     params.add(machine);
                 }
 
-                if (MainSettingsManager.useMemoryOvercommit(MainActivity.activity)) {
+                if (MainSettingsManager.useMemoryOvercommit(activity)) {
                     params.add("-overcommit");
                     params.add("mem-lock=off");
                 }
 
 
-                if (MainSettingsManager.useLocalTime(MainActivity.activity)) {
+                if (MainSettingsManager.useLocalTime(activity)) {
                     params.add("-rtc");
                     params.add("base=localtime");
                 }
@@ -252,9 +255,9 @@ public class StartVM {
 
                 params.add(vncParams);
             } else {
-                String qmpParams = "unix:";
-                qmpParams += Config.getLocalVNCSocketPath();
-                params.add(qmpParams);
+                String vncSocketParams = "unix:";
+                vncSocketParams += Config.getLocalVNCSocketPath();
+                params.add(vncSocketParams);
             }
 
             //if (!MainSettingsManager.getArch(activity).equals("PPC") || !MainSettingsManager.getArch(activity).equals("ARM64")) {
@@ -271,9 +274,6 @@ public class StartVM {
         }
 
         //params.add("-full-screen");
-
-        params.add("-qmp");
-        params.add("unix:" + Config.getLocalQMPSocketPath() + ",server,nowait");
 
         return String.join(" ", params);
     }

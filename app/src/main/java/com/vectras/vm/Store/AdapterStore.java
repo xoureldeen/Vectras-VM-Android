@@ -10,15 +10,11 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.cardview.widget.CardView;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.vectras.vm.R;
-import com.vectras.vm.Fragment.HomeFragment;
-import com.vectras.vm.PostActivity;
 import java.util.Collections;
 import java.util.List;
-import com.vectras.vm.MainActivity;
 import com.vectras.vm.StoreActivity;
 import com.vectras.vm.StoreItemActivity;
 
@@ -29,8 +25,7 @@ public class AdapterStore extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 	List<DataStore> data = Collections.emptyList();
 	DataStore current;
 	int currentPos = 0;
-	
-	// create constructor to innitilize context and data sent from MainActivity
+
 	public AdapterStore(Context context, List<DataStore> data) {
 		this.context = context;
 		inflater = LayoutInflater.from(context);
@@ -53,10 +48,10 @@ public class AdapterStore extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 		MyHolder myHolder = (MyHolder) holder;
 		final DataStore current = data.get(position);
 		myHolder.textName.setText(current.itemName);
-		myHolder.textSize.setText(MainActivity.activity.getString(R.string.size) + current.itemSize);
+		myHolder.textSize.setText(context.getString(R.string.size) + current.itemSize);
 		Glide.with(StoreActivity.activity).load(current.itemIcon).into(myHolder.ivIcon);
 		Animation animation;
-		animation = AnimationUtils.loadAnimation(MainActivity.activity, android.R.anim.slide_in_left);
+		animation = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left);
 		animation.setDuration(300);
 
 		myHolder.cdItem.startAnimation(animation);

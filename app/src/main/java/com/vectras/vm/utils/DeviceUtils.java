@@ -59,4 +59,8 @@ public class DeviceUtils {
 
         return false;
     }
+
+    public static boolean is64bit() {
+        return Build.SUPPORTED_ABIS[0].contains("arm64");
+    }
 }

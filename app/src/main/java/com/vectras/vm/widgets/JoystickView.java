@@ -28,7 +28,7 @@ public class JoystickView extends View
 
 
     /**
-     * Interface definition for a callback to be invoked when a
+     * CallbackInterface definition for a callback to be invoked when a
      * JoystickView's button is moved
      */
     public interface OnMoveListener {
@@ -43,7 +43,7 @@ public class JoystickView extends View
 
 
     /**
-     * Interface definition for a callback to be invoked when a JoystickView
+     * CallbackInterface definition for a callback to be invoked when a JoystickView
      * is touched and held by multiple pointers.
      */
     public interface OnMultipleLongPressListener {

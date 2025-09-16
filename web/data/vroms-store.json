@@ -336,6 +336,22 @@
         "verified": true
     },
     {
+        "rom_name":"Windows 8 build 8432",
+        "rom_icon":"https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/09/17/windows-logo_1_926ed76111646acbbe332bc5af0cf2ce.png",
+        "rom_url":"https://youtu.be/wH8n87pPJ2k",
+        "rom_path":"Windows 8 build 8432.cvbi",
+        "rom_avail":true,
+        "rom_size":"Preview build",
+        "rom_arch":"X86_64",
+        "rom_kernel":"windows",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 8.1 build 9431 is the official Preview build of Windows 8.1, also known as the Milestone Preview. This build was released on 26 June 2013 with the occasion of the Build 2013 conference taking place. At the time of its release, it was possible to upgrade to this build from a Windows 8 copy by using the Windows Store or by downloading an ISO from TechNet or MSDN. The ISOs were made publicly available the day after, on 27 June 2013 in multiple languages, when the day 2 keynote started. An ARM version of the build was also available, but it was only obtainable through the Microsoft Store (repair content packages were also made available).",
+        "file_size": "7 GB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
+    },
+    {
         "rom_name":"Windows 8",
         "rom_icon":"https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/09/17/windows-logo_1_926ed76111646acbbe332bc5af0cf2ce.png",
         "rom_url":"https://youtu.be/ZSyz1T6S_7g",

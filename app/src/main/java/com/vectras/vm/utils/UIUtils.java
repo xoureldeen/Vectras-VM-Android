@@ -26,7 +26,6 @@ import android.text.Html;
 import android.text.InputType;
 import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.Display;
@@ -41,7 +40,6 @@ import android.widget.Toast;
 import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.qemu.utils.FileUtils;
-import com.vectras.vm.MainActivity;
 import com.vectras.vm.R;
 import com.vectras.vm.logger.VectrasStatus;
 
@@ -458,6 +456,46 @@ public class UIUtils {
         ViewCompat.setOnApplyWindowInsetsListener(_view, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout() | WindowInsetsCompat.Type.ime());
             v.setPadding(systemBars.left + originalPaddingLeft, originalPaddingTop, systemBars.right + originalPaddingRight, systemBars.bottom + originalPaddingBottom);
+            return insets;
+        });
+    }
+    public static void setOnApplyWindowInsetsListenerBottomOnly(View _view) {
+        int originalPaddingLeft = _view.getPaddingLeft();
+        int originalPaddingTop = _view.getPaddingTop();
+        int originalPaddingRight = _view.getPaddingRight();
+        int originalPaddingBottom = _view.getPaddingBottom();
+
+        ViewCompat.setOnApplyWindowInsetsListener(_view, (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout() | WindowInsetsCompat.Type.ime());
+            v.setPadding(originalPaddingLeft, originalPaddingTop, originalPaddingRight, systemBars.bottom + originalPaddingBottom);
+            return insets;
+        });
+    }
+
+
+    public static void setOnApplyWindowInsetsListenerLeftOnly(View _view) {
+        int originalPaddingLeft = _view.getPaddingLeft();
+        int originalPaddingTop = _view.getPaddingTop();
+        int originalPaddingRight = _view.getPaddingRight();
+        int originalPaddingBottom = _view.getPaddingBottom();
+
+
+        ViewCompat.setOnApplyWindowInsetsListener(_view, (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout() | WindowInsetsCompat.Type.ime());
+            v.setPadding(systemBars.left + originalPaddingLeft  , originalPaddingTop, originalPaddingRight, originalPaddingBottom);
+            return insets;
+        });
+    }
+
+    public static void setOnApplyWindowInsetsListenerHorizontalOnly(View _view) {
+        int originalPaddingLeft = _view.getPaddingLeft();
+        int originalPaddingTop = _view.getPaddingTop();
+        int originalPaddingRight = _view.getPaddingRight();
+        int originalPaddingBottom = _view.getPaddingBottom();
+
+        ViewCompat.setOnApplyWindowInsetsListener(_view, (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout() | WindowInsetsCompat.Type.ime());
+            v.setPadding(systemBars.left + originalPaddingLeft, originalPaddingTop, systemBars.right + originalPaddingRight, originalPaddingBottom);
             return insets;
         });
     }

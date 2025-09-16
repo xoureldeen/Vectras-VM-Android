@@ -86,6 +86,7 @@ public class VectrasApp extends Application {
 	public void onCreate() {
 		super.onCreate();
 		vectrasapp = this;
+		context = new WeakReference<>(getApplicationContext());
 		CrashHandler.getInstance().registerGlobal(this);
 		CrashHandler.getInstance().registerPart(this);
 		try {

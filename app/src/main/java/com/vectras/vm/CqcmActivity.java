@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -15,12 +14,12 @@ import androidx.core.app.ActivityCompat;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.vectras.vm.home.HomeActivity;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.JSONUtils;
 import com.vectras.vm.utils.PermissionUtils;
 import com.vectras.vm.utils.UIUtils;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -86,7 +85,7 @@ public class CqcmActivity extends AppCompatActivity {
                 } else {
                     _map = Objects.requireNonNull(getIntent().getStringExtra("content"));
                 }
-                if (JSONUtils.isMapValidFromString(_map)) {
+                if (JSONUtils.isValidFromString(_map)) {
                     mapForCreateNewVM = new Gson().fromJson(_map, new TypeToken<HashMap<String, Object>>(){}.getType());
                     if (mapForCreateNewVM.containsKey("imgName")) {
                         imgName = Objects.requireNonNull(mapForCreateNewVM.get("imgName")).toString();
@@ -116,7 +115,7 @@ public class CqcmActivity extends AppCompatActivity {
         } else {
             Toast.makeText(getApplicationContext(), "The virtual machine list data is corrupted and new virtual machines cannot be added right now.", Toast.LENGTH_LONG).show();
         }
-        if(!MainActivity.isActivate) {
+        if(!HomeActivity.isActivate) {
             Log.i("CqcmActivity", "Vectras VM is not opening.");
             gotoActivity.setClass(getApplicationContext(), SplashActivity.class);
             startActivity(gotoActivity);
@@ -134,7 +133,7 @@ public class CqcmActivity extends AppCompatActivity {
     private void runCommand(String _command) {
         AppConfig.pendingCommand = _command;
 
-        if(!MainActivity.isActivate) {
+        if(!HomeActivity.isActivate) {
             Log.i("CqcmActivity", "Vectras VM is not opening.");
             gotoActivity.setClass(getApplicationContext(), SplashActivity.class);
             startActivity(gotoActivity);

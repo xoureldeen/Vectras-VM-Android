@@ -22,7 +22,7 @@ public class LibraryChecker {
 
     public void checkMissingLibraries(Activity activity) {
         // List of required libraries
-        String[] requiredLibraries = AppConfig.neededPkgs.split(" ");
+        String[] requiredLibraries = DeviceUtils.is64bit() ? AppConfig.neededPkgs.split(" ") : AppConfig.neededPkgs32bit.split(" ");
 
         // Get the list of installed packages
         isPackageInstalled(null, (output, errors) -> {
@@ -61,7 +61,7 @@ public class LibraryChecker {
                 .setPositiveButton("Install", (dialog, which) -> {
                     // Create the install command
                     String installCommand = "apk add " + missingLibraries.replace("\n", " ");
-                    new Terminal(context).executeShellCommand(installCommand, true, activity);
+                    new Terminal(context).executeShellCommand(installCommand, true, true, activity);
                 })
                 .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
                 .show();
@@ -81,7 +81,7 @@ public class LibraryChecker {
         String command = "apk info";
 
         Terminal terminal = new Terminal(context);
-        terminal.executeShellCommand(command, (Activity) context, (output, errors) -> {
+        terminal.executeShellCommand(command, (Activity) context, false, (output, errors) -> {
             if (callback != null) {
                 callback.onCommandCompleted(output, errors);
             }
@@ -93,7 +93,7 @@ public class LibraryChecker {
         String command = "apk info";
 
         Terminal terminal = new Terminal(activity);
-        terminal.executeShellCommand(command, activity, (output, errors) -> {
+        terminal.executeShellCommand(command, activity, false, (output, errors) -> {
             if (callback != null) {
                 callback.onCommandCompleted(output, errors);
             }
@@ -134,7 +134,7 @@ public class LibraryChecker {
                 .setCancelable(false)
                 .setPositiveButton("Install", (dialog, which) -> {
                     String installCommand = "apk add " + packageName;
-                    new Terminal(context).executeShellCommand(installCommand, true, activity);
+                    new Terminal(context).executeShellCommand(installCommand, true, true, activity);
                 })
                 .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
                 .show();

@@ -3,7 +3,6 @@ package com.vectras.vm.utils;
 import android.annotation.SuppressLint;
 import android.content.ContentUris;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
@@ -15,7 +14,6 @@ import android.system.ErrnoException;
 import android.system.Os;
 import android.text.TextUtils;
 import android.util.Log;
-import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 
 import java.io.File;
@@ -27,31 +25,21 @@ import java.util.LinkedList;
 import java.util.List;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.ParcelFileDescriptor;
-import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.vectras.vm.MainActivity;
-import com.vectras.vm.AppConfig;
 import com.vectras.vm.R;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Objects;
@@ -486,11 +474,11 @@ public class FileUtils {
 
 	}
 
-	public static String getDataDir() {
+	public static String getDataDir(Context context) {
 
-		String dataDir = MainActivity.activity.getApplicationInfo().dataDir;
-		PackageManager m = MainActivity.activity.getPackageManager();
-		String packageName = MainActivity.activity.getPackageName();
+		String dataDir = context.getApplicationInfo().dataDir;
+		PackageManager m = context.getPackageManager();
+		String packageName = context.getPackageName();
 		Log.v("VMExecutor", "Found packageName: " + packageName);
 
 		if (dataDir == null) {

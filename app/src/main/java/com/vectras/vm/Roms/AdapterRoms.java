@@ -38,7 +38,6 @@ public class AdapterRoms extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     static List<DataRoms> dataRom = Collections.emptyList();
     private final String TAG = "AdapterRoms";
 
-    // create constructor to innitilize context and data sent from MainActivity
     public AdapterRoms(Context context, List<DataRoms> data) {
         this.context = context;
         inflater = LayoutInflater.from(context);

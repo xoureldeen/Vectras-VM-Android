@@ -269,7 +269,7 @@ public class RadioGroupPlus extends LinearLayout {
     }
 
     /**
-     * <p>Interface definition for a callback to be invoked when the checked
+     * <p>CallbackInterface definition for a callback to be invoked when the checked
      * radio button changed in this group.</p>
      */
     public interface OnCheckedChangeListener {

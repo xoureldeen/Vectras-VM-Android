@@ -181,9 +181,10 @@ public class Config {
     public static final ScaleType defaultScaleModeCenter = ScaleType.CENTER;
     public static final String defaultInputMode = VncCanvasActivity.TOUCH_ZOOM_MODE;
     public static String vmID = "";
+    public static String currentVNCServervmID = "";
 
     public static void setDefault () {
-        defaultVNCHost = "localhost";
+        defaultVNCHost = "0.0.0.0";
         defaultVNCUsername = "vectras";
         defaultVNCPasswd = "555555";
         defaultVNCPort = 5901;

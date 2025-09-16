@@ -38,7 +38,6 @@ public class AdapterRomStoreSearch extends RecyclerView.Adapter<RecyclerView.Vie
     static List<DataRoms> dataRom = Collections.emptyList();
     private final String TAG = "AdapterRomStoreSearch";
 
-    // create constructor to innitilize context and data sent from MainActivity
     public AdapterRomStoreSearch(Context context, List<DataRoms> data) {
         this.context = context;
         inflater = LayoutInflater.from(context);
