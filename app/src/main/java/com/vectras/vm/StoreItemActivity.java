@@ -1,10 +1,7 @@
 package com.vectras.vm;
 
 import android.app.Dialog;
-import android.app.IntentService;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.*;
@@ -12,26 +9,16 @@ import android.text.Html;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.MimeTypeMap;
 import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.os.PowerManager;
-import androidx.appcompat.app.AlertDialog;
 import com.bumptech.glide.Glide;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.LoadAdError;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
-import com.google.android.gms.ads.interstitial.InterstitialAd;
-import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
+//import com.google.android.gms.ads.MobileAds;
+//import com.google.android.gms.ads.initialization.InitializationStatus;
+//import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+//import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.vectras.vm.utils.DialogUtils;
-import com.vectras.vm.utils.FileUtils;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.FileOutputStream;
@@ -39,21 +26,12 @@ import java.net.HttpURLConnection;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import com.vectras.vm.R;
 import com.vectras.vm.utils.UIUtils;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import android.os.PowerManager;
 
 public class StoreItemActivity extends AppCompatActivity {
 	public StoreItemActivity activity;
@@ -63,7 +41,7 @@ public class StoreItemActivity extends AppCompatActivity {
 	public Button dBtn;
 	public ImageView itemIcon, itemPrvMain, itemPrv1, itemPrv2;
 
-	private InterstitialAd mInterstitialAd;
+//	private InterstitialAd mInterstitialAd;
 
 	@Override
 	protected void onCreate(Bundle bundle) {
@@ -90,10 +68,10 @@ public class StoreItemActivity extends AppCompatActivity {
 		//AdRequest adRequest = new AdRequest.Builder().build();
 		//mAdView.loadAd(adRequest);
 
-		MobileAds.initialize(this, new OnInitializationCompleteListener() {
-			@Override
-			public void onInitializationComplete(InitializationStatus initializationStatus) {}
-		});
+//		MobileAds.initialize(this, new OnInitializationCompleteListener() {
+//			@Override
+//			public void onInitializationComplete(InitializationStatus initializationStatus) {}
+//		});
 		/*InterstitialAd.load(this,"ca-app-pub-3568137780412047/4892595373", adRequest,
 				new InterstitialAdLoadCallback() {
 					@Override
@@ -111,11 +89,11 @@ public class StoreItemActivity extends AppCompatActivity {
 						mInterstitialAd = null;
 					}
 				});*/
-		if (mInterstitialAd != null) {
-			mInterstitialAd.show(StoreItemActivity.this);
-		} else {
-			Log.d("TAG", "The interstitial ad wasn't ready yet.");
-		}
+//		if (mInterstitialAd != null) {
+//			mInterstitialAd.show(StoreItemActivity.this);
+//		} else {
+//			Log.d("TAG", "The interstitial ad wasn't ready yet.");
+//		}
 		dBtn.setOnClickListener(new View.OnClickListener() {
 
 			@Override

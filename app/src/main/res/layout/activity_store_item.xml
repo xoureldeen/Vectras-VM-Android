@@ -21,12 +21,12 @@
 
     <include layout="@layout/content_store_item" />
 
-    <com.google.android.gms.ads.AdView
-        android:id="@+id/adView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_gravity="bottom|center_horizontal"
-        app:adSize="BANNER"
-        app:adUnitId="ca-app-pub-3568137780412047/7410650412" />
+<!--    <com.google.android.gms.ads.AdView-->
+<!--        android:id="@+id/adView"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginBottom="8dp"-->
+<!--        android:layout_gravity="bottom|center_horizontal"-->
+<!--        app:adSize="BANNER"-->
+<!--        app:adUnitId="ca-app-pub-3568137780412047/7410650412" />-->
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
