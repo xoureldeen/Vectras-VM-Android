@@ -41,14 +41,3 @@ jobs:
       with:
         name: android-release-apk
         path: app/build/outputs/apk/release/app-release.apk
-
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: '3.2'
-
-    - name: Install Fastlane
-      run: gem install fastlane
-
-    - name: Run Fastlane
-      run: fastlane metadata
