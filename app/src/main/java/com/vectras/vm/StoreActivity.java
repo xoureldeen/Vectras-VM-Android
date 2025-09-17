@@ -23,12 +23,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.vectras.vm.R;
-import com.vectras.vm.Blog.AdapterBlog;
-import com.vectras.vm.Blog.DataBlog;
-import com.vectras.vm.Fragment.HomeFragment;
+//import com.google.android.gms.ads.AdRequest;
+//import com.google.android.gms.ads.AdView;
 import com.vectras.vm.Store.AdapterStore;
 import com.vectras.vm.Store.DataStore;
 import com.vectras.vm.utils.FileUtils;

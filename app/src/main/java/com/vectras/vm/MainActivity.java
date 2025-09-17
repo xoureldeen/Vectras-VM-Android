@@ -59,11 +59,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.LoadAdError;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.interstitial.InterstitialAd;
-import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
+//import com.google.android.gms.ads.AdRequest;
+//import com.google.android.gms.ads.LoadAdError;
+//import com.google.android.gms.ads.MobileAds;
+//import com.google.android.gms.ads.interstitial.InterstitialAd;
+//import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -118,8 +118,8 @@ public class MainActivity extends AppCompatActivity {
     public static JSONArray jArray;
     public static List<DataMainRoms> data;
     public static MainActivity activity;
-    private InterstitialAd mInterstitialAd;
-    private AdRequest adRequest;
+//    private InterstitialAd mInterstitialAd;
+//    private AdRequest adRequest;
     public DrawerLayout mainDrawer;
     private final String TAG = "MainActivity";
     public static /**/ LinearLayout extVncLayout;
@@ -465,14 +465,14 @@ public class MainActivity extends AppCompatActivity {
 
         getWindow().setNavigationBarColor(SurfaceColors.SURFACE_2.getColor(this));
 
-        adRequest = new AdRequest.Builder().build();
+//        adRequest = new AdRequest.Builder().build();
 
         //AdView mAdView = findViewById(R.id.adView);
         //adRequest = new AdRequest.Builder().build();
         //mAdView.loadAd(adRequest);
 
-        MobileAds.initialize(this, initializationStatus -> {
-        });
+//        MobileAds.initialize(this, initializationStatus -> {
+//        });
 
         DialogUtils.joinTelegram(activity);
 
@@ -945,28 +945,28 @@ public class MainActivity extends AppCompatActivity {
         //if (MainSettingsManager.getVmUi(activity).equals("VNC") && MainVNCActivity.started)
         //startActivity(new Intent(activity, MainVNCActivity.class));
 
-        InterstitialAd.load(this, "ca-app-pub-3568137780412047/7745973511", adRequest,
-                new InterstitialAdLoadCallback() {
-                    @Override
-                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
-                        // The mInterstitialAd reference will be null until
-                        // an ad is loaded.
-                        mInterstitialAd = interstitialAd;
-                        Log.i("MainActivity", "onAdLoaded");
-                    }
-
-                    @Override
-                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-                        // Handle the error
-                        Log.d("MainActivity", loadAdError.toString());
-                        mInterstitialAd = null;
-                    }
-                });
-        if (mInterstitialAd != null) {
-            mInterstitialAd.show(this);
-        } else {
-            Log.d("TAG", "The interstitial ad wasn't ready yet.");
-        }
+//        InterstitialAd.load(this, "ca-app-pub-3568137780412047/7745973511", adRequest,
+//                new InterstitialAdLoadCallback() {
+//                    @Override
+//                    public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+//                        // The mInterstitialAd reference will be null until
+//                        // an ad is loaded.
+//                        mInterstitialAd = interstitialAd;
+//                        Log.i("MainActivity", "onAdLoaded");
+//                    }
+//
+//                    @Override
+//                    public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+//                        // Handle the error
+//                        Log.d("MainActivity", loadAdError.toString());
+//                        mInterstitialAd = null;
+//                    }
+//                });
+//        if (mInterstitialAd != null) {
+//            mInterstitialAd.show(this);
+//        } else {
+//            Log.d("TAG", "The interstitial ad wasn't ready yet.");
+//        }
 
         if (!AppConfig.pendingCommand.isEmpty()) {
             if (!VMManager.isthiscommandsafe(AppConfig.pendingCommand, getApplicationContext())) {

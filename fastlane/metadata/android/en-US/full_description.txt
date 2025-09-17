@@ -1,0 +1,15 @@
+Welcome to Vectras VM! A virtual machine app for Android based on QEMU that lets you emulate various OSes including: Linux, Windows, Android, macOS and more.
+
+Minimum System Requirements
+- Android 6.0 and up.
+- 3GB RAM (1GB of free RAM).
+- A good processor.
+
+Recommended System Requirements
+- Android 8.1 and up.
+- 8GB RAM (3GB of free RAM).
+- CPU and Android OS support 64-bit.
+- Snapdragon 855 CPU or better.
+- Integrated or removable cooling system (if running operating systems from 2010 to present).
+
+Tips: If the OS you are trying to emulate crashes, try using an older version.

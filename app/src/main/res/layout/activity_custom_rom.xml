@@ -179,13 +179,13 @@
                         android:orientation="horizontal"
                         android:visibility="gone">
 
-                        <com.google.android.gms.ads.AdView
-                            android:id="@+id/adView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="8dp"
-                            app:adSize="BANNER"
-                            app:adUnitId="ca-app-pub-3568137780412047/8936512089" />
+<!--                        <com.google.android.gms.ads.AdView-->
+<!--                            android:id="@+id/adView"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginBottom="8dp"-->
+<!--                            app:adSize="BANNER"-->
+<!--                            app:adUnitId="ca-app-pub-3568137780412047/8936512089" />-->
                     </LinearLayout>
                 </com.google.android.material.textfield.TextInputLayout>
 

@@ -20,27 +20,27 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+//import com.google.android.gms.tasks.Continuation;
+//import com.google.android.gms.tasks.OnCompleteListener;
+//import com.google.android.gms.tasks.OnSuccessListener;
+//import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+//import com.google.firebase.auth.FirebaseAuth;
+//import com.google.firebase.auth.FirebaseUser;
+//import com.google.firebase.auth.UserProfileChangeRequest;
+//import com.google.firebase.database.DatabaseReference;
+//import com.google.firebase.database.FirebaseDatabase;
 
 public class ProfileActivity extends AppCompatActivity {
 
     private ProfileActivity activity;
     public TextInputEditText profileUsername;
     public MaterialButton saveBtn;
-    FirebaseAuth mAuth;
-    FirebaseUser mCurrentUser;
-    private DatabaseReference newUser;
+//    FirebaseAuth mAuth;
+//    FirebaseUser mCurrentUser;
+//    private DatabaseReference newUser;
     public Uri profileUri;
 
     public ImageView profilePic;
@@ -58,24 +58,24 @@ public class ProfileActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        mAuth = FirebaseAuth.getInstance();
-        mCurrentUser = mAuth.getCurrentUser();
-        newUser = FirebaseDatabase.getInstance().getReference().child(mCurrentUser.getUid());
-        newUser.child("email").setValue(mCurrentUser.getEmail());
-        String name = mCurrentUser.getDisplayName();
-        String email = mCurrentUser.getEmail();
-        Uri picture = mCurrentUser.getPhotoUrl();
+//        mAuth = FirebaseAuth.getInstance();
+//        mCurrentUser = mAuth.getCurrentUser();
+//        newUser = FirebaseDatabase.getInstance().getReference().child(mCurrentUser.getUid());
+//        newUser.child("email").setValue(mCurrentUser.getEmail());
+//        String name = mCurrentUser.getDisplayName();
+//        String email = mCurrentUser.getEmail();
+//        Uri picture = mCurrentUser.getPhotoUrl();
         profilePic = findViewById(R.id.profilePic);
         profileUsername = findViewById(R.id.profileName);
         saveBtn = findViewById(R.id.saveBtn);
         loadingPb = findViewById(R.id.loadingPb);
         //Glide.with(activity).load(picture).error(R.drawable.person_24).into(profilePic);
-        profileUsername.setText(name);
-        if (profileUsername.getText().toString().equals(mCurrentUser.getDisplayName())) {
-            saveBtn.setEnabled(false);
-        } else {
-            saveBtn.setEnabled(true);
-        }
+//        profileUsername.setText(name);
+//        if (profileUsername.getText().toString().equals(mCurrentUser.getDisplayName())) {
+//            saveBtn.setEnabled(false);
+//        } else {
+//            saveBtn.setEnabled(true);
+//        }
         TextWatcher afterTextChangedListener = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -90,11 +90,11 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if (profileUsername.getText().toString().trim().length() > 0) {
-                    if (profileUsername.getText().toString().equals(mCurrentUser.getDisplayName())) {
-                        saveBtn.setEnabled(false);
-                    } else {
-                        saveBtn.setEnabled(true);
-                    }
+//                    if (profileUsername.getText().toString().equals(mCurrentUser.getDisplayName())) {
+//                        saveBtn.setEnabled(false);
+//                    } else {
+//                        saveBtn.setEnabled(true);
+//                    }
                 } else {
                     saveBtn.setEnabled(false);
                     profileUsername.setError("username can't be empty!");
@@ -114,31 +114,31 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 loadingPb.setVisibility(View.VISIBLE);
 
-                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                        .setDisplayName(String.valueOf(profileUsername.getText()))
-                        .setPhotoUri(imgUri)
-                        .build();
-
-                mCurrentUser.updateProfile(profileUpdates)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()) {
-                                    mCurrentUser.sendEmailVerification()
-                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<Void> task) {
-                                                    saveBtn.setEnabled(false);
-                                                    loadingPb.setVisibility(View.GONE);
-                                                    View rootView = findViewById(R.id.main_layout);
-                                                    Snackbar.make(rootView, "Updated Successfully!", 3000).show();
-                                                }
-                                            });
-
-                                }
-                            }
-                        });
-
+//                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+//                        .setDisplayName(String.valueOf(profileUsername.getText()))
+//                        .setPhotoUri(imgUri)
+//                        .build();
+//
+//                mCurrentUser.updateProfile(profileUpdates)
+//                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<Void> task) {
+//                                if (task.isSuccessful()) {
+//                                    mCurrentUser.sendEmailVerification()
+//                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                                                @Override
+//                                                public void onComplete(@NonNull Task<Void> task) {
+//                                                    saveBtn.setEnabled(false);
+//                                                    loadingPb.setVisibility(View.GONE);
+//                                                    View rootView = findViewById(R.id.main_layout);
+//                                                    Snackbar.make(rootView, "Updated Successfully!", 3000).show();
+//                                                }
+//                                            });
+//
+//                                }
+//                            }
+//                        });
+//
             }
         });
 
@@ -146,7 +146,7 @@ public class ProfileActivity extends AppCompatActivity {
         singoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
+//                FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(activity, SplashActivity.class));
                 finishAffinity();
             }
@@ -179,20 +179,20 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        if (profileUsername.getText().toString().equals(mCurrentUser.getDisplayName())) {
-            saveBtn.setEnabled(false);
-        } else {
-            saveBtn.setEnabled(true);
-        }
+//        if (profileUsername.getText().toString().equals(mCurrentUser.getDisplayName())) {
+//            saveBtn.setEnabled(false);
+//        } else {
+//            saveBtn.setEnabled(true);
+//        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (profileUsername.getText().toString().equals(mCurrentUser.getDisplayName())) {
-            saveBtn.setEnabled(false);
-        } else {
-            saveBtn.setEnabled(true);
-        }
+//        if (profileUsername.getText().toString().equals(mCurrentUser.getDisplayName())) {
+//            saveBtn.setEnabled(false);
+//        } else {
+//            saveBtn.setEnabled(true);
+//        }
     }
 }
