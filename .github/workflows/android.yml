@@ -47,10 +47,8 @@ jobs:
       with:
         ruby-version: '3.2'
 
-    - name: Install dependencies
-      run: |
-        gem install bundler
-        bundle install
-        
+    - name: Install Fastlane
+      run: gem install fastlane
+
     - name: Run Fastlane
       run: fastlane metadata
