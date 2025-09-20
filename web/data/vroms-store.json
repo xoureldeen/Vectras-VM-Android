@@ -464,6 +464,22 @@
         "verified": true
     },
     {
+        "rom_name":"Windows 10 (Micro 10)",
+        "rom_icon":"https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/09/17/windows-logo_1_926ed76111646acbbe332bc5af0cf2ce.png",
+        "rom_url":"https://anbui.ovh/get/vec/community/win/nt10/mr10.html",
+        "rom_path":"Windows 10 (Micro10).cvbi",
+        "rom_avail":true,
+        "rom_size":"Lighter",
+        "rom_arch":"X86_64",
+        "rom_kernel":"windows",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"Windows 10 is a major release of Microsoft's Windows NT operating system. The successor to Windows 8.1, it was released to manufacturing on July 15, 2015, and later to retail on July 29, 2015.",
+        "file_size": "7 GB",
+        "creator": "tokaevUser",
+        "verified": true
+    },
+    {
         "rom_name":"Windows 10 LTSB 2015",
         "rom_icon":"https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/09/17/windows-logo_1_926ed76111646acbbe332bc5af0cf2ce.png",
         "rom_url":"https://youtu.be/9AMJ1UB5NeY",
