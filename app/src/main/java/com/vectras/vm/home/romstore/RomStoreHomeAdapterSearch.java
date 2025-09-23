@@ -1,11 +1,9 @@
-package com.vectras.vm.Roms;
+package com.vectras.vm.home.romstore;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,26 +17,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
-import com.vectras.vm.AppConfig;
 import com.vectras.vm.RomInfo;
 import com.vectras.vm.R;
+import com.vectras.vm.Roms.DataRoms;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
-public class AdapterRomStoreSearch extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class RomStoreHomeAdapterSearch extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     Context context;
     private final LayoutInflater inflater;
     static List<DataRoms> dataRom = Collections.emptyList();
-    private final String TAG = "AdapterRomStoreSearch";
+    private final String TAG = "RomStoreHomeAdapterSearch";
 
-    public AdapterRomStoreSearch(Context context, List<DataRoms> data) {
+    public RomStoreHomeAdapterSearch(Context context, List<DataRoms> data) {
         this.context = context;
         inflater = LayoutInflater.from(context);
         dataRom = data;

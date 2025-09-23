@@ -4,6 +4,8 @@
 package android.androidVNC;
 
 import com.vectras.qemu.Config;
+import com.vectras.qemu.VNCConfig;
+import com.vectras.vm.VectrasApp;
 
 import android.widget.ImageView.ScaleType;
 

@@ -938,4 +938,16 @@ public class MainSettingsManager extends AppCompatActivity
         return prefs.getString("skipVersion", "");
     }
 
+    public static void setVNCScaleMode(Context context, int mode) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putInt("vncScaleMode", mode);
+        edit.commit();
+    }
+
+    public static int getVNCScaleMode(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getInt("vncScaleMode", 0);
+    }
+
 }

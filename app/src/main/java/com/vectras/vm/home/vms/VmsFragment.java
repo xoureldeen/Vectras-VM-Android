@@ -169,7 +169,7 @@ public class VmsFragment extends Fragment implements CallbackInterface.HomeCallT
     private void checkAndLoad() {
         if (PermissionUtils.storagepermission(requireActivity(), true)) {
             loadDataVbi();
-            if (DeviceUtils.isStorageLow(requireActivity())) {
+            if (DeviceUtils.isStorageLow(requireActivity(), true)) {
                 DialogUtils.oneDialog(requireActivity(),
                         getResources().getString(R.string.oops),
                         getResources().getString(R.string.very_low_available_storage_space_content),
@@ -179,7 +179,7 @@ public class VmsFragment extends Fragment implements CallbackInterface.HomeCallT
                         true,
                         null,
                         () -> {
-                            if (DeviceUtils.isStorageLow(requireActivity()))
+                            if (DeviceUtils.isStorageLow(requireActivity(), true))
                                 requireActivity().finish();
                         });
             }

@@ -3,64 +3,108 @@ package com.vectras.vm.utils;
 import static android.content.Intent.ACTION_VIEW;
 
 import android.app.Activity;
-import android.content.DialogInterface;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.preference.PreferenceManager;
 
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.vectras.vm.R;
 
 public class DialogUtils {
 
     public static void oneDialog(Activity _context, String _title, String _message, String _textPositiveButton, boolean _isicon, int _iconid, boolean _cancel, Runnable _onPositive, Runnable _onDismiss) {
-        MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(_context, R.style.CenteredDialogTheme);
-        dialog.setTitle(_title);
-        dialog.setMessage(_message);
+        View buttonsView = LayoutInflater.from(_context).inflate(R.layout.dialog_layout, null);
+
+        AlertDialog dialog = new AlertDialog.Builder(_context).create();
+        dialog.setCancelable(_cancel);
+        dialog.setView(buttonsView);
+
+        ImageView icon = buttonsView.findViewById(R.id.icon);
+        TextView title = buttonsView.findViewById(R.id.tv_title);
+        TextView content = buttonsView.findViewById(R.id.tv_content);
+        TextView positiveButton = buttonsView.findViewById(R.id.positiveButton);
+        TextView negativeButton = buttonsView.findViewById(R.id.negativeButton);
+        TextView neutralButton = buttonsView.findViewById(R.id.neutralButton);
+
         if (_isicon) {
-            dialog.setIcon(_iconid);
+            icon.setImageResource(_iconid);
+        } else {
+            icon.setVisibility(View.GONE);
         }
-        if (!_cancel) {
-            dialog.setCancelable(false);
-        }
-        dialog.setPositiveButton(_textPositiveButton, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (_onPositive != null) _onPositive.run();
-                dialog.dismiss();
-            }
+
+        title.setText(_title);
+        content.setText(_message);
+
+        positiveButton.setText(_textPositiveButton);
+        positiveButton.setBackgroundResource(R.drawable.dialog_shape_single_button);
+        negativeButton.setVisibility(View.GONE);
+        neutralButton.setVisibility(View.GONE);
+
+        positiveButton.setOnClickListener(v -> {
+            if (_onPositive != null) _onPositive.run();
+            dialog.dismiss();
         });
+
+//        dialog.setPositiveButton(_textPositiveButton, (dialog2, which) -> {
+//            if (_onPositive != null) _onPositive.run();
+//            dialog2.dismiss();
+//        });
         dialog.setOnDismissListener(dialog1 -> {
             if (_onDismiss != null) _onDismiss.run();
         });
         dialog.show();
     }
     public static void twoDialog(Activity _context, String _title, String _message, String _textPositiveButton, String _textNegativeButton, boolean _isicon, int _iconid, boolean _cancel, Runnable _onPositive, Runnable _onNegative, Runnable _onDismiss) {
-        MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(_context, R.style.CenteredDialogTheme);
-        dialog.setTitle(_title);
-        dialog.setMessage(_message);
+        View buttonsView = LayoutInflater.from(_context).inflate(R.layout.dialog_layout, null);
+
+        AlertDialog dialog = new AlertDialog.Builder(_context).create();
+        dialog.setCancelable(_cancel);
+        dialog.setView(buttonsView);
+
+        ImageView icon = buttonsView.findViewById(R.id.icon);
+        TextView title = buttonsView.findViewById(R.id.tv_title);
+        TextView content = buttonsView.findViewById(R.id.tv_content);
+        TextView positiveButton = buttonsView.findViewById(R.id.positiveButton);
+        TextView negativeButton = buttonsView.findViewById(R.id.negativeButton);
+        TextView neutralButton = buttonsView.findViewById(R.id.neutralButton);
+
         if (_isicon) {
-            dialog.setIcon(_iconid);
+            icon.setImageResource(_iconid);
+        } else {
+            icon.setVisibility(View.GONE);
         }
-        if (!_cancel) {
-            dialog.setCancelable(false);
-        }
-        dialog.setPositiveButton(_textPositiveButton, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (_onPositive != null) _onPositive.run();
-                dialog.dismiss();
-            }
+
+        title.setText(_title);
+        content.setText(_message);
+
+        positiveButton.setText(_textPositiveButton);
+        negativeButton.setText(_textNegativeButton);
+        negativeButton.setBackgroundResource(R.drawable.dialog_shape_bottom_button);
+        neutralButton.setVisibility(View.GONE);
+
+        positiveButton.setOnClickListener(v -> {
+            if (_onPositive != null) _onPositive.run();
+            dialog.dismiss();
         });
-        dialog.setNegativeButton(_textNegativeButton, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (_onNegative != null) _onNegative.run();
-                dialog.dismiss();
-            }
+
+        negativeButton.setOnClickListener(v -> {
+            if (_onNegative != null) _onNegative.run();
+            dialog.dismiss();
         });
+//        dialog.setPositiveButton(_textPositiveButton, (dialog2, which) -> {
+//            if (_onPositive != null) _onPositive.run();
+//            dialog2.dismiss();
+//        });
+//        dialog.setNegativeButton(_textNegativeButton, (dialog3, which) -> {
+//            if (_onNegative != null) _onNegative.run();
+//            dialog3.dismiss();
+//        });
         dialog.setOnDismissListener(dialog1 -> {
             if (_onDismiss != null) _onDismiss.run();
         });
@@ -68,36 +112,59 @@ public class DialogUtils {
     }
 
     public static void threeDialog(Activity _context, String _title, String _message, String _textPositiveButton, String _textNegativeButton, String _textNeutralButton ,boolean _isicon, int _iconid, boolean _cancel, Runnable _onPositive, Runnable _onNegative, Runnable _onNeutral, Runnable _onDismiss) {
-        MaterialAlertDialogBuilder dialog = new MaterialAlertDialogBuilder(_context, R.style.CenteredDialogTheme);
-        dialog.setTitle(_title);
-        dialog.setMessage(_message);
+        View buttonsView = LayoutInflater.from(_context).inflate(R.layout.dialog_layout, null);
+
+        AlertDialog dialog = new AlertDialog.Builder(_context).create();
+        dialog.setCancelable(_cancel);
+        dialog.setView(buttonsView);
+
+        ImageView icon = buttonsView.findViewById(R.id.icon);
+        TextView title = buttonsView.findViewById(R.id.tv_title);
+        TextView content = buttonsView.findViewById(R.id.tv_content);
+        TextView positiveButton = buttonsView.findViewById(R.id.positiveButton);
+        TextView negativeButton = buttonsView.findViewById(R.id.negativeButton);
+        TextView neutralButton = buttonsView.findViewById(R.id.neutralButton);
+
         if (_isicon) {
-            dialog.setIcon(_iconid);
+            icon.setImageResource(_iconid);
+        } else {
+            icon.setVisibility(View.GONE);
         }
-        if (!_cancel) {
-            dialog.setCancelable(false);
-        }
-        dialog.setPositiveButton(_textPositiveButton, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (_onPositive != null) _onPositive.run();
-                dialog.dismiss();
-            }
+
+        title.setText(_title);
+        content.setText(_message);
+
+        positiveButton.setText(_textPositiveButton);
+        negativeButton.setText(_textNegativeButton);
+        neutralButton.setText(_textNeutralButton);
+
+        positiveButton.setOnClickListener(v -> {
+            if (_onPositive != null) _onPositive.run();
+            dialog.dismiss();
         });
-        dialog.setNegativeButton(_textNegativeButton, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (_onNegative != null) _onNegative.run();
-                dialog.dismiss();
-            }
+
+        negativeButton.setOnClickListener(v -> {
+            if (_onNegative != null) _onNegative.run();
+            dialog.dismiss();
         });
-        dialog.setNeutralButton(_textNeutralButton, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (_onNeutral != null) _onNeutral.run();
-                dialog.dismiss();
-            }
+
+        neutralButton.setOnClickListener(v -> {
+            if (_onNeutral != null) _onNeutral.run();
+            dialog.dismiss();
         });
+
+//        dialog.setPositiveButton(_textPositiveButton, (dialog2, which) -> {
+//            if (_onPositive != null) _onPositive.run();
+//            dialog2.dismiss();
+//        });
+//        dialog.setNegativeButton(_textNegativeButton, (dialog3, which) -> {
+//            if (_onNegative != null) _onNegative.run();
+//            dialog3.dismiss();
+//        });
+//        dialog.setNeutralButton(_textNeutralButton, (dialog4, which) -> {
+//            if (_onNeutral != null) _onNeutral.run();
+//            dialog4.dismiss();
+//        });
         dialog.setOnDismissListener(dialog1 -> {
             if (_onDismiss != null) _onDismiss.run();
         });

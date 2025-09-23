@@ -15,7 +15,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingHorizontal="16dp"
-            android:paddingBottom="80dp"
             android:orientation="vertical">
 
             <com.google.android.material.card.MaterialCardView
@@ -72,15 +71,25 @@
                                 android:id="@+id/tv_totalstorage"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:padding="8dp"
+                                android:paddingHorizontal="8dp"
+                                android:paddingVertical="4dp"
                                 android:text="@string/total_memory" />
 
                             <TextView
                                 android:id="@+id/tv_usedstorage"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:padding="8dp"
+                                android:paddingHorizontal="8dp"
+                                android:paddingVertical="4dp"
                                 android:text="@string/used_memory" />
+
+                            <TextView
+                                android:id="@+id/tv_freestorage"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingHorizontal="8dp"
+                                android:paddingVertical="4dp"
+                                android:text="@string/free_memory" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -140,15 +149,25 @@
                                 android:id="@+id/tv_totalram"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:padding="8dp"
+                                android:paddingHorizontal="8dp"
+                                android:paddingVertical="4dp"
                                 android:text="@string/total_memory" />
 
                             <TextView
                                 android:id="@+id/tv_usedram"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:padding="8dp"
+                                android:paddingHorizontal="8dp"
+                                android:paddingVertical="4dp"
                                 android:text="@string/used_memory" />
+
+                            <TextView
+                                android:id="@+id/tv_freeram"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingHorizontal="8dp"
+                                android:paddingVertical="4dp"
+                                android:text="@string/free_memory" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>

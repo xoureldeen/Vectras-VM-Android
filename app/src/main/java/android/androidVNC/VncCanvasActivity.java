@@ -110,7 +110,7 @@ public abstract class VncCanvasActivity extends AppCompatActivity {
 		 * 
 		 * @see
 		 * android.androidVNC.VncCanvasActivity.ZoomInputHandler#onKeyDown(int,
-		 * android.view.KeyEvent)
+		 * android.view.SimulateKeyEvent)
 		 */
 		@Override
 		public boolean onKeyDown(int keyCode, KeyEvent evt) {
@@ -122,7 +122,7 @@ public abstract class VncCanvasActivity extends AppCompatActivity {
 		 * 
 		 * @see
 		 * android.androidVNC.VncCanvasActivity.ZoomInputHandler#onKeyUp(int,
-		 * android.view.KeyEvent)
+		 * android.view.SimulateKeyEvent)
 		 */
 		@Override
 		public boolean onKeyUp(int keyCode, KeyEvent evt) {
@@ -317,7 +317,7 @@ public abstract class VncCanvasActivity extends AppCompatActivity {
 		 * 
 		 * @see
 		 * android.androidVNC.VncCanvasActivity.ZoomInputHandler#onKeyDown(int,
-		 * android.view.KeyEvent)
+		 * android.view.SimulateKeyEvent)
 		 */
 		@Override
 		public boolean onKeyDown(int keyCode, KeyEvent evt) {
@@ -329,7 +329,7 @@ public abstract class VncCanvasActivity extends AppCompatActivity {
 		 * 
 		 * @see
 		 * android.androidVNC.VncCanvasActivity.ZoomInputHandler#onKeyUp(int,
-		 * android.view.KeyEvent)
+		 * android.view.SimulateKeyEvent)
 		 */
 		@Override
 		public boolean onKeyUp(int keyCode, KeyEvent evt) {
@@ -1245,7 +1245,7 @@ public abstract class VncCanvasActivity extends AppCompatActivity {
 		 * (non-Javadoc)
 		 * 
 		 * @see android.androidVNC.AbstractInputHandler#onKeyDown(int,
-		 * android.view.KeyEvent)
+		 * android.view.SimulateKeyEvent)
 		 */
 		@Override
 		public boolean onKeyDown(int keyCode, KeyEvent evt) {
@@ -1291,7 +1291,7 @@ public abstract class VncCanvasActivity extends AppCompatActivity {
 		 * (non-Javadoc)
 		 * 
 		 * @see android.androidVNC.AbstractInputHandler#onKeyUp(int,
-		 * android.view.KeyEvent)
+		 * android.view.SimulateKeyEvent)
 		 */
 		@Override
 		public boolean onKeyUp(int keyCode, KeyEvent evt) {
@@ -1380,7 +1380,7 @@ public abstract class VncCanvasActivity extends AppCompatActivity {
 		 * (non-Javadoc)
 		 * 
 		 * @see android.androidVNC.AbstractInputHandler#onKeyDown(int,
-		 * android.view.KeyEvent)
+		 * android.view.SimulateKeyEvent)
 		 */
 		@Override
 		public boolean onKeyDown(int keyCode, KeyEvent evt) {
@@ -1391,7 +1391,7 @@ public abstract class VncCanvasActivity extends AppCompatActivity {
 		 * (non-Javadoc)
 		 * 
 		 * @see android.androidVNC.AbstractInputHandler#onKeyUp(int,
-		 * android.view.KeyEvent)
+		 * android.view.SimulateKeyEvent)
 		 */
 		@Override
 		public boolean onKeyUp(int keyCode, KeyEvent evt) {
@@ -1469,7 +1469,7 @@ public abstract class VncCanvasActivity extends AppCompatActivity {
 		 * (non-Javadoc)
 		 * 
 		 * @see android.androidVNC.AbstractInputHandler#onKeyDown(int,
-		 * android.view.KeyEvent)
+		 * android.view.SimulateKeyEvent)
 		 */
 		@Override
 		public boolean onKeyDown(int keyCode, KeyEvent evt) {
@@ -1480,7 +1480,7 @@ public abstract class VncCanvasActivity extends AppCompatActivity {
 		 * (non-Javadoc)
 		 * 
 		 * @see android.androidVNC.AbstractInputHandler#onKeyUp(int,
-		 * android.view.KeyEvent)
+		 * android.view.SimulateKeyEvent)
 		 */
 		@Override
 		public boolean onKeyUp(int keyCode, KeyEvent evt) {
@@ -1548,7 +1548,7 @@ public abstract class VncCanvasActivity extends AppCompatActivity {
 		 * (non-Javadoc)
 		 * 
 		 * @see android.androidVNC.AbstractInputHandler#onKeyDown(int,
-		 * android.view.KeyEvent)
+		 * android.view.SimulateKeyEvent)
 		 */
 		@Override
 		public boolean onKeyDown(int keyCode, KeyEvent evt) {
@@ -1562,7 +1562,7 @@ public abstract class VncCanvasActivity extends AppCompatActivity {
 		 * (non-Javadoc)
 		 * 
 		 * @see android.androidVNC.AbstractInputHandler#onKeyUp(int,
-		 * android.view.KeyEvent)
+		 * android.view.SimulateKeyEvent)
 		 */
 		@Override
 		public boolean onKeyUp(int keyCode, KeyEvent evt) {
@@ -1646,7 +1646,7 @@ public abstract class VncCanvasActivity extends AppCompatActivity {
 		 * (non-Javadoc)
 		 * 
 		 * @see android.androidVNC.AbstractInputHandler#onKeyDown(int,
-		 * android.view.KeyEvent)
+		 * android.view.SimulateKeyEvent)
 		 */
 		@Override
 		public boolean onKeyDown(int keyCode, KeyEvent evt) {
@@ -1712,7 +1712,7 @@ public abstract class VncCanvasActivity extends AppCompatActivity {
 		 * (non-Javadoc)
 		 * 
 		 * @see android.androidVNC.AbstractInputHandler#onKeyUp(int,
-		 * android.view.KeyEvent)
+		 * android.view.SimulateKeyEvent)
 		 */
 		@Override
 		public boolean onKeyUp(int keyCode, KeyEvent evt) {
@@ -1793,4 +1793,16 @@ public abstract class VncCanvasActivity extends AppCompatActivity {
     public void onConnected() {
 
     }
+
+	public void onDisconnected() {
+
+	}
+
+	public void reconnect() {
+		vncCanvas.initializeVncCanvas(connection, new Runnable() {
+			public void run() {
+				setModes();
+			}
+		});
+	}
 }

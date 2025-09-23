@@ -10,13 +10,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginVertical="16dp"
             android:orientation="vertical">
 
             <LinearLayout
                 android:id="@+id/ln_removable_devices"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="8dp"
                 android:orientation="vertical">
                 <TextView
                     android:layout_width="wrap_content"
@@ -25,7 +25,7 @@
                     android:paddingHorizontal="16dp"
                     android:text="@string/change_removable_devices"
                     android:textColor="?attr/colorControlNormal"
-                    android:textSize="18sp"/>
+                    android:textSize="22sp"/>
 
                 <LinearLayout
                     android:id="@+id/ln_cdrom"
@@ -163,6 +163,7 @@
                 android:id="@+id/ln_user_interface"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingTop="8dp"
                 android:orientation="vertical">
                 <TextView
                     android:layout_width="wrap_content"
@@ -171,7 +172,7 @@
                     android:paddingHorizontal="16dp"
                     android:textColor="?attr/colorControlNormal"
                     android:text="@string/user_interface"
-                    android:textSize="18sp"/>
+                    android:textSize="22sp"/>
 
                 <LinearLayout
                     android:id="@+id/ln_mouse"
@@ -191,6 +192,31 @@
                         android:padding="8dp"
                         android:textColor="?attr/colorControlNormal"
                         android:text="@string/mouse_mode"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ln_screenMode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:paddingVertical="8dp"
+                    android:paddingHorizontal="16dp">
+                    <ImageView
+                        android:id="@+id/iv_screenOneToOne"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/view_real_size_24px"
+                        android:background="?attr/selectableItemBackgroundBorderless"/>
+                    <ImageView
+                        android:id="@+id/iv_screenFit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="8dp"
+                        android:src="@drawable/fullscreen_24px"
+                        android:background="?attr/selectableItemBackgroundBorderless"/>
                 </LinearLayout>
             </LinearLayout>
 

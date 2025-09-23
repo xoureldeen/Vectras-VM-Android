@@ -26,7 +26,7 @@ public class DeviceUtils {
         return memoryInfo.totalMem;
     }
 
-    public static boolean isStorageLow(Context context) {
+    public static boolean isStorageLow(Context context, boolean isCheckVeryLow) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             try {
                 File path = Environment.getDataDirectory();
@@ -51,7 +51,7 @@ public class DeviceUtils {
                 long availableBytes = statsManager.getFreeBytes(uuid);
                 long availableMB = availableBytes / (1024 * 1024);
 
-                return availableMB < 2048;
+                return availableMB < (isCheckVeryLow ? 256 : 2048);
             } catch (IOException e) {
                 Log.e(TAG, "Error getting storage stats", e);
             }

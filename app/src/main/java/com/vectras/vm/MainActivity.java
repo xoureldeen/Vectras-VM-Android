@@ -1195,19 +1195,19 @@ public class MainActivity extends AppCompatActivity {
     private void checkpermissions() {
         if (PermissionUtils.storagepermission(activity, true)) {
             loadDataVbi();
-            if (DeviceUtils.isStorageLow(this)) {
-                DialogUtils.oneDialog(this,
-                        getResources().getString(R.string.oops),
-                        getResources().getString(R.string.very_low_available_storage_space_content),
-                        getResources().getString(R.string.ok),
-                        true,
-                        R.drawable.warning_48px,
-                        true,
-                        null,
-                        () -> {
-                            if (DeviceUtils.isStorageLow(this)) finish();
-                        });
-            }
+//            if (DeviceUtils.isStorageLow(this)) {
+//                DialogUtils.oneDialog(this,
+//                        getResources().getString(R.string.oops),
+//                        getResources().getString(R.string.very_low_available_storage_space_content),
+//                        getResources().getString(R.string.ok),
+//                        true,
+//                        R.drawable.warning_48px,
+//                        true,
+//                        null,
+//                        () -> {
+//                            if (DeviceUtils.isStorageLow(this)) finish();
+//                        });
+//            }
         }
     }
 

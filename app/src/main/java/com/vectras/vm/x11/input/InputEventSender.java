@@ -157,7 +157,7 @@ public final class InputEventSender {
         boolean no_modifiers = (!e.isAltPressed() && !e.isCtrlPressed() && !e.isMetaPressed())
                 || ((e.getMetaState() & META_ALT_RIGHT_ON) != 0 && (e.getCharacters() != null || e.getUnicodeChar() != 0)); // For layouts with AltGr
         // For Enter getUnicodeChar() returns 10 (line feed), but we still
-        // want to send it as KeyEvent.
+        // want to send it as SimulateKeyEvent.
         char unicode = keyCode != KEYCODE_ENTER ? (char) e.getUnicodeChar() : 0;
         int scancode = (preferScancodes || !no_modifiers) ? e.getScanCode(): 0;
 

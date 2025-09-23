@@ -35,19 +35,19 @@ class DPadMouseKeyHandler {
 		int yv = 0;
 		boolean result = true;
 		switch (keyCode) {
-//		case KeyEvent.KEYCODE_DPAD_LEFT:
+//		case SimulateKeyEvent.KEYCODE_DPAD_LEFT:
 //			xv = -1;
 //			break;
-//		case KeyEvent.KEYCODE_DPAD_RIGHT:
+//		case SimulateKeyEvent.KEYCODE_DPAD_RIGHT:
 //			xv = 1;
 //			break;
-//		case KeyEvent.KEYCODE_DPAD_UP:
+//		case SimulateKeyEvent.KEYCODE_DPAD_UP:
 //			yv = -1;
 //			break;
-//		case KeyEvent.KEYCODE_DPAD_DOWN:
+//		case SimulateKeyEvent.KEYCODE_DPAD_DOWN:
 //			yv = 1;
 //			break;
-//		case KeyEvent.KEYCODE_DPAD_CENTER:
+//		case SimulateKeyEvent.KEYCODE_DPAD_CENTER:
 //			if (!mouseDown) {
 //				mouseDown = true;
 //				result = canvas.processPointerEvent(canvas.mouseX, canvas.mouseY, MotionEvent.ACTION_DOWN, evt.getMetaState(), mouseDown, canvas.cameraButtonDown);
@@ -91,10 +91,10 @@ class DPadMouseKeyHandler {
 		boolean result = false;
 
 		switch (keyCode) {
-//		case KeyEvent.KEYCODE_DPAD_LEFT:
-//		case KeyEvent.KEYCODE_DPAD_RIGHT:
-//		case KeyEvent.KEYCODE_DPAD_UP:
-//		case KeyEvent.KEYCODE_DPAD_DOWN:
+//		case SimulateKeyEvent.KEYCODE_DPAD_LEFT:
+//		case SimulateKeyEvent.KEYCODE_DPAD_RIGHT:
+//		case SimulateKeyEvent.KEYCODE_DPAD_UP:
+//		case SimulateKeyEvent.KEYCODE_DPAD_DOWN:
 //			mouseMover.stop();
 //			isMoving = false;
 //			result = true;

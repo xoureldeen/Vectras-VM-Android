@@ -101,8 +101,8 @@ public class SystemMonitorFragment extends Fragment {
                         getString(R.string.shutdown),
                         getString(R.string.shutdown_or_reset_content),
                         getString(R.string.shutdown),
-                        getString(R.string.cancel),
                         getString(R.string.reset),
+                        getString(R.string.close),
                         true,
                         R.drawable.power_settings_new_24px,
                         true,
@@ -113,11 +113,11 @@ public class SystemMonitorFragment extends Fragment {
                             binding.btStopvmvnc.setVisibility(View.GONE);
                             getQemuInfo();
                         },
-                        null,
                         () -> {
                             Config.vmID = Config.currentVNCServervmID;
                             VMManager.resetCurrentVM();
                         },
+                        null,
                         null);
             }
         });
@@ -156,6 +156,7 @@ public class SystemMonitorFragment extends Fragment {
 
         binding.tvTotalram.setText(getString(R.string.total_memory) + " " + String.format(Locale.US, "%.1f", totalMemory) + " GB");
         binding.tvUsedram.setText(getString(R.string.used_memory)  + " " + String.format(Locale.US, "%.1f", usedMemory) + " GB");
+        binding.tvFreeram.setText(getString(R.string.free_memory)  + " " + String.format(Locale.US, "%.1f", freeMemory) + " GB");
         binding.tvPercentageofram.setText((int) percentageOfRam + "%");
         if (SDK_INT >= Build.VERSION_CODES.N) {
             binding.cpiMemory.setProgress((int) percentageOfRam, true);
@@ -173,6 +174,7 @@ public class SystemMonitorFragment extends Fragment {
 
         binding.tvTotalstorage.setText(getString(R.string.total_memory) + " " + String.format(Locale.US, "%.1f", totalStorage) + " GB");
         binding.tvUsedstorage.setText(getString(R.string.used_memory)  + " " + String.format(Locale.US, "%.1f", usedStorage) + " GB");
+        binding.tvFreestorage.setText(getString(R.string.free_memory)  + " " + String.format(Locale.US, "%.1f", freeStorage) + " GB");
         binding.tvPercentageofstorage.setText((int) percentageOfStorage + "%");
         if (SDK_INT >= Build.VERSION_CODES.N) {
             binding.cpiStorage.setProgress((int) percentageOfStorage, true);
@@ -196,7 +198,7 @@ public class SystemMonitorFragment extends Fragment {
         binding.tvQemuarch.setText(getString(R.string.arch) + " " + currentArch + ".");
 
         executor.execute(() -> {
-            String result = Terminal.executeShellCommandWithResult("ps -e", requireActivity());
+            String result = Terminal.executeShellCommandWithResult("ps -eo command", requireActivity());
             requireActivity().runOnUiThread(() -> {
                 if (!result.isEmpty()) {
                     switch (currentArch) {

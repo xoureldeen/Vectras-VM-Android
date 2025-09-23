@@ -173,7 +173,8 @@ public class VncCanvas extends AppCompatImageView {
 		});
 
         // Show the ProgressDialog
-		pd.show();
+		// Did not give show to not flash.
+		//pd.show();
 		final Display display = pd.getWindow().getWindowManager().getDefaultDisplay();
 		Thread t = new Thread() {
 
@@ -241,7 +242,8 @@ public class VncCanvas extends AppCompatImageView {
 		Activity activity = ((Activity) getContext());
 		Intent data = new Intent();
 		activity.setResult(Config.VNC_RESET_RESULT_CODE, data);
-		activity.finish();
+// Do not terminate Activity when no signal.
+//		activity.finish();
 
 	}
 
@@ -501,6 +503,7 @@ public class VncCanvas extends AppCompatImageView {
 		} finally {
 			Log.v(TAG, "Closing VNC Connection");
 			rfb.close();
+			disconnected();
 		}
 	}
 
@@ -2046,6 +2049,11 @@ public class VncCanvas extends AppCompatImageView {
         activity.onConnected();
 
     }
+
+	public void disconnected() {
+		VncCanvasActivity activity = (VncCanvasActivity) VncCanvas.this.getContext();
+		activity.onDisconnected();
+	}
 
 
     class VNCOnTouchListener implements View.OnTouchListener {
