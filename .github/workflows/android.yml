@@ -55,7 +55,7 @@ jobs:
         path: app/build/outputs/apk/release/app-release.apk
 
     - name: Send Release APK to Telegram
-      if: github.event_name == 'push' && secrets.TELEGRAM_BOT_TOKEN
+      if: secrets.TELEGRAM_BOT_TOKEN
       run: |
         success=true
 
