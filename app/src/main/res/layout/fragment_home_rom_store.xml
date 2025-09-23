@@ -10,7 +10,7 @@
         android:id="@+id/rv_romlist"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingBottom="88dp"
+        android:paddingBottom="8dp"
         android:clipToPadding="false"
         android:fillViewport="true" />
 

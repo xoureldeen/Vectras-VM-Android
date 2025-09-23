@@ -550,6 +550,9 @@
     <string name="action_needed">Action needed</string>
     <string name="repair_vm_list_content">Data about the virtual machines has been corrupted and needs to be repaired.</string>
     <string name="start_repair">Start repair</string>
+    <string name="not_enough_storage_to_set_up_content">There is not enough storage available on your device to set up. Please clear up and try again later.</string>
+    <string name="no_signal">No signal</string>
+    <string name="tap_to_try_again">Tap to try again.</string>
 
 
 
@@ -796,4 +799,260 @@
     <string name="settings_tag_keyboard">Keyboard</string>
     <string name="settings_tag_other">Other</string>
     <string name="executing_command_please_wait">Executing command, please wait…</string>
+    <!-- Feature: User Profile -->
+    <string name="profile_title">User Profile</string>
+    <string name="profile_edit_button">Edit Profile</string>
+    <string name="profile_username_label">Username</string>
+
+    <!-- Feature: Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_enable_notifications">Enable Notifications</string>
+    <!-- Common Strings -->
+    <string name="common_ok">OK</string>
+    <string name="common_cancel">Cancel</string>
+    <string name="common_save">Save</string>
+    <string name="common_loading">Loading…</string>
+    <string name="common_error">An error occurred.</string>
+    <string name="api_key" translatable="false">xyz123abc</string>
+<!-- ======================= VIRTUAL MACHINE MANAGEMENT ===================== -->
+
+    <!-- VM Creation & Setup -->
+    <string name="vm_create_new">New VM</string> <!-- Was: new_vm -->
+    <string name="vm_label_setup_command">Setup command</string> <!-- Was: setup_command -->
+    <string name="vm_message_who_created_rom">Who created this rom?</string> <!-- Was: who_created_this_rom -->
+    <string name="vm_error_no_support_for_arm">No support for ARM.</string>
+    <string name="vm_error_failed_cache_dir_creation">The virtual machine cache directory failed to
+        create. Please try again later.
+    </string> <!-- Was: vm_cache_dir_failed_to_create_content -->
+
+    <!-- VM Details & Information -->
+    <string name="vm_info_label_creator">Creator</string> <!-- Was: creator -->
+    <string name="vm_info_label_architecture">Architecture</string> <!-- Was: architecture -->
+    <string name="vm_info_label_size">Size</string> <!-- Was: sizetext -->
+    <string name="vm_info_label_file_name">File name</string> <!-- Was: file_name -->
+    <string name="vm_info_label_verified">Verified</string> <!-- Was: verified -->
+    <string name="vm_info_desc_verified">It has been tested to work and is not harmful to the
+        device. But it may not work on your device.
+    </string> <!-- Was: verified_content -->
+    <string name="vm_info_label_not_verified">Not verified</string> <!-- Was: not_verified -->
+    <string name="vm_info_desc_not_verified">Untested, it may not work or have unexpected
+        behavior.
+    </string> <!-- Was: not_verified_content -->
+
+    <!-- VM Controls & Devices -->
+    <string name="vm_control_power">Power</string> <!-- Was: power -->
+    <string name="vm_control_dialog_shutdown_reset_message">Do you want to shut down or reset? This
+        can cause some unexpected problems for the virtual machine. You can leave without shutting
+        down by pressing and holding the exit button or pressing the back key.
+    </string> <!-- Was: shutdown_or_reset_content -->
+    <string name="vm_device_cdrom">CDROM</string>
+    <string name="vm_device_floppy_drive">Floppy drive</string>
+    <string name="vm_device_floppy_drive_a">Floppy drive A</string>
+    <string name="vm_device_floppy_drive_b">Floppy drive B</string>
+    <string name="vm_device_sd_card">SD card</string>
+    <string name="vm_device_action_change_removable">Change removable devices</string> <!-- Was: change_removable_devices -->
+    <string name="vm_device_action_eject">Eject</string>
+    <string name="vm_device_action_change_or_eject_other">Change or eject other device</string>
+    <string name="vm_device_action_change_or_eject_a_device">Change or eject a device</string>
+    <string name="vm_device_action_change_a_removable_device">Change a removable device</string>
+    <string name="vm_device_action_change_disk_file">Change disk file</string>
+    <string name="vm_device_status_ejected">Ejected.</string>
+    <string name="vm_device_error_eject_failed">Eject failed.</string>
+    <string name="vm_device_status_changed">Changed.</string>
+    <string name="vm_device_error_change_failed">Change failed.</string>
+    <string name="vm_device_prompt_enter_id">Enter device ID</string> <!-- Was: enter_device_id -->
+    <string name="vm_device_error_need_to_enter_id">You need to enter the device ID.</string> <!-- Was: you_need_to_enter_the_device_id -->
+    <string name="vm_device_error_not_removable">This is not a removable device.</string> <!-- Was: this_is_not_a_removable_device -->
+
+    <!-- VM List & Search -->
+    <string name="vm_list_no_matching_results">No matching results found.</string> <!-- Was: no_matching_results_found -->
+    <string name="vm_list_error_data_corrupted">The virtual machine list data is corrupted, do you
+        want to repair it?
+    </string> <!-- Was: vm_list_data_is_corrupted_content -->
+    <string name="vm_list_repair_action_needed">Action needed</string> <!-- Was: action_needed -->
+    <string name="vm_list_repair_message">Data about the virtual machines has been corrupted and
+        needs to be repaired.
+    </string> <!-- Was: repair_vm_list_content -->
+    <string name="vm_list_repair_button_start">Start repair</string>
+
+    <!-- ========================== GENERAL APP STRINGS ========================== -->
+    <string name="app_label_vectras_vm" translatable="false">Vectras VM</string> <!-- Assuming this could be your app name -->
+    <string name="common_home">Home</string>
+    <string name="common_more">More</string>
+    <string name="common_later">Later</string>
+    <string name="common_stop">Stop</string> <!-- Added common string -->
+    <string name="common_yes">Yes</string>
+    <string name="common_no">No</string> <!-- "No" often used as a negative confirmation, "Cancel" for dismissing -->
+    <string name="common_unknown">Unknown</string> <!-- Was: unknow -->
+    <string name="common_button_go_to_settings">Go to settings</string>
+    <string name="common_message_just_a_sec">Just a sec…</string>
+
+    <!-- ========================== VIRTUAL MACHINE (VM) CORE ========================== -->
+    <!-- VM Creation & Setup -->
+    <string name="vm_action_create_new">New VM</string> <!-- Was: new_vm -->
+    <string name="vm_prompt_who_created_rom">Who created this rom?</string>
+    <string name="vm_error_no_arm_support">No support for ARM.</string>
+    <string name="vm_info_label_verified_status">Verified</string> <!-- Was: verified_content -->
+    <string name="vm_info_label_not_verified_status">Not verified</string> <!-- Was: not_verified_content -->
+
+    <!-- VM Controls & Power -->
+    <string name="vm_control_label_power">Power</string> <!-- Was: power -->
+    <string name="vm_control_dialog_title_power_options">Power Options</string> <!-- Added for clarity -->
+    <string name="vm_control_dialog_message_shutdown_or_reset">Do you want to shut down or reset?
+        This can cause some unexpected problems for the virtual machine. You can leave without
+        shutting down by pressing and holding the exit button or pressing the back key.
+    </string> <!-- Was: shutdown_or_reset_content -->
+
+    <!-- VM Removable Devices (CDROM, Floppy, SD Card) -->
+    <string name="vm_device_label_cdrom">CDROM</string>
+    <string name="vm_device_label_floppy_drive">Floppy drive</string>
+    <string name="vm_device_label_floppy_drive_a">Floppy drive A</string>
+    <string name="vm_device_label_floppy_drive_b">Floppy drive B</string>
+    <string name="vm_device_label_sd_card">SD card</string>
+    <string name="vm_device_action_change_removable_devices">Change removable devices</string>
+    <string name="vm_device_status_ejected_successfully">Ejected.</string> <!-- Was: ejected -->
+    <string name="vm_device_status_changed_successfully">Changed.</string>
+    <string name="vm_device_error_id_required">You need to enter the device ID.</string>
+
+    <!-- VM List & Management -->
+    <string name="vm_list_message_no_matching_results">No matching results found.</string> <!-- Was: no_matching_results_found -->
+    <string name="vm_list_error_data_corrupted_prompt_repair">The virtual machine list data is
+        corrupted, do you want to repair it?
+    </string> <!-- Was: vm_list_data_is_corrupted_content -->
+    <string name="vm_list_repair_title_action_needed">Action needed</string> <!-- Was: action_needed -->
+    <string name="vm_list_repair_message_data_corrupted">Data about the virtual machines has been
+        corrupted and needs to be repaired.
+    </string> <!-- Was: repair_vm_list_content -->
+    <string name="vm_list_repair_button_start_repair">Start repair</string> <!-- Was: start_repair -->
+
+    <!-- ========================== FILE & STORAGE OPERATIONS ========================== -->
+    <string name="file_error_invalid_path">Invalid file path, please select a file from elsewhere.
+    </string> <!-- Was: invalid_file_path_content -->
+    <string name="file_error_invalid_iso_format">The file you selected is not in the correct format,
+        please select an iso file.
+    </string> <!-- Was: invalid_iso_file_path_content -->
+    <string name="file_error_unable_to_copy_iso">Unable to copy iso file, try selecting this iso
+        file elsewhere.
+    </string> <!-- Was: unable_to_copy_iso_file_content -->
+    <string name="file_error_unable_to_copy_hard_drive">Unable to copy hard drive file, try
+        selecting this iso file elsewhere.
+    </string> <!-- Was: unable_to_copy_hard_drive_file_content -->
+    <string name="file_error_could_not_process_cvbi">Could not process cvbi file, the file path is
+        invalid or the file may be corrupted.
+    </string> <!-- Was: could_not_process_cvbi_file_content -->
+    <string name="file_error_unable_to_process_cvbi_vm_dir">Unable to process cvbi file because
+        virtual machine directory creation failed.
+    </string> <!-- Was: unable_to_cvbi_file_vm_dir_content -->
+    <string name="file_error_unable_to_process_thumbnail">Unable to process thumbnail.</string> <!-- Was: unable_to_process_thumbnail_content -->
+
+    <!-- ========================== DEVICE STORAGE & UPDATES ========================== -->
+    <string name="device_error_very_low_storage">The available storage space on your device is too
+        low. Please clean up.
+    </string> <!-- Was: very_low_available_storage_space_content -->
+    <string name="device_error_not_enough_storage_for_setup">There is not enough storage available
+        on your device to set up. Please clear up and try again later.
+    </string> <!-- Was: not_enough_storage_to_set_up_content -->
+
+    <string name="update_status_checking">Checking for updates</string>
+    <string name="update_message_whats_new">What\'s new?</string>
+    <string name="update_status_new_available">New update available</string>
+    <string name="update_status_up_to_date">You\'re up to date</string>
+    <string name="update_action_check_now">Check for updates</string>
+    <string name="update_desc_check_now">See if there are any new updates.</string>
+    <string name="update_action_skip_version">Skip this version</string>
+    <string name="update_prompt_update_now">Update now to experience the latest features and fix
+        issues.
+    </string> <!-- Was: update_now_content -->
+
+    <!-- ========================== VNC / EXTERNAL DISPLAY ========================== -->
+    <string name="vnc_label_external_connection">External</string> <!-- Was: external -->
+    <string name="vnc_option_use_external_server">Use external VNC Server</string>
+    <string name="vnc_hint_enter_display_number">Enter display number (Recommended 0 – 9)</string>
+    <string name="vnc_message_connection_port_info">The VNC port you need to connect to is</string>
+    <string name="vnc_error_display_number_too_large">Need to set smaller screen number</string> <!-- Was: need_to_set_smaller_screen_number -->
+    <string name="vnc_hint_password_optional">Leave password blank if you do not want to set a
+        password.
+    </string>
+    <string name="vnc_error_port_in_use">The VNC Server port you set is currently in use by another
+        virtual machine, app, or service. You can change the settings and run the virtual machine
+        again.
+    </string> <!-- Was: the_vnc_server_port_you_set_is_currently_in_use_by_other -->
+    <string name="vnc_error_display_number_required">You need to set a number for the display.
+    </string> <!-- Was: you_need_to_set_a_number_for_the_display -->
+
+    <!-- ========================== SYSTEM MONITOR ========================== -->
+    <string name="system_monitor_title">System monitor</string>
+    <string name="system_monitor_label_qemu_status">Status:</string> <!-- Was: status_qemu -->
+    <string name="system_monitor_label_qemu_port">Port:</string> <!-- Was: port_qemu -->
+    <string name="system_monitor_message_running_with_vnc">You can shut down this virtual machine by
+        clicking the Stop button in the System monitor. To control it, connect to this port:
+    </string> <!-- Was: running_vm_with_vnc_server_content -->
+    <string name="system_monitor_label_storage">Storage</string> <!-- Assuming translatable=false -->
+
+    <!-- TermuxX11Activity -->
+    <string name="perm_storage_not_granted_warning">The storage permission must be granted to
+        Vectras VM app to…
+    </string> <!-- Was: msg_storage_permission_not_granted_warning -->
+    <string name="perm_action_grant_storage">Grant Storage Permission</string> <!-- Was: action_grant_storage_permission -->
+
+    <string name="perm_battery_optimization_not_disabled_warning">Android battery optimizations
+        should be disabled for the Vectras VM app so that… Check
+        https://developer.android.com/about/versions/oreo/background for more info and
+        https://developer.android.com/guide/components/foreground-services#background-start-restrictions
+        for more info. \n\nAlso check https://dontkillmyapp.com for info on vendor specific app
+        killers. Depending on vendor you may need to do things like enable AutoStart, disable
+        DuraSpeed, enable `Display pop-up windows while running in the background` for the app.
+    </string> <!-- Was: msg_battery_optimization_not_disabled_warning -->
+    <string name="perm_action_disable_battery_optimizations">Disable Battery Optimizations</string> <!-- Was: action_disable_battery_optimizations -->
+
+    <string name="perm_display_over_other_apps_not_granted_warning">The display over other apps
+        permission should be granted to Vectras VM app for starting foreground activities from
+        background. Check
+        https://developer.android.com/guide/components/activities/background-starts for more info.
+    </string> <!-- Was: msg_display_over_other_apps_permission_not_granted_warning -->
+    <string name="perm_action_grant_display_over_other_apps">Grant Draw Over Apps Permission
+    </string> <!-- Was: action_grant_display_over_other_apps_permission -->
+
+    <string name="perm_status_already_granted">Already Granted</string> <!-- Was: action_already_granted -->
+    <string name="perm_status_already_disabled">Already Disabled</string> <!-- Was: action_already_disabled -->
+
+    <string name="x11_status_not_connected">Not connected</string>
+    <string name="x11_button_help">   Help   </string> <!-- Consider removing leading/trailing spaces if not intentional for specific rendering -->
+    <string name="x11_button_preferences">   Preferences   </string> <!-- Same as above -->
+    <string name="x11_desc_extra_keys_config">Here you can set value of extra-keys variable like in
+        Termux app (read <a href="http://wiki.termux.com/wiki/Touch_Keyboard#Extra_Keys_Row">
+            this</a>) and more (e.g. META). Put empty string for the default value.
+    </string>
+
+    <!-- Log Level -->
+    <string name="x11_log_level_title">Log Level</string>
+    <string name="x11_log_level_off">Off</string>
+    <string name="x11_log_level_normal">Normal</string>
+    <string name="x11_log_level_debug">Debug</string>
+    <string name="x11_log_level_verbose">Verbose</string>
+    <string name="x11_log_level_unknown">*Unknown*</string>
+    <string name="x11_log_level_current_value">Logcat log level set to \"%1$s\"</string> <!-- Was: log_level_value -->
+
+    <string name="x11_action_back_to_display">Back to the Display</string>
+    <string name="x11_desc_ui_environment">x11 ui environment.</string>
+
+    <!-- <string name="app_name" translatable="false">My Awesome App</string> -->
+
+    <!-- <string name="shared_user_label" translatable="false">Vterm user</string> -->
+
+    <!-- <string name="run_command_permission_description">execute arbitrary commands within Vterm
+        environment
+    </string> -->
+
+    <!-- <string name="bootstrap_error_not_primary_user_message">Vterm can only be installed on the
+        primary user account.
+    </string> -->
+
+    <!-- <string name="max_terminals_reached_message">Close down existing ones before creating new.
+    </string> -->
+
+
+
+    <!-- ========================== TERMUX-X11 STRINGS ========================== -->
+    <!-- <string name="plugin_info" translatable="false">lol</string> -->
 </resources>

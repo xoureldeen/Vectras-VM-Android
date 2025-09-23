@@ -38,6 +38,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.color.MaterialColors;
 import com.google.gson.Gson;
 import com.termux.app.TermuxActivity;
 import com.vectras.qemu.Config;
@@ -50,7 +51,7 @@ import com.vectras.vm.Minitools;
 import com.vectras.vm.R;
 import com.vectras.vm.RequestNetwork;
 import com.vectras.vm.RequestNetworkController;
-import com.vectras.vm.Roms.AdapterRomStoreSearch;
+import com.vectras.vm.home.romstore.RomStoreHomeAdapterSearch;
 import com.vectras.vm.Roms.DataRoms;
 import com.vectras.vm.RomsManagerActivity;
 import com.vectras.vm.SetArchActivity;
@@ -66,7 +67,6 @@ import com.vectras.vm.home.core.SharedData;
 import com.vectras.vm.home.monitor.SystemMonitorFragment;
 import com.vectras.vm.home.romstore.RomStoreFragment;
 import com.vectras.vm.home.vms.VmsFragment;
-import com.vectras.vm.home.vms.VmsHomeAdapter;
 import com.vectras.vm.logger.VectrasStatus;
 import com.vectras.vm.settings.UpdaterActivity;
 import com.vectras.vm.utils.DialogUtils;
@@ -101,7 +101,7 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
     public static boolean isActivate = false;
     ActivityHomeBinding binding;
     ActivityHomeContentBinding bindingContent;
-    private AdapterRomStoreSearch adapterRomStoreSearch;
+    private RomStoreHomeAdapterSearch adapterRomStoreSearch;
     private final List<DataRoms> dataRomStoreSearch = new ArrayList<>();
 
     public static CallbackInterface.HomeCallToVmsListener homeCallToVmsListener;
@@ -130,21 +130,24 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
         VmsFragment.vmsCallToHomeListener = this;
         RomStoreFragment.romStoreCallToHomeListener = this;
 
-        EdgeToEdge.enable(this);
+//        EdgeToEdge.enable(this);
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
         bindingContent = binding.maincontent;
         setContentView(binding.getRoot());
         isActivate = true;
 
-        UIUtils.setOnApplyWindowInsetsListener(bindingContent.main);
-        UIUtils.setOnApplyWindowInsetsListenerLeftOnly(binding.navView);
-        UIUtils.setOnApplyWindowInsetsListenerBottomOnly(binding.rvRomstoresearch);
-        UIUtils.setOnApplyWindowInsetsListenerBottomOnly(binding.lnSearchempty);
+//        UIUtils.setOnApplyWindowInsetsListenerTop(bindingContent.main);
+//        UIUtils.setOnApplyWindowInsetsListenerLeftOnly(binding.navView);
+//        UIUtils.setOnApplyWindowInsetsListenerBottomOnly(binding.rvRomstoresearch);
+//        UIUtils.setOnApplyWindowInsetsListenerBottomOnly(binding.lnSearchempty);
 
         initialize(bundle);
     }
 
     private void initialize(Bundle savedInstanceState) {
+        //Any view
+        getWindow().setNavigationBarColor(MaterialColors.getColor(binding.drawerLayout, com.google.android.material.R.attr.colorSurfaceContainer));
+
         bindingContent.efabCreate.setOnClickListener(view -> startActivity(new Intent(this, SetArchActivity.class)));
 
         setSupportActionBar(bindingContent.toolbar);
@@ -230,7 +233,7 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
             }
         });
 
-        adapterRomStoreSearch = new AdapterRomStoreSearch(this, dataRomStoreSearch);
+        adapterRomStoreSearch = new RomStoreHomeAdapterSearch(this, dataRomStoreSearch);
         binding.rvRomstoresearch.setAdapter(adapterRomStoreSearch);
         binding.rvRomstoresearch.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 

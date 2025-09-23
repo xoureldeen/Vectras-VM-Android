@@ -16,7 +16,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-            <include layout="@layout/desktop_controls" />
+            <include
+                android:id="@+id/desktopcontrols"
+                layout="@layout/desktop_controls" />
         </LinearLayout>
 
         <LinearLayout
@@ -25,7 +27,9 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:visibility="gone">
-            <include layout="@layout/game_controls" />
+            <include
+                android:id="@+id/gamecontrols"
+                layout="@layout/game_controls" />
         </LinearLayout>
 
         <LinearLayout

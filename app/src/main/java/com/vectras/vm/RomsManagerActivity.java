@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
-import com.vectras.vm.Roms.AdapterRomStoreSearch;
+import com.vectras.vm.home.romstore.RomStoreHomeAdapterSearch;
 import com.vectras.vm.Roms.AdapterRoms;
 import com.vectras.vm.Roms.DataRoms;
 import com.vectras.vm.databinding.ActivityRomsManagerBinding;
@@ -35,7 +35,7 @@ public class RomsManagerActivity extends AppCompatActivity {
     private RequestNetwork.RequestListener _net_request_listener;
     private String contentJSON = "[]";
     public static String license;
-    private AdapterRomStoreSearch mAdapterSearch;
+    private RomStoreHomeAdapterSearch mAdapterSearch;
     private List<DataRoms> data = new ArrayList<>();
     private List<DataRoms> dataSearch = new ArrayList<>();
     public static boolean isFinishNow = false;
@@ -137,7 +137,7 @@ public class RomsManagerActivity extends AppCompatActivity {
         binding.romsRv.setAdapter(mAdapter);
         binding.romsRv.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
-        mAdapterSearch = new AdapterRomStoreSearch(this, dataSearch);
+        mAdapterSearch = new RomStoreHomeAdapterSearch(this, dataSearch);
         binding.romsSearch.setAdapter(mAdapterSearch);
         binding.romsSearch.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 

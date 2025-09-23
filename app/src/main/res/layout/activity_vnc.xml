@@ -30,8 +30,41 @@
 
         </RelativeLayout>
 
-        <include layout="@layout/controls_fragment" />
-        <include layout="@layout/send_key_dialog" />
+        <include
+            android:id="@+id/controlsfragment"
+            layout="@layout/controls_fragment" />
+        <include
+            android:id="@+id/sendkeysdialog"
+            layout="@layout/send_key_dialog" />
+
+        <LinearLayout
+            android:id="@+id/ln_nosignal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:background="#E6000000">
+
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/cast_warning_24px"
+                app:tint="@android:color/white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:textSize="20sp"
+                android:text="@string/no_signal"
+                android:textColor="@android:color/white"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tap_to_try_again"
+                android:textColor="@android:color/white"/>
+        </LinearLayout>
 
     </RelativeLayout>
 

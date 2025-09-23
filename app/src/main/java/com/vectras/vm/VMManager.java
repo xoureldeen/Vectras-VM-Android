@@ -3,6 +3,9 @@ package com.vectras.vm;
 import static android.content.Intent.ACTION_OPEN_DOCUMENT;
 import static com.vectras.vm.utils.FileUtils.isFileExists;
 
+import android.androidVNC.AbstractScaling;
+import android.androidVNC.VncCanvas;
+import android.androidVNC.VncCanvasActivity;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -13,6 +16,7 @@ import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -32,6 +36,7 @@ import com.google.gson.reflect.TypeToken;
 import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.qemu.MainVNCActivity;
+import com.vectras.qemu.VNCConfig;
 import com.vectras.qemu.utils.QmpClient;
 import com.vectras.vm.MainRoms.AdapterMainRoms;
 import com.vectras.vm.home.HomeActivity;
@@ -802,7 +807,7 @@ public class VMManager {
         QmpClient.sendCommand("{ \"execute\": \"system_reset\" }");
     }
 
-    public static void showChangeRemovableDevicesDialog(Activity _activity, boolean isMainVNCActivity) {
+    public static void showChangeRemovableDevicesDialog(Activity _activity, VncCanvasActivity vncCanvasActivity) {
 
         String allDevice = getAllDevicesInQemu();
 
@@ -811,11 +816,11 @@ public class VMManager {
                 .setView(_view)
                 .create();
 
-        if (allDevice.contains("ide1-cd0")
+        if (allDevice != null && (allDevice.contains("ide1-cd0")
                 || allDevice.contains("ide2-cd0")
                 || allDevice.contains("floppy0")
                 || allDevice.contains("floppy1")
-                || allDevice.contains("sd0")) {
+                || allDevice.contains("sd0"))) {
 
             if (allDevice.contains("ide1-cd0")
                     || allDevice.contains("ide2-cd0")) {
@@ -904,11 +909,36 @@ public class VMManager {
         } else {
             TextView tvFdb = _view.findViewById(R.id.tv_otherdevice);
             tvFdb.setText(R.string.change_or_eject_a_device);
+
+            _view.findViewById(R.id.ln_cdrom).setVisibility(View.GONE);
+            _view.findViewById(R.id.ln_fda).setVisibility(View.GONE);
+            _view.findViewById(R.id.ln_fdb).setVisibility(View.GONE);
+            _view.findViewById(R.id.ln_sd).setVisibility(View.GONE);
         }
 
-        if (isMainVNCActivity) {
+        if (vncCanvasActivity != null) {
             _view.findViewById(R.id.ln_mouse).setOnClickListener(v -> {
                 MainVNCActivity.activity.onMouseMode();
+                _dialog.dismiss();
+            });
+
+            if (MainSettingsManager.getVNCScaleMode(_activity) == VNCConfig.oneToOne) {
+                _view.findViewById(R.id.iv_screenOneToOne).setBackgroundResource(R.drawable.dialog_shape_single_button);
+            } else {
+                _view.findViewById(R.id.iv_screenFit).setBackgroundResource(R.drawable.dialog_shape_single_button);
+            }
+
+            _view.findViewById(R.id.iv_screenOneToOne).setOnClickListener(v -> {
+                AbstractScaling.getById(R.id.itemOneToOne)
+                        .setScaleTypeForActivity(vncCanvasActivity);
+                MainSettingsManager.setVNCScaleMode(_activity, VNCConfig.oneToOne);
+                _dialog.dismiss();
+            });
+
+            _view.findViewById(R.id.iv_screenFit).setOnClickListener(v -> {
+                AbstractScaling.getById(R.id.itemFitToScreen)
+                        .setScaleTypeForActivity(vncCanvasActivity);
+                MainSettingsManager.setVNCScaleMode(_activity, VNCConfig.fitToScreen);
                 _dialog.dismiss();
             });
         } else {
