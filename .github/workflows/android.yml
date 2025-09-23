@@ -10,6 +10,7 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    environment: TELEGRAM
 
     steps:
     - uses: actions/checkout@v4
@@ -22,7 +23,16 @@ jobs:
         cache: gradle
 
     - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+      run: |
+        chmod +x gradlew
+
+        for chat in \
+          "-d chat_id=$TELEGRAM_CHAT_ID -d message_thread_id=13762" \
+          "-d chat_id=$TELEGRAM_CHAT_ID_VEC"; do
+          curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" \
+               $chat \
+               -d $'text=New update available on GitHub repository and building APK.\nPlease wait about 10 minutes.\nRun ID: '${GITHUB_RUN_ID}
+        done
 
     - name: Build Debug APK
       run: ./gradlew assembleDebug
@@ -41,3 +51,50 @@ jobs:
       with:
         name: android-release-apk
         path: app/build/outputs/apk/release/app-release.apk
+        run: |
+          if [[ -n "$TELEGRAM_BOT_TOKEN" ]]; then
+            success=true
+
+            for file in app/build/outputs/apk/release/*.apk; do
+              echo "Uploading $(basename "$file")"
+              tries=0
+              success_file=false
+              until [ $tries -ge 5 ]; do
+                success_targets=false
+                for target in \
+                  "-F chat_id=$TELEGRAM_CHAT_ID -F message_thread_id=13762" \
+                  "-F chat_id=$TELEGRAM_CHAT_ID_VEC"; do
+
+                  if curl -s -F document=@"$file" $target \
+                          -F $'caption=Done! Note that this is a version that is automatically built when there are changes in the GitHub repository, not the official version. Please only install it if you really want to see what is new.\nRun ID: '${GITHUB_RUN_ID} \
+                          https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendDocument; then
+                    success_targets=true
+                  else
+                    echo "Retrying upload for $file to target..."
+                    sleep 2
+                  fi
+                done
+
+                if $success_targets; then
+                  success_file=true
+                  break
+                fi
+                tries=$((tries+1))
+              done
+
+              if ! $success_file; then
+                echo "Upload failed for $file"
+                success=false
+              fi
+            done
+
+            if [ "$success" = false ]; then
+              for chat in \
+                "-d chat_id=$TELEGRAM_CHAT_ID -d message_thread_id=13762" \
+                "-d chat_id=$TELEGRAM_CHAT_ID_VEC"; do
+                curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" \
+                     $chat \
+                    -d $'text=Something went wrong and the APK file could not be uploaded.\nRun ID: '${GITHUB_RUN_ID}
+              done
+            fi
+          fi
