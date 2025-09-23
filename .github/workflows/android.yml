@@ -23,16 +23,17 @@ jobs:
         cache: gradle
 
     - name: Grant execute permission for gradlew
-      run: |
-        chmod +x gradlew
+      run: chmod +x gradlew
 
+    - name: Send notification to Telegram
+      run: |
         if [[ -n "${{ secrets.TELEGRAM_BOT_TOKEN }}" ]]; then
           for chat in \
             "-d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} -d message_thread_id=13762" \
             "-d chat_id=${{ secrets.TELEGRAM_CHAT_ID_VEC }}"; do
             curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
                  $chat \
-                 -d $'text=New update available on GitHub repository and building APK.\nPlease wait about 10 minutes.\nRun ID: '${GITHUB_RUN_ID}
+                 -d $'text=New update available on GitHub repository and building APK.\nPlease wait about 5 minutes.\nRun ID: '${GITHUB_RUN_ID}
           done
         fi
 
