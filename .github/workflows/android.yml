@@ -10,7 +10,7 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    environment: BuidAPK
+    environment: BuildAPK
 
     steps:
     - uses: actions/checkout@v4
