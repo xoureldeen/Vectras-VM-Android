@@ -31,7 +31,7 @@ jobs:
           for chat in \
             "-d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} -d message_thread_id=13762" \
             "-d chat_id=${{ secrets.TELEGRAM_CHAT_ID_VEC }}"; do
-            curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+            curl -s -o /dev/null -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
                  $chat \
                  -d $'text=New update available on GitHub repository and building APK.\nPlease wait about 5 minutes.\nRun ID: '${GITHUB_RUN_ID}
           done
@@ -70,7 +70,7 @@ jobs:
                   "-F chat_id=${{ secrets.TELEGRAM_CHAT_ID }} -F message_thread_id=13762" \
                   "-F chat_id=${{ secrets.TELEGRAM_CHAT_ID_VEC }}"; do
 
-                  if curl -s -F document=@"$file" $target \
+                  if curl -s -o /dev/null -F document=@"$file" $target \
                           -F $'caption=Done! Note that this is a version that is automatically built when there are changes in the GitHub repository, not the official version. Please only install it if you really want to see what is new.\nRun ID: '${GITHUB_RUN_ID} \
                           https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument; then
                     success_targets=true
@@ -97,7 +97,7 @@ jobs:
               for chat in \
                 "-d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} -d message_thread_id=13762" \
                 "-d chat_id=${{ secrets.TELEGRAM_CHAT_ID_VEC }}"; do
-                curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+                curl -s -o /dev/null -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
                      $chat \
                     -d $'text=Something went wrong and the APK file could not be uploaded.\nRun ID: '${GITHUB_RUN_ID}
               done
