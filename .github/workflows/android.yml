@@ -53,7 +53,9 @@ jobs:
       with:
         name: android-release-apk
         path: app/build/outputs/apk/release/app-release.apk
-        run: |
+
+    - name: Upload to Telegram 
+      run: |
           if [[ -n "${{ secrets.TELEGRAM_BOT_TOKEN }}" ]]; then
             success=true
 
