@@ -29,7 +29,7 @@ jobs:
       run: |
         if [[ -n "${{ secrets.TELEGRAM_BOT_TOKEN }}" ]]; then
           for chat in \
-            "-d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} -d message_thread_id=13762" \
+            "-d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} -d message_thread_id=8" \
             "-d chat_id=${{ secrets.TELEGRAM_CHAT_ID_VEC }}"; do
             curl -s -o /dev/null -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
                  $chat \
@@ -67,7 +67,7 @@ jobs:
               until [ $tries -ge 5 ]; do
                 success_targets=false
                 for target in \
-                  "-F chat_id=${{ secrets.TELEGRAM_CHAT_ID }} -F message_thread_id=13762" \
+                  "-F chat_id=${{ secrets.TELEGRAM_CHAT_ID }} -F message_thread_id=8" \
                   "-F chat_id=${{ secrets.TELEGRAM_CHAT_ID_VEC }}"; do
 
                   if curl -s -o /dev/null -F document=@"$file" $target \
@@ -95,7 +95,7 @@ jobs:
 
             if [ "$success" = false ]; then
               for chat in \
-                "-d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} -d message_thread_id=13762" \
+                "-d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} -d message_thread_id=8" \
                 "-d chat_id=${{ secrets.TELEGRAM_CHAT_ID_VEC }}"; do
                 curl -s -o /dev/null -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
                      $chat \
