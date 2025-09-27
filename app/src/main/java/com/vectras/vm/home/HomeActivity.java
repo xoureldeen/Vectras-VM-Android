@@ -138,7 +138,7 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
 
 //        UIUtils.setOnApplyWindowInsetsListenerTop(bindingContent.main);
 //        UIUtils.setOnApplyWindowInsetsListenerLeftOnly(binding.navView);
-//        UIUtils.setOnApplyWindowInsetsListenerBottomOnly(binding.rvRomstoresearch);
+        UIUtils.setOnApplyWindowInsetsListenerBottomOnly(binding.rvRomstoresearch);
 //        UIUtils.setOnApplyWindowInsetsListenerBottomOnly(binding.lnSearchempty);
 
         initialize(bundle);

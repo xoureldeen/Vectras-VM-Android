@@ -33,10 +33,12 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -44,6 +46,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.ZoomControls;
 
 import com.antlersoft.android.bc.BCFactory;
@@ -1799,6 +1802,29 @@ public abstract class VncCanvasActivity extends AppCompatActivity {
 	}
 
 	public void reconnect() {
+		// Recreate canvas to change resolution as resolution when changed in some Linux OS may cause canvas to not resize accordingly.
+
+		// Remove old canvas
+		ViewGroup parent = findViewById(R.id.vnc_canvas_layout);
+		parent.removeView(vncCanvas);
+
+		// Create new canvas
+		VncCanvas newCanvas = new VncCanvas(this);
+		newCanvas.setId(R.id.vnc_canvas); // Reassign ID
+		newCanvas.setKeepScreenOn(true);
+
+        // Add to parent
+		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+				ViewGroup.LayoutParams.WRAP_CONTENT,
+				ViewGroup.LayoutParams.WRAP_CONTENT
+		);
+		params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+
+		parent.addView(newCanvas, params);
+
+        // Reassign reference variable
+		vncCanvas = newCanvas;
+
 		vncCanvas.initializeVncCanvas(connection, new Runnable() {
 			public void run() {
 				setModes();
