@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.vectras.vm">
+    package="com.vectras.vm" >
 
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -47,7 +47,11 @@
         android:largeHeap="true"
         android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".settings.VNCSettingsActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:exported="false" />
         <activity
             android:name=".home.HomeActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
@@ -58,13 +62,13 @@
             android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
             android:exported="false" />
         <activity
-            android:name=".settings.VNCActivity"
+            android:name=".settings.ExternalVNCSettingsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
             android:exported="false" />
         <activity
             android:name=".ReceiveRomFileActivity"
             android:exported="true"
-            android:label="@string/importRom">
+            android:label="@string/importRom" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -110,7 +114,7 @@
             android:name=".SplashActivity"
             android:configChanges="uiMode|orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
             android:exported="true"
-            android:hardwareAccelerated="true">
+            android:hardwareAccelerated="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -228,7 +232,7 @@
             android:exported="true"
             android:resizeableActivity="true"
             android:supportsPictureInPicture="false"
-            android:taskAffinity="com.vectras.vm.x11.LoriePreferences">
+            android:taskAffinity="com.vectras.vm.x11.LoriePreferences" >
             <intent-filter>
                 <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
                 <action android:name="android.intent.action.MAIN" />
@@ -246,7 +250,7 @@
             android:name=".x11.utils.KeyInterceptor"
             android:exported="true"
             android:label="Termux:X11 KeyInterceptor"
-            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE" >
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>
@@ -260,7 +264,7 @@
             android:name=".x11.LoriePreferences$Receiver"
             android:enabled="true"
             android:exported="true"
-            tools:ignore="ExportedReceiver">
+            tools:ignore="ExportedReceiver" >
             <intent-filter>
                 <action android:name="com.vectras.vm.x11.CHANGE_PREFERENCE" />
             </intent-filter>

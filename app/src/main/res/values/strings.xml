@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">v2.9.5.10-3dfx</string>
+    <string name="app_version" translatable="false">v2.9.5.11-3dfx</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -553,7 +553,9 @@
     <string name="not_enough_storage_to_set_up_content">There is not enough storage available on your device to set up. Please clear up and try again later.</string>
     <string name="no_signal">No signal</string>
     <string name="tap_to_try_again">Tap to try again.</string>
-
+    <string name="force_refresh">Force refresh</string>
+    <string name="force_refresh_vnc_description">The VNC screen will restart every time there is a change, which helps troubleshoot problems.</string>
+    <string name="settings_for_vnc">Settings for VNC.</string>
 
 
     <!--======================TERMUX STRINGS====================-->
@@ -814,7 +816,7 @@
     <string name="common_loading">Loading…</string>
     <string name="common_error">An error occurred.</string>
     <string name="api_key" translatable="false">xyz123abc</string>
-<!-- ======================= VIRTUAL MACHINE MANAGEMENT ===================== -->
+    <!-- ======================= VIRTUAL MACHINE MANAGEMENT ===================== -->
 
     <!-- VM Creation & Setup -->
     <string name="vm_create_new">New VM</string> <!-- Was: new_vm -->
@@ -1050,7 +1052,6 @@
 
     <!-- <string name="max_terminals_reached_message">Close down existing ones before creating new.
     </string> -->
-
 
 
     <!-- ========================== TERMUX-X11 STRINGS ========================== -->

@@ -14,8 +14,7 @@ import static com.vectras.vm.utils.LibraryChecker.isPackageInstalled2;
 import static com.vectras.vm.utils.UIUtils.UIAlert;
 
 import com.vectras.vm.settings.UpdaterActivity;
-import com.vectras.vm.settings.VNCActivity;
-import com.vectras.vm.utils.DeviceUtils;
+import com.vectras.vm.settings.ExternalVNCSettingsActivity;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.NetworkUtils;
 import com.vectras.vm.utils.NotificationUtils;
@@ -35,7 +34,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.provider.DocumentsContract;
-import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -845,7 +843,7 @@ public class MainActivity extends AppCompatActivity {
                     activity.getString(R.string.go_to_settings),
                     activity.getString(R.string.close),
                     true, R.drawable.warning_48px, true,
-                    () -> activity.startActivity(new Intent(activity, VNCActivity.class)),
+                    () -> activity.startActivity(new Intent(activity, ExternalVNCSettingsActivity.class)),
                     null,
                     null);
             return;

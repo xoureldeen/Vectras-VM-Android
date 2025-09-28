@@ -11,21 +11,21 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.R;
-import com.vectras.vm.databinding.ActivityVncactivityBinding;
+import com.vectras.vm.databinding.ActivityExternalVncSettingsBinding;
 import com.vectras.vm.utils.ClipboardUltils;
 
 import java.util.Objects;
 
-public class VNCActivity extends AppCompatActivity {
+public class ExternalVNCSettingsActivity extends AppCompatActivity {
 
-    ActivityVncactivityBinding binding;
+    ActivityExternalVncSettingsBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_vncactivity);
-        binding = ActivityVncactivityBinding.inflate(getLayoutInflater());
+        setContentView(R.layout.activity_external_vnc_settings);
+        binding = ActivityExternalVncSettingsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);

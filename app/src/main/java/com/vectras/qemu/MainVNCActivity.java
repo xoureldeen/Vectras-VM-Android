@@ -764,6 +764,7 @@ public class MainVNCActivity extends VncCanvasActivity {
                 setUIModeMobile(screenMode == VNCScreenMode.FitToScreen);
 
             binding.lnNosignal.setVisibility(View.GONE);
+            this.vncCanvas.setFocusableInTouchMode(true);
         });
     }
 
@@ -800,7 +801,11 @@ public class MainVNCActivity extends VncCanvasActivity {
 //            }
         } else {
             // Try reconnect.
-            tryReconnect();
+            if (Config.forceRefeshVNCDisplay) {
+                finish();
+            } else {
+                tryReconnect();
+            }
         }
     }
 

@@ -182,6 +182,7 @@ public class Config {
     public static final String defaultInputMode = VncCanvasActivity.TOUCH_ZOOM_MODE;
     public static String vmID = "";
     public static String currentVNCServervmID = "";
+    public static boolean forceRefeshVNCDisplay = false;
 
     public static void setDefault () {
         defaultVNCHost = "0.0.0.0";

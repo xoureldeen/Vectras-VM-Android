@@ -300,6 +300,7 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
         Log.d(TAG, "onResume");
         Config.ui = MainSettingsManager.getVmUi(this);
         Config.defaultVNCPort = Integer.parseInt(MainSettingsManager.getVncExternalDisplay(this));
+        Config.forceRefeshVNCDisplay = MainSettingsManager.getForceRefeshVNCDisplay(this);
 
         if (!MainSettingsManager.getVncExternal(this))
             NotificationUtils.clearAll(this);

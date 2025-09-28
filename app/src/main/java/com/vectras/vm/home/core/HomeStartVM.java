@@ -25,7 +25,7 @@ import com.vectras.vm.MainService;
 import com.vectras.vm.R;
 import com.vectras.vm.VMManager;
 import com.vectras.vm.logger.VectrasStatus;
-import com.vectras.vm.settings.VNCActivity;
+import com.vectras.vm.settings.ExternalVNCSettingsActivity;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.NetworkUtils;
 import com.vectras.vm.utils.ServiceUtils;
@@ -100,7 +100,7 @@ public class HomeStartVM {
                     activity.getString(R.string.go_to_settings),
                     activity.getString(R.string.close),
                     true, R.drawable.warning_48px, true,
-                    () -> activity.startActivity(new Intent(activity, VNCActivity.class)),
+                    () -> activity.startActivity(new Intent(activity, ExternalVNCSettingsActivity.class)),
                     null,
                     null);
             return;
