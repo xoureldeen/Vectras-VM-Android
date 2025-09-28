@@ -950,4 +950,16 @@ public class MainSettingsManager extends AppCompatActivity
         return prefs.getInt("vncScaleMode", 0);
     }
 
+    public static void setForceRefeshVNCDisplay(Context context, Boolean _boolean) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putBoolean("forceRefeshVNCDisplay", _boolean);
+        edit.commit();
+    }
+
+    public static Boolean getForceRefeshVNCDisplay(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean("forceRefeshVNCDisplay", false);
+    }
+
 }

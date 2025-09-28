@@ -22,12 +22,12 @@
         app:iconSpaceReserved="false" />
     <Preference
         android:key="vnc"
-        android:title="@string/vnc_server"
-        android:summary="@string/vnc_settings_description"
+        android:title="@string/vnc"
+        android:summary="@string/settings_for_vnc"
         app:iconSpaceReserved="false">
         <intent
             android:targetPackage="com.vectras.vm"
-            android:targetClass="com.vectras.vm.settings.VNCActivity" />
+            android:targetClass="com.vectras.vm.settings.VNCSettingsActivity" />
     </Preference>
     <Preference
         android:key="x11"

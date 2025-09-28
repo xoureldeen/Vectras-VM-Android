@@ -40,6 +40,7 @@ import com.vectras.qemu.VNCConfig;
 import com.vectras.qemu.utils.QmpClient;
 import com.vectras.vm.MainRoms.AdapterMainRoms;
 import com.vectras.vm.home.HomeActivity;
+import com.vectras.vm.settings.VNCSettingsActivity;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.JSONUtils;
@@ -919,6 +920,11 @@ public class VMManager {
         if (vncCanvasActivity != null) {
             _view.findViewById(R.id.ln_mouse).setOnClickListener(v -> {
                 MainVNCActivity.activity.onMouseMode();
+                _dialog.dismiss();
+            });
+
+            _view.findViewById(R.id.ln_settings).setOnClickListener(v -> {
+                _activity.startActivity(new Intent(_activity, VNCSettingsActivity.class));
                 _dialog.dismiss();
             });
 
