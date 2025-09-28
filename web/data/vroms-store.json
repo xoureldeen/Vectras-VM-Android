@@ -945,6 +945,22 @@
         "verified": true
     },
     {
+        "rom_name":"Linux Lite 1.0.6",
+        "rom_icon":"https://upload.wikimedia.org/wikipedia/commons/3/35/Linux_lite_light_logo_sample_sample.png?20230411040548",
+        "rom_url":"https://youtu.be/xRdtZXVjBN0",
+        "rom_path":"Linux Lite 1.0.6.cvbi",
+        "rom_avail":true,
+        "rom_size":"Based on Ubuntu 12.04",
+        "rom_arch":"X86_64",
+        "rom_kernel":"linux",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"Linux Lite is a Linux distribution based on Ubuntu LTS created by a team of programmers led by Jerry Bezencon. Created in 2012, it uses a customized implementation of Xfce as its desktop environment, and runs on the main Linux kernel.",
+        "file_size": "5 GB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
+    },
+    {
         "rom_name":"elementary OS 5.1",
         "rom_icon":"https://static-00.iconduck.com/assets.00/elementary-os-icon-2048x2048-r076wdiz.png",
         "rom_url":"https://anbui.ovh/get/vec/community/linux/elementaryos51.html",
