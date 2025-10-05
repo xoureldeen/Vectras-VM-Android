@@ -60,6 +60,7 @@ public class DialogUtils {
         });
         dialog.show();
     }
+
     public static void twoDialog(Activity _context, String _title, String _message, String _textPositiveButton, String _textNegativeButton, boolean _isicon, int _iconid, boolean _cancel, Runnable _onPositive, Runnable _onNegative, Runnable _onDismiss) {
         View buttonsView = LayoutInflater.from(_context).inflate(R.layout.dialog_layout, null);
 
@@ -111,7 +112,7 @@ public class DialogUtils {
         dialog.show();
     }
 
-    public static void threeDialog(Activity _context, String _title, String _message, String _textPositiveButton, String _textNegativeButton, String _textNeutralButton ,boolean _isicon, int _iconid, boolean _cancel, Runnable _onPositive, Runnable _onNegative, Runnable _onNeutral, Runnable _onDismiss) {
+    public static void threeDialog(Activity _context, String _title, String _message, String _textPositiveButton, String _textNegativeButton, String _textNeutralButton, boolean _isicon, int _iconid, boolean _cancel, Runnable _onPositive, Runnable _onNegative, Runnable _onNeutral, Runnable _onDismiss) {
         View buttonsView = LayoutInflater.from(_context).inflate(R.layout.dialog_layout, null);
 
         AlertDialog dialog = new AlertDialog.Builder(_context).create();
@@ -189,6 +190,34 @@ public class DialogUtils {
                         edit.putBoolean("tgDialog", true);
                         edit.apply();
                     }, null);
+        }
+    }
+
+    public static void fileDeletionResult(Activity activity, boolean isCompleted) {
+        if (isCompleted) {
+            DialogUtils.oneDialog(
+                    activity,
+                    activity.getString(R.string.done),
+                    activity.getString(R.string.file_deleted),
+                    activity.getString(R.string.ok),
+                    true,
+                    R.drawable.check_24px,
+                    true,
+                    null,
+                    null
+            );
+        } else {
+            DialogUtils.oneDialog(
+                    activity,
+                    activity.getString(R.string.oops),
+                    activity.getString(R.string.delete_file_failed_content),
+                    activity.getString(R.string.ok),
+                    true,
+                    R.drawable.error_96px,
+                    true,
+                    null,
+                    null
+            );
         }
     }
 }

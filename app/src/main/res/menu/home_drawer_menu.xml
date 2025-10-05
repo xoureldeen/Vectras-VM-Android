@@ -12,23 +12,18 @@
         android:title="@string/roms_store" />
     <item
         android:id="@+id/navigation_item_import_iso"
-        android:icon="@drawable/round_album_24"
+        android:icon="@drawable/album_24px"
         android:title="@string/import_iso"
         android:visible="false"/>
     <item
         android:id="@+id/navigation_item_hdd1"
-        android:icon="@drawable/round_storage_24"
+        android:icon="@drawable/hard_drive_24px"
         android:title="@string/hdd1"/>
     <item
         android:id="@+id/navigation_item_hdd2"
-        android:icon="@drawable/round_storage_24"
+        android:icon="@drawable/hard_drive_24px"
         android:title="@string/hdd2"
         android:visible="false"/>
-    <item
-        android:id="@+id/navigation_data_explorer"
-        android:icon="@drawable/round_folder_24"
-        android:visible="false"
-        android:title="@string/data_explorer"/>
     <item
         android:id="@+id/navigation_item_desktop"
         android:icon="@drawable/desktop_24px"
@@ -39,31 +34,35 @@
         android:title="@string/terminal"/>
     <item
         android:id="@+id/navigation_item_view_logs"
-        android:icon="@drawable/round_adb_24"
+        android:icon="@drawable/overview_24px"
         android:title="@string/view_logs" />
     <item
         android:id="@+id/navigation_item_settings"
-        android:icon="@drawable/round_settings_24"
+        android:icon="@drawable/settings_24px"
         android:title="@string/settings"/>
     <item
         android:id="@+id/mini_tools"
         android:icon="@drawable/home_repair_service_24px"
         android:title="@string/mini_tools"/>
     <item
+        android:id="@+id/navigation_data_explorer"
+        android:icon="@drawable/folder_24px"
+        android:title="@string/open_main_folder"/>
+    <item
         android:id="@+id/navigation_item_website"
         android:icon="@drawable/round_public_24"
         android:title="@string/vectras_website" />
     <item
         android:id="@+id/navigation_item_donate"
-        android:icon="@drawable/ic_patreon"
+        android:icon="@drawable/patreon_outline_225"
         android:title="@string/patreon"/>
     <item
         android:id="@+id/navigation_item_help"
-        android:icon="@drawable/round_help_24"
+        android:icon="@drawable/help_24px"
         android:title="@string/help"/>
     <item
         android:id="@+id/navigation_item_info"
-        android:icon="@drawable/round_info_24"
+        android:icon="@drawable/info_24px"
         android:title="@string/about"/>
 
 </menu>

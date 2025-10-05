@@ -30,7 +30,7 @@ public class CreateImageDialogFragment extends DialogFragment {
 
     public boolean customRom = false;
 
-    public String folder = AppConfig.vmFolder + CustomRomActivity.vmID + "/";
+    public String folder = AppConfig.maindirpath;
     public String filename = "disk";
     public TextInputEditText drive;
     public TextInputLayout driveLayout;

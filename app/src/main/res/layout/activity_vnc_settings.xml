@@ -47,6 +47,35 @@
             android:orientation="vertical"
             android:animateLayoutChanges="true">
 
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cv_notusingvnc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                app:cardBackgroundColor="?attr/colorSurfaceContainer"
+                style="@style/Widget.Material3.CardView.Filled"
+                android:visibility="gone"
+                tools:visibility="visible">
+                <LinearLayout
+                    android:id="@+id/ln_notusingvnc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:gravity="center_vertical"
+                    android:background="?attr/selectableItemBackground">
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/warning_48px"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="16dp"
+                        android:text="@string/you_are_using_x11_instead_of_vnc_content"/>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/ln_forcerefesh"
                 android:layout_width="match_parent"

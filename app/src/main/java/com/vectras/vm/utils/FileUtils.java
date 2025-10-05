@@ -3,6 +3,7 @@ package com.vectras.vm.utils;
 import android.annotation.SuppressLint;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
@@ -31,6 +32,7 @@ import android.os.Looper;
 import android.os.ParcelFileDescriptor;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
 
 import com.vectras.vm.R;
 
@@ -49,6 +51,8 @@ import java.util.Objects;
  * @author dev
  */
 public class FileUtils {
+	public static final String TAG = "FileUtils";
+
 	@NonNull
 	public static File getExternalFilesDirectory(Context context) {
 		return new File(Environment.getExternalStorageDirectory(), "Documents/VectrasVM");
@@ -793,7 +797,7 @@ public class FileUtils {
 		}
 	}
 
-	public static int getFolderSize(String _path) {
+	public static long getFolderSize(String _path) {
 		try {
 			File file;
 			file = new File(_path);
@@ -822,7 +826,7 @@ public class FileUtils {
 					}
 				}
 			}
-			return (int) result;
+			return result;
 		} catch (Exception _e) {
 			return 0;
 		}
@@ -832,19 +836,14 @@ public class FileUtils {
 		String filePath = null;
 		if ("content".equalsIgnoreCase(uri.getScheme())) {
 			String[] projection = {MediaStore.Files.FileColumns.DATA};
-			Cursor cursor = null;
-			try {
-				cursor = context.getContentResolver().query(uri, projection, null, null, null);
-				if (cursor != null && cursor.moveToFirst()) {
-					int index = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATA);
-					filePath = cursor.getString(index);
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			} finally {
-				if (cursor != null)
-					cursor.close();
-			}
+            try (Cursor cursor = context.getContentResolver().query(uri, projection, null, null, null)) {
+                if (cursor != null && cursor.moveToFirst()) {
+                    int index = cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATA);
+                    filePath = cursor.getString(index);
+                }
+            } catch (Exception e) {
+				Log.e(TAG, "getFilePathFromUri: ", e);
+            }
 		} else if ("file".equalsIgnoreCase(uri.getScheme())) {
 			filePath = uri.getPath();
 		}
@@ -867,5 +866,54 @@ public class FileUtils {
 			return false;
 		}
 		return true;
+	}
+
+	public static void openFolder(Activity activity, String folderPath) {
+		File folder = new File(folderPath);
+
+		if (!folder.exists() || !folder.isDirectory()) {
+			DialogUtils.oneDialog(
+					activity,
+					activity.getString(R.string.oops),
+					activity.getString(R.string.directory_does_not_exist),
+					activity.getString(R.string.ok),
+					true,
+					R.drawable.error_96px,
+					true,
+					null,
+					null
+			);
+			Log.e(TAG, "openFolder: Folder not found!");
+			return;
+		}
+
+		Uri uri = FileProvider.getUriForFile(
+				activity,
+				activity.getPackageName() + ".provider",
+				folder
+		);
+
+		Intent intent = new Intent(Intent.ACTION_VIEW);
+		intent.setDataAndType(uri, "resource/folder");
+		intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+		intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+		try {
+			activity.startActivity(intent);
+		} catch (Exception e) {
+			DialogUtils.oneDialog(
+					activity,
+					activity.getString(R.string.oops),
+					activity.getString(R.string.there_is_no_app_to_perform_this_action),
+					activity.getString(R.string.ok),
+					true,
+					R.drawable.error_96px,
+					true,
+					null,
+					null
+			);
+			Log.e(TAG, "openFolder: " + e.getMessage());
+		}
 	}
 }
