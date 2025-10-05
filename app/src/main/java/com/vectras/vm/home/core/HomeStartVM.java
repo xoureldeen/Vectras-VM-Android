@@ -62,7 +62,7 @@ public class HomeStartVM {
 
         if (MainSettingsManager.getSharedFolder(activity)
                 && !MainSettingsManager.getArch(activity).equals("I386")
-                && FileUtils.getFolderSize(FileUtils.getExternalFilesDirectory(activity).getPath() + "/SharedFolder") / Math.pow(10, 2) > 516) {
+                && FileUtils.getFolderSize(FileUtils.getExternalFilesDirectory(activity).getPath() + "/SharedFolder") * Math.pow(10, -6) > 516) {
             DialogUtils.twoDialog(
                     activity,
                     activity.getString(R.string.problem_has_been_detected),
