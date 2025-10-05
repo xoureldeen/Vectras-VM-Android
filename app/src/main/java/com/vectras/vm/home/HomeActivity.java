@@ -1,32 +1,28 @@
 package com.vectras.vm.home;
 
-import static android.content.Intent.ACTION_OPEN_DOCUMENT;
 import static android.content.Intent.ACTION_VIEW;
-import static android.os.Build.VERSION.SDK_INT;
 import static com.vectras.vm.VectrasApp.getApp;
-import static com.vectras.vm.utils.UIUtils.UIAlert;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.StrictMode;
-import android.provider.DocumentsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
+import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
@@ -39,6 +35,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.color.MaterialColors;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.termux.app.TermuxActivity;
 import com.vectras.qemu.Config;
@@ -46,7 +43,6 @@ import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.AboutActivity;
 import com.vectras.vm.AppConfig;
 import com.vectras.vm.CustomRomActivity;
-import com.vectras.vm.DataExplorerActivity;
 import com.vectras.vm.Minitools;
 import com.vectras.vm.R;
 import com.vectras.vm.RequestNetwork;
@@ -81,24 +77,23 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 public class HomeActivity extends AppCompatActivity implements RomStoreFragment.RomStoreCallToHomeListener, VmsFragment.VmsCallToHomeListener {
-
-    public static String curRomName;
     private final String TAG = "HomeActivity";
     public static boolean isActivate = false;
+    public static boolean isOpenRomStore = false;
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
     ActivityHomeBinding binding;
     ActivityHomeContentBinding bindingContent;
     private RomStoreHomeAdapterSearch adapterRomStoreSearch;
@@ -210,13 +205,10 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
                 bindingContent.searchbar.setEnabled(false);
             }
 
-            if (selectedFragment != null) {
-                getSupportFragmentManager().beginTransaction()
-                        .replace(bindingContent.containerView.getId(), selectedFragment)
-                        .commit();
-                return true;
-            }
-            return false;
+            getSupportFragmentManager().beginTransaction()
+                    .replace(bindingContent.containerView.getId(), selectedFragment)
+                    .commit();
+            return true;
         });
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
@@ -308,178 +300,76 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
 
         DisplaySystem.reLaunchVNC(this);
         PendingCommand.runNow(this);
-    }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent ReturnedIntent) {
-        super.onActivityResult(requestCode, resultCode, ReturnedIntent);
-        if (requestCode == 1004 && resultCode == RESULT_OK) {
-            Uri content_describer = ReturnedIntent.getData();
-            File selectedFilePath = new File(getPath(content_describer));
-            ProgressBar loading = findViewById(R.id.loading);
-            if (selectedFilePath.toString().endsWith(".iso")) {
-                loading.setVisibility(View.VISIBLE);
-                new Thread(() -> {
-                    FileInputStream File;
-                    try {
-                        assert content_describer != null;
-                        File = (FileInputStream) getContentResolver().openInputStream(content_describer);
-                    } catch (FileNotFoundException e) {
-                        throw new RuntimeException(e);
-                    }
-                    try {
-                        try {
-                            try (OutputStream out = new FileOutputStream(AppConfig.maindirpath + "/drive.iso")) {
-                                // Transfer bytes from in to out
-                                byte[] buf = new byte[1024];
-                                int len;
-                                while (true) {
-                                    assert File != null;
-                                    if (!((len = File.read(buf)) > 0)) break;
-                                    out.write(buf, 0, len);
-                                }
-                            }
-                        } finally {
-                            Runnable runnable = () -> loading.setVisibility(View.GONE);
-                            runOnUiThread(runnable);
-                            assert File != null;
-                            File.close();
-                        }
-                    } catch (IOException e) {
-                        Runnable runnable = () -> {
-                            loading.setVisibility(View.GONE);
-                            UIAlert(this, e.toString(), "error");
-                        };
-                        runOnUiThread(runnable);
-                    }
-                }).start();
-            } else
-                UIAlert(this, "please select iso file", "INVALID FILE");
-        } else if (requestCode == 1005 && resultCode == RESULT_OK) {
-            Uri content_describer = ReturnedIntent.getData();
-            ProgressBar loading = findViewById(R.id.loading);
-            loading.setVisibility(View.VISIBLE);
-            new Thread(() -> {
-                FileInputStream File;
-                try {
-                    assert content_describer != null;
-                    File = (FileInputStream) getContentResolver().openInputStream(content_describer);
-                } catch (FileNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
-                try {
-                    try {
-                        try (OutputStream out = new FileOutputStream(AppConfig.maindirpath + "/hdd1.qcow2")) {
-                            // Transfer bytes from in to out
-                            byte[] buf = new byte[1024];
-                            int len;
-                            while (true) {
-                                assert File != null;
-                                if (!((len = File.read(buf)) > 0)) break;
-                                out.write(buf, 0, len);
-                            }
-                        }
-                    } finally {
-                        Runnable runnable = () -> loading.setVisibility(View.GONE);
-                        runOnUiThread(runnable);
-                        assert File != null;
-                        File.close();
-                    }
-                } catch (IOException e) {
-                    Runnable runnable = () -> {
-                        loading.setVisibility(View.GONE);
-                        UIAlert(this, e.toString(), "error");
-                    };
-                    runOnUiThread(runnable);
-                }
-            }).start();
-        } else if (requestCode == 1006 && resultCode == RESULT_OK) {
-            Uri content_describer = ReturnedIntent.getData();
-            ProgressBar loading = findViewById(R.id.loading);
-            loading.setVisibility(View.VISIBLE);
-            new Thread(() -> {
-                FileInputStream File;
-                try {
-                    assert content_describer != null;
-                    File = (FileInputStream) getContentResolver().openInputStream(content_describer);
-                } catch (FileNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
-                try {
-                    try {
-                        try (OutputStream out = new FileOutputStream(AppConfig.maindirpath + "/hdd2.qcow2")) {
-                            // Transfer bytes from in to out
-                            byte[] buf = new byte[1024];
-                            int len;
-                            while (true) {
-                                assert File != null;
-                                if (!((len = File.read(buf)) > 0)) break;
-                                out.write(buf, 0, len);
-                            }
-                        }
-                    } finally {
-                        Runnable runnable = () -> loading.setVisibility(View.GONE);
-                        runOnUiThread(runnable);
-                        assert File != null;
-                        File.close();
-                    }
-                } catch (IOException e) {
-                    Runnable runnable = () -> {
-                        loading.setVisibility(View.GONE);
-                        UIAlert(this, e.toString(), "error");
-                    };
-                    runOnUiThread(runnable);
-                }
-            }).start();
-        } else if (requestCode == 122 && resultCode == RESULT_OK) {
-            Uri content_describer = ReturnedIntent.getData();
-            File selectedFilePath = new File(getPath(content_describer));
-            ProgressBar loading = findViewById(R.id.loading);
-            loading.setVisibility(View.VISIBLE);
-            new Thread(() -> {
-                FileInputStream File;
-                try {
-                    assert content_describer != null;
-                    File = (FileInputStream) getContentResolver().openInputStream(content_describer);
-                } catch (FileNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
-                try {
-                    try {
-                        File romDir = new File(AppConfig.maindirpath + curRomName + "/");
-                        if (!romDir.exists()) {
-                            if(!romDir.mkdirs()) return;
-                        }
-                        try (OutputStream out = new FileOutputStream(AppConfig.maindirpath + curRomName + "/" + "drv1-" + selectedFilePath.getName())) {
-                            // Transfer bytes from in to out
-                            byte[] buf = new byte[1024];
-                            int len;
-                            while (true) {
-                                assert File != null;
-                                if (!((len = File.read(buf)) > 0)) break;
-                                out.write(buf, 0, len);
-                            }
-                        }
-                    } finally {
-                        Runnable runnable = () -> loading.setVisibility(View.GONE);
-                        runOnUiThread(runnable);
-                        assert File != null;
-                        File.close();
-                    }
-                } catch (IOException e) {
-                    Runnable runnable = () -> {
-                        loading.setVisibility(View.GONE);
-                        UIAlert(this, e.toString(), "error");
-                    };
-                    runOnUiThread(runnable);
-                }
-            }).start();
+        if (isOpenRomStore) {
+            isOpenRomStore = false;
+            bindingContent.bottomNavigation.setSelectedItemId(R.id.item_romstore);
+
         }
     }
 
-    public String getPath(Uri uri) {
-        return FileUtils.getPath(this, uri);
-    }
+    private final ActivityResultLauncher<String> isoPicker =
+            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
+                if (uri == null) return;
+
+                if (VMManager.isAISOFile(FileUtils.getFileNameFromUri(this, uri))) {
+                    importFile(uri, AppConfig.importedDriveFolder + "/drive.iso");
+                } else {
+                    DialogUtils.twoDialog(this,
+                            getString(R.string.problem_has_been_detected),
+                            getString(R.string.file_format_is_not_supported),
+                            getResources().getString(R.string.continuetext),
+                            getResources().getString(R.string.cancel),
+                            true,
+                            R.drawable.album_24px,
+                            true,
+                            () -> importFile(uri, AppConfig.importedDriveFolder + "/drive.iso"),
+                            null,
+                            null);
+                }
+            });
+
+    private final ActivityResultLauncher<String> hdd1Picker =
+            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
+                if (uri == null) return;
+
+                if (VMManager.isADiskFile(FileUtils.getFileNameFromUri(this, uri))) {
+                    importFile(uri, AppConfig.importedDriveFolder + "/hdd1.qcow2");
+                } else {
+                    DialogUtils.twoDialog(this,
+                            getString(R.string.problem_has_been_detected),
+                            getString(R.string.file_format_is_not_supported),
+                            getResources().getString(R.string.continuetext),
+                            getResources().getString(R.string.cancel),
+                            true,
+                            R.drawable.hard_drive_24px,
+                            true,
+                            () -> importFile(uri, AppConfig.importedDriveFolder + "/hdd1.qcow2"),
+                            null,
+                            null);
+                }
+            });
+
+    private final ActivityResultLauncher<String> hdd2Picker =
+            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
+                if (uri == null) return;
+
+                if (VMManager.isADiskFile(FileUtils.getFileNameFromUri(this, uri))) {
+                    importFile(uri, AppConfig.importedDriveFolder + "/hdd2.qcow2");
+                } else {
+                    DialogUtils.twoDialog(this,
+                            getString(R.string.problem_has_been_detected),
+                            getString(R.string.file_format_is_not_supported),
+                            getResources().getString(R.string.continuetext),
+                            getResources().getString(R.string.cancel),
+                            true,
+                            R.drawable.hard_drive_24px,
+                            true,
+                            () -> importFile(uri, AppConfig.importedDriveFolder + "/hdd2.qcow2"),
+                            null,
+                            null);
+                }
+            });
 
     private void setupDrawer() {
         binding.drawerLayout.setScrimColor(Color.parseColor("#40000000")); //25%
@@ -506,157 +396,82 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
                 w.setData(Uri.parse(tw));
                 startActivity(w);
             } else if (id == R.id.navigation_item_import_iso) {
-                if (new File(AppConfig.maindirpath + "/drive.iso").exists()) {
-                    AlertDialog ad;
-                    ad = new AlertDialog.Builder(this, R.style.MainDialogTheme).create();
-                    ad.setTitle("REPLACE ISO");
-                    ad.setMessage("there is iso imported you want to replace it?");
-                    ad.setButton(Dialog.BUTTON_POSITIVE, "REPLACE", (dialog, which) -> {
-                        Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
-                        intent.addCategory(Intent.CATEGORY_OPENABLE);
-                        intent.setType("*/*");
-
-                        // Optionally, specify a URI for the file that should appear in the
-                        // system file picker when it loads.
-                        if (SDK_INT >= Build.VERSION_CODES.O) {
-                            intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
-                        }
-
-                        startActivityForResult(intent, 1004);
-                    });
-                    ad.setButton(Dialog.BUTTON_NEGATIVE, "REMOVE", (dialog, which) -> {
-                        File isoFile = new File(AppConfig.maindirpath + "/drive.iso");
-                        try {
-                            if(!isoFile.delete()) Log.e(TAG, "Delete drive.iso failed!");
-                        } catch (Exception e) {
-                            Log.e(TAG, "Delete drive.iso: ", e);
-                        }
-                    });
-                    ad.show();
+                if (new File(AppConfig.importedDriveFolder + "/drive.iso").exists()) {
+                    DialogUtils.threeDialog(
+                            this,
+                            "Replace iso",
+                            "There is iso imported you want to replace it?",
+                            getString(R.string.replace),
+                            getString(R.string.cancel),
+                            getString(R.string.remove),
+                            true,
+                            R.drawable.album_24px,
+                            true,
+                            () -> isoPicker.launch("*/*"),
+                            null,
+                            () -> {
+                                try {
+                                    File isoFile = new File(AppConfig.importedDriveFolder + "/drive.iso");
+                                    DialogUtils.fileDeletionResult(this, isoFile.delete());
+                                } catch (Exception e) {
+                                    DialogUtils.fileDeletionResult(this, false);
+                                }
+                            },
+                            null);
                 } else {
-                    Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
-                    intent.addCategory(Intent.CATEGORY_OPENABLE);
-                    intent.setType("*/*");
-
-                    // Optionally, specify a URI for the file that should appear in the
-                    // system file picker when it loads.
-                    if (SDK_INT >= Build.VERSION_CODES.O) {
-                        intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
-                    }
-
-                    startActivityForResult(intent, 1004);
+                    isoPicker.launch("*/*");
                 }
             } else if (id == R.id.navigation_item_hdd1) {
-                if (new File(AppConfig.maindirpath + "/hdd1.qcow2").exists()) {
-                    AlertDialog ad;
-                    ad = new AlertDialog.Builder(this, R.style.MainDialogTheme).create();
-                    ad.setTitle("REPLACE HDD1");
-                    ad.setMessage("there is hdd1 imported you want to replace it?");
-                    ad.setButton(Dialog.BUTTON_POSITIVE, "REPLACE", (dialog, which) -> {
-                        Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
-                        intent.addCategory(Intent.CATEGORY_OPENABLE);
-                        intent.setType("*/*");
-
-                        // Optionally, specify a URI for the file that should appear in the
-                        // system file picker when it loads.
-                        if (SDK_INT >= Build.VERSION_CODES.O) {
-                            intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
-                        }
-
-                        startActivityForResult(intent, 1006);
-                    });
-                    ad.setButton(Dialog.BUTTON_NEGATIVE, "REMOVE", (dialog, which) -> {
-                        File isoFile = new File(AppConfig.maindirpath + "/hdd1.qcow2");
-                        try {
-                            if(!isoFile.delete()) Log.e(TAG, "Delete hdd1.qcow2 failed!");
-                        } catch (Exception e) {
-                            Log.e(TAG, "Delete hdd1.qcow2: ", e);
-                        }
-                    });
-                    ad.setButton(Dialog.BUTTON_NEUTRAL, "SHARE", (dialog, which) -> {
-                        Intent intentShareFile = new Intent(Intent.ACTION_SEND);
-                        File fileWithinMyDir = new File(AppConfig.maindirpath + "/hdd1.qcow2");
-
-                        if (fileWithinMyDir.exists()) {
-                            intentShareFile.setType("*/*");
-                            intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + AppConfig.maindirpath + "/hdd1.qcow2"));
-
-                            intentShareFile.putExtra(Intent.EXTRA_SUBJECT,
-                                    "Sharing File...");
-                            intentShareFile.putExtra(Intent.EXTRA_TEXT, "Sharing File...");
-
-                            startActivity(Intent.createChooser(intentShareFile, "Share File"));
-                        }
-                    });
-                    ad.show();
+                if (new File(AppConfig.importedDriveFolder + "/hdd1.qcow2").exists()) {
+                    DialogUtils.threeDialog(
+                            this,
+                            "Replace HDD1",
+                            "There is HDD1 imported you want to replace it?",
+                            getString(R.string.replace),
+                            getString(R.string.cancel),
+                            getString(R.string.remove),
+                            true,
+                            R.drawable.hard_drive_24px,
+                            true,
+                            () -> hdd1Picker.launch("*/*"),
+                            null,
+                            () -> {
+                                try {
+                                    File hdd1File = new File(AppConfig.importedDriveFolder + "/hdd1.qcow2");
+                                    DialogUtils.fileDeletionResult(this, hdd1File.delete());
+                                } catch (Exception e) {
+                                    DialogUtils.fileDeletionResult(this, false);
+                                }
+                            },
+                            null);
                 } else {
-                    Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
-                    intent.addCategory(Intent.CATEGORY_OPENABLE);
-                    intent.setType("*/*");
-
-                    // Optionally, specify a URI for the file that should appear in the
-                    // system file picker when it loads.
-                    if (SDK_INT >= Build.VERSION_CODES.O) {
-                        intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
-                    }
-
-                    startActivityForResult(intent, 1005);
+                    hdd1Picker.launch("*/*");
                 }
             } else if (id == R.id.navigation_item_hdd2) {
-                if (new File(AppConfig.maindirpath + "/hdd2.qcow2").exists()) {
-                    AlertDialog ad;
-                    ad = new AlertDialog.Builder(this, R.style.MainDialogTheme).create();
-                    ad.setTitle("REPLACE HDD2");
-                    ad.setMessage("there is hdd2 imported you want to replace it?");
-                    ad.setButton(Dialog.BUTTON_POSITIVE, "REPLACE", (dialog, which) -> {
-                        Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
-                        intent.addCategory(Intent.CATEGORY_OPENABLE);
-                        intent.setType("*/*");
-
-                        // Optionally, specify a URI for the file that should appear in the
-                        // system file picker when it loads.
-                        if (SDK_INT >= Build.VERSION_CODES.O) {
-                            intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
-                        }
-
-                        startActivityForResult(intent, 1006);
-                    });
-                    ad.setButton(Dialog.BUTTON_NEGATIVE, "REMOVE", (dialog, which) -> {
-                        File isoFile = new File(AppConfig.maindirpath + "/hdd2.qcow2");
-                        try {
-                            if(!isoFile.delete()) Log.e(TAG, "Delete hdd2.qcow2 failed!");
-                        } catch (Exception e) {
-                            Log.e(TAG, "Delete hdd2.qcow2: ", e);
-                        }
-                    });
-                    ad.setButton(Dialog.BUTTON_NEUTRAL, "SHARE", (dialog, which) -> {
-                        Intent intentShareFile = new Intent(Intent.ACTION_SEND);
-                        File fileWithinMyDir = new File(AppConfig.maindirpath + "/hdd2.qcow2");
-
-                        if (fileWithinMyDir.exists()) {
-                            intentShareFile.setType("*/*");
-                            intentShareFile.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + AppConfig.maindirpath + "/hdd2.qcow2"));
-
-                            intentShareFile.putExtra(Intent.EXTRA_SUBJECT,
-                                    "Sharing File...");
-                            intentShareFile.putExtra(Intent.EXTRA_TEXT, "Sharing File...");
-
-                            startActivity(Intent.createChooser(intentShareFile, "Share File"));
-                        }
-                    });
-                    ad.show();
+                if (new File(AppConfig.importedDriveFolder + "/hdd2.qcow2").exists()) {
+                    DialogUtils.threeDialog(
+                            this,
+                            "Replace HDD2",
+                            "There is HDD2 imported you want to replace it?",
+                            getString(R.string.replace),
+                            getString(R.string.cancel),
+                            getString(R.string.remove),
+                            true,
+                            R.drawable.hard_drive_24px,
+                            true,
+                            () -> hdd2Picker.launch("*/*"),
+                            null,
+                            () -> {
+                                try {
+                                    File hdd1File = new File(AppConfig.importedDriveFolder + "/hdd2.qcow2");
+                                    DialogUtils.fileDeletionResult(this, hdd1File.delete());
+                                } catch (Exception e) {
+                                    DialogUtils.fileDeletionResult(this, false);
+                                }
+                            },
+                            null);
                 } else {
-                    Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
-                    intent.addCategory(Intent.CATEGORY_OPENABLE);
-                    intent.setType("*/*");
-
-                    // Optionally, specify a URI for the file that should appear in the
-                    // system file picker when it loads.
-                    if (SDK_INT >= Build.VERSION_CODES.O) {
-                        intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
-                    }
-
-                    startActivityForResult(intent, 1006);
+                    hdd2Picker.launch("*/*");
                 }
             } else if (id == R.id.navigation_item_desktop) {
                 DisplaySystem.launchX11(this, true);
@@ -714,7 +529,8 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
             } else if (id == R.id.navigation_item_store) {
                 startActivity(new Intent(this, StoreActivity.class));
             } else if (id == R.id.navigation_data_explorer) {
-                startActivity(new Intent(this, DataExplorerActivity.class));
+//                startActivity(new Intent(this, DataExplorerActivity.class));
+                FileUtils.openFolder(this, AppConfig.maindirpath);
             } else if (id == R.id.navigation_item_donate) {
                 String tw = "https://www.patreon.com/VectrasTeam";
                 Intent w = new Intent(ACTION_VIEW);
@@ -803,7 +619,7 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
             }
         };
 
-        requestNetwork.startRequestNetwork(RequestNetworkController.GET,AppConfig.updateJson,"maincheckupdate",requestNetworkListener);
+        requestNetwork.startRequestNetwork(RequestNetworkController.GET, AppConfig.updateJson, "maincheckupdate", requestNetworkListener);
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -844,5 +660,43 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
             binding.rvRomstoresearch.setVisibility(View.VISIBLE);
 
         adapterRomStoreSearch.notifyDataSetChanged();
+    }
+
+    private void importFile(Uri uri, String copyTo) {
+        if (uri == null) return;
+
+        View progressView = LayoutInflater.from(this).inflate(R.layout.dialog_progress_style, null);
+        TextView progress_text = progressView.findViewById(R.id.progress_text);
+        progress_text.setText(getString(R.string.importing_file));
+        AlertDialog progressDialog = new MaterialAlertDialogBuilder(this, R.style.CenteredDialogTheme)
+                .setView(progressView)
+                .setCancelable(false)
+                .create();
+        progressDialog.show();
+
+        AtomicBoolean isCompleted = new AtomicBoolean(false);
+        executor.execute(() -> {
+            try {
+                FileUtils.copyFileFromUri(this, uri, copyTo);
+                isCompleted.set(true);
+            } catch (Exception e) {
+                isCompleted.set(false);
+            } finally {
+                runOnUiThread(() -> {
+                    progressDialog.dismiss();
+                    DialogUtils.oneDialog(
+                            this,
+                            isCompleted.get() ? getString(R.string.imported) : getString(R.string.oops),
+                            isCompleted.get() ? getString(R.string.file_imported_successfully) : getString(R.string.file_import_failed),
+                            getString(R.string.ok),
+                            true,
+                            isCompleted.get() ? R.drawable.check_24px : R.drawable.error_96px,
+                            true,
+                            null,
+                            null
+                    );
+                });
+            }
+        });
     }
 }

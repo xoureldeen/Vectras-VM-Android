@@ -2,6 +2,7 @@ package com.vectras.vm.settings;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,8 +26,14 @@ public class VNCSettingsActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         setSupportActionBar(binding.toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        binding.toolbar.setNavigationOnClickListener(view -> onBackPressed());
+        binding.toolbar.setNavigationOnClickListener(view -> finish());
         initialize();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        binding.cvNotusingvnc.setVisibility(MainSettingsManager.getVmUi(this).equals("VNC") ? View.GONE : View.VISIBLE);
     }
 
     private void initialize() {
@@ -38,5 +45,12 @@ public class VNCSettingsActivity extends AppCompatActivity {
 
         binding.swForcerefesh.setChecked(MainSettingsManager.getForceRefeshVNCDisplay(this));
         binding.swExternal.setChecked(MainSettingsManager.getVncExternal(this));
+
+        binding.lnNotusingvnc.setOnClickListener(v -> {
+            Intent intent = new Intent();
+            intent.putExtra("goto", "qemu");
+            intent.setClass(this, MainSettingsManager.class);
+            startActivity(intent);
+        });
     }
 }

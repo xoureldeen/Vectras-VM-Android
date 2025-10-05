@@ -10,8 +10,11 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.preference.PreferenceManager;
+import android.util.Log;
 
+import androidx.preference.PreferenceManager;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
@@ -28,13 +31,19 @@ import com.vectras.vm.SplashActivity;
 import com.vectras.vm.VectrasApp;
 
 import java.util.Locale;
+import java.util.Objects;
 
 public class MainSettingsManager extends AppCompatActivity
         implements PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
+
+    public static final String TAG = "MainSettingsManager";
+
     public static MainSettingsManager activity;
 
     private static Handler mHandler;
     public static SharedPreferences sp;
+    public static int goToXML = -1;
+    public static boolean isAllowFirstChangeSubtitle = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +56,6 @@ public class MainSettingsManager extends AppCompatActivity
         sp = PreferenceManager.getDefaultSharedPreferences(activity);
 
         PreferenceFragmentCompat preference = new MainPreferencesFragment();
-        Intent intent = getIntent();
 
         // add preference settings
         getSupportFragmentManager().beginTransaction()
@@ -55,18 +63,33 @@ public class MainSettingsManager extends AppCompatActivity
                 .commit();
 
         // toolbar
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+
+        CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapsingToolbarLayout);
+
+        if (getIntent().hasExtra("goto")) {
+            isAllowFirstChangeSubtitle = false;
+            if (Objects.equals(getIntent().getStringExtra("goto"), "qemu")) {
+                goToXML = R.xml.qemu;
+                collapsingToolbarLayout.setSubtitle(getString(R.string.qemu));
+            }
+        }
     }
 
     @Override
-    public boolean onPreferenceStartFragment(PreferenceFragmentCompat caller, Preference pref) {
+    public boolean onPreferenceStartFragment(@NonNull PreferenceFragmentCompat caller, Preference pref) {
         // Instantiate the new Fragment
         final Bundle bundle = pref.getExtras();
-        final Fragment fragment = Fragment.instantiate(this, pref.getFragment(), bundle);
 
-        fragment.setTargetFragment(caller, 0);
+        assert pref.getFragment() != null;
+        Fragment fragment = getSupportFragmentManager()
+                .getFragmentFactory()
+                .instantiate(getClassLoader(), pref.getFragment());
+        fragment.setArguments(bundle);
+
+//        fragment.setTargetFragment(caller, 0);
 
         // Replace the existing Fragment with the new Fragment
         getSupportFragmentManager().beginTransaction()
@@ -94,11 +117,13 @@ public class MainSettingsManager extends AppCompatActivity
         @Override
         public void onResume() {
             super.onResume();
-            CollapsingToolbarLayout collapsingToolbarLayout =
-                    requireActivity().findViewById(R.id.collapsingToolbarLayout);
+            if (MainSettingsManager.isAllowFirstChangeSubtitle) {
+                CollapsingToolbarLayout collapsingToolbarLayout =
+                        requireActivity().findViewById(R.id.collapsingToolbarLayout);
 
-            if (collapsingToolbarLayout != null) {
-                collapsingToolbarLayout.setSubtitle(getString(R.string.general));
+                if (collapsingToolbarLayout != null) {
+                    collapsingToolbarLayout.setSubtitle(getString(R.string.general));
+                }
             }
         }
 
@@ -112,14 +137,12 @@ public class MainSettingsManager extends AppCompatActivity
         @Override
         public void onCreatePreferences(Bundle bundle, String root_key) {
             // Load the Preferences from the XML file
-            setPreferencesFromResource(R.xml.headers_preference, root_key);
+            setPreferencesFromResource(MainSettingsManager.goToXML == -1 ? R.xml.headers_preference : MainSettingsManager.goToXML, root_key);
+            MainSettingsManager.goToXML = -1;
         }
 
         @Override
-        public boolean onPreferenceChange(Preference pref, Object newValue) {
-            if (pref.getKey().equals("app")) {
-
-            }
+        public boolean onPreferenceChange(@NonNull Preference pref, Object newValue) {
             return true;
         }
 
@@ -162,26 +185,26 @@ public class MainSettingsManager extends AppCompatActivity
                 languagePref.setOnPreferenceChangeListener(this);
             }
 
-            SwitchPreferenceCompat switchPreferenceCompat = findPreference("updateVersionPrompt");
-            assert switchPreferenceCompat != null;
-            SwitchPreferenceCompat switchJoinBetaChannel = findPreference("checkforupdatesfromthebetachannel");
-            assert switchJoinBetaChannel != null;
-
-            if (!switchPreferenceCompat.isChecked()) {
-                switchJoinBetaChannel.setEnabled(false);
-            }
-
-            switchPreferenceCompat.setOnPreferenceChangeListener((preference, newValue) -> {
-                if (!(Boolean) newValue) {
-                    if (switchJoinBetaChannel.isEnabled())
-                        switchJoinBetaChannel.setEnabled(false);
-                } else {
-                    if (!switchJoinBetaChannel.isEnabled())
-                        switchJoinBetaChannel.setEnabled(true);
-
-                }
-                return true;
-            });
+//            SwitchPreferenceCompat switchPreferenceCompat = findPreference("updateVersionPrompt");
+//            assert switchPreferenceCompat != null;
+//            SwitchPreferenceCompat switchJoinBetaChannel = findPreference("checkforupdatesfromthebetachannel");
+//            assert switchJoinBetaChannel != null;
+//
+//            if (!switchPreferenceCompat.isChecked()) {
+//                switchJoinBetaChannel.setEnabled(false);
+//            }
+//
+//            switchPreferenceCompat.setOnPreferenceChangeListener((preference, newValue) -> {
+//                if (!(Boolean) newValue) {
+//                    if (switchJoinBetaChannel.isEnabled())
+//                        switchJoinBetaChannel.setEnabled(false);
+//                } else {
+//                    if (!switchJoinBetaChannel.isEnabled())
+//                        switchJoinBetaChannel.setEnabled(true);
+//
+//                }
+//                return true;
+//            });
 
         }
 
@@ -268,7 +291,7 @@ public class MainSettingsManager extends AppCompatActivity
         }
 
         @Override
-        public boolean onPreferenceChange(Preference pref, Object newValue) {
+        public boolean onPreferenceChange(@NonNull Preference pref, Object newValue) {
             return true;
         }
 
@@ -284,9 +307,9 @@ public class MainSettingsManager extends AppCompatActivity
 
             //Preference prefIfType = findPreference("ifType");
             //if (getArch(activity).equals("ARM64"))
-                //if (prefIfType != null) {
-                    //prefIfType.setVisible(false);
-                //}
+            //if (prefIfType != null) {
+            //prefIfType.setVisible(false);
+            //}
 
             Preference pref = findPreference("vmArch");
             if (pref != null) {
@@ -359,12 +382,9 @@ public class MainSettingsManager extends AppCompatActivity
         }
 
         private void onArch() {
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    activity.finish();
-                    startActivity(new Intent(activity, SplashActivity.class));
-                }
+            mHandler.postDelayed(() -> {
+                activity.finish();
+                startActivity(new Intent(activity, SplashActivity.class));
             }, 300);
         }
 
@@ -401,7 +421,7 @@ public class MainSettingsManager extends AppCompatActivity
         }
 
         @Override
-        public boolean onPreferenceChange(Preference pref, Object newValue) {
+        public boolean onPreferenceChange(@NonNull Preference pref, Object newValue) {
             return true;
         }
 
@@ -442,10 +462,7 @@ public class MainSettingsManager extends AppCompatActivity
         }
 
         @Override
-        public boolean onPreferenceChange(Preference pref, Object newValue) {
-            if (pref.getKey().equals("app")) {
-
-            }
+        public boolean onPreferenceChange(@NonNull Preference pref, Object newValue) {
             return true;
         }
 
@@ -490,9 +507,8 @@ public class MainSettingsManager extends AppCompatActivity
     public static int getOrientationSetting(Activity activity) {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        int orientation = prefs.getInt("orientation", 0);
         // UIUtils.log("Getting First time: " + firstTime);
-        return orientation;
+        return prefs.getInt("orientation", 0);
     }
 
     public static void setOrientationSetting(Activity activity, int orientation) {
@@ -571,42 +587,39 @@ public class MainSettingsManager extends AppCompatActivity
 
     public static String getLastDir(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String imagesDir = prefs.getString("lastDir", null);
-        return imagesDir;
+        return prefs.getString("lastDir", null);
     }
 
     public static void setLastDir(Context context, String imagesPath) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putString("lastDir", imagesPath);
-        edit.commit();
+        edit.apply();
     }
 
     public static String getImagesDir(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String imagesDir = prefs.getString("imagesDir", null);
-        return imagesDir;
+        return prefs.getString("imagesDir", null);
     }
 
     public static void setImagesDir(Context context, String imagesPath) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putString("imagesDir", imagesPath);
-        edit.commit();
+        edit.apply();
     }
 
 
     public static String getExportDir(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String imagesDir = prefs.getString("exportDir", null);
-        return imagesDir;
+        return prefs.getString("exportDir", null);
     }
 
     public static void setExportDir(Context context, String imagesPath) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putString("exportDir", imagesPath);
-        edit.commit();
+        edit.apply();
     }
 
 
@@ -626,28 +639,26 @@ public class MainSettingsManager extends AppCompatActivity
 
     public static int getExitCode(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        int exitCode = prefs.getInt("exitCode", 1);
-        return exitCode;
+        return prefs.getInt("exitCode", 1);
     }
 
     public static void setExitCode(Context context, int exitCode) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putInt("exitCode", exitCode);
-        edit.commit();
+        edit.apply();
     }
 
     public static String getControlMode(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String controlMode = prefs.getString("controlMode", "D");
-        return controlMode;
+        return prefs.getString("controlMode", "D");
     }
 
     public static void setControlMode(Context context, String controlMode) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putString("controlMode", controlMode);
-        edit.commit();
+        edit.apply();
     }
 
 
@@ -655,7 +666,7 @@ public class MainSettingsManager extends AppCompatActivity
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putBoolean("modeNight", nightMode);
-        edit.commit();
+        edit.apply();
     }
 
     public static Boolean getModeNight(Context context) {
@@ -812,29 +823,30 @@ public class MainSettingsManager extends AppCompatActivity
         PackageInfo pInfo = null;
 
         try {
-            pInfo = activity.getPackageManager().getPackageInfo(activity.getClass().getPackage().getName(),
+            pInfo = activity.getPackageManager().getPackageInfo(Objects.requireNonNull(activity.getClass().getPackage()).getName(),
                     PackageManager.GET_META_DATA);
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            Log.e(TAG, "isFirstLaunch", e);
         }
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        boolean firstTime = prefs.getBoolean("firstTime" + pInfo.versionName, true);
-        return firstTime;
+        assert pInfo != null;
+        return prefs.getBoolean("firstTime" + pInfo.versionName, true);
     }
 
     public static void setFirstLaunch(Activity activity) {
         PackageInfo pInfo = null;
 
         try {
-            pInfo = activity.getPackageManager().getPackageInfo(activity.getClass().getPackage().getName(),
+            pInfo = activity.getPackageManager().getPackageInfo(Objects.requireNonNull(activity.getClass().getPackage()).getName(),
                     PackageManager.GET_META_DATA);
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            Log.e(TAG, "setFirstLaunch", e);
         }
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         SharedPreferences.Editor edit = prefs.edit();
+        assert pInfo != null;
         edit.putBoolean("firstTime" + pInfo.versionName, false);
-        edit.commit();
+        edit.apply();
     }
 
 
@@ -870,7 +882,7 @@ public class MainSettingsManager extends AppCompatActivity
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putBoolean("setUpWithManualSetupBefore", _boolean);
-        edit.commit();
+        edit.apply();
     }
 
     public static Boolean getsetUpWithManualSetupBefore(Context context) {
@@ -882,7 +894,7 @@ public class MainSettingsManager extends AppCompatActivity
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putInt("SelectedMirror", _int);
-        edit.commit();
+        edit.apply();
     }
 
     public static int getSelectedMirror(Context context) {
@@ -894,7 +906,7 @@ public class MainSettingsManager extends AppCompatActivity
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putBoolean("dontShowAgainJoinBetaUpdateChannelDialog", _boolean);
-        edit.commit();
+        edit.apply();
     }
 
     public static Boolean getDontShowAgainJoinBetaUpdateChannelDialog(Context context) {
@@ -906,7 +918,7 @@ public class MainSettingsManager extends AppCompatActivity
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putBoolean("useDefaultBios", _boolean);
-        edit.commit();
+        edit.apply();
     }
 
     public static Boolean getuseDefaultBios(Context context) {
@@ -918,7 +930,7 @@ public class MainSettingsManager extends AppCompatActivity
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putBoolean("useUEFI", _boolean);
-        edit.commit();
+        edit.apply();
     }
 
     public static Boolean getuseUEFI(Context context) {
@@ -930,7 +942,7 @@ public class MainSettingsManager extends AppCompatActivity
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putString("skipVersion", version);
-        edit.commit();
+        edit.apply();
     }
 
     public static String getSkipVersion(Context context) {
@@ -942,7 +954,7 @@ public class MainSettingsManager extends AppCompatActivity
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putInt("vncScaleMode", mode);
-        edit.commit();
+        edit.apply();
     }
 
     public static int getVNCScaleMode(Context context) {
@@ -954,7 +966,7 @@ public class MainSettingsManager extends AppCompatActivity
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putBoolean("forceRefeshVNCDisplay", _boolean);
-        edit.commit();
+        edit.apply();
     }
 
     public static Boolean getForceRefeshVNCDisplay(Context context) {

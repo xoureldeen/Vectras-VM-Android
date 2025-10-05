@@ -27,6 +27,7 @@ import com.vectras.vm.VMManager;
 import com.vectras.vm.logger.VectrasStatus;
 import com.vectras.vm.settings.ExternalVNCSettingsActivity;
 import com.vectras.vm.utils.DialogUtils;
+import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.NetworkUtils;
 import com.vectras.vm.utils.ServiceUtils;
 
@@ -56,6 +57,25 @@ public class HomeStartVM {
 
         if (!VMManager.isthiscommandsafe(env, activity.getApplicationContext())) {
             DialogUtils.oneDialog(activity, activity.getString(R.string.problem_has_been_detected), activity.getString(R.string.harmful_command_was_detected) + " " + activity.getResources().getString(R.string.reason) + ": " + VMManager.latestUnsafeCommandReason, activity.getString(R.string.ok), true, R.drawable.verified_user_24px, true, null, null);
+            return;
+        }
+
+        if (MainSettingsManager.getSharedFolder(activity)
+                && !MainSettingsManager.getArch(activity).equals("I386")
+                && FileUtils.getFolderSize(FileUtils.getExternalFilesDirectory(activity).getPath() + "/SharedFolder") / Math.pow(10, 2) > 516) {
+            DialogUtils.twoDialog(
+                    activity,
+                    activity.getString(R.string.problem_has_been_detected),
+                    activity.getString(R.string.shared_folder_is_too_large_content),
+                    activity.getString(R.string.open_shared_folder),
+                    activity.getString(R.string.close),
+                    true,
+                    R.drawable.warning_48px,
+                    true,
+                    () -> FileUtils.openFolder(activity, FileUtils.getExternalFilesDirectory(activity).getPath() + "/SharedFolder"),
+                    null,
+                    null
+            );
             return;
         }
 

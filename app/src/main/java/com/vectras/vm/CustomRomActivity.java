@@ -56,8 +56,8 @@ public class CustomRomActivity extends AppCompatActivity {
     boolean iseditparams = false;
     public String previousName = "";
     public boolean addromnowdone = false;
-    public static String vmID = VMManager.idGenerator();
-    public int port = VMManager.startRandomPort();
+    private String vmID = VMManager.idGenerator();
+    private int port = VMManager.startRandomPort();
     private boolean created = false;
     private String thumbnailPath = "";
     private final Timer _timer = new Timer();
@@ -114,6 +114,7 @@ public class CustomRomActivity extends AppCompatActivity {
         binding.driveField.setEndIconOnClickListener(v -> {
             if (Objects.requireNonNull(binding.drive.getText()).toString().isEmpty()) {
                 CreateImageDialogFragment dialogFragment = new CreateImageDialogFragment();
+                dialogFragment.folder = AppConfig.vmFolder + vmID + "/";
                 dialogFragment.customRom = true;
                 dialogFragment.filename = Objects.requireNonNull(binding.title.getText()).toString();
                 dialogFragment.drive = binding.drive;
@@ -244,7 +245,7 @@ public class CustomRomActivity extends AppCompatActivity {
             thumbnailPath = current.itemIcon;
             vmID = getIntent().getStringExtra("VMID");
 
-            if (vmID != null && vmID.isEmpty()) {
+            if (vmID == null || vmID.isEmpty()) {
                 vmID = VMManager.idGenerator();
             }
 

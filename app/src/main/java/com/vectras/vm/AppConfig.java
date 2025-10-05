@@ -73,6 +73,7 @@ public class AppConfig {
     public static String downloadsFolder = maindirpath + "Downloads/";
     public static String romsdatajson = maindirpath + "roms-data.json";
     public static String vmFolder = maindirpath + "roms/";
+    public static String importedDriveFolder = maindirpath + "drive/";
     public static String pendingCommand = "";
 
     public static String neededPkgs = "aria2 tar dwm xfce4-terminal libslirp libslirp-dev pulseaudio-dev glib-dev pixman-dev zlib-dev spice-dev" +
