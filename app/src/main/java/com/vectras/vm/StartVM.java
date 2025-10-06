@@ -1,7 +1,6 @@
 package com.vectras.vm;
 
 import android.app.Activity;
-import android.content.Intent;
 
 import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;

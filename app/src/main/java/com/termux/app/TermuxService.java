@@ -21,6 +21,7 @@ import android.provider.Settings;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
+import com.vectras.vm.AppConfig;
 import com.vectras.vm.R;
 import com.termux.terminal.EmulatorDebug;
 import com.termux.terminal.TerminalSession;
@@ -48,10 +49,10 @@ public final class TermuxService extends Service implements SessionChangedCallba
 
     /** Note that this is a symlink on the Android M preview. */
     @SuppressLint("SdCardPath")
-    public static final String FILES_PATH = "/data/data/com.vectras.vm/files";
-    public static final String PREFIX_PATH = FILES_PATH + "/usr";
-    public static final String HOME_PATH = FILES_PATH + "/home";
-    public static final String OPT_PATH = FILES_PATH + "/fex-rootfs/opt";
+    public static final String FILES_PATH = AppConfig.internalDataDirPath;
+    public static final String PREFIX_PATH = FILES_PATH + "usr";
+    public static final String HOME_PATH = FILES_PATH + "home";
+    public static final String OPT_PATH = FILES_PATH + "fex-rootfs/opt";
 
     private static final int NOTIFICATION_ID = 1337;
 

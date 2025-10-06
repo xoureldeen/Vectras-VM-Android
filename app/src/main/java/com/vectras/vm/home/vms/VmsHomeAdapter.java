@@ -75,7 +75,7 @@ public class VmsHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
             Config.vmID = current.vmID;
             String env = StartVM.env(activity, current.itemExtra, current.itemPath, "");
-            HomeStartVM.startNow(activity, current.itemName, env, current.itemExtra, current.itemPath, null, null);
+            HomeStartVM.startNow(activity, current.itemName, env, current.vmID, current.itemIcon);
         });
 
         myHolder.cdRoms.setOnLongClickListener(v -> {

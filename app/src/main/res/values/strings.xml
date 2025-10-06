@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">v2.9.5.12-3dfx</string>
+    <string name="app_version" translatable="false">v2.9.5.13-3dfx</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -569,6 +569,11 @@
     <string name="directory_does_not_exist">Directory does not exist.</string>
     <string name="shared_folder_is_too_large_content">The shared folder is too large. Please delete some of the following files so that the total size of all files in the shared folder does not exceed 516 MB.</string>
     <string name="open_shared_folder">Open shared folder</string>
+    <string name="vm_could_not_be_run_content">An error occurred and the virtual machine could not be run.</string>
+    <string name="error_ANOTHER_PROCESS_USING_IMAGE">An error occurred and the virtual machine could not be started. Another process is using a file that this virtual machine also needs. Find and terminate that process.</string>
+    <string name="could_not_create_dir_to_save_cvbi_content">Something went wrong. Could not create directory to save cvbi file.</string>
+    <string name="quick_start">Quick start</string>
+    <string name="quick_start_description">To start up faster the next time you open Vectras VM if you don\'t remove it from multitasking.</string>
 
 
     <!--======================TERMUX STRINGS====================-->

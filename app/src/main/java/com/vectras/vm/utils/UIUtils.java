@@ -5,6 +5,7 @@ import android.app.Activity;
 import androidx.activity.ComponentActivity;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -498,5 +499,10 @@ public class UIUtils {
             v.setPadding(systemBars.left + originalPaddingLeft, originalPaddingTop, systemBars.right + originalPaddingRight, originalPaddingBottom);
             return insets;
         });
+    }
+
+    public static boolean isUsingThemeNightMode() {
+        int nightMode = AppCompatDelegate.getDefaultNightMode();
+        return nightMode == AppCompatDelegate.MODE_NIGHT_YES;
     }
 }

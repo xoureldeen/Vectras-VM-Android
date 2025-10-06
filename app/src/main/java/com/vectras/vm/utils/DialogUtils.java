@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +38,8 @@ public class DialogUtils {
         } else {
             icon.setVisibility(View.GONE);
         }
+
+        if (UIUtils.isUsingThemeNightMode()) positiveButton.setTextColor(Color.WHITE);
 
         title.setText(_title);
         content.setText(_message);
@@ -79,6 +82,11 @@ public class DialogUtils {
             icon.setImageResource(_iconid);
         } else {
             icon.setVisibility(View.GONE);
+        }
+
+        if (UIUtils.isUsingThemeNightMode()) {
+            positiveButton.setTextColor(Color.WHITE);
+            negativeButton.setTextColor(Color.WHITE);
         }
 
         title.setText(_title);
@@ -134,6 +142,12 @@ public class DialogUtils {
 
         title.setText(_title);
         content.setText(_message);
+
+        if (UIUtils.isUsingThemeNightMode()) {
+            positiveButton.setTextColor(Color.WHITE);
+            negativeButton.setTextColor(Color.WHITE);
+            neutralButton.setTextColor(Color.WHITE);
+        }
 
         positiveButton.setText(_textPositiveButton);
         negativeButton.setText(_textNegativeButton);

@@ -6,16 +6,17 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
-import com.google.android.material.appbar.AppBarLayout;
+import com.bumptech.glide.Glide;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
@@ -34,20 +35,20 @@ import com.vectras.vm.utils.ServiceUtils;
 import java.io.File;
 
 public class HomeStartVM {
+    public static final String TAG = "HomeStartVM";
     public static AlertDialog progressDialog;
-
     public static boolean skipIDEwithARM64DialogInStartVM = false;
+    public static final Handler handlerForLaunch = new Handler(Looper.getMainLooper());
+    public static Runnable tickForLaunch = null;
 
     public static void startNow(
             Activity activity,
             String vmName,
             String env,
-            String itemExtra,
-            String itemPath,
-            AppBarLayout appbar,
-            LinearLayout extVncLayout
+            String vmID,
+            String thumbnailFile
     ) {
-        File romDir = new File(Config.getCacheDir() + "/" + Config.vmID);
+        File romDir = new File(Config.getCacheDir() + "/" + vmID);
         if (!romDir.exists()) {
             if (!romDir.mkdirs()) {
                 DialogUtils.oneDialog(activity, activity.getString(R.string.problem_has_been_detected), activity.getString(R.string.vm_cache_dir_failed_to_create_content), activity.getString(R.string.ok), true, R.drawable.warning_48px, true, null, null);
@@ -81,7 +82,7 @@ public class HomeStartVM {
 
         VMManager.lastQemuCommand = env;
 
-        if (VMManager.isThisVMRunning(activity, itemExtra, itemPath)) {
+        if (VMManager.isVMRunning(activity, vmID)) {
             Toast.makeText(activity, "This VM is already running.", Toast.LENGTH_LONG).show();
             if (MainSettingsManager.getVmUi(activity).equals("VNC"))
                 activity.startActivity(new Intent(activity, MainVNCActivity.class));
@@ -93,7 +94,7 @@ public class HomeStartVM {
         if (AppConfig.getSetupFiles().contains("arm") && !AppConfig.getSetupFiles().contains("arm64")) {
             if (env.contains("tcg,thread=multi")) {
                 DialogUtils.twoDialog(activity, activity.getResources().getString(R.string.problem_has_been_detected), activity.getResources().getString(R.string.can_not_use_mttcg), activity.getString(R.string.ok), activity.getString(R.string.cancel), true, R.drawable.warning_48px, true,
-                        () -> startNow(activity, vmName, env.replace("tcg,thread=multi", "tcg,thread=single"), itemExtra, itemPath, appbar, extVncLayout), null, null);
+                        () -> startNow(activity, vmName, env.replace("tcg,thread=multi", "tcg,thread=single"), vmID, thumbnailFile), null, null);
                 return;
             }
         }
@@ -102,7 +103,7 @@ public class HomeStartVM {
             DialogUtils.twoDialog(activity, activity.getString(R.string.problem_has_been_detected), activity.getString(R.string.you_cannot_use_IDE_hard_drive_type_with_ARM64), activity.getString(R.string.continuetext), activity.getString(R.string.cancel), true, R.drawable.warning_48px, true,
                     () -> {
                         skipIDEwithARM64DialogInStartVM = true;
-                        startNow(activity, vmName, env, itemExtra, itemPath, appbar, extVncLayout);
+                        startNow(activity, vmName, env, vmID, thumbnailFile);
                     }, null, null);
             return;
         } else if (skipIDEwithARM64DialogInStartVM) {
@@ -126,60 +127,61 @@ public class HomeStartVM {
             return;
         }
 
-        showProgressDialog(activity, activity.getString(R.string.booting_up));
-        Handler handler = new Handler();
-        handler.postDelayed(
-                () -> {
-                    if (ServiceUtils.isServiceRunning(activity, MainService.class)) {
-                        MainService.startCommand(env, activity);
-                    } else {
-                        Intent serviceIntent = new Intent(activity, MainService.class);
-                        MainService.env = env;
-                        MainService.CHANNEL_ID = vmName;
-                        MainService.activity = activity;
-                        if (SDK_INT >= Build.VERSION_CODES.O) {
-                            activity.startForegroundService(serviceIntent);
-                        } else {
-                            activity.startService(serviceIntent);
-                        }
-                    }
+        showProgressDialog(activity, vmName, thumbnailFile);
 
+        VMManager.isQemuStopedWithError = false;
 
-                    if (MainSettingsManager.getVmUi(activity).equals("VNC")) {
-                        if (MainSettingsManager.getVncExternal(activity)) {
-                            if (extVncLayout != null) extVncLayout.setVisibility(View.VISIBLE);
-                            if (appbar != null) appbar.setExpanded(true);
-                            progressDialog.dismiss();
-                        } else {
-                            Handler handler1 = new Handler();
-                            handler1.postDelayed(
-                                    () -> {
-                                        MainVNCActivity.started = true;
-                                        activity.startActivity(
-                                                new Intent(
-                                                        activity, MainVNCActivity.class));
-                                        progressDialog.dismiss();
-                                    },
-                                    2000);
-                        }
+        if (ServiceUtils.isServiceRunning(activity, MainService.class)) {
+            MainService.startCommand(env, activity);
+        } else {
+            Intent serviceIntent = new Intent(activity, MainService.class);
+            MainService.env = env;
+            MainService.CHANNEL_ID = vmName;
+            MainService.activity = activity;
+            if (SDK_INT >= Build.VERSION_CODES.O) {
+                activity.startForegroundService(serviceIntent);
+            } else {
+                activity.startService(serviceIntent);
+            }
+        }
+
+        tickForLaunch = new Runnable() {
+            @Override
+            public void run() {
+                if (VMManager.isQemuStopedWithError || FileUtils.isFileExists(Config.getLocalQMPSocketPath())) {
+                    handlerForLaunch.removeCallbacks(this);
+
+                    progressDialog.dismiss();
+
+                    //If Qemu doesn't crash and finish then launch.
+                    if (!VMManager.isQemuStopedWithError) {
+                        if (MainSettingsManager.getVmUi(activity).equals("VNC")) {
+                            if (MainSettingsManager.getVncExternal(activity)) {
+                                Config.currentVNCServervmID = vmID;
+                                DialogUtils.oneDialog(activity, activity.getString(R.string.vnc_server), activity.getString(R.string.running_vm_with_vnc_server_content) + " " + (Integer.parseInt(MainSettingsManager.getVncExternalDisplay(activity)) + 5900) + ".", activity.getString(R.string.ok), true, R.drawable.cast_24px, true, null, null);
+                            } else {
+                                MainVNCActivity.started = true;
+                                activity.startActivity(new Intent(activity, MainVNCActivity.class));
+                            }
 //                    } else if (MainSettingsManager.getVmUi(activity).equals("SPICE")) {
 //                        //This feature is not available yet.
-                    } else if (MainSettingsManager.getVmUi(activity).equals("X11")) {
-                        Handler handler1 = new Handler();
-                        handler1.postDelayed(
-                                () -> {
-                                    progressDialog.dismiss();
-                                    DisplaySystem.launchX11(activity, false);
-                                },
-                                3000);
+                        } else if (MainSettingsManager.getVmUi(activity).equals("X11")) {
+                            DisplaySystem.launchX11(activity, false);
+                        }
+
+                        Log.i(TAG, "Virtual machine running.");
                     }
 
-                    if (MainSettingsManager.getVncExternal(activity)) {
-                        Config.currentVNCServervmID = Config.vmID;
-                        DialogUtils.oneDialog(activity, activity.getString(R.string.vnc_server), activity.getString(R.string.running_vm_with_vnc_server_content) + " " + (Integer.parseInt(MainSettingsManager.getVncExternalDisplay(activity)) + 5900) + ".", activity.getString(R.string.ok), true, R.drawable.cast_24px, true, null, null);
-                    }
-                },
-                2000);
+                    skipIDEwithARM64DialogInStartVM = false;
+                    tickForLaunch = null;
+                    return;
+                }
+
+                handlerForLaunch.postDelayed(this, 500);
+            }
+        };
+        handlerForLaunch.postDelayed(tickForLaunch, 1000);
+
         String[] params = env.split("\\s+");
         VectrasStatus.logInfo("Params:");
         Log.d("HomeStartVM", "Params:");
@@ -190,10 +192,29 @@ public class HomeStartVM {
 
     }
 
-    public static void showProgressDialog(Activity activity, String _content) {
-        View progressView = LayoutInflater.from(activity).inflate(R.layout.dialog_progress_style, null);
-        TextView progress_text = progressView.findViewById(R.id.progress_text);
-        progress_text.setText(_content);
+    public static void showProgressDialog(Activity activity, String _content, String thumbnailFile) {
+        View progressView = LayoutInflater.from(activity).inflate(R.layout.dialog_start_vm, null);
+        TextView tvVMName = progressView.findViewById(R.id.vm_name);
+        tvVMName.setText(_content);
+
+        if (thumbnailFile != null) {
+            ImageView ivThumbnail = progressView.findViewById(R.id.iv_thumbnail);
+
+            if (thumbnailFile.isEmpty()){
+                VMManager.setIconWithName(ivThumbnail, _content);
+            } else {
+                if (FileUtils.isFileExists(thumbnailFile)) {
+                    Glide.with(activity.getApplicationContext())
+                            .load(new File(thumbnailFile))
+                            .placeholder(R.drawable.ic_computer_180dp_with_padding)
+                            .error(R.drawable.ic_computer_180dp_with_padding)
+                            .into(ivThumbnail);
+                } else {
+                    VMManager.setIconWithName(ivThumbnail, _content);
+                }
+            }
+        }
+
         progressDialog = new MaterialAlertDialogBuilder(activity, R.style.CenteredDialogTheme)
                 .setView(progressView)
                 .setCancelable(false)

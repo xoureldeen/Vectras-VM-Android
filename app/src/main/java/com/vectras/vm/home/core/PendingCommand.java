@@ -3,6 +3,7 @@ package com.vectras.vm.home.core;
 import android.app.Activity;
 import android.widget.Toast;
 
+import com.vectras.qemu.Config;
 import com.vectras.vm.AppConfig;
 import com.vectras.vm.R;
 import com.vectras.vm.StartVM;
@@ -47,7 +48,8 @@ public class PendingCommand {
                 } else {
                     com.vectras.vm.StartVM.cdrompath = "";
                     String env = StartVM.env(activity, AppConfig.pendingCommand, "", "1");
-                    HomeStartVM.startNow(activity, "Quick run", env, AppConfig.pendingCommand, "", null, null);
+                    Config.vmID = VMManager.idGenerator();
+                    HomeStartVM.startNow(activity, "Quick run", env, Config.vmID, null);
                     VMManager.lastQemuCommand = AppConfig.pendingCommand;
                 }
             }

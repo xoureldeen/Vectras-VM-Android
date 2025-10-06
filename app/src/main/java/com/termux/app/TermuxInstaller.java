@@ -69,7 +69,7 @@ final class TermuxInstaller {
             @Override
             public void run() {
                 try {
-                    final String STAGING_PREFIX_PATH = TermuxService.FILES_PATH + "/usr-staging";
+                    final String STAGING_PREFIX_PATH = TermuxService.FILES_PATH + "usr-staging";
                     final File STAGING_PREFIX_FILE = new File(STAGING_PREFIX_PATH);
 
                     if (STAGING_PREFIX_FILE.exists()) {

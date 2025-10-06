@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
 
 public class TermuxFileReceiverActivity extends Activity {
 
-    static final String TERMUX_RECEIVEDIR = TermuxService.FILES_PATH + "/home/downloads";
+    static final String TERMUX_RECEIVEDIR = TermuxService.FILES_PATH + "home/downloads";
     static final String EDITOR_PROGRAM = TermuxService.HOME_PATH + "/bin/termux-file-editor";
     static final String URL_OPENER_PROGRAM = TermuxService.HOME_PATH + "/bin/termux-url-opener";
 

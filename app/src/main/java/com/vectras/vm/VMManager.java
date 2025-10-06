@@ -4,20 +4,15 @@ import static android.content.Intent.ACTION_OPEN_DOCUMENT;
 import static com.vectras.vm.utils.FileUtils.isFileExists;
 
 import android.androidVNC.AbstractScaling;
-import android.androidVNC.VncCanvas;
 import android.androidVNC.VncCanvasActivity;
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,7 +20,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
@@ -38,7 +32,6 @@ import com.vectras.qemu.MainSettingsManager;
 import com.vectras.qemu.MainVNCActivity;
 import com.vectras.qemu.VNCConfig;
 import com.vectras.qemu.utils.QmpClient;
-import com.vectras.vm.MainRoms.AdapterMainRoms;
 import com.vectras.vm.home.HomeActivity;
 import com.vectras.vm.settings.VNCSettingsActivity;
 import com.vectras.vm.utils.DialogUtils;
@@ -73,6 +66,7 @@ public class VMManager {
     public static String pendingDeviceID = "";
     public static int restoredVMs = 0;
     public static boolean isKeptSomeFiles = false;
+    public static boolean isQemuStopedWithError = false;
 
     public static String latestUnsafeCommandReason = "";
     public static String lastQemuCommand = "";
@@ -96,8 +90,8 @@ public class VMManager {
 
         FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", finalJson);
         finalJson = new Gson().toJson(mapForCreateNewVM);
-        FileUtils.writeToFile(AppConfig.maindirpath + "/roms/" + Objects.requireNonNull(mapForCreateNewVM.get("vmID")).toString(), "rom-data.json", finalJson.replace("\\u003d", "="));
-        FileUtils.writeToFile(AppConfig.maindirpath + "/roms/" + Objects.requireNonNull(mapForCreateNewVM.get("vmID")).toString(), "vmID.txt", Objects.requireNonNull(mapForCreateNewVM.get("vmID")).toString());
+        FileUtils.writeToFile(AppConfig.maindirpath + "/roms/" + Objects.requireNonNull(mapForCreateNewVM.get("vmID")), "rom-data.json", finalJson.replace("\\u003d", "="));
+        FileUtils.writeToFile(AppConfig.maindirpath + "/roms/" + Objects.requireNonNull(mapForCreateNewVM.get("vmID")), "vmID.txt", Objects.requireNonNull(mapForCreateNewVM.get("vmID")).toString());
     }
 
     public static void editVM(String name, String thumbnail, String drive, String arch, String cdrom, String params, int position) {
@@ -127,8 +121,8 @@ public class VMManager {
         finalJson = new Gson().toJson(listmapForCreateNewVM);
         FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", finalJson);
         finalJson = new Gson().toJson(mapForCreateNewVM);
-        FileUtils.writeToFile(AppConfig.maindirpath + "/roms/" + Objects.requireNonNull(mapForCreateNewVM.get("vmID")).toString(), "rom-data.json", finalJson.replace("\\u003d", "="));
-        FileUtils.writeToFile(AppConfig.maindirpath + "/roms/" + Objects.requireNonNull(mapForCreateNewVM.get("vmID")).toString(), "vmID.txt", Objects.requireNonNull(mapForCreateNewVM.get("vmID")).toString());
+        FileUtils.writeToFile(AppConfig.maindirpath + "/roms/" + Objects.requireNonNull(mapForCreateNewVM.get("vmID")), "rom-data.json", finalJson.replace("\\u003d", "="));
+        FileUtils.writeToFile(AppConfig.maindirpath + "/roms/" + Objects.requireNonNull(mapForCreateNewVM.get("vmID")), "vmID.txt", Objects.requireNonNull(mapForCreateNewVM.get("vmID")).toString());
     }
 
     public static void deleteVMDialog(String _vmName, int _position, Activity _activity) {
@@ -158,7 +152,7 @@ public class VMManager {
             jSONArray.remove(_position);
 
 
-            Writer output = null;
+            Writer output;
             File jsonFile = new File(AppConfig.maindirpath + "roms-data" + ".json");
             output = new BufferedWriter(new FileWriter(jsonFile));
             output.write(jSONArray.toString());
@@ -187,7 +181,7 @@ public class VMManager {
 
     @NonNull
     public static String startRamdomVMID() {
-        String addAdb = "";
+        String addAdb;
         Random random = new Random();
         int randomAbc = random.nextInt(12);
         if (randomAbc == 0) {
@@ -215,7 +209,7 @@ public class VMManager {
         } else {
             addAdb = "l";
         }
-        return addAdb + String.valueOf((long)(random.nextInt(65535)));
+        return addAdb + (long) (random.nextInt(65535));
     }
 
     public static int startRandomPort() {
@@ -252,18 +246,18 @@ public class VMManager {
         finalJson = new Gson().toJson(listmapForRemoveVM);
         if (!pendingVMID.isEmpty()) {
             int _startRepeat = 0;
-            String _currentVMIDToScan = "";
+            String _currentVMIDToScan;
             ArrayList<String> _filelist = new ArrayList<>();
             FileUtils.getAListOfAllFilesAndFoldersInADirectory(AppConfig.vmFolder, _filelist);
             if (!_filelist.isEmpty()) {
-                for (int _repeat = 0; _repeat < (int)(_filelist.size()); _repeat++) {
+                for (int _repeat = 0; _repeat < _filelist.size(); _repeat++) {
                     if (_startRepeat < _filelist.size()) {
-                        if (isFileExists(_filelist.get((int)(_startRepeat)) + "/vmID.txt")) {
-                            _currentVMIDToScan = FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/vmID.txt").replace("\n", "");
+                        if (isFileExists(_filelist.get(_startRepeat) + "/vmID.txt")) {
+                            _currentVMIDToScan = FileUtils.readAFile(_filelist.get(_startRepeat) + "/vmID.txt").replace("\n", "");
                             if (!_currentVMIDToScan.isEmpty()) {
                                 if (_currentVMIDToScan.equals(pendingVMID)) {
-                                    if (!finalJson.contains(_filelist.get((int)(_startRepeat)))) {
-                                        FileUtils.deleteDirectory(_filelist.get((int)(_startRepeat)));
+                                    if (!finalJson.contains(_filelist.get(_startRepeat))) {
+                                        FileUtils.deleteDirectory(_filelist.get(_startRepeat));
                                     } else {
                                         isKeptSomeFiles = true;
                                         hideVMID(pendingVMID);
@@ -281,17 +275,17 @@ public class VMManager {
     public static void hideVMID(@NonNull String _vmID) {
         if (!_vmID.isEmpty()) {
             int _startRepeat = 0;
-            String _currentVMIDToScan = "";
+            String _currentVMIDToScan;
             ArrayList<String> _filelist = new ArrayList<>();
             FileUtils.getAListOfAllFilesAndFoldersInADirectory(AppConfig.vmFolder, _filelist);
             if (!_filelist.isEmpty()) {
-                for (int _repeat = 0; _repeat < (int)(_filelist.size()); _repeat++) {
+                for (int _repeat = 0; _repeat < _filelist.size(); _repeat++) {
                     if (_startRepeat < _filelist.size()) {
-                        if (isFileExists(_filelist.get((int)(_startRepeat)) + "/vmID.txt")) {
-                            _currentVMIDToScan = FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/vmID.txt").replace("\n", "");
+                        if (isFileExists(_filelist.get(_startRepeat) + "/vmID.txt")) {
+                            _currentVMIDToScan = FileUtils.readAFile(_filelist.get(_startRepeat) + "/vmID.txt").replace("\n", "");
                             if (!_currentVMIDToScan.isEmpty()) {
                                 if (_currentVMIDToScan.equals(_vmID)) {
-                                    FileUtils.moveAFile(_filelist.get((int)(_startRepeat)) + "/vmID.txt", _filelist.get((int)(_startRepeat)) + "/vmID.old.txt");
+                                    FileUtils.moveAFile(_filelist.get(_startRepeat) + "/vmID.txt", _filelist.get(_startRepeat) + "/vmID.old.txt");
                                 }
                             }
                         }
@@ -312,17 +306,17 @@ public class VMManager {
         }
         if (!pendingVMID.isEmpty()) {
             int _startRepeat = 0;
-            String _currentVMIDToScan = "";
+            String _currentVMIDToScan;
             ArrayList<String> _filelist = new ArrayList<>();
             FileUtils.getAListOfAllFilesAndFoldersInADirectory(AppConfig.vmFolder, _filelist);
             if (!_filelist.isEmpty()) {
-                for (int _repeat = 0; _repeat < (int)(_filelist.size()); _repeat++) {
+                for (int _repeat = 0; _repeat < _filelist.size(); _repeat++) {
                     if (_startRepeat < _filelist.size()) {
-                        if (isFileExists(_filelist.get((int)(_startRepeat)) + "/vmID.txt")) {
-                            _currentVMIDToScan = FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/vmID.txt").replace("\n", "");
+                        if (isFileExists(_filelist.get(_startRepeat) + "/vmID.txt")) {
+                            _currentVMIDToScan = FileUtils.readAFile(_filelist.get(_startRepeat) + "/vmID.txt").replace("\n", "");
                             if (!_currentVMIDToScan.isEmpty()) {
                                 if (_currentVMIDToScan.equals(pendingVMID)) {
-                                    FileUtils.moveAFile(_filelist.get((int)(_startRepeat)) + "/vmID.txt", _filelist.get((int)(_startRepeat)) + "/vmID.old.txt");
+                                    FileUtils.moveAFile(_filelist.get(_startRepeat) + "/vmID.txt", _filelist.get(_startRepeat) + "/vmID.old.txt");
                                 }
                             }
                         }
@@ -340,11 +334,11 @@ public class VMManager {
             ArrayList<String> _filelist = new ArrayList<>();
             FileUtils.getAListOfAllFilesAndFoldersInADirectory(AppConfig.vmFolder, _filelist);
             if (!_filelist.isEmpty()) {
-                for (int _repeat = 0; _repeat < (int)(_filelist.size()); _repeat++) {
+                for (int _repeat = 0; _repeat < _filelist.size(); _repeat++) {
                     if (_startRepeat < _filelist.size()) {
-                        if (!isFileExists(_filelist.get((int)(_startRepeat)) + "/vmID.txt")) {
-                            if (!finalJson.contains(_filelist.get((int) (_startRepeat)))) {
-                                FileUtils.deleteDirectory(_filelist.get((int) (_startRepeat)));
+                        if (!isFileExists(_filelist.get(_startRepeat) + "/vmID.txt")) {
+                            if (!finalJson.contains(_filelist.get(_startRepeat))) {
+                                FileUtils.deleteDirectory(_filelist.get(_startRepeat));
                             }
                         }
                     }
@@ -362,38 +356,38 @@ public class VMManager {
         ArrayList<String> _filelist = new ArrayList<>();
         FileUtils.getAListOfAllFilesAndFoldersInADirectory(AppConfig.vmFolder, _filelist);
         if (!_filelist.isEmpty()) {
-            for (int _repeat = 0; _repeat < (int)(_filelist.size()); _repeat++) {
+            for (int _repeat = 0; _repeat < _filelist.size(); _repeat++) {
                 if (_startRepeat < _filelist.size()) {
-                    if (!isFileExists(_filelist.get((int)(_startRepeat)) + "/vmID.txt")) {
-                        if (isFileExists(_filelist.get((int)(_startRepeat)) + "/rom-data.json")) {
-                            if (JSONUtils.isValidFromString(FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/rom-data.json"))) {
+                    if (!isFileExists(_filelist.get(_startRepeat) + "/vmID.txt")) {
+                        if (isFileExists(_filelist.get(_startRepeat) + "/rom-data.json")) {
+                            if (JSONUtils.isValidFromString(FileUtils.readAFile(_filelist.get(_startRepeat) + "/rom-data.json"))) {
                                 if (_resulttemp.toString().contains("}")) {
-                                    _resulttemp.append(",").append(FileUtils.readAFile(_filelist.get((int) (_startRepeat)) + "/rom-data.json"));
+                                    _resulttemp.append(",").append(FileUtils.readAFile(_filelist.get(_startRepeat) + "/rom-data.json"));
                                 } else {
-                                    _resulttemp = new StringBuilder(FileUtils.readAFile(_filelist.get((int) (_startRepeat)) + "/rom-data.json"));
+                                    _resulttemp = new StringBuilder(FileUtils.readAFile(_filelist.get(_startRepeat) + "/rom-data.json"));
                                 }
                                 if (JSONUtils.isValidFromString(FileUtils.readAFile(AppConfig.maindirpath + "/roms-data.json").replaceAll("]", _resulttemp + "]"))) {
                                     if (_result.toString().contains("}")) {
-                                        _result.append(",").append(FileUtils.readAFile(_filelist.get((int) (_startRepeat)) + "/rom-data.json"));
+                                        _result.append(",").append(FileUtils.readAFile(_filelist.get(_startRepeat) + "/rom-data.json"));
                                     } else {
-                                        _result = new StringBuilder(FileUtils.readAFile(_filelist.get((int) (_startRepeat)) + "/rom-data.json"));
+                                        _result = new StringBuilder(FileUtils.readAFile(_filelist.get(_startRepeat) + "/rom-data.json"));
                                     }
-                                    if (isFileExists(_filelist.get((int)(_startRepeat)) + "/vmID.old.txt")) {
-                                        enableVMID(FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/vmID.old.txt"));
+                                    if (isFileExists(_filelist.get(_startRepeat) + "/vmID.old.txt")) {
+                                        enableVMID(FileUtils.readAFile(_filelist.get(_startRepeat) + "/vmID.old.txt"));
                                     } else {
-                                        FileUtils.writeToFile(_filelist.get((int)(_startRepeat)), "/vmID.txt", VMManager.idGenerator());
+                                        FileUtils.writeToFile(_filelist.get(_startRepeat), "/vmID.txt", VMManager.idGenerator());
                                     }
                                     restoredVMs++;
                                 } else if (JSONUtils.isValidFromString(FileUtils.readAFile(AppConfig.maindirpath + "/roms-data.json").replaceAll("]", "," + _resulttemp + "]"))) {
                                     if (_result.toString().contains("}")) {
-                                        _result.append(",").append(FileUtils.readAFile(_filelist.get((int) (_startRepeat)) + "/rom-data.json"));
+                                        _result.append(",").append(FileUtils.readAFile(_filelist.get(_startRepeat) + "/rom-data.json"));
                                     } else {
-                                        _result = new StringBuilder("," + FileUtils.readAFile(_filelist.get((int) (_startRepeat)) + "/rom-data.json"));
+                                        _result = new StringBuilder("," + FileUtils.readAFile(_filelist.get(_startRepeat) + "/rom-data.json"));
                                     }
-                                    if (isFileExists(_filelist.get((int)(_startRepeat)) + "/vmID.old.txt")) {
-                                        enableVMID(FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/vmID.old.txt"));
+                                    if (isFileExists(_filelist.get(_startRepeat) + "/vmID.old.txt")) {
+                                        enableVMID(FileUtils.readAFile(_filelist.get(_startRepeat) + "/vmID.old.txt"));
                                     } else {
-                                        FileUtils.writeToFile(_filelist.get((int)(_startRepeat)), "/vmID.txt", VMManager.idGenerator());
+                                        FileUtils.writeToFile(_filelist.get(_startRepeat), "/vmID.txt", VMManager.idGenerator());
                                     }
                                     restoredVMs++;
                                 } else {
@@ -474,11 +468,11 @@ public class VMManager {
         ArrayList<String> _filelist = new ArrayList<>();
         FileUtils.getAListOfAllFilesAndFoldersInADirectory(AppConfig.vmFolder, _filelist);
         if (!_filelist.isEmpty()) {
-            for (int _repeat = 0; _repeat < (int)(_filelist.size()); _repeat++) {
+            for (int _repeat = 0; _repeat < _filelist.size(); _repeat++) {
                 if (_startRepeat < _filelist.size()) {
-                    if (isFileExists(_filelist.get((int)(_startRepeat)) + "/vmID.old.txt")) {
-                        if (FileUtils.readAFile(_filelist.get((int)(_startRepeat)) + "/vmID.old.txt").equals(_vmID)) {
-                            FileUtils.moveAFile(_filelist.get((int)(_startRepeat)) + "/vmID.old.txt", _filelist.get((int)(_startRepeat)) + "/vmID.txt");
+                    if (isFileExists(_filelist.get(_startRepeat) + "/vmID.old.txt")) {
+                        if (FileUtils.readAFile(_filelist.get(_startRepeat) + "/vmID.old.txt").equals(_vmID)) {
+                            FileUtils.moveAFile(_filelist.get(_startRepeat) + "/vmID.old.txt", _filelist.get(_startRepeat) + "/vmID.txt");
                         }
                     }
                 }
@@ -500,10 +494,10 @@ public class VMManager {
             ArrayList<String> _filelist = new ArrayList<>();
             FileUtils.getAListOfAllFilesAndFoldersInADirectory(AppConfig.vmFolder, _filelist);
             if (!_filelist.isEmpty()) {
-                for (int _repeat = 0; _repeat < (int)(_filelist.size()); _repeat++) {
+                for (int _repeat = 0; _repeat < _filelist.size(); _repeat++) {
                     if (_startRepeat < _filelist.size()) {
-                        if (!finalJson.contains(Objects.requireNonNull(Uri.parse(_filelist.get((int) (_startRepeat))).getLastPathSegment()))) {
-                            FileUtils.moveAFile(_filelist.get((int) (_startRepeat)), AppConfig.recyclebin + Uri.parse(_filelist.get((int) (_startRepeat))).getLastPathSegment());
+                        if (!finalJson.contains(Objects.requireNonNull(Uri.parse(_filelist.get(_startRepeat)).getLastPathSegment()))) {
+                            FileUtils.moveAFile(_filelist.get(_startRepeat), AppConfig.recyclebin + Uri.parse(_filelist.get(_startRepeat)).getLastPathSegment());
                         }
                     }
                     _startRepeat++;
@@ -518,10 +512,10 @@ public class VMManager {
             ArrayList<String> _filelist = new ArrayList<>();
             FileUtils.getAListOfAllFilesAndFoldersInADirectory(_foderpath, _filelist);
             if (!_filelist.isEmpty()) {
-                for (int _repeat = 0; _repeat < (int)(_filelist.size()); _repeat++) {
+                for (int _repeat = 0; _repeat < _filelist.size(); _repeat++) {
                     if (_startRepeat < _filelist.size()) {
-                        if (isADiskFile(_filelist.get((int)(_startRepeat)))) {
-                            return _filelist.get((int)(_startRepeat));
+                        if (isADiskFile(_filelist.get(_startRepeat))) {
+                            return _filelist.get(_startRepeat);
                         }
                     }
                     _startRepeat++;
@@ -534,7 +528,7 @@ public class VMManager {
     public static boolean isADiskFile (@NonNull String _filepath) {
         if (_filepath.contains(".")) {
             String _getFileName = Objects.requireNonNull(Uri.parse(_filepath).getLastPathSegment()).toLowerCase();
-            String _getFileFormat = _getFileName.substring((int)(_getFileName.lastIndexOf(".") + 1), (int)(_getFileName.length()));
+            String _getFileFormat = _getFileName.substring(_getFileName.lastIndexOf(".") + 1);
             return "qcow2,img,vhd,vhdx,vdi,qcow,vmdk,vpc".contains(_getFileFormat);
         }
         return false;
@@ -546,10 +540,10 @@ public class VMManager {
             ArrayList<String> _filelist = new ArrayList<>();
             FileUtils.getAListOfAllFilesAndFoldersInADirectory(_foderpath, _filelist);
             if (!_filelist.isEmpty()) {
-                for (int _repeat = 0; _repeat < (int)(_filelist.size()); _repeat++) {
+                for (int _repeat = 0; _repeat < _filelist.size(); _repeat++) {
                     if (_startRepeat < _filelist.size()) {
-                        if (isAISOFile(_filelist.get((int)(_startRepeat)))) {
-                            return _filelist.get((int)(_startRepeat));
+                        if (isAISOFile(_filelist.get(_startRepeat))) {
+                            return _filelist.get(_startRepeat);
                         }
                     }
                     _startRepeat++;
@@ -562,7 +556,7 @@ public class VMManager {
     public static boolean isAISOFile (@NonNull String _filepath) {
         if (_filepath.contains(".")) {
             String _getFileName = Objects.requireNonNull(Uri.parse(_filepath).getLastPathSegment()).toLowerCase();
-            String _getFileFormat = _getFileName.substring((int)(_getFileName.lastIndexOf(".") + 1), (int)(_getFileName.length()));
+            String _getFileFormat = _getFileName.substring(_getFileName.lastIndexOf(".") + 1);
             return "iso".contains(_getFileFormat);
         }
         return false;
@@ -586,10 +580,15 @@ public class VMManager {
     }
 
     public static boolean isExecutedCommandError(@NonNull String _command, String _result, Activity _activity) {
-        if (!_command.contains("qemu-system"))
+        if (!_command.contains("qemu-system")) {
+            isQemuStopedWithError = false;
             return false;
-        if (_command.contains("qemu-system") && _result.contains("Killed"))
+        }
+
+        if (_command.contains("qemu-system") && _result.contains("Killed")) {
+            isQemuStopedWithError = true;
             return true;
+        }
         //Error code: PROOT_IS_MISSING_0
         if (_result.contains("proot\": error=2,")) {
             DialogUtils.twoDialog(_activity, _activity.getResources().getString(R.string.problem_has_been_detected), _activity.getResources().getString(R.string.error_PROOT_IS_MISSING_0), _activity.getString(R.string.continuetext), _activity.getString(R.string.cancel), true, R.drawable.build_24px, true,
@@ -604,10 +603,12 @@ public class VMManager {
                         _activity.finish();
                     },
                     null, null);
+            isQemuStopedWithError = true;
             return true;
         } else if (_result.contains(") exists") && _result.contains("drive with bus")) {
             //Error code: DRIVE_INDEX_0_EXISTS
             DialogUtils.oneDialog(_activity, _activity.getString(R.string.problem_has_been_detected), _activity.getString(R.string.error_DRIVE_INDEX_0_EXISTS) + "\n\n" + _result, _activity.getString(R.string.ok),true, R.drawable.hard_drive_24px, true,null, null);
+            isQemuStopedWithError = true;
             return true;
         } else if (_result.contains("gtk initialization failed") || _result.contains("x11 not available")) {
             //Error code: X11_NOT_AVAILABLE
@@ -617,13 +618,28 @@ public class VMManager {
                         DialogUtils.oneDialog(_activity, _activity.getString(R.string.done), _activity.getString(R.string.switched_to_VNC), _activity.getString(R.string.ok),true, R.drawable.check_24px, true,null, null);
                     },
                     null, null);
+            isQemuStopedWithError = true;
             return true;
         } else if (_result.contains("No such file or directory")) {
             //Error code: NO_SUCH_FILE_OR_DIRECTORY
             DialogUtils.oneDialog(_activity, _activity.getString(R.string.problem_has_been_detected), _activity.getString(R.string.error_NO_SUCH_FILE_OR_DIRECTORY) + "\n\n" + _result, _activity.getString(R.string.ok),true, R.drawable.file_copy_24px, true,null, null);
             _activity.stopService(new Intent(_activity, MainService.class));
+            isQemuStopedWithError = true;
+            return true;
+        } else if (_result.contains("another process using")) {
+            //Error code: ANOTHER_PROCESS_USING_IMAGE
+            DialogUtils.oneDialog(_activity, _activity.getString(R.string.problem_has_been_detected), _activity.getString(R.string.error_ANOTHER_PROCESS_USING_IMAGE) + "\n\n" + _result, _activity.getString(R.string.ok),true, R.drawable.file_copy_24px, true,null, null);
+            _activity.stopService(new Intent(_activity, MainService.class));
+            isQemuStopedWithError = true;
+            return true;
+        } else if (_command.contains("qemu-system") && _result.contains("qemu-system")) {
+            //Error code: UNKNOW_ERROR
+            DialogUtils.oneDialog(_activity, _activity.getString(R.string.problem_has_been_detected), _activity.getString(R.string.vm_could_not_be_run_content) + "\n\n" + _result, _activity.getString(R.string.ok),true, R.drawable.error_96px, true,null, null);
+            _activity.stopService(new Intent(_activity, MainService.class));
+            isQemuStopedWithError = true;
             return true;
         } else {
+            isQemuStopedWithError = false;
             return false;
         }
     }
@@ -721,10 +737,9 @@ public class VMManager {
         return true;
     }
 
-    public static boolean isThisVMRunning(Activity activity, String intemExtra, String itemPath) {
-        Terminal vterm = new Terminal(activity);
-        vterm.executeShellCommand2("ps -e", false, activity);
-        if (AppConfig.temporaryLastedTerminalOutput.contains(intemExtra) && AppConfig.temporaryLastedTerminalOutput.contains(itemPath)) {
+    public static boolean isVMRunning(Activity activity, String vmID) {
+        String result = Terminal.executeShellCommandWithResult("ps -e", activity);
+        if (result.contains(Config.getCacheDir() + "/" + vmID + "/qmpsocket")) {
             Log.d("VMManager.isThisVMRunning", "Yes");
             return true;
         } else {
@@ -774,7 +789,7 @@ public class VMManager {
 
     public static void killcurrentqemuprocess(Activity activity) {
         Terminal vterm = new Terminal(activity);
-        String env = "killall -9 ";
+        String env = "killall -15 ";
         switch (MainSettingsManager.getArch(activity)) {
             case "ARM64":
                 env += "qemu-system-aarch64";
@@ -794,10 +809,10 @@ public class VMManager {
 
     public static void killallqemuprocesses(Context context) {
         Terminal vterm = new Terminal(context);
-        vterm.executeShellCommand2("killall -9 qemu-system-i386", false, null);
-        vterm.executeShellCommand2("killall -9 qemu-system-x86_64", false, null);
-        vterm.executeShellCommand2("killall -9 qemu-system-aarch64", false, null);
-        vterm.executeShellCommand2("killall -9 qemu-system-ppc", false, null);
+        vterm.executeShellCommand2("killall -15 qemu-system-i386", false, null);
+        vterm.executeShellCommand2("killall -15 qemu-system-x86_64", false, null);
+        vterm.executeShellCommand2("killall -15 qemu-system-aarch64", false, null);
+        vterm.executeShellCommand2("killall -15 qemu-system-ppc", false, null);
     }
 
     public static void shutdownCurrentVM() {
@@ -1125,18 +1140,18 @@ public class VMManager {
         }
     }
 
-    public static void setVNCPasswordWithDelay(String _password, Activity _activity) {
+    public static void setVNCPasswordWithDelay(String _password) {
         new Thread(() -> {
             try {
                 Thread.sleep(1000);
-                setVNCPassword(_password, _activity);
+                setVNCPassword(_password);
             } catch (InterruptedException e) {
                 Log.d(TAG, "setVNCPasswordWithDelay: " + e.getMessage());
             }
         }).start();
     }
 
-    public static void setVNCPassword(String _password, Activity _activity) {
+    public static void setVNCPassword(String _password) {
         String _result = QmpClient.sendCommand(changeVNCPasswordQMPCommand(_password));
         if (isQMPCommandSuccess(_result)) {
             Log.d(TAG, "setVNCPassword: Success");
@@ -1196,19 +1211,5 @@ public class VMManager {
                 || _qemuCommand.contains("-machine q35")
                 || _qemuCommand.contains("-M pc-q35")
                 || _qemuCommand.contains("-machine pc-q35");
-    }
-
-    public static boolean checkSharedFolder() { //TODO: not work idk why
-        File folder = new File(AppConfig.sharedFolder);
-        File[] listOfFiles = folder.listFiles();
-
-        if (listOfFiles != null) {
-            for (File file : listOfFiles) {
-                if (file.isFile() && file.length() > 500 * 1024 * 1024) { // 500MB
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 }

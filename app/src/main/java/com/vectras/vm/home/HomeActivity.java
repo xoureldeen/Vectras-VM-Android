@@ -216,11 +216,13 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
             public void handleOnBackPressed() {
                 if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
                     binding.drawerLayout.closeDrawer(GravityCompat.START);
-                } else {
+                } else if (MainSettingsManager.getQuickStart(HomeActivity.this)){
                     Intent intent = new Intent(Intent.ACTION_MAIN);
                     intent.addCategory(Intent.CATEGORY_HOME);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
+                } else {
+                    finish();
                 }
             }
         });
