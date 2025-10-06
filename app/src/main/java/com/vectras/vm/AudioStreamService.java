@@ -69,7 +69,7 @@ public class AudioStreamService extends Service {
                 new Thread(() -> {
                     try {
                     LocalSocket socket = new LocalSocket();
-                    LocalSocketAddress address = new LocalSocketAddress(TermuxService.FILES_PATH + "/run/pulse/native",
+                    LocalSocketAddress address = new LocalSocketAddress(TermuxService.FILES_PATH + "run/pulse/native",
                             LocalSocketAddress.Namespace.FILESYSTEM);
 
                         socket.connect(address);

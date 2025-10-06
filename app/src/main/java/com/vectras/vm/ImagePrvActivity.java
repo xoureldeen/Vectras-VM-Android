@@ -6,7 +6,6 @@ import android.widget.ImageView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
-import com.vectras.vm.R;
 import com.vectras.vm.utils.UIUtils;
 
 public class ImagePrvActivity extends AppCompatActivity {

@@ -36,6 +36,16 @@
             android:title="@string/copy_file"
             app:icon="@drawable/file_copy_24px" />
 
+        <SwitchPreferenceCompat
+            android:id="@+id/quickstart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:defaultValue="true"
+            android:key="quickStart"
+            android:summary="@string/quick_start_description"
+            android:title="@string/quick_start"
+            app:icon="@drawable/power_settings_new_24px" />
+
         <ListPreference
             android:key="language"
             android:title="@string/language"

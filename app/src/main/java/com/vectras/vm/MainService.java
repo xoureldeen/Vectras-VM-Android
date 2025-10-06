@@ -61,18 +61,16 @@ public class MainService extends Service {
     }
 
     public static void stopService() {
-        Thread t = new Thread(new Runnable() {
-            public void run() {
-                if (service != null) {
-                    service.stopForeground(true);
-                    service.stopSelf();
+        Thread t = new Thread(() -> {
+            if (service != null) {
+                service.stopForeground(true);
+                service.stopSelf();
 
-                    //TODO: Not Work
-                    //Terminal.killQemuProcess();
-                    VMManager.killallqemuprocesses(activity);
-                }
-
+                //TODO: Not Work
+                //Terminal.killQemuProcess();
+                VMManager.killallqemuprocesses(activity);
             }
+
         });
         t.setName("HomeStartVM");
         t.start();
@@ -112,7 +110,9 @@ public class MainService extends Service {
 
     public static void startCommand(String _env, Activity _activity) {
         Terminal vterm = new Terminal(_activity);
-        vterm.executeShellCommand2("dwm", false, _activity);
+        if (Build.VERSION.SDK_INT < 34) {
+            vterm.executeShellCommand2("dwm", false, _activity);
+        }
         vterm.executeShellCommand2(_env, true, _activity);
     }
 }

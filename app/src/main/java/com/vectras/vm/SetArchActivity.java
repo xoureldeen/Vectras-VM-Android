@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.Menu;
@@ -26,11 +25,10 @@ public class SetArchActivity extends AppCompatActivity implements View.OnClickLi
 
     SetArchActivity activity;
     ActivitySetArchBinding binding;
-    private static Handler mHandler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mHandler = new Handler();
         UIUtils.edgeToEdge(this);
         binding = ActivitySetArchBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -45,9 +43,7 @@ public class SetArchActivity extends AppCompatActivity implements View.OnClickLi
         binding.bntimport.setOnClickListener(this);
 
         setSupportActionBar(binding.toolbar);
-        binding.toolbar.setNavigationOnClickListener(v -> {
-            onBackPressed();
-        });
+        binding.toolbar.setNavigationOnClickListener(v -> finish());
 
         binding.toolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.roms_store) {
@@ -62,42 +58,39 @@ public class SetArchActivity extends AppCompatActivity implements View.OnClickLi
 //            binding.buttongetcm.setText(getResources().getString(R.string.open));
 //        }
 
-        binding.bntimport.setOnDragListener(new View.OnDragListener() {
-            @Override
-            public boolean onDrag(View v, DragEvent event) {
-                Log.i("Drag", "onDrag: " + event.getAction());
-                switch (event.getAction()) {
-                    case DragEvent.ACTION_DRAG_STARTED:
-                        ClipDescription description = event.getClipDescription();
-                        if (description != null) {
-                            Log.d("DRAG", "MIME: " + description.getMimeType(0));
-                            return true; // Accept to go to event DragEvent.ACTION_DROP
-                        }
-                        return false;
+        binding.bntimport.setOnDragListener((v, event) -> {
+            Log.i("Drag", "onDrag: " + event.getAction());
+            switch (event.getAction()) {
+                case DragEvent.ACTION_DRAG_STARTED:
+                    ClipDescription description = event.getClipDescription();
+                    if (description != null) {
+                        Log.d("DRAG", "MIME: " + description.getMimeType(0));
+                        return true; // Accept to go to event DragEvent.ACTION_DROP
+                    }
+                    return false;
 
-                    case DragEvent.ACTION_DROP:
-                        ClipData clipData = event.getClipData();
-                        if (clipData != null && clipData.getItemCount() > 0) {
-                            Uri uri = clipData.getItemAt(0).getUri();
-                            String filePath = FileUtils.getFilePathFromUri(getApplicationContext(), uri);
+                case DragEvent.ACTION_DROP:
+                    ClipData clipData = event.getClipData();
+                    if (clipData != null && clipData.getItemCount() > 0) {
+                        Uri uri = clipData.getItemAt(0).getUri();
+                        String filePath = FileUtils.getFilePathFromUri(getApplicationContext(), uri);
 
-                            File file = new File(filePath);
+                        File file = new File(filePath);
 
-                            Intent intent = new Intent();
-                            intent.setClass(getApplicationContext(), CustomRomActivity.class);
-                            intent.putExtra("addromnow", "");
-                            intent.putExtra("romextra", "");
-                            intent.putExtra("romname", "");
-                            intent.putExtra("romicon", "");
-                            intent.putExtra("rompath", filePath);
-                            intent.putExtra("romfilename", file.getName());
-                            startActivity(intent);
-                            finish();
-                        }
-                        return true;
-                }
-                return true;
+                        Intent intent = new Intent();
+                        intent.setClass(getApplicationContext(), CustomRomActivity.class);
+                        intent.putExtra("addromnow", "");
+                        intent.putExtra("romextra", "");
+                        intent.putExtra("romname", "");
+                        intent.putExtra("romicon", "");
+                        intent.putExtra("rompath", filePath);
+                        intent.putExtra("romfilename", file.getName());
+                        startActivity(intent);
+                        finish();
+                    }
+                    return true;
             }
+            return true;
         });
 
     }

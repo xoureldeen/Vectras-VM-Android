@@ -25,9 +25,8 @@ import java.util.Objects;
 
 public class CqcmActivity extends AppCompatActivity {
 
-    private Intent gotoActivity = new Intent();
-    private Intent openURL = new Intent();
-    private Button buttonallow;
+    private final Intent gotoActivity = new Intent();
+    private final Intent openURL = new Intent();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +35,8 @@ public class CqcmActivity extends AppCompatActivity {
             UIUtils.edgeToEdge(this);
             setContentView(R.layout.activity_cqcm);
             UIUtils.setOnApplyWindowInsetsListener(findViewById(R.id.main));
-            buttonallow = findViewById(R.id.buttonallow);
+
+            Button buttonallow = findViewById(R.id.buttonallow);
             buttonallow.setOnClickListener(v -> {
                 if (shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                     Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
@@ -64,7 +64,7 @@ public class CqcmActivity extends AppCompatActivity {
 
     }
     private void startAdd() {
-        HashMap<String, Object> mapForCreateNewVM = new HashMap<>();
+        HashMap<String, Object> mapForCreateNewVM;
         String _map;
         String imgName = "";
         String imgIcon = "";
@@ -81,7 +81,7 @@ public class CqcmActivity extends AppCompatActivity {
         if (JSONUtils.isValidFromFile(AppConfig.romsdatajson)) {
             if (getIntent().hasExtra("content")) {
                 if (Objects.requireNonNull(getIntent().getStringExtra("content")).endsWith("}]")) {
-                    _map = Objects.requireNonNull(getIntent().getStringExtra("content")).substring((int) 0, (int)(Objects.requireNonNull(getIntent().getStringExtra("content")).length() - 1));
+                    _map = Objects.requireNonNull(getIntent().getStringExtra("content")).substring(0, Objects.requireNonNull(getIntent().getStringExtra("content")).length() - 1);
                 } else {
                     _map = Objects.requireNonNull(getIntent().getStringExtra("content"));
                 }

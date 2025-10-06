@@ -30,7 +30,7 @@
         android:title="@string/alpine_desktop"/>
     <item
         android:id="@+id/navigation_item_terminal"
-        android:icon="@drawable/round_terminal_24"
+        android:icon="@drawable/terminal_24px"
         android:title="@string/terminal"/>
     <item
         android:id="@+id/navigation_item_view_logs"
@@ -50,7 +50,7 @@
         android:title="@string/open_main_folder"/>
     <item
         android:id="@+id/navigation_item_website"
-        android:icon="@drawable/round_public_24"
+        android:icon="@drawable/language_24px"
         android:title="@string/vectras_website" />
     <item
         android:id="@+id/navigation_item_donate"

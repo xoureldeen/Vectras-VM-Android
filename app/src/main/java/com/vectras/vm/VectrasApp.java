@@ -1,52 +1,37 @@
 package com.vectras.vm;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.Application;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
-import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.HorizontalScrollView;
-import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.google.android.material.color.DynamicColors;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.PackageUtils;
-import com.vectras.vterm.Terminal;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
@@ -55,20 +40,17 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class VectrasApp extends Application {
@@ -238,13 +220,9 @@ public class VectrasApp extends Application {
 					} catch (final Throwable e) {
 						e.printStackTrace();
 						if (isRunning.get()) {
-							MAIN_HANDLER.post(new Runnable() {
-
-								@Override
-								public void run() {
-									//VectrasStatus.logError("<font color='red'>[E] >"+ mContext.getApplicationContext().toString() +e.getMessage()+"</font>");
-								}
-							});
+							MAIN_HANDLER.post(() -> {
+                                //VectrasStatus.logError("<font color='red'>[E] >"+ mContext.getApplicationContext().toString() +e.getMessage()+"</font>");
+                            });
 						} else {
 							if (e instanceof RuntimeException) {
 								throw (RuntimeException) e;
@@ -318,9 +296,9 @@ public class VectrasApp extends Application {
 				head.put("App Version", String.format("%s (%d)", versionName, versionCode));
 				head.put("Kernel", getKernel());
 				head.put("Support Abis",
-						Build.VERSION.SDK_INT >= 21 && Build.SUPPORTED_ABIS != null
-								? Arrays.toString(Build.SUPPORTED_ABIS)
-								: "unknown");
+                        Build.SUPPORTED_ABIS != null
+                                ? Arrays.toString(Build.SUPPORTED_ABIS)
+                                : "unknown");
 				head.put("Fingerprint", Build.FINGERPRINT);
 
 				StringBuilder builder = new StringBuilder();
@@ -343,7 +321,7 @@ public class VectrasApp extends Application {
 				String time = DATE_FORMAT.format(new Date());
 				File file = new File(mCrashDir, "crash_" + time + ".txt");
 				try {
-					write(file, log.getBytes("UTF-8"));
+					write(file, log.getBytes(StandardCharsets.UTF_8));
 				} catch (Throwable e) {
 					e.printStackTrace();
 				}
@@ -434,6 +412,7 @@ public class VectrasApp extends Application {
 	private void setupAppConfig(Context _context) {
 		AppConfig.vectrasVersion = PackageUtils.getThisVersionName(_context);
 		AppConfig.vectrasVersionCode = PackageUtils.getThisVersionCode(_context);
+		AppConfig.internalDataDirPath = getFilesDir().getPath() + "/";
 		AppConfig.basefiledir = AppConfig.datadirpath(_context) + "/.qemu/";
 		AppConfig.maindirpath = FileUtils.getExternalFilesDirectory(_context).getPath() + "/";
 		AppConfig.sharedFolder = AppConfig.maindirpath + "SharedFolder/";

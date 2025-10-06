@@ -971,7 +971,19 @@ public class MainSettingsManager extends AppCompatActivity
 
     public static Boolean getForceRefeshVNCDisplay(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getBoolean("forceRefeshVNCDisplay", false);
+        return prefs.getBoolean("forceRefeshVNCDisplay", true);
+    }
+
+    public static void setQuickStart(Context context, Boolean _boolean) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putBoolean("quickStart", _boolean);
+        edit.apply();
+    }
+
+    public static Boolean getQuickStart(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean("quickStart", true);
     }
 
 }

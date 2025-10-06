@@ -119,11 +119,11 @@ public class Terminal {
                         "-b", "/dev",
                         "-b", "/proc",
                         "-b", "/sys",
-                        "-b", "/data/data/com.vectras.vm/files/distro/root:/dev/shm",
+                        "-b", AppConfig.internalDataDirPath + "distro/root:/dev/shm",
                         "-b", "/sdcard",
                         "-b", "/storage",
                         "-b", "/data",
-                        "-b", "/data/data/com.vectras.vm/files/usr/tmp:/tmp",
+                        "-b", AppConfig.internalDataDirPath + "usr/tmp:/tmp",
                         "-w", "/root",
                         "/bin/sh",
                         "--login"
@@ -215,11 +215,11 @@ public class Terminal {
                         "-b", "/dev",
                         "-b", "/proc",
                         "-b", "/sys",
-                        "-b", "/data/data/com.vectras.vm/files/distro/root:/dev/shm",
+                        "-b", AppConfig.internalDataDirPath + "distro/root:/dev/shm",
                         "-b", "/sdcard",
                         "-b", "/storage",
                         "-b", "/data",
-                        "-b", "/data/data/com.vectras.vm/files/usr/tmp:/tmp",
+                        "-b", AppConfig.internalDataDirPath + "usr/tmp:/tmp",
                         "-w", "/root",
                         "/bin/sh",
                         "--login"// The shell to execute inside PRoot
@@ -317,11 +317,11 @@ public class Terminal {
                     "-b", "/dev",
                     "-b", "/proc",
                     "-b", "/sys",
-                    "-b", "/data/data/com.vectras.vm/files/distro/root:/dev/shm",
+                    "-b", AppConfig.internalDataDirPath + "distro/root:/dev/shm",
                     "-b", "/sdcard",
                     "-b", "/storage",
                     "-b", "/data",
-                    "-b", "/data/data/com.vectras.vm/files/usr/tmp:/tmp",
+                    "-b", AppConfig.internalDataDirPath + "usr/tmp:/tmp",
                     "-w", "/root",
                     "/bin/sh",
                     "--login"
@@ -397,11 +397,11 @@ public class Terminal {
                         "-b", "/dev",
                         "-b", "/proc",
                         "-b", "/sys",
-                        "-b", "/data/data/com.vectras.vm/files/distro/root:/dev/shm",
+                        "-b", AppConfig.internalDataDirPath + "distro/root:/dev/shm",
                         "-b", "/sdcard",
                         "-b", "/storage",
                         "-b", "/data",
-                        "-b", "/data/data/com.vectras.vm/files/usr/tmp:/tmp",
+                        "-b", AppConfig.internalDataDirPath + "usr/tmp:/tmp",
                         "-w", "/root",
                         "/bin/sh",
                         "--login"
@@ -513,11 +513,11 @@ public class Terminal {
                         "-b", "/dev",
                         "-b", "/proc",
                         "-b", "/sys",
-                        "-b", "/data/data/com.vectras.vm/files/distro/root:/dev/shm",
+                        "-b", AppConfig.internalDataDirPath + "distro/root:/dev/shm",
                         "-b", "/sdcard",
                         "-b", "/storage",
                         "-b", "/data",
-                        "-b", "/data/data/com.vectras.vm/files/usr/tmp:/tmp",
+                        "-b", AppConfig.internalDataDirPath + "usr/tmp:/tmp",
                         "-w", "/root",
                         "/bin/sh",
                         "--login"
@@ -558,7 +558,7 @@ public class Terminal {
                 errors.append(Log.getStackTraceString(e));
             } finally {
                 // Dismiss ProgressDialog on the main thread
-                new Handler(Looper.getMainLooper()).post(() -> progressDialog.dismiss());
+                new Handler(Looper.getMainLooper()).post(progressDialog::dismiss);
 
                 // Return the output and errors via callback on the main thread
                 String finalOutput = output.toString();

@@ -804,14 +804,14 @@ public class MainActivity extends AppCompatActivity {
 
         VMManager.lastQemuCommand = env;
 
-        if (VMManager.isThisVMRunning(activity, itemExtra, itemPath)) {
-            Toast.makeText(activity, "This VM is already running.", Toast.LENGTH_LONG).show();
-            if (MainSettingsManager.getVmUi(activity).equals("VNC"))
-                activity.startActivity(new Intent(activity, MainVNCActivity.class));
-            else if (MainSettingsManager.getVmUi(activity).equals("X11"))
-                activity.launchX11(false);
-            return;
-        }
+//        if (VMManager.isThisVMRunning(activity, itemExtra, itemPath)) {
+//            Toast.makeText(activity, "This VM is already running.", Toast.LENGTH_LONG).show();
+//            if (MainSettingsManager.getVmUi(activity).equals("VNC"))
+//                activity.startActivity(new Intent(activity, MainVNCActivity.class));
+//            else if (MainSettingsManager.getVmUi(activity).equals("X11"))
+//                activity.launchX11(false);
+//            return;
+//        }
 
         if (AppConfig.getSetupFiles().contains("arm") && !AppConfig.getSetupFiles().contains("arm64")) {
             if (env.contains("tcg,thread=multi")) {

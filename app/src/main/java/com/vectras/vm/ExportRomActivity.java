@@ -1,24 +1,16 @@
 package com.vectras.vm;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.gson.Gson;
@@ -41,7 +33,7 @@ import java.util.TimerTask;
 
 public class ExportRomActivity extends AppCompatActivity {
 
-    private Timer _timer = new Timer();
+    private final Timer _timer = new Timer();
     private TimerTask timerTask;
     private LinearLayout linearone;
     private LinearLayout linearload;
@@ -61,9 +53,6 @@ public class ExportRomActivity extends AppCompatActivity {
     public String cdromfile = "";
     private int folderSize = 0;
     private int zipFileSize = 0;
-    private double zipprogress = 0;
-    private double zipprogresslast = 0;
-    private double folderSizeMB = 0;
     private LinearProgressIndicator progressBar;
     private TextView textviewsettingup;
     private int compressionProgress = 0;
@@ -89,34 +78,21 @@ public class ExportRomActivity extends AppCompatActivity {
 
         Button buttondone;
         buttondone = findViewById(R.id.materialbutton1);
-        buttondone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editauthor.setEnabled(false);
-                editdesc.setEnabled(false);
-                editauthor.setEnabled(true);
-                editdesc.setEnabled(true);
-                startCreateCVBI();
-            }
+        buttondone.setOnClickListener(v -> {
+            editauthor.setEnabled(false);
+            editdesc.setEnabled(false);
+            editauthor.setEnabled(true);
+            editdesc.setEnabled(true);
+            startCreateCVBI();
         });
 
         Button buttonexit;
         buttonexit = findViewById(R.id.buttonexit);
-        buttonexit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        buttonexit.setOnClickListener(v -> finish());
 
         Button buttonexit2;
         buttonexit2 = findViewById(R.id.buttonexit2);
-        buttonexit2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        buttonexit2.setOnClickListener(v -> finish());
         data= getSharedPreferences("data", Activity.MODE_PRIVATE);
 
         editauthor.setText(data.getString("author", ""));
@@ -126,8 +102,8 @@ public class ExportRomActivity extends AppCompatActivity {
     @Override
     public void onPause() {
         super.onPause();
-        data.edit().putString("author", editauthor.getText().toString()).commit();
-        data.edit().putString("desc", editdesc.getText().toString()).commit();
+        data.edit().putString("author", editauthor.getText().toString()).apply();
+        data.edit().putString("desc", editdesc.getText().toString()).apply();
     }
 
     private void UIControler(int _status, String _content) {
@@ -138,7 +114,7 @@ public class ExportRomActivity extends AppCompatActivity {
             linearone.setVisibility(View.GONE);
             linearload.setVisibility(View.GONE);
             lineardone.setVisibility(View.VISIBLE);
-            textviewfilename.setText(getResources().getString(R.string.saved_in) + " " +_content);
+            textviewfilename.setText(getString(R.string.saved_in) + " " + _content);
         } else if (_status == 2) {
             linearone.setVisibility(View.GONE);
             linearload.setVisibility(View.GONE);
@@ -153,7 +129,9 @@ public class ExportRomActivity extends AppCompatActivity {
 
         File vDir = new File(AppConfig.maindirpath + "cvbi");
         if (!vDir.exists()) {
-            vDir.mkdirs();
+            if(!vDir.mkdirs()) {
+                UIControler(2, getString(R.string.could_not_create_dir_to_save_cvbi_content));
+            }
         }
 
         listmapForGetData.clear();
@@ -161,7 +139,7 @@ public class ExportRomActivity extends AppCompatActivity {
 
         listmapForGetData = new Gson().fromJson(FileUtils.readAFile(AppConfig.romsdatajson), new TypeToken<ArrayList<HashMap<String, Object>>>(){}.getType());
 
-        getRomPath = AppConfig.vmFolder + Objects.requireNonNull(listmapForGetData.get(pendingPosition).get("vmID")).toString() + "/";
+        getRomPath = AppConfig.vmFolder + Objects.requireNonNull(listmapForGetData.get(pendingPosition).get("vmID")) + "/";
 
         if (listmapForGetData.get(pendingPosition).containsKey("imgName")) {
             mapForGetData.put("title", Objects.requireNonNull(listmapForGetData.get(pendingPosition).get("imgName")).toString());
@@ -235,19 +213,16 @@ public class ExportRomActivity extends AppCompatActivity {
         timerTask = new TimerTask() {
             @Override
             public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        zipFileSize = FileUtils.getFileSize(FileUtils.getExternalFilesDirectory(getApplicationContext()).getPath() + "/cvbi/" + Objects.requireNonNull(mapForGetData.get("title")).toString() + ".cvbi");
-                        compressionProgress = ZipUtils.getCompressionProgress(folderSize, zipFileSize);
-                        if (compressionProgress > 0) {
-                            if (compressionProgress > 98) {
-                                progressBar.setIndeterminate(true);
-                            } else {
-                                progressBar.setProgressCompat(compressionProgress, true);
-                            }
-                            textviewsettingup.setText(getResources().getString(R.string.about) + " " + String.valueOf(ZipUtils.getRemainingCompressionTime(folderSize, zipFileSize)) + " " + getResources().getString(R.string.seconds_left));
+                runOnUiThread(() -> {
+                    zipFileSize = FileUtils.getFileSize(FileUtils.getExternalFilesDirectory(getApplicationContext()).getPath() + "/cvbi/" + Objects.requireNonNull(mapForGetData.get("title")) + ".cvbi");
+                    compressionProgress = ZipUtils.getCompressionProgress(folderSize, zipFileSize);
+                    if (compressionProgress > 0) {
+                        if (compressionProgress > 98) {
+                            progressBar.setIndeterminate(true);
+                        } else {
+                            progressBar.setProgressCompat(compressionProgress, true);
                         }
+                        textviewsettingup.setText(getResources().getString(R.string.about) + " " + ZipUtils.getRemainingCompressionTime(folderSize, zipFileSize) + " " + getResources().getString(R.string.seconds_left));
                     }
                 });
             }
@@ -265,73 +240,64 @@ public class ExportRomActivity extends AppCompatActivity {
                                 new FileSource("/" + new File(cdromfile).getName(), new File(cdromfile)),
                                 new FileSource("/" + new File(getApplicationContext().getExternalFilesDir("data") + "/rom-data.json").getName(), new File(getApplicationContext().getExternalFilesDir("data") + "/rom-data.json"))
                         };
-                        ZipUtil.pack(addedEntries, new File(FileUtils.getExternalFilesDirectory(getApplicationContext()).getPath() + "/cvbi/" + Objects.requireNonNull(mapForGetData.get("title")).toString() + ".cvbi"));
+                        ZipUtil.pack(addedEntries, new File(FileUtils.getExternalFilesDirectory(getApplicationContext()).getPath() + "/cvbi/" + Objects.requireNonNull(mapForGetData.get("title")) + ".cvbi"));
                     } else if ((!iconfile.isEmpty()) && (!diskfile.isEmpty())) {
                         ZipEntrySource[] addedEntries = new ZipEntrySource[]{
                                 new FileSource("/" + new File(diskfile).getName(), new File(diskfile)),
                                 new FileSource("/" + new File(iconfile).getName(), new File(iconfile)),
                                 new FileSource("/" + new File(getApplicationContext().getExternalFilesDir("data") + "/rom-data.json").getName(), new File(getApplicationContext().getExternalFilesDir("data") + "/rom-data.json"))
                         };
-                        ZipUtil.pack(addedEntries, new File(FileUtils.getExternalFilesDirectory(getApplicationContext()).getPath() + "/cvbi/" + Objects.requireNonNull(mapForGetData.get("title")).toString() + ".cvbi"));
+                        ZipUtil.pack(addedEntries, new File(FileUtils.getExternalFilesDirectory(getApplicationContext()).getPath() + "/cvbi/" + Objects.requireNonNull(mapForGetData.get("title")) + ".cvbi"));
                     } else if ((!iconfile.isEmpty()) && (!cdromfile.isEmpty())) {
                         ZipEntrySource[] addedEntries = new ZipEntrySource[]{
                                 new FileSource("/" + new File(iconfile).getName(), new File(iconfile)),
                                 new FileSource("/" + new File(cdromfile).getName(), new File(cdromfile)),
                                 new FileSource("/" + new File(getApplicationContext().getExternalFilesDir("data") + "/rom-data.json").getName(), new File(getApplicationContext().getExternalFilesDir("data") + "/rom-data.json"))
                         };
-                        ZipUtil.pack(addedEntries, new File(FileUtils.getExternalFilesDirectory(getApplicationContext()).getPath() + "/cvbi/" + Objects.requireNonNull(mapForGetData.get("title")).toString() + ".cvbi"));
+                        ZipUtil.pack(addedEntries, new File(FileUtils.getExternalFilesDirectory(getApplicationContext()).getPath() + "/cvbi/" + Objects.requireNonNull(mapForGetData.get("title")) + ".cvbi"));
                     } else if ((!diskfile.isEmpty()) && (!cdromfile.isEmpty())) {
                         ZipEntrySource[] addedEntries = new ZipEntrySource[]{
                                 new FileSource("/" + new File(diskfile).getName(), new File(diskfile)),
                                 new FileSource("/" + new File(cdromfile).getName(), new File(cdromfile)),
                                 new FileSource("/" + new File(getApplicationContext().getExternalFilesDir("data") + "/rom-data.json").getName(), new File(getApplicationContext().getExternalFilesDir("data") + "/rom-data.json"))
                         };
-                        ZipUtil.pack(addedEntries, new File(FileUtils.getExternalFilesDirectory(getApplicationContext()).getPath() + "/cvbi/" + Objects.requireNonNull(mapForGetData.get("title")).toString() + ".cvbi"));
+                        ZipUtil.pack(addedEntries, new File(FileUtils.getExternalFilesDirectory(getApplicationContext()).getPath() + "/cvbi/" + Objects.requireNonNull(mapForGetData.get("title")) + ".cvbi"));
                     } else if (!iconfile.isEmpty()) {
                         ZipEntrySource[] addedEntries = new ZipEntrySource[]{
                                 new FileSource("/" + new File(iconfile).getName(), new File(iconfile)),
                                 new FileSource("/" + new File(getApplicationContext().getExternalFilesDir("data") + "/rom-data.json").getName(), new File(getApplicationContext().getExternalFilesDir("data") + "/rom-data.json"))
                         };
-                        ZipUtil.pack(addedEntries, new File(FileUtils.getExternalFilesDirectory(getApplicationContext()).getPath() + "/cvbi/" + Objects.requireNonNull(mapForGetData.get("title")).toString() + ".cvbi"));
+                        ZipUtil.pack(addedEntries, new File(FileUtils.getExternalFilesDirectory(getApplicationContext()).getPath() + "/cvbi/" + Objects.requireNonNull(mapForGetData.get("title")) + ".cvbi"));
                     } else if (!diskfile.isEmpty()) {
                         ZipEntrySource[] addedEntries = new ZipEntrySource[]{
                                 new FileSource("/" + new File(diskfile).getName(), new File(diskfile)),
                                 new FileSource("/" + new File(getApplicationContext().getExternalFilesDir("data") + "/rom-data.json").getName(), new File(getApplicationContext().getExternalFilesDir("data") + "/rom-data.json"))
                         };
-                        ZipUtil.pack(addedEntries, new File(FileUtils.getExternalFilesDirectory(getApplicationContext()).getPath() + "/cvbi/" + Objects.requireNonNull(mapForGetData.get("title")).toString() + ".cvbi"));
+                        ZipUtil.pack(addedEntries, new File(FileUtils.getExternalFilesDirectory(getApplicationContext()).getPath() + "/cvbi/" + Objects.requireNonNull(mapForGetData.get("title")) + ".cvbi"));
                     } else if (!cdromfile.isEmpty()) {
                         ZipEntrySource[] addedEntries = new ZipEntrySource[]{
                                 new FileSource("/" + new File(cdromfile).getName(), new File(cdromfile)),
                                 new FileSource("/" + new File(getApplicationContext().getExternalFilesDir("data") + "/rom-data.json").getName(), new File(getApplicationContext().getExternalFilesDir("data") + "/rom-data.json"))
                         };
-                        ZipUtil.pack(addedEntries, new File(FileUtils.getExternalFilesDirectory(getApplicationContext()).getPath() + "/cvbi/" + Objects.requireNonNull(mapForGetData.get("title")).toString() + ".cvbi"));
+                        ZipUtil.pack(addedEntries, new File(FileUtils.getExternalFilesDirectory(getApplicationContext()).getPath() + "/cvbi/" + Objects.requireNonNull(mapForGetData.get("title")) + ".cvbi"));
                     } else {
                         ZipEntrySource[] addedEntries = new ZipEntrySource[]{
                                 new FileSource("/" + new File(getApplicationContext().getExternalFilesDir("data") + "/rom-data.json").getName(), new File(getApplicationContext().getExternalFilesDir("data") + "/rom-data.json"))
                         };
-                        ZipUtil.pack(addedEntries, new File(FileUtils.getExternalFilesDirectory(getApplicationContext()).getPath() + "/cvbi/" + Objects.requireNonNull(mapForGetData.get("title")).toString() + ".cvbi"));
+                        ZipUtil.pack(addedEntries, new File(FileUtils.getExternalFilesDirectory(getApplicationContext()).getPath() + "/cvbi/" + Objects.requireNonNull(mapForGetData.get("title")) + ".cvbi"));
                     }
 
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            UIControler(1, FileUtils.getExternalFilesDirectory(getApplicationContext()).getPath() + "/cvbi/" + Objects.requireNonNull(mapForGetData.get("title")).toString() + ".cvbi");
-                            if (timerTask != null) {
-                                timerTask.cancel();
-                            }
+                    runOnUiThread(() -> {
+                        UIControler(1, FileUtils.getExternalFilesDirectory(getApplicationContext()).getPath() + "/cvbi/" + Objects.requireNonNull(mapForGetData.get("title")) + ".cvbi");
+                        if (timerTask != null) {
+                            timerTask.cancel();
                         }
                     });
                 } catch (Exception e) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            UIControler(2, e.toString());
-                        }
-                    });
+                    runOnUiThread(() -> UIControler(2, e.toString()));
                 }
             }
         };
         t.start();
-        return;
     }
 }

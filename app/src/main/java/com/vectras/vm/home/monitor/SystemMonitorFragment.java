@@ -198,7 +198,7 @@ public class SystemMonitorFragment extends Fragment {
         binding.tvQemuarch.setText(getString(R.string.arch) + " " + currentArch + ".");
 
         executor.execute(() -> {
-            String result = Terminal.executeShellCommandWithResult("ps -eo command", requireActivity());
+            String result = Terminal.executeShellCommandWithResult("ps -e command", requireActivity());
             requireActivity().runOnUiThread(() -> {
                 if (!result.isEmpty()) {
                     switch (currentArch) {
