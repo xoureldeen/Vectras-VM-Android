@@ -1009,6 +1009,22 @@
         "verified": true
     },
     {
+        "rom_name":"Ubuntu MATE 14.04 LTS",
+        "rom_icon":"https://ubuntu-mate.org/images/get-involved/logo-guidelines/Wheel_tag_coloured.png",
+        "rom_url":"https://youtu.be/pwg40Cnmg_I",
+        "rom_path":"Ubuntu MATE 14.04 LTS.cvbi",
+        "rom_avail":true,
+        "rom_size":"Trusty Tahr",
+        "rom_arch":"X86_64",
+        "rom_kernel":"linux",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nUbuntu MATE is a free and open-source Linux distribution and an official derivative of Ubuntu. Its main differentiation from Ubuntu is that it uses the MATE desktop environment as its default user interface (based on GNOME 2), instead of the GNOME desktop environment that is the default user interface for Ubuntu.",
+        "file_size": "5 GB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
+    },
+    {
         "rom_name":"Android 1.6 R2",
         "rom_icon":"https://static.wikia.nocookie.net/android/images/f/f4/Androiddonut.jpg/revision/latest?cb=20111216213427",
         "rom_url":"https://youtu.be/x4RYF0iOncs",
