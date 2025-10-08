@@ -177,7 +177,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                     mmap.clear();
                     mmap = new Gson().fromJson(contentJSON, new TypeToken<HashMap<String, Object>>() {
                     }.getType());
-                    if (mmap.containsKey("arm64") && mmap.containsKey("x86_64")) {
+                    if (mmap.containsKey("arm64-v8a") && mmap.containsKey("x86_64")) {
                         if (Build.SUPPORTED_ABIS[0].contains("arm64")) {
                             bootstrapfilelink = Objects.requireNonNull(mmap.get("arm64-v8a")).toString();
                         } else {
