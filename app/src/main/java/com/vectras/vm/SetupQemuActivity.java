@@ -177,11 +177,11 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                     mmap.clear();
                     mmap = new Gson().fromJson(contentJSON, new TypeToken<HashMap<String, Object>>() {
                     }.getType());
-                    if (mmap.containsKey("arm64") && mmap.containsKey("x86_64")) {
+                    if (mmap.containsKey("arm64-v8a") && mmap.containsKey("x86_64")) {
                         if (Build.SUPPORTED_ABIS[0].contains("arm64")) {
-                            bootstrapfilelink = mmap.get("arm64").toString();
+                            bootstrapfilelink = Objects.requireNonNull(mmap.get("arm64-v8a")).toString();
                         } else {
-                            bootstrapfilelink = mmap.get("x86_64").toString();
+                            bootstrapfilelink = Objects.requireNonNull(mmap.get("x86_64")).toString();
                         }
                         downloadBootstrapsCommand = " aria2c -x 4 -o setup.tar.gz " + bootstrapfilelink;
                         if (!bootstrapfilelink.isEmpty()) {
@@ -608,6 +608,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                 " apk add qemu-audio-sdl pulseaudio;" +
                 " echo export PULSE_SERVER=127.0.0.1 >> /etc/profile;" +
                 " mkdir -p ~/.vnc && echo -e \"555555\\n555555\" | vncpasswd -f > ~/.vnc/passwd && chmod 0600 ~/.vnc/passwd;" +
+                " chmod 775 /usr/local/bin/*;" +
                 " echo \"installation successful! xssFjnj58Id\"";
 
         executeShellCommand(cmd);
@@ -664,6 +665,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                 " apk add qemu-audio-sdl pulseaudio;" +
                 " echo export PULSE_SERVER=127.0.0.1 >> /etc/profile;" +
                 " mkdir -p ~/.vnc && echo -e \"555555\\n555555\" | vncpasswd -f > ~/.vnc/passwd && chmod 0600 ~/.vnc/passwd;" +
+                " chmod 775 /usr/local/bin/*;" +
                 " echo \"installation successful! xssFjnj58Id\"";
 
         executeShellCommand(cmd);
@@ -741,51 +743,43 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
             ProgressBar loading = progressBar;
             String abi = Build.SUPPORTED_ABIS[0];
             if (selectedFilePath.toString().endsWith(abi + ".tar.gz")) {
+                simpleSetupUIControler(1);
                 loading.setVisibility(View.VISIBLE);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        FileInputStream File = null;
+                new Thread(() -> {
+                    FileInputStream File;
+                    try {
+                        File = (FileInputStream) getContentResolver().openInputStream(content_describer);
+                    } catch (FileNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                    try {
                         try {
-                            File = (FileInputStream) getContentResolver().openInputStream(content_describer);
-                        } catch (FileNotFoundException e) {
-                            throw new RuntimeException(e);
-                        }
-                        try {
+                            OutputStream out = new FileOutputStream(tarPath);
                             try {
-                                OutputStream out = new FileOutputStream(new File(tarPath));
-                                try {
-                                    // Transfer bytes from in to out
-                                    byte[] buf = new byte[1024];
-                                    int len;
-                                    while ((len = File.read(buf)) > 0) {
-                                        out.write(buf, 0, len);
-                                    }
-                                } finally {
-                                    out.close();
+                                // Transfer bytes from in to out
+                                byte[] buf = new byte[1024];
+                                int len;
+                                while ((len = File.read(buf)) > 0) {
+                                    out.write(buf, 0, len);
                                 }
                             } finally {
-                                Runnable runnable = new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        loading.setVisibility(GONE);
-                                        setupVectras();
-                                        MainSettingsManager.setsetUpWithManualSetupBefore(SetupQemuActivity.this, true);
-                                    }
-                                };
-                                activity.runOnUiThread(runnable);
-                                File.close();
+                                out.close();
                             }
-                        } catch (IOException e) {
-                            Runnable runnable = new Runnable() {
-                                @Override
-                                public void run() {
-                                    loading.setVisibility(GONE);
-                                    UIAlert(activity, e.toString(), "error");
-                                }
+                        } finally {
+                            Runnable runnable = () -> {
+                                loading.setVisibility(GONE);
+                                setupVectras();
+                                MainSettingsManager.setsetUpWithManualSetupBefore(SetupQemuActivity.this, true);
                             };
                             activity.runOnUiThread(runnable);
+                            File.close();
                         }
+                    } catch (IOException e) {
+                        Runnable runnable = () -> {
+                            loading.setVisibility(GONE);
+                            UIAlert(activity, e.toString(), "error");
+                        };
+                        activity.runOnUiThread(runnable);
                     }
                 }).start();
             } else {

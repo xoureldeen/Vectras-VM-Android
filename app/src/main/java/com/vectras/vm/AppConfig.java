@@ -19,10 +19,10 @@ import java.util.Objects;
 public class AppConfig {
 
     // App Config
-    public static String vectrasVersion = "2.9.5";
+    public static String vectrasVersion = "3.0.0";
     public static int vectrasVersionCode = 21;
     public static String vectrasWebsite = "https://vectras.vercel.app/";
-    public static String vectrasWebsiteRaw = "https://raw.githubusercontent.com/xoureldeen/Vectras-VM-Android/refs/heads/master/web/";
+    public static String vectrasWebsiteRaw = "https://raw.githubusercontent.com/AnBui2004/Vectras-VM-Emu-Android/refs/heads/master/web/";
     public static String bootstrapfileslink = vectrasWebsiteRaw + "/data/setupfiles.json";
     public static String vectrasHelp = vectrasWebsite + "how.html";
     public static String community = vectrasWebsite + "community.html";
@@ -78,8 +78,8 @@ public class AppConfig {
     public static String pendingCommand = "";
 
     public static String neededPkgs = "aria2 tar dwm xfce4-terminal libslirp libslirp-dev pulseaudio-dev glib-dev pixman-dev zlib-dev spice-dev" +
-            " libusbredirparser usbredir-dev libiscsi-dev sdl2 sdl2-dev libepoxy-dev virglrenderer-dev rdma-core" +
-            " libusb ncurses-libs curl libnfs sdl2 gtk+3.0 fuse libpulse libseccomp jack pipewire liburing" +
+            " libusbredirparser usbredir-dev libiscsi-dev sdl2 sdl2-dev sdl2_image-dev libepoxy-dev virglrenderer-dev rdma-core" +
+            " libusb libaio ncurses-libs curl libnfs sdl2 gtk+3.0 fuse libpulse libseccomp jack pipewire liburing" +
             " mesa-dri-gallium mesa-vulkan-swrast vulkan-loader mesa-utils mesa-egl mesa-gbm mesa-vulkan-ati mesa-vulkan-broadcom mesa-vulkan-freedreno mesa-vulkan-panfrost";
 
     public static String neededPkgs32bit = "aria2 tar dwm xfce4-terminal libslirp libslirp-dev pulseaudio-dev glib-dev pixman-dev zlib-dev spice-dev" +
