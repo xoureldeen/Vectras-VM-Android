@@ -22,7 +22,7 @@ public class AppConfig {
     public static String vectrasVersion = "2.9.5";
     public static int vectrasVersionCode = 21;
     public static String vectrasWebsite = "https://vectras.vercel.app/";
-    public static String vectrasWebsiteRaw = "https://raw.githubusercontent.com/xoureldeen/Vectras-VM-Android/refs/heads/master/web/";
+    public static String vectrasWebsiteRaw = "https://raw.githubusercontent.com/AnBui2004/Vectras-VM-Emu-Android/refs/heads/master/web/";
     public static String bootstrapfileslink = vectrasWebsiteRaw + "/data/setupfiles.json";
     public static String vectrasHelp = vectrasWebsite + "how.html";
     public static String community = vectrasWebsite + "community.html";
