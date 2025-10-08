@@ -189,7 +189,7 @@ public class SystemMonitorFragment extends Fragment {
         String command = "qemu-system-x86_64 --version";
         new Terminal(requireActivity()).extractQemuVersion(command, false, requireActivity(), (output, errors) -> {
             if (errors.isEmpty()) {
-                binding.tvQemuversion.setText(getString(R.string.version) + " " + (output.equals("8.2.1") ? output + " - 3dfx" : getString(R.string.unknow)) + ".");
+                binding.tvQemuversion.setText(getString(R.string.version) + " " + (output.equals("8.2.1") || output.equals("9.2.2") ? output + " - 3dfx" : getString(R.string.unknow)) + ".");
             } else {
                 Log.e(TAG, "Errors: " + errors);
             }
