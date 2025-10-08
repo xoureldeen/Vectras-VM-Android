@@ -132,7 +132,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
         new Terminal(this).extractQemuVersion(command, false, this, (output, errors) -> {
             if (errors.isEmpty()) {
                 String versionStr = "Unknown";
-                if (output.equals("8.2.1"))
+                if (output.equals("8.2.1") || output.equals("9.2.2"))
                     versionStr = output + " - 3dfx";
                 Log.d(TAG, "QEMU Version: " + versionStr);
                 qemuVersion.setText(versionStr);

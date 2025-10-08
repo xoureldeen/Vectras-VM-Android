@@ -19,7 +19,7 @@ import java.util.Objects;
 public class AppConfig {
 
     // App Config
-    public static String vectrasVersion = "2.9.5";
+    public static String vectrasVersion = "3.0.0";
     public static int vectrasVersionCode = 21;
     public static String vectrasWebsite = "https://vectras.vercel.app/";
     public static String vectrasWebsiteRaw = "https://raw.githubusercontent.com/AnBui2004/Vectras-VM-Emu-Android/refs/heads/master/web/";
