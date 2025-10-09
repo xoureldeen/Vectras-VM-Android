@@ -16,11 +16,11 @@ import android.content.ClipboardManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +46,7 @@ import com.vectras.vm.databinding.ActivitySetupQemuBinding;
 import com.vectras.vm.home.HomeActivity;
 import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.DialogUtils;
+import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.JSONUtils;
 import com.vectras.vm.utils.ListUtils;
 import com.vectras.vm.utils.UIUtils;
@@ -58,6 +59,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -101,7 +103,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
     private String contentJSON = "";
     private HashMap<String, Object> mmap = new HashMap<>();
     private String bootstrapfilelink = "";
-    private ArrayList<HashMap<String, String>> listmapForSelectMirrors = new ArrayList<>();
+    private final ArrayList<HashMap<String, String>> listmapForSelectMirrors = new ArrayList<>();
     private String selectedMirrorCommand = "echo ";
     private String selectedMirrorLocation = "";
     private String downloadBootstrapsCommand = "";
@@ -213,38 +215,44 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         File distroDir = new File(filesDir + "/distro");
         File binDir = new File(distroDir + "/bin");
         if (!binDir.exists()) {
-            extractBootstraps();
+            extractSystemFiles("bootstrap", "");
+            extractSystemFiles("alpine", "distro");
 
         }
         setupOnClick();
     }
 
-    public void extractBootstraps() {
+    public void extractSystemFiles(String fromAsset, String extractTo) {
+        String randomFileName = VMManager.startRamdomVMID();
         String filesDir = getFilesDir().getAbsolutePath();
         String abi = getDeviceAbi();
-        String assetPath = "bootstrap/" + abi + ".tar";
         //String apkLoaderAssetPath = "bootstrap/loader.apk";
-        String extractedFilePath = filesDir + "/" + abi + ".tar";
+        String assetPath = fromAsset + "/" + abi + ".tar";
+        String extractedFilePath = filesDir + "/" + randomFileName + ".tar";
         //String apkLoaderextractedFilePath = TermuxService.PREFIX_PATH + "/libexec/termux-x11/loader.apk";
+        File destDir = new File(filesDir + "/" + extractTo);
+        if (!destDir.exists()) destDir.mkdir();
 
         ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Extracting data...");
         progressDialog.setCancelable(false);
         progressDialog.show();
 
-        new AsyncTask<Void, Void, Boolean>() {
-            String errorMessage = null;
+        new Thread(() -> {
+            boolean isCompleted;
+            String errorMessage = "";
 
-            @Override
-            protected Boolean doInBackground(Void... voids) {
-                // Step 1: Copy asset to filesDir
-                if (!copyAssetToFile(assetPath, extractedFilePath)) {
-                    errorMessage = "Failed to copy asset file.";
-                    return false;
-                }
+            // Step 1: Copy asset to filesDir
+            if (!copyAssetToFile(assetPath, extractedFilePath)) {
+                errorMessage = "Failed to copy asset file.";
+                isCompleted = false;
+            } else {
+                isCompleted = true;
+            }
 
-                // Step 2: Run tar extraction
-                String[] cmdline = {"tar", "xf", extractedFilePath, "-C", filesDir};
+            // Step 2: Run tar extraction
+            if (isCompleted) {
+                String[] cmdline = {"tar", "xf", extractedFilePath, "-C", filesDir + "/" + extractTo};
                 Process process = null;
                 try {
                     process = Runtime.getRuntime().exec(cmdline);
@@ -268,12 +276,11 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                                 errorOutput.toString().isEmpty()
                                         ? "Unknown error"
                                         : errorOutput.toString();
-                        return false;
+                        isCompleted = false;
                     }
-                    return true;
                 } catch (IOException | InterruptedException e) {
                     errorMessage = e.getMessage();
-                    return false;
+                    isCompleted = false;
                 } finally {
                     if (process != null) {
                         process.destroy();
@@ -285,24 +292,43 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                 }
             }
 
-            @Override
-            protected void onPostExecute(Boolean success) {
+            boolean finalIsCompleted = isCompleted;
+            String finalErrorMessage = errorMessage;
+            runOnUiThread(() -> {
                 progressDialog.dismiss();
-                if (success) {
+                if (finalIsCompleted) {
                     Toast.makeText(
                                     getApplicationContext(),
                                     R.string.extraction_complete,
                                     Toast.LENGTH_SHORT)
                             .show();
+
+                    if (fromAsset.equals("alpine")) {
+                        File rootDir = new File(filesDir + "/distro/root");
+                        if (!rootDir.exists()) rootDir.mkdir();
+
+                        File resolv = new File(filesDir + "/distro/etc/resolv.conf");
+                        resolv.getParentFile().mkdirs();
+                        try (BufferedWriter writer = new BufferedWriter(new FileWriter(resolv))) {
+                            writer.write("nameserver 1.1.1.1\n");
+                            writer.write("nameserver 1.0.0.1\n");
+                        } catch (IOException e) {
+                            Log.e(TAG, "resolv: ", e);
+                        }
+
+                    }
                 } else {
                     new AlertDialog.Builder(activity)
                             .setTitle("Extraction Failed")
-                            .setMessage("Error: " + errorMessage)
+                            .setMessage("Error: " + finalErrorMessage)
                             .setPositiveButton("OK", null)
                             .show();
                 }
-            }
-        }.execute();
+
+                File extractedTarFile = new File(extractedFilePath);
+                if (extractedTarFile.exists()) extractedTarFile.delete();
+            });
+        }).start();
     }
 
     /**
@@ -319,7 +345,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
             out.flush();
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "copyAssetToFile: ", e);
             return false;
         }
     }
@@ -433,12 +459,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         }
 
         // Scroll to the bottom
-        scrollView.post(new Runnable() {
-            @Override
-            public void run() {
-                scrollView.fullScroll(ScrollView.FOCUS_DOWN);
-            }
-        });
+        scrollView.post(() -> scrollView.fullScroll(ScrollView.FOCUS_DOWN));
     }
 
     public void onBackPressed() {
@@ -537,7 +558,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                             appendTextAndScroll("Error: " + toastMessage + "\n");
                             Toast.makeText(activity, toastMessage, Toast.LENGTH_LONG).show();
                             uiControllerAdvancedSetup(false);
-                            title.setText("Failed!");
+                            title.setText(getString(R.string.failed));
                             simpleSetupUIControler(2);
                         });
                     }
@@ -578,7 +599,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                     appendTextAndScroll("Error: " + errorMessage + "\n");
                     Toast.makeText(activity, "Error executing command: " + errorMessage, Toast.LENGTH_LONG).show();
                     uiControllerAdvancedSetup(false);
-                    title.setText("Failed!");
+                    title.setText(getString(R.string.failed));
                     simpleSetupUIControler(2);
                 });
             }
@@ -589,7 +610,6 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         simpleSetupUIControler(1);
         uiControllerAdvancedSetup(true);
         progressBar.setVisibility(View.VISIBLE);
-        String filesDir = activity.getFilesDir().getAbsolutePath();
         String neededPkgs = AppConfig.neededPkgs;
         if (!AppConfig.getSetupFiles().contains("64")) {
             neededPkgs.replaceAll(" mesa-vulkan-broadcom mesa-vulkan-freedreno mesa-vulkan-panfrost", "");
@@ -621,7 +641,6 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         aria2Error = false;
         uiControllerAdvancedSetup(true);
         progressBar.setVisibility(View.VISIBLE);
-        String filesDir = activity.getFilesDir().getAbsolutePath();
         String cmd = "";
         cmd += selectedMirrorCommand + ";";
         String cmd2 = "set -e;" +
@@ -648,7 +667,6 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         aria2Error = false;
         uiControllerAdvancedSetup(true);
         progressBar.setVisibility(View.VISIBLE);
-        String filesDir = activity.getFilesDir().getAbsolutePath();
         String cmd = "";
         cmd += selectedMirrorCommand + ";";
         String cmd2 = "set -e;" +
@@ -731,7 +749,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
     }
 
     public String getPath(Uri uri) {
-        return com.vectras.vm.utils.FileUtils.getPath(this, uri);
+        return FileUtils.getPath(this, uri);
     }
 
     @Override
@@ -748,22 +766,22 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                 new Thread(() -> {
                     FileInputStream File;
                     try {
+                        assert content_describer != null;
                         File = (FileInputStream) getContentResolver().openInputStream(content_describer);
                     } catch (FileNotFoundException e) {
                         throw new RuntimeException(e);
                     }
                     try {
                         try {
-                            OutputStream out = new FileOutputStream(tarPath);
-                            try {
+                            try (OutputStream out = new FileOutputStream(tarPath)) {
                                 // Transfer bytes from in to out
                                 byte[] buf = new byte[1024];
                                 int len;
-                                while ((len = File.read(buf)) > 0) {
+                                while (true) {
+                                    assert File != null;
+                                    if (!((len = File.read(buf)) > 0)) break;
                                     out.write(buf, 0, len);
                                 }
-                            } finally {
-                                out.close();
                             }
                         } finally {
                             Runnable runnable = () -> {
@@ -772,6 +790,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                                 MainSettingsManager.setsetUpWithManualSetupBefore(SetupQemuActivity.this, true);
                             };
                             activity.runOnUiThread(runnable);
+                            assert File != null;
                             File.close();
                         }
                     } catch (IOException e) {
@@ -805,69 +824,48 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         LinearLayout lineardonate = findViewById(R.id.lineardonate);
 
         Button dontjointtelegrambutton = findViewById(R.id.dontjointtelegrambutton);
-        dontjointtelegrambutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                linearcommunity.setVisibility(View.GONE);
-            }
-        });
+        dontjointtelegrambutton.setOnClickListener(v -> linearcommunity.setVisibility(GONE));
 
         Button jointelegrambutton = findViewById(R.id.jointelegrambutton);
-        jointelegrambutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                linearcommunity.setVisibility(GONE);
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(AppConfig.telegramLink));
-                startActivity(intent);
-                //Don't show join Telegram dialog again
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-                SharedPreferences.Editor edit = prefs.edit();
-                edit.putBoolean("tgDialog", true);
-                edit.apply();
-            }
+        jointelegrambutton.setOnClickListener(v -> {
+            linearcommunity.setVisibility(GONE);
+            Intent intent = new Intent(ACTION_VIEW, Uri.parse(AppConfig.telegramLink));
+            startActivity(intent);
+            //Don't show join Telegram dialog again
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+            SharedPreferences.Editor edit = prefs.edit();
+            edit.putBoolean("tgDialog", true);
+            edit.apply();
         });
 
         Button dontdonatebutton = findViewById(R.id.dontdonatebutton);
-        dontdonatebutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                lineardonate.setVisibility(View.GONE);
-            }
-        });
+        dontdonatebutton.setOnClickListener(v -> lineardonate.setVisibility(GONE));
 
         Button donatebuuton = findViewById(R.id.donatebutton);
-        donatebuuton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                lineardonate.setVisibility(View.GONE);
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(AppConfig.patreonLink));
-                startActivity(intent);
-            }
+        donatebuuton.setOnClickListener(v -> {
+            lineardonate.setVisibility(GONE);
+            Intent intent = new Intent(ACTION_VIEW, Uri.parse(AppConfig.patreonLink));
+            startActivity(intent);
         });
 
         Button done100 = findViewById(R.id.done100);
-        done100.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!AppConfig.needreinstallsystem) {
-                    startActivity(new Intent(SetupQemuActivity.this, HomeActivity.class));
-                } else {
-                    AppConfig.needreinstallsystem = false;
-                }
-                finish();
+        done100.setOnClickListener(v -> {
+            if (!AppConfig.needreinstallsystem) {
+                startActivity(new Intent(SetupQemuActivity.this, HomeActivity.class));
+            } else {
+                AppConfig.needreinstallsystem = false;
             }
+            finish();
         });
 
-        binding.advancedsetup.ivClose.setOnClickListener(v -> {
-            linearsimplesetupui.setVisibility(View.VISIBLE);
-        });
+        binding.advancedsetup.ivClose.setOnClickListener(v -> linearsimplesetupui.setVisibility(View.VISIBLE));
 
         binding.advancedsetup.ivCopycommandsetup.setOnClickListener(v -> copyToClipboard(binding.advancedsetup.tvCommandsetup.getText().toString()));
     }
 
     private void uiControllerAdvancedSetup(boolean isStartSetup) {
-        binding.advancedsetup.lnBntinstall.setVisibility(isStartSetup ? View.GONE : View.VISIBLE);
-        binding.advancedsetup.progressBar.setVisibility(isStartSetup ? View.VISIBLE : View.GONE);
+        binding.advancedsetup.lnBntinstall.setVisibility(isStartSetup ? GONE : View.VISIBLE);
+        binding.advancedsetup.progressBar.setVisibility(isStartSetup ? View.VISIBLE : GONE);
     }
 
     private void showAdvancedSetupDialog() {
@@ -937,7 +935,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
 
             final TextView textViewLocation = _view.findViewById(R.id.textViewLocation);
 
-            textViewLocation.setText(Objects.requireNonNull(_data.get((int) _position).get("location")));
+            textViewLocation.setText(Objects.requireNonNull(_data.get(_position).get("location")));
 
             return _view;
         }

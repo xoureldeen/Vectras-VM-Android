@@ -111,7 +111,7 @@ public class DataExplorerActivity extends AppCompatActivity {
 
         lv = findViewById(R.id.listview1);
 
-        getDir(AppConfig.maindirpath);
+        getDir(AppConfig.internalDataDirPath);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
