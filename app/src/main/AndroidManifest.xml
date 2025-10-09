@@ -187,7 +187,8 @@
         <activity
             android:name=".DataExplorerActivity"
             android:label="Data Explorer"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:exported="true"/>
         <activity
             android:name=".SetArchActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
