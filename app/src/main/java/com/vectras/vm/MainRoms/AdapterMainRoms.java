@@ -109,7 +109,7 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 Config.QMPPort = current.qmpPort;
             }
             Config.vmID = current.vmID;
-            String env = StartVM.env(activity, current.itemExtra, current.itemPath, "");
+            String env = StartVM.env(activity, current.itemExtra, current.itemPath, false);
             MainActivity.startVM(current.itemName, env, current.itemExtra, current.itemPath);
         });
 

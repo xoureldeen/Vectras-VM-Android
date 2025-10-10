@@ -981,7 +981,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 } else {
                     StartVM.cdrompath = "";
-                    String env = StartVM.env(MainActivity.activity, AppConfig.pendingCommand, "", "1");
+                    String env = StartVM.env(MainActivity.activity, AppConfig.pendingCommand, "", true);
                     MainActivity.startVM("Quick run", env, AppConfig.pendingCommand, "");
                     VMManager.lastQemuCommand = AppConfig.pendingCommand;
                 }

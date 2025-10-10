@@ -47,8 +47,8 @@ public class PendingCommand {
                     }
                 } else {
                     com.vectras.vm.StartVM.cdrompath = "";
-                    String env = StartVM.env(activity, AppConfig.pendingCommand, "", "1");
                     Config.vmID = VMManager.idGenerator();
+                    String env = StartVM.env(activity, AppConfig.pendingCommand, "", true);
                     HomeStartVM.startNow(activity, "Quick run", env, Config.vmID, null);
                     VMManager.lastQemuCommand = AppConfig.pendingCommand;
                 }
