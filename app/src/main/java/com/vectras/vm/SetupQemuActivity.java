@@ -109,6 +109,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
     private String downloadBootstrapsCommand = "";
     private boolean aria2Error = false;
     private boolean isexecutingCommand = false;
+    private boolean isEdgeServerError = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -311,7 +312,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                                     Toast.LENGTH_SHORT)
                             .show();
 
-                    if (fromAsset.equals("alpine")) {
+                    if (fromAsset.contains("alpine")) {
                         File rootDir = new File(filesDir + "/distro/root");
                         if (!rootDir.exists()) rootDir.mkdir();
 
@@ -441,6 +442,8 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
             libprooterror = true;
         } else if (textToAdd.contains("not complete: /root/setup.tar.gz")) {
             aria2Error = true;
+        } else if (textToAdd.contains("edge") && textToAdd.contains("temporary error")) {
+            isEdgeServerError = true;
         }
 
         if (textToAdd.contains("Starting setup...")) {
@@ -567,7 +570,7 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                 if (exitValue != 0) {
                     isexecutingCommand = false;
                     // If exit value is not zero, display a toast message
-                    if (!aria2Error) {
+                    if (!aria2Error && isEdgeServerError) {
                         String toastMessage = "Command failed with exit code: " + exitValue;
                         activity.runOnUiThread(() -> {
                             appendTextAndScroll("Error: " + toastMessage + "\n");
@@ -597,13 +600,22 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                     } else if (aria2Error && downloadBootstrapsCommand.contains("aria2c")) {
                         activity.runOnUiThread(() -> {
                             downloadBootstrapsCommand = " curl -o setup.tar.gz -L " + bootstrapfilelink;
-                            if (AppConfig.getSetupFiles().contains("arm64-v8a") || AppConfig.getSetupFiles().contains("x86_64")) {
+                            if (AppConfig.getSetupFiles().contains("64")) {
                                 setupVectras64();
                             } else {
                                 setupVectras32();
                             }
                         });
-
+                    } else if (isEdgeServerError) {
+                        isEdgeServerError = false;
+                        activity.runOnUiThread(() -> {
+                            selectedMirrorCommand += " && sed '/edge/d' /etc/apk/repositories";
+                            if (AppConfig.getSetupFiles().contains("64")) {
+                                setupVectras64();
+                            } else {
+                                setupVectras32();
+                            }
+                        });
                     }
                 }
             } catch (IOException | InterruptedException e) {

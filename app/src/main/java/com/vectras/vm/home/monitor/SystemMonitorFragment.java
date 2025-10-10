@@ -27,6 +27,7 @@ import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.R;
 import com.vectras.vm.VMManager;
 import com.vectras.vm.databinding.FragmentHomeSystemMonitorBinding;
+import com.vectras.vm.utils.CommandUtils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vterm.Terminal;
 
@@ -186,20 +187,15 @@ public class SystemMonitorFragment extends Fragment {
     @SuppressLint("SetTextI18n")
     private void getQemuInfo() {
         String currentArch = MainSettingsManager.getArch(requireActivity());
-        String command = "qemu-system-x86_64 --version";
-        new Terminal(requireActivity()).extractQemuVersion(command, false, requireActivity(), (output, errors) -> {
-            if (errors.isEmpty()) {
-                binding.tvQemuversion.setText(getString(R.string.version) + " " + (output.equals("8.2.1") || output.equals("9.2.2") ? output + " - 3dfx" : getString(R.string.unknow)) + ".");
-            } else {
-                Log.e(TAG, "Errors: " + errors);
-            }
-        });
 
         binding.tvQemuarch.setText(getString(R.string.arch) + " " + currentArch + ".");
 
         executor.execute(() -> {
+            String qemuVersionName = CommandUtils.getQemuVersionName();
             String result = Terminal.executeShellCommandWithResult("ps -e command", requireActivity());
             requireActivity().runOnUiThread(() -> {
+                binding.tvQemuversion.setText(getString(R.string.version) + " " + qemuVersionName + ".");
+
                 if (!result.isEmpty()) {
                     switch (currentArch) {
                         case "X86_64" ->

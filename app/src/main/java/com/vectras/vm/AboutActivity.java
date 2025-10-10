@@ -9,6 +9,7 @@ import android.os.Bundle;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.vectras.vm.adapters.GithubUserAdapter;
+import com.vectras.vm.utils.CommandUtils;
 import com.vectras.vm.utils.UIUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -28,9 +29,11 @@ import android.widget.TextView;
 import com.vectras.vterm.Terminal;
 
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class AboutActivity extends AppCompatActivity implements View.OnClickListener{
-
+    ExecutorService executor = Executors.newSingleThreadExecutor();
     Button btn_osl, btn_clog;
     ImageButton btn_discord, btn_youtube, btn_github, btn_telegram, btn_instagram, btn_facebook;
 
@@ -127,18 +130,9 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 
 
         TextView qemuVersion = findViewById(R.id.qemuVersion);
-
-        String command = "qemu-system-x86_64 --version";
-        new Terminal(this).extractQemuVersion(command, false, this, (output, errors) -> {
-            if (errors.isEmpty()) {
-                String versionStr = "Unknown";
-                if (output.equals("8.2.1") || output.equals("9.2.2"))
-                    versionStr = output + " - 3dfx";
-                Log.d(TAG, "QEMU Version: " + versionStr);
-                qemuVersion.setText(versionStr);
-            } else {
-                Log.e(TAG, "Errors: " + errors);
-            }
+        executor.execute(() -> {
+            String qemuVersionName = CommandUtils.getQemuVersionName();
+            runOnUiThread(() -> qemuVersion.setText(qemuVersionName));
         });
 
 //        SimpleAnimations.scale(findViewById(R.id.card_yagiz), 250);
