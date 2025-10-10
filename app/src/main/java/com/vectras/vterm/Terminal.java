@@ -287,7 +287,7 @@ public class Terminal {
         }).start();
     }
 
-    public static String executeShellCommandWithResult(String userCommand, Activity activity) {
+    public static String executeShellCommandWithResult(String userCommand, Context context) {
         StringBuilder output = new StringBuilder();
         StringBuilder errors = new StringBuilder();
         Log.d(TAG, userCommand);
@@ -296,8 +296,8 @@ public class Terminal {
         try {
             ProcessBuilder processBuilder = new ProcessBuilder();
 
-            String filesDir = Objects.requireNonNull(activity.getFilesDir().getAbsolutePath());
-            File tmpDir = new File(Objects.requireNonNull(activity.getFilesDir()), "usr/tmp");
+            String filesDir = Objects.requireNonNull(context.getFilesDir().getAbsolutePath());
+            File tmpDir = new File(Objects.requireNonNull(context.getFilesDir()), "usr/tmp");
 
             processBuilder.environment().put("PROOT_TMP_DIR", tmpDir.getAbsolutePath());
             processBuilder.environment().put("HOME", "/root");
