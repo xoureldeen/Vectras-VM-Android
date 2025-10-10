@@ -38,6 +38,7 @@ public class HomeStartVM {
     public static final String TAG = "HomeStartVM";
     public static AlertDialog progressDialog;
     public static boolean skipIDEwithARM64DialogInStartVM = false;
+    public static boolean isStopNow = false;
     public static final Handler handlerForLaunch = new Handler(Looper.getMainLooper());
     public static Runnable tickForLaunch = null;
 
@@ -48,7 +49,18 @@ public class HomeStartVM {
             String vmID,
             String thumbnailFile
     ) {
-        File romDir = new File(Config.getCacheDir() + "/" + vmID);
+        isStopNow = false;
+
+        String finalvmID;
+        if (vmID == null || vmID.isEmpty()) {
+            finalvmID = VMManager.startRamdomVMID();
+        } else {
+            finalvmID = vmID;
+        }
+
+        Config.vmID = finalvmID;
+
+        File romDir = new File(Config.getCacheDir() + "/" + finalvmID);
         if (!romDir.exists()) {
             if (!romDir.mkdirs()) {
                 DialogUtils.oneDialog(activity, activity.getString(R.string.problem_has_been_detected), activity.getString(R.string.vm_cache_dir_failed_to_create_content), activity.getString(R.string.ok), true, R.drawable.warning_48px, true, null, null);
@@ -82,7 +94,7 @@ public class HomeStartVM {
 
         VMManager.lastQemuCommand = env;
 
-        if (VMManager.isVMRunning(activity, vmID)) {
+        if (VMManager.isVMRunning(activity, finalvmID)) {
             Toast.makeText(activity, "This VM is already running.", Toast.LENGTH_LONG).show();
             if (MainSettingsManager.getVmUi(activity).equals("VNC"))
                 activity.startActivity(new Intent(activity, MainVNCActivity.class));
@@ -94,7 +106,7 @@ public class HomeStartVM {
         if (AppConfig.getSetupFiles().contains("arm") && !AppConfig.getSetupFiles().contains("arm64")) {
             if (env.contains("tcg,thread=multi")) {
                 DialogUtils.twoDialog(activity, activity.getResources().getString(R.string.problem_has_been_detected), activity.getResources().getString(R.string.can_not_use_mttcg), activity.getString(R.string.ok), activity.getString(R.string.cancel), true, R.drawable.warning_48px, true,
-                        () -> startNow(activity, vmName, env.replace("tcg,thread=multi", "tcg,thread=single"), vmID, thumbnailFile), null, null);
+                        () -> startNow(activity, vmName, env.replace("tcg,thread=multi", "tcg,thread=single"), finalvmID, thumbnailFile), null, null);
                 return;
             }
         }
@@ -103,7 +115,7 @@ public class HomeStartVM {
             DialogUtils.twoDialog(activity, activity.getString(R.string.problem_has_been_detected), activity.getString(R.string.you_cannot_use_IDE_hard_drive_type_with_ARM64), activity.getString(R.string.continuetext), activity.getString(R.string.cancel), true, R.drawable.warning_48px, true,
                     () -> {
                         skipIDEwithARM64DialogInStartVM = true;
-                        startNow(activity, vmName, env, vmID, thumbnailFile);
+                        startNow(activity, vmName, env, finalvmID, thumbnailFile);
                     }, null, null);
             return;
         } else if (skipIDEwithARM64DialogInStartVM) {
@@ -148,16 +160,15 @@ public class HomeStartVM {
         tickForLaunch = new Runnable() {
             @Override
             public void run() {
-                if (VMManager.isQemuStopedWithError || FileUtils.isFileExists(Config.getLocalQMPSocketPath())) {
+                if (isStopNow || VMManager.isQemuStopedWithError || FileUtils.isFileExists(Config.getLocalQMPSocketPath())) {
                     handlerForLaunch.removeCallbacks(this);
 
                     progressDialog.dismiss();
 
-                    //If Qemu doesn't crash and finish then launch.
-                    if (!VMManager.isQemuStopedWithError) {
+                    if (!isStopNow && !VMManager.isQemuStopedWithError) {
                         if (MainSettingsManager.getVmUi(activity).equals("VNC")) {
                             if (MainSettingsManager.getVncExternal(activity)) {
-                                Config.currentVNCServervmID = vmID;
+                                Config.currentVNCServervmID = finalvmID;
                                 DialogUtils.oneDialog(activity, activity.getString(R.string.vnc_server), activity.getString(R.string.running_vm_with_vnc_server_content) + " " + (Integer.parseInt(MainSettingsManager.getVncExternalDisplay(activity)) + 5900) + ".", activity.getString(R.string.ok), true, R.drawable.cast_24px, true, null, null);
                             } else {
                                 MainVNCActivity.started = true;
@@ -200,7 +211,7 @@ public class HomeStartVM {
         if (thumbnailFile != null) {
             ImageView ivThumbnail = progressView.findViewById(R.id.iv_thumbnail);
 
-            if (thumbnailFile.isEmpty()){
+            if (thumbnailFile.isEmpty()) {
                 VMManager.setIconWithName(ivThumbnail, _content);
             } else {
                 if (FileUtils.isFileExists(thumbnailFile)) {
@@ -214,6 +225,12 @@ public class HomeStartVM {
                 }
             }
         }
+
+        ImageView ivStop = progressView.findViewById(R.id.ivStop);
+        ivStop.setOnClickListener(v -> {
+            isStopNow = true;
+            VMManager.shutdownCurrentVM();
+        });
 
         progressDialog = new MaterialAlertDialogBuilder(activity, R.style.CenteredDialogTheme)
                 .setView(progressView)

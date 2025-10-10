@@ -656,6 +656,22 @@
         "verified": true
     },
     {
+        "rom_name":"Windows 11 25H2",
+        "rom_icon":"https://www.getmyos.com/app_public/files/t/1/2021/06/windows_11_logo_by_getmyos.png",
+        "rom_url":"https://youtu.be/FWE9SIYbB5A",
+        "rom_path":"Windows 11 25H2.cvbi",
+        "rom_avail":true,
+        "rom_size":"2025 Update",
+        "rom_arch":"X86_64",
+        "rom_kernel":"windows",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 11 is the latest major release of Microsoft's Windows NT operating system, released on October 5, 2021 as the successor to Windows 10 (2015). It is provided free for any Windows 10 devices that meet the new Windows 11 system requirements. A server version, Windows Server 2025, was released in 2024. Windows 11 is the first major version of Windows NT without a companion mobile version following the discontinuations of Windows Phone with Windows 10 Mobile.",
+        "file_size": "15 GB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
+    },
+    {
         "rom_name":"ReactOS",
         "rom_icon":"https://www.linuxinsider.com/wp-content/uploads/sites/2/2021/05/2016-react-os-1.jpg",
         "rom_url":"https://anbui.ovh/get/vec/community/linux/reactos.html",

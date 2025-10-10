@@ -74,7 +74,7 @@ public class VmsHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 Config.QMPPort = current.qmpPort;
             }
             Config.vmID = current.vmID;
-            String env = StartVM.env(activity, current.itemExtra, current.itemPath, "");
+            String env = StartVM.env(activity, current.itemExtra, current.itemPath, false);
             HomeStartVM.startNow(activity, current.itemName, env, current.vmID, current.itemIcon);
         });
 
