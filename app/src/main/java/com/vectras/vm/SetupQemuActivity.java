@@ -179,13 +179,13 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
                     mmap.clear();
                     mmap = new Gson().fromJson(contentJSON, new TypeToken<HashMap<String, Object>>() {
                     }.getType());
-                    if (mmap.containsKey("arm64-v8a") && mmap.containsKey("x86_64")) {
+                    if (mmap.containsKey("arm64-v8a") && mmap.containsKey("amd64")) {
                         if (Build.SUPPORTED_ABIS[0].contains("arm64")) {
                             bootstrapfilelink = Objects.requireNonNull(mmap.get("arm64-v8a")).toString();
                         } else {
-                            bootstrapfilelink = Objects.requireNonNull(mmap.get("x86_64")).toString();
+                            bootstrapfilelink = Objects.requireNonNull(mmap.get("amd64")).toString();
                         }
-                        downloadBootstrapsCommand = " aria2c -x 4 -o setup.tar.gz " + bootstrapfilelink;
+                        downloadBootstrapsCommand = " aria2c -x 4 --async-dns=false --disable-ipv6 --check-certificate=false -o setup.tar.gz " + bootstrapfilelink;
                         if (!bootstrapfilelink.isEmpty()) {
                             linearcannotconnecttoserver.setVisibility(GONE);
                         }
@@ -211,15 +211,23 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
             }
         };
 
+        startExtractSystemFiles();
+        setupOnClick();
+    }
+
+    private void startExtractSystemFiles() {
         String filesDir = activity.getFilesDir().getAbsolutePath();
         File distroDir = new File(filesDir + "/distro");
         File binDir = new File(distroDir + "/bin");
         if (!binDir.exists()) {
             extractSystemFiles("bootstrap", "");
-            extractSystemFiles("alpine", "distro");
+            if (Build.SUPPORTED_ABIS[0].contains("64")) {
+                extractSystemFiles("alpine22", "distro");
+            } else {
+                extractSystemFiles("alpine21", "distro");
+            }
 
         }
-        setupOnClick();
     }
 
     public void extractSystemFiles(String fromAsset, String extractTo) {
@@ -318,11 +326,18 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
 
                     }
                 } else {
-                    new AlertDialog.Builder(activity)
-                            .setTitle("Extraction Failed")
-                            .setMessage("Error: " + finalErrorMessage)
-                            .setPositiveButton("OK", null)
-                            .show();
+                    DialogUtils.twoDialog(
+                            this,
+                            getString(R.string.failed),
+                            finalErrorMessage,
+                            getString(R.string.try_again),
+                            getString(R.string.close),
+                            true,
+                            R.drawable.error_96px,
+                            false,
+                            this::startExtractSystemFiles,
+                            this::finish,
+                            null);
                 }
 
                 File extractedTarFile = new File(extractedFilePath);
