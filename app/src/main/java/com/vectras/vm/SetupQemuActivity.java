@@ -4,6 +4,7 @@ import static android.content.Intent.ACTION_OPEN_DOCUMENT;
 import static android.content.Intent.ACTION_VIEW;
 import static android.view.View.GONE;
 
+import com.termux.app.TermuxActivity;
 import com.termux.app.TermuxService;
 
 import static com.vectras.vm.utils.UIUtils.UIAlert;
@@ -227,7 +228,6 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
             } else {
                 extractSystemFiles("alpine21", "distro");
             }
-
         }
     }
 
@@ -886,6 +886,14 @@ public class SetupQemuActivity extends AppCompatActivity implements View.OnClick
         });
 
         binding.advancedsetup.ivClose.setOnClickListener(v -> linearsimplesetupui.setVisibility(View.VISIBLE));
+        binding.advancedsetup.ivOpenterminal.setOnClickListener(v -> {
+            if (DeviceUtils.is64bit()) {
+                startActivity(new Intent(this, TermuxActivity.class));
+            } else {
+                com.vectras.vterm.TerminalBottomSheetDialog VTERM = new com.vectras.vterm.TerminalBottomSheetDialog(this);
+                VTERM.showVterm();
+            }
+        });
 
         binding.advancedsetup.ivCopycommandsetup.setOnClickListener(v -> copyToClipboard(binding.advancedsetup.tvCommandsetup.getText().toString()));
     }

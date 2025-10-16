@@ -5,6 +5,6 @@
         android:right="2dp"
         android:bottom="2dp" />
     <corners android:radius="2dp" />
-    <solid android:color="@color/cursor" />
+    <solid android:color="#fff" />
     <size android:height="20dp" android:width="10dp" />
 </shape>

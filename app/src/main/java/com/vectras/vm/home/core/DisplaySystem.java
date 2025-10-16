@@ -13,6 +13,7 @@ import com.vectras.qemu.MainSettingsManager;
 import com.vectras.qemu.MainVNCActivity;
 import com.vectras.vm.R;
 import com.vectras.vm.core.ShellExecutor;
+import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.x11.X11Activity;
@@ -44,6 +45,17 @@ public class DisplaySystem {
                     activity,
                     activity.getString(R.string.x11_feature_not_supported),
                     activity.getString(R.string.the_x11_feature_is_currently_not_supported_on_android_14_and_above_please_use_a_device_with_android_13_or_below_for_x11_functionality),
+                    activity.getString(R.string.ok),
+                    true, R.drawable.error_96px,
+                    true,
+                    null,
+                    null
+            );
+        } else if (!DeviceUtils.is64bit()) {
+            DialogUtils.oneDialog(
+                    activity,
+                    activity.getString(R.string.x11_feature_not_supported),
+                    activity.getString(R.string.cpu_not_support_64_xfce),
                     activity.getString(R.string.ok),
                     true, R.drawable.error_96px,
                     true,

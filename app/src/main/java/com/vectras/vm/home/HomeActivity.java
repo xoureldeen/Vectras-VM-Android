@@ -65,6 +65,7 @@ import com.vectras.vm.home.romstore.RomStoreFragment;
 import com.vectras.vm.home.vms.VmsFragment;
 import com.vectras.vm.logger.VectrasStatus;
 import com.vectras.vm.settings.UpdaterActivity;
+import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.LibraryChecker;
@@ -478,9 +479,12 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
             } else if (id == R.id.navigation_item_desktop) {
                 DisplaySystem.launchX11(this, true);
             } else if (id == R.id.navigation_item_terminal) {
-                /*com.vectras.vterm.TerminalBottomSheetDialog VTERM = new com.vectras.vterm.TerminalBottomSheetDialog(activity);
-                VTERM.showVterm();*/
-                startActivity(new Intent(this, TermuxActivity.class));
+                if (DeviceUtils.is64bit()) {
+                    startActivity(new Intent(this, TermuxActivity.class));
+                } else {
+                    com.vectras.vterm.TerminalBottomSheetDialog VTERM = new com.vectras.vterm.TerminalBottomSheetDialog(this);
+                    VTERM.showVterm();
+                }
             } else if (id == R.id.navigation_item_view_logs) {
                 BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
                 View view = getLayoutInflater().inflate(R.layout.bottomsheetdialog_logger, null);
