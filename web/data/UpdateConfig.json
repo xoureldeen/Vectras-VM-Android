@@ -5,11 +5,11 @@
     "url": "https://github.com/xoureldeen/Vectras-VM-Android/releases/v2.9.5",
     "Message": "<h2>v2.9.5-3dfx</h2><ul><li>Bring back 3dfx support.</li><li>Enhance app execution.</li><li>Added some linux programs in x11 display.</li><li>Added alpine linux (x11).</li><li>Russian language by <a href=\"https://github.com/OFGING\" target=\"_blank\">@OFGING</a></li></ul><br><br>New updates are live!",
     "cancellable": true,
-    "versionCodeBeta":"24",
-    "versionNameBeta":"3.2.1",
-    "versionNameBetas":"v2.9.5.1-3dfx,v2.9.5.2-3dfx,v2.9.5.3-3dfx,v2.9.5.4-3dfx,v2.9.5.5-3dfx,v2.9.5.6-3dfx,v2.9.5.7-3dfx,v2.9.5.8-3dfx,v2.9.5.9-3dfx,v2.9.5.10-3dfx,v2.9.5.11-3dfx,v2.9.5.12-3dfx,v2.9.5.13-3dfx,3.0.0,3.1.0,3.2.1",
+    "versionCodeBeta":"25",
+    "versionNameBeta":"3.2.2",
+    "versionNameBetas":"v2.9.5.1-3dfx,v2.9.5.2-3dfx,v2.9.5.3-3dfx,v2.9.5.4-3dfx,v2.9.5.5-3dfx,v2.9.5.6-3dfx,v2.9.5.7-3dfx,v2.9.5.8-3dfx,v2.9.5.9-3dfx,v2.9.5.10-3dfx,v2.9.5.11-3dfx,v2.9.5.12-3dfx,v2.9.5.13-3dfx,3.0.0,3.1.0,3.2.1,3.2.2",
     "sizeBeta": "50 MB",
     "urlBeta": "https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases",
-    "MessageBeta": "<h2>3.2.1</h2>Bugs fixed.",
+    "MessageBeta": "<h2>3.2.2</h2>Bugs fixed.",
     "cancellableBeta": true
 }

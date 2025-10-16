@@ -1,20 +1,21 @@
 package com.vectras.vterm;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.termux.app.TermuxService;
+import com.vectras.vm.AppConfig;
 import com.vectras.vm.R;
 import com.vectras.vterm.view.ZoomableTextView;
 
@@ -28,13 +29,16 @@ import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
+import java.util.Objects;
 
 public class TerminalBottomSheetDialog {
-    private ZoomableTextView terminalOutput;
-    private EditText commandInput;
-    private View view;
-    private Activity activity;
-    private BottomSheetDialog bottomSheetDialog;
+    private final ZoomableTextView terminalOutput;
+    private final EditText commandInput;
+    private final View view;
+    private final Activity activity;
+    private final BottomSheetDialog bottomSheetDialog;
+    LinearLayout inputContainer;
+    boolean isAllowAddToResultCommand = true;
 
     public TerminalBottomSheetDialog(Activity activity) {
         this.activity = activity;
@@ -45,27 +49,20 @@ public class TerminalBottomSheetDialog {
 
         terminalOutput = view.findViewById(R.id.tvTerminalOutput);
         commandInput = view.findViewById(R.id.etCommandInput);
+        inputContainer = view.findViewById(R.id.ln_input);
 
         TextView tvPrompt = view.findViewById(R.id.tvPrompt);
         updateUserPrompt(tvPrompt);
 
         // Show the keyboard
-        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(commandInput, InputMethodManager.SHOW_IMPLICIT);
-
-        commandInput.requestFocus();
+        forcusCommandInput();
 
         // Whenever you modify the text of the EditText, do the following to ensure the cursor is at the end:
         commandInput.setSelection(commandInput.getText().length());
 
         // when user click terminal view will open keyboard
         terminalOutput.setOnClickListener(view -> {
-            // Request focus for the EditText
-            commandInput.requestFocus();
-
-            // Show the keyboard
-            InputMethodManager imm1 = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm1.showSoftInput(commandInput, InputMethodManager.SHOW_IMPLICIT);
+            forcusCommandInput();
         });
         // Configure the editor to handle the "Done" action on the soft keyboard
         commandInput.setOnEditorActionListener((v, actionId, event) -> {
@@ -78,21 +75,18 @@ public class TerminalBottomSheetDialog {
             return false;
         });
 
-        commandInput.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                // If the event is a key-down event on the "enter" button
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    activity.runOnUiThread(() -> appendTextAndScroll(commandInput.getText().toString() + "\n"));
-                    executeShellCommand(commandInput.getText().toString());
-                    commandInput.setText("");
-                    activity.runOnUiThread(() -> {
-                        commandInput.requestFocus(); // Request focus again
-                    });
-                    return true;
-                }
-                return false;
+        commandInput.setOnKeyListener((v, keyCode, event) -> {
+            // If the event is a key-down event on the "enter" button
+            if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                    (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                activity.runOnUiThread(() -> appendTextAndScroll(commandInput.getText().toString() + "\n"));
+                executeShellCommand(commandInput.getText().toString());
+                commandInput.setText("");
+                // Request focus again
+                activity.runOnUiThread(commandInput::requestFocus);
+                return true;
             }
+            return false;
         });
     }
 
@@ -106,9 +100,7 @@ public class TerminalBottomSheetDialog {
             String username = null;
             // Update the prompt on the UI thread
             String finalUsername = username != null ? username : "root";
-            activity.runOnUiThread(() -> {
-                promptView.setText(finalUsername + "@localhost:~$ ");
-            });
+            activity.runOnUiThread(() -> promptView.setText(finalUsername + "@localhost:~$ "));
         }).start();
     }
 
@@ -117,15 +109,19 @@ public class TerminalBottomSheetDialog {
         ScrollView scrollView = view.findViewById(R.id.scrollView);
 
         // Update the text
-        terminalOutput.append(textToAdd);
+        if (textToAdd.contains("@localhost:~$ clear")) {
+            isAllowAddToResultCommand = false;
+            terminalOutput.setText("");
+        } else {
+            if (isAllowAddToResultCommand) {
+                terminalOutput.append(textToAdd);
+            } else {
+                isAllowAddToResultCommand = true;
+            }
+        }
 
         // Scroll to the bottom
-        scrollView.post(new Runnable() {
-            @Override
-            public void run() {
-                scrollView.fullScroll(ScrollView.FOCUS_DOWN);
-            }
-        });
+        scrollView.post(() -> scrollView.fullScroll(ScrollView.FOCUS_DOWN));
     }
 
     private String getLocalIpAddress() {
@@ -134,8 +130,8 @@ public class TerminalBottomSheetDialog {
                 NetworkInterface intf = en.nextElement();
                 for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
                     InetAddress inetAddress = enumIpAddr.nextElement();
-                    if (!inetAddress.isLoopbackAddress() && inetAddress.getHostAddress().toString().contains(".")) {
-                        return inetAddress.getHostAddress().toString();
+                    if (!inetAddress.isLoopbackAddress() && Objects.requireNonNull(inetAddress.getHostAddress()).contains(".")) {
+                        return inetAddress.getHostAddress();
                     }
                 }
             }
@@ -150,47 +146,51 @@ public class TerminalBottomSheetDialog {
         if (checkInstallation())
             new Thread(() -> {
                 try {
-                    // Setup the process builder to start PRoot with environmental variables and commands
+                    activity.runOnUiThread(() -> {
+                        if (terminalOutput.getVisibility() == View.GONE) terminalOutput.setVisibility(View.VISIBLE);
+                        appendTextAndScroll("root@localhost:~$ " + userCommand + "\n");
+                        inputContainer.setVisibility(View.GONE);
+                    });
+                    // Setup the qemuProcess builder to start PRoot with environmental variables and commands
                     ProcessBuilder processBuilder = new ProcessBuilder();
 
                     // Adjust these environment variables as necessary for your app
-                    String filesDir = activity.getFilesDir().getAbsolutePath();
-                    String nativeLibDir = activity.getApplicationInfo().nativeLibraryDir;
+                    String filesDir = AppConfig.internalDataDirPath;
 
-                    File tmpDir = new File(activity.getFilesDir(), "tmp");
+                    File tmpDir = new File(filesDir, "usr/tmp");
 
-                    // Setup environment for the PRoot process
+                    // Setup environment for the PRoot qemuProcess
                     processBuilder.environment().put("PROOT_TMP_DIR", tmpDir.getAbsolutePath());
-                    processBuilder.environment().put("PROOT_LOADER", nativeLibDir + "/libproot-loader.so");
-                    processBuilder.environment().put("PROOT_LOADER_32", nativeLibDir + "/libproot-loader32.so");
 
                     processBuilder.environment().put("HOME", "/root");
                     processBuilder.environment().put("USER", "root");
-                    processBuilder.environment().put("PATH", "/bin:/usr/bin:/sbin:/usr/sbin");
+                    //processBuilder.environment().put("PATH", "/bin:/usr/bin:/sbin:/usr/sbin");
+                    //processBuilder.environment().put("LD_LIBRARY_PATH", TermuxService.PREFIX_PATH + "/lib");
                     processBuilder.environment().put("TERM", "xterm-256color");
                     processBuilder.environment().put("TMPDIR", tmpDir.getAbsolutePath());
                     processBuilder.environment().put("SHELL", "/bin/sh");
-                    processBuilder.environment().put("DISPLAY", getLocalIpAddress()+":1");
-                    processBuilder.environment().put("PULSE_SERVER", "/run/pulse/native");
-                    processBuilder.environment().put("XDG_RUNTIME_DIR", "/run");
-                    processBuilder.environment().put("QEMU_AUDIO_DRV", "sdl");
+                    processBuilder.environment().put("DISPLAY", ":0");
+                    processBuilder.environment().put("PULSE_SERVER", "127.0.0.1");
+                    processBuilder.environment().put("XDG_RUNTIME_DIR", "${TMPDIR}");
                     processBuilder.environment().put("SDL_VIDEODRIVER", "x11");
 
-                String[] prootCommand = {
-                        nativeLibDir + "/libproot.so", // PRoot binary path
-                        "--kill-on-exit",
-                        "--link2symlink",
-                        "-0",
-                        "-r", filesDir + "/distro", // Path to the rootfs
-                        "-b", "/dev",
-                        "-b", "/proc",
-                        "-b", "/sys",
-                        "-b", "/sdcard",
-                        "-b", "/storage",
-                        "-b", "/data",
-                        "-w", "/root",
-                        "/bin/sh",
-                        "--login"// The shell to execute inside PRoot
+                    String[] prootCommand = {
+                            TermuxService.PREFIX_PATH + "/bin/proot", // PRoot binary path
+                            "--kill-on-exit",
+                            "--link2symlink",
+                            "-0",
+                            "-r", filesDir + "/distro", // Path to the rootfs
+                            "-b", "/dev",
+                            "-b", "/proc",
+                            "-b", "/sys",
+                            "-b", AppConfig.internalDataDirPath + "distro/root:/dev/shm",
+                            "-b", "/sdcard",
+                            "-b", "/storage",
+                            "-b", "/data",
+                            "-b", AppConfig.internalDataDirPath + "usr/tmp:/tmp",
+                            "-w", "/root",
+                            "/bin/sh",
+                            "--login"// The shell to execute inside PRoot
                     };
 
                     processBuilder.command(prootCommand);
@@ -210,13 +210,21 @@ public class TerminalBottomSheetDialog {
                     String line;
                     while ((line = reader.readLine()) != null) {
                         final String outputLine = line;
-                        activity.runOnUiThread(() -> appendTextAndScroll(outputLine + "\n"));
+                        activity.runOnUiThread(() -> {
+                            appendTextAndScroll(outputLine + "\n");
+                            inputContainer.setVisibility(View.VISIBLE);
+                            forcusCommandInput();
+                        });
                     }
 
                     // Read any errors from the error stream
                     while ((line = errorReader.readLine()) != null) {
                         final String errorLine = line;
-                        activity.runOnUiThread(() -> appendTextAndScroll(errorLine + "\n"));
+                        activity.runOnUiThread(() -> {
+                            appendTextAndScroll(errorLine + "\n");
+                            inputContainer.setVisibility(View.VISIBLE);
+                            forcusCommandInput();
+                        });
                     }
 
                     // Clean up
@@ -229,7 +237,11 @@ public class TerminalBottomSheetDialog {
                 } catch (IOException | InterruptedException e) {
                     // Handle exceptions by printing the stack trace in the terminal output
                     final String errorMessage = e.getMessage();
-                    activity.runOnUiThread(() -> appendTextAndScroll("Error: " + errorMessage + "n"));
+                    activity.runOnUiThread(() -> {
+                        appendTextAndScroll("Error: " + errorMessage + "n");
+                        inputContainer.setVisibility(View.VISIBLE);
+                        forcusCommandInput();
+                    });
                 }
             }).start(); // Execute the command in a separate thread to prevent blocking the UI thread
         else
@@ -244,5 +256,13 @@ public class TerminalBottomSheetDialog {
         String filesDir = activity.getFilesDir().getAbsolutePath();
         File distro = new File(filesDir, "distro");
         return distro.exists();
+    }
+
+    private void forcusCommandInput() {
+        commandInput.post(() -> {
+            commandInput.requestFocus();
+            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(commandInput, InputMethodManager.SHOW_IMPLICIT);
+        });
     }
 }

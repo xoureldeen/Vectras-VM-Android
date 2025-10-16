@@ -54,6 +54,14 @@
                     android:singleLine="true"/>
 
                 <ImageView
+                    android:id="@+id/iv_openterminal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:src="@drawable/terminal_24px"
+                    android:background="?attr/selectableItemBackgroundBorderless"/>
+
+                <ImageView
                     android:id="@+id/iv_close"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

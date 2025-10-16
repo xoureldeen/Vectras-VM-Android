@@ -14,6 +14,7 @@ import androidx.preference.PreferenceManager;
 
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.home.HomeActivity;
+import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.UIUtils;
 
@@ -141,7 +142,7 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
         } else {
             startActivity(new Intent(this, SetupQemuActivity.class));
             //For Android 14+
-            if (Build.VERSION.SDK_INT >= 34) {
+            if (!DeviceUtils.is64bit() || Build.VERSION.SDK_INT >= 34) {
                 MainSettingsManager.setVmUi(this, "VNC");
             }
         }
