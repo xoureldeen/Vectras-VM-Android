@@ -140,10 +140,11 @@ public class CqcmActivity extends AppCompatActivity {
             Log.i("CqcmActivity", "Opened SplashActivity");
         } else {
             Log.i("CqcmActivity", "Vectras VM is opening.");
-            openURL.setAction(Intent.ACTION_VIEW);
-            openURL.setData(Uri.parse("android-app://com.vectras.vm"));
-            startActivity(openURL);
-            Log.i("CqcmActivity", "Opened Vectras VM using URL.");
+            Intent intent = new Intent();
+            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            intent.setClass(this, HomeActivity.class);
+            startActivity(intent);
+            Log.i("CqcmActivity", "Opened HomeActivity.");
         }
         finish();
     }

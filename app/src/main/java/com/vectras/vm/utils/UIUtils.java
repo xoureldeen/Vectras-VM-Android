@@ -505,4 +505,14 @@ public class UIUtils {
         int nightMode = AppCompatDelegate.getDefaultNightMode();
         return nightMode == AppCompatDelegate.MODE_NIGHT_YES;
     }
+
+    public static boolean isColorLight(int color) {
+        int r = (color >> 16) & 0xFF;
+        int g = (color >> 8) & 0xFF;
+        int b = color & 0xFF;
+
+        double luminance = 0.299 * r + 0.587 * g + 0.114 * b;
+        return luminance > 186;
+    }
+
 }

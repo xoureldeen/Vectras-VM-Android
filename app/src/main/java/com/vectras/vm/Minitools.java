@@ -149,9 +149,9 @@ public class Minitools extends AppCompatActivity {
                     FileUtils.deleteDirectory(getFilesDir().getAbsolutePath() + "/distro");
                     FileUtils.deleteDirectory(getFilesDir().getAbsolutePath() + "/usr");
                     Intent intent = new Intent();
-                    intent.setClass(Minitools.this, SetupQemuActivity.class);
+                    intent.setClass(Minitools.this, SetupWizardActivity.class);
                     startActivity(intent);
-                    finish();
+                    finishAffinity();
                 }, null, null));
 
         spinnerselectmirror.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

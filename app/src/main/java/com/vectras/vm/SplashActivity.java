@@ -140,7 +140,7 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
         if ((new File(AppConfig.internalDataDirPath, "distro/usr/local/bin/qemu-system-x86_64").exists()) || (new File(AppConfig.internalDataDirPath, "distro/usr/bin/qemu-system-x86_64").exists())) {
             startActivity(new Intent(this, HomeActivity.class));
         } else {
-            startActivity(new Intent(this, SetupQemuActivity.class));
+            startActivity(new Intent(this, SetupWizardActivity.class));
             //For Android 14+
             if (!DeviceUtils.is64bit() || Build.VERSION.SDK_INT >= 34) {
                 MainSettingsManager.setVmUi(this, "VNC");
