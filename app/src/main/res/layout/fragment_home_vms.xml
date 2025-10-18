@@ -41,7 +41,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/package_2_96px" />
+                    android:src="@drawable/upcoming_96px" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

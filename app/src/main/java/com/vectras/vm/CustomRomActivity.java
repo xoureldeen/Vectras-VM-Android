@@ -2,6 +2,7 @@ package com.vectras.vm;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -207,10 +208,17 @@ public class CustomRomActivity extends AppCompatActivity {
 
 
         binding.qemuField.setEndIconOnClickListener(v -> {
-            String qcc = "android-app://com.anbui.cqcm.app";
-            Intent i = new Intent(Intent.ACTION_VIEW);
-            i.setData(Uri.parse(qcc));
-            startActivity(i);
+            PackageManager pm = getPackageManager();
+            Intent intent = pm.getLaunchIntentForPackage("com.anbui.cqcm.app");
+
+            if (intent != null) {
+                startActivity(intent);
+            } else {
+                Intent intenturl = new Intent();
+                intenturl.setAction(Intent.ACTION_VIEW);
+                intenturl.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.anbui.cqcm.app"));
+                startActivity(intenturl);
+            }
         });
 
         binding.ivIcon.setOnClickListener(v -> {
@@ -569,10 +577,10 @@ public class CustomRomActivity extends AppCompatActivity {
         if (!HomeActivity.isActivate) {
             startActivity(new Intent(this, SplashActivity.class));
         } else {
-            Intent openURL = new Intent();
-            openURL.setAction(Intent.ACTION_VIEW);
-            openURL.setData(Uri.parse("android-app://com.vectras.vm"));
-            startActivity(openURL);
+            Intent intent = new Intent();
+            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            intent.setClass(this, HomeActivity.class);
+            startActivity(intent);
         }
         finish();
     }

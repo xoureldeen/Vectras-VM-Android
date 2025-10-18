@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">3.2.2</string>
+    <string name="app_version" translatable="false">3.2.3</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -575,6 +575,7 @@
     <string name="quick_start">Quick start</string>
     <string name="quick_start_description">To start up faster the next time you open Vectras VM if you don\'t remove it from multitasking.</string>
     <string name="cpu_not_support_64_xfce">Your device\'s Android OS or CPU doesn\'t support 64-bit, which means you can\'t use this feature.</string>
+    <string name="the_file_could_not_be_processed_content">The file could not be processed, possibly due to an invalid file path or a corrupted file. Please try again later.</string>
 
 
     <!--======================TERMUX STRINGS====================-->

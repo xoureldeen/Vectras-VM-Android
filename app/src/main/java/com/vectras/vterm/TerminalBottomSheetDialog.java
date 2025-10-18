@@ -109,9 +109,12 @@ public class TerminalBottomSheetDialog {
         ScrollView scrollView = view.findViewById(R.id.scrollView);
 
         // Update the text
-        if (textToAdd.contains("@localhost:~$ clear")) {
+        if (textToAdd.contains("@localhost:~$ exit")) {
+            bottomSheetDialog.dismiss();
+        } else if (textToAdd.contains("@localhost:~$ clear")) {
             isAllowAddToResultCommand = false;
             terminalOutput.setText("");
+            terminalOutput.setVisibility(View.GONE);
         } else {
             if (isAllowAddToResultCommand) {
                 terminalOutput.append(textToAdd);

@@ -128,7 +128,7 @@
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".SetupQemuActivity"
+            android:name=".SetupWizardActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
             android:exported="false"
             android:hardwareAccelerated="true"

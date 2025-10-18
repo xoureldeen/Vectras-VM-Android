@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.preference.PreferenceManager;
 
+import com.google.android.material.color.MaterialColors;
 import com.vectras.vm.R;
 
 public class DialogUtils {
@@ -39,7 +40,9 @@ public class DialogUtils {
             icon.setVisibility(View.GONE);
         }
 
-        if (UIUtils.isUsingThemeNightMode()) positiveButton.setTextColor(Color.WHITE);
+        if (UIUtils.isUsingThemeNightMode()
+                || !UIUtils.isColorLight(MaterialColors.getColor(positiveButton, com.google.android.material.R.attr.colorPrimaryContainer)))
+            positiveButton.setTextColor(Color.WHITE);
 
         title.setText(_title);
         content.setText(_message);
@@ -84,7 +87,8 @@ public class DialogUtils {
             icon.setVisibility(View.GONE);
         }
 
-        if (UIUtils.isUsingThemeNightMode()) {
+        if (UIUtils.isUsingThemeNightMode()
+                || !UIUtils.isColorLight(MaterialColors.getColor(positiveButton, com.google.android.material.R.attr.colorPrimaryContainer))) {
             positiveButton.setTextColor(Color.WHITE);
             negativeButton.setTextColor(Color.WHITE);
         }
@@ -143,7 +147,8 @@ public class DialogUtils {
         title.setText(_title);
         content.setText(_message);
 
-        if (UIUtils.isUsingThemeNightMode()) {
+        if (UIUtils.isUsingThemeNightMode()
+                || !UIUtils.isColorLight(MaterialColors.getColor(positiveButton, com.google.android.material.R.attr.colorPrimaryContainer))) {
             positiveButton.setTextColor(Color.WHITE);
             negativeButton.setTextColor(Color.WHITE);
             neutralButton.setTextColor(Color.WHITE);
