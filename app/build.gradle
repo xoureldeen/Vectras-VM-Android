@@ -102,6 +102,7 @@ dependencies {
     implementation "androidx.documentfile:documentfile:1.1.0"
     compileOnly project(':shell-loader:stub')
     implementation project(":terminal-view")
+    implementation project(":library")
     
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:3.0.0'

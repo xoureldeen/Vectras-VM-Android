@@ -22,6 +22,8 @@ import com.vectras.vterm.Terminal;
 import java.util.HashSet;
 import java.util.Set;
 
+import au.com.darkside.xdemo.XServerActivity;
+
 public class DisplaySystem {
     public static void launch(Activity activity) {
         if (MainSettingsManager.getVmUi(activity).equals("VNC")) {
@@ -40,7 +42,7 @@ public class DisplaySystem {
     }
 
     public static void launchX11(Activity activity, boolean isKillXFCE) {
-        if (SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+        if (SDK_INT >= 34 && isKillXFCE) {
             DialogUtils.oneDialog(
                     activity,
                     activity.getString(R.string.x11_feature_not_supported),
@@ -99,10 +101,14 @@ public class DisplaySystem {
                             null
                     );
                 } else {
-                    if (isKillXFCE)
-                        new Terminal(activity).executeShellCommand2("killall xfce4-session", false, activity);
-                    activity.startActivity(new Intent(activity, X11Activity.class));
-                    new Terminal(activity).executeShellCommand2("xfce4-session", false, activity);
+                    if (SDK_INT >= 34) {
+                        activity.startActivity(new Intent(activity, XServerActivity.class));
+                    } else {
+                        if (isKillXFCE)
+                            new Terminal(activity).executeShellCommand2("killall xfce4-session", false, activity);
+                        activity.startActivity(new Intent(activity, X11Activity.class));
+                        new Terminal(activity).executeShellCommand2("xfce4-session", false, activity);
+                    }
                 }
             });
         }
