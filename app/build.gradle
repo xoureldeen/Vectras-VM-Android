@@ -10,8 +10,8 @@ android {
         applicationId "com.vectras.vm"
         minSdk minApi
         targetSdk targetApi
-        versionCode 26
-        versionName "3.2.3"
+        versionCode 27
+        versionName "3.2.4"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -72,7 +72,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.7.1'
-    implementation 'com.google.android.material:material:1.14.0-alpha05'
+    implementation 'com.google.android.material:material:1.14.0-alpha06'
     implementation "androidx.annotation:annotation:1.9.1"
     implementation "androidx.core:core:1.17.0"
     implementation "androidx.drawerlayout:drawerlayout:1.2.0"

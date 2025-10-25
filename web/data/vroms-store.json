@@ -416,6 +416,22 @@
         "verified": true
     },
     {
+        "rom_name":"Windows Server 2012 build 7868",
+        "rom_icon":"https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/09/17/windows-logo_1_926ed76111646acbbe332bc5af0cf2ce.png",
+        "rom_url":"https://youtu.be/N9fqaqLW5ow",
+        "rom_path":"Windows Server 2012 build 7868.cvbi",
+        "rom_avail":true,
+        "rom_size":"6.2 kernel version",
+        "rom_arch":"X86_64",
+        "rom_kernel":"windows",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows Server 2012 build 7868 is a build of Windows Server 2012, which was shared on 13 October 2024. It is the last available build to use its predecessor's branding in the watermark, and the first available server build with the kernel version bumped up to 6.2.",
+        "file_size": "8 GB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true
+    },
+    {
         "rom_name":"Windows Server 2012 build 7904",
         "rom_icon":"https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/09/17/windows-logo_1_926ed76111646acbbe332bc5af0cf2ce.png",
         "rom_url":"https://youtu.be/Urwn2XVEYp8",
@@ -829,6 +845,38 @@
         "desc":"User: root\nPassword: [None]\nDebian (/ˈdɛbiən/), also known as Debian GNU/Linux, is a free and open source Linux distribution, developed by the Debian Project, which was established by Ian Murdock in August 1993. Debian is one of the oldest operating systems based on the Linux kernel, and is the basis for many other Linux distributions.",
         "file_size": "400 MB",
         "creator": "steven",
+        "verified": true
+    },
+    {
+        "rom_name":"Debian 10",
+        "rom_icon":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRw2CcpHNKIioANF5MV4H-Zw2H3S7hPDMaqeA&s",
+        "rom_url":"https://anbui.ovh/get/vec/community/linux/debian10.html",
+        "rom_path":"Debian 10.cvbi",
+        "rom_avail":true,
+        "rom_size":"Buster",
+        "rom_arch":"X86_64",
+        "rom_kernel":"linux",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"User: vectrasvm\nPassword: 1234\nDebian (/ˈdɛbiən/), also known as Debian GNU/Linux, is a free and open source Linux distribution, developed by the Debian Project, which was established by Ian Murdock in August 1993. Debian is one of the oldest operating systems based on the Linux kernel, and is the basis for many other Linux distributions.",
+        "file_size": "2 GB",
+        "creator": "tokaevUser",
+        "verified": true
+    },
+    {
+        "rom_name":"Debian 12",
+        "rom_icon":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRw2CcpHNKIioANF5MV4H-Zw2H3S7hPDMaqeA&s",
+        "rom_url":"https://anbui.ovh/get/vec/community/linux/debian10.html",
+        "rom_path":"Debian 12.cvbi",
+        "rom_avail":true,
+        "rom_size":"Bookworm",
+        "rom_arch":"X86_64",
+        "rom_kernel":"linux",
+        "rom_extra":"",
+        "final_rom_file_name":"",
+        "desc":"Debian (/ˈdɛbiən/), also known as Debian GNU/Linux, is a free and open source Linux distribution, developed by the Debian Project, which was established by Ian Murdock in August 1993. Debian is one of the oldest operating systems based on the Linux kernel, and is the basis for many other Linux distributions.",
+        "file_size": "11 GB",
+        "creator": "tokaevUser",
         "verified": true
     },
     {

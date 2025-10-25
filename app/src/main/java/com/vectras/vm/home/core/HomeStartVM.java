@@ -27,6 +27,7 @@ import com.vectras.vm.R;
 import com.vectras.vm.VMManager;
 import com.vectras.vm.logger.VectrasStatus;
 import com.vectras.vm.settings.ExternalVNCSettingsActivity;
+import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.NetworkUtils;
@@ -61,7 +62,7 @@ public class HomeStartVM {
             isLaunchFromPending = false;
             if (pendingVMID.isEmpty()) return;
         } else {
-            if (MainSettingsManager.getVmUi(activity).equals("X11") && SDK_INT >= 34) {
+            if (MainSettingsManager.getVmUi(activity).equals("X11") && (SDK_INT >= 34 || !DeviceUtils.is64bit())) {
                 pendingVMName = vmName;
                 pendingEnv = env;
                 pendingVMID = vmID;
