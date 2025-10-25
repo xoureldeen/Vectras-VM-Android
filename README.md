@@ -74,6 +74,7 @@ Help support the project by contributing!
 # Thanks to
 - [3DFX QEMU PATCH](https://github.com/kjliew/qemu-3dfx)
 - [Alpine Linux](https://www.alpinelinux.org/)
+- [Android X11 X-Server](https://github.com/nwrkbiz/android-xserver)
 - [Glide](https://github.com/bumptech/glide)
 - [Gson](https://github.com/google/gson)
 - [OkHttp](https://github.com/square/okhttp)
