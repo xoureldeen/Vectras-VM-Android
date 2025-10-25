@@ -240,6 +240,23 @@
             </intent-filter>
         </activity>
 
+        <service android:name="au.com.darkside.xdemo.XServerService"
+            android:stopWithTask="false" />
+        <activity
+            android:name="au.com.darkside.xdemo.XServerActivity"
+            android:configChanges="keyboardHidden"
+            android:label="@string/app_name"
+            android:screenOrientation="sensorLandscape">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="x11" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="au.com.darkside.xdemo.AccessControlEditor"
+            android:label="Authorized IP addresses" />
+
         <meta-data
             android:name="com.samsung.android.multidisplay.keep_process_alive"
             android:value="false" />

@@ -27,12 +27,15 @@ import com.vectras.vm.R;
 import com.vectras.vm.VMManager;
 import com.vectras.vm.logger.VectrasStatus;
 import com.vectras.vm.settings.ExternalVNCSettingsActivity;
+import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.NetworkUtils;
 import com.vectras.vm.utils.ServiceUtils;
 
 import java.io.File;
+
+import au.com.darkside.xdemo.XServerActivity;
 
 public class HomeStartVM {
     public static final String TAG = "HomeStartVM";
@@ -41,6 +44,11 @@ public class HomeStartVM {
     public static boolean isStopNow = false;
     public static final Handler handlerForLaunch = new Handler(Looper.getMainLooper());
     public static Runnable tickForLaunch = null;
+    public static String pendingVMName = "";
+    public static String pendingEnv = "";
+    public static String pendingVMID = "";
+    public static String pendingThumbnailFile = "";
+    public static boolean isLaunchFromPending = false;
 
     public static void startNow(
             Activity activity,
@@ -49,6 +57,21 @@ public class HomeStartVM {
             String vmID,
             String thumbnailFile
     ) {
+
+        if (isLaunchFromPending) {
+            isLaunchFromPending = false;
+            if (pendingVMID.isEmpty()) return;
+        } else {
+            if (MainSettingsManager.getVmUi(activity).equals("X11") && (SDK_INT >= 34 || !DeviceUtils.is64bit())) {
+                pendingVMName = vmName;
+                pendingEnv = env;
+                pendingVMID = vmID;
+                pendingThumbnailFile = thumbnailFile;
+                activity.startActivity(new Intent(activity, XServerActivity.class));
+                return;
+            }
+        }
+
         isStopNow = false;
 
         String finalvmID;
@@ -176,7 +199,7 @@ public class HomeStartVM {
                             }
 //                    } else if (MainSettingsManager.getVmUi(activity).equals("SPICE")) {
 //                        //This feature is not available yet.
-                        } else if (MainSettingsManager.getVmUi(activity).equals("X11")) {
+                        } else if (MainSettingsManager.getVmUi(activity).equals("X11") && SDK_INT < 34) {
                             DisplaySystem.launchX11(activity, false);
                         }
 
@@ -201,6 +224,11 @@ public class HomeStartVM {
             Log.d("HomeStartVM", i + ": " + params[i]);
         }
 
+    }
+
+    public static void startPending(Activity activity) {
+        isLaunchFromPending = true;
+        startNow(activity, pendingVMName, pendingEnv, pendingVMID, pendingThumbnailFile);
     }
 
     public static void showProgressDialog(Activity activity, String _content, String thumbnailFile) {
