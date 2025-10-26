@@ -20,6 +20,7 @@ import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
@@ -51,10 +52,19 @@ import java.io.IOException;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.vectras.qemu.Config;
+import com.vectras.qemu.MainVNCActivity;
+import com.vectras.vm.MainService;
 import com.vectras.vm.R;
+import com.vectras.vm.VMManager;
+import com.vectras.vm.databinding.ActivityMainXServerBinding;
 import com.vectras.vm.home.core.HomeStartVM;
+import com.vectras.vm.utils.DialogUtils;
+import com.vectras.vm.utils.FileUtils;
+import com.vectras.vm.utils.SimulateKeyEvent;
 
 /**
  * This activity launches an X server and provides a screen for it.
@@ -62,6 +72,7 @@ import com.vectras.vm.home.core.HomeStartVM;
  * @author Matthew Kwan
  */
 public class XServerActivity extends AppCompatActivity {
+    ActivityMainXServerBinding binding;
     private XServer _xServer;
     private ScreenView _screenView;
     private WakeLock _wakeLock;
@@ -95,9 +106,10 @@ public class XServerActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_x_server);
+        binding = ActivityMainXServerBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        copyAssetData(""); // copy all assets to getApplicationInfo().dataDir directory
+//        copyAssetData(""); // copy all assets to getApplicationInfo().dataDir directory
 
         int port = DEFAULT_PORT;
         Intent intent = getIntent();
@@ -149,9 +161,7 @@ public class XServerActivity extends AppCompatActivity {
         if (_screenView != null) {
 //            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(1024, 768);
 //            _screenView.setLayoutParams(params);
-
-            FrameLayout fl = findViewById(R.id.frame);
-            fl.addView(_screenView);
+            binding.frame.addView(_screenView);
         }
 
         PowerManager pm;
@@ -188,6 +198,14 @@ public class XServerActivity extends AppCompatActivity {
             }
         }
 
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                binding.lnTools.setVisibility(binding.lnTools.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+            }
+        });
+
+        initializeToolBar();
         HomeStartVM.startPending(this);
     }
 
@@ -463,7 +481,32 @@ public class XServerActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ACTIVITY_ACCESS_CONTROL && resultCode == RESULT_OK) setAccessControl();
+        if (resultCode == RESULT_OK) {
+            if (requestCode == ACTIVITY_ACCESS_CONTROL) {
+                setAccessControl();
+            } else {
+                Uri content_describer = data.getData();
+                File selectedFilePath = new File(getPath(content_describer));
+
+                switch (requestCode) {
+                    case 120:
+                        VMManager.changeCDROM(selectedFilePath.getAbsolutePath(), this);
+                        break;
+                    case 889:
+                        VMManager.changeFloppyDriveA(selectedFilePath.getAbsolutePath(), this);
+                        break;
+                    case 13335:
+                        VMManager.changeFloppyDriveB(selectedFilePath.getAbsolutePath(), this);
+                        break;
+                    case 32:
+                        VMManager.changeSDCard(selectedFilePath.getAbsolutePath(), this);
+                        break;
+                    case 1996:
+                        VMManager.changeRemovableDevice(VMManager.pendingDeviceID, selectedFilePath.getAbsolutePath(), this);
+                        break;
+                }
+            }
+        }
     }
 
     /**
@@ -551,4 +594,37 @@ public class XServerActivity extends AppCompatActivity {
         }
     }
 
+    private void initializeToolBar() {
+        binding.btnPower.setOnClickListener(v -> DialogUtils.threeDialog(this, getString(R.string.power), getString(R.string.shutdown_or_reset_content), getString(R.string.shutdown), getString(R.string.reset), getString(R.string.close), true, R.drawable.power_settings_new_24px, true,
+                this::shutdownthisvm, VMManager::resetCurrentVM, null, null));
+
+        binding.btnDevices.setOnClickListener(v -> VMManager.showChangeRemovableDevicesDialog(this, null));
+
+        binding.btnKeyboard.setOnClickListener(v -> {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Service.INPUT_METHOD_SERVICE);
+
+            // If anyone knows a better way to bring up the soft
+            // keyboard, I'd love to hear about it.
+            _screenView.requestFocus();
+            imm.hideSoftInputFromWindow(_screenView.getWindowToken(), 0);
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        });
+
+        binding.btnForcustoqemu.setOnClickListener(v -> SimulateKeyEvent.qemuForcus(this));
+
+        binding.btnZoomin.setOnClickListener(v -> SimulateKeyEvent.qemuZoomIn(this));
+
+        binding.btnZoomout.setOnClickListener(v -> SimulateKeyEvent.qemuZoomOut(this));
+    }
+
+    private void shutdownthisvm() {
+        VMManager.shutdownCurrentVM();
+        Config.setDefault();
+        MainService.stopService();
+        finish();
+    }
+
+    public String getPath(Uri uri) {
+        return FileUtils.getPath(this, uri);
+    }
 }

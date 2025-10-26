@@ -62,9 +62,9 @@ public class HomeStartVM {
             isLaunchFromPending = false;
             if (pendingVMID.isEmpty()) return;
         } else {
-            if (MainSettingsManager.getVmUi(activity).equals("X11") && (SDK_INT >= 34 || !DeviceUtils.is64bit())) {
+            if (MainSettingsManager.getVmUi(activity).equals("X11") && SDK_INT >= 34) {
                 pendingVMName = vmName;
-                pendingEnv = env;
+                pendingEnv = "xterm -e bash -c '" + env + "'";
                 pendingVMID = vmID;
                 pendingThumbnailFile = thumbnailFile;
                 activity.startActivity(new Intent(activity, XServerActivity.class));

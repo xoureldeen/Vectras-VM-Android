@@ -400,7 +400,8 @@ public class SetupWizardActivity extends AppCompatActivity {
             cmd += downloadBootstrapsCommand + ";" +
                     " echo \"Installing Qemu...\";" +
                     " tar -xzvf setup.tar.gz -C /;" +
-                    " rm setup.tar.gz;";
+                    " rm setup.tar.gz;" +
+                    " chmod 775 /usr/local/bin/*;";
         } else {
             cmd += " apk add qemu-system-x86_64 qemu-system-ppc qemu-system-i386 qemu-system-aarch64" +
                     " qemu-pr-helper qemu-img qemu-audio-sdl pulseaudio mesa-dri-gallium;";
@@ -410,7 +411,6 @@ public class SetupWizardActivity extends AppCompatActivity {
                 " apk add qemu-audio-sdl pulseaudio;" +
                 " echo export PULSE_SERVER=127.0.0.1 >> /etc/profile;" +
                 " mkdir -p ~/.vnc && echo -e \"555555\\n555555\" | vncpasswd -f > ~/.vnc/passwd && chmod 0600 ~/.vnc/passwd;" +
-                " chmod 775 /usr/local/bin/*;" +
                 " echo \"installation successful! xssFjnj58Id\"";
 
         bindingAdvancedSetup.tvCommandsetup.setText(cmd);

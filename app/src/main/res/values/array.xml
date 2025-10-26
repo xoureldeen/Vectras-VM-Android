@@ -35,7 +35,7 @@
         <item>8</item>
     </string-array>
     <string-array name="vmUiLabels">
-        <item>X11 (TERMUX)</item>
+        <item>X11</item>
         <!--<item>SPICE</item>-->
         <item>VNC</item>
     </string-array>
