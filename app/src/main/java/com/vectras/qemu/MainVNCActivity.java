@@ -886,7 +886,7 @@ public class MainVNCActivity extends VncCanvasActivity {
             newFragment.show(ft, "Logger");
         });
 
-        bindingControls.shutdownBtn.setOnClickListener(v -> DialogUtils.threeDialog(activity, getString(R.string.power), getString(R.string.shutdown_or_reset_content), getString(R.string.shutdown), getString(R.string.reset), getString(R.string.close), true, R.drawable.power_settings_new_24px, true,
+        bindingControls.shutdownBtn.setOnClickListener(v -> DialogUtils.threeDialog(activity, getString(R.string.power), getString(R.string.shutdown_or_reset_content_vnc), getString(R.string.shutdown), getString(R.string.reset), getString(R.string.close), true, R.drawable.power_settings_new_24px, true,
                 this::shutdownthisvm, VMManager::resetCurrentVM, null, null));
 
         bindingControls.shutdownBtn.setOnLongClickListener(view -> {

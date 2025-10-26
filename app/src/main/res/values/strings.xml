@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">3.2.4</string>
+    <string name="app_version" translatable="false">3.2.5</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -509,7 +509,8 @@
     <string name="you_need_to_enter_the_device_id">You need to enter the device ID.</string>
     <string name="this_is_not_a_removable_device">This is not a removable device.</string>
     <string name="power">Power</string>
-    <string name="shutdown_or_reset_content">Do you want to shut down or reset? This can cause some unexpected problems for the virtual machine. You can leave without shutting down by pressing and holding the exit button or pressing the back key.</string>
+    <string name="shutdown_or_reset_content">Do you want to shut down or reset? This can cause some unexpected problems for the virtual machine.</string>
+    <string name="shutdown_or_reset_content_vnc">Do you want to shut down or reset? This can cause some unexpected problems for the virtual machine. You can leave without shutting down by pressing and holding the exit button or pressing the back key.</string>
     <string name="external">External</string>
     <string name="use_external_vnc_server">Use external VNC Server</string>
     <string name="enter_display_number_hint">Enter display number (Recommended 0 – 9)</string>
@@ -576,6 +577,7 @@
     <string name="quick_start_description">To start up faster the next time you open Vectras VM if you don\'t remove it from multitasking.</string>
     <string name="cpu_not_support_64_xfce">Your device\'s Android OS or CPU doesn\'t support 64-bit, which means you can\'t use this feature.</string>
     <string name="the_file_could_not_be_processed_content">The file could not be processed, possibly due to an invalid file path or a corrupted file. Please try again later.</string>
+    <string name="focus_or_defocus_the_qemu_window">Focus or defocus the QEMU window</string>
 
 
     <!--======================TERMUX STRINGS====================-->

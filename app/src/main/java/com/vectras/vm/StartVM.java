@@ -1,6 +1,7 @@
 package com.vectras.vm;
 
 import android.app.Activity;
+import android.os.Build;
 
 import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
@@ -273,6 +274,11 @@ public class StartVM {
         } else if (MainSettingsManager.getVmUi(activity).equals("X11")) {
             params.add("-display");
             params.add("gtk");
+
+            if (Build.VERSION.SDK_INT >= 34) {
+                params.add("-monitor");
+                params.add("stdio");
+            }
         }
 
         //params.add("-full-screen");

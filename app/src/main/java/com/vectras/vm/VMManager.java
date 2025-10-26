@@ -678,11 +678,15 @@ public class VMManager {
     }
 
     public static boolean isthiscommandsafe(@NonNull String _command, Context _context) {
-        if (_command.startsWith("qemu")) {
-            if (!_command.contains("&")) {
-                if (!_command.contains("\n")) {
-                    if (!_command.contains(";")) {
-                        if (!_command.contains("|")) {
+        //xterm -e bash -c '
+        String result = _command.replaceFirst("(?i)^\\s*xterm\\s+-e\\s+bash\\s+-c\\s*'", "");
+        Log.d("VMManager.isthiscommandsafe", result);
+
+        if (result.startsWith("qemu")) {
+            if (!result.contains("&")) {
+                if (!result.contains("\n")) {
+                    if (!result.contains(";")) {
+                        if (!result.contains("|")) {
                             return true;
                         } else {
                             latestUnsafeCommandReason = _context.getString(R.string.command_are_not_allowed_to_contain_vertical_bars);
