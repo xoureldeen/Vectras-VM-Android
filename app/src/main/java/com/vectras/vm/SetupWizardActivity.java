@@ -395,7 +395,8 @@ public class SetupWizardActivity extends AppCompatActivity {
 
         if (isManualMode) {
             cmd += " tar -xzvf " + tarPath + " -C /;" +
-                    " rm " + tarPath + ";";
+                    " rm " + tarPath + ";" +
+                    " chmod 775 /usr/local/bin/*;";
         } else if (DeviceUtils.is64bit()) {
             cmd += downloadBootstrapsCommand + ";" +
                     " echo \"Installing Qemu...\";" +
