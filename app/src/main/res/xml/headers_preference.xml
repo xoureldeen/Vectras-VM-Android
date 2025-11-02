@@ -10,10 +10,10 @@
         app:iconSpaceReserved="false" />
     <Preference
         android:key="userinterface"
-        android:fragment="com.vectras.qemu.MainSettingsManager$UserInterfacePreferencesFragment"
-        android:title="@string/personalization"
+        android:title="@string/theme"
         android:summary="@string/personalization_settings_description"
         app:iconSpaceReserved="false" />
+
     <Preference
         android:key="qemu"
         android:fragment="com.vectras.qemu.MainSettingsManager$QemuPreferencesFragment"

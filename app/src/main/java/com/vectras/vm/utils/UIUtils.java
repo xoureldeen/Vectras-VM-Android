@@ -515,4 +515,13 @@ public class UIUtils {
         return luminance > 186;
     }
 
+    public static void setDarkOrLight(int mode) {
+        if (mode == MainSettingsManager.THEME_LIGHT) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        } else if (mode == MainSettingsManager.THEME_DARK) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        }
+    }
 }

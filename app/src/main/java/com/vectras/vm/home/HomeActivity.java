@@ -93,6 +93,7 @@ import java.util.stream.Collectors;
 public class HomeActivity extends AppCompatActivity implements RomStoreFragment.RomStoreCallToHomeListener, VmsFragment.VmsCallToHomeListener {
     private final String TAG = "HomeActivity";
     public static boolean isActivate = false;
+    public static boolean isNeedRecreate = false;
     public static boolean isOpenRomStore = false;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     ActivityHomeBinding binding;
@@ -293,6 +294,13 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
     public void onResume() {
         super.onResume();
         Log.d(TAG, "onResume");
+
+        if (isNeedRecreate) {
+            isNeedRecreate = false;
+            recreate();
+            return;
+        }
+
         Config.ui = MainSettingsManager.getVmUi(this);
         Config.defaultVNCPort = Integer.parseInt(MainSettingsManager.getVncExternalDisplay(this));
         Config.forceRefeshVNCDisplay = MainSettingsManager.getForceRefeshVNCDisplay(this);
