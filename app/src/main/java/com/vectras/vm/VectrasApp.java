@@ -23,6 +23,8 @@ import android.widget.HorizontalScrollView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.res.ResourcesCompat;
 
@@ -31,6 +33,7 @@ import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.PackageUtils;
+import com.vectras.vm.utils.UIUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -76,8 +79,7 @@ public class VectrasApp extends Application {
 		} catch (Throwable ignore) {
 			// ignored
 		}
-		setModeNight(this);
-		DynamicColors.applyToActivitiesIfAvailable(this);
+        setupTheme();
 
 		Locale locale = Locale.getDefault();
 		String language = locale.getLanguage();
@@ -88,6 +90,22 @@ public class VectrasApp extends Application {
 			overrideFont("DEFAULT", R.font.gilroy);
 		}
 		setupAppConfig(getApplicationContext());
+
+        registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+            @Override
+            public void onActivityPreCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
+                if (MainSettingsManager.getDynamicColor(activity))
+                    DynamicColors.applyToActivityIfAvailable(activity);
+            }
+
+            @Override public void onActivityCreated(@NonNull Activity activity, Bundle savedInstanceState) {}
+            @Override public void onActivityStarted(@NonNull Activity activity) {}
+            @Override public void onActivityResumed(@NonNull Activity activity) {}
+            @Override public void onActivityPaused(@NonNull Activity activity) {}
+            @Override public void onActivityStopped(@NonNull Activity activity) {}
+            @Override public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {}
+            @Override public void onActivityDestroyed(@NonNull Activity activity) {}
+        });
 	}
 
 	public void overrideFont(String defaultFontNameToOverride, int customFontResourceId) {
@@ -102,15 +120,13 @@ public class VectrasApp extends Application {
 		}
 	}
 
-	private void setModeNight(Context context) {
-		if (MainSettingsManager.getModeNight(context)) {
-			AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-			setTheme(R.style.AppTheme);
-		} else {
-			AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-			setTheme(R.style.AppTheme);
-		}
+	private void setupTheme() {
+        UIUtils.setDarkOrLight(MainSettingsManager.getTheme(this));
 
+//        if (MainSettingsManager.getDynamicColor(this))
+//            DynamicColors.applyToActivitiesIfAvailable(this);
+
+//        setTheme(R.style.AppTheme);
 	}
 
 	public static Context getApp() {

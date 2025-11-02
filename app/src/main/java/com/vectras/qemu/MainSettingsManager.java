@@ -29,6 +29,7 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.vectras.vm.R;
 import com.vectras.vm.SplashActivity;
 import com.vectras.vm.VectrasApp;
+import com.vectras.vm.settings.ThemeActivity;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -37,6 +38,10 @@ public class MainSettingsManager extends AppCompatActivity
         implements PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
 
     public static final String TAG = "MainSettingsManager";
+
+    public static final int THEME_DEFAULT = 0;
+    public static final int THEME_LIGHT = 1;
+    public static final int THEME_DARK = 2;
 
     public static MainSettingsManager activity;
 
@@ -76,6 +81,11 @@ public class MainSettingsManager extends AppCompatActivity
                 collapsingToolbarLayout.setSubtitle(getString(R.string.qemu));
             }
         }
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 
     @Override
@@ -144,6 +154,18 @@ public class MainSettingsManager extends AppCompatActivity
         @Override
         public boolean onPreferenceChange(@NonNull Preference pref, Object newValue) {
             return true;
+        }
+
+        @Override
+        public boolean onPreferenceTreeClick(Preference preference) {
+            if ("userinterface".equals(preference.getKey())) {
+                Intent intent = new Intent(getContext(), ThemeActivity.class);
+                startActivity(intent);
+                //Need to close to avoid lag when this activity recreate.
+                requireActivity().finish();
+                return true;
+            }
+            return super.onPreferenceTreeClick(preference);
         }
 
     }
@@ -244,7 +266,7 @@ public class MainSettingsManager extends AppCompatActivity
             Preference pref = findPreference("modeNight");
             if (pref != null) {
                 pref.setOnPreferenceChangeListener((preference, newValue) -> {
-                    onNightMode();
+                    //onNightMode();
                     return true;
                 });
             }
@@ -984,6 +1006,30 @@ public class MainSettingsManager extends AppCompatActivity
     public static Boolean getQuickStart(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean("quickStart", true);
+    }
+
+    public static void setTheme(Context context, int value) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putInt("theme", value);
+        edit.apply();
+    }
+
+    public static int getTheme(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getInt("theme", 0);
+    }
+
+    public static void setDynamicColor(Context context, Boolean _boolean) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putBoolean("dynamicColor", _boolean);
+        edit.apply();
+    }
+
+    public static Boolean getDynamicColor(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean("dynamicColor", true);
     }
 
 }

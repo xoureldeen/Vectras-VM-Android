@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">3.2.6</string>
+    <string name="app_version" translatable="false">3.2.7</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -451,7 +451,7 @@
     <string name="system">System</string>
     <string name="vnc_server">VNC Server</string>
     <string name="system_settings_description">Language, check for updates and files.</string>
-    <string name="personalization_settings_description">Themes and user interface.</string>
+    <string name="personalization_settings_description">Light, dark and dynamic color.</string>
     <string name="qemu_settings_description">Settings for the emulator.</string>
     <string name="vnc_settings_description">Using VNC Server for external.</string>
     <string name="x11_settings_description">X11 user interface environment.</string>
@@ -578,6 +578,14 @@
     <string name="cpu_not_support_64_xfce">Your device\'s Android OS or CPU doesn\'t support 64-bit, which means you can\'t use this feature.</string>
     <string name="the_file_could_not_be_processed_content">The file could not be processed, possibly due to an invalid file path or a corrupted file. Please try again later.</string>
     <string name="focus_or_defocus_the_qemu_window">Focus or defocus the QEMU window</string>
+    <string name="theme">Theme</string>
+    <string name="themes">Themes</string>
+    <string name="light">Light</string>
+    <string name="dark">Dark</string>
+    <string name="this_app_needs_to_be_restarted_for_it_to_take_effect">This app needs to be restarted for it to take effect.</string>
+    <string name="dynamic_color">Dynamic color</string>
+    <string name="dynamic_color_description">Automatically change color according to the system.</string>
+    <string name="restart">Restart</string>
 
 
     <!--======================TERMUX STRINGS====================-->

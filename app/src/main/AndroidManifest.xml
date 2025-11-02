@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.vectras.vm" >
+    package="com.vectras.vm">
 
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -47,7 +47,11 @@
         android:largeHeap="true"
         android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".settings.ThemeActivity"
+            android:configChanges="uiMode|orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
+            android:exported="false" />
         <activity
             android:name=".settings.VNCSettingsActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
@@ -68,7 +72,7 @@
         <activity
             android:name=".ReceiveRomFileActivity"
             android:exported="true"
-            android:label="@string/importRom" >
+            android:label="@string/importRom">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -114,7 +118,7 @@
             android:name=".SplashActivity"
             android:configChanges="uiMode|orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
             android:exported="true"
-            android:hardwareAccelerated="true" >
+            android:hardwareAccelerated="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -177,23 +181,19 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name="com.vectras.qemu.MainSettingsManager"
-            android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|screenLayout|fontScale|uiMode|orientation|screenSize|smallestScreenSize"
-            android:label="@string/settings"
-            android:theme="@style/AppTheme" />
+            android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|screenLayout|fontScale|orientation|screenSize|smallestScreenSize"
+            android:label="@string/settings" />
         <activity
             android:name=".CustomRomActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
-            android:theme="@style/AppTheme" />
+            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout" />
         <activity
             android:name=".DataExplorerActivity"
-            android:label="Data Explorer"
-            android:theme="@style/AppTheme"
-            android:exported="true"/>
+            android:exported="true"
+            android:label="Data Explorer" />
         <activity
             android:name=".SetArchActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
-            android:label="Set Qemu Version"
-            android:theme="@style/AppTheme" />
+            android:label="Set Qemu Version" />
 
         <service
             android:name=".MainService"
@@ -233,15 +233,17 @@
             android:exported="true"
             android:resizeableActivity="true"
             android:supportsPictureInPicture="false"
-            android:taskAffinity="com.vectras.vm.x11.LoriePreferences" >
+            android:taskAffinity="com.vectras.vm.x11.LoriePreferences">
             <intent-filter>
                 <action android:name="android.intent.action.APPLICATION_PREFERENCES" />
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
 
-        <service android:name="au.com.darkside.xdemo.XServerService"
+        <service
+            android:name="au.com.darkside.xdemo.XServerService"
             android:stopWithTask="false" />
+
         <activity
             android:name="au.com.darkside.xdemo.XServerActivity"
             android:configChanges="keyboardHidden"
@@ -249,7 +251,9 @@
             android:screenOrientation="sensorLandscape">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:scheme="x11" />
             </intent-filter>
         </activity>
@@ -268,7 +272,7 @@
             android:name=".x11.utils.KeyInterceptor"
             android:exported="true"
             android:label="Termux:X11 KeyInterceptor"
-            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE" >
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService" />
             </intent-filter>
@@ -282,7 +286,7 @@
             android:name=".x11.LoriePreferences$Receiver"
             android:enabled="true"
             android:exported="true"
-            tools:ignore="ExportedReceiver" >
+            tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="com.vectras.vm.x11.CHANGE_PREFERENCE" />
             </intent-filter>

@@ -115,18 +115,6 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
         com.vectras.qemu.utils.FileInstaller.installFiles(activity, true);
     }
 
-
-    public void onStart() {
-        super.onStart();
-        if (MainSettingsManager.getModeNight(activity)) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            VectrasApp.getApp().setTheme(R.style.AppTheme);
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            VectrasApp.getApp().setTheme(R.style.AppTheme);
-        }
-    }
-
     public static void setupFolders() {
         try {
             StartVM.cache = activity.getCacheDir().getAbsolutePath();

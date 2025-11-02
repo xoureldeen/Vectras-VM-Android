@@ -187,9 +187,9 @@ public class Terminal {
                 ProcessBuilder processBuilder = new ProcessBuilder();
 
                 // Adjust these environment variables as necessary for your app
-                String filesDir = Objects.requireNonNull(context.getFilesDir().getAbsolutePath());
+                String filesDir = context.getFilesDir().getAbsolutePath();
 
-                File tmpDir = new File(Objects.requireNonNull(context.getFilesDir()), "usr/tmp");
+                File tmpDir = new File(context.getFilesDir(), "usr/tmp");
 
                 // Setup environment for the PRoot qemuProcess
                 processBuilder.environment().put("PROOT_TMP_DIR", tmpDir.getAbsolutePath());
