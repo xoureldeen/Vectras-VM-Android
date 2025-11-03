@@ -93,7 +93,7 @@ dependencies {
     implementation "androidx.window:window:1.5.0"
     implementation "commons-io:commons-io:2.20.0"
     implementation 'org.zeroturnaround:zt-zip:1.17'
-    implementation 'com.airbnb.android:lottie:6.6.10'
+    implementation 'com.airbnb.android:lottie:6.7.1'
     implementation 'org.apache.commons:commons-compress:1.28.0'
 //    implementation 'com.google.firebase:firebase-crashlytics-buildtools:3.0.6'
     implementation 'androidx.activity:activity:1.11.0'
