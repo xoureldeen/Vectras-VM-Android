@@ -67,7 +67,6 @@ We publish a **new beta release after every commit** — so you can always test 
 # Donate
 Help support the project by contributing!
 
-[![Buy Me A Coffee][ico-buymeacoffee]][link-buymeacoffee]
 [![Buy Me a Coffee at ko-fi.com][ico-ko-fi]][link-ko-fi]
 [![Support me on Patreon](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fshieldsio-patreon.vercel.app%2Fapi%3Fusername%3Dendel%26type%3Dpatrons&style=flat)](https://patreon.com/VectrasTeam)
 
@@ -93,5 +92,4 @@ Help support the project by contributing!
 [link-telegram]: https://t.me/vectras_os
 [link-repo]: https://github.com/xoureldeen/Vectras-VM-Android/
 [link-releases]: https://github.com/xoureldeen/Vectras-VM-Android/releases/
-[link-buymeacoffee]: https://www.buymeacoffee.com/vectrasvm
 [link-ko-fi]: https://ko-fi.com/vectrasvm
