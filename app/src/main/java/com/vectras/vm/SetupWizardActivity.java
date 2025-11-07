@@ -632,12 +632,12 @@ public class SetupWizardActivity extends AppCompatActivity {
         bindingAdvancedSetup.ivClose.setOnClickListener(v -> binding.linearsimplesetupui.setVisibility(View.VISIBLE));
 
         bindingAdvancedSetup.ivOpenterminal.setOnClickListener(v -> {
-            if (DeviceUtils.is64bit()) {
+//            if (DeviceUtils.is64bit()) {
                 startActivity(new Intent(this, TermuxActivity.class));
-            } else {
-                TerminalBottomSheetDialog VTERM = new TerminalBottomSheetDialog(this);
-                VTERM.showVterm();
-            }
+//            } else {
+//                TerminalBottomSheetDialog VTERM = new TerminalBottomSheetDialog(this);
+//                VTERM.showVterm();
+//            }
         });
 
         bindingAdvancedSetup.btnInstall.setOnClickListener(v -> {

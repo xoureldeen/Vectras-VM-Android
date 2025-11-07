@@ -28,6 +28,7 @@ import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.PopupWindow;
 
+import com.google.android.material.button.MaterialButton;
 import com.vectras.vm.R;
 import com.termux.view.TerminalView;
 
@@ -173,7 +174,7 @@ public final class ExtraKeysView extends GridLayout {
     private Button createSpecialButton(String buttonKey, boolean needUpdate) {
         SpecialButtonState state = specialButtons.get(SpecialButton.valueOf(buttonKey));
         state.isOn = true;
-        Button button = new Button(getContext(), null, android.R.attr.buttonBarButtonStyle);
+        MaterialButton button = new MaterialButton(getContext(), null, android.R.attr.buttonBarButtonStyle);
         button.setTextColor(state.isActive ? INTERESTING_COLOR : TEXT_COLOR);
         if (needUpdate) {
             state.buttons.add(button);
@@ -184,11 +185,11 @@ public final class ExtraKeysView extends GridLayout {
     void popup(View view, ExtraKeyButton extraButton) {
         int width = view.getMeasuredWidth();
         int height = view.getMeasuredHeight();
-        Button button;
+        MaterialButton button;
         if(isSpecialButton(extraButton)) {
-            button = createSpecialButton(extraButton.getKey(), false);
+            button = (MaterialButton) createSpecialButton(extraButton.getKey(), false);
         } else {
-            button = new Button(getContext(), null, android.R.attr.buttonBarButtonStyle);
+            button = new MaterialButton(getContext(), null, android.R.attr.buttonBarButtonStyle);
             button.setTextColor(TEXT_COLOR);
         }
         button.setText(extraButton.getDisplay());
@@ -253,11 +254,11 @@ public final class ExtraKeysView extends GridLayout {
             for (int col = 0; col < buttons[row].length; col++) {
                 final ExtraKeyButton buttonInfo = buttons[row][col];
 
-                Button button;
+                MaterialButton button;
                 if(isSpecialButton(buttonInfo)) {
-                    button = createSpecialButton(buttonInfo.getKey(), true);
+                    button = (MaterialButton) createSpecialButton(buttonInfo.getKey(), true);
                 } else {
-                    button = new Button(getContext(), null, android.R.attr.buttonBarButtonStyle);
+                    button = new MaterialButton(getContext(), null, android.R.attr.buttonBarButtonStyle);
                 }
 
                 button.setText(buttonInfo.getDisplay());

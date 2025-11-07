@@ -27,15 +27,12 @@ import com.vectras.vm.R;
 import com.vectras.vm.VMManager;
 import com.vectras.vm.logger.VectrasStatus;
 import com.vectras.vm.settings.ExternalVNCSettingsActivity;
-import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.NetworkUtils;
 import com.vectras.vm.utils.ServiceUtils;
 
 import java.io.File;
-
-import au.com.darkside.xdemo.XServerActivity;
 
 public class HomeStartVM {
     public static final String TAG = "HomeStartVM";
@@ -61,13 +58,14 @@ public class HomeStartVM {
         if (isLaunchFromPending) {
             isLaunchFromPending = false;
             if (pendingVMID.isEmpty()) return;
+            pendingVMID = "";
         } else {
-            if (MainSettingsManager.getVmUi(activity).equals("X11") && SDK_INT >= 34) {
+            if (MainSettingsManager.getVmUi(activity).equals("X11")) {
                 pendingVMName = vmName;
                 pendingEnv = "xterm -e bash -c '" + env + "'";
                 pendingVMID = vmID;
                 pendingThumbnailFile = thumbnailFile;
-                activity.startActivity(new Intent(activity, XServerActivity.class));
+                DisplaySystem.launch(activity);
                 return;
             }
         }
@@ -199,8 +197,8 @@ public class HomeStartVM {
                             }
 //                    } else if (MainSettingsManager.getVmUi(activity).equals("SPICE")) {
 //                        //This feature is not available yet.
-                        } else if (MainSettingsManager.getVmUi(activity).equals("X11") && SDK_INT < 34) {
-                            DisplaySystem.launchX11(activity, false);
+//                        } else if (MainSettingsManager.getVmUi(activity).equals("X11") && SDK_INT < 34) {
+//                            DisplaySystem.launchX11(activity, false);
                         }
 
                         Log.i(TAG, "Virtual machine running.");

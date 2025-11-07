@@ -487,12 +487,12 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
             } else if (id == R.id.navigation_item_desktop) {
                 DisplaySystem.launchX11(this, true);
             } else if (id == R.id.navigation_item_terminal) {
-                if (DeviceUtils.is64bit()) {
+//                if (DeviceUtils.is64bit()) {
                     startActivity(new Intent(this, TermuxActivity.class));
-                } else {
-                    com.vectras.vterm.TerminalBottomSheetDialog VTERM = new com.vectras.vterm.TerminalBottomSheetDialog(this);
-                    VTERM.showVterm();
-                }
+//                } else {
+//                    com.vectras.vterm.TerminalBottomSheetDialog VTERM = new com.vectras.vterm.TerminalBottomSheetDialog(this);
+//                    VTERM.showVterm();
+//                }
             } else if (id == R.id.navigation_item_view_logs) {
                 BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
                 View view = getLayoutInflater().inflate(R.layout.bottomsheetdialog_logger, null);
@@ -591,9 +591,8 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
 //                            size = obj.getString("size");
                         }
 
-                        if ((versionCode < versionCodeonUpdate ||
-                                !versionNameonUpdate.equals(versionName)) &&
-                                !MainSettingsManager.getSkipVersion(HomeActivity.this).equals(versionNameonUpdate)) {
+                        if ((versionCode < versionCodeonUpdate &&
+                                !MainSettingsManager.getSkipVersion(HomeActivity.this).equals(versionNameonUpdate))) {
 
                             BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(HomeActivity.this);
                             View v = getLayoutInflater().inflate(R.layout.update_bottom_dialog_layout, null);

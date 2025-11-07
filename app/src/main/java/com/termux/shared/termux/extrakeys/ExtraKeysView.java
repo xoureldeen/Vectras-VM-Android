@@ -34,6 +34,8 @@ import android.widget.PopupWindow;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.material.button.MaterialButton;
+
 /**
  * A {@link View} showing extra keys (such as Escape, Ctrl, Alt) not normally available on an Android soft
  * keyboards.
@@ -304,12 +306,12 @@ public final class ExtraKeysView extends GridLayout {
             for (int col = 0; col < buttons[row].length; col++) {
                 final ExtraKeyButton buttonInfo = buttons[row][col];
 
-                Button button;
+                MaterialButton button;
                 if (isSpecialButton(buttonInfo)) {
-                    button = createSpecialButton(buttonInfo.key, true);
+                    button = (MaterialButton) createSpecialButton(buttonInfo.key, true);
                     if (button == null) return;
                 } else {
-                    button = new Button(getContext(), null, android.R.attr.buttonBarButtonStyle);
+                    button = new MaterialButton(getContext(), null, android.R.attr.buttonBarButtonStyle);
                 }
 
                 button.setBackground(new ColorDrawable(Color.BLACK) {
@@ -489,12 +491,12 @@ public final class ExtraKeysView extends GridLayout {
     void showPopup(View view, ExtraKeyButton extraButton) {
         int width = view.getMeasuredWidth();
         int height = view.getMeasuredHeight();
-        Button button;
+        MaterialButton button;
         if (isSpecialButton(extraButton)) {
-            button = createSpecialButton(extraButton.key, false);
+            button = (MaterialButton) createSpecialButton(extraButton.key, false);
             if (button == null) return;
         } else {
-            button = new Button(getContext(), null, android.R.attr.buttonBarButtonStyle);
+            button = new MaterialButton(getContext(), null, android.R.attr.buttonBarButtonStyle);
             button.setTextColor(mButtonTextColor);
         }
         button.setText(extraButton.display);
@@ -556,7 +558,7 @@ public final class ExtraKeysView extends GridLayout {
         SpecialButtonState state = mSpecialButtons.get(SpecialButton.valueOf(buttonKey));
         if (state == null) return null;
         state.setIsCreated(true);
-        Button button = new Button(getContext(), null, android.R.attr.buttonBarButtonStyle);
+        Button button = new MaterialButton(getContext(), null, android.R.attr.buttonBarButtonStyle);
         button.setTextColor(state.isActive ? mButtonActiveTextColor : mButtonTextColor);
         if (needUpdate) {
             state.buttons.add(button);
