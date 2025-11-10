@@ -3,14 +3,10 @@ package com.vectras.vm;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
-import android.os.Environment;
-import android.widget.ImageView.ScaleType;
 
 import com.vectras.qemu.MainSettingsManager;
-import com.vectras.vm.utils.FileUtils;
 
 import java.io.File;
-import java.util.Hashtable;
 import java.util.Objects;
 
 /**
@@ -66,7 +62,7 @@ public class AppConfig {
     }
     public static String internalDataDirPath = "/data/data/com.vectras.vm/files/";
     public static String basefiledir = "";
-    public static String maindirpath = "";
+    public static String maindirpath = "/sdcard/Documents/VectrasVM";
     public static String recyclebin = "";
     //public static String basefiledir = datadirpath(SplashActivity.activity) + "/.qemu/";
     //public static String maindirpath = FileUtils.getExternalFilesDirectory(SplashActivity.activity).getPath() + "/";
@@ -75,6 +71,7 @@ public class AppConfig {
     public static String romsdatajson = maindirpath + "roms-data.json";
     public static String vmFolder = maindirpath + "roms/";
     public static String importedDriveFolder = maindirpath + "drive/";
+    public static String cvbiFolder = maindirpath + "cvbi/";
     public static String pendingCommand = "";
 
     public static String neededPkgs = "bash aria2 tar dwm xfce4-terminal xterm libslirp libslirp-dev pulseaudio-dev glib-dev pixman-dev zlib-dev spice-dev" +

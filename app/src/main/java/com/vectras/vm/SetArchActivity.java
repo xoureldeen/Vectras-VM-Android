@@ -78,7 +78,7 @@ public class SetArchActivity extends AppCompatActivity implements View.OnClickLi
                         File file = new File(filePath);
 
                         Intent intent = new Intent();
-                        intent.setClass(getApplicationContext(), CustomRomActivity.class);
+                        intent.setClass(getApplicationContext(), VMCreatorActivity.class);
                         intent.putExtra("addromnow", "");
                         intent.putExtra("romextra", "");
                         intent.putExtra("romname", "");
@@ -100,22 +100,22 @@ public class SetArchActivity extends AppCompatActivity implements View.OnClickLi
         if (id == R.id.archi386) {
             MainSettingsManager.setArch(this, "I386");
 
-            startActivity(new Intent(activity, CustomRomActivity.class));
+            startActivity(new Intent(activity, VMCreatorActivity.class));
             finish();
         } else if (id == R.id.archx86_64) {
             MainSettingsManager.setArch(this, "X86_64");
 
-            startActivity(new Intent(activity, CustomRomActivity.class));
+            startActivity(new Intent(activity, VMCreatorActivity.class));
             finish();
         } else if (id == R.id.archarm64) {
             MainSettingsManager.setArch(this, "ARM64");
 
-            startActivity(new Intent(activity, CustomRomActivity.class));
+            startActivity(new Intent(activity, VMCreatorActivity.class));
             finish();
         } else if (id == R.id.archppc) {
             MainSettingsManager.setArch(this, "PPC");
 
-            startActivity(new Intent(activity, CustomRomActivity.class));
+            startActivity(new Intent(activity, VMCreatorActivity.class));
             finish();
         } else if (id == R.id.webBtn) {
             String qe = "https://www.qemu.org/";
@@ -136,7 +136,7 @@ public class SetArchActivity extends AppCompatActivity implements View.OnClickLi
             }
         } else if (id == R.id.bntimport) {
             Intent intent = new Intent();
-            intent.setClass(getApplicationContext(), CustomRomActivity.class);
+            intent.setClass(getApplicationContext(), VMCreatorActivity.class);
             intent.putExtra("importcvbinow", "");
             startActivity(intent);
             finish();

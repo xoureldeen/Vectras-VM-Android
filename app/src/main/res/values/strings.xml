@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">3.2.9</string>
+    <string name="app_version" translatable="false">3.2.10</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -586,6 +586,23 @@
     <string name="dynamic_color">Dynamic color</string>
     <string name="dynamic_color_description">Automatically change color according to the system.</string>
     <string name="restart">Restart</string>
+    <string name="edit">Edit</string>
+    <string name="importing">Importing…</string>
+    <string name="completed">Completed</string>
+    <string name="please_stay_here">Please stay here.</string>
+    <string name="exporting">Exporting…</string>
+    <string name="developers">Developers</string>
+    <string name="our_social">Our social</string>
+    <string name="like">Like</string>
+    <string name="unit_of_view">view</string>
+    <string name="unit_of_views">views</string>
+    <string name="views">Views</string>
+    <string name="import_and_export">Import &amp; export</string>
+    <string name="import_and_export_description">Settings for importing and exporting roms.</string>
+    <string name="smart_size_calculation">Smart size calculation</string>
+    <string name="smart_size_calculation_description">Skip size calculation when importing rom if needed for faster import but import progress will not be shown.</string>
+    <string name="cyclic_redundancy_check">Cyclic redundancy check</string>
+    <string name="cyclic_redundancy_check_description">Check and detect data errors when exporting rom, you can turn it off for faster exporting.</string>
 
 
     <!--======================TERMUX STRINGS====================-->

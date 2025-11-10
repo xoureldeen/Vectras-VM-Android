@@ -632,7 +632,7 @@ public class VMManager {
             _activity.stopService(new Intent(_activity, MainService.class));
             isQemuStopedWithError = true;
             return true;
-        } else if (_command.contains("qemu-system") && _result.contains("qemu-system")) {
+        } else if (_command.contains("qemu-system") && _result.contains("qemu-system") && !_result.contains("warning:")) {
             //Error code: UNKNOW_ERROR
             DialogUtils.oneDialog(_activity, _activity.getString(R.string.problem_has_been_detected), _activity.getString(R.string.vm_could_not_be_run_content) + "\n\n" + _result, _activity.getString(R.string.ok),true, R.drawable.error_96px, true,null, null);
             _activity.stopService(new Intent(_activity, MainService.class));

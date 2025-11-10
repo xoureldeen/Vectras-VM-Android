@@ -74,6 +74,7 @@ public class RomStoreHomeAdapterSearch extends RecyclerView.Adapter<RecyclerView
                 intent.putExtra("verified", current.verified);
                 intent.putExtra("creator", current.creator);
                 intent.putExtra("size", current.fileSize);
+                intent.putExtra("id", current.id);
                 context.startActivity(intent);
             });
         } else {

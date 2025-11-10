@@ -55,7 +55,7 @@
         android:text="@string/create"
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="80dp"
         app:icon="@drawable/add_24px"
         app:layout_behavior="com.google.android.material.behavior.HideViewOnScrollBehavior"
         tools:ignore="ContentDescription" />

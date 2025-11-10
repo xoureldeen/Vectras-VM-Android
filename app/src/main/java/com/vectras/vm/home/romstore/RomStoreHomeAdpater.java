@@ -71,6 +71,7 @@ public class RomStoreHomeAdpater extends RecyclerView.Adapter<RecyclerView.ViewH
                 intent.putExtra("verified", current.verified);
                 intent.putExtra("creator", current.creator);
                 intent.putExtra("size", current.fileSize);
+                intent.putExtra("id", current.id);
                 context.startActivity(intent);
             });
         } else {

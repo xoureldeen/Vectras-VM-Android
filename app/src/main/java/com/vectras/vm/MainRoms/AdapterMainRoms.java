@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.vectras.qemu.Config;
-import com.vectras.vm.CustomRomActivity;
+import com.vectras.vm.VMCreatorActivity;
 import com.vectras.vm.ExportRomActivity;
 import com.vectras.vm.MainActivity;
 import com.vectras.vm.R;
@@ -77,9 +77,9 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             Button modifyRomBtn = v.findViewById(R.id.modifyRomBtn);
             modifyRomBtn.setOnClickListener(v3 -> {
-                CustomRomActivity.current = data.get(position);
+                VMCreatorActivity.current = data.get(position);
                 VMManager.setArch(current.itemArch, activity);
-                context.startActivity(new Intent(context, CustomRomActivity.class).putExtra("POS", position).putExtra("MODIFY", true).putExtra("VMID", current.vmID));
+                context.startActivity(new Intent(context, VMCreatorActivity.class).putExtra("POS", position).putExtra("MODIFY", true).putExtra("VMID", current.vmID));
                 bottomSheetDialog.cancel();
             });
 

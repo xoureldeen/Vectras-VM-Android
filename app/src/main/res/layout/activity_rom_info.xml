@@ -103,7 +103,44 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:paddingVertical="16dp"
-                    android:paddingHorizontal="8dp">
+                    android:paddingHorizontal="8dp"
+                    android:animateLayoutChanges="true" >
+
+                    <LinearLayout
+                        android:id="@+id/ln_all_views"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:visibility="gone"
+                        tools:visibility="visible" >
+                        <LinearLayout
+                            android:id="@+id/ln_views"
+                            android:layout_width="110dp"
+                            android:layout_height="wrap_content"
+                            android:paddingHorizontal="8dp"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:background="?attr/selectableItemBackground">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/show_chart_24px" />
+
+                            <TextView
+                                android:id="@+id/tv_views"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:singleLine="true"
+                                android:text="@string/views" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="25dp"
+                            android:background="?attr/colorSurfaceContainerHigh"/>
+                    </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/ln_verified"
@@ -248,23 +285,34 @@
                 android:layout_height="wrap_content"
                 android:paddingVertical="8dp"
                 android:paddingHorizontal="16dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:animateLayoutChanges="true" >
 
-                <Button
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_like"
+                    style="@style/Widget.Material3Expressive.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    app:icon="@drawable/thumb_up_24px"
+                    android:text="@string/like"
+                    android:visibility="gone"
+                    tools:visibility="visible" />
+
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_download"
                     style="@style/Widget.Material3Expressive.Button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="4dp"
+                    android:layout_marginEnd="8dp"
                     android:layout_weight="1"
                     android:text="@string/getit" />
 
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_pick"
                     style="@style/Widget.Material3Expressive.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
                     android:layout_weight="1"
                     android:text="@string/import_settings" />
             </LinearLayout>

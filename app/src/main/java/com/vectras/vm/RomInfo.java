@@ -1,26 +1,27 @@
 package com.vectras.vm;
 
-import static android.content.Intent.ACTION_OPEN_DOCUMENT;
-
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.DocumentsContract;
+import android.util.Log;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.databinding.ActivityRomInfoBinding;
 import com.vectras.vm.utils.DialogUtils;
@@ -28,12 +29,26 @@ import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.ImageUtils;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Locale;
 import java.util.Objects;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class RomInfo extends AppCompatActivity {
 
+    final String TAG = "RomInfo";
     ActivityRomInfoBinding binding;
     public static boolean isFinishNow = false;
+    private int likeCount = 0;
+    private String currentViews = "0";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +58,7 @@ public class RomInfo extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.toolbar);
-        binding.toolbar.setNavigationOnClickListener(v -> {
-            onBackPressed();
-        });
+        binding.toolbar.setNavigationOnClickListener(v -> finish());
 
         binding.btnDownload.setOnClickListener(v -> {
             Intent openurl = new Intent();
@@ -54,17 +67,7 @@ public class RomInfo extends AppCompatActivity {
             startActivity(openurl);
         });
 
-        binding.btnPick.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType("*/*");
-                intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.DIRECTORY_DOWNLOADS);
-                startActivityForResult(intent, 0);
-            }
-        });
+        binding.btnPick.setOnClickListener(v -> romPicker.launch("*/*"));
 
         if (getIntent().hasExtra("title")) {
             binding.textName.setText(getIntent().getStringExtra("title"));
@@ -90,81 +93,89 @@ public class RomInfo extends AppCompatActivity {
         isFinishNow = false;
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 0 && resultCode == RESULT_OK) {
-            Uri content_describer = data.getData();
-            File selectedFilePath = new File(getPath(content_describer));
-            if (selectedFilePath.getName().equals(getIntent().getStringExtra("filename")) || (selectedFilePath.getName().endsWith(".cvbi.zip") && selectedFilePath.getName().equals(getIntent().getStringExtra("filename") + ".zip"))) {
-                Intent intent = new Intent();
+    private final ActivityResultLauncher<String> romPicker =
+            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
 
-                if (getIntent().hasExtra("icon") &&
-                        !Objects.requireNonNull(getIntent().getStringExtra("icon")).isEmpty() &&
-                        (!selectedFilePath.getName().endsWith(".cvbi")
-                        || !selectedFilePath.getName().endsWith(".cvbi.zip"))) {
+                if (uri == null) return;
 
-                    Glide.with(this)
-                            .asBitmap()
-                            .load(getIntent().getStringExtra("icon"))
-                            .into(new CustomTarget<Bitmap>() {
-                                @Override
-                                public void onResourceReady(@NonNull Bitmap resource,
-                                                            @Nullable Transition<? super Bitmap> transition) {
-                                    ImageUtils.saveBitmapToPNGFile(resource, Objects.requireNonNull(getExternalCacheDir()).getAbsolutePath(), "thumbnail.png");
-                                    intent.putExtra("romicon", getExternalCacheDir().getAbsolutePath() + "/thumbnail.png");
-                                }
+                String filePath;
+                try {
+                    File selectedFilePath = new File(getPath(uri));
+                    filePath = selectedFilePath.getPath();
+                } catch (Exception e) {
+                    filePath = "";
+                }
 
-                                @Override
-                                public void onLoadCleared(@Nullable Drawable placeholder) {
-                                    intent.putExtra("romicon", "");
-                                }
-                            });
+                String selectedFileName = FileUtils.getFileNameFromUri(this, uri);
+                if (selectedFileName.equals(getIntent().getStringExtra("filename")) ||
+                        (selectedFileName.endsWith(".cvbi.zip") && selectedFileName.equals(getIntent().getStringExtra("filename") + ".zip"))) {
+                    Intent intent = new Intent();
+
+                    if (getIntent().hasExtra("icon") &&
+                            !Objects.requireNonNull(getIntent().getStringExtra("icon")).isEmpty() &&
+                            (!selectedFileName.endsWith(".cvbi")
+                                    || !selectedFileName.endsWith(".cvbi.zip"))) {
+
+                        Glide.with(this)
+                                .asBitmap()
+                                .load(getIntent().getStringExtra("icon"))
+                                .into(new CustomTarget<Bitmap>() {
+                                    @Override
+                                    public void onResourceReady(@NonNull Bitmap resource,
+                                                                @Nullable Transition<? super Bitmap> transition) {
+                                        ImageUtils.saveBitmapToPNGFile(resource, Objects.requireNonNull(getExternalCacheDir()).getAbsolutePath(), "thumbnail.png");
+                                        intent.putExtra("romicon", getExternalCacheDir().getAbsolutePath() + "/thumbnail.png");
+                                    }
+
+                                    @Override
+                                    public void onLoadCleared(@Nullable Drawable placeholder) {
+                                        intent.putExtra("romicon", "");
+                                    }
+                                });
+                    } else {
+                        intent.putExtra("romicon", "");
+                    }
+
+                    intent.setClass(getApplicationContext(), VMCreatorActivity.class);
+                    intent.putExtra("addromnow", "");
+                    intent.putExtra("romname", getIntent().getStringExtra("title"));
+                    intent.putExtra("romfilename", getIntent().getStringExtra("filename"));
+                    intent.putExtra("finalromfilename", getIntent().getStringExtra("finalromfilename"));
+                    intent.putExtra("rompath", filePath);
+                    intent.putExtra("romuri", uri.toString());
+                    if (Objects.requireNonNull(getIntent().getStringExtra("extra")).contains(selectedFileName)) {
+                        intent.putExtra("addtodrive", "");
+                        intent.putExtra("romextra", getIntent().getStringExtra("extra"));
+                    } else {
+                        intent.putExtra("addtodrive", "1");
+                        intent.putExtra("romextra", getIntent().getStringExtra("extra"));
+                    }
+                    switch (Objects.requireNonNull(getIntent().getStringExtra("arch"))) {
+                        case "X86_64":
+                            MainSettingsManager.setArch(this, "X86_64");
+                            break;
+                        case "i386":
+                            MainSettingsManager.setArch(this, "I386");
+                            break;
+                        case "ARM64":
+                            MainSettingsManager.setArch(this, "ARM64");
+                            break;
+                        case "PowerPC":
+                            MainSettingsManager.setArch(this, "PPC");
+                            break;
+                    }
+                    startActivity(intent);
                 } else {
-                    intent.putExtra("romicon", "");
+                    DialogUtils.oneDialog(RomInfo.this,
+                            getString(R.string.problem_has_been_detected),
+                            getString(R.string.please_select) + " " + getIntent().getStringExtra("filename"),
+                            getString(R.string.ok),
+                            true, R.drawable.warning_48px,
+                            true,
+                            null,
+                            null);
                 }
-
-                intent.setClass(getApplicationContext(), CustomRomActivity.class);
-                intent.putExtra("addromnow", "");
-                intent.putExtra("romname", getIntent().getStringExtra("title"));
-                intent.putExtra("romfilename", getIntent().getStringExtra("filename"));
-                intent.putExtra("finalromfilename", getIntent().getStringExtra("finalromfilename"));
-                intent.putExtra("rompath", selectedFilePath.getPath());
-                if (Objects.requireNonNull(getIntent().getStringExtra("extra")).contains(selectedFilePath.getName())) {
-                    intent.putExtra("addtodrive", "");
-                    intent.putExtra("romextra", getIntent().getStringExtra("extra"));
-                } else {
-                    intent.putExtra("addtodrive", "1");
-                    intent.putExtra("romextra", getIntent().getStringExtra("extra"));
-                }
-                switch (Objects.requireNonNull(getIntent().getStringExtra("arch"))) {
-                    case "X86_64":
-                        MainSettingsManager.setArch(this, "X86_64");
-                        break;
-                    case "i386":
-                        MainSettingsManager.setArch(this, "I386");
-                        break;
-                    case "ARM64":
-                        MainSettingsManager.setArch(this, "ARM64");
-                        break;
-                    case "PowerPC":
-                        MainSettingsManager.setArch(this, "PPC");
-                        break;
-                }
-                startActivity(intent);
-            } else {
-                DialogUtils.oneDialog(RomInfo.this,
-                        getString(R.string.problem_has_been_detected),
-                        getString(R.string.please_select) + " " + getIntent().getStringExtra("filename"),
-                        getString(R.string.ok),
-                        true, R.drawable.warning_48px,
-                        true,
-                        null,
-                        null);
-            }
-
-        }
-    }
+            });
 
     public String getPath(Uri uri) {
         return FileUtils.getPath(RomInfo.this, uri);
@@ -199,6 +210,17 @@ public class RomInfo extends AppCompatActivity {
         if (getIntent().hasExtra("filename")) {
             binding.tvFilename.setText(getIntent().getStringExtra("filename"));
         }
+
+        binding.lnViews.setOnClickListener((v -> DialogUtils.oneDialog(
+                RomInfo.this,
+                getString(R.string.views),
+                currentViews + ".",
+                getString(R.string.ok),
+                true,
+                R.drawable.show_chart_24px,
+                true,
+                null,
+                null)));
 
         String finalCurrentVerifyText = currentVerifyText;
         String finalCurrentVerifyContent = currentVerifyContent;
@@ -257,6 +279,198 @@ public class RomInfo extends AppCompatActivity {
                 true,
                 null,
                 null)));
+
+        binding.btnLike.setOnClickListener(v -> sendLikeUpdate(Objects.requireNonNull(getIntent().getStringExtra("id"))));
+
+        if (getIntent().hasExtra("id") && !Objects.requireNonNull(getIntent().getStringExtra("id")).isEmpty()) {
+            RequestNetwork net = new RequestNetwork(this);
+            RequestNetwork.RequestListener _net_request_listener = new RequestNetwork.RequestListener() {
+                @SuppressLint("SetTextI18n")
+                @Override
+                public void onResponse(String tag, String response, HashMap<String, Object> responseHeaders) {
+                    Log.i(TAG, response);
+                    if (!response.isEmpty()) {
+                        HashMap<String, Object> map = new Gson().fromJson(
+                                response, new TypeToken<HashMap<String, Object>>() {
+                                }.getType()
+                        );
+
+                        if (map.containsKey("likes")) {
+                            likeCount = ((Double) Objects.requireNonNull(map.get("likes"))).intValue();
+                            binding.btnLike.setVisibility(View.VISIBLE);
+                            binding.btnLike.setText((Objects.requireNonNull(map.get("likes")).toString().isEmpty() || (((Double) Objects.requireNonNull(map.get("likes"))).intValue() == 0) ? getString(R.string.like) : finalNumberOfInteractionsFormat(((Double) Objects.requireNonNull(map.get("likes"))).intValue())));
+                            if (MainSettingsManager.getLikes(RomInfo.this).contains("," + getIntent().getStringExtra("id"))) {
+                                binding.btnLike.setIcon(ContextCompat.getDrawable(RomInfo.this, R.drawable.thumb_up_filled_24px));
+                            }
+                        } else {
+                            binding.btnLike.setVisibility(View.GONE);
+                        }
+
+                        if (map.containsKey("views")) {
+                            String viewsContent;
+
+                            if (Objects.requireNonNull(map.get("views")).toString().isEmpty()) {
+                                currentViews = "1";
+                                viewsContent = "1 " + getString(R.string.unit_of_view);
+                            } else {
+                                currentViews = finalNumberOfInteractionsFormat(((Double) Objects.requireNonNull(map.get("views"))).intValue());
+                                viewsContent = currentViews + " " + getString(((Double) Objects.requireNonNull(map.get("views"))).intValue() > 1 ? R.string.unit_of_views : R.string.unit_of_view);
+                            }
+
+                            binding.lnAllViews.setVisibility(View.VISIBLE);
+                            binding.tvViews.setText(viewsContent);
+                        } else {
+                            binding.lnAllViews.setVisibility(View.GONE);
+                        }
+                    } else {
+                        binding.lnAllViews.setVisibility(View.GONE);
+                        binding.btnLike.setVisibility(View.GONE);
+                    }
+                }
+
+                @Override
+                public void onErrorResponse(String tag, String message) {
+                    if (tag.equals("contentinfo")) {
+                        binding.lnAllViews.setVisibility(View.GONE);
+                        binding.btnLike.setVisibility(View.GONE);
+                    }
+                }
+            };
+
+            net.startRequestNetwork(RequestNetworkController.GET,"https://go.anbui.ovh/egg/contentinfo?id=" + getIntent().getStringExtra("id") + "&app=verctrasvm","contentinfo", _net_request_listener);
+
+            sendViewUpdate(getIntent().getStringExtra("id"));
+        }
+    }
+
+    private void sendLikeUpdate(String id) {
+        String addlikecount;
+
+        if (MainSettingsManager.getLikes(this).contains("," + id)) {
+            MainSettingsManager.setLikes(this, MainSettingsManager.getLikes(this).replace("," + id, ""));
+            binding.btnLike.setIcon(ContextCompat.getDrawable(RomInfo.this, R.drawable.thumb_up_24px));
+            addlikecount = "-1";
+            likeCount--;
+        } else {
+            MainSettingsManager.setLikes(this, MainSettingsManager.getLikes(this) + "," + id);
+            binding.btnLike.setIcon(ContextCompat.getDrawable(RomInfo.this, R.drawable.thumb_up_filled_24px));
+            addlikecount = "1";
+            likeCount++;
+        }
+
+        binding.btnLike.setText(likeCount == 0 ? getString(R.string.like) : finalNumberOfInteractionsFormat(likeCount));
+
+        String json = "{"
+                + "\"id\":\"" + id + "\","
+                + "\"addcount\":" + addlikecount
+                + "}";
+
+        RequestBody body = RequestBody.create(
+                json, MediaType.get("application/json; charset=utf-8")
+        );
+
+        Request request = new Request.Builder()
+                .url("https://go.anbui.ovh/egg/updatelike?app=verctrasvm")
+                .post(body)
+                .build();
+
+        OkHttpClient client = new OkHttpClient();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                Log.e(TAG, "sendLikeUpdate: ", e);
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String resBody = response.body().string();
+                    if (!resBody.isEmpty()) {
+                        HashMap<String, Object> map = new Gson().fromJson(
+                                resBody, new TypeToken<HashMap<String, Object>>(){}.getType()
+                        );
+
+                        if (map.containsKey("count")) {
+                            runOnUiThread(() -> {
+                                binding.btnLike.setVisibility(View.VISIBLE);
+                                binding.btnLike.setText((Objects.requireNonNull(map.get("count")).toString().isEmpty() || (((Double) Objects.requireNonNull(map.get("count"))).intValue() == 0) ? getString(R.string.like) : finalNumberOfInteractionsFormat(((Double) Objects.requireNonNull(map.get("count"))).intValue())));
+                            });
+                        } else {
+                            runOnUiThread(() -> binding.btnLike.setVisibility(View.GONE));
+                        }
+                    } else {
+                        runOnUiThread(() -> binding.btnLike.setVisibility(View.GONE));
+                    }
+                } else {
+                    runOnUiThread(() -> binding.btnLike.setVisibility(View.GONE));
+                }
+            }
+        });
+    }
+
+    private void sendViewUpdate(String id) {
+
+        if (MainSettingsManager.getViews(this).contains("," + id)) {
+            return;
+        } else {
+            MainSettingsManager.setViews(this, MainSettingsManager.getViews(this) + "," + id);
+        }
+
+        String json = "{"
+                + "\"id\":\"" + id + "\""
+                + "}";
+
+        RequestBody body = RequestBody.create(
+                json, MediaType.get("application/json; charset=utf-8")
+        );
+
+        Request request = new Request.Builder()
+                .url("https://go.anbui.ovh/egg/updateview?app=verctrasvm")
+                .post(body)
+                .build();
+
+        OkHttpClient client = new OkHttpClient();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                Log.e(TAG, "sendViewUpdate: ", e);
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String resBody = response.body().string();
+                    if (!resBody.isEmpty()) {
+                        HashMap<String, Object> map = new Gson().fromJson(
+                                resBody, new TypeToken<HashMap<String, Object>>(){}.getType()
+                        );
+
+                        if (map.containsKey("count")) {
+                            String viewsContent;
+
+                            if (Objects.requireNonNull(map.get("count")).toString().isEmpty()) {
+                                currentViews = "1";
+                                viewsContent = "1 " + getString(R.string.unit_of_view);
+                            } else {
+                                currentViews = finalNumberOfInteractionsFormat(((Double) Objects.requireNonNull(map.get("count"))).intValue());
+                                viewsContent = currentViews + " " + getString(((Double) Objects.requireNonNull(map.get("count"))).intValue() > 1 ? R.string.unit_of_views : R.string.unit_of_view);
+                            }
+
+                            runOnUiThread(() -> {
+                                binding.lnAllViews.setVisibility(View.VISIBLE);
+                                binding.tvViews.setText(viewsContent);
+                            });
+                        } else {
+                            runOnUiThread(() ->binding.lnAllViews.setVisibility(View.GONE));
+                        }
+                    } else {
+                        runOnUiThread(() -> binding.lnAllViews.setVisibility(View.GONE));
+                    }
+                } else {
+                    runOnUiThread(() -> binding.lnAllViews.setVisibility(View.GONE));
+                }
+            }
+        });
     }
 
     @NonNull
@@ -269,4 +483,15 @@ public class RomInfo extends AppCompatActivity {
             default -> getString(R.string.unknow);
         };
     }
+
+    public static String finalNumberOfInteractionsFormat(int number) {
+        if (number >= 1_000_000) {
+            return String.format(Locale.US, "%.1fM", number / 1_000_000.0);
+        } else if (number >= 1_000) {
+            return String.format(Locale.US, "%.1fK", number / 1_000.0);
+        } else {
+            return String.valueOf(number);
+        }
+    }
+
 }

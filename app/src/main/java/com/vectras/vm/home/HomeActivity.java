@@ -42,14 +42,14 @@ import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.AboutActivity;
 import com.vectras.vm.AppConfig;
-import com.vectras.vm.CustomRomActivity;
+import com.vectras.vm.VMCreatorActivity;
 import com.vectras.vm.Minitools;
 import com.vectras.vm.R;
 import com.vectras.vm.RequestNetwork;
 import com.vectras.vm.RequestNetworkController;
 import com.vectras.vm.home.romstore.RomStoreHomeAdapterSearch;
 import com.vectras.vm.Roms.DataRoms;
-import com.vectras.vm.RomsManagerActivity;
+import com.vectras.vm.RomStoreActivity;
 import com.vectras.vm.SetArchActivity;
 import com.vectras.vm.StoreActivity;
 import com.vectras.vm.VMManager;
@@ -65,7 +65,6 @@ import com.vectras.vm.home.romstore.RomStoreFragment;
 import com.vectras.vm.home.vms.VmsFragment;
 import com.vectras.vm.logger.VectrasStatus;
 import com.vectras.vm.settings.UpdaterActivity;
-import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.LibraryChecker;
@@ -170,7 +169,7 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
                 menuItem -> {
                     if (menuItem.getItemId() == R.id.importrom) {
                         Intent intent = new Intent();
-                        intent.setClass(getApplicationContext(), CustomRomActivity.class);
+                        intent.setClass(getApplicationContext(), VMCreatorActivity.class);
                         intent.putExtra("importcvbinow", "");
                         startActivity(intent);
                     } else if (menuItem.getItemId() == R.id.backtothedisplay) {
@@ -552,7 +551,7 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
                 startActivity(w);
             } else if (id == R.id.navigation_item_get_rom) {
                 Intent intent = new Intent();
-                intent.setClass(getApplicationContext(), RomsManagerActivity.class);
+                intent.setClass(getApplicationContext(), RomStoreActivity.class);
                 startActivity(intent);
             } else if (id == R.id.mini_tools) {
                 Intent intent = new Intent();

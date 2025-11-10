@@ -49,6 +49,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".settings.ImportExportSettingsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".settings.MainActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme" />
+        <activity
             android:name=".settings.ThemeActivity"
             android:configChanges="uiMode|orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
             android:exported="false" />
@@ -109,7 +116,7 @@
             android:exported="true"
             android:hardwareAccelerated="true" />
         <activity
-            android:name=".EditActivity"
+            android:name=".QemuParamsEditorActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
             android:exported="false"
             android:hardwareAccelerated="true"
@@ -138,7 +145,7 @@
             android:hardwareAccelerated="true"
             tools:ignore="DiscouragedApi" /> <!-- stupid android issue -->
         <activity
-            android:name=".RomsManagerActivity"
+            android:name=".RomStoreActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
             android:exported="false"
             android:hardwareAccelerated="true"
@@ -184,7 +191,7 @@
             android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|screenLayout|fontScale|orientation|screenSize|smallestScreenSize"
             android:label="@string/settings" />
         <activity
-            android:name=".CustomRomActivity"
+            android:name=".VMCreatorActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout" />
         <activity
             android:name=".DataExplorerActivity"

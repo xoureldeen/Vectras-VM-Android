@@ -57,13 +57,14 @@ public class ReceiveRomFileActivity extends AppCompatActivity {
                 if (Intent.ACTION_VIEW.equals(action) && uri != null) {
                     if (Objects.requireNonNull(uri.getPath()).endsWith(".cvbi")) {
                         Intent _intent = new Intent();
-                        _intent.setClass(this, CustomRomActivity.class);
+                        _intent.setClass(this, VMCreatorActivity.class);
                         _intent.putExtra("addromnow", "");
                         _intent.putExtra("romextra", "");
                         _intent.putExtra("romname", "");
                         _intent.putExtra("romicon", "");
                         _intent.putExtra("romfilename", ".cvbi");
                         _intent.putExtra("rompath", getFilePath(uri));
+                        _intent.putExtra("romuri", uri.toString());
                         startActivity(_intent);
                         Log.i("ReceiveRomFileActivity", uri.toString());
                         Log.i("ReceiveRomFileActivity", Objects.requireNonNull(getFilePath(uri)));
@@ -75,13 +76,14 @@ public class ReceiveRomFileActivity extends AppCompatActivity {
                     if (uri != null) {
                         if (Objects.requireNonNull(uri.getPath()).endsWith(".cvbi")) {
                             Intent _intent = new Intent();
-                            _intent.setClass(this, CustomRomActivity.class);
+                            _intent.setClass(this, VMCreatorActivity.class);
                             _intent.putExtra("addromnow", "");
                             _intent.putExtra("romextra", "");
                             _intent.putExtra("romname", "");
                             _intent.putExtra("romicon", "");
                             _intent.putExtra("romfilename", ".cvbi");
                             _intent.putExtra("rompath", getFilePath(uri));
+                            _intent.putExtra("romuri", uri.toString());
                             startActivity(_intent);
                             Log.i("ReceiveRomFileActivity", uri.toString());
                             Log.i("ReceiveRomFileActivity", Objects.requireNonNull(getFilePath(uri)));
