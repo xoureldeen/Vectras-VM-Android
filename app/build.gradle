@@ -91,7 +91,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.13.2'
     implementation 'com.squareup.okhttp3:okhttp:5.2.1'
     implementation "androidx.window:window:1.5.0"
-    implementation "commons-io:commons-io:2.20.0"
+    implementation "commons-io:commons-io:2.21.0"
     implementation 'org.zeroturnaround:zt-zip:1.17'
     implementation 'com.airbnb.android:lottie:6.6.10'
     implementation 'org.apache.commons:commons-compress:1.28.0'
