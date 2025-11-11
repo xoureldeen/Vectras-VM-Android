@@ -35,4 +35,13 @@
         android:title="@string/x11"
         android:summary="@string/x11_settings_description"
         app:iconSpaceReserved="false" />
+    <Preference
+        android:key="importandexport"
+        android:title="@string/import_and_export"
+        android:summary="@string/import_and_export_description"
+        app:iconSpaceReserved="false">
+        <intent
+            android:targetPackage="com.vectras.vm"
+            android:targetClass="com.vectras.vm.settings.ImportExportSettingsActivity" />
+    </Preference>
 </PreferenceScreen>

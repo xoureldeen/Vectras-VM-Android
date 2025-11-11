@@ -1,6 +1,5 @@
 package au.com.darkside.xdemo;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Service;
@@ -10,7 +9,6 @@ import android.app.PendingIntent;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -23,7 +21,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import java.net.InetAddress;
@@ -31,6 +28,7 @@ import java.net.NetworkInterface;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import au.com.darkside.xserver.ScreenView;
@@ -41,7 +39,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.ProcessBuilder;
 import java.lang.Class;
-import java.lang.reflect.Constructor;
 
 import android.util.Log;
 
@@ -53,10 +50,10 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.vectras.qemu.Config;
-import com.vectras.qemu.MainVNCActivity;
 import com.vectras.vm.MainService;
 import com.vectras.vm.R;
 import com.vectras.vm.VMManager;
@@ -72,6 +69,7 @@ import com.vectras.vm.utils.SimulateKeyEvent;
  * @author Matthew Kwan
  */
 public class XServerActivity extends AppCompatActivity {
+    private final String TAG = "XServerActivity";
     ActivityMainXServerBinding binding;
     private XServer _xServer;
     private ScreenView _screenView;
@@ -142,7 +140,7 @@ public class XServerActivity extends AppCompatActivity {
                 try {
                     File file = new File(getApplicationInfo().nativeLibraryDir + "/libbinary.so");
                     if(file.exists()){
-                        file.setExecutable(true); // make program executable
+                        if (!file.setExecutable(true)) Log.e(TAG, "Execution of libbinary.so failed."); // make program executable
                         ProcessBuilder pb = new ProcessBuilder(file.getPath());
                         Map<String, String> env = pb.environment();
                         env.put("DISPLAY", "127.0.0.1:0");
@@ -184,10 +182,10 @@ public class XServerActivity extends AppCompatActivity {
             int importance = 3; // default importance
 
             try{
-                Class nc = Class.forName("android.app.NotificationChannel");
+                Class<?> nc = Class.forName("android.app.NotificationChannel");
                 Object ncObj = nc.getConstructor(new Class[] {String.class, CharSequence.class, int.class}).newInstance(NOTIFICATION_CHANNEL_DEFAULT, name, importance);
                 nc.getMethod("setDescription", String.class).invoke(ncObj, description);
-                nc.getMethod("setVibrationPattern", long[].class).invoke(ncObj, new long[]{ 0 }); // enableVibration is bugged, use this as workaround
+                nc.getMethod("setVibrationPattern", long[].class).invoke(ncObj, (Object) new long[]{ 0 }); // enableVibration is bugged, use this as workaround
                 nc.getMethod("enableVibration", boolean.class).invoke(ncObj, true);
                 nc.getMethod("enableLights", boolean.class).invoke(ncObj, false);
                 NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -315,7 +313,7 @@ public class XServerActivity extends AppCompatActivity {
      * @return True if the menu selection has been handled.
      */
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         super.onOptionsItemSelected(item);
 
         switch (item.getItemId()) {
@@ -377,7 +375,7 @@ public class XServerActivity extends AppCompatActivity {
                 if (_windowManager == null) {
                     try {
                         File file = new File(getApplicationInfo().nativeLibraryDir + "/libwm.so");
-                        file.setExecutable(true); // make program executable
+                        if (!file.setExecutable(true)) Log.e(TAG, "Execution of libwm.so failed."); // make program executable
                         ProcessBuilder pb = new ProcessBuilder(file.getPath());
                         Map<String, String> env = pb.environment();
                         env.put("DISPLAY", "127.0.0.1:0");
@@ -441,11 +439,7 @@ public class XServerActivity extends AppCompatActivity {
      */
     private Dialog getMenuIpAdressDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("IP address").setMessage(getAddressInfo()).setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                dialog.cancel();
-            }
-        });
+        builder.setTitle("IP address").setMessage(getAddressInfo()).setPositiveButton("OK", (dialog, id) -> dialog.cancel());
         return builder.create();
     }
 
@@ -468,6 +462,7 @@ public class XServerActivity extends AppCompatActivity {
 
                     hosts.add(host);
                 } catch (Exception e) {
+                    Log.e(TAG, "setAccessControl: ", e);
                 }
             }
         }
@@ -547,22 +542,23 @@ public class XServerActivity extends AppCompatActivity {
 
     private void copyAssetData(String path) {
         AssetManager assetManager = this.getAssets();
-        String assets[] = null;
+        String[] assets;
         try {
             assets = assetManager.list(path);
+            assert assets != null;
             if (assets.length == 0) {
                 copyFile(path);
             } else {
                 String fullPath = getApplicationInfo().dataDir + "/" + path;
                 File dir = new File(fullPath);
                 if (!dir.exists())
-                    dir.mkdir();
-                for (int i = 0; i < assets.length; ++i) {
-                    Log.i(assets[i], "Info");
-                    if(path == "")
-                        copyAssetData(assets[i]);
+                    if (!dir.mkdir()) Log.e(TAG, "Unable to copy asset: " + fullPath);
+                for (String asset : assets) {
+                    Log.i(asset, "Info");
+                    if (path.isEmpty())
+                        copyAssetData(asset);
                     else
-                        copyAssetData(path + "/" + assets[i]);
+                        copyAssetData(path + "/" + asset);
                 }
             }
         } catch (IOException ex) {
@@ -572,8 +568,8 @@ public class XServerActivity extends AppCompatActivity {
 
     private void copyFile(String filename) {
         AssetManager assetManager = this.getAssets();
-        InputStream in = null;
-        OutputStream out = null;
+        InputStream in;
+        OutputStream out;
         try {
             in = assetManager.open(filename);
             String newFileName = getApplicationInfo().dataDir + "/" + filename;
@@ -585,12 +581,10 @@ public class XServerActivity extends AppCompatActivity {
                 out.write(buffer, 0, read);
             }
             in.close();
-            in = null;
             out.flush();
             out.close();
-            out = null;
         } catch (Exception e) {
-            Log.e("tag", e.getMessage());
+            Log.e("tag", Objects.requireNonNull(e.getMessage()));
         }
     }
 

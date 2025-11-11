@@ -2,7 +2,6 @@ package com.vectras.vm.settings;
 
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -10,6 +9,7 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.color.DynamicColors;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.R;
 import com.vectras.vm.databinding.ActivityThemeBinding;
@@ -83,7 +83,7 @@ public class ThemeActivity extends AppCompatActivity {
         oldDynamicColorData = MainSettingsManager.getDynamicColor(this);
         newDynamicColorData = oldDynamicColorData;
 
-        if (Build.VERSION.SDK_INT > 31) {
+        if (DynamicColors.isDynamicColorAvailable()) {
             binding.swDynamiccolor.setChecked(oldDynamicColorData);
             binding.lnDynamiccolor.setOnClickListener(v -> binding.swDynamiccolor.toggle());
             binding.swDynamiccolor.setOnCheckedChangeListener((buttonView, isChecked) -> changeDynamicColor(isChecked));

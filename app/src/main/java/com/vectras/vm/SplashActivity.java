@@ -9,11 +9,11 @@ import android.os.Handler;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.PreferenceManager;
 
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.home.HomeActivity;
+import com.vectras.vm.setupwizard.SetupWizardActivity;
 import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.UIUtils;

@@ -3,7 +3,6 @@ package au.com.darkside.xdemo;
 
 import android.app.Service;
 import android.app.NotificationManager;
-import android.app.Notification;
 import android.content.Intent;
 import android.os.IBinder;
 

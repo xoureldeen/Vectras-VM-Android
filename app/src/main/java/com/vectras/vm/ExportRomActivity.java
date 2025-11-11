@@ -1,48 +1,36 @@
 package com.vectras.vm;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.material.progressindicator.LinearProgressIndicator;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.vectras.vm.databinding.ActivityExportRomBinding;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.PackageUtils;
 import com.vectras.vm.utils.UIUtils;
 import com.vectras.vm.utils.ZipUtils;
 
-import org.zeroturnaround.zip.FileSource;
-import org.zeroturnaround.zip.ZipEntrySource;
-import org.zeroturnaround.zip.ZipUtil;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class ExportRomActivity extends AppCompatActivity {
 
-    private final Timer _timer = new Timer();
-    private TimerTask timerTask;
-    private LinearLayout linearone;
-    private LinearLayout linearload;
-    private LinearLayout lineardone;
-    private LinearLayout linearerror;
-    private TextView textviewfilename;
-    private TextView textviewerrorcontent;
-    private EditText editauthor;
-    private EditText editdesc;
+    ActivityExportRomBinding binding;
     public static int pendingPosition = 0;
     public static HashMap<String, Object> mapForGetData = new HashMap<>();
     public static ArrayList<HashMap<String, Object>> listmapForGetData = new ArrayList<>();
@@ -51,83 +39,74 @@ public class ExportRomActivity extends AppCompatActivity {
     public String iconfile = "";
     public String diskfile = "";
     public String cdromfile = "";
-    private int folderSize = 0;
-    private int zipFileSize = 0;
-    private LinearProgressIndicator progressBar;
-    private TextView textviewsettingup;
-    private int compressionProgress = 0;
+    private boolean isExporting = false;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         UIUtils.edgeToEdge(this);
-        setContentView(R.layout.activity_export_rom);
+        binding = ActivityExportRomBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         UIUtils.setOnApplyWindowInsetsListener(findViewById(R.id.main));
 
-        linearone = findViewById(R.id.linearall);
-        linearload = findViewById(R.id.linearload);
-        lineardone = findViewById(R.id.lineardone);
-        linearerror = findViewById(R.id.linearerror);
-        textviewfilename = findViewById(R.id.textviewfilename);
-        textviewerrorcontent = findViewById(R.id.textviewerrorcontent);
-        editauthor = findViewById(R.id.edittext1);
-        editdesc = findViewById(R.id.edittext2);
-        progressBar = findViewById(R.id.linearprogress);
-        textviewsettingup = findViewById(R.id.textviewsettingup);
-
-        Button buttondone;
-        buttondone = findViewById(R.id.materialbutton1);
-        buttondone.setOnClickListener(v -> {
-            editauthor.setEnabled(false);
-            editdesc.setEnabled(false);
-            editauthor.setEnabled(true);
-            editdesc.setEnabled(true);
-            startCreateCVBI();
+        binding.materialbutton1.setOnClickListener(v -> {
+            binding.edittext1.setEnabled(false);
+            binding.edittext2.setEnabled(false);
+            binding.edittext1.setEnabled(true);
+            binding.edittext2.setEnabled(true);
+            startCreate();
         });
 
-        Button buttonexit;
-        buttonexit = findViewById(R.id.buttonexit);
-        buttonexit.setOnClickListener(v -> finish());
+        binding.buttonexit.setOnClickListener(v -> finish());
 
-        Button buttonexit2;
-        buttonexit2 = findViewById(R.id.buttonexit2);
-        buttonexit2.setOnClickListener(v -> finish());
+        binding.buttonexit2.setOnClickListener(v -> finish());
         data= getSharedPreferences("data", Activity.MODE_PRIVATE);
 
-        editauthor.setText(data.getString("author", ""));
-        editdesc.setText(data.getString("desc", ""));
+        binding.edittext1.setText(data.getString("author", ""));
+        binding.edittext2.setText(data.getString("desc", ""));
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                onBack();
+            }
+        });
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        data.edit().putString("author", editauthor.getText().toString()).apply();
-        data.edit().putString("desc", editdesc.getText().toString()).apply();
+        data.edit().putString("author", Objects.requireNonNull(binding.edittext1.getText()).toString()).apply();
+        data.edit().putString("desc", Objects.requireNonNull(binding.edittext2.getText()).toString()).apply();
     }
 
+    private void onBack() {
+        if (!isExporting) finish();
+    }
+
+    @SuppressLint("SetTextI18n")
     private void UIControler(int _status, String _content) {
         if (_status == 0) {
-            linearone.setVisibility(View.GONE);
-            linearload.setVisibility(View.VISIBLE);
+            binding.linearall.setVisibility(View.GONE);
+            binding.linearload.setVisibility(View.VISIBLE);
         } else if (_status == 1) {
-            linearone.setVisibility(View.GONE);
-            linearload.setVisibility(View.GONE);
-            lineardone.setVisibility(View.VISIBLE);
-            textviewfilename.setText(getString(R.string.saved_in) + " " + _content);
+            binding.linearall.setVisibility(View.GONE);
+            binding.linearload.setVisibility(View.GONE);
+            binding.lineardone.setVisibility(View.VISIBLE);
+            binding.textviewfilename.setText(getString(R.string.saved_in) + " " + _content);
         } else if (_status == 2) {
-            linearone.setVisibility(View.GONE);
-            linearload.setVisibility(View.GONE);
-            lineardone.setVisibility(View.GONE);
-            linearerror.setVisibility(View.VISIBLE);
-            textviewerrorcontent.setText(_content);
+            binding.linearall.setVisibility(View.GONE);
+            binding.linearload.setVisibility(View.GONE);
+            binding.lineardone.setVisibility(View.GONE);
+            binding.linearerror.setVisibility(View.VISIBLE);
+            binding.textviewerrorcontent.setText(_content);
         }
     }
 
-    private void startCreateCVBI() {
-        UIControler(0, "");
-
-        File vDir = new File(AppConfig.maindirpath + "cvbi");
+    @SuppressLint("SetTextI18n")
+    private void startCreate() {
+        File vDir = new File(AppConfig.cvbiFolder);
         if (!vDir.exists()) {
             if(!vDir.mkdirs()) {
                 UIControler(2, getString(R.string.could_not_create_dir_to_save_cvbi_content));
@@ -188,116 +167,81 @@ public class ExportRomActivity extends AppCompatActivity {
         } else {
             mapForGetData.put("arch", "");
         }
-        if (editauthor.getText().toString().isEmpty()) {
+        if (Objects.requireNonNull(binding.edittext1.getText()).toString().isEmpty()) {
             mapForGetData.put("author", "Unknow");
         } else {
-            mapForGetData.put("author", editauthor.getText().toString());
+            mapForGetData.put("author", binding.edittext1.getText().toString());
         }
-        if (editdesc.getText().toString().isEmpty()) {
+        if (Objects.requireNonNull(binding.edittext2.getText()).toString().isEmpty()) {
             mapForGetData.put("desc", "Empty.");
         } else {
-            mapForGetData.put("desc", editdesc.getText().toString());
+            mapForGetData.put("desc", binding.edittext2.getText().toString());
         }
 
         mapForGetData.put("versioncode", PackageUtils.getThisVersionCode(getApplicationContext()));
 
-        FileUtils.writeToFile(new File(String.valueOf(getApplicationContext().getExternalFilesDir("data"))).getPath(), "rom-data.json", new Gson().toJson(mapForGetData));
+        FileUtils.writeToFile(new File(String.valueOf(getExternalFilesDir("data"))).getPath(), "rom-data.json", new Gson().toJson(mapForGetData));
 
-        //folderSize = FileUtils.getFolderSize(getRomPath);
-        //folderSizeMB = (folderSize / (1024 * 10.24)) / 2;
-        folderSize = FileUtils.getFileSize(diskfile);
-        folderSize += FileUtils.getFileSize(cdromfile);
-        folderSize += FileUtils.getFileSize(iconfile);
-        ZipUtils.reset();
+        String[] filePaths = new String[0];
 
-        timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                runOnUiThread(() -> {
-                    zipFileSize = FileUtils.getFileSize(FileUtils.getExternalFilesDirectory(getApplicationContext()).getPath() + "/cvbi/" + Objects.requireNonNull(mapForGetData.get("title")) + ".cvbi");
-                    compressionProgress = ZipUtils.getCompressionProgress(folderSize, zipFileSize);
-                    if (compressionProgress > 0) {
-                        if (compressionProgress > 98) {
-                            progressBar.setIndeterminate(true);
-                        } else {
-                            progressBar.setProgressCompat(compressionProgress, true);
-                        }
-                        textviewsettingup.setText(getResources().getString(R.string.about) + " " + ZipUtils.getRemainingCompressionTime(folderSize, zipFileSize) + " " + getResources().getString(R.string.seconds_left));
-                    }
-                });
+        ArrayList<String> _filelist = new ArrayList<>();
+        FileUtils.getAListOfAllFilesAndFoldersInADirectory(AppConfig.vmFolder + Objects.requireNonNull(listmapForGetData.get(pendingPosition).get("vmID")), _filelist);
+        if (!_filelist.isEmpty()) {
+            for (int _repeat = 0; _repeat < _filelist.size(); _repeat++) {
+                filePaths = java.util.Arrays.copyOf(filePaths, filePaths.length + 1);
+                filePaths[filePaths.length - 1] = !_filelist.get(_repeat).endsWith("rom-data.json") ? _filelist.get(_repeat) : getExternalFilesDir("data") + "/rom-data.json";
             }
-        };
-        _timer.schedule(timerTask, 0, 1000);
+        }
 
-        Thread t = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    if ((!iconfile.isEmpty()) && (!diskfile.isEmpty()) && (!cdromfile.isEmpty())) {
-                        ZipEntrySource[] addedEntries = new ZipEntrySource[]{
-                                new FileSource("/" + new File(diskfile).getName(), new File(diskfile)),
-                                new FileSource("/" + new File(iconfile).getName(), new File(iconfile)),
-                                new FileSource("/" + new File(cdromfile).getName(), new File(cdromfile)),
-                                new FileSource("/" + new File(getApplicationContext().getExternalFilesDir("data") + "/rom-data.json").getName(), new File(getApplicationContext().getExternalFilesDir("data") + "/rom-data.json"))
-                        };
-                        ZipUtil.pack(addedEntries, new File(FileUtils.getExternalFilesDirectory(getApplicationContext()).getPath() + "/cvbi/" + Objects.requireNonNull(mapForGetData.get("title")) + ".cvbi"));
-                    } else if ((!iconfile.isEmpty()) && (!diskfile.isEmpty())) {
-                        ZipEntrySource[] addedEntries = new ZipEntrySource[]{
-                                new FileSource("/" + new File(diskfile).getName(), new File(diskfile)),
-                                new FileSource("/" + new File(iconfile).getName(), new File(iconfile)),
-                                new FileSource("/" + new File(getApplicationContext().getExternalFilesDir("data") + "/rom-data.json").getName(), new File(getApplicationContext().getExternalFilesDir("data") + "/rom-data.json"))
-                        };
-                        ZipUtil.pack(addedEntries, new File(FileUtils.getExternalFilesDirectory(getApplicationContext()).getPath() + "/cvbi/" + Objects.requireNonNull(mapForGetData.get("title")) + ".cvbi"));
-                    } else if ((!iconfile.isEmpty()) && (!cdromfile.isEmpty())) {
-                        ZipEntrySource[] addedEntries = new ZipEntrySource[]{
-                                new FileSource("/" + new File(iconfile).getName(), new File(iconfile)),
-                                new FileSource("/" + new File(cdromfile).getName(), new File(cdromfile)),
-                                new FileSource("/" + new File(getApplicationContext().getExternalFilesDir("data") + "/rom-data.json").getName(), new File(getApplicationContext().getExternalFilesDir("data") + "/rom-data.json"))
-                        };
-                        ZipUtil.pack(addedEntries, new File(FileUtils.getExternalFilesDirectory(getApplicationContext()).getPath() + "/cvbi/" + Objects.requireNonNull(mapForGetData.get("title")) + ".cvbi"));
-                    } else if ((!diskfile.isEmpty()) && (!cdromfile.isEmpty())) {
-                        ZipEntrySource[] addedEntries = new ZipEntrySource[]{
-                                new FileSource("/" + new File(diskfile).getName(), new File(diskfile)),
-                                new FileSource("/" + new File(cdromfile).getName(), new File(cdromfile)),
-                                new FileSource("/" + new File(getApplicationContext().getExternalFilesDir("data") + "/rom-data.json").getName(), new File(getApplicationContext().getExternalFilesDir("data") + "/rom-data.json"))
-                        };
-                        ZipUtil.pack(addedEntries, new File(FileUtils.getExternalFilesDirectory(getApplicationContext()).getPath() + "/cvbi/" + Objects.requireNonNull(mapForGetData.get("title")) + ".cvbi"));
-                    } else if (!iconfile.isEmpty()) {
-                        ZipEntrySource[] addedEntries = new ZipEntrySource[]{
-                                new FileSource("/" + new File(iconfile).getName(), new File(iconfile)),
-                                new FileSource("/" + new File(getApplicationContext().getExternalFilesDir("data") + "/rom-data.json").getName(), new File(getApplicationContext().getExternalFilesDir("data") + "/rom-data.json"))
-                        };
-                        ZipUtil.pack(addedEntries, new File(FileUtils.getExternalFilesDirectory(getApplicationContext()).getPath() + "/cvbi/" + Objects.requireNonNull(mapForGetData.get("title")) + ".cvbi"));
-                    } else if (!diskfile.isEmpty()) {
-                        ZipEntrySource[] addedEntries = new ZipEntrySource[]{
-                                new FileSource("/" + new File(diskfile).getName(), new File(diskfile)),
-                                new FileSource("/" + new File(getApplicationContext().getExternalFilesDir("data") + "/rom-data.json").getName(), new File(getApplicationContext().getExternalFilesDir("data") + "/rom-data.json"))
-                        };
-                        ZipUtil.pack(addedEntries, new File(FileUtils.getExternalFilesDirectory(getApplicationContext()).getPath() + "/cvbi/" + Objects.requireNonNull(mapForGetData.get("title")) + ".cvbi"));
-                    } else if (!cdromfile.isEmpty()) {
-                        ZipEntrySource[] addedEntries = new ZipEntrySource[]{
-                                new FileSource("/" + new File(cdromfile).getName(), new File(cdromfile)),
-                                new FileSource("/" + new File(getApplicationContext().getExternalFilesDir("data") + "/rom-data.json").getName(), new File(getApplicationContext().getExternalFilesDir("data") + "/rom-data.json"))
-                        };
-                        ZipUtil.pack(addedEntries, new File(FileUtils.getExternalFilesDirectory(getApplicationContext()).getPath() + "/cvbi/" + Objects.requireNonNull(mapForGetData.get("title")) + ".cvbi"));
+        View progressView = LayoutInflater.from(this).inflate(R.layout.dialog_progress_style, null);
+        TextView progressText = progressView.findViewById(R.id.progress_text);
+        progressText.setText(getString(R.string.exporting) + "\n" + getString(R.string.please_stay_here));
+        ProgressBar progressBar = progressView.findViewById(R.id.progress_bar);
+        AlertDialog progressDialog = new MaterialAlertDialogBuilder(this, R.style.CenteredDialogTheme)
+                .setView(progressView)
+                .setCancelable(false)
+                .create();
+
+        progressDialog.show();
+
+        String[] finalFilePaths = filePaths;
+        new Thread(() -> {
+            isExporting = true;
+
+            String outputPath;
+            if (!FileUtils.isFileExists(AppConfig.cvbiFolder + Objects.requireNonNull(mapForGetData.get("title")) + ".cvbi")) {
+                outputPath = AppConfig.cvbiFolder + Objects.requireNonNull(mapForGetData.get("title")) + ".cvbi";
+            } else {
+                String outputFileName = Objects.requireNonNull(mapForGetData.get("title")).toString();
+                int prefix = 0;
+                while (true) {
+                    if (!FileUtils.isFileExists(AppConfig.cvbiFolder + outputFileName + "_" + prefix + ".cvbi")) {
+                        outputPath = AppConfig.cvbiFolder + outputFileName + "_" + prefix + ".cvbi";
+                        break;
                     } else {
-                        ZipEntrySource[] addedEntries = new ZipEntrySource[]{
-                                new FileSource("/" + new File(getApplicationContext().getExternalFilesDir("data") + "/rom-data.json").getName(), new File(getApplicationContext().getExternalFilesDir("data") + "/rom-data.json"))
-                        };
-                        ZipUtil.pack(addedEntries, new File(FileUtils.getExternalFilesDirectory(getApplicationContext()).getPath() + "/cvbi/" + Objects.requireNonNull(mapForGetData.get("title")) + ".cvbi"));
+                        prefix++;
                     }
-
-                    runOnUiThread(() -> {
-                        UIControler(1, FileUtils.getExternalFilesDirectory(getApplicationContext()).getPath() + "/cvbi/" + Objects.requireNonNull(mapForGetData.get("title")) + ".cvbi");
-                        if (timerTask != null) {
-                            timerTask.cancel();
-                        }
-                    });
-                } catch (Exception e) {
-                    runOnUiThread(() -> UIControler(2, e.toString()));
                 }
             }
-        };
-        t.start();
+
+            boolean result = ZipUtils.compress(
+                    this,
+                    finalFilePaths,
+                    outputPath,
+                    progressText,
+                    progressBar
+            );
+
+            runOnUiThread(() -> {
+                isExporting = false;
+                progressDialog.dismiss();
+
+                if (result) {
+                    UIControler(1, outputPath);
+                } else {
+                    UIControler(2, ZipUtils.lastErrorContent);
+                }
+            });
+        }).start();
     }
 }

@@ -184,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
                 // Menu items
                 int id = item.getItemId();
                 if (id == R.id.installRoms) {
-                    startActivity(new Intent(activity, RomsManagerActivity.class));
+                    startActivity(new Intent(activity, RomStoreActivity.class));
                 } else if (id == R.id.arch) {
                     startActivity(new Intent(activity, SetArchActivity.class));
                 }
@@ -196,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
         Button gotoromstore = findViewById(R.id.gotoromstorebutton);
         gotoromstore.setOnClickListener(v -> {
             Intent intent = new Intent();
-            intent.setClass(getApplicationContext(), RomsManagerActivity.class);
+            intent.setClass(getApplicationContext(), RomStoreActivity.class);
             startActivity(intent);
         });
 
@@ -451,7 +451,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(w);
             } else if (id == R.id.navigation_item_get_rom) {
                 Intent intent = new Intent();
-                intent.setClass(getApplicationContext(), RomsManagerActivity.class);
+                intent.setClass(getApplicationContext(), RomStoreActivity.class);
                 startActivity(intent);
             } else if (id == R.id.mini_tools) {
                 Intent intent = new Intent();
@@ -1225,7 +1225,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             } else if (item.getItemId() == R.id.importrom) {
                 Intent intent = new Intent();
-                intent.setClass(getApplicationContext(), CustomRomActivity.class);
+                intent.setClass(getApplicationContext(), VMCreatorActivity.class);
                 intent.putExtra("importcvbinow", "");
                 startActivity(intent);
             }

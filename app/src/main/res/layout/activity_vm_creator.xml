@@ -1,0 +1,247 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/main" >
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:id="@+id/mainlayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$Behavior">
+
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                android:id="@+id/collapsingToolbarLayout"
+                style="?attr/collapsingToolbarLayoutLargeStyle"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                android:fitsSystemWindows="true"
+                app:title="@string/create"
+                app:collapsedTitleTextAppearance="@style/TextAppearance.Material3.TitleMedium"
+                app:expandedTitleTextAppearance="@style/TextAppearance.Material3.DisplaySmall">
+
+                <com.google.android.material.appbar.MaterialToolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:elevation="0dp"
+                    app:layout_collapseMode="pin"
+                    app:navigationIcon="@drawable/arrow_back_24px"/>
+
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <LinearLayout
+                android:id="@+id/custom"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                        <com.google.android.material.card.MaterialCardView
+                            style="?attr/materialCardViewFilledStyle"
+                            android:layout_width="120dp"
+                            android:layout_height="120dp"
+                            app:cardBackgroundColor="?attr/colorSurfaceContainer"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginVertical="8dp">
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" >
+                                <ImageView
+                                    android:id="@+id/ivIcon"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:scaleType="centerCrop"
+                                    android:background="?attr/selectableItemBackground"
+                                    app:srcCompat="@drawable/ic_computer_180dp_with_padding" />
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:gravity="bottom|right">
+                                    <ImageView
+                                        android:id="@+id/ivAddThubnail"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:padding="4dp"
+                                        app:tint="@android:color/white"
+                                        app:srcCompat="@drawable/round_add_24"
+                                        android:background="@drawable/backgroud_round_only_left_25_black_50_style"/>
+                                </LinearLayout>
+                            </RelativeLayout>
+                        </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/titleField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/rom_name"
+                    android:theme="@style/AppTheme.TextInput"
+                    app:startIconDrawable="@drawable/round_edit_24">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:selectAllOnFocus="true"
+                        android:singleLine="true" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/driveField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:hint="@string/rom_drive_qcow2_img_etc"
+                    android:theme="@style/AppTheme.TextInput"
+                    app:endIconContentDescription="@string/make_image"
+                    app:endIconDrawable="@drawable/more_vert_24px"
+                    app:endIconMode="custom"
+                    app:startIconDrawable="@drawable/round_storage_24">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/drive"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:inputType="text"
+                        android:selectAllOnFocus="true"
+                        android:singleLine="true" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/cdromField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:hint="CDROM (iso only)"
+                    android:theme="@style/AppTheme.TextInput"
+                    app:startIconDrawable="@drawable/round_album_24"
+                    app:endIconDrawable="@drawable/close_24px">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/cdrom"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:editable="false"
+                        android:focusable="false"
+                        android:inputType="text"
+                        android:selectAllOnFocus="true"
+                        android:singleLine="true" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/qemuField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/qemu_params"
+                    android:theme="@style/AppTheme.TextInput"
+                    app:endIconContentDescription="@string/qemu_create_cmd"
+                    app:endIconDrawable="@drawable/cqcm48"
+                    app:endIconMode="custom"
+                    app:startIconDrawable="@drawable/ic_qemu">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/qemu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:selectAllOnFocus="true"
+                        android:focusable="false"
+                        android:clickable="true"
+                        android:inputType="none"
+                        android:singleLine="true"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentBottom="true"
+                        android:gravity="center_horizontal|bottom"
+                        android:orientation="horizontal"
+                        android:visibility="gone">
+
+<!--                        <com.google.android.gms.ads.AdView-->
+<!--                            android:id="@+id/adView"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginBottom="8dp"-->
+<!--                            app:adSize="BANNER"-->
+<!--                            app:adUnitId="ca-app-pub-3568137780412047/8936512089" />-->
+                    </LinearLayout>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/addRomBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add"
+                    android:visibility="gone"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:padding="8sp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:id="@+id/lineardisclaimer">
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/verified_user_24px"
+                        android:layout_marginRight="8sp"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/disclaimer_here"/>
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <LinearLayout
+        android:id="@+id/linearload"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:fitsSystemWindows="true">
+        <TextView
+            android:id="@+id/textviewprogress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:gravity="center"
+            android:text="@string/processing_this_may_take_a_few_minutes" />
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:indeterminate="true"
+            android:max="100"
+            app:showAnimationBehavior="inward"
+            android:id="@+id/linearprogress"
+            app:indeterminateAnimationType="disjoint"
+            app:wavelength="40dp"
+            app:waveAmplitude="3dp"
+            app:waveSpeed="10dp"/>
+    </LinearLayout>
+</LinearLayout>

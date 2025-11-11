@@ -90,27 +90,27 @@ public class UpdaterActivity extends AppCompatActivity {
                 if (!response.isEmpty()) {
                     try {
                         final JSONObject obj = new JSONObject(response);
-                        String versionNameonUpdate;
+//                        String versionNameonUpdate;
                         int versionCodeonUpdate;
                         String whatsnew;
                         String size;
                         String url;
 
                         if (MainSettingsManager.getcheckforupdatesfromthebetachannel(UpdaterActivity.this)) {
-                            versionNameonUpdate = obj.getString("versionNameBeta");
+//                            versionNameonUpdate = obj.getString("versionNameBeta");
                             versionCodeonUpdate = obj.getInt("versionCodeBeta");
                             whatsnew = obj.getString("MessageBeta");
                             size = obj.getString("sizeBeta");
                             url = obj.getString("urlBeta");
                         } else {
-                            versionNameonUpdate = obj.getString("versionName");
+//                            versionNameonUpdate = obj.getString("versionName");
                             versionCodeonUpdate = obj.getInt("versionCode");
                             whatsnew = obj.getString("Message");
                             size = obj.getString("size");
                             url = obj.getString("url");
                         }
 
-                        if (versionCode < versionCodeonUpdate || !versionNameonUpdate.equals(versionName)) {
+                        if (versionCode < versionCodeonUpdate) {
                             binding.collapsingToolbarLayout.setTitle(getText(R.string.new_update_available));
                             binding.collapsingToolbarLayout.setSubtitle(getString(R.string.whats_new));
                             binding.mcvWhatsnew.setVisibility(View.VISIBLE);

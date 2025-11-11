@@ -7,9 +7,11 @@
     android:gravity="center_vertical">
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progress_bar"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:indeterminate="true" />
+        android:indeterminate="true"
+        android:max="100" />
 
     <TextView
         android:id="@+id/progress_text"

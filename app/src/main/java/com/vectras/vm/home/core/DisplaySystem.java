@@ -29,7 +29,11 @@ public class DisplaySystem {
         if (MainSettingsManager.getVmUi(activity).equals("VNC")) {
             activity.startActivity(new Intent(activity, MainVNCActivity.class));
         } else if (MainSettingsManager.getVmUi(activity).equals("X11")) {
-            DisplaySystem.launchX11(activity, false);
+            if (SDK_INT >= 34) {
+                activity.startActivity(new Intent(activity, XServerActivity.class));
+            } else {
+                DisplaySystem.launchX11(activity, false);
+            }
         }
     }
 

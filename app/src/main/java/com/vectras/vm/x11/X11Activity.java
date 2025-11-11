@@ -3,9 +3,7 @@ package com.vectras.vm.x11;
 import static android.Manifest.permission.WRITE_SECURE_SETTINGS;
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
-import android.graphics.drawable.ColorDrawable;
 import static android.os.Build.VERSION.SDK_INT;
 import android.os.Looper;
 import static android.view.InputDevice.KEYBOARD_TYPE_ALPHABETIC;
@@ -14,15 +12,19 @@ import static android.view.WindowManager.LayoutParams.*;
 
 import android.view.WindowManager;
 import android.widget.TextView;
+
+import androidx.activity.OnBackPressedCallback;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.FragmentTransaction;
+
+import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.Fragment.ControlersOptionsFragment;
 import com.vectras.vm.Fragment.LoggerDialogFragment;
 import com.vectras.vm.MainService;
 import com.vectras.vm.VMManager;
-import com.vectras.vm.VectrasApp;
-import com.vectras.vm.widgets.JoystickView;
-import com.vectras.qemu.MainSettingsManager;
+import com.vectras.vm.home.core.HomeStartVM;
+import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.widgets.JoystickView;
 import static com.vectras.vm.x11.CmdEntryPoint.ACTION_START;
 import static com.vectras.vm.x11.LoriePreferences.ACTION_PREFERENCES_CHANGED;
@@ -261,7 +263,7 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                         if (e.isFromSource(InputDevice.SOURCE_MOUSE)
                                 || e.isFromSource(InputDevice.SOURCE_MOUSE_RELATIVE)) {
                             if (e.getRepeatCount() != 0) // ignore auto-repeat
-                            return true;
+                                return true;
                             if (e.getAction() == ACTION_UP
                                     || e.getAction() == ACTION_DOWN)
                                 lorieView.sendMouseEvent(
@@ -300,10 +302,14 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                 (v, e) -> mInputHandler.handleTouchEvent(lorieParent, lorieView, e));
         lorieParent.setOnGenericMotionListener(
                 (v, e) -> mInputHandler.handleTouchEvent(lorieParent, lorieView, e));
-        lorieView.setOnCapturedPointerListener(
-                (v, e) -> mInputHandler.handleTouchEvent(lorieView, lorieView, e));
-        lorieParent.setOnCapturedPointerListener(
-                (v, e) -> mInputHandler.handleTouchEvent(lorieView, lorieView, e));
+        if (SDK_INT >= VERSION_CODES.O) {
+            lorieView.setOnCapturedPointerListener(
+                    (v, e) -> mInputHandler.handleTouchEvent(lorieView, lorieView, e));
+        }
+        if (SDK_INT >= VERSION_CODES.O) {
+            lorieParent.setOnCapturedPointerListener(
+                    (v, e) -> mInputHandler.handleTouchEvent(lorieView, lorieView, e));
+        }
         lorieView.setOnKeyListener(mLorieKeyListener);
 
         lorieView.setCallback(
@@ -331,15 +337,17 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                     }
                 });
 
-        registerReceiver(
-                receiver,
-                new IntentFilter(ACTION_START) {
-                    {
-                        addAction(ACTION_PREFERENCES_CHANGED);
-                        addAction(ACTION_STOP);
-                    }
-                },
-                SDK_INT >= VERSION_CODES.TIRAMISU ? RECEIVER_EXPORTED : 0);
+        if (SDK_INT >= VERSION_CODES.O) {
+            registerReceiver(
+                    receiver,
+                    new IntentFilter(ACTION_START) {
+                        {
+                            addAction(ACTION_PREFERENCES_CHANGED);
+                            addAction(ACTION_STOP);
+                        }
+                    },
+                    SDK_INT >= VERSION_CODES.TIRAMISU ? RECEIVER_EXPORTED : 0);
+        }
 
         inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
@@ -412,10 +420,10 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
             sendKey(KEYCODE_F, true);
 
             if (isFullScreen[0]) {
-                btnFit.setImageDrawable(getResources().getDrawable(R.drawable.close_fullscreen_24px));
+                btnFit.setImageDrawable(AppCompatResources.getDrawable(X11Activity.this, R.drawable.close_fullscreen_24px));
                 isFullScreen[0] = false;
             } else {
-                btnFit.setImageDrawable(getResources().getDrawable(R.drawable.open_in_full_24px));
+                btnFit.setImageDrawable(AppCompatResources.getDrawable(X11Activity.this, R.drawable.open_in_full_24px));
                 isFullScreen[0] = true;
             }
         });
@@ -524,125 +532,39 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                 return false;
             }
         });
-        JoystickView joystick = (JoystickView) findViewById(R.id.joyStick);
+        JoystickView joystick = findViewById(R.id.joyStick);
         joystick.setVisibility(View.GONE);
-        tabBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                keyDownUp(KEYCODE_TAB);
-            }
+        tabBtn.setOnClickListener(v -> keyDownUp(KEYCODE_TAB));
+        tabGameBtn.setOnClickListener(v -> keyDownUp(KEYCODE_TAB));
+        enterGameBtn.setOnClickListener(v -> keyDownUp(KEYCODE_ENTER));
+        eBtn.setOnClickListener(v -> keyDownUp(KEYCODE_E));
+        rBtn.setOnClickListener(v -> keyDownUp(KEYCODE_R));
+        qBtn.setOnClickListener(v -> keyDownUp(KEYCODE_Q));
+        xBtn.setOnClickListener(v -> keyDownUp(KEYCODE_X));
+        ctrlGameBtn.setOnClickListener(v -> keyDownUp(KEYCODE_CTRL_LEFT));
+        spaceBtn.setOnClickListener(v -> keyDownUp(KEYCODE_SPACE));
+        btnVterm.setOnClickListener(v -> {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            // Create and show the dialog.
+            LoggerDialogFragment newFragment = new LoggerDialogFragment();
+            newFragment.show(ft, "Logger");
         });
-        tabGameBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                keyDownUp(KEYCODE_TAB);
-            }
-        });
-        enterGameBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                keyDownUp(KEYCODE_ENTER);
-            }
-        });
-        eBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                keyDownUp(KEYCODE_E);
-            }
-        });
-        rBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                keyDownUp(KEYCODE_R);
-            }
-        });
-        qBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                keyDownUp(KEYCODE_Q);
-            }
-        });
-        xBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                keyDownUp(KEYCODE_X);
-            }
-        });
-        ctrlGameBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                keyDownUp(KEYCODE_CTRL_LEFT);
-            }
-        });
-        spaceBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                keyDownUp(KEYCODE_SPACE);
-            }
-        });
-        btnVterm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                // Create and show the dialog.
-                LoggerDialogFragment newFragment = new LoggerDialogFragment();
-                newFragment.show(ft, "Logger");
-            }
-        });
-        shutdownBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new AlertDialog.Builder(activity, R.style.MainDialogTheme)
-                        .setTitle(getString(R.string.shutdown))
-                        .setMessage(getString(R.string.are_you_sure_you_want_to_shutdown_vm))
-                        .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
-                            // Stop the service
-                            MainService.stopService();
-                            //Terminal.killQemuProcess();
-                            VMManager.killcurrentqemuprocess(X11Activity.this);
-                            finish();
-                        })
-                        .setNegativeButton(getString(R.string.no), null)
-                        .show();
-            }
+        shutdownBtn.setOnClickListener(v -> DialogUtils.threeDialog(activity, getString(R.string.power), getString(R.string.shutdown_or_reset_content_vnc), getString(R.string.shutdown), getString(R.string.reset), getString(R.string.close), true, R.drawable.power_settings_new_24px, true,
+                this::shutdownthisvm, VMManager::resetCurrentVM, null, null));
+
+        shutdownBtn.setOnLongClickListener(view -> {
+            DialogUtils.twoDialog(activity, "Exit", "You will be left here but the virtual machine will continue to run.", "Exit", getString(R.string.cancel), true, R.drawable.exit_to_app_24px, true,
+                    this::finish, null, null);
+
+            return false;
         });
 
-        shutdownBtn.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                AlertDialog alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
-                alertDialog.setTitle("Exit");
-                alertDialog.setMessage("You will be left here but the virtual machine will continue to run.");
-                alertDialog.setCancelable(true);
-                alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Exit", (dialog, which) -> {
-                    finish();
-                });
-                alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", (dialog, which) -> {
-
-                });
-                alertDialog.show();
-                return false;
-            }
-        });
-        keyboardBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        toggleKeyboardVisibility(X11Activity.this);
-                    }
-                }, 200);
-            }
-        });
-        controllersBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                // Create and show the dialog.
-                ControlersOptionsFragment newFragment = new ControlersOptionsFragment();
-                newFragment.show(ft, "Controllers");
-            }
+        keyboardBtn.setOnClickListener(v -> new Handler(Looper.getMainLooper()).postDelayed(() -> toggleKeyboardVisibility(X11Activity.this), 200));
+        controllersBtn.setOnClickListener(v -> {
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            // Create and show the dialog.
+            ControlersOptionsFragment newFragment = new ControlersOptionsFragment();
+            newFragment.show(ft, "Controllers");
         });
         findViewById(R.id.btnSettings)
                 .setOnClickListener(
@@ -653,90 +575,71 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                                                 setAction(Intent.ACTION_MAIN);
                                             }
                                         }));
-        upBtn.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    sendKey(KEYCODE_DPAD_UP, false);
-                    v.animate().scaleXBy(-0.2f).setDuration(200).start();
-                    v.animate().scaleYBy(-0.2f).setDuration(200).start();
-                    return true;
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    sendKey(KEYCODE_DPAD_UP, true);
-                    v.animate().cancel();
-                    v.animate().scaleX(1f).setDuration(200).start();
-                    v.animate().scaleY(1f).setDuration(200).start();
-                    return true;
-                }
-                return false;
+        upBtn.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                sendKey(KEYCODE_DPAD_UP, false);
+                v.animate().scaleXBy(-0.2f).setDuration(200).start();
+                v.animate().scaleYBy(-0.2f).setDuration(200).start();
+                return true;
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                sendKey(KEYCODE_DPAD_UP, true);
+                v.animate().cancel();
+                v.animate().scaleX(1f).setDuration(200).start();
+                v.animate().scaleY(1f).setDuration(200).start();
+                return true;
             }
+            return false;
         });
-        leftBtn.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    sendKey(KEYCODE_DPAD_LEFT, false);
-                    v.animate().scaleXBy(-0.2f).setDuration(200).start();
-                    v.animate().scaleYBy(-0.2f).setDuration(200).start();
-                    return true;
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    sendKey(KEYCODE_DPAD_LEFT, true);
-                    v.animate().cancel();
-                    v.animate().scaleX(1f).setDuration(200).start();
-                    v.animate().scaleY(1f).setDuration(200).start();
-                    return true;
-                }
-                return false;
+        leftBtn.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                sendKey(KEYCODE_DPAD_LEFT, false);
+                v.animate().scaleXBy(-0.2f).setDuration(200).start();
+                v.animate().scaleYBy(-0.2f).setDuration(200).start();
+                return true;
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                sendKey(KEYCODE_DPAD_LEFT, true);
+                v.animate().cancel();
+                v.animate().scaleX(1f).setDuration(200).start();
+                v.animate().scaleY(1f).setDuration(200).start();
+                return true;
             }
+            return false;
         });
-        downBtn.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    sendKey(KEYCODE_DPAD_DOWN, false);
-                    v.animate().scaleXBy(-0.2f).setDuration(200).start();
-                    v.animate().scaleYBy(-0.2f).setDuration(200).start();
-                    return true;
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    sendKey(KEYCODE_DPAD_DOWN, true);
-                    v.animate().cancel();
-                    v.animate().scaleX(1f).setDuration(200).start();
-                    v.animate().scaleY(1f).setDuration(200).start();
-                    return true;
-                }
-                return false;
+        downBtn.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                sendKey(KEYCODE_DPAD_DOWN, false);
+                v.animate().scaleXBy(-0.2f).setDuration(200).start();
+                v.animate().scaleYBy(-0.2f).setDuration(200).start();
+                return true;
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                sendKey(KEYCODE_DPAD_DOWN, true);
+                v.animate().cancel();
+                v.animate().scaleX(1f).setDuration(200).start();
+                v.animate().scaleY(1f).setDuration(200).start();
+                return true;
             }
+            return false;
         });
-        rightBtn.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    sendKey(KEYCODE_DPAD_RIGHT, false);
-                    v.animate().scaleXBy(-0.2f).setDuration(200).start();
-                    v.animate().scaleYBy(-0.2f).setDuration(200).start();
-                    return true;
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    sendKey(KEYCODE_DPAD_RIGHT, true);
-                    v.animate().cancel();
-                    v.animate().scaleX(1f).setDuration(200).start();
-                    v.animate().scaleY(1f).setDuration(200).start();
-                    return true;
-                }
-                return false;
+        rightBtn.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                sendKey(KEYCODE_DPAD_RIGHT, false);
+                v.animate().scaleXBy(-0.2f).setDuration(200).start();
+                v.animate().scaleYBy(-0.2f).setDuration(200).start();
+                return true;
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                sendKey(KEYCODE_DPAD_RIGHT, true);
+                v.animate().cancel();
+                v.animate().scaleX(1f).setDuration(200).start();
+                v.animate().scaleY(1f).setDuration(200).start();
+                return true;
             }
+            return false;
         });
-        escBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                keyDownUp(KEYCODE_ESCAPE);
-            }
-        });
-        enterBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                keyDownUp(KEYCODE_ENTER);
-            }
-        });
+
+        escBtn.setOnClickListener(v -> keyDownUp(KEYCODE_ESCAPE));
+
+        enterBtn.setOnClickListener(v -> keyDownUp(KEYCODE_ENTER));
+
         ctrlBtn.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("UseCompatLoadingForDrawables")
             @Override
@@ -767,16 +670,10 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                 }
             }
         });
-        delBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                keyDownUp(KEYCODE_DEL);
-            }
-        });
+        delBtn.setOnClickListener(v -> keyDownUp(KEYCODE_DEL));
+
         qmpBtn.setVisibility(View.GONE);
-        qmpBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        qmpBtn.setOnClickListener(v -> {
 //                if (monitorMode) {
 //                    onVNC();
 //                    qmpBtn.setImageDrawable(getResources().getDrawable(R.drawable.round_terminal_24));
@@ -784,8 +681,8 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
 //                    onMonitor();
 //                    qmpBtn.setImageDrawable(getResources().getDrawable(R.drawable.round_computer_24));
 //                }
-            }
         });
+
         Button rightClickBtn = findViewById(R.id.rightClickBtn);
         Button middleClickBtn = findViewById(R.id.middleBtn);
         Button leftClickBtn = findViewById(R.id.leftClickBtn);
@@ -825,15 +722,25 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
             rightClickBtn.setVisibility(View.GONE);
         }
 
-        winBtn.setOnClickListener(new View.OnClickListener() {
+        winBtn.setOnClickListener(v -> {
+            sendKey(KEYCODE_CTRL_LEFT, false);
+            sendKey(KEYCODE_ESCAPE, false);
+            sendKey(KEYCODE_CTRL_LEFT, false);
+            sendKey(KEYCODE_ESCAPE, false);
+        });
+
+        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
-            public void onClick(View v) {
-                sendKey(KEYCODE_CTRL_LEFT, false);
-                sendKey(KEYCODE_ESCAPE, false);
-                sendKey(KEYCODE_CTRL_LEFT, false);
-                sendKey(KEYCODE_ESCAPE, false);
+            public void handleOnBackPressed() {
+                if (findViewById(R.id.mainControl).getVisibility() == View.GONE) {
+                    findViewById(R.id.mainControl).setVisibility(View.VISIBLE);
+                } else if (findViewById(R.id.mainControl).getVisibility() == View.VISIBLE) {
+                    findViewById(R.id.mainControl).setVisibility(View.GONE);
+                }
             }
         });
+
+        HomeStartVM.startPending(this);
     }
     
     private void keyDownUp(int keyEventCode) {
@@ -1024,33 +931,35 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                             10);
                 });
 
-        Map.of(
-                        left,
-                        InputStub.BUTTON_LEFT,
-                        middle,
-                        InputStub.BUTTON_MIDDLE,
-                        right,
-                        InputStub.BUTTON_RIGHT)
-                .forEach(
-                        (v, b) ->
-                                v.setOnTouchListener(
-                                        (__, e) -> {
-                                            switch (e.getAction()) {
-                                                case MotionEvent.ACTION_DOWN:
-                                                case MotionEvent.ACTION_POINTER_DOWN:
-                                                    getLorieView()
-                                                            .sendMouseEvent(0, 0, b, true, true);
-                                                    v.setPressed(true);
-                                                    break;
-                                                case MotionEvent.ACTION_UP:
-                                                case MotionEvent.ACTION_POINTER_UP:
-                                                    getLorieView()
-                                                            .sendMouseEvent(0, 0, b, false, true);
-                                                    v.setPressed(false);
-                                                    break;
-                                            }
-                                            return true;
-                                        }));
+        if (SDK_INT >= VERSION_CODES.N) {
+            Map.of(
+                            left,
+                            InputStub.BUTTON_LEFT,
+                            middle,
+                            InputStub.BUTTON_MIDDLE,
+                            right,
+                            InputStub.BUTTON_RIGHT)
+                    .forEach(
+                            (v, b) ->
+                                    v.setOnTouchListener(
+                                            (__, e) -> {
+                                                switch (e.getAction()) {
+                                                    case MotionEvent.ACTION_DOWN:
+                                                    case MotionEvent.ACTION_POINTER_DOWN:
+                                                        getLorieView()
+                                                                .sendMouseEvent(0, 0, b, true, true);
+                                                        v.setPressed(true);
+                                                        break;
+                                                    case MotionEvent.ACTION_UP:
+                                                    case MotionEvent.ACTION_POINTER_UP:
+                                                        getLorieView()
+                                                                .sendMouseEvent(0, 0, b, false, true);
+                                                        v.setPressed(false);
+                                                        break;
+                                                }
+                                                return true;
+                                            }));
+        }
 
         pos.setOnTouchListener(
                 new View.OnTouchListener() {
@@ -1186,9 +1095,10 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                 new AlertDialog.Builder(this)
                         .setTitle("Permission denied")
                         .setMessage(
-                                "Android requires WRITE_SECURE_SETTINGS permission to start accessibility service automatically.\n"
-                                        + "Please, launch this command using ADB:\n"
-                                        + "adb shell pm grant com.vectras.vm.x11 android.permission.WRITE_SECURE_SETTINGS")
+                                """
+                                        Android requires WRITE_SECURE_SETTINGS permission to start accessibility service automatically.
+                                        Please, launch this command using ADB:
+                                        adb shell pm grant com.vectras.vm.x11 android.permission.WRITE_SECURE_SETTINGS""")
                         .setNegativeButton("OK", null)
                         .create()
                         .show();
@@ -1460,15 +1370,6 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                 .setFitsSystemWindows(!fullscreen);
     }
 
-    @Override
-    public void onBackPressed() {
-        if (findViewById(R.id.mainControl).getVisibility() == View.GONE) {
-            findViewById(R.id.mainControl).setVisibility(View.VISIBLE);
-        } else if (findViewById(R.id.mainControl).getVisibility() == View.VISIBLE) {
-            findViewById(R.id.mainControl).setVisibility(View.GONE);
-        }
-    }
-
     public static boolean hasPipPermission(@NonNull Context context) {
         AppOpsManager appOpsManager =
                 (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
@@ -1489,9 +1390,12 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
 
     @Override
     public void onUserLeaveHint() {
+        super.onUserLeaveHint();
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         if (preferences.getBoolean("PIP", false) && hasPipPermission(this)) {
-            enterPictureInPictureMode();
+            if (SDK_INT >= VERSION_CODES.N) {
+                enterPictureInPictureMode();
+            }
         }
     }
 
@@ -1548,9 +1452,11 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                     if (!connected) tryConnect();
 
                     if (connected)
-                        getLorieView()
-                                .setPointerIcon(
-                                        PointerIcon.getSystemIcon(this, PointerIcon.TYPE_NULL));
+                        if (SDK_INT >= VERSION_CODES.N) {
+                            getLorieView()
+                                    .setPointerIcon(
+                                            PointerIcon.getSystemIcon(this, PointerIcon.TYPE_NULL));
+                        }
                 });
     }
 
@@ -1579,5 +1485,12 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                 || (textInput != null && textInput.isFocused())) return false;
 
         return mInputHandler.shouldInterceptKeys();
+    }
+
+    private void shutdownthisvm() {
+        VMManager.shutdownCurrentVM();
+        Config.setDefault();
+        MainService.stopService();
+        finish();
     }
 }

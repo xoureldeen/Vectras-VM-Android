@@ -1,4 +1,4 @@
-package com.vectras.vm;
+package com.vectras.vm.setupwizard;
 
 import static android.content.Intent.ACTION_VIEW;
 
@@ -33,6 +33,10 @@ import androidx.preference.PreferenceManager;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.vectras.qemu.MainSettingsManager;
+import com.vectras.vm.AppConfig;
+import com.vectras.vm.R;
+import com.vectras.vm.RequestNetwork;
+import com.vectras.vm.RequestNetworkController;
 import com.vectras.vm.databinding.ActivitySetupWizardBinding;
 import com.vectras.vm.databinding.SetupQemuAdvancedBinding;
 import com.vectras.vm.databinding.SetupQemuDoneBinding;
@@ -46,7 +50,6 @@ import com.vectras.vm.utils.JSONUtils;
 import com.vectras.vm.utils.ListUtils;
 import com.vectras.vm.utils.UIUtils;
 import com.vectras.vm.utils.PermissionUtils;
-import com.vectras.vterm.TerminalBottomSheetDialog;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -54,9 +57,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -82,7 +83,7 @@ public class SetupWizardActivity extends AppCompatActivity {
     private String downloadBootstrapsCommand = "";
     private boolean aria2Error = false;
     private boolean isexecutingCommand = false;
-    private boolean isEdgeServerError = false;
+    private boolean isServerError = false;
     private boolean isManualMode = false;
     private boolean isAllowCheckPermissions = false;
 
@@ -161,32 +162,10 @@ public class SetupWizardActivity extends AppCompatActivity {
             }
         });
 
-        startExtractSystemFiles();
+        extractSystemFiles();
     }
 
-    private void startExtractSystemFiles() {
-        String filesDir = getFilesDir().getAbsolutePath();
-        File distroDir = new File(filesDir + "/distro");
-        File binDir = new File(distroDir + "/bin");
-        if (!binDir.exists()) {
-            extractSystemFiles("bootstrap", "");
-            if (Build.SUPPORTED_ABIS[0].contains("64")) {
-                extractSystemFiles("alpine22", "distro");
-            } else {
-                extractSystemFiles("alpine21", "distro");
-            }
-        }
-    }
-
-    public void extractSystemFiles(String fromAsset, String extractTo) {
-        String randomFileName = VMManager.startRamdomVMID();
-        String filesDir = getFilesDir().getAbsolutePath();
-        String abi = getDeviceAbi();
-        String assetPath = fromAsset + "/" + abi + ".tar";
-        String extractedFilePath = filesDir + "/" + randomFileName + ".tar";
-        File destDir = new File(filesDir + "/" + extractTo);
-        if (!destDir.exists()) if (!destDir.mkdir()) Log.e(TAG, "extractSystemFiles: Unable to create folder " + filesDir + "/" + extractTo);
-
+    private void extractSystemFiles() {
         View progressView = LayoutInflater.from(this).inflate(R.layout.dialog_progress_style, null);
         TextView progress_text = progressView.findViewById(R.id.progress_text);
         progress_text.setText(getString(R.string.installing));
@@ -197,127 +176,23 @@ public class SetupWizardActivity extends AppCompatActivity {
         progressDialog.show();
 
         new Thread(() -> {
-            boolean isCompleted;
-            String errorMessage = "";
+            boolean result = SetupFeatureCore.startExtractSystemFiles(this);
 
-            // Step 1: Copy asset to filesDir
-            if (!copyAssetToFile(assetPath, extractedFilePath)) {
-                errorMessage = "Failed to copy asset file.";
-                isCompleted = false;
-            } else {
-                isCompleted = true;
-            }
-
-            // Step 2: Run tar extraction
-            if (isCompleted) {
-                String[] cmdline = {"tar", "xf", extractedFilePath, "-C", filesDir + "/" + extractTo};
-                Process process = null;
-                try {
-                    process = Runtime.getRuntime().exec(cmdline);
-
-                    // Capture standard error output (stderr)
-                    BufferedReader errorReader =
-                            new BufferedReader(new InputStreamReader(process.getErrorStream()));
-                    StringBuilder errorOutput = new StringBuilder();
-                    String line;
-                    while ((line = errorReader.readLine()) != null) {
-                        errorOutput.append(line).append("\n");
-                    }
-                    errorReader.close();
-
-                    // Wait for the process to complete
-                    int exitCode = process.waitFor();
-
-                    // If there was any output in stderr, treat it as an error
-                    if (exitCode != 0 || errorOutput.length() > 0) {
-                        errorMessage =
-                                errorOutput.toString().isEmpty()
-                                        ? "Unknown error"
-                                        : errorOutput.toString();
-                        isCompleted = false;
-                    }
-                } catch (IOException | InterruptedException e) {
-                    errorMessage = e.getMessage();
-                    isCompleted = false;
-                } finally {
-                    if (process != null) {
-                        process.destroy();
-                    }
-                }
-            }
-
-            boolean finalIsCompleted = isCompleted;
-            String finalErrorMessage = errorMessage;
             runOnUiThread(() -> {
                 progressDialog.dismiss();
-                if (finalIsCompleted) {
-                    Toast.makeText(
-                                    getApplicationContext(),
-                                    R.string.extraction_complete,
-                                    Toast.LENGTH_SHORT)
-                            .show();
 
-                    if (fromAsset.contains("alpine")) {
-                        File rootDir = new File(filesDir + "/distro/root");
-                        if (!rootDir.exists()) if(!rootDir.mkdir()) Log.e(TAG, "extractSystemFiles: Unable to create folder " + filesDir + "/distro/root");
-
-                        File resolv = new File(filesDir + "/distro/etc/resolv.conf");
-                        if(!Objects.requireNonNull(resolv.getParentFile()).mkdirs()) Log.e(TAG, "extractSystemFiles: Unable to add DNS.");
-                        try (BufferedWriter writer = new BufferedWriter(new FileWriter(resolv))) {
-                            writer.write("nameserver 1.1.1.1\n");
-                            writer.write("nameserver 1.0.0.1\n");
-                            writer.write("nameserver 8.8.8.8\n");
-                            writer.write("nameserver 8.8.4.4\n");
-                        } catch (IOException e) {
-                            Log.e(TAG, "extractSystemFiles: resolv: ", e);
-                        }
-
-                    }
-                } else {
-                    DialogUtils.twoDialog(
-                            this,
-                            getString(R.string.failed),
-                            finalErrorMessage,
-                            getString(R.string.try_again),
-                            getString(R.string.close),
-                            true,
-                            R.drawable.error_96px,
-                            false,
-                            this::startExtractSystemFiles,
-                            this::finish,
-                            null);
-                }
-
-                File extractedTarFile = new File(extractedFilePath);
-                if (extractedTarFile.exists()) if(!extractedTarFile.delete()) Log.e(TAG, "extractSystemFiles: Unable to delete " + extractedFilePath);
+                if (!result) DialogUtils.oneDialog(
+                        this,
+                        getString(R.string.oops),
+                        getString(R.string.system_files_installation_failed_content),
+                        getString(R.string.try_again),
+                        true,
+                        R.drawable.error_96px,
+                        false,
+                        this::extractSystemFiles,
+                        null);
             });
         }).start();
-    }
-
-    /**
-     * Copies the specified asset to the given file path.
-     */
-    private boolean copyAssetToFile(String assetPath, String outputPath) {
-        try (InputStream in = getAssets().open(assetPath);
-             OutputStream out = new FileOutputStream(outputPath)) {
-            byte[] buffer = new byte[1024];
-            int read;
-            while ((read = in.read(buffer)) != -1) {
-                out.write(buffer, 0, read);
-            }
-            out.flush();
-            return true;
-        } catch (IOException e) {
-            Log.e(TAG, "copyAssetToFile: ", e);
-            return false;
-        }
-    }
-
-    /**
-     * Determines the ABI of the device.
-     */
-    private String getDeviceAbi() {
-        return Build.SUPPORTED_ABIS[0];
     }
 
     @Override
@@ -342,47 +217,46 @@ public class SetupWizardActivity extends AppCompatActivity {
             libprooterror = true;
         } else if (textToAdd.contains("not complete: /root/setup.tar.gz")) {
             aria2Error = true;
-        } else if (textToAdd.contains("edge") && textToAdd.contains("temporary error")) {
-            isEdgeServerError = true;
+        } else if (textToAdd.contains("temporary error")) {
+            isServerError = true;
         }
 
         if (textToAdd.contains("Starting setup...")) {
-            bindingAdvancedSetup.title.setText("Getting ready for you...");
-            binding.textviewsettingup.setText(R.string.getting_ready_for_you_please_don_t_disconnect_the_network);
+            setTextStatus(getString(R.string.getting_ready_for_you_please_don_t_disconnect_the_network));
         } else if (textToAdd.contains("fetch http")) {
-            bindingAdvancedSetup.title.setText(getString(R.string.connecting_to_mirror_in) + "\n" + selectedMirrorLocation + "...");
-            binding.textviewsettingup.setText(getString(R.string.connecting_to_mirror_in) + "\n" + selectedMirrorLocation + "...");
+            setTextStatus(getString(R.string.connecting_to_mirror_in) + "\n" + selectedMirrorLocation + "...");
         } else if (textToAdd.contains("Installing packages...")) {
-            bindingAdvancedSetup.title.setText(R.string.it_won_t_take_long);
-            binding.textviewsettingup.setText(R.string.completed_10_it_won_t_take_long);
+            setTextStatus(getString(R.string.completed_10_it_won_t_take_long));
         } else if (textToAdd.contains("(50/")) {
-            binding.textviewsettingup.setText(R.string.completed_20_it_won_t_take_long);
+            setTextStatus(getString(R.string.completed_20_it_won_t_take_long));
         } else if (textToAdd.contains("100/")) {
-            binding.textviewsettingup.setText(R.string.completed_30_it_won_t_take_long);
+            setTextStatus(getString(R.string.completed_30_it_won_t_take_long));
         } else if (textToAdd.contains("150/")) {
-            binding.textviewsettingup.setText(R.string.completed_40_it_won_t_take_long);
+            setTextStatus(getString(R.string.completed_40_it_won_t_take_long));
         } else if (textToAdd.contains("200/")) {
-            binding.textviewsettingup.setText(R.string.completed_50_it_won_t_take_long);
+            setTextStatus(getString(R.string.completed_50_it_won_t_take_long));
         } else if (textToAdd.contains("Downloading Qemu...")) {
-            bindingAdvancedSetup.title.setText(R.string.don_t_disconnect);
-            binding.textviewsettingup.setText(R.string.completed_75_don_t_disconnect);
+            setTextStatus(getString(R.string.completed_75_don_t_disconnect));
         } else if (textToAdd.contains("Installing Qemu...")) {
-            bindingAdvancedSetup.title.setText(R.string.keep_it_up);
-            binding.textviewsettingup.setText(R.string.completed_80_keep_it_up);
+            setTextStatus(getString(R.string.keep_it_up));
         } else if (textToAdd.contains("qemu-system")) {
-            binding.textviewsettingup.setText(R.string.completed_95_keep_it_up);
+            setTextStatus(getString(R.string.completed_95_keep_it_up));
         } else if (textToAdd.contains("Just a sec...")) {
-            bindingAdvancedSetup.title.setText(R.string.almost_there);
-            binding.textviewsettingup.setText(getString(R.string.almost_there));
+            setTextStatus(getString(R.string.almost_there));
         }
 
         // Scroll to the bottom
         bindingAdvancedSetup.scrollView.post(() -> bindingAdvancedSetup.scrollView.fullScroll(ScrollView.FOCUS_DOWN));
     }
 
+    private void setTextStatus(String content) {
+        bindingAdvancedSetup.title.setText(content);
+        binding.textviewsettingup.setText(content);
+    }
+
     private void startSetup() {
         aria2Error = false;
-        isEdgeServerError = false;
+        isServerError = false;
         simpleSetupUIControler(1);
         uiControllerAdvancedSetup(true);
         String cmd = selectedMirrorCommand + ";" +
@@ -418,26 +292,13 @@ public class SetupWizardActivity extends AppCompatActivity {
         executeShellCommand(cmd);
     }
 
-    private void checkabi() {
-        if (!DeviceUtils.is64bit())
-            DialogUtils.oneDialog(this,
-                    getResources().getString(R.string.warning),
-                    getResources().getString(R.string.cpu_not_support_64),
-                    getString(R.string.ok),
-                    true,
-                    R.drawable.error_96px,
-                    true,
-                    null,
-                    null);
-    }
-
     private void checkpermissions() {
         if (!isAllowCheckPermissions) return;
 
         if (PermissionUtils.storagepermission(this, true)) {
             if (!isFirstLaunch) {
                 isFirstLaunch = true;
-                checkabi();
+                SetupFeatureCore.checkabi(this);
 
                 File tarGZ = new File(tarPath);
                 if (tarGZ.exists()) {
@@ -632,12 +493,12 @@ public class SetupWizardActivity extends AppCompatActivity {
         bindingAdvancedSetup.ivClose.setOnClickListener(v -> binding.linearsimplesetupui.setVisibility(View.VISIBLE));
 
         bindingAdvancedSetup.ivOpenterminal.setOnClickListener(v -> {
-            if (DeviceUtils.is64bit()) {
+//            if (DeviceUtils.is64bit()) {
                 startActivity(new Intent(this, TermuxActivity.class));
-            } else {
-                TerminalBottomSheetDialog VTERM = new TerminalBottomSheetDialog(this);
-                VTERM.showVterm();
-            }
+//            } else {
+//                TerminalBottomSheetDialog VTERM = new TerminalBottomSheetDialog(this);
+//                VTERM.showVterm();
+//            }
         });
 
         bindingAdvancedSetup.btnInstall.setOnClickListener(v -> {
@@ -856,7 +717,7 @@ public class SetupWizardActivity extends AppCompatActivity {
                 if (exitValue != 0) {
                     isexecutingCommand = false;
                     // If exit value is not zero, display a toast message
-                    if (!aria2Error && !isEdgeServerError) {
+                    if (!aria2Error) {
                         String toastMessage = "Command failed with exit code: " + exitValue;
                         runOnUiThread(() -> {
                             appendTextAndScroll("Error: " + toastMessage + "\n");
@@ -888,12 +749,17 @@ public class SetupWizardActivity extends AppCompatActivity {
                             downloadBootstrapsCommand = " curl -o setup.tar.gz -L " + bootstrapfilelink;
                             startSetup();
                         });
-                    } else if (isEdgeServerError) {
-                        isEdgeServerError = false;
-                        runOnUiThread(() -> {
-                            selectedMirrorCommand += " && sed '/edge/d' /etc/apk/repositories";
-                            startSetup();
-                        });
+                    } else if (isServerError) {
+                        DialogUtils.oneDialog(
+                                this,
+                                getResources().getString(R.string.oops),
+                                getResources().getString(R.string.unable_to_connect_to_alpine_linux_server_content),
+                                getString(R.string.ok),
+                                true,
+                                R.drawable.warning_48px,
+                                true,
+                                null,
+                                null);
                     }
                 }
             } catch (IOException | InterruptedException e) {

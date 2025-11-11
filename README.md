@@ -5,10 +5,10 @@
 # Vectras VM
 [![Ceasefire Now](https://badge.techforpalestine.org/default)](https://techforpalestine.org/learn-more)
 
-![GitHub Repo stars](https://img.shields.io/github/stars/xoureldeen/Vectras-VM-Android)
-![GitHub watchers](https://img.shields.io/github/watchers/xoureldeen/Vectras-VM-Android)
-![GitHub forks](https://img.shields.io/github/forks/xoureldeen/Vectras-VM-Android)
-[![Total downloads](https://img.shields.io/github/downloads/xoureldeen/Vectras-VM-Android/total)](https://github.com/xoureldeen/Vectras-VM-Android/releases)
+![GitHub Repo stars](https://img.shields.io/github/stars/AnBui2004/Vectras-VM-Android)
+![GitHub watchers](https://img.shields.io/github/watchers/AnBui2004/Vectras-VM-Android)
+![GitHub forks](https://img.shields.io/github/forks/AnBui2004/Vectras-VM-Android)
+[![Total downloads](https://img.shields.io/github/downloads/AnBui2004/Vectras-VM-Android/total)](https://github.com/AnBui2004/Vectras-VM-Android/releases)
 [![Discord server](https://img.shields.io/discord/911060166810681345)][link-discord]
 [![Telegram Channel][ico-telegram]][link-telegram]
 [![Software License][ico-license]](LICENSE)
@@ -64,10 +64,23 @@ We publish a **new beta release after every commit** — so you can always test 
 
 [![Download Beta](https://img.shields.io/badge/Download-Beta-blue?style=for-the-badge&logo=github)](https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases)
 
+### Bootstraps
+QEMU 9.2.2 - 3dfx:
+- [arm64 (for phone or tablet)](https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/3.2.9/base-vectras-vm-arm64-v8a.tar.gz)
+- [x86_64 (for PC)](https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/3.2.9/base-vectras-vm-x86_64.tar.gz)
+
+QEMU 8.2.0 - 3dfx:
+- [arm64 (for phone or tablet)](https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/3.2.9/vectras-vm-arm64-v8a.tar.gz)
+- [x86_64 (for PC)](https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/3.2.9/vectras-vm-x86_64.tar.gz)
+
+### Wrappers
+
+- [For QEMU 9.2.2 - 3dfx](https://github.com/AnBui2004/Vectras-VM-Emu-Android/blob/master/3dfx/3dfx-wrappers-3.0.0.iso)
+- [For QEMU 8.2.0 - 3dfx](https://github.com/AnBui2004/Vectras-VM-Emu-Android/blob/master/3dfx/3dfx-wrappers-2.9.5.iso)
+
 # Donate
 Help support the project by contributing!
 
-[![Buy Me A Coffee][ico-buymeacoffee]][link-buymeacoffee]
 [![Buy Me a Coffee at ko-fi.com][ico-ko-fi]][link-ko-fi]
 [![Support me on Patreon](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fshieldsio-patreon.vercel.app%2Fapi%3Fusername%3Dendel%26type%3Dpatrons&style=flat)](https://patreon.com/VectrasTeam)
 
@@ -93,5 +106,4 @@ Help support the project by contributing!
 [link-telegram]: https://t.me/vectras_os
 [link-repo]: https://github.com/xoureldeen/Vectras-VM-Android/
 [link-releases]: https://github.com/xoureldeen/Vectras-VM-Android/releases/
-[link-buymeacoffee]: https://www.buymeacoffee.com/vectrasvm
 [link-ko-fi]: https://ko-fi.com/vectrasvm

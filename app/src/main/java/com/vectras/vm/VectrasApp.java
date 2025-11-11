@@ -436,8 +436,9 @@ public class VectrasApp extends Application {
 		AppConfig.romsdatajson = AppConfig.maindirpath + "roms-data.json";
 		AppConfig.vmFolder = AppConfig.maindirpath + "roms/";
 		AppConfig.recyclebin = AppConfig.maindirpath + "recyclebin/";
+        AppConfig.cvbiFolder = AppConfig.maindirpath + "cvbi/";
 
-		Config.cacheDir = _context.getCacheDir().getAbsolutePath();
-		Config.storagedir = Environment.getExternalStorageDirectory().toString();
+        Config.cacheDir = _context.getCacheDir().getAbsolutePath();
+        Config.storagedir = Environment.getExternalStorageDirectory().toString();
 	}
 }

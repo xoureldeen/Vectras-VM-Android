@@ -1032,4 +1032,51 @@ public class MainSettingsManager extends AppCompatActivity
         return prefs.getBoolean("dynamicColor", true);
     }
 
+    public static void setLikes(Context context, String value) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putString("likes", value);
+        edit.apply();
+    }
+
+    public static String getLikes(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString("likes", "");
+    }
+
+    public static void setViews(Context context, String value) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putString("views", value);
+        edit.apply();
+    }
+
+    public static String getViews(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getString("views", "");
+    }
+
+    public static void setSmartSizeCalculation(Context context, Boolean _boolean) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putBoolean("smartSizeCalculation", _boolean);
+        edit.apply();
+    }
+
+    public static Boolean getSmartSizeCalculation(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean("smartSizeCalculation", true);
+    }
+
+    public static void setCyclicRedundancyCheck(Context context, Boolean _boolean) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putBoolean("cyclicRedundancyCheck", _boolean);
+        edit.apply();
+    }
+
+    public static Boolean getCyclicRedundancyCheck(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean("cyclicRedundancyCheck", true);
+    }
 }
