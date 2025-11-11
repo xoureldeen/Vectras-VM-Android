@@ -1,5 +1,7 @@
 package com.vectras.vm;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -7,6 +9,7 @@ import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HostnameVerifier;
@@ -16,6 +19,7 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import okhttp3.CacheControl;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -81,13 +85,14 @@ public class RequestNetworkController {
                 builder.connectTimeout(SOCKET_TIMEOUT, TimeUnit.MILLISECONDS);
                 builder.readTimeout(READ_TIMEOUT, TimeUnit.MILLISECONDS);
                 builder.writeTimeout(READ_TIMEOUT, TimeUnit.MILLISECONDS);
+                builder.cache(null);
                 builder.hostnameVerifier(new HostnameVerifier() {
                     @Override
                     public boolean verify(String hostname, SSLSession session) {
                         return true;
                     }
                 });
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
 
             client = builder.build();
@@ -99,8 +104,11 @@ public class RequestNetworkController {
     public void execute(final com.vectras.vm.RequestNetwork requestNetwork, String method, String url, final String tag, final com.vectras.vm.RequestNetwork.RequestListener requestListener) {
         Request.Builder reqBuilder = new Request.Builder();
         Headers.Builder headerBuilder = new Headers.Builder();
+        CacheControl.Builder cacheControlBuilder = new CacheControl.Builder()
+                .noCache()
+                .noStore();
 
-        if (requestNetwork.getHeaders().size() > 0) {
+        if (!requestNetwork.getHeaders().isEmpty()) {
             HashMap<String, Object> headers = requestNetwork.getHeaders();
 
             for (HashMap.Entry<String, Object> header : headers.entrySet()) {
@@ -114,12 +122,12 @@ public class RequestNetworkController {
                     HttpUrl.Builder httpBuilder;
 
                     try {
-                        httpBuilder = HttpUrl.parse(url).newBuilder();
+                        httpBuilder = Objects.requireNonNull(HttpUrl.parse(url)).newBuilder();
                     } catch (NullPointerException ne) {
                         throw new NullPointerException("unexpected url: " + url);
                     }
 
-                    if (requestNetwork.getParams().size() > 0) {
+                    if (!requestNetwork.getParams().isEmpty()) {
                         HashMap<String, Object> params = requestNetwork.getParams();
 
                         for (HashMap.Entry<String, Object> param : params.entrySet()) {
@@ -127,10 +135,10 @@ public class RequestNetworkController {
                         }
                     }
 
-                    reqBuilder.url(httpBuilder.build()).headers(headerBuilder.build()).get();
+                    reqBuilder.url(httpBuilder.build()).headers(headerBuilder.build()).cacheControl(cacheControlBuilder.build()).get();
                 } else {
                     FormBody.Builder formBuilder = new FormBody.Builder();
-                    if (requestNetwork.getParams().size() > 0) {
+                    if (!requestNetwork.getParams().isEmpty()) {
                         HashMap<String, Object> params = requestNetwork.getParams();
 
                         for (HashMap.Entry<String, Object> param : params.entrySet()) {
@@ -140,15 +148,15 @@ public class RequestNetworkController {
 
                     RequestBody reqBody = formBuilder.build();
 
-                    reqBuilder.url(url).headers(headerBuilder.build()).method(method, reqBody);
+                    reqBuilder.url(url).headers(headerBuilder.build()).method(method, reqBody).cacheControl(cacheControlBuilder.build());
                 }
             } else {
                 RequestBody reqBody = RequestBody.create(MediaType.parse("application/json"), new Gson().toJson(requestNetwork.getParams()));
 
                 if (method.equals(GET)) {
-                    reqBuilder.url(url).headers(headerBuilder.build()).get();
+                    reqBuilder.url(url).headers(headerBuilder.build()).cacheControl(cacheControlBuilder.build()).get();
                 } else {
-                    reqBuilder.url(url).headers(headerBuilder.build()).method(method, reqBody);
+                    reqBuilder.url(url).headers(headerBuilder.build()).method(method, reqBody).cacheControl(cacheControlBuilder.build());
                 }
             }
 
@@ -156,28 +164,20 @@ public class RequestNetworkController {
 
             getClient().newCall(req).enqueue(new Callback() {
                 @Override
-                public void onFailure(Call call, final IOException e) {
-                    requestNetwork.getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            requestListener.onErrorResponse(tag, e.getMessage());
-                        }
-                    });
+                public void onFailure(@NonNull Call call, @NonNull final IOException e) {
+                    requestNetwork.getActivity().runOnUiThread(() -> requestListener.onErrorResponse(tag, e.getMessage()));
                 }
 
                 @Override
-                public void onResponse(Call call, final Response response) throws IOException {
+                public void onResponse(@NonNull Call call, @NonNull final Response response) throws IOException {
                     final String responseBody = response.body().string().trim();
-                    requestNetwork.getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Headers b = response.headers();
-                            HashMap<String, Object> map = new HashMap<>();
-                            for (String s : b.names()) {
-                                map.put(s, b.get(s) != null ? b.get(s) : "null");
-                            }
-                            requestListener.onResponse(tag, responseBody, map);
+                    requestNetwork.getActivity().runOnUiThread(() -> {
+                        Headers b = response.headers();
+                        HashMap<String, Object> map = new HashMap<>();
+                        for (String s : b.names()) {
+                            map.put(s, b.get(s) != null ? b.get(s) : "null");
                         }
+                        requestListener.onResponse(tag, responseBody, map);
                     });
                 }
             });

@@ -33,4 +33,6 @@ public class DataRoms {
     public boolean verified;
     @SerializedName("id")
     public String id;
+    @SerializedName("vecid")
+    public String vecid;
 }

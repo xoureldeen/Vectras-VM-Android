@@ -47,8 +47,9 @@ public class RomInfo extends AppCompatActivity {
     final String TAG = "RomInfo";
     ActivityRomInfoBinding binding;
     public static boolean isFinishNow = false;
-    private int likeCount = 0;
     private String currentViews = "0";
+    private boolean isAnBuiID = false;
+    private String contentID = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +82,18 @@ public class RomInfo extends AppCompatActivity {
 
         if (getIntent().hasExtra("icon")) {
             Glide.with(this).load(getIntent().getStringExtra("icon")).placeholder(R.drawable.ic_computer_180dp_with_padding).error(R.drawable.ic_computer_180dp_with_padding).into(binding.ivIcon);
+        }
+
+        if (getIntent().hasExtra("id") &&
+                !Objects.requireNonNull(getIntent().getStringExtra("id")).isEmpty()) {
+
+            isAnBuiID = true;
+            contentID = getIntent().getStringExtra("id");
+
+        } else if (getIntent().hasExtra("vecid") &&
+                !Objects.requireNonNull(getIntent().getStringExtra("vecid")).isEmpty()) {
+
+            contentID = getIntent().getStringExtra("vecid");
         }
 
         initialize();
@@ -280,9 +293,9 @@ public class RomInfo extends AppCompatActivity {
                 null,
                 null)));
 
-        binding.btnLike.setOnClickListener(v -> sendLikeUpdate(Objects.requireNonNull(getIntent().getStringExtra("id"))));
+        binding.btnLike.setOnClickListener(v -> sendLikeUpdate(contentID));
 
-        if (getIntent().hasExtra("id") && !Objects.requireNonNull(getIntent().getStringExtra("id")).isEmpty()) {
+        if (!contentID.isEmpty()) {
             RequestNetwork net = new RequestNetwork(this);
             RequestNetwork.RequestListener _net_request_listener = new RequestNetwork.RequestListener() {
                 @SuppressLint("SetTextI18n")
@@ -295,20 +308,22 @@ public class RomInfo extends AppCompatActivity {
                                 }.getType()
                         );
 
+                        binding.btnLike.setVisibility(View.VISIBLE);
+                        String likeContent = getString(R.string.like);
+                        boolean isLiked = MainSettingsManager.getLikes(RomInfo.this).contains("," + getIntent().getStringExtra("id"));
                         if (map.containsKey("likes")) {
-                            likeCount = ((Double) Objects.requireNonNull(map.get("likes"))).intValue();
-                            binding.btnLike.setVisibility(View.VISIBLE);
-                            binding.btnLike.setText((Objects.requireNonNull(map.get("likes")).toString().isEmpty() || (((Double) Objects.requireNonNull(map.get("likes"))).intValue() == 0) ? getString(R.string.like) : finalNumberOfInteractionsFormat(((Double) Objects.requireNonNull(map.get("likes"))).intValue())));
-                            if (MainSettingsManager.getLikes(RomInfo.this).contains("," + getIntent().getStringExtra("id"))) {
-                                binding.btnLike.setIcon(ContextCompat.getDrawable(RomInfo.this, R.drawable.thumb_up_filled_24px));
-                            }
+                            likeContent = (Objects.requireNonNull(map.get("likes")).toString().isEmpty() || (((Double) Objects.requireNonNull(map.get("likes"))).intValue() == 0) ? getString(R.string.like) : finalNumberOfInteractionsFormat(((Double) Objects.requireNonNull(map.get("likes"))).intValue()));
                         } else {
-                            binding.btnLike.setVisibility(View.GONE);
+                            if (isLiked) likeContent = getString(R.string.liked);
                         }
+                        if (isLiked) {
+                            binding.btnLike.setIcon(ContextCompat.getDrawable(RomInfo.this, R.drawable.thumb_up_filled_24px));
+                        }
+                        binding.btnLike.setText(likeContent);
 
+                        binding.lnAllViews.setVisibility(View.VISIBLE);
+                        String viewsContent;
                         if (map.containsKey("views")) {
-                            String viewsContent;
-
                             if (Objects.requireNonNull(map.get("views")).toString().isEmpty()) {
                                 currentViews = "1";
                                 viewsContent = "1 " + getString(R.string.unit_of_view);
@@ -316,12 +331,11 @@ public class RomInfo extends AppCompatActivity {
                                 currentViews = finalNumberOfInteractionsFormat(((Double) Objects.requireNonNull(map.get("views"))).intValue());
                                 viewsContent = currentViews + " " + getString(((Double) Objects.requireNonNull(map.get("views"))).intValue() > 1 ? R.string.unit_of_views : R.string.unit_of_view);
                             }
-
-                            binding.lnAllViews.setVisibility(View.VISIBLE);
-                            binding.tvViews.setText(viewsContent);
                         } else {
-                            binding.lnAllViews.setVisibility(View.GONE);
+                            viewsContent = "1 " + getString(R.string.unit_of_view);
                         }
+                        binding.tvViews.setText(viewsContent);
+
                     } else {
                         binding.lnAllViews.setVisibility(View.GONE);
                         binding.btnLike.setVisibility(View.GONE);
@@ -337,9 +351,11 @@ public class RomInfo extends AppCompatActivity {
                 }
             };
 
-            net.startRequestNetwork(RequestNetworkController.GET,"https://go.anbui.ovh/egg/contentinfo?id=" + getIntent().getStringExtra("id") + "&app=verctrasvm","contentinfo", _net_request_listener);
+            String urlToGetInfo = "https://go.anbui.ovh/egg/contentinfo?id=" + contentID + (isAnBuiID ? "" : "&app=vectrasvm");
+            net.startRequestNetwork(RequestNetworkController.GET,urlToGetInfo,"contentinfo", _net_request_listener);
+            Log.i(TAG, "urlToGetInfo: " + urlToGetInfo);
 
-            sendViewUpdate(getIntent().getStringExtra("id"));
+            sendViewUpdate(contentID);
         }
     }
 
@@ -350,19 +366,18 @@ public class RomInfo extends AppCompatActivity {
             MainSettingsManager.setLikes(this, MainSettingsManager.getLikes(this).replace("," + id, ""));
             binding.btnLike.setIcon(ContextCompat.getDrawable(RomInfo.this, R.drawable.thumb_up_24px));
             addlikecount = "-1";
-            likeCount--;
         } else {
             MainSettingsManager.setLikes(this, MainSettingsManager.getLikes(this) + "," + id);
             binding.btnLike.setIcon(ContextCompat.getDrawable(RomInfo.this, R.drawable.thumb_up_filled_24px));
             addlikecount = "1";
-            likeCount++;
         }
 
-        binding.btnLike.setText(likeCount == 0 ? getString(R.string.like) : finalNumberOfInteractionsFormat(likeCount));
+        binding.btnLike.setText(addlikecount.equals("1") ? R.string.liked : R.string.like);
 
         String json = "{"
                 + "\"id\":\"" + id + "\","
                 + "\"addcount\":" + addlikecount
+                + (isAnBuiID ? "" : ",\"app\":\"vectrasvm\"")
                 + "}";
 
         RequestBody body = RequestBody.create(
@@ -418,6 +433,7 @@ public class RomInfo extends AppCompatActivity {
 
         String json = "{"
                 + "\"id\":\"" + id + "\""
+                + (isAnBuiID ? "" : ",\"app\":\"vectrasvm\"")
                 + "}";
 
         RequestBody body = RequestBody.create(
@@ -425,7 +441,7 @@ public class RomInfo extends AppCompatActivity {
         );
 
         Request request = new Request.Builder()
-                .url("https://go.anbui.ovh/egg/updateview?app=verctrasvm")
+                .url("https://go.anbui.ovh/egg/updateview?app=vectrasvm")
                 .post(body)
                 .build();
 

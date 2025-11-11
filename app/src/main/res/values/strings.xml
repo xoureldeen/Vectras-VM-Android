@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">3.2.10</string>
+    <string name="app_version" translatable="false">3.3.0</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -594,6 +594,7 @@
     <string name="developers">Developers</string>
     <string name="our_social">Our social</string>
     <string name="like">Like</string>
+    <string name="liked">Liked</string>
     <string name="unit_of_view">view</string>
     <string name="unit_of_views">views</string>
     <string name="views">Views</string>
@@ -603,6 +604,8 @@
     <string name="smart_size_calculation_description">Skip size calculation when importing rom if needed for faster import but import progress will not be shown.</string>
     <string name="cyclic_redundancy_check">Cyclic redundancy check</string>
     <string name="cyclic_redundancy_check_description">Check and detect data errors when exporting rom, you can turn it off for faster exporting.</string>
+    <string name="unable_to_connect_to_alpine_linux_server_content">Unable to connect to Alpine Linux server or it is temporarily down, please try checking your network connection, change another mirror or try again in a few hours.</string>
+    <string name="system_files_installation_failed_content">An error occurred while installing system files.</string>
 
 
     <!--======================TERMUX STRINGS====================-->

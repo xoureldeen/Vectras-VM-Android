@@ -139,7 +139,7 @@
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".SetupWizardActivity"
+            android:name=".setupwizard.SetupWizardActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
             android:exported="false"
             android:hardwareAccelerated="true"

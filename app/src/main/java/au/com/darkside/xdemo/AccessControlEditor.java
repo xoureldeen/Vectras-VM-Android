@@ -18,6 +18,7 @@ import com.vectras.vm.R;
 
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -40,32 +41,24 @@ public class AccessControlEditor extends ListActivity implements OnItemClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_access_control_editor_x_server);
 
-        _hostField = (EditText) findViewById(R.id.host_field);
+        _hostField = findViewById(R.id.host_field);
 
         Button button;
 
-        button = (Button) findViewById(R.id.add_button);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                addHost();
-            }
+        button = findViewById(R.id.add_button);
+        button.setOnClickListener(v -> addHost());
+
+        button = findViewById(R.id.cancel_button);
+        button.setOnClickListener(v -> {
+            setResult(RESULT_CANCELED, null);
+            finish();
         });
 
-        button = (Button) findViewById(R.id.cancel_button);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                setResult(RESULT_CANCELED, null);
-                finish();
-            }
-        });
-
-        button = (Button) findViewById(R.id.apply_button);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                saveAccessList();
-                setResult(RESULT_OK, null);
-                finish();
-            }
+        button = findViewById(R.id.apply_button);
+        button.setOnClickListener(v -> {
+            saveAccessList();
+            setResult(RESULT_OK, null);
+            finish();
         });
 
         getListView().setOnItemClickListener(this);
@@ -130,7 +123,7 @@ public class AccessControlEditor extends ListActivity implements OnItemClickList
         int b3 = (n >> 8) & 0xff;
         int b4 = n & 0xff;
 
-        return "" + b1 + "." + b2 + "." + b3 + "." + b4;
+        return b1 + "." + b2 + "." + b3 + "." + b4;
     }
 
     /**
@@ -145,7 +138,7 @@ public class AccessControlEditor extends ListActivity implements OnItemClickList
         for (String s : set)
             hosts.add(hostToString(s));
 
-        _adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, hosts);
+        _adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, hosts);
         setListAdapter(_adapter);
     }
 
@@ -192,7 +185,7 @@ public class AccessControlEditor extends ListActivity implements OnItemClickList
         int n = _adapter.getCount();
 
         for (int i = 0; i < n; i++) {
-            String host = stringToHost(_adapter.getItem(i));
+            String host = stringToHost(Objects.requireNonNull(_adapter.getItem(i)));
 
             if (host != null) editor.putBoolean(host, true);
         }

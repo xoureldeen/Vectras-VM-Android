@@ -22,12 +22,15 @@ import android.widget.Toast;
 import android.widget.BaseAdapter;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.termux.app.TermuxService;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.home.HomeActivity;
+import com.vectras.vm.setupwizard.SetupWizardActivity;
 import com.vectras.vm.utils.CommandUtils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
@@ -50,6 +53,13 @@ public class Minitools extends AppCompatActivity {
     private Spinner spinnerselectmirror;
     private String selectedMirrorCommand = "";
 
+    LinearLayout setupsoundfortermux;
+    LinearLayout cleanup;
+    LinearLayout restore;
+    LinearLayout deleteallvm;
+    LinearLayout reinstallsystem;
+    LinearLayout deleteall;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,12 +73,12 @@ public class Minitools extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         toolbar.setTitle(getString(R.string.mini_tools));
 
-        LinearLayout setupsoundfortermux = findViewById(R.id.setupsoundfortermux);
-        LinearLayout cleanup = findViewById(R.id.cleanup);
-        LinearLayout restore = findViewById(R.id.restore);
-        LinearLayout deleteallvm = findViewById(R.id.deleteallvm);
-        LinearLayout reinstallsystem = findViewById(R.id.reinstallsystem);
-        LinearLayout deleteall = findViewById(R.id.deleteall);
+        setupsoundfortermux = findViewById(R.id.setupsoundfortermux);
+        cleanup = findViewById(R.id.cleanup);
+        restore = findViewById(R.id.restore);
+        deleteallvm = findViewById(R.id.deleteallvm);
+        reinstallsystem = findViewById(R.id.reinstallsystem);
+        deleteall = findViewById(R.id.deleteall);
         spinnerselectmirror = findViewById(R.id.spinnerselectmirror);
 
         setupsoundfortermux.setOnClickListener(v -> {
@@ -97,12 +107,7 @@ public class Minitools extends AppCompatActivity {
         });
 
         cleanup.setOnClickListener(v -> DialogUtils.twoDialog(Minitools.this, getResources().getString(R.string.clean_up), getResources().getString(R.string.clean_up_content), getResources().getString(R.string.clean_up), getResources().getString(R.string.cancel), true, R.drawable.cleaning_services_24px, true,
-                () -> {
-                    VMManager.cleanUp();
-                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.done), Toast.LENGTH_LONG).show();
-                    restore.setVisibility(GONE);
-                    cleanup.setVisibility(GONE);
-                }, null, null));
+                this::cleanUp, null, null));
 
         restore.setOnClickListener(v -> DialogUtils.twoDialog(Minitools.this, getResources().getString(R.string.restore), getResources().getString(R.string.restore_content), getResources().getString(R.string.continuetext), getResources().getString(R.string.cancel), true, R.drawable.settings_backup_restore_24px, true,
                 () -> {
@@ -112,47 +117,13 @@ public class Minitools extends AppCompatActivity {
                 }, null, null));
 
         deleteallvm.setOnClickListener(v -> DialogUtils.twoDialog(Minitools.this, getResources().getString(R.string.delete_all_vm), getResources().getString(R.string.delete_all_vm_content), getResources().getString(R.string.delete_all), getResources().getString(R.string.cancel), true, R.drawable.delete_24px, true,
-                () -> {
-                    VMManager.killallqemuprocesses(getApplicationContext());
-                    FileUtils.deleteDirectory(AppConfig.vmFolder);
-                    FileUtils.deleteDirectory(AppConfig.recyclebin);
-                    FileUtils.deleteDirectory(AppConfig.romsdatajson);
-                    File vDir = new File(AppConfig.maindirpath);
-                    vDir.mkdirs();
-                    FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", "[]");
-                    cleanup.setVisibility(GONE);
-                    restore.setVisibility(GONE);
-                    deleteallvm.setVisibility(GONE);
-                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.done), Toast.LENGTH_LONG).show();
-                }, null, null));
+                this::eraserAllVM, null, null));
 
         deleteall.setOnClickListener(v -> DialogUtils.twoDialog(Minitools.this, getResources().getString(R.string.delete_all), getResources().getString(R.string.delete_all_content), getResources().getString(R.string.delete_all), getResources().getString(R.string.cancel), true, R.drawable.delete_forever_24px, true,
-                () -> {
-                    VMManager.killallqemuprocesses(getApplicationContext());
-                    FileUtils.deleteDirectory(AppConfig.maindirpath);
-                    File vDir = new File(AppConfig.maindirpath);
-                    vDir.mkdirs();
-                    FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", "[]");
-                    cleanup.setVisibility(GONE);
-                    restore.setVisibility(GONE);
-                    deleteallvm.setVisibility(GONE);
-                    deleteall.setVisibility(GONE);
-                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.done), Toast.LENGTH_LONG).show();
-                }, null, null));
+                this::eraserData, null, null));
 
         reinstallsystem.setOnClickListener(v -> DialogUtils.twoDialog(Minitools.this, getResources().getString(R.string.reinstall_system), getResources().getString(R.string.reinstall_system_content), getResources().getString(R.string.continuetext), getResources().getString(R.string.cancel), true, R.drawable.system_update_24px, true,
-                () -> {
-                    HomeActivity.isActivate = false;
-                    AppConfig.needreinstallsystem = true;
-                    VMManager.killallqemuprocesses(Minitools.this);
-                    FileUtils.deleteDirectory(getFilesDir().getAbsolutePath() + "/data");
-                    FileUtils.deleteDirectory(getFilesDir().getAbsolutePath() + "/distro");
-                    FileUtils.deleteDirectory(getFilesDir().getAbsolutePath() + "/usr");
-                    Intent intent = new Intent();
-                    intent.setClass(Minitools.this, SetupWizardActivity.class);
-                    startActivity(intent);
-                    finishAffinity();
-                }, null, null));
+                this::eraserSystem, null, null));
 
         spinnerselectmirror.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -228,6 +199,113 @@ public class Minitools extends AppCompatActivity {
 
             return _view;
         }
+    }
+
+    private void cleanUp() {
+        View progressView = LayoutInflater.from(this).inflate(R.layout.dialog_progress_style, null);
+        TextView progress_text = progressView.findViewById(R.id.progress_text);
+        progress_text.setText(getString(R.string.just_a_moment));
+        AlertDialog progressDialog = new MaterialAlertDialogBuilder(this, R.style.CenteredDialogTheme)
+                .setView(progressView)
+                .setCancelable(false)
+                .create();
+        progressDialog.show();
+
+        new Thread(() -> {
+            VMManager.cleanUp();
+
+            runOnUiThread(() -> {
+                progressDialog.dismiss();
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.done), Toast.LENGTH_LONG).show();
+                restore.setVisibility(GONE);
+                cleanup.setVisibility(GONE);
+            });
+        }).start();
+    }
+
+    private void eraserAllVM() {
+        View progressView = LayoutInflater.from(this).inflate(R.layout.dialog_progress_style, null);
+        TextView progress_text = progressView.findViewById(R.id.progress_text);
+        progress_text.setText(getString(R.string.just_a_moment));
+        AlertDialog progressDialog = new MaterialAlertDialogBuilder(this, R.style.CenteredDialogTheme)
+                .setView(progressView)
+                .setCancelable(false)
+                .create();
+        progressDialog.show();
+
+        new Thread(() -> {
+            VMManager.killallqemuprocesses(this);
+            FileUtils.deleteDirectory(AppConfig.vmFolder);
+            FileUtils.deleteDirectory(AppConfig.recyclebin);
+            FileUtils.deleteDirectory(AppConfig.romsdatajson);
+            File vDir = new File(AppConfig.maindirpath);
+            if (!vDir.mkdirs()) Log.e(TAG, "Unable to create folder: " + AppConfig.maindirpath);
+            FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", "[]");
+
+            runOnUiThread(() -> {
+                progressDialog.dismiss();
+                cleanup.setVisibility(GONE);
+                restore.setVisibility(GONE);
+                deleteallvm.setVisibility(GONE);
+                Toast.makeText(this, getResources().getString(R.string.done), Toast.LENGTH_LONG).show();
+            });
+        }).start();
+    }
+
+    private void eraserData() {
+        View progressView = LayoutInflater.from(this).inflate(R.layout.dialog_progress_style, null);
+        TextView progress_text = progressView.findViewById(R.id.progress_text);
+        progress_text.setText(getString(R.string.just_a_moment));
+        AlertDialog progressDialog = new MaterialAlertDialogBuilder(this, R.style.CenteredDialogTheme)
+                .setView(progressView)
+                .setCancelable(false)
+                .create();
+        progressDialog.show();
+
+        new Thread(() -> {
+            VMManager.killallqemuprocesses(this);
+            FileUtils.deleteDirectory(AppConfig.maindirpath);
+            File vDir = new File(AppConfig.maindirpath);
+            if (!vDir.mkdirs()) Log.e(TAG, "Unable to create folder: " + AppConfig.maindirpath);
+            FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", "[]");
+
+           runOnUiThread(() -> {
+                progressDialog.dismiss();
+                cleanup.setVisibility(GONE);
+                restore.setVisibility(GONE);
+                deleteallvm.setVisibility(GONE);
+                deleteall.setVisibility(GONE);
+                Toast.makeText(this, getResources().getString(R.string.done), Toast.LENGTH_LONG).show();
+            });
+        }).start();
+    }
+
+    private void eraserSystem() {
+        View progressView = LayoutInflater.from(this).inflate(R.layout.dialog_progress_style, null);
+        TextView progress_text = progressView.findViewById(R.id.progress_text);
+        progress_text.setText(getString(R.string.just_a_moment));
+        AlertDialog progressDialog = new MaterialAlertDialogBuilder(this, R.style.CenteredDialogTheme)
+                .setView(progressView)
+                .setCancelable(false)
+                .create();
+        progressDialog.show();
+
+        new Thread(() -> {
+            HomeActivity.isActivate = false;
+            AppConfig.needreinstallsystem = true;
+            VMManager.killallqemuprocesses(this);
+            FileUtils.deleteDirectory(getFilesDir().getAbsolutePath() + "/data");
+            FileUtils.deleteDirectory(getFilesDir().getAbsolutePath() + "/distro");
+            FileUtils.deleteDirectory(getFilesDir().getAbsolutePath() + "/usr");
+
+            runOnUiThread(() -> {
+                progressDialog.dismiss();
+                Intent intent = new Intent();
+                intent.setClass(this, SetupWizardActivity.class);
+                startActivity(intent);
+                finishAffinity();
+            });
+        }).start();
     }
 
     public void extractLoaderApk() {

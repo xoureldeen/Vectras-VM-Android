@@ -439,6 +439,6 @@ public class VectrasApp extends Application {
         AppConfig.cvbiFolder = AppConfig.maindirpath + "cvbi/";
 
         Config.cacheDir = _context.getCacheDir().getAbsolutePath();
-		Config.storagedir = Environment.getExternalStorageDirectory().toString();
+        Config.storagedir = Environment.getExternalStorageDirectory().toString();
 	}
 }
