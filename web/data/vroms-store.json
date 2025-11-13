@@ -1046,7 +1046,7 @@
     {
         "rom_name": "Debian 12",
         "rom_icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRw2CcpHNKIioANF5MV4H-Zw2H3S7hPDMaqeA&s",
-        "rom_url": "https://anbui.ovh/get/vec/community/linux/debian10.html",
+        "rom_url": "https://anbui.ovh/get/vec/community/linux/debian12.html",
         "rom_path": "Debian 12.cvbi",
         "rom_avail": true,
         "rom_size": "Bookworm",
