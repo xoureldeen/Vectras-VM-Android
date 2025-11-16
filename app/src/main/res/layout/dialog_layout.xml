@@ -37,6 +37,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/oops"
                 android:textColor="?attr/colorControlNormal"
+                android:textColorLink="?attr/colorControlNormal"
                 android:textSize="14sp"/>
         </androidx.core.widget.NestedScrollView>
         <TextView

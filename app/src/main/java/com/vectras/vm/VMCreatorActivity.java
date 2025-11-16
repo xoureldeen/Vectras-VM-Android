@@ -40,7 +40,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -377,46 +376,48 @@ public class VMCreatorActivity extends AppCompatActivity {
                 if (uri == null) return;
 
                 if (MainSettingsManager.copyFile(this)) {
-                    whenProcessing(true);
+                    View progressView = LayoutInflater.from(this).inflate(R.layout.dialog_progress_style, null);
+                    TextView progressText = progressView.findViewById(R.id.progress_text);
+                    progressText.setText(getString(R.string.copying_file));
+                    AlertDialog progressDialog = new MaterialAlertDialogBuilder(this, R.style.CenteredDialogTheme)
+                            .setView(progressView)
+                            .setCancelable(false)
+                            .create();
+
+                    progressDialog.show();
+
                     executor.execute(() -> {
                         try {
-                            try {
-                                String _filename = FileUtils.getFileNameFromUri(this, uri);
-                                if (_filename == null || _filename.isEmpty()) {
-                                    _filename = String.valueOf(System.currentTimeMillis());
-                                }
-
-                                FileUtils.copyFileFromUri(this, uri, AppConfig.vmFolder + vmID + "/" + _filename);
-
-                                String final_filename = _filename;
-                                runOnUiThread(() -> {
-                                    binding.cdrom.setText(AppConfig.vmFolder + vmID + "/" + final_filename);
-                                    binding.cdromField.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
-                                    binding.cdromField.setEndIconDrawable(R.drawable.close_24px);
-                                    changeOnClickCdrom();
-                                });
-
-                            } finally {
-                                runOnUiThread(() -> whenProcessing(false));
+                            String _filename = FileUtils.getFileNameFromUri(this, uri);
+                            if (_filename == null || _filename.isEmpty()) {
+                                _filename = String.valueOf(System.currentTimeMillis());
                             }
-                        } catch (IOException e) {
+
+                            FileUtils.copyFileFromUri(this, uri, AppConfig.vmFolder + vmID + "/" + _filename);
+
+                            String final_filename = _filename;
                             runOnUiThread(() -> {
-                                whenProcessing(false);
-                                DialogUtils.oneDialog(this,
-                                        getString(R.string.oops),
-                                        getString(R.string.unable_to_copy_iso_file_content),
-                                        getString(R.string.ok),
-                                        true,
-                                        R.drawable.warning_48px,
-                                        true,
-                                        null,
-                                        null);
+                                binding.cdrom.setText(AppConfig.vmFolder + vmID + "/" + final_filename);
+                                binding.cdromField.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
+                                binding.cdromField.setEndIconDrawable(R.drawable.close_24px);
+                                changeOnClickCdrom();
                             });
+                        } catch (Exception e) {
+                            runOnUiThread(() -> DialogUtils.oneDialog(this,
+                                    getString(R.string.oops),
+                                    getString(R.string.unable_to_copy_iso_file_content),
+                                    getString(R.string.ok),
+                                    true,
+                                    R.drawable.warning_48px,
+                                    true,
+                                    null,
+                                    null));
                             Log.e(TAG, "isoPicker: " + e.getMessage());
+                        } finally {
+                            runOnUiThread(progressDialog::dismiss);
                         }
                     });
                 } else {
-                    whenProcessing(false);
                     if (!FileUtils.isValidFilePath(this, FileUtils.getPath(this, uri), false)) {
                         DialogUtils.oneDialog(this,
                                 getString(R.string.problem_has_been_detected),
@@ -486,18 +487,6 @@ public class VMCreatorActivity extends AppCompatActivity {
         }
         binding.title.setText(getString(R.string.new_vm));
         binding.qemu.setText(defQemuParams);
-    }
-
-    private void whenProcessing(boolean _isProcessing) {
-        if (_isProcessing) {
-            binding.mainlayout.setVisibility(View.GONE);
-            binding.appbar.setVisibility(View.GONE);
-            binding.linearprogress.setIndeterminate(true);
-            binding.textviewprogress.setText(getResources().getString(R.string.processing_this_may_take_a_few_minutes));
-        } else {
-            binding.mainlayout.setVisibility(View.VISIBLE);
-            binding.appbar.setVisibility(View.VISIBLE);
-        }
     }
 
     private void checkVMID() {
@@ -637,7 +626,7 @@ public class VMCreatorActivity extends AppCompatActivity {
 
     private void thumbnailProcessing() {
         if (!thumbnailPath.isEmpty()) {
-            binding.ivAddThubnail.setImageResource(R.drawable.round_edit_24);
+            binding.ivAddThubnail.setImageResource(R.drawable.edit_24px);
             File imgFile = new File(thumbnailPath);
 
             if (imgFile.exists()) {
@@ -674,47 +663,50 @@ public class VMCreatorActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     private void startProcessingHardDriveFile(Uri _content_describer, boolean _addtodrive) {
         if (MainSettingsManager.copyFile(this)) {
-            whenProcessing(true);
 
             if (!createVMFolder(true)) return;
 
+            View progressView = LayoutInflater.from(this).inflate(R.layout.dialog_progress_style, null);
+            TextView progressText = progressView.findViewById(R.id.progress_text);
+            progressText.setText(getString(R.string.copying_file));
+            AlertDialog progressDialog = new MaterialAlertDialogBuilder(this, R.style.CenteredDialogTheme)
+                    .setView(progressView)
+                    .setCancelable(false)
+                    .create();
+
+            progressDialog.show();
+
             executor.execute(() -> {
                 try {
-                    try {
-                        String _filename = FileUtils.getFileNameFromUri(this, _content_describer);
-                        if (_filename == null || _filename.isEmpty()) {
-                            _filename = String.valueOf(System.currentTimeMillis());
-                        }
-
-                        FileUtils.copyFileFromUri(this, _content_describer, AppConfig.vmFolder + vmID + "/" + _filename);
-
-                        String final_filename = _filename;
-                        runOnUiThread(() -> {
-                            if (_addtodrive) {
-                                binding.drive.setText(AppConfig.vmFolder + vmID + "/" + final_filename);
-                                binding.driveField.setEndIconDrawable(R.drawable.more_vert_24px);
-                            }
-                        });
-                    } finally {
-                        runOnUiThread(() -> whenProcessing(false));
+                    String _filename = FileUtils.getFileNameFromUri(this, _content_describer);
+                    if (_filename == null || _filename.isEmpty()) {
+                        _filename = String.valueOf(System.currentTimeMillis());
                     }
-                } catch (IOException e) {
+
+                    FileUtils.copyFileFromUri(this, _content_describer, AppConfig.vmFolder + vmID + "/" + _filename);
+
+                    String final_filename = _filename;
                     runOnUiThread(() -> {
-                        whenProcessing(false);
-                        DialogUtils.oneDialog(this,
-                                getString(R.string.oops),
-                                getString(R.string.unable_to_copy_hard_drive_file_content),
-                                getString(R.string.ok),
-                                true,
-                                R.drawable.warning_48px,
-                                true,
-                                null,
-                                null);
+                        if (_addtodrive) {
+                            binding.drive.setText(AppConfig.vmFolder + vmID + "/" + final_filename);
+                            binding.driveField.setEndIconDrawable(R.drawable.more_vert_24px);
+                        }
                     });
+                } catch (Exception e) {
+                    runOnUiThread(() -> DialogUtils.oneDialog(this,
+                            getString(R.string.oops),
+                            getString(R.string.unable_to_copy_hard_drive_file_content),
+                            getString(R.string.ok),
+                            true,
+                            R.drawable.warning_48px,
+                            true,
+                            null,
+                            null));
+                } finally {
+                    runOnUiThread(progressDialog::dismiss);
                 }
             });
         } else {
-            whenProcessing(false);
             if (!FileUtils.isValidFilePath(this, FileUtils.getPath(this, _content_describer), false)) {
                 DialogUtils.oneDialog(this,
                         getString(R.string.problem_has_been_detected),
@@ -850,7 +842,6 @@ public class VMCreatorActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     private void afterExtractCVBIFile(String _filename) {
         isImportingCVBI = false;
-        whenProcessing(false);
         binding.ivIcon.setEnabled(true);
         try {
             if (!FileUtils.isFileExists(AppConfig.vmFolder + vmID + "/rom-data.json")) {
@@ -927,7 +918,7 @@ public class VMCreatorActivity extends AppCompatActivity {
                 }
 
                 if (jObj.has("icon") && !jObj.isNull("icon")) {
-                    binding.ivAddThubnail.setImageResource(R.drawable.round_edit_24);
+                    binding.ivAddThubnail.setImageResource(R.drawable.edit_24px);
                     thumbnailPath = AppConfig.vmFolder + vmID + "/" + jObj.getString("icon");
                     thumbnailProcessing();
                 } else {
@@ -965,19 +956,15 @@ public class VMCreatorActivity extends AppCompatActivity {
                 }
 
                 if (jObj.has("author") && !jObj.isNull("author") && jObj.has("desc") && !jObj.isNull("desc")) {
-                    if (jObj.getString("desc").contains("<") && jObj.getString("desc").contains(">")) {
-                        UIUtils.UIAlert(this, getResources().getString(R.string.from) + " " + jObj.getString("author"), jObj.getString("desc"));
-                    } else {
-                        DialogUtils.oneDialog(this,
-                                getString(R.string.from) + " " + jObj.getString("author"),
-                                jObj.getString("desc"),
-                                getString(R.string.ok),
-                                true,
-                                R.drawable.info_24px,
-                                false,
-                                null,
-                                null);
-                    }
+                    DialogUtils.oneDialog(this,
+                            getString(R.string.from) + " " + jObj.getString("author"),
+                            jObj.getString("desc"),
+                            getString(R.string.ok),
+                            true,
+                            R.drawable.info_24px,
+                            false,
+                            null,
+                            null);
                 }
             }
             binding.collapsingToolbarLayout.setSubtitle(MainSettingsManager.getArch(this));

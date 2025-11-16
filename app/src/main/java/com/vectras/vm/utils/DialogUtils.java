@@ -8,6 +8,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -45,7 +50,16 @@ public class DialogUtils {
             positiveButton.setTextColor(Color.WHITE);
 
         title.setText(_title);
-        content.setText(_message);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Spannable sp = (Spannable) Html.fromHtml(_message, Html.FROM_HTML_MODE_LEGACY);
+            Linkify.addLinks(sp, Linkify.ALL);
+            content.setText(sp);
+            content.setMovementMethod(LinkMovementMethod.getInstance());
+        } else {
+            content.setText(_message);
+        }
+
 
         positiveButton.setText(_textPositiveButton);
         positiveButton.setBackgroundResource(R.drawable.dialog_shape_single_button);
@@ -94,7 +108,15 @@ public class DialogUtils {
         }
 
         title.setText(_title);
-        content.setText(_message);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Spannable sp = (Spannable) Html.fromHtml(_message, Html.FROM_HTML_MODE_LEGACY);
+            Linkify.addLinks(sp, Linkify.ALL);
+            content.setText(sp);
+            content.setMovementMethod(LinkMovementMethod.getInstance());
+        } else {
+            content.setText(_message);
+        }
 
         positiveButton.setText(_textPositiveButton);
         negativeButton.setText(_textNegativeButton);
@@ -145,7 +167,15 @@ public class DialogUtils {
         }
 
         title.setText(_title);
-        content.setText(_message);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Spannable sp = (Spannable) Html.fromHtml(_message, Html.FROM_HTML_MODE_LEGACY);
+            Linkify.addLinks(sp, Linkify.ALL);
+            content.setText(sp);
+            content.setMovementMethod(LinkMovementMethod.getInstance());
+        } else {
+            content.setText(_message);
+        }
 
         if (UIUtils.isUsingThemeNightMode()
                 || !UIUtils.isColorLight(MaterialColors.getColor(positiveButton, com.google.android.material.R.attr.colorPrimaryContainer))) {
