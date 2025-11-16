@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">3.3.0</string>
+    <string name="app_version" translatable="false">3.3.1</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -95,10 +95,10 @@
     <string name="choose_qemu_architicture">Choose qemu architicture:</string>
     <string name="choose_qemu_architecture">Choose qemu architecture:</string>
     <string name="import_custom_rom_cvbi">IMPORT CUSTOM ROM \".CVBI\"</string>
-    <string name="rom_name">ROM NAME</string>
-    <string name="rom_drive_qcow2_img_etc">ROM DRIVE (qcow2, img, etc…)</string>
-    <string name="qemu_params">QEMU PARAMS</string>
-    <string name="rom_icon">ROM ICON</string>
+    <string name="rom_name">VM name</string>
+    <string name="rom_drive_qcow2_img_etc">Drive (qcow2, img, etc…)</string>
+    <string name="qemu_params">QEMU params</string>
+    <string name="rom_icon">Rom icon</string>
     <string name="add">ADD</string>
     <string name="import_iso">Import ISO</string>
     <string name="importRom">Import ROM</string>
@@ -606,6 +606,8 @@
     <string name="cyclic_redundancy_check_description">Check and detect data errors when exporting rom, you can turn it off for faster exporting.</string>
     <string name="unable_to_connect_to_alpine_linux_server_content">Unable to connect to Alpine Linux server or it is temporarily down, please try checking your network connection, change another mirror or try again in a few hours.</string>
     <string name="system_files_installation_failed_content">An error occurred while installing system files.</string>
+    <string name="copying_file">Copying file…</string>
+    <string name="cdrom_hint">CD-ROM (iso file only)</string>
 
 
     <!--======================TERMUX STRINGS====================-->

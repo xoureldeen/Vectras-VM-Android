@@ -1,6 +1,11 @@
+<div align="center">
 <p align="center">
   <img src="resources/vectrasvm.png" style="width: 30%;" />
 </p>
+<p align="center">
+  <a href="https://trendshift.io/repositories/12183" target="_blank"><img src="https://trendshift.io/api/badge/repositories/12183" alt="xoureldeen%2FVectras-VM-Android | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
+</p>
+</div>
 
 # Vectras VM
 [![Ceasefire Now](https://badge.techforpalestine.org/default)](https://techforpalestine.org/learn-more)
