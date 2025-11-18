@@ -1171,6 +1171,24 @@
         "id": ""
     },
     {
+        "rom_name": "Lubuntu 16.04",
+        "rom_icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Lubuntu.svg/1200px-Lubuntu.svg.png",
+        "rom_url": "https://youtu.be/usid0P7oePU",
+        "rom_path": "Lubuntu 16.04.cvbi",
+        "rom_avail": true,
+        "rom_size": "Xenial Xerus",
+        "rom_arch": "X86_64",
+        "rom_kernel": "linux",
+        "rom_extra": "",
+        "final_rom_file_name": "",
+        "desc": "This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nLubuntu (/lʊˈbʊntuː/ luu-BUUN-too) is a lightweight Linux distribution based on Ubuntu that uses the LXQt desktop environment in place of GNOME. Lubuntu was originally touted as being \"lighter, less resource hungry and more energy-efficient\", but now aims to be \"a functional yet modular distribution focused on getting out of the way and letting users use their computer\".",
+        "file_size": "4 GB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true,
+        "vecid": "lubuntu1604cvbi",
+        "id": ""
+    },
+    {
         "rom_name": "Lubuntu 18.04",
         "rom_icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Lubuntu.svg/1200px-Lubuntu.svg.png",
         "rom_url": "https://go.anbui.ovh/vectrasvm/community/linux/Lubuntu%2018.04.cvbi",
