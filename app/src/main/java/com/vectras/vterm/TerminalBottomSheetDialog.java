@@ -170,7 +170,7 @@ public class TerminalBottomSheetDialog {
                     //processBuilder.environment().put("PATH", "/bin:/usr/bin:/sbin:/usr/sbin");
                     //processBuilder.environment().put("LD_LIBRARY_PATH", TermuxService.PREFIX_PATH + "/lib");
                     processBuilder.environment().put("TERM", "xterm-256color");
-                    processBuilder.environment().put("TMPDIR", tmpDir.getAbsolutePath());
+                    processBuilder.environment().put("TMPDIR", "/tmp");
                     processBuilder.environment().put("SHELL", "/bin/sh");
                     processBuilder.environment().put("DISPLAY", ":0");
                     processBuilder.environment().put("PULSE_SERVER", "127.0.0.1");

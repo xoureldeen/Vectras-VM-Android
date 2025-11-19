@@ -54,12 +54,8 @@ import com.vectras.vm.utils.PermissionUtils;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -86,6 +82,7 @@ public class SetupWizardActivity extends AppCompatActivity {
     private boolean isServerError = false;
     private boolean isManualMode = false;
     private boolean isAllowCheckPermissions = false;
+    String tarPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -201,8 +198,6 @@ public class SetupWizardActivity extends AppCompatActivity {
         checkpermissions();
     }
 
-    String tarPath;
-
     // Function to append text and automatically scroll to bottom
     @SuppressLint("SetTextI18n")
     private void appendTextAndScroll(String textToAdd) {
@@ -284,6 +279,8 @@ public class SetupWizardActivity extends AppCompatActivity {
 
         cmd += " echo \"Just a sec...\";" +
                 " apk add qemu-audio-sdl pulseaudio;" +
+                " echo export TMPDIR=/tmp >> /etc/profile;" +
+                " mkdir -p $TMPDIR/pulse;" +
                 " echo export PULSE_SERVER=127.0.0.1 >> /etc/profile;" +
                 " mkdir -p ~/.vnc && echo -e \"555555\\n555555\" | vncpasswd -f > ~/.vnc/passwd && chmod 0600 ~/.vnc/passwd;" +
                 " echo \"installation successful! xssFjnj58Id\"";
@@ -300,14 +297,8 @@ public class SetupWizardActivity extends AppCompatActivity {
                 isFirstLaunch = true;
                 SetupFeatureCore.checkabi(this);
 
-                File tarGZ = new File(tarPath);
-                if (tarGZ.exists()) {
-                    isManualMode = true;
-                    startSetup();
-                } else {
-                    if (binding.linearsimplesetupui.getVisibility() == View.GONE) {
-                        showAdvancedSetupDialog();
-                    }
+                if (binding.linearsimplesetupui.getVisibility() == View.GONE) {
+                    showAdvancedSetupDialog();
                 }
             }
 
@@ -354,54 +345,19 @@ public class SetupWizardActivity extends AppCompatActivity {
     private final ActivityResultLauncher<String> bootstrapFilePicker =
             registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
                 if (uri != null) {
-                    File selectedFilePath = new File(getPath(uri));
                     String abi = Build.SUPPORTED_ABIS[0];
-                    if (selectedFilePath.toString().endsWith(abi + ".tar.gz")) {
+                    if (FileUtils.getFileNameFromUri(this, uri).endsWith(abi + ".tar.gz")) {
                         simpleSetupUIControler(1);
                         new Thread(() -> {
-                            FileInputStream File = null;
                             try {
-                                File = (FileInputStream) getContentResolver().openInputStream(uri);
-                            } catch (FileNotFoundException e) {
+                                setTextStatus(getString(R.string.copying_file));
+                                FileUtils.copyFileFromUri(this, uri, tarPath);
                                 runOnUiThread(() -> {
-                                    DialogUtils.oneDialog(this,
-                                            getString(R.string.oops),
-                                            getString(R.string.the_file_could_not_be_processed_content),
-                                            getResources().getString(R.string.ok),
-                                            true,
-                                            R.drawable.warning_48px,
-                                            true,
-                                            null,
-                                            () -> {
-                                                if (binding.linearsimplesetupui.getVisibility() == View.GONE) {
-                                                    showAdvancedSetupDialog();
-                                                }
-                                            });
-                                    simpleSetupUIControler(0);
+                                    isManualMode = true;
+                                    startSetup();
+                                    MainSettingsManager.setsetUpWithManualSetupBefore(SetupWizardActivity.this, true);
                                 });
-                            }
-                            try {
-                                try {
-                                    try (OutputStream out = new FileOutputStream(tarPath)) {
-                                        // Transfer bytes from in to out
-                                        byte[] buf = new byte[1024];
-                                        int len;
-                                        while (true) {
-                                            assert File != null;
-                                            if (!((len = File.read(buf)) > 0)) break;
-                                            out.write(buf, 0, len);
-                                        }
-                                    }
-                                } finally {
-                                    runOnUiThread(() -> {
-                                        isManualMode = true;
-                                        startSetup();
-                                        MainSettingsManager.setsetUpWithManualSetupBefore(SetupWizardActivity.this, true);
-                                    });
-                                    assert File != null;
-                                    File.close();
-                                }
-                            } catch (IOException e) {
+                            } catch (Exception e) {
                                 runOnUiThread(() -> {
                                     DialogUtils.oneDialog(this,
                                             getString(R.string.oops),
@@ -422,8 +378,8 @@ public class SetupWizardActivity extends AppCompatActivity {
                         }).start();
                     } else {
                         DialogUtils.oneDialog(this,
-                                "Invalid file",
-                                "Please select vectras-vm-" + abi + ".tar.gz file.",
+                                getString(R.string.invalid_file),
+                                getString(R.string.please_select) + " vectras-vm-" + abi + ".tar.gz.",
                                 getResources().getString(R.string.ok),
                                 true,
                                 R.drawable.warning_48px,

@@ -105,7 +105,7 @@ public class Terminal {
                 processBuilder.environment().put("HOME", "/root");
                 processBuilder.environment().put("USER", user);
                 processBuilder.environment().put("TERM", "xterm-256color");
-                processBuilder.environment().put("TMPDIR", tmpDir.getAbsolutePath());
+                processBuilder.environment().put("TMPDIR", "/tmp");
                 processBuilder.environment().put("SHELL", "/bin/sh");
                 processBuilder.environment().put("DISPLAY", DISPLAY);
                 processBuilder.environment().put("PULSE_SERVER", "127.0.0.1");
@@ -199,7 +199,7 @@ public class Terminal {
                 //processBuilder.environment().put("PATH", "/bin:/usr/bin:/sbin:/usr/sbin");
                 //processBuilder.environment().put("LD_LIBRARY_PATH", TermuxService.PREFIX_PATH + "/lib");
                 processBuilder.environment().put("TERM", "xterm-256color");
-                processBuilder.environment().put("TMPDIR", tmpDir.getAbsolutePath());
+                processBuilder.environment().put("TMPDIR", "/tmp");
                 processBuilder.environment().put("SHELL", "/bin/sh");
                 processBuilder.environment().put("DISPLAY", DISPLAY);
                 processBuilder.environment().put("PULSE_SERVER", "127.0.0.1");
@@ -303,7 +303,7 @@ public class Terminal {
             processBuilder.environment().put("HOME", "/root");
             processBuilder.environment().put("USER", user);
             processBuilder.environment().put("TERM", "xterm-256color");
-            processBuilder.environment().put("TMPDIR", tmpDir.getAbsolutePath());
+            processBuilder.environment().put("TMPDIR", "/tmp");
             processBuilder.environment().put("SHELL", "/bin/sh");
             processBuilder.environment().put("DISPLAY", DISPLAY);
             processBuilder.environment().put("PULSE_SERVER", "127.0.0.1");
@@ -381,7 +381,7 @@ public class Terminal {
                 processBuilder.environment().put("HOME", "/root");
                 processBuilder.environment().put("USER", user);
                 processBuilder.environment().put("TERM", "xterm-256color");
-                processBuilder.environment().put("TMPDIR", tmpDir.getAbsolutePath());
+                processBuilder.environment().put("TMPDIR", "/tmp");
                 processBuilder.environment().put("SHELL", "/bin/sh");
                 processBuilder.environment().put("DISPLAY", DISPLAY);
                 processBuilder.environment().put("PULSE_SERVER", "127.0.0.1");
@@ -499,7 +499,7 @@ public class Terminal {
                 processBuilder.environment().put("HOME", "/root");
                 processBuilder.environment().put("USER", user);
                 processBuilder.environment().put("TERM", "xterm-256color");
-                processBuilder.environment().put("TMPDIR", tmpDir.getAbsolutePath());
+                processBuilder.environment().put("TMPDIR", "/tmp");
                 processBuilder.environment().put("SHELL", "/bin/sh");
                 processBuilder.environment().put("DISPLAY", DISPLAY);
                 processBuilder.environment().put("PULSE_SERVER", "127.0.0.1");
