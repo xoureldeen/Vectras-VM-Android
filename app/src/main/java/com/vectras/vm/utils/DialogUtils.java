@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.text.Html;
 import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
@@ -52,7 +53,9 @@ public class DialogUtils {
         title.setText(_title);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Spannable sp = (Spannable) Html.fromHtml(_message, Html.FROM_HTML_MODE_LEGACY);
+            Spannable sp = (Spannable) (isHTML(_message) ?
+                    Html.fromHtml(_message, Html.FROM_HTML_MODE_LEGACY) :
+                    new SpannableString(_message));
             Linkify.addLinks(sp, Linkify.ALL);
             content.setText(sp);
             content.setMovementMethod(LinkMovementMethod.getInstance());
@@ -110,7 +113,9 @@ public class DialogUtils {
         title.setText(_title);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Spannable sp = (Spannable) Html.fromHtml(_message, Html.FROM_HTML_MODE_LEGACY);
+            Spannable sp = (Spannable) (isHTML(_message) ?
+                    Html.fromHtml(_message, Html.FROM_HTML_MODE_LEGACY) :
+                    new SpannableString(_message));
             Linkify.addLinks(sp, Linkify.ALL);
             content.setText(sp);
             content.setMovementMethod(LinkMovementMethod.getInstance());
@@ -169,7 +174,9 @@ public class DialogUtils {
         title.setText(_title);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Spannable sp = (Spannable) Html.fromHtml(_message, Html.FROM_HTML_MODE_LEGACY);
+            Spannable sp = (Spannable) (isHTML(_message) ?
+                    Html.fromHtml(_message, Html.FROM_HTML_MODE_LEGACY) :
+                    new SpannableString(_message));
             Linkify.addLinks(sp, Linkify.ALL);
             content.setText(sp);
             content.setMovementMethod(LinkMovementMethod.getInstance());
@@ -268,5 +275,9 @@ public class DialogUtils {
                     null
             );
         }
+    }
+
+    public static boolean isHTML(String content) {
+        return content.contains("<") && content.contains("</") && content.contains(">");
     }
 }

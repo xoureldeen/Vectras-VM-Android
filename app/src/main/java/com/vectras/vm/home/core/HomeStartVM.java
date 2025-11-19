@@ -46,6 +46,7 @@ public class HomeStartVM {
     public static String pendingVMID = "";
     public static String pendingThumbnailFile = "";
     public static boolean isLaunchFromPending = false;
+    public static String runCommandFormat = "export TMPDIR=/tmp && mkdir -p $TMPDIR/pulse && export XDG_RUNTIME_DIR=/tmp && pulseaudio --start --exit-idle-time=-1 > /dev/null 2>&1 && %s";
 
     public static void startNow(
             Activity activity,
@@ -62,10 +63,11 @@ public class HomeStartVM {
         } else {
             if (MainSettingsManager.getVmUi(activity).equals("X11")) {
                 pendingVMName = vmName;
-                pendingEnv = "xterm -e bash -c '" + env + "'";
+                pendingEnv = env;
                 pendingVMID = vmID;
                 pendingThumbnailFile = thumbnailFile;
                 DisplaySystem.launch(activity);
+                runCommandFormat = String.format(runCommandFormat, "xterm -e bash -c '%s'");
                 return;
             }
         }
@@ -164,11 +166,14 @@ public class HomeStartVM {
 
         VMManager.isQemuStopedWithError = false;
 
+        String finalCommand = String.format(runCommandFormat, env);
+        Log.i(TAG, finalCommand);
+
         if (ServiceUtils.isServiceRunning(activity, MainService.class)) {
-            MainService.startCommand(env, activity);
+            MainService.startCommand(finalCommand, activity);
         } else {
             Intent serviceIntent = new Intent(activity, MainService.class);
-            MainService.env = env;
+            MainService.env = finalCommand;
             MainService.CHANNEL_ID = vmName;
             MainService.activity = activity;
             if (SDK_INT >= Build.VERSION_CODES.O) {
@@ -222,11 +227,13 @@ public class HomeStartVM {
             Log.d("HomeStartVM", i + ": " + params[i]);
         }
 
+        setDefault();
     }
 
     public static void startPending(Activity activity) {
         isLaunchFromPending = true;
         startNow(activity, pendingVMName, pendingEnv, pendingVMID, pendingThumbnailFile);
+        setDefault();
     }
 
     public static void showProgressDialog(Activity activity, String _content, String thumbnailFile) {
@@ -264,5 +271,9 @@ public class HomeStartVM {
                 .create();
 
         progressDialog.show();
+    }
+
+    public static void setDefault() {
+        runCommandFormat = "export TMPDIR=/tmp && mkdir -p $TMPDIR/pulse && export XDG_RUNTIME_DIR=/tmp && pulseaudio --start --exit-idle-time=-1 > /dev/null 2>&1 && %s";
     }
 }

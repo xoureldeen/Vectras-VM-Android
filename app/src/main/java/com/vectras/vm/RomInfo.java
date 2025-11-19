@@ -50,6 +50,15 @@ public class RomInfo extends AppCompatActivity {
     private String currentViews = "0";
     private boolean isAnBuiID = false;
     private String contentID = "";
+    private String token = "";
+    private String urlToGetInfo = "";
+    private RequestNetwork net;
+    private RequestNetwork.RequestListener _net_request_listener;
+    private boolean retryUpdateView = true;
+    private boolean retrySendLike;
+    private boolean hasRetriedView;
+    private boolean hasRetriedLike;
+    private boolean waitingForUpdateLike;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -296,8 +305,8 @@ public class RomInfo extends AppCompatActivity {
         binding.btnLike.setOnClickListener(v -> sendLikeUpdate(contentID));
 
         if (!contentID.isEmpty()) {
-            RequestNetwork net = new RequestNetwork(this);
-            RequestNetwork.RequestListener _net_request_listener = new RequestNetwork.RequestListener() {
+            net = new RequestNetwork(this);
+            _net_request_listener = new RequestNetwork.RequestListener() {
                 @SuppressLint("SetTextI18n")
                 @Override
                 public void onResponse(String tag, String response, HashMap<String, Object> responseHeaders) {
@@ -307,6 +316,8 @@ public class RomInfo extends AppCompatActivity {
                                 response, new TypeToken<HashMap<String, Object>>() {
                                 }.getType()
                         );
+
+                        if (map.containsKey("token")) token = Objects.requireNonNull(map.get("token")).toString();
 
                         binding.btnLike.setVisibility(View.VISIBLE);
                         String likeContent = getString(R.string.like);
@@ -336,6 +347,8 @@ public class RomInfo extends AppCompatActivity {
                         }
                         binding.tvViews.setText(viewsContent);
 
+                        if (retryUpdateView) sendViewUpdate(contentID);
+                        if (retrySendLike) sendLikeUpdate(contentID);
                     } else {
                         binding.lnAllViews.setVisibility(View.GONE);
                         binding.btnLike.setVisibility(View.GONE);
@@ -351,7 +364,7 @@ public class RomInfo extends AppCompatActivity {
                 }
             };
 
-            String urlToGetInfo = "https://go.anbui.ovh/egg/contentinfo?id=" + contentID + (isAnBuiID ? "" : "&app=vectrasvm");
+            urlToGetInfo = "https://go.anbui.ovh/egg/contentinfo?id=" + contentID + (isAnBuiID ? "" : "&app=vectrasvm");
             net.startRequestNetwork(RequestNetworkController.GET,urlToGetInfo,"contentinfo", _net_request_listener);
             Log.i(TAG, "urlToGetInfo: " + urlToGetInfo);
 
@@ -360,6 +373,9 @@ public class RomInfo extends AppCompatActivity {
     }
 
     private void sendLikeUpdate(String id) {
+        if (waitingForUpdateLike) return;
+        waitingForUpdateLike = true;
+
         String addlikecount;
 
         if (MainSettingsManager.getLikes(this).contains("," + id)) {
@@ -377,7 +393,8 @@ public class RomInfo extends AppCompatActivity {
         String json = "{"
                 + "\"id\":\"" + id + "\","
                 + "\"addcount\":" + addlikecount
-                + (isAnBuiID ? "" : ",\"app\":\"vectrasvm\"")
+                + (isAnBuiID ? "" : ",\"app\":\"vectrasvm\",")
+                + "\"token\":" + "\"" + token + "\""
                 + "}";
 
         RequestBody body = RequestBody.create(
@@ -393,11 +410,26 @@ public class RomInfo extends AppCompatActivity {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                waitingForUpdateLike = false;
                 Log.e(TAG, "sendLikeUpdate: ", e);
             }
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                int statusCode = response.code();
+
+                if (statusCode == 403 && !hasRetriedLike) {
+                    retrySendLike = true;
+                    hasRetriedLike = true;
+                    waitingForUpdateLike = false;
+                    net.startRequestNetwork(RequestNetworkController.GET, urlToGetInfo,"contentinfo", _net_request_listener);
+                    return;
+                }
+
+                retrySendLike = false;
+                hasRetriedLike = false;
+                waitingForUpdateLike = false;
+
                 if (response.isSuccessful()) {
                     String resBody = response.body().string();
                     if (!resBody.isEmpty()) {
@@ -433,7 +465,8 @@ public class RomInfo extends AppCompatActivity {
 
         String json = "{"
                 + "\"id\":\"" + id + "\""
-                + (isAnBuiID ? "" : ",\"app\":\"vectrasvm\"")
+                + (isAnBuiID ? "" : ",\"app\":\"vectrasvm\",")
+                + "\"token\":" + "\"" + token + "\""
                 + "}";
 
         RequestBody body = RequestBody.create(
@@ -454,6 +487,18 @@ public class RomInfo extends AppCompatActivity {
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                int statusCode = response.code();
+
+                if (statusCode == 403 && !hasRetriedView) {
+                    retryUpdateView = true;
+                    hasRetriedView = true;
+                    net.startRequestNetwork(RequestNetworkController.GET, urlToGetInfo,"contentinfo", _net_request_listener);
+                    return;
+                }
+
+                retryUpdateView = false;
+                hasRetriedView = false;
+
                 if (response.isSuccessful()) {
                     String resBody = response.body().string();
                     if (!resBody.isEmpty()) {
