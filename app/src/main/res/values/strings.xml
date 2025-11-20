@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">3.3.2</string>
+    <string name="app_version" translatable="false">3.3.3</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <string name="str_home">Home</string>
     <string name="str_logger">Logger</string>
@@ -609,6 +609,7 @@
     <string name="copying_file">Copying file…</string>
     <string name="cdrom_hint">CD-ROM (iso file only)</string>
     <string name="invalid_file">Invalid file</string>
+    <string name="processes">Processes</string>
 
 
     <!--======================TERMUX STRINGS====================-->
