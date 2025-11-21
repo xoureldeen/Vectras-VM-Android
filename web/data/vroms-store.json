@@ -144,6 +144,24 @@
         "id": ""
     },
     {
+        "rom_name": "Windows XP Starter Edition",
+        "rom_icon": "https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/10/12/windows_2001_logo_1_abcd7f82240a9d6d4ef94d5c6223130b.png",
+        "rom_url": "https://youtu.be/ZOl4MaBXm3Q",
+        "rom_path": "Windows XP Starter Edition.cvbi",
+        "rom_avail": true,
+        "rom_size": "Lighter than Windows XP",
+        "rom_arch": "X86_64",
+        "rom_kernel": "windows",
+        "rom_extra": "",
+        "final_rom_file_name": "",
+        "desc": "This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows XP is a major release of Microsoft's Windows NT operating system. It was released to manufacturing on August 24, 2001, and later to retail on October 25, 2001. It is a direct successor to Windows 2000 for high-end and business users and Windows Me for home users.",
+        "file_size": "2 GB",
+        "creator": "Nguyen Bao An Bui",
+        "verified": true,
+        "vecid": "windowsxpstartereditioncvbi",
+        "id": ""
+    },
+    {
         "rom_name": "Windows FLP",
         "rom_icon": "https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/10/12/windows_2001_logo_1_abcd7f82240a9d6d4ef94d5c6223130b.png",
         "rom_url": "https://youtu.be/O0xwtHC72W0",
