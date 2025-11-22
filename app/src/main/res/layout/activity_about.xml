@@ -22,15 +22,16 @@
             android:fitsSystemWindows="true"
             app:title="@string/about"
             app:collapsedTitleTextAppearance="@style/TextAppearance.Material3.TitleMedium"
-            app:expandedTitleTextAppearance="@style/TextAppearance.Material3.DisplaySmall">
+            app:expandedTitleTextAppearance="@style/TextAppearance.Material3.DisplaySmall" >
 
             <com.google.android.material.appbar.MaterialToolbar
+                android:theme="@style/ThemeOverlay.Material3.Toolbar.CircleNavigationButton"
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:elevation="0dp"
                 app:layout_collapseMode="pin"
-                app:navigationIcon="@drawable/arrow_back_24px"/>
+                app:navigationIcon="@drawable/arrow_back_rounded_24px" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>

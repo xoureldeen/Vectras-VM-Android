@@ -15,7 +15,7 @@
         <item name="checkboxStyle">@style/MyCheckBoxStyle</item>
 <!--        <item name="android:windowAnimationStyle">@style/ActivityAnimation</item>-->
         <item name="actionOverflowButtonStyle">@style/AppTheme.Toolbar.OverflowButton</item>
-        <item name="fontFamily">@font/googlesans_medium</item>
+        <item name="fontFamily">@font/googlesansflex</item>
         <item name="chipStyle">@style/AppTheme.WidgetGroupChip</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="windowActionBarOverlay">true</item>
@@ -24,6 +24,7 @@
         <item name="android:alertDialogTheme">@style/MainDialogTheme</item>
         <item name="android:dialogPreferenceStyle">@style/MainDialogTheme</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+        <item name="materialSwitchStyle">@style/App.MaterialSwitch</item>
     </style>
 
     <style name="SwitchStyle" parent="Widget.Material3.CompoundButton.MaterialSwitch" />

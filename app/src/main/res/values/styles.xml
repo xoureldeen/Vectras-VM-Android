@@ -2,4 +2,8 @@
 <resources>
     <style name="CenteredDialogTheme" parent="ThemeOverlay.Material3.MaterialAlertDialog.Centered">
     </style>
+
+    <style name="App.MaterialSwitch" parent="@style/Widget.Material3.CompoundButton.MaterialSwitch">
+        <item name="thumbIcon">@drawable/switch_thumb_icon</item>
+    </style>
 </resources>

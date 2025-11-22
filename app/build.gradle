@@ -10,8 +10,8 @@ android {
         applicationId "com.vectras.vm"
         minSdk minApi
         targetSdk targetApi
-        versionCode 37
-        versionName "3.3.3"
+        versionCode 38
+        versionName "3.3.4"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -72,12 +72,12 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.7.1'
-    implementation 'com.google.android.material:material:1.14.0-alpha06'
+    implementation 'com.google.android.material:material:1.14.0-alpha07'
     implementation "androidx.annotation:annotation:1.9.1"
     implementation "androidx.core:core:1.17.0"
     implementation "androidx.drawerlayout:drawerlayout:1.2.0"
     implementation "androidx.preference:preference:1.2.1"
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-beta01"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-rc01"
     implementation "androidx.viewpager:viewpager:1.1.0"
 //    implementation platform('com.google.firebase:firebase-bom:34.2.0')
 //    implementation 'com.google.firebase:firebase-analytics'
@@ -90,12 +90,12 @@ dependencies {
     implementation 'com.google.guava:guava:33.5.0-jre'
     implementation 'com.google.code.gson:gson:2.13.2'
     implementation 'com.squareup.okhttp3:okhttp:5.3.1'
-    implementation "androidx.window:window:1.5.0"
+    implementation "androidx.window:window:1.5.1"
     implementation "commons-io:commons-io:2.21.0"
     implementation 'com.airbnb.android:lottie:6.7.1'
     implementation 'org.apache.commons:commons-compress:1.28.0'
 //    implementation 'com.google.firebase:firebase-crashlytics-buildtools:3.0.6'
-    implementation 'androidx.activity:activity:1.11.0'
+    implementation 'androidx.activity:activity:1.12.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
     implementation 'androidx.preference:preference:1.2.1'
     implementation "androidx.documentfile:documentfile:1.1.0"

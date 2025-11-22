@@ -26,11 +26,13 @@
             app:subtitle="@string/external">
 
             <com.google.android.material.appbar.MaterialToolbar
+                android:theme="@style/ThemeOverlay.Material3.Toolbar.CircleNavigationButton"
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:elevation="0dp"
-                app:layout_collapseMode="pin" />
+                app:layout_collapseMode="pin"
+                app:navigationIcon="@drawable/arrow_back_rounded_24px" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -83,7 +85,7 @@
                 android:id="@+id/cv_copyport"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="8dp"
+                android:layout_marginVertical="16dp"
                 app:cardBackgroundColor="?attr/colorSurfaceContainer"
                 style="@style/Widget.Material3.CardView.Filled">
 
@@ -160,8 +162,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:backgroundTint="?attr/colorPrimaryContainer"
-        app:cardCornerRadius="25dp"
+        android:backgroundTint="?attr/colorSecondaryContainer"
+        app:cardCornerRadius="50dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -170,15 +172,16 @@
             android:layout_height="match_parent"
             android:background="?attr/selectableItemBackground"
             android:gravity="center_vertical"
-            android:padding="15dp">
+            android:paddingVertical="16dp"
+            android:paddingLeft="32dp"
+            android:paddingRight="20dp" >
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/use_external_vnc_server"
-                android:textColor="?attr/colorPrimary"
-                android:textSize="18sp">
+                android:textSize="16sp">
 
             </TextView>
 
