@@ -26,11 +26,13 @@
             app:subtitle="@string/settings">
 
             <com.google.android.material.appbar.MaterialToolbar
+                android:theme="@style/ThemeOverlay.Material3.Toolbar.CircleNavigationButton"
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:elevation="0dp"
-                app:layout_collapseMode="pin" />
+                app:layout_collapseMode="pin"
+                app:navigationIcon="@drawable/arrow_back_rounded_24px" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -77,7 +79,7 @@
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/select_daynight"
-                            style="@style/Widget.Material3Expressive.Button.OutlinedButton"
+                            style="?attr/materialButtonOutlinedStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -85,7 +87,7 @@
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/select_day"
-                            style="@style/Widget.Material3Expressive.Button.OutlinedButton"
+                            style="?attr/materialButtonOutlinedStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -93,7 +95,7 @@
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/select_night"
-                            style="@style/Widget.Material3Expressive.Button.OutlinedButton"
+                            style="?attr/materialButtonOutlinedStyle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"

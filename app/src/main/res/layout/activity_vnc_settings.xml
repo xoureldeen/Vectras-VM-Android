@@ -26,11 +26,13 @@
             app:subtitle="@string/settings">
 
             <com.google.android.material.appbar.MaterialToolbar
+                android:theme="@style/ThemeOverlay.Material3.Toolbar.CircleNavigationButton"
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:elevation="0dp"
-                app:layout_collapseMode="pin" />
+                app:layout_collapseMode="pin"
+                app:navigationIcon="@drawable/arrow_back_rounded_24px" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -130,7 +132,7 @@
                     android:layout_marginEnd="8dp"
                     android:orientation="vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/short_distance_in_external"
+                    app:layout_constraintEnd_toStartOf="@id/arrow_forward_in_external"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
@@ -148,10 +150,21 @@
                         android:textSize="14sp" />
                 </LinearLayout>
 
+                <ImageView
+                    android:id="@+id/arrow_forward_in_external"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/arrow_forward_ios_24px"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/short_distance_in_external"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <View
                     android:id="@+id/short_distance_in_external"
                     android:layout_width="1dp"
-                    android:layout_height="24dp"
+                    android:layout_height="36dp"
                     android:layout_marginHorizontal="16dp"
                     android:background="?attr/colorOutline"
                     app:layout_constraintBottom_toBottomOf="parent"

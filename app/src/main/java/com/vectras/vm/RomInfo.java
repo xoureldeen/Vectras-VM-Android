@@ -392,8 +392,8 @@ public class RomInfo extends AppCompatActivity {
 
         String json = "{"
                 + "\"id\":\"" + id + "\","
-                + "\"addcount\":" + addlikecount
-                + (isAnBuiID ? "" : ",\"app\":\"vectrasvm\",")
+                + "\"addcount\":" + addlikecount + ","
+                + (isAnBuiID ? "" : "\"app\":\"vectrasvm\",")
                 + "\"token\":" + "\"" + token + "\""
                 + "}";
 
@@ -464,8 +464,8 @@ public class RomInfo extends AppCompatActivity {
         }
 
         String json = "{"
-                + "\"id\":\"" + id + "\""
-                + (isAnBuiID ? "" : ",\"app\":\"vectrasvm\",")
+                + "\"id\":\"" + id + "\","
+                + (isAnBuiID ? "" : "\"app\":\"vectrasvm\",")
                 + "\"token\":" + "\"" + token + "\""
                 + "}";
 

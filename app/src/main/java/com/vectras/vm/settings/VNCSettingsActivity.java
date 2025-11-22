@@ -16,6 +16,7 @@ import java.util.Objects;
 public class VNCSettingsActivity extends AppCompatActivity {
 
     ActivityVncSettingsBinding binding;
+    boolean isInitialized = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +35,8 @@ public class VNCSettingsActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         binding.cvNotusingvnc.setVisibility(MainSettingsManager.getVmUi(this).equals("VNC") ? View.GONE : View.VISIBLE);
+
+        if (isInitialized) binding.swExternal.setChecked(MainSettingsManager.getVncExternal(this));
     }
 
     private void initialize() {
@@ -52,5 +55,7 @@ public class VNCSettingsActivity extends AppCompatActivity {
             intent.setClass(this, MainSettingsManager.class);
             startActivity(intent);
         });
+
+        isInitialized = true;
     }
 }
