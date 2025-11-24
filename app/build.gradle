@@ -89,7 +89,7 @@ dependencies {
 //    implementation 'com.google.android.gms:play-services-ads:24.6.0'
     implementation 'com.google.guava:guava:33.5.0-jre'
     implementation 'com.google.code.gson:gson:2.13.2'
-    implementation 'com.squareup.okhttp3:okhttp:5.3.1'
+    implementation 'com.squareup.okhttp3:okhttp:5.3.2'
     implementation "androidx.window:window:1.5.1"
     implementation "commons-io:commons-io:2.21.0"
     implementation 'com.airbnb.android:lottie:6.7.1'
