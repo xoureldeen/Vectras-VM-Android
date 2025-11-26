@@ -50,6 +50,7 @@ import com.vectras.vm.utils.JSONUtils;
 import com.vectras.vm.utils.ListUtils;
 import com.vectras.vm.utils.UIUtils;
 import com.vectras.vm.utils.PermissionUtils;
+import com.vectras.vterm.TerminalBottomSheetDialog;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -208,7 +209,7 @@ public class SetupWizardActivity extends AppCompatActivity {
             isexecutingCommand = false;
             binding.linearsimplesetupui.setVisibility(View.GONE);
             bindingAdvancedSetup.lnAdvancedsetup.setVisibility(View.GONE);
-        } else if (textToAdd.contains("libproot.so --help")) {
+        } else if (textToAdd.contains("libproot.so --help") || textToAdd.contains("/bin/sh: can't fork:")) {
             libprooterror = true;
         } else if (textToAdd.contains("not complete: /root/setup.tar.gz")) {
             aria2Error = true;
@@ -245,7 +246,7 @@ public class SetupWizardActivity extends AppCompatActivity {
     }
 
     private void setTextStatus(String content) {
-        bindingAdvancedSetup.title.setText(content);
+        bindingAdvancedSetup.title.setText(content.replaceAll("\n", ". "));
         binding.textviewsettingup.setText(content);
     }
 
@@ -449,12 +450,12 @@ public class SetupWizardActivity extends AppCompatActivity {
         bindingAdvancedSetup.ivClose.setOnClickListener(v -> binding.linearsimplesetupui.setVisibility(View.VISIBLE));
 
         bindingAdvancedSetup.ivOpenterminal.setOnClickListener(v -> {
-//            if (DeviceUtils.is64bit()) {
+            if (DeviceUtils.is64bit()) {
                 startActivity(new Intent(this, TermuxActivity.class));
-//            } else {
-//                TerminalBottomSheetDialog VTERM = new TerminalBottomSheetDialog(this);
-//                VTERM.showVterm();
-//            }
+            } else {
+                TerminalBottomSheetDialog VTERM = new TerminalBottomSheetDialog(this);
+                VTERM.showVterm();
+            }
         });
 
         bindingAdvancedSetup.btnInstall.setOnClickListener(v -> {
@@ -584,12 +585,7 @@ public class SetupWizardActivity extends AppCompatActivity {
         }
 
         // ViewHolder holds binding for reuse
-        private static class ViewHolder {
-            final SimpleLayoutForSpinerBinding binding;
-
-            ViewHolder(SimpleLayoutForSpinerBinding binding) {
-                this.binding = binding;
-            }
+                private record ViewHolder(SimpleLayoutForSpinerBinding binding) {
         }
     }
 
@@ -684,7 +680,7 @@ public class SetupWizardActivity extends AppCompatActivity {
                         });
                     }
                     if (libprooterror) {
-                        DialogUtils.twoDialog(
+                        runOnUiThread(() -> DialogUtils.twoDialog(
                                 this,
                                 getResources().getString(R.string.oops),
                                 getResources().getString(R.string.a_serious_problem_has_occurred),
@@ -699,14 +695,14 @@ public class SetupWizardActivity extends AppCompatActivity {
                                     startActivity(intent);
                                 },
                                 null,
-                                null);
+                                null));
                     } else if (aria2Error && downloadBootstrapsCommand.contains("aria2c")) {
                         runOnUiThread(() -> {
                             downloadBootstrapsCommand = " curl -o setup.tar.gz -L " + bootstrapfilelink;
                             startSetup();
                         });
                     } else if (isServerError) {
-                        DialogUtils.oneDialog(
+                        runOnUiThread(() -> DialogUtils.oneDialog(
                                 this,
                                 getResources().getString(R.string.oops),
                                 getResources().getString(R.string.unable_to_connect_to_alpine_linux_server_content),
@@ -715,7 +711,7 @@ public class SetupWizardActivity extends AppCompatActivity {
                                 R.drawable.warning_48px,
                                 true,
                                 null,
-                                null);
+                                null));
                     }
                 }
             } catch (IOException | InterruptedException e) {

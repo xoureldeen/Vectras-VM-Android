@@ -85,6 +85,7 @@ public class SystemMonitorFragment extends Fragment {
 
     private void initialize() {
         binding.btStopqemu.setOnClickListener(v -> VMManager.requestKillAllQemuProcess(requireActivity(), () -> {
+
             ScheduledExecutorService executorUpdate = Executors.newSingleThreadScheduledExecutor();
             executorUpdate.schedule(() -> {
                 if (getContext() != null) {

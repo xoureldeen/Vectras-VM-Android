@@ -34,12 +34,21 @@ public class VNCSettingsActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-        binding.cvNotusingvnc.setVisibility(MainSettingsManager.getVmUi(this).equals("VNC") ? View.GONE : View.VISIBLE);
-
-        if (isInitialized) binding.swExternal.setChecked(MainSettingsManager.getVncExternal(this));
+        if (isInitialized) {
+            binding.swExternal.setEnabled(true);
+            binding.swExternal.setChecked(MainSettingsManager.getVncExternal(this));
+            binding.swEnabled.setChecked(MainSettingsManager.getVmUi(this).equals("VNC"));
+            uiController(binding.swEnabled.isChecked());
+        }
     }
 
     private void initialize() {
+        binding.swEnabled.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            MainSettingsManager.setVmUi(this, isChecked ? "VNC" : "X11");
+            uiController(isChecked);
+        });
+        binding.lnEnabled.setOnClickListener(v -> binding.swEnabled.toggle());
+
         binding.swForcerefesh.setOnCheckedChangeListener((buttonView, isChecked) -> MainSettingsManager.setForceRefeshVNCDisplay(this, isChecked));
         binding.lnForcerefesh.setOnClickListener(v -> binding.swForcerefesh.toggle());
 
@@ -49,13 +58,15 @@ public class VNCSettingsActivity extends AppCompatActivity {
         binding.swForcerefesh.setChecked(MainSettingsManager.getForceRefeshVNCDisplay(this));
         binding.swExternal.setChecked(MainSettingsManager.getVncExternal(this));
 
-        binding.lnNotusingvnc.setOnClickListener(v -> {
-            Intent intent = new Intent();
-            intent.putExtra("goto", "qemu");
-            intent.setClass(this, MainSettingsManager.class);
-            startActivity(intent);
-        });
-
         isInitialized = true;
+
+        uiController(binding.swEnabled.isChecked());
+    }
+
+    private void uiController(boolean isEnabled) {
+        binding.lnAllOptions.setAlpha(isEnabled ? 1f : 0.5f);
+        binding.lnForcerefesh.setEnabled(isEnabled);
+        binding.lnExternal.setEnabled(isEnabled);
+        binding.swExternal.setEnabled(isEnabled);
     }
 }

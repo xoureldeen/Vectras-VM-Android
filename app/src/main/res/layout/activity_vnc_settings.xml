@@ -46,44 +46,19 @@
             android:id="@+id/ln_all_options"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingTop="108dp"
+            android:paddingHorizontal="16dp"
+            android:paddingBottom="16dp"
             android:orientation="vertical"
             android:animateLayoutChanges="true">
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cv_notusingvnc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                app:cardBackgroundColor="?attr/colorSurfaceContainer"
-                style="@style/Widget.Material3.CardView.Filled"
-                android:visibility="gone"
-                tools:visibility="visible">
-                <LinearLayout
-                    android:id="@+id/ln_notusingvnc"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp"
-                    android:gravity="center_vertical"
-                    android:background="?attr/selectableItemBackground">
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/warning_48px"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="16dp"
-                        android:text="@string/you_are_using_x11_instead_of_vnc_content"/>
-
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/ln_forcerefesh"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:padding="16dp">
+                android:background="@drawable/object_shape_top"
+                android:padding="16dp"
+                android:layout_marginBottom="2dp" >
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -123,7 +98,7 @@
                 android:id="@+id/ln_external"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
+                android:background="@drawable/object_shape_bottom"
                 android:padding="16dp">
 
                 <LinearLayout
@@ -180,7 +155,52 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:background="?attr/colorSurface"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <com.google.android.material.card.MaterialCardView
+        style="@style/Widget.Material3.CardView.Filled"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:backgroundTint="?attr/colorSecondaryContainer"
+        app:cardCornerRadius="50dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:id="@+id/ln_enabled"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center_vertical"
+            android:paddingVertical="16dp"
+            android:paddingLeft="32dp"
+            android:paddingRight="20dp" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/use_vnc"
+                android:textSize="16sp">
+
+            </TextView>
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/sw_enabled"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/colorAccent"
+                android:clickable="false"/>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

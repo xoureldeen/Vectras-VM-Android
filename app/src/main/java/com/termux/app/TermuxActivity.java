@@ -142,7 +142,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
     final SoundPool mBellSoundPool = new SoundPool.Builder().setMaxStreams(1).setAudioAttributes(
         new AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
             .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION).build()).build();
-    int mBellSoundId;
+//    int mBellSoundId;
 
     private final BroadcastReceiver mBroadcastReceiever = new BroadcastReceiver() {
         @Override
@@ -348,7 +348,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
 
         checkForFontAndColors();
 
-        mBellSoundId = mBellSoundPool.load(this, R.raw.bell, 1);
+//        mBellSoundId = mBellSoundPool.load(this, R.raw.bell, 1);
 
         sendOpenedBroadcast();
 
@@ -459,7 +459,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
 
                 switch (mSettings.mBellBehaviour) {
                     case TermuxPreferences.BELL_BEEP:
-                        mBellSoundPool.play(mBellSoundId, 1.f, 1.f, 1, 0, 1.f);
+//                        mBellSoundPool.play(mBellSoundId, 1.f, 1.f, 1, 0, 1.f);
                         break;
                     case TermuxPreferences.BELL_VIBRATE:
                         BellUtil.getInstance(TermuxActivity.this).doBell();

@@ -84,11 +84,11 @@ public class VectrasApp extends Application {
 		Locale locale = Locale.getDefault();
 		String language = locale.getLanguage();
 
-		if (language.contains("ar")) {
-			overrideFont("DEFAULT", R.font.cairo_regular);
-		} else {
-			overrideFont("DEFAULT", R.font.gilroy);
-		}
+//		if (language.contains("ar")) {
+//			overrideFont("DEFAULT", R.font.cairo_regular);
+//		} else {
+//			overrideFont("DEFAULT", R.font.gilroy);
+//		}
 		setupAppConfig(getApplicationContext());
 
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
