@@ -271,7 +271,7 @@
     <string name="powerpc_qemu" translatable="false">PowerPC</string>
     <string name="arm64_qemu" translatable="false">ARM64</string>
     <string name="x86_64_qemu_recommended">x86_64 (Recommended)</string>
-    <string name="x86_64">x86_64</string>
+    <string name="x86_64" translatable="false">x86_64</string>
     <string name="i386_qemu" translatable="false">i386</string>
     <string name="export_rom">Export Rom</string>
     <string name="are_you_sure">Are you sure?</string>
@@ -1066,8 +1066,7 @@
         background. Check
         https://developer.android.com/guide/components/activities/background-starts for more info.
     </string> <!-- Was: msg_display_over_other_apps_permission_not_granted_warning -->
-    <string name="perm_action_grant_display_over_other_apps">Grant Draw Over Apps Permission
-    </string> <!-- Was: action_grant_display_over_other_apps_permission -->
+    <string name="perm_action_grant_display_over_other_apps">"Grant Draw Over Apps Permission     "</string> <!-- Was: action_grant_display_over_other_apps_permission -->
 
     <string name="perm_status_already_granted">Already Granted</string> <!-- Was: action_already_granted -->
     <string name="perm_status_already_disabled">Already Disabled</string> <!-- Was: action_already_disabled -->
