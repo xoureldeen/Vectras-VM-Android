@@ -17,7 +17,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:padding="3dp"
-			app:fontFamily="@font/jetbrainsmonoregular"/>
+			app:fontFamily="@font/googlesansvodevariablefontwght"/>
 
 	</RelativeLayout>
 
@@ -27,4 +27,3 @@
 		android:layout_width="match_parent"/>
 
 </LinearLayout>
-

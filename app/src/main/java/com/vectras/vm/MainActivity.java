@@ -739,7 +739,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Menu items
         int id = item.getItemId();
-        if (id == R.id.info) {
+        if (id == 0) {
             appbar = findViewById(R.id.appbar);
             if (appbar.getTop() < 0)
                 appbar.setExpanded(true);

@@ -53,7 +53,7 @@
                         android:textIsSelectable="true"
                         android:textSize="12sp"
                         android:textColor="#fff"
-                        app:fontFamily="@font/jetbrainsmonoregular"
+                        app:fontFamily="@font/googlesansvodevariablefontwght"
                         tools:visibility="visible"/>
 
                     <LinearLayout
@@ -72,7 +72,7 @@
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                             android:textSize="12sp"
                             android:textColor="#fff"
-                            app:fontFamily="@font/jetbrainsmonoregular" />
+                            app:fontFamily="@font/googlesansvodevariablefontwght" />
 
                         <EditText
                             android:id="@+id/etCommandInput"
@@ -88,7 +88,7 @@
                             android:textCursorDrawable="@drawable/cursor"
                             android:textSize="12sp"
                             android:textColor="#fff"
-                            app:fontFamily="@font/jetbrainsmonoregular" />
+                            app:fontFamily="@font/googlesansvodevariablefontwght" />
 
                     </LinearLayout>
                 </LinearLayout>

@@ -10,6 +10,8 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.StrictMode;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -30,10 +32,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
@@ -47,6 +47,8 @@ import com.vectras.vm.Minitools;
 import com.vectras.vm.R;
 import com.vectras.vm.RequestNetwork;
 import com.vectras.vm.RequestNetworkController;
+import com.vectras.vm.databinding.BottomsheetdialogLoggerBinding;
+import com.vectras.vm.databinding.UpdateBottomDialogLayoutBinding;
 import com.vectras.vm.home.romstore.RomStoreHomeAdapterSearch;
 import com.vectras.vm.Roms.DataRoms;
 import com.vectras.vm.RomStoreActivity;
@@ -65,6 +67,7 @@ import com.vectras.vm.home.romstore.RomStoreFragment;
 import com.vectras.vm.home.vms.VmsFragment;
 import com.vectras.vm.logger.VectrasStatus;
 import com.vectras.vm.settings.UpdaterActivity;
+import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.LibraryChecker;
@@ -82,8 +85,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -115,6 +116,11 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
     public void openRomStore() {
         bindingContent.bottomNavigation.setSelectedItemId(R.id.item_romstore);
     }
+
+    Handler handlerUpdateLog = new Handler(Looper.getMainLooper());
+    Runnable updateLogTask = () -> {
+
+    };
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -486,57 +492,14 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
             } else if (id == R.id.navigation_item_desktop) {
                 DisplaySystem.launchX11(this, true);
             } else if (id == R.id.navigation_item_terminal) {
-//                if (DeviceUtils.is64bit()) {
+                if (DeviceUtils.is64bit()) {
                     startActivity(new Intent(this, TermuxActivity.class));
-//                } else {
-//                    com.vectras.vterm.TerminalBottomSheetDialog VTERM = new com.vectras.vterm.TerminalBottomSheetDialog(this);
-//                    VTERM.showVterm();
-//                }
-            } else if (id == R.id.navigation_item_view_logs) {
-                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
-                View view = getLayoutInflater().inflate(R.layout.bottomsheetdialog_logger, null);
-                bottomSheetDialog.setContentView(view);
-                bottomSheetDialog.show();
-
-//                final String CREDENTIAL_SHARED_PREF = "settings_prefs";
-                Timer _timer = new Timer();
-                TimerTask t;
-
-                LinearLayoutManager layoutManager = new LinearLayoutManager(getApp());
-                LogsAdapter mLogAdapter = new LogsAdapter(layoutManager, getApp());
-                RecyclerView logList = view.findViewById(R.id.recyclerLog);
-                logList.setAdapter(mLogAdapter);
-                logList.setLayoutManager(layoutManager);
-                mLogAdapter.scrollToLastPosition();
-                try {
-                    Process process = Runtime.getRuntime().exec("logcat -e");
-                    BufferedReader bufferedReader = new BufferedReader(
-                            new InputStreamReader(process.getInputStream()));
-                    Process process2 = Runtime.getRuntime().exec("logcat -w");
-                    BufferedReader bufferedReader2 = new BufferedReader(
-                            new InputStreamReader(process2.getInputStream()));
-
-                    t = new TimerTask() {
-                        @Override
-                        public void run() {
-                            runOnUiThread(() -> {
-                                try {
-                                    if (bufferedReader.readLine() != null || bufferedReader2.readLine() != null) {
-                                        String logLine = bufferedReader.readLine();
-                                        String logLine2 = bufferedReader2.readLine();
-                                        VectrasStatus.logError("<font color='red'>[E] " + logLine + "</font>");
-                                        VectrasStatus.logError("<font color='#FFC107'>[W] " + logLine2 + "</font>");
-                                    }
-                                } catch (IOException e) {
-                                    throw new RuntimeException(e);
-                                }
-                            });
-                        }
-                    };
-                    _timer.scheduleAtFixedRate(t, 0, 100);
-                } catch (IOException e) {
-                    Log.e(TAG, "Log: ", e);
+                } else {
+                    com.vectras.vterm.TerminalBottomSheetDialog VTERM = new com.vectras.vterm.TerminalBottomSheetDialog(this);
+                    VTERM.showVterm();
                 }
+            } else if (id == R.id.navigation_item_view_logs) {
+                showLogsDialog();
             } else if (id == R.id.navigation_item_settings) {
                 startActivity(new Intent(this, MainSettingsManager.class));
             } else if (id == R.id.navigation_item_store) {
@@ -594,25 +557,22 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
                                 !MainSettingsManager.getSkipVersion(HomeActivity.this).equals(versionNameonUpdate))) {
 
                             BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(HomeActivity.this);
-                            View v = getLayoutInflater().inflate(R.layout.update_bottom_dialog_layout, null);
-                            bottomSheetDialog.setContentView(v);
+                            UpdateBottomDialogLayoutBinding updateBottomDialogLayoutBinding = UpdateBottomDialogLayoutBinding.inflate(getLayoutInflater());
+                            bottomSheetDialog.setContentView(updateBottomDialogLayoutBinding.getRoot());
 
 //                            TextView tvContent = v.findViewById(R.id.tv_content);
-                            MaterialButton skipButton = v.findViewById(R.id.bn_skip);
-                            MaterialButton laterButton = v.findViewById(R.id.bn_later);
-                            MaterialButton updateButton = v.findViewById(R.id.bn_update);
 
 //                            tvContent.setMovementMethod(LinkMovementMethod.getInstance());
 //                            tvContent.setText(Html.fromHtml(message + "<br><br>Update size:<br>" + size));
 
-                            skipButton.setOnClickListener(view -> {
+                            updateBottomDialogLayoutBinding.bnSkip.setOnClickListener(view -> {
                                 MainSettingsManager.setSkipVersion(HomeActivity.this, versionNameonUpdate);
                                 bottomSheetDialog.dismiss();
                             });
 
-                            laterButton.setOnClickListener(view -> bottomSheetDialog.dismiss());
+                            updateBottomDialogLayoutBinding.bnLater.setOnClickListener(view -> bottomSheetDialog.dismiss());
 
-                            updateButton.setOnClickListener(view -> {
+                            updateBottomDialogLayoutBinding.bnUpdate.setOnClickListener(view -> {
                                 startActivity(new Intent(HomeActivity.this, UpdaterActivity.class));
                                 bottomSheetDialog.dismiss();
                             });
@@ -709,6 +669,59 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
                     );
                 });
             }
+        });
+    }
+
+    private void showLogsDialog() {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
+        BottomsheetdialogLoggerBinding bottomsheetdialogLoggerBinding = BottomsheetdialogLoggerBinding.inflate(getLayoutInflater());
+        bottomSheetDialog.setContentView(bottomsheetdialogLoggerBinding.getRoot());
+        bottomSheetDialog.show();
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getApp());
+        LogsAdapter mLogAdapter = new LogsAdapter(layoutManager, getApp());
+        bottomsheetdialogLoggerBinding.recyclerLog.setAdapter(mLogAdapter);
+        bottomsheetdialogLoggerBinding.recyclerLog.setLayoutManager(layoutManager);
+        mLogAdapter.scrollToLastPosition();
+
+        AtomicBoolean isStop = new AtomicBoolean(false);
+
+        try {
+            Process process = Runtime.getRuntime().exec("logcat -e");
+            BufferedReader bufferedReader = new BufferedReader(
+                    new InputStreamReader(process.getInputStream()));
+            Process process2 = Runtime.getRuntime().exec("logcat -w");
+            BufferedReader bufferedReader2 = new BufferedReader(
+                    new InputStreamReader(process2.getInputStream()));
+
+
+            updateLogTask = new Runnable() {
+                @Override
+                public void run() {
+                    if (isStop.get()) return;
+
+                    try {
+                        if (bufferedReader.readLine() != null || bufferedReader2.readLine() != null) {
+                            String logLine = bufferedReader.readLine();
+                            String logLine2 = bufferedReader2.readLine();
+                            VectrasStatus.logError("<font color='red'>[E] " + logLine + "</font>");
+                            VectrasStatus.logError("<font color='#FFC107'>[W] " + logLine2 + "</font>");
+                        }
+                    } catch (IOException e) {
+                        Log.e(TAG, "Log: ", e);
+                    }
+                    handlerUpdateLog.postDelayed(this, 1000);
+                }
+            };
+
+            handlerUpdateLog.post(updateLogTask);
+        } catch (IOException e) {
+            Log.e(TAG, "Log: ", e);
+        }
+
+        bottomSheetDialog.setOnDismissListener(menuItem1 -> {
+            isStop.set(true);
+            handlerUpdateLog.removeCallbacks(updateLogTask);
         });
     }
 }
