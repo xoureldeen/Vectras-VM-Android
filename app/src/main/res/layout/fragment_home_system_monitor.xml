@@ -306,7 +306,7 @@
                         android:layout_height="wrap_content"
                         android:paddingVertical="8dp"
                         android:text="@string/just_a_sec"
-                        app:fontFamily="@font/jetbrainsmonoregular" />
+                        app:fontFamily="@font/googlesansvodevariablefontwght" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 

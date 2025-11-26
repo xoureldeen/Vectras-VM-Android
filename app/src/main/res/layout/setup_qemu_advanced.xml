@@ -102,7 +102,7 @@
                                 android:layout_height="wrap_content"
                                 android:textIsSelectable="true"
                                 android:textSize="12sp"
-                                app:fontFamily="@font/jetbrainsmonoregular"/>
+                                app:fontFamily="@font/googlesansvodevariablefontwght"/>
                         </LinearLayout>
                     </ScrollView>
                 </LinearLayout>
@@ -176,7 +176,7 @@
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="8dp"
                     android:textSize="12sp"
-                    app:fontFamily="@font/jetbrainsmonoregular"/>
+                    app:fontFamily="@font/googlesansvodevariablefontwght"/>
             </androidx.core.widget.NestedScrollView>
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
