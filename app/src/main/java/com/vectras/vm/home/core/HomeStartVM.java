@@ -46,7 +46,7 @@ public class HomeStartVM {
     public static String pendingVMID = "";
     public static String pendingThumbnailFile = "";
     public static boolean isLaunchFromPending = false;
-    public static String runCommandFormat = "export TMPDIR=/tmp && mkdir -p $TMPDIR/pulse && export XDG_RUNTIME_DIR=/tmp && pulseaudio --start --exit-idle-time=-1 > /dev/null 2>&1 && %s";
+    public static String runCommandFormat = "export TMPDIR=/tmp && mkdir -p $TMPDIR/pulse && export XDG_RUNTIME_DIR=/tmp && chmod -R 775 $TMPDIR/pulse && pulseaudio --start --exit-idle-time=-1 > /dev/null 2>&1 && %s";
 
     public static void startNow(
             Activity activity,
@@ -166,7 +166,7 @@ public class HomeStartVM {
 
         VMManager.isQemuStopedWithError = false;
 
-        String finalCommand = String.format(runCommandFormat, env);
+        String finalCommand = VMManager.addAudioDevSdl(String.format(runCommandFormat, env));
         Log.i(TAG, finalCommand);
 
         if (ServiceUtils.isServiceRunning(activity, MainService.class)) {
@@ -274,6 +274,6 @@ public class HomeStartVM {
     }
 
     public static void setDefault() {
-        runCommandFormat = "export TMPDIR=/tmp && mkdir -p $TMPDIR/pulse && export XDG_RUNTIME_DIR=/tmp && pulseaudio --start --exit-idle-time=-1 > /dev/null 2>&1 && %s";
+        runCommandFormat = "export TMPDIR=/tmp && mkdir -p $TMPDIR/pulse && export XDG_RUNTIME_DIR=/tmp && chmod -R 775 $TMPDIR/pulse && pulseaudio --start --exit-idle-time=-1 > /dev/null 2>&1 && %s";
     }
 }
