@@ -9,7 +9,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -29,6 +28,7 @@ import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.Fragment.CreateImageDialogFragment;
 import com.vectras.vm.MainRoms.DataMainRoms;
 import com.vectras.vm.databinding.ActivityVmCreatorBinding;
+import com.vectras.vm.databinding.DialogProgressStyleBinding;
 import com.vectras.vm.home.HomeActivity;
 import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.DialogUtils;
@@ -65,22 +65,9 @@ public class VMCreatorActivity extends AppCompatActivity {
     private boolean isImportingCVBI = false;
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-
-        menu.add(1, 1, 1, getString(R.string.create)).setShortcut('3', 'c').setIcon(R.drawable.check_24px).setShowAsAction(1);
-
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         return switch (item.getItemId()) {
-            case 1 -> {
-                startCreateVM();
-                yield true;
-            }
             case android.R.id.home -> {
                 finish();
                 yield true;
@@ -102,6 +89,8 @@ public class VMCreatorActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         binding.collapsingToolbarLayout.setSubtitle(MainSettingsManager.getArch(this));
+
+        binding.btnCreate.setOnClickListener(v -> startCreateVM());
 
         binding.drive.setOnClickListener(v -> diskPicker.launch("*/*"));
         binding.driveField.setOnClickListener(v -> diskPicker.launch("*/*"));
@@ -376,11 +365,10 @@ public class VMCreatorActivity extends AppCompatActivity {
                 if (uri == null) return;
 
                 if (MainSettingsManager.copyFile(this)) {
-                    View progressView = LayoutInflater.from(this).inflate(R.layout.dialog_progress_style, null);
-                    TextView progressText = progressView.findViewById(R.id.progress_text);
-                    progressText.setText(getString(R.string.copying_file));
+                    DialogProgressStyleBinding dialogProgressStyleBinding = DialogProgressStyleBinding.inflate(getLayoutInflater());
+                    dialogProgressStyleBinding.progressText.setText(getString(R.string.copying_file));
                     AlertDialog progressDialog = new MaterialAlertDialogBuilder(this, R.style.CenteredDialogTheme)
-                            .setView(progressView)
+                            .setView(dialogProgressStyleBinding.getRoot())
                             .setCancelable(false)
                             .create();
 

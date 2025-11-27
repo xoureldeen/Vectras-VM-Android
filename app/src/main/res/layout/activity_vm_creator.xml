@@ -15,23 +15,31 @@
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsingToolbarLayout"
-            style="?attr/collapsingToolbarLayoutLargeStyle"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
-            android:fitsSystemWindows="true"
-            app:collapsedTitleTextAppearance="@style/TextAppearance.Material3.TitleMedium"
-            app:expandedTitleTextAppearance="@style/TextAppearance.Material3.DisplaySmall"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:title="@string/create">
+            style="@style/App.CollapsingToolbarLarge"
+            app:title="@string/create"
+            app:toolbarId="@id/toolbar" >
 
-            <com.google.android.material.appbar.MaterialToolbar
-                android:theme="@style/ThemeOverlay.Material3.Toolbar.CircleNavigationButton"
-                android:id="@+id/toolbar"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:elevation="0dp"
-                app:layout_collapseMode="pin"
-                app:navigationIcon="@drawable/arrow_back_rounded_24px" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_collapseMode="pin">
+                <com.google.android.material.appbar.MaterialToolbar
+                    android:id="@+id/toolbar"
+                    style="@style/App.CollapsingMaterialToolbar"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"/>
+                <com.google.android.material.button.MaterialButton
+                    style="?attr/materialIconButtonFilledStyle"
+                    android:id="@+id/btn_create"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_gravity="center_vertical"
+                    app:icon="@drawable/check_24px"
+                    app:iconSize="24dp"
+                    app:iconGravity="textStart"/>
+            </LinearLayout>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -55,7 +63,7 @@
                 android:layout_height="120dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginVertical="8dp"
-                app:cardBackgroundColor="?attr/colorSurfaceContainer">
+                app:cardBackgroundColor="?attr/colorCard">
 
                 <RelativeLayout
                     android:layout_width="match_parent"

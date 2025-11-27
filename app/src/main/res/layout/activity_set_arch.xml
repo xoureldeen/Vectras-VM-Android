@@ -15,24 +15,13 @@
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$Behavior">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
-            style="?attr/collapsingToolbarLayoutLargeStyle"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
-            android:fitsSystemWindows="true"
-            app:collapsedTitleTextAppearance="@style/TextAppearance.Material3.TitleMedium"
-            app:expandedTitleTextAppearance="@style/TextAppearance.Material3.DisplaySmall"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            style="@style/App.CollapsingToolbarLarge"
             app:subtitle="@string/import_or_choose_an_architecture_to_start_creating"
             app:title="@string/create">
 
             <com.google.android.material.appbar.MaterialToolbar
-                android:theme="@style/ThemeOverlay.Material3.Toolbar.CircleNavigationButton"
                 android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:elevation="0dp"
-                app:layout_collapseMode="pin"
-                app:navigationIcon="@drawable/arrow_back_rounded_24px" />
+                style="@style/App.CollapsingMaterialToolbar" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -54,7 +43,7 @@
                 android:id="@+id/bntimport"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/object_shape_single"
+                android:background="@drawable/object_shape_single_high"
                 android:padding="16dp"
                 android:layout_marginBottom="16dp">
 
@@ -96,7 +85,7 @@
                 android:id="@+id/archx86_64"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/object_shape_top"
+                android:background="@drawable/object_shape_top_high"
                 android:padding="16dp"
                 android:layout_marginVertical="2dp">
 
@@ -138,7 +127,7 @@
                 android:id="@+id/archi386"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/object_shape_middle"
+                android:background="@drawable/object_shape_middle_high"
                 android:padding="16dp"
                 android:layout_marginVertical="2dp">
 
@@ -180,7 +169,7 @@
                 android:id="@+id/archarm64"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/object_shape_middle"
+                android:background="@drawable/object_shape_middle_high"
                 android:padding="16dp"
                 android:layout_marginVertical="2dp">
 
@@ -222,7 +211,7 @@
                 android:id="@+id/archppc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/object_shape_bottom"
+                android:background="@drawable/object_shape_bottom_high"
                 android:padding="16dp"
                 android:layout_marginVertical="2dp">
 

@@ -1,6 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.Material3Expressive.DayNight.NoActionBar">
+        <item name="android:windowBackground">?attr/colorSurfaceContainerLow</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:windowMinWidthMinor">100%</item>
@@ -9,7 +10,7 @@
         <item name="android:enforceNavigationBarContrast" tools:ignore="NewApi">false</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
+        <item name="android:windowLightStatusBar" >false</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
         <!-- Customize your theme here. -->
         <item name="checkboxStyle">@style/MyCheckBoxStyle</item>
@@ -26,6 +27,7 @@
         <item name="android:dialogPreferenceStyle">@style/MainDialogTheme</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
         <item name="materialSwitchStyle">@style/App.MaterialSwitch</item>
+        <item name="colorCard">?attr/colorSurfaceContainerHigh</item>
     </style>
 
     <!-- See https://developer.android.com/training/material/theme.html for how to customize the Material theme. -->
@@ -40,9 +42,9 @@
         <item name="chipStrokeWidth">1dp</item>
     </style>
 
-    <style name="AppTheme.Toolbar.OverflowButton" parent="@style/Widget.AppCompat.ActionButton.Overflow"></style>
+    <style name="AppTheme.Toolbar.OverflowButton" parent="@style/Widget.AppCompat.ActionButton.Overflow" />
 
-    <style name="AppTheme.TextInput" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox"></style>
+    <style name="AppTheme.TextInput" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox" />
 
     <style name="Theme.FullScreen" parent="AppTheme">
         <item name="android:windowFullscreen">true</item>
@@ -62,7 +64,7 @@
 
     </style>
 
-    <style name="MainDialogTheme" parent="AppTheme.MaterialAlertDialog"></style>
+    <style name="MainDialogTheme" parent="AppTheme.MaterialAlertDialog" />
     <!--  Alert Dialog  -->
     <style name="AppTheme.MaterialAlertDialog" parent="@style/ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="shapeAppearanceOverlay">@style/MaterialDialog.ShapeAppearance</item>
