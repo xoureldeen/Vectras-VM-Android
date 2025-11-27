@@ -52,7 +52,7 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginEnd="16dp"
                     android:orientation="vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/sw_forcerefesh"
@@ -93,7 +93,7 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginEnd="16dp"
                     android:orientation="vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/arrow_forward_in_external"
@@ -118,9 +118,8 @@
                     android:id="@+id/arrow_forward_in_external"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="8dp"
-                    android:src="@drawable/arrow_forward_ios_24px"
+                    android:layout_marginEnd="4dp"
+                    android:src="@drawable/keyboard_arrow_right_24px"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/short_distance_in_external"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -149,7 +148,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="35dp"
+        android:layout_height="55dp"
         android:background="?attr/colorSurfaceContainerLow"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 

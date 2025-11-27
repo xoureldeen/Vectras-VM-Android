@@ -143,7 +143,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="35dp"
+        android:layout_height="55dp"
         android:background="?attr/colorSurfaceContainerLow"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
