@@ -1214,4 +1214,23 @@ public class VMManager {
                 || _qemuCommand.contains("-M pc-q35")
                 || _qemuCommand.contains("-machine pc-q35");
     }
+
+    public static String addAudioDevSdl(String env) {
+        final String audioDevParam = ",audiodev=defaultaudiodev -audiodev sdl,id=defaultaudiodev ";
+        String result = env;
+        if (env.startsWith("-device hda-duplex ") || env.contains(" -device hda-duplex ") || env.endsWith(" -device hda-duplex")) {
+            result = result.replaceFirst(" -device hda-duplex", " -device hda-duplex" + audioDevParam);
+        } else if (env.startsWith("-device cs4231a ") || env.contains(" -device cs4231a ") || env.endsWith(" -device cs4231a")) {
+            result = result.replaceFirst(" -device cs4231a", " -device cs4231a" + audioDevParam);
+        } else if (env.startsWith("-device ac97 ") || env.contains(" -device ac97 ") || env.endsWith(" -device ac97")) {
+            result = result.replaceFirst(" -device ac97", " -device ac97" + audioDevParam);
+        } else if (env.startsWith("-device es1370 ") || env.contains(" -device es1370 ") || env.endsWith(" -device es1370")) {
+            result = result.replaceFirst(" -device es1370", " -device es1370" + audioDevParam);
+        } else if (env.startsWith("-device sb16 ") || env.contains(" -device sb16 ") || env.endsWith(" -device sb16")) {
+            result = result.replaceFirst(" -device sb16", " -device sb16" + audioDevParam);
+        } else if (env.startsWith("-device adlib ") || env.contains(" -device adlib ") || env.endsWith(" -device adlib")) {
+            result = result.replaceFirst(" -device adlib", " -device adlib" + audioDevParam);
+        }
+        return result;
+    }
 }

@@ -275,11 +275,10 @@ public class SetupWizardActivity extends AppCompatActivity {
                     " chmod 775 /usr/local/bin/*;";
         } else {
             cmd += " apk add qemu-system-x86_64 qemu-system-ppc qemu-system-i386 qemu-system-aarch64" +
-                    " qemu-pr-helper qemu-img qemu-audio-sdl pulseaudio mesa-dri-gallium;";
+                    " qemu-pr-helper qemu-img mesa-dri-gallium;";
         }
 
         cmd += " echo \"Just a sec...\";" +
-                " apk add qemu-audio-sdl pulseaudio;" +
                 " echo export TMPDIR=/tmp >> /etc/profile;" +
                 " mkdir -p $TMPDIR/pulse;" +
                 " echo export PULSE_SERVER=127.0.0.1 >> /etc/profile;" +
