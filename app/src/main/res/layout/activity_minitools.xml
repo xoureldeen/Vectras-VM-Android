@@ -17,23 +17,12 @@
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$Behavior">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
-            style="?attr/collapsingToolbarLayoutLargeStyle"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
-            android:fitsSystemWindows="true"
-            app:collapsedTitleTextAppearance="@style/TextAppearance.Material3.TitleMedium"
-            app:expandedTitleTextAppearance="@style/TextAppearance.Material3.DisplaySmall"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            style="@style/App.CollapsingToolbarLarge"
             app:title="@string/mini_tools">
 
             <com.google.android.material.appbar.MaterialToolbar
-                android:theme="@style/ThemeOverlay.Material3.Toolbar.CircleNavigationButton"
                 android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:elevation="0dp"
-                app:layout_collapseMode="pin"
-                app:navigationIcon="@drawable/arrow_back_rounded_24px" />
+                style="@style/App.CollapsingMaterialToolbar" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -55,7 +44,7 @@
                 android:id="@+id/mirror"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/object_shape_top"
+                android:background="@drawable/object_shape_top_high"
                 android:gravity="center_vertical"
                 android:paddingLeft="16dp"
                 android:paddingTop="2dp"
@@ -93,7 +82,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:background="@drawable/object_shape_middle"
+                android:background="@drawable/object_shape_middle_high"
                 android:gravity="center_vertical"
                 android:padding="16dp">
 
@@ -114,7 +103,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:background="@drawable/object_shape_middle"
+                android:background="@drawable/object_shape_middle_high"
                 android:gravity="center_vertical"
                 android:padding="16dp">
 
@@ -135,7 +124,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:background="@drawable/object_shape_middle"
+                android:background="@drawable/object_shape_middle_high"
                 android:gravity="center_vertical"
                 android:padding="16dp">
 
@@ -156,7 +145,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:background="@drawable/object_shape_middle"
+                android:background="@drawable/object_shape_middle_high"
                 android:gravity="center_vertical"
                 android:padding="16dp">
 
@@ -177,7 +166,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:background="@drawable/object_shape_middle"
+                android:background="@drawable/object_shape_middle_high"
                 android:gravity="center_vertical"
                 android:padding="16dp">
 
@@ -198,7 +187,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:background="@drawable/object_shape_bottom"
+                android:background="@drawable/object_shape_bottom_high"
                 android:gravity="center_vertical"
                 android:padding="16dp">
 

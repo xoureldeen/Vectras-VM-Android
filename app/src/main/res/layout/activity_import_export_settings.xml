@@ -15,23 +15,13 @@
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$Behavior">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
-            style="?attr/collapsingToolbarLayoutLargeStyle"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/collapsingToolbarLayoutLargeSize"
-            android:fitsSystemWindows="true"
-            app:collapsedTitleTextAppearance="@style/TextAppearance.Material3.TitleMedium"
-            app:expandedTitleTextAppearance="@style/TextAppearance.Material3.DisplaySmall"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            style="@style/App.CollapsingToolbarLarge"
             app:title="@string/import_and_export"
             app:subtitle="@string/settings">
 
             <com.google.android.material.appbar.MaterialToolbar
-                android:theme="@style/ThemeOverlay.Material3.Toolbar.CircleNavigationButton"
                 android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:elevation="0dp"
-                app:layout_collapseMode="pin"
+                style="@style/App.CollapsingMaterialToolbar"
                 app:navigationIcon="@drawable/arrow_back_rounded_24px" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -54,7 +44,7 @@
                 android:id="@+id/ln_smart_size_calculation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/object_shape_top"
+                android:background="@drawable/object_shape_top_high"
                 android:padding="16dp"
                 android:layout_marginBottom="2dp" >
 
@@ -96,7 +86,7 @@
                 android:id="@+id/ln_cyclic_redundancy_check"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/object_shape_bottom"
+                android:background="@drawable/object_shape_bottom_high"
                 android:padding="16dp">
 
                 <LinearLayout

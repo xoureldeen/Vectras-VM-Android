@@ -1,9 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="CenteredDialogTheme" parent="ThemeOverlay.Material3.MaterialAlertDialog.Centered">
-    </style>
+
+    <style name="CenteredDialogTheme" parent="ThemeOverlay.Material3.MaterialAlertDialog.Centered" />
 
     <style name="App.MaterialSwitch" parent="@style/Widget.Material3.CompoundButton.MaterialSwitch">
         <item name="thumbIcon">@drawable/switch_thumb_icon</item>
+    </style>
+
+    <style name="App.CollapsingToolbarLarge" parent="Widget.Material3.CollapsingToolbar.Large">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?attr/collapsingToolbarLayoutLargeSize</item>
+        <item name="android:fitsSystemWindows">true</item>
+        <item name="layout_scrollFlags">scroll|exitUntilCollapsed</item>
+        <item name="android:background">?attr/colorSurfaceContainerLow</item>
+        <item name="contentScrim">?attr/colorSurfaceContainerLow</item>
+        <item name="statusBarScrim">?attr/colorSurfaceContainerLow</item>
+        <item name="collapsedTitleTextAppearance">@style/TextAppearance.Material3.TitleMedium</item>
+        <item name="expandedTitleTextAppearance">@style/TextAppearance.Material3.DisplaySmall</item>
+    </style>
+
+    <style name="App.CollapsingMaterialToolbar" parent="Widget.Material3.Toolbar">
+        <item name="theme">@style/ThemeOverlay.Material3.Toolbar.CircleNavigationButton</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">?attr/actionBarSize</item>
+        <item name="android:elevation">0dp</item>
+        <item name="layout_collapseMode">pin</item>
+        <item name="navigationIcon">@drawable/arrow_back_rounded_24px</item>
     </style>
 </resources>

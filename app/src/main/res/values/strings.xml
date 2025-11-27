@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">3.3.5</string>
+    <string name="app_version" translatable="false">3.3.6</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <!-- logger -->
     <string name="startvm">VM STARTED!</string>

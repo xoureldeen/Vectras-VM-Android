@@ -111,7 +111,7 @@
             android:padding="4dp"
             android:visibility="visible"
             android:id="@+id/card_social"
-            app:cardBackgroundColor="?attr/colorSurfaceContainer" >
+            app:cardBackgroundColor="?attr/colorCard" >
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -237,7 +237,7 @@
             android:padding="4dp"
             android:visibility="visible"
             android:id="@+id/developers"
-            app:cardBackgroundColor="?attr/colorSurfaceContainer" >
+            app:cardBackgroundColor="?attr/colorCard" >
 
             <LinearLayout
                 android:layout_width="match_parent"
