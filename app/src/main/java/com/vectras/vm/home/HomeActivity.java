@@ -36,7 +36,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.gson.Gson;
 import com.termux.app.TermuxActivity;
 import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
@@ -223,7 +222,13 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
             public void handleOnBackPressed() {
                 if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
                     binding.drawerLayout.closeDrawer(GravityCompat.START);
-                } else if (MainSettingsManager.getQuickStart(HomeActivity.this)){
+                    //Prevent apps from exiting after the drawer is closed.
+                    return;
+                } if (binding.searchview.isShowing()) {
+                    binding.searchview.hide();
+                } else if (bindingContent.bottomNavigation.getSelectedItemId() != R.id.item_home) {
+                    bindingContent.bottomNavigation.setSelectedItemId(R.id.item_home);
+                } else if (MainSettingsManager.getQuickStart(HomeActivity.this)) {
                     Intent intent = new Intent(Intent.ACTION_MAIN);
                     intent.addCategory(Intent.CATEGORY_HOME);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -234,26 +239,36 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
             }
         });
 
-        adapterRomStoreSearch = new RomStoreHomeAdapterSearch(this, dataRomStoreSearch);
+        adapterRomStoreSearch = new
+
+                RomStoreHomeAdapterSearch(this, dataRomStoreSearch);
         binding.rvRomstoresearch.setAdapter(adapterRomStoreSearch);
-        binding.rvRomstoresearch.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        binding.rvRomstoresearch.setLayoutManager(new
 
-        binding.searchview.getEditText().addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+                LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
-            @Override
-            public void afterTextChanged(Editable s) {
-                search(s.toString());
-            }
+        binding.searchview.getEditText().
 
-            @Override
-            public void onTextChanged(CharSequence newText, int start, int before, int count) {
-            }
-        });
+                addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    }
 
-        new LibraryChecker(this).checkMissingLibraries(this);
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        search(s.toString());
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence newText, int start, int before, int count) {
+                    }
+                });
+
+        new
+
+                LibraryChecker(this).
+
+                checkMissingLibraries(this);
 
         setupDrawer();
         DisplaySystem.startTermuxX11();
@@ -261,6 +276,7 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
         NotificationUtils.clearAll(this);
 
         if (MainSettingsManager.getPromptUpdateVersion(this))
+
             updateApp();
     }
 
@@ -320,7 +336,6 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
         if (isOpenRomStore) {
             isOpenRomStore = false;
             bindingContent.bottomNavigation.setSelectedItemId(R.id.item_romstore);
-
         }
     }
 
@@ -527,7 +542,7 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
 
     private void updateApp() {
         int versionCode = PackageUtils.getThisVersionCode(getApplicationContext());
-        String versionName = PackageUtils.getThisVersionName(getApplicationContext());
+//        String versionName = PackageUtils.getThisVersionName(getApplicationContext());
 
         RequestNetwork requestNetwork = new RequestNetwork(this);
         RequestNetwork.RequestListener requestNetworkListener = new RequestNetwork.RequestListener() {
@@ -598,7 +613,6 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
     private void search(String keyword) {
         try {
             // Extract data from json and store into ArrayList as class objects
-            Gson gson = new Gson();
             List<DataRoms> filteredData = new ArrayList<>();
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

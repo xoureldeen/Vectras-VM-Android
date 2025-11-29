@@ -30,6 +30,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.termux.app.TermuxService;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.home.HomeActivity;
+import com.vectras.vm.setupwizard.SetupWizard2Activity;
 import com.vectras.vm.setupwizard.SetupWizardActivity;
 import com.vectras.vm.utils.CommandUtils;
 import com.vectras.vm.utils.DialogUtils;
@@ -301,7 +302,7 @@ public class Minitools extends AppCompatActivity {
             runOnUiThread(() -> {
                 progressDialog.dismiss();
                 Intent intent = new Intent();
-                intent.setClass(this, SetupWizardActivity.class);
+                intent.setClass(this, SetupWizard2Activity.class);
                 startActivity(intent);
                 finishAffinity();
             });

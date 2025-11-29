@@ -9,6 +9,7 @@ import com.vectras.vm.R;
 import com.vectras.vm.VMManager;
 import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.DialogUtils;
+import com.vectras.vm.utils.FileUtils;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -24,13 +25,31 @@ import java.util.Objects;
 public class SetupFeatureCore {
     public static String TAG = "SetupFeatureCore";
 
+    public static boolean isInstalledSystemFiles(Context context) {
+        return isInstalledProot(context) && isInstalledDistro(context);
+    }
+
+    public static boolean isInstalledProot(Context context) {
+        return FileUtils.isFileExists(context.getFilesDir().getAbsolutePath() + "/usr/bin/proot");
+    }
+
+    public static boolean isInstalledDistro(Context context) {
+        return FileUtils.isFileExists(context.getFilesDir().getAbsolutePath() + "/distro/bin/busybox");
+    }
+
     public static boolean startExtractSystemFiles(Context context) {
+        if (isInstalledSystemFiles(context)) return true;
+
         String filesDir = context.getFilesDir().getAbsolutePath();
         File distroDir = new File(filesDir + "/distro");
         File binDir = new File(distroDir + "/bin");
         if (!binDir.exists()) {
-            if (!extractSystemFiles(context, "bootstrap", ""))
-                return false;
+            if (!isInstalledProot(context)) {
+                if (!extractSystemFiles(context, "bootstrap", "")) return false;
+            }
+
+            if (isInstalledDistro(context)) return true;
+
             if (Build.SUPPORTED_ABIS[0].contains("64")) {
                 return extractSystemFiles(context, "alpine22", "distro");
             } else {
