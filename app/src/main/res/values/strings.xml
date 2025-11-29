@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">3.3.8</string>
+    <string name="app_version" translatable="false">3.3.9</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <!-- logger -->
     <string name="startvm">VM STARTED!</string>
@@ -132,7 +132,7 @@
     <string name="free_palistine">FREE PALISTINE</string>
     <string name="store">Store</string>
     <string name="no_internet_connection">no internet connection</string>
-    <string name="check_your_internet_connection">check your internet connection</string>
+    <string name="check_your_internet_connection">Check your internet connection.</string>
     <string name="downloading_file">Downloading file..</string>
     <string name="lenght_of_file">"Lenght of file: "</string>
     <string name="downloaded_to_path">"Downloaded to path: "</string>
@@ -440,6 +440,20 @@
     <string name="invalid_file">Invalid file</string>
     <string name="processes">Processes</string>
     <string name="use_vnc">Use VNC</string>
+    <string name="installing_system_files">Installing system files</string>
+    <string name="connecting">Connecting…</string>
+    <string name="how_do_you_want_to_install">How do you want to install?</string>
+    <string name="how_do_you_want_to_install_note">Standard or manual?</string>
+    <string name="standard">Standard</string>
+    <string name="standard_note">Recommended and setup will automatically install everything.</string>
+    <string name="custom">Custom</string>
+    <string name="custom_note">If you want to manually select the bootstrap file you want to install the Qemu version you desire.</string>
+    <string name="mirror_note">Choose the mirror closest to you for faster setup.</string>
+    <string name="please_do_not_disconnect_the_network_this_may_take_a_few_minutes">Please do not disconnect the network. This may take a few minutes.</string>
+    <string name="something_went_wrong">Something went wrong</string>
+    <string name="the_setup_could_not_be_completed_and_below_is_the_log">The setup could not be completed and below is the log.</string>
+    <string name="this_option_is_temporarily_unavailable_because_the_server_cannot_be_connected">This option is temporarily unavailable because the server cannot be connected.</string>
+    <string name="vectras_vm_cannot_run_on_this_device">Vectras VM cannot run on this device.</string>
 
 
     <!--======================TERMUX STRINGS====================-->

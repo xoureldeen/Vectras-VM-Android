@@ -584,7 +584,7 @@ public class SetupWizardActivity extends AppCompatActivity {
         }
 
         // ViewHolder holds binding for reuse
-                private record ViewHolder(SimpleLayoutForSpinerBinding binding) {
+        record ViewHolder(SimpleLayoutForSpinerBinding binding) {
         }
     }
 
