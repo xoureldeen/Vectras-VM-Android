@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import android.widget.BaseAdapter;
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
@@ -81,6 +83,7 @@ public class SetupWizard2Activity extends AppCompatActivity {
     boolean isLibProotError = false;
     boolean aria2Error = false;
     boolean isServerError = false;
+    boolean isNotEnoughStorageSpace = false;
     boolean isCustomSetupMode = false;
     final ArrayList<HashMap<String, String>> mirrorList = new ArrayList<>();
 
@@ -115,6 +118,12 @@ public class SetupWizard2Activity extends AppCompatActivity {
         if (currentStep == 1 && PermissionUtils.storagepermission(this, false)) {
             extractSystemFiles();
         }
+    }
+
+    @Override
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        loadingIndicatorController(currentStep);
     }
 
     private void initialize() {
@@ -237,9 +246,14 @@ public class SetupWizard2Activity extends AppCompatActivity {
             binding.lnInstallingPackages.setVisibility(View.VISIBLE);
         } else if (step == STEP_ERROR) {
             binding.lnInstallingPackagesFailed.setVisibility(View.VISIBLE);
-            binding.tvErrorLogContent.setText(log);
+            binding.tvErrorLogContent.setText(log.isEmpty() ? getString(R.string.there_are_no_logs) : log);
 
-            if (isLibProotError) {
+            if (isNotEnoughStorageSpace) {
+                binding.ivErrorLarge.setImageResource(R.drawable.disc_full_100px);
+                binding.tvErrorTitle.setText(getString(R.string.not_enough_storage_space));
+                binding.tvErrorSubtitle.setText(getString(R.string.not_enough_storage_to_set_up_content));
+                binding.btnTryAgain.setText(getString(R.string.join_our_community));
+            } else if (isLibProotError) {
                 binding.ivErrorLarge.setImageResource(R.drawable.error_96px);
                 binding.tvErrorTitle.setText(getString(R.string.vectras_vm_cannot_run_on_this_device));
                 binding.tvErrorSubtitle.setText(getString(R.string.a_serious_problem_has_occurred));
@@ -257,7 +271,52 @@ public class SetupWizard2Activity extends AppCompatActivity {
             bindingFinalSteps.main.setVisibility(View.VISIBLE);
         }
 
+        loadingIndicatorController(step);
+
         currentStep = step;
+    }
+
+    private void loadingIndicatorController(int step) {
+        float dp = 200f;
+        float px = dp * getResources().getDisplayMetrics().density;
+
+        if (step == STEP_EXTRACTING_SYSTEM_FILES) {
+            binding.lnExtractingSystemFilesCpiContainer.post(() -> {
+                int heightPx = binding.lnExtractingSystemFilesCpiContainer.getHeight();
+
+                if (heightPx < px) {
+                    binding.cpiExtractingSystemFiles.setVisibility(View.GONE);
+                    binding.lpiExtractingSystemFiles.setVisibility(View.VISIBLE);
+                } else {
+                    binding.cpiExtractingSystemFiles.setVisibility(View.VISIBLE);
+                    binding.lpiExtractingSystemFiles.setVisibility(View.GONE);
+                }
+            });
+        } else if (step == STEP_GETTING_DATA) {
+            binding.lnGettingDataCpiContainer.post(() -> {
+                int heightPx = binding.lnGettingDataCpiContainer.getHeight();
+
+                if (heightPx < px) {
+                    binding.cpiGettingData.setVisibility(View.GONE);
+                    binding.lpiGettingData.setVisibility(View.VISIBLE);
+                } else {
+                    binding.cpiGettingData.setVisibility(View.VISIBLE);
+                    binding.lpiGettingData.setVisibility(View.GONE);
+                }
+            });
+        } else if (step == STEP_INSTALLING_PACKAGES) {
+            binding.lnInstallingPackagesCpiContainer.post(() -> {
+                int heightPx = binding.lnInstallingPackagesCpiContainer.getHeight();
+
+                if (heightPx < px) {
+                    binding.cpiInstallingPackages.setVisibility(View.GONE);
+                    binding.lpiInstallingPackages.setVisibility(View.VISIBLE);
+                } else {
+                    binding.cpiInstallingPackages.setVisibility(View.VISIBLE);
+                    binding.lpiInstallingPackages.setVisibility(View.GONE);
+                }
+            });
+        }
     }
 
     private void uiControllerFinalSteps(int step) {
@@ -287,7 +346,14 @@ public class SetupWizard2Activity extends AppCompatActivity {
     }
 
     private void extractSystemFiles() {
-        uiController(STEP_EXTRACTING_SYSTEM_FILES);
+        isNotEnoughStorageSpace = DeviceUtils.isStorageLow(this, false);
+
+        if (isNotEnoughStorageSpace) {
+            uiController(STEP_ERROR);
+            return;
+        } else {
+            uiController(STEP_EXTRACTING_SYSTEM_FILES);
+        }
 
         new Thread(() -> {
             boolean result = SetupFeatureCore.startExtractSystemFiles(this);
@@ -369,7 +435,7 @@ public class SetupWizard2Activity extends AppCompatActivity {
                 " mkdir -p $TMPDIR/pulse;" +
                 " echo export PULSE_SERVER=127.0.0.1 >> /etc/profile;" +
                 " mkdir -p ~/.vnc && echo -e \"555555\\n555555\" | vncpasswd -f > ~/.vnc/passwd && chmod 0600 ~/.vnc/passwd;" +
-                " echo \"installation successful! xssFjnj58Id\"";
+                " echo \"Installation successful! xssFjnj58Id\"";
 
         executeShellCommand(cmd);
     }

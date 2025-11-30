@@ -93,6 +93,7 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
     private final String TAG = "HomeActivity";
     public static boolean isActivate = false;
     public static boolean isNeedRecreate = false;
+    public static boolean isOpenHome = false;
     public static boolean isOpenRomStore = false;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     ActivityHomeBinding binding;
@@ -336,6 +337,10 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
         if (isOpenRomStore) {
             isOpenRomStore = false;
             bindingContent.bottomNavigation.setSelectedItemId(R.id.item_romstore);
+        } else if (isOpenHome) {
+            isOpenHome = false;
+            if (binding.searchview.isShowing()) binding.searchview.hide();
+            bindingContent.bottomNavigation.setSelectedItemId(R.id.item_home);
         }
     }
 

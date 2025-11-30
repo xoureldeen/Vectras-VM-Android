@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">3.3.9</string>
+    <string name="app_version" translatable="false">3.4.0</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <!-- logger -->
     <string name="startvm">VM STARTED!</string>
@@ -454,6 +454,8 @@
     <string name="the_setup_could_not_be_completed_and_below_is_the_log">The setup could not be completed and below is the log.</string>
     <string name="this_option_is_temporarily_unavailable_because_the_server_cannot_be_connected">This option is temporarily unavailable because the server cannot be connected.</string>
     <string name="vectras_vm_cannot_run_on_this_device">Vectras VM cannot run on this device.</string>
+    <string name="not_enough_storage_space">Not enough storage space.</string>
+    <string name="there_are_no_logs">There are no logs.</string>
 
 
     <!--======================TERMUX STRINGS====================-->

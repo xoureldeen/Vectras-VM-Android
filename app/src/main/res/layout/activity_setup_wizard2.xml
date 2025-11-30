@@ -105,12 +105,22 @@
             android:layout_height="wrap_content"
             android:text="@string/just_a_sec" />
 
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/lpi_extracting_system_files"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="16dp"
+            android:indeterminate="true"
+            android:visibility="gone"/>
+
         <LinearLayout
+            android:id="@+id/ln_extracting_system_files_cpi_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center">
 
             <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/cpi_extracting_system_files"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:indeterminate="true"
@@ -141,13 +151,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/just_a_sec" />
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/lpi_getting_data"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="16dp"
+            android:indeterminate="true"
+            android:visibility="gone"/>
 
         <LinearLayout
+            android:id="@+id/ln_getting_data_cpi_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center">
 
             <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/cpi_getting_data"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:indeterminate="true"
@@ -372,13 +391,23 @@
             android:layout_height="wrap_content"
             android:text="@string/please_do_not_disconnect_the_network_this_may_take_a_few_minutes" />
 
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/lpi_installing_packages"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="16dp"
+            android:indeterminate="true"
+            android:visibility="gone"/>
+
         <LinearLayout
+            android:id="@+id/ln_installing_packages_cpi_container"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center">
 
             <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/cpi_installing_packages"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:indeterminate="true"
