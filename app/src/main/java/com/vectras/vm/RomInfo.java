@@ -233,6 +233,15 @@ public class RomInfo extends AppCompatActivity {
             binding.tvFilename.setText(getIntent().getStringExtra("filename"));
         }
 
+        binding.ivIcon.setOnClickListener(v -> {
+            if (getIntent().hasExtra("icon")) {
+                Intent intent = new Intent();
+                intent.putExtra("uri", getIntent().getStringExtra("icon"));
+                intent.setClass(getApplicationContext(), ImagePrvActivity.class);
+                startActivity(intent);
+            }
+        });
+
         binding.lnViews.setOnClickListener((v -> DialogUtils.oneDialog(
                 RomInfo.this,
                 getString(R.string.views),
@@ -540,7 +549,7 @@ public class RomInfo extends AppCompatActivity {
             case "X86_64" -> getString(R.string.x86_64);
             case "i386" -> getString(R.string.i386_qemu);
             case "ARM64" -> getString(R.string.arm64_qemu);
-            case "PowerPC" -> getString(R.string.powerpc_qemu);
+            case "PPC" -> getString(R.string.powerpc_qemu);
             default -> getString(R.string.unknow);
         };
     }

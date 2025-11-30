@@ -48,7 +48,7 @@
                     style="?attr/materialCardViewFilledStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:cardBackgroundColor="?attr/colorSurfaceContainer">
+                    app:cardBackgroundColor="?attr/colorCard">
 
                     <ImageView
                         android:id="@+id/ivIcon"
@@ -129,7 +129,7 @@
                         <View
                             android:layout_width="1dp"
                             android:layout_height="25dp"
-                            android:background="?attr/colorSurfaceContainerHigh"/>
+                            android:background="?attr/colorSurfaceContainerHighest"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -159,7 +159,7 @@
                     <View
                         android:layout_width="1dp"
                         android:layout_height="25dp"
-                        android:background="?attr/colorSurfaceContainerHigh"/>
+                        android:background="?attr/colorSurfaceContainerHighest"/>
 
                     <LinearLayout
                         android:id="@+id/ln_creator"
@@ -187,7 +187,7 @@
                     <View
                         android:layout_width="1dp"
                         android:layout_height="25dp"
-                        android:background="?attr/colorSurfaceContainerHigh"/>
+                        android:background="?attr/colorSurfaceContainerHighest"/>
 
                     <LinearLayout
                         android:id="@+id/ln_arch"
@@ -215,7 +215,7 @@
                     <View
                         android:layout_width="1dp"
                         android:layout_height="25dp"
-                        android:background="?attr/colorSurfaceContainerHigh"/>
+                        android:background="?attr/colorSurfaceContainerHighest"/>
 
                     <LinearLayout
                         android:id="@+id/ln_size"
@@ -243,7 +243,7 @@
                     <View
                         android:layout_width="1dp"
                         android:layout_height="25dp"
-                        android:background="?attr/colorSurfaceContainerHigh"/>
+                        android:background="?attr/colorSurfaceContainerHighest"/>
 
                     <LinearLayout
                         android:id="@+id/ln_filename"

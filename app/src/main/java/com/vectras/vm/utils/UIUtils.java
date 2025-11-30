@@ -8,6 +8,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import android.content.ClipData;
@@ -32,6 +33,8 @@ import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
 import android.widget.ScrollView;
@@ -523,5 +526,14 @@ public class UIUtils {
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         }
+    }
+
+    public static void setLightStatusBar(boolean isEnable, Activity _activity) {
+        Window window = _activity.getWindow();
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+        WindowCompat.getInsetsController(window, window.getDecorView())
+                .setAppearanceLightStatusBars(isEnable);
     }
 }

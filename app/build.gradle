@@ -1,5 +1,8 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
 }
 
 android {
@@ -10,8 +13,8 @@ android {
         applicationId "com.vectras.vm"
         minSdk minApi
         targetSdk targetApi
-        versionCode 43
-        versionName "3.3.9"
+        versionCode 44
+        versionName "3.4.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -65,8 +68,15 @@ android {
         sourceCompatibility JavaVersion.VERSION_21
         targetCompatibility JavaVersion.VERSION_21
     }
+
     buildToolsVersion '36.1.0'
     ndkVersion '21'
+
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_21)
+        }
+    }
 }
 
 dependencies {
@@ -74,9 +84,9 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'com.google.android.material:material:1.14.0-alpha07'
     implementation "androidx.annotation:annotation:1.9.1"
-    implementation "androidx.core:core:1.17.0"
+    implementation "androidx.core:core-ktx:1.17.0"
     implementation "androidx.drawerlayout:drawerlayout:1.2.0"
-    implementation "androidx.preference:preference:1.2.1"
+    implementation "androidx.preference:preference-ktx:1.2.1"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-rc01"
     implementation "androidx.viewpager:viewpager:1.1.0"
 //    implementation platform('com.google.firebase:firebase-bom:34.2.0')
@@ -95,10 +105,11 @@ dependencies {
     implementation 'com.airbnb.android:lottie:6.7.1'
     implementation 'org.apache.commons:commons-compress:1.28.0'
 //    implementation 'com.google.firebase:firebase-crashlytics-buildtools:3.0.6'
-    implementation 'androidx.activity:activity:1.12.0'
+    implementation 'androidx.activity:activity-ktx:1.12.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
-    implementation 'androidx.preference:preference:1.2.1'
+    implementation 'androidx.preference:preference-ktx:1.2.1'
     implementation "androidx.documentfile:documentfile:1.1.0"
+    implementation 'androidx.core:core-ktx:1.17.0'
     compileOnly project(':shell-loader:stub')
     implementation project(":terminal-view")
     implementation project(":library")

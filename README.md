@@ -99,6 +99,7 @@ Help support the project by contributing!
 - [PROOT](https://proot-me.github.io/)
 - [QEMU](https://github.com/qemu/qemu)
 - [Termux](https://github.com/termux)
+- [ZoomImageView](https://github.com/k1slay/ZoomImageView)
 
 [ico-telegram]: https://img.shields.io/badge/Telegram-2CA5E0?logo=telegram&logoColor=white
 [ico-discord]: https://img.shields.io/badge/Discord-%235865F2.svg?&logo=discord&logoColor=white

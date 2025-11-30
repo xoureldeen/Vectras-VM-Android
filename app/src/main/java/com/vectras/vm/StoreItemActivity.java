@@ -168,22 +168,22 @@ public class StoreItemActivity extends AppCompatActivity {
 		itemPrvMain.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				ImagePrvActivity.linkIv = prvMain;
-				startActivity(new Intent(activity, ImagePrvActivity.class));
+//				ImagePrvActivity.linkIv = prvMain;
+//				startActivity(new Intent(activity, ImagePrvActivity.class));
 			}
 		});
 		itemPrv1.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				ImagePrvActivity.linkIv = prv1;
-				startActivity(new Intent(activity, ImagePrvActivity.class));
+//				ImagePrvActivity.linkIv = prv1;
+//				startActivity(new Intent(activity, ImagePrvActivity.class));
 			}
 		});
 		itemPrv2.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				ImagePrvActivity.linkIv = prv2;
-				startActivity(new Intent(activity, ImagePrvActivity.class));
+//				ImagePrvActivity.linkIv = prv2;
+//				startActivity(new Intent(activity, ImagePrvActivity.class));
 			}
 		});
 	}

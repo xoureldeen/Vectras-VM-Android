@@ -3,13 +3,13 @@ package com.vectras.vm.utils;
 import android.app.ActivityManager;
 import android.app.usage.StorageStatsManager;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 import android.os.storage.StorageManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
-
-import androidx.annotation.RequiresApi;
 
 import java.io.File;
 import java.io.IOException;
@@ -62,5 +62,17 @@ public class DeviceUtils {
 
     public static boolean is64bit() {
         return Build.SUPPORTED_ABIS[0].contains("arm64");
+    }
+
+    public static boolean isLargeScreen(Context context) {
+        Configuration config = context.getResources().getConfiguration();
+        return config.smallestScreenWidthDp >= 600;
+    }
+
+    public static boolean isHighDpi(Context context) {
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        int currentDpi = metrics.densityDpi;
+        Log.i(TAG, "isHighDpi: " + currentDpi);
+        return currentDpi >= 600;
     }
 }

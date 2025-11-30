@@ -561,8 +561,8 @@ public class VMCreatorActivity extends AppCompatActivity {
         created = true;
 
         if (getIntent().hasExtra("addromnow")) {
-            RomStoreActivity.isFinishNow = true;
             RomInfo.isFinishNow = true;
+            HomeActivity.isOpenHome = true;
         }
 
         modify = false;

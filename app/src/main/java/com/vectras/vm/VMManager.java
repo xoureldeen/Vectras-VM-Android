@@ -10,6 +10,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +39,7 @@ import com.vectras.vm.settings.VNCSettingsActivity;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.JSONUtils;
+import com.vectras.vm.utils.TextUtils;
 import com.vectras.vm.utils.UIUtils;
 import com.vectras.vterm.Terminal;
 
@@ -131,17 +134,39 @@ public class VMManager {
 
         DialogUtils.threeDialog(_activity, _activity.getString(R.string.remove)+ " " + _vmName, _activity.getString(R.string.remove_vm_content), _activity.getString(R.string.remove_and_do_not_keep_files), _activity.getString(R.string.remove_but_keep_files), _activity.getString(R.string.cancel),true, R.drawable.delete_24px, true,
                 () -> {
-                    isKeptSomeFiles = false;
-                    deleteVM();
-                    removeInRomsDataJson(_activity, _vmName, _position);
-                },
-                () -> {
-                    hideVMIDWithPosition();
-                    removeInRomsDataJson(_activity, _vmName, _position);
-                },
-                () -> {
+                    View progressView = LayoutInflater.from(_activity).inflate(R.layout.dialog_progress_style, null);
+                    TextView progress_text = progressView.findViewById(R.id.progress_text);
+                    progress_text.setText(_activity.getString(R.string.just_a_moment));
+                    AlertDialog progressDialog = new MaterialAlertDialogBuilder(_activity, R.style.CenteredDialogTheme)
+                            .setView(progressView)
+                            .setCancelable(false)
+                            .create();
+                    progressDialog.show();
 
+                    new Thread(() -> {
+                        isKeptSomeFiles = false;
+                        deleteVM();
+                        removeInRomsDataJson(_activity, _vmName, _position);
+                        _activity.runOnUiThread(() -> new Handler(Looper.getMainLooper()).postDelayed(progressDialog::dismiss, 500));
+                    }).start();
                 },
+                () -> {
+                    View progressView = LayoutInflater.from(_activity).inflate(R.layout.dialog_progress_style, null);
+                    TextView progress_text = progressView.findViewById(R.id.progress_text);
+                    progress_text.setText(_activity.getString(R.string.just_a_moment));
+                    AlertDialog progressDialog = new MaterialAlertDialogBuilder(_activity, R.style.CenteredDialogTheme)
+                            .setView(progressView)
+                            .setCancelable(false)
+                            .create();
+                    progressDialog.show();
+
+                    new Thread(() -> {
+                        hideVMIDWithPosition();
+                        removeInRomsDataJson(_activity, _vmName, _position);
+                        _activity.runOnUiThread(() -> new Handler(Looper.getMainLooper()).postDelayed(progressDialog::dismiss, 500));
+                    }).start();
+                },
+                null,
                 null);
     }
 
@@ -181,35 +206,14 @@ public class VMManager {
 
     @NonNull
     public static String startRamdomVMID() {
-        String addAdb;
         Random random = new Random();
-        int randomAbc = random.nextInt(12);
-        if (randomAbc == 0) {
-            addAdb = "a";
-        } else if (randomAbc == 1) {
-            addAdb = "b";
-        } else if (randomAbc == 2) {
-            addAdb = "c";
-        } else if (randomAbc == 3) {
-            addAdb = "d";
-        } else if (randomAbc == 4) {
-            addAdb = "e";
-        } else if (randomAbc == 5) {
-            addAdb = "f";
-        } else if (randomAbc == 6) {
-            addAdb = "g";
-        } else if (randomAbc == 7) {
-            addAdb = "h";
-        } else if (randomAbc == 8) {
-            addAdb = "i";
-        } else if (randomAbc == 9) {
-            addAdb = "j";
-        } else if (randomAbc == 10) {
-            addAdb = "k";
-        } else {
-            addAdb = "l";
+        StringBuilder result = new StringBuilder();
+
+        for (int i = 0; i < 10; i++) {
+            result.append(random.nextInt(2) > 0 ? TextUtils.randomALetter() : String.valueOf(random.nextInt(10)));
         }
-        return addAdb + (long) (random.nextInt(65535));
+
+        return result.toString();
     }
 
     public static int startRandomPort() {
