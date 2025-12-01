@@ -271,6 +271,24 @@
     "id": ""
   },
   {
+    "rom_name": "Floppy Bird",
+    "rom_icon": "https://www.doshaven.eu/wp-content/uploads/2016/06/flpybird_000-320x200.png",
+    "rom_url": "https://anbui.ovh/get/vec/community/other/floppybird.html",
+    "rom_path": "Floppy bird.cvbi",
+    "rom_avail": true,
+    "rom_size": "Play!",
+    "rom_arch": "X86_64",
+    "rom_kernel": "other",
+    "rom_extra": "",
+    "final_rom_file_name": "",
+    "desc": "From HaoPC 曹 on Telegram.\n\nFloppy Bird is a clone of the infamous Flappy Bird written in 16 bit (x86) assembly.\nIn other words it works on RAW METAL and doesn't require an underlying operating system, it is an operating system on its own.",
+    "file_size": "1 MB",
+    "creator": "HaoPC 曹",
+    "verified": true,
+    "vecid": "floppybirdcvbi",
+    "id": ""
+  },
+  {
     "rom_name": "Gentoo Linux",
     "rom_icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Gentoo_Linux_logo_matte.svg/1200px-Gentoo_Linux_logo_matte.svg.png",
     "rom_url": "https://anbui.ovh/get/vec/community/linux/gentoo.html",
@@ -1531,3 +1549,4 @@
     "id": ""
   }
 ]
+
