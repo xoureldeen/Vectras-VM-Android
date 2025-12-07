@@ -27,7 +27,7 @@
     <item
         android:id="@+id/navigation_item_desktop"
         android:icon="@drawable/desktop_24px"
-        android:title="@string/alpine_desktop"/>
+        android:title="@string/X11_display"/>
     <item
         android:id="@+id/navigation_item_terminal"
         android:icon="@drawable/terminal_24px"

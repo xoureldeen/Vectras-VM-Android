@@ -1315,6 +1315,24 @@
     "id": ""
   },
   {
+    "rom_name": "Windows 8.1 x86",
+    "rom_icon": "https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/09/17/windows-logo_1_926ed76111646acbbe332bc5af0cf2ce.png",
+    "rom_url": "https://anbui.ovh/get/vec/community/win/nt6/81superlitex862017.html",
+    "rom_path": "Windows 8.1 Superlite x86 2017.cvbi",
+    "rom_avail": true,
+    "rom_size": "Superlite 2017",
+    "rom_arch": "X86_64",
+    "rom_kernel": "windows",
+    "rom_extra": "",
+    "final_rom_file_name": "",
+    "desc": "From HaoPC 曹 on Telegram.\n\nWindows 8.1 is a release of the Windows NT operating system based on Windows 8 developed by Microsoft. It was released to manufacturing on August 27, 2013, and broadly released for retail sale on October 17, 2013, about a year after the retail release of its predecessor, and succeeded by Windows 10 on July 29, 2015. Windows 8.1 was made available for download via MSDN and Technet and available as a free upgrade for retail copies of Windows 8 and Windows RT users via the Windows Store. A server version, Windows Server 2012 R2, was released on October 18, 2013.",
+    "file_size": "3 GB",
+    "creator": "HaoPC 曹",
+    "verified": true,
+    "vecid": "windows81superlitex862017cvbi",
+    "id": ""
+  },
+  {
     "rom_name": "Windows 98 Plus!",
     "rom_icon": "https://www.getmyos.com/upload/files/2018/10/04/windows_logo_1995_1_21eb221818c6620a5391a14ce1b0fc51.png",
     "rom_url": "https://www.mediafire.com/file/8cndpbaaallbqws/98PLUS%2521.qcow2/file",

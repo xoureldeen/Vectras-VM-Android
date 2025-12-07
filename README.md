@@ -101,6 +101,10 @@ Help support the project by contributing!
 - [Termux](https://github.com/termux)
 - [ZoomImageView](https://github.com/k1slay/ZoomImageView)
 
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=xoureldeen/Vectras-VM-Android,AnBui2004/Vectras-VM-Emu-Android&type=date&legend=top-left)](https://www.star-history.com/#xoureldeen/Vectras-VM-Android&AnBui2004/Vectras-VM-Emu-Android&type=date&legend=top-left)
+
 [ico-telegram]: https://img.shields.io/badge/Telegram-2CA5E0?logo=telegram&logoColor=white
 [ico-discord]: https://img.shields.io/badge/Discord-%235865F2.svg?&logo=discord&logoColor=white
 [ico-version]: https://img.shields.io/badge/Android-3DDC84?logo=android&logoColor=white

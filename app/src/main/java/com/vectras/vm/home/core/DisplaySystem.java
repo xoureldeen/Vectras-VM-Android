@@ -6,6 +6,7 @@ import static com.vectras.vm.utils.LibraryChecker.isPackageInstalled2;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 
 import com.termux.app.TermuxService;
 import com.vectras.qemu.Config;
@@ -13,27 +14,25 @@ import com.vectras.qemu.MainSettingsManager;
 import com.vectras.qemu.MainVNCActivity;
 import com.vectras.vm.R;
 import com.vectras.vm.core.ShellExecutor;
+import com.vectras.vm.core.TermuxX11;
 import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
+import com.vectras.vm.utils.PackageUtils;
 import com.vectras.vm.x11.X11Activity;
 import com.vectras.vterm.Terminal;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import au.com.darkside.xdemo.XServerActivity;
-
 public class DisplaySystem {
+    private static final String TAG = "DisplaySystem";
+
     public static void launch(Activity activity) {
         if (MainSettingsManager.getVmUi(activity).equals("VNC")) {
             activity.startActivity(new Intent(activity, MainVNCActivity.class));
         } else if (MainSettingsManager.getVmUi(activity).equals("X11")) {
-            if (SDK_INT >= 34) {
-                activity.startActivity(new Intent(activity, XServerActivity.class));
-            } else {
-                DisplaySystem.launchX11(activity, false);
-            }
+            DisplaySystem.launchX11(activity, false);
         }
     }
 
@@ -45,19 +44,8 @@ public class DisplaySystem {
             activity.startActivity(new Intent(activity, MainVNCActivity.class));
     }
 
-    public static void launchX11(Activity activity, boolean isKillXFCE) {
-        if (SDK_INT >= 34 && isKillXFCE) {
-            DialogUtils.oneDialog(
-                    activity,
-                    activity.getString(R.string.x11_feature_not_supported),
-                    activity.getString(R.string.the_x11_feature_is_currently_not_supported_on_android_14_and_above_please_use_a_device_with_android_13_or_below_for_x11_functionality),
-                    activity.getString(R.string.ok),
-                    true, R.drawable.error_96px,
-                    true,
-                    null,
-                    null
-            );
-        } else if (!DeviceUtils.is64bit()) {
+    public static void launchX11(Activity activity, boolean isKill) {
+        if (!DeviceUtils.is64bit()) {
             DialogUtils.oneDialog(
                     activity,
                     activity.getString(R.string.x11_feature_not_supported),
@@ -69,11 +57,16 @@ public class DisplaySystem {
                     null
             );
         } else {
+            if (SDK_INT >= 34 && !PackageUtils.isInstalled("com.termux.x11", activity)) {
+                DialogUtils.needInstallTermuxX11(activity);
+                return;
+            }
+
             // XFCE4 meta-package
-            String xfce4Package = "xfce4";
+            String necessaryPackage = "fluxbox";
 
             // Check if XFCE4 is installed
-            isPackageInstalled2(activity, xfce4Package, (output, errors) -> {
+            isPackageInstalled2(activity, necessaryPackage, (output, errors) -> {
                 boolean isInstalled = false;
 
                 // Check if the package exists in the installed packages output
@@ -83,36 +76,47 @@ public class DisplaySystem {
                         installedPackages.add(installedPackage.trim());
                     }
 
-                    isInstalled = installedPackages.contains(xfce4Package.trim());
+                    isInstalled = installedPackages.contains(necessaryPackage.trim());
                 }
 
                 // If not installed, show a dialog to install it
                 if (!isInstalled) {
                     DialogUtils.twoDialog(
                             activity,
-                            "Install XFCE4",
-                            "XFCE4 is not installed. Would you like to install it?",
+                            activity.getString(R.string.action_needed),
+                            activity.getString(R.string.the_required_package_is_not_installed_content),
                             activity.getString(R.string.install),
                             activity.getString(R.string.cancel),
                             true,
                             R.drawable.desktop_24px,
                             true,
                             () -> {
-                                String installCommand = "apk add " + xfce4Package;
-                                new Terminal(activity).executeShellCommand(installCommand, true, true, activity);
+                                String installCommand = "apk add " + necessaryPackage;
+                                new Terminal(activity).executeShellCommand(installCommand, true, true, activity.getString(R.string.just_a_moment), activity);
                             },
                             null,
                             null
                     );
                 } else {
                     if (SDK_INT >= 34) {
-                        activity.startActivity(new Intent(activity, XServerActivity.class));
+//                        activity.startActivity(new Intent(activity, XServerActivity.class));
+                        Intent intent = new Intent();
+                        intent.setClassName("com.termux.x11", "com.termux.x11.MainActivity");
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                        activity.startActivity(intent);
+                        try {
+                            TermuxX11.main(new String[]{":0"});
+                        } catch (Exception e) {
+                            Log.e(TAG, "TermuxX11.main: ", e);
+                        }
                     } else {
-                        if (isKillXFCE)
-                            new Terminal(activity).executeShellCommand2("killall xfce4-session", false, activity);
                         activity.startActivity(new Intent(activity, X11Activity.class));
-                        new Terminal(activity).executeShellCommand2("xfce4-session", false, activity);
                     }
+
+                    if (isKill)
+                        new Terminal(activity).executeShellCommand2("killall fluxbox", false, activity);
+                    new Terminal(activity).executeShellCommand2(SDK_INT >= 34 ? "export DISPLAY=:0 && sleep 5 && fluxbox" : "fluxbox", false, activity);
                 }
             });
         }

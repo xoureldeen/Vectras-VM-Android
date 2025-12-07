@@ -30,6 +30,7 @@ import com.vectras.vm.settings.ExternalVNCSettingsActivity;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.NetworkUtils;
+import com.vectras.vm.utils.PackageUtils;
 import com.vectras.vm.utils.ServiceUtils;
 
 import java.io.File;
@@ -62,13 +63,20 @@ public class HomeStartVM {
             pendingVMID = "";
         } else {
             if (MainSettingsManager.getVmUi(activity).equals("X11")) {
-                pendingVMName = vmName;
-                pendingEnv = env;
-                pendingVMID = vmID;
-                pendingThumbnailFile = thumbnailFile;
-                DisplaySystem.launch(activity);
                 runCommandFormat = String.format(runCommandFormat, "xterm -e bash -c '%s'");
-                return;
+                if (SDK_INT < 34) {
+                    pendingVMName = vmName;
+                    pendingEnv = env;
+                    pendingVMID = vmID;
+                    pendingThumbnailFile = thumbnailFile;
+                    DisplaySystem.launch(activity);
+                    return;
+                } else {
+                    if (!PackageUtils.isInstalled("com.termux.x11", activity)) {
+                        DialogUtils.needInstallTermuxX11(activity);
+                        return;
+                    }
+                }
             }
         }
 
@@ -167,6 +175,10 @@ public class HomeStartVM {
         VMManager.isQemuStopedWithError = false;
 
         String finalCommand = VMManager.addAudioDevSdl(String.format(runCommandFormat, env));
+
+        if (MainSettingsManager.getVmUi(activity).equals("X11") && SDK_INT >= 34) {
+            finalCommand = "export DISPLAY=:0 && sleep 5\nfluxbox &\n" + finalCommand;
+        }
         Log.i(TAG, finalCommand);
 
         if (ServiceUtils.isServiceRunning(activity, MainService.class)) {
@@ -202,8 +214,8 @@ public class HomeStartVM {
                             }
 //                    } else if (MainSettingsManager.getVmUi(activity).equals("SPICE")) {
 //                        //This feature is not available yet.
-//                        } else if (MainSettingsManager.getVmUi(activity).equals("X11") && SDK_INT < 34) {
-//                            DisplaySystem.launchX11(activity, false);
+                        } else if (MainSettingsManager.getVmUi(activity).equals("X11") && SDK_INT >= 34) {
+                            DisplaySystem.launchX11(activity, false);
                         }
 
                         Log.i(TAG, "Virtual machine running.");

@@ -362,7 +362,7 @@ public class SetupWizard2Activity extends AppCompatActivity {
                 if (result) {
                     getDataForStandardSetup();
                 } else {
-                    uiController(STEP_ERROR, getString(R.string.system_files_installation_failed_content));
+                    uiController(STEP_ERROR, getString(R.string.system_files_installation_failed_content) + (!SetupFeatureCore.lastErrorLog.isEmpty() ? "\n\n" + SetupFeatureCore.lastErrorLog : ""));
                 }
             }, 1000));
         }).start();

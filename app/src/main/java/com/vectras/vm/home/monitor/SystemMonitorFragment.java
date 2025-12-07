@@ -196,7 +196,7 @@ public class SystemMonitorFragment extends Fragment {
             String result = Terminal.executeShellCommandWithResult("ps -e command", requireActivity());
             requireActivity().runOnUiThread(() -> {
                 binding.tvProcesses.setText(result);
-                binding.tvQemuversion.setText(getString(R.string.version) + " " + qemuVersionName + ".");
+                binding.tvQemuversion.setText(getString(R.string.version) + " " + (qemuVersionName.isEmpty() ? getString(R.string.unknow) : qemuVersionName) + ".");
 
                 if (!result.isEmpty()) {
                     switch (currentArch) {

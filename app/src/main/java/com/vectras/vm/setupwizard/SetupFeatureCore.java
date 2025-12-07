@@ -24,6 +24,7 @@ import java.util.Objects;
 
 public class SetupFeatureCore {
     public static String TAG = "SetupFeatureCore";
+    public static String lastErrorLog = "";
 
     public static boolean isInstalledSystemFiles(Context context) {
         return isInstalledProot(context) && isInstalledDistro(context);
@@ -39,6 +40,7 @@ public class SetupFeatureCore {
 
     public static boolean startExtractSystemFiles(Context context) {
         if (isInstalledSystemFiles(context)) return true;
+        lastErrorLog = "";
 
         String filesDir = context.getFilesDir().getAbsolutePath();
         File distroDir = new File(filesDir + "/distro");
@@ -100,6 +102,7 @@ public class SetupFeatureCore {
                 // If there was any output in stderr, treat it as an error
                 return exitCode == 0 && errorOutput.length() <= 0;
             } catch (IOException | InterruptedException e) {
+                lastErrorLog = lastErrorLog.isEmpty() ? e.toString() : lastErrorLog + "\n" + e;
                 Log.e(TAG, "extractSystemFiles: ", e);
             } finally {
                 if (process != null) {
@@ -121,6 +124,7 @@ public class SetupFeatureCore {
             out.flush();
             return true;
         } catch (IOException e) {
+            lastErrorLog = e.toString();
             Log.e(TAG, "copyAssetToFile: ", e);
             return false;
         }
