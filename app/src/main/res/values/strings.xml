@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">3.4.0</string>
+    <string name="app_version" translatable="false">3.4.1</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <!-- logger -->
     <string name="startvm">VM STARTED!</string>
@@ -456,6 +456,9 @@
     <string name="vectras_vm_cannot_run_on_this_device">Vectras VM cannot run on this device.</string>
     <string name="not_enough_storage_space">Not enough storage space.</string>
     <string name="there_are_no_logs">There are no logs.</string>
+    <string name="the_required_package_is_not_installed_content">The required package is not installed, you need to install it before using this feature.</string>
+    <string name="need_install_termux_x11_content">Termux:X11 app is not installed, you need to install it to continue.</string>
+    <string name="X11_display">X11 display</string>
 
 
     <!--======================TERMUX STRINGS====================-->

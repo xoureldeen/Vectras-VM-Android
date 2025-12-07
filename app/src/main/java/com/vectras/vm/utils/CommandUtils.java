@@ -22,7 +22,11 @@ public class CommandUtils {
     }
 
     public static String getQemuVersionName() {
-        return getQemuVersion() + (is3dfxVersion() ? " - 3dfx" : "");
+        String qemuVersion = getQemuVersion();
+
+        if (qemuVersion.toLowerCase().contains("failed")) return "";
+
+        return (qemuVersion.contains("Error") ? qemuVersion.substring(0, qemuVersion.indexOf("Error")) : qemuVersion) + (is3dfxVersion() ? " - 3dfx" : "");
     }
 
     public static String getQemuVersion() {

@@ -249,6 +249,19 @@ public class DialogUtils {
         }
     }
 
+    public static void needInstallTermuxX11(Activity _activity) {
+        twoDialog(_activity, _activity.getResources().getString(R.string.action_needed),
+                _activity.getResources().getString(R.string.need_install_termux_x11_content),
+                _activity.getResources().getString(R.string.install), _activity.getResources().getString(R.string.cancel),
+                true, R.drawable.warning_24px, true,
+                () -> {
+                    String tg = "https://github.com/termux/termux-x11/releases";
+                    Intent f = new Intent(ACTION_VIEW);
+                    f.setData(Uri.parse(tg));
+                    _activity.startActivity(f);
+                }, null, null);
+    }
+
     public static void fileDeletionResult(Activity activity, boolean isCompleted) {
         if (isCompleted) {
             DialogUtils.oneDialog(

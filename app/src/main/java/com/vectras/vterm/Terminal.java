@@ -78,6 +78,10 @@ public class Terminal {
 
     // Method to execute the shell command
     public void executeShellCommand(String userCommand, boolean showResultDialog, boolean showProgressDialog, Activity dialogActivity) {
+        executeShellCommand(userCommand, showResultDialog, showProgressDialog, dialogActivity.getString(R.string.executing_command_please_wait), dialogActivity);
+    }
+
+    public void executeShellCommand(String userCommand, boolean showResultDialog, boolean showProgressDialog, String progressDialogMessage, Activity dialogActivity) {
         StringBuilder output = new StringBuilder();
         StringBuilder errors = new StringBuilder();
         Log.d(TAG, userCommand);
@@ -86,7 +90,7 @@ public class Terminal {
         // Show ProgressDialog
         View progressView = LayoutInflater.from(dialogActivity).inflate(R.layout.dialog_progress_style, null);
         TextView progress_text = progressView.findViewById(R.id.progress_text);
-        progress_text.setText(dialogActivity.getString(R.string.executing_command_please_wait));
+        progress_text.setText(progressDialogMessage);
         AlertDialog progressDialog = new MaterialAlertDialogBuilder(dialogActivity, R.style.CenteredDialogTheme)
                 .setView(progressView)
                 .setCancelable(false)
