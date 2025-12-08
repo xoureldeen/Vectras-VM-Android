@@ -272,12 +272,10 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
                 checkMissingLibraries(this);
 
         setupDrawer();
-        DisplaySystem.startTermuxX11();
         DialogUtils.joinTelegram(this);
         NotificationUtils.clearAll(this);
 
         if (MainSettingsManager.getPromptUpdateVersion(this))
-
             updateApp();
     }
 
@@ -342,6 +340,8 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
             if (binding.searchview.isShowing()) binding.searchview.hide();
             bindingContent.bottomNavigation.setSelectedItemId(R.id.item_home);
         }
+
+        new Handler(Looper.getMainLooper()).post(() -> DisplaySystem.startTermuxX11(this));
     }
 
     private final ActivityResultLauncher<String> isoPicker =

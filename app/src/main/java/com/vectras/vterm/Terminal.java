@@ -68,20 +68,20 @@ public class Terminal {
         return null;
     }
 
-    private void showDialog(String message, Activity activity, String usercommand) {
-        if (VMManager.isExecutedCommandError(usercommand, message, activity))
+    private void showDialog(String message, Context context, String usercommand) {
+        if (VMManager.isExecutedCommandError(usercommand, message, context))
             return;
 
-        DialogUtils.twoDialog(activity, "Execution Result", message, activity.getString(R.string.copy), activity.getString(R.string.close), true, R.drawable.round_terminal_24, true,
-                () -> ClipboardUltils.copyToClipboard(activity, message), null, null);
+        DialogUtils.twoDialog(context, "Execution Result", message, context.getString(R.string.copy), context.getString(R.string.close), true, R.drawable.round_terminal_24, true,
+                () -> ClipboardUltils.copyToClipboard(context, message), null, null);
     }
 
     // Method to execute the shell command
-    public void executeShellCommand(String userCommand, boolean showResultDialog, boolean showProgressDialog, Activity dialogActivity) {
+    public void executeShellCommand(String userCommand, boolean showResultDialog, boolean showProgressDialog, Context dialogActivity) {
         executeShellCommand(userCommand, showResultDialog, showProgressDialog, dialogActivity.getString(R.string.executing_command_please_wait), dialogActivity);
     }
 
-    public void executeShellCommand(String userCommand, boolean showResultDialog, boolean showProgressDialog, String progressDialogMessage, Activity dialogActivity) {
+    public void executeShellCommand(String userCommand, boolean showResultDialog, boolean showProgressDialog, String progressDialogMessage, Context dialogActivity) {
         StringBuilder output = new StringBuilder();
         StringBuilder errors = new StringBuilder();
         Log.d(TAG, userCommand);
@@ -147,7 +147,7 @@ public class Terminal {
 
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    Log.d(TAG, line);
+//                    Log.d(TAG, line);
                     com.vectras.vm.logger.VectrasStatus.logError("<font color='#4db6ac'>VTERM: >" + line + "</font>");
                     output.append(line).append("\n");
                 }
@@ -180,7 +180,7 @@ public class Terminal {
         }).start();
     }
 
-    public void executeShellCommand2(String userCommand, boolean showResultDialog, Activity dialogActivity) {
+    public void executeShellCommand2(String userCommand, boolean showResultDialog, Context dialogActivity) {
         StringBuilder output = new StringBuilder();
         StringBuilder errors = new StringBuilder();
         Log.d(TAG, userCommand);
@@ -191,7 +191,7 @@ public class Terminal {
                 ProcessBuilder processBuilder = new ProcessBuilder();
 
                 // Adjust these environment variables as necessary for your app
-                String filesDir = context.getFilesDir().getAbsolutePath();
+                String filesDir = getContext().getFilesDir().getAbsolutePath();
 
                 File tmpDir = new File(context.getFilesDir(), "usr/tmp");
 
@@ -245,7 +245,7 @@ public class Terminal {
                 // Read the input stream for the output of the command
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    Log.d(TAG, line);
+//                    Log.d(TAG, line);
                     com.vectras.vm.logger.VectrasStatus.logError("<font color='#4db6ac'>VTERM: >" + line + "</font>");
                     output.append(line).append("\n");
                 }
@@ -345,7 +345,7 @@ public class Terminal {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                Log.d(TAG, line);
+//                Log.d(TAG, line);
                 com.vectras.vm.logger.VectrasStatus.logError("<font color='#4db6ac'>VTERM: >" + line + "</font>");
                 output.append(line).append("\n");
             }
@@ -474,7 +474,7 @@ public class Terminal {
         void onCommandCompleted(String output, String errors);
     }
 
-    public String executeShellCommand(String userCommand, Activity dialogActivity, boolean isShowProgressDialog, CommandCallback callback) {
+    public String executeShellCommand(String userCommand, Context dialogActivity, boolean isShowProgressDialog, CommandCallback callback) {
         StringBuilder output = new StringBuilder();
         StringBuilder errors = new StringBuilder();
         Log.d(TAG, userCommand);
@@ -541,7 +541,7 @@ public class Terminal {
 
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    Log.d(TAG, line);
+//                    Log.d(TAG, line);
                     com.vectras.vm.logger.VectrasStatus.logError("<font color='#4db6ac'>VTERM: >" + line + "</font>");
                     output.append(line).append("\n");
                 }
@@ -576,28 +576,6 @@ public class Terminal {
         return "Execution is in progress..."; // Returning a message indicating the command execution is ongoing
     }
 
-
-    private boolean checkInstallation() {
-        String filesDir = context.getFilesDir().getAbsolutePath();
-        File distro = new File(filesDir, "distro");
-        return distro.exists();
-    }
-
-    public static void killQemuProcess() {
-        if (qemuProcess != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                qemuProcess.destroyForcibly();
-            else
-                qemuProcess.destroy();
-            //MainVNCActivity.activity.finish();
-            MainVNCActivity.started = false;
-            qemuProcess = null; // Set it to null after destroying it
-            Log.d(TAG, "QEMU process destroyed.");
-        } else {
-            Log.d(TAG, "QEMU process was null.");
-        }
-    }
-
     /**
      * Checks if a package is installed using `apk info`.
      *
@@ -619,5 +597,12 @@ public class Terminal {
             Log.e(TAG, "Error checking package: " + packageName, e);
         }
         return false;
+    }
+
+    private Context getContext() {
+        if (context == null) {
+            return VectrasApp.getContext();
+        }
+        return context;
     }
 }

@@ -89,11 +89,11 @@ public class LibraryChecker {
     }
 
     // Method to check if the package is installed
-    public static void isPackageInstalled2(Activity activity, String packageName, Terminal.CommandCallback callback) {
+    public static void isPackageInstalled2(Context context, String packageName, Terminal.CommandCallback callback) {
         String command = "apk info";
 
-        Terminal terminal = new Terminal(activity);
-        terminal.executeShellCommand(command, activity, false, (output, errors) -> {
+        Terminal terminal = new Terminal(context);
+        terminal.executeShellCommand(command, context, false, (output, errors) -> {
             if (callback != null) {
                 callback.onCommandCompleted(output, errors);
             }

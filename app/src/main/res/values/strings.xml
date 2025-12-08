@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">3.4.1</string>
+    <string name="app_version" translatable="false">3.4.2</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <!-- logger -->
     <string name="startvm">VM STARTED!</string>
@@ -214,7 +214,7 @@
     <string name="you_cannot_use_IDE_hard_drive_type_with_ARM64">You cannot use IDE hard drive type with ARM64. If you continue, the default hard drive type will be used.</string>
     <string name="error_PROOT_IS_MISSING_0">The system is not working, necessary files are missing. This problem may be caused by incorrect setup. Do you want to try the setup again? Error code: PROOT_IS_MISSING_0.</string>
     <string name="error_DRIVE_INDEX_0_EXISTS">An error occurred and the virtual machine cannot start. There are two or more drives that cannot be plugged into the same slot. Please check your virtual machine settings and make sure all drives are not plugged into the same slot. Error code: DRIVE_INDEX_0_EXISTS.</string>
-    <string name="error_X11_NOT_AVAILABLE">An error occurred and the virtual machine cannot start. X11 is not working. We recommend you switch to VNC. Do you want to switch to VNC? Error code: X11_NOT_AVAILABLE.</string>
+    <string name="error_X11_NOT_AVAILABLE">An error occurred and the virtual machine is not running. The X11 display is temporarily unavailable, please exit the Vectras VM and come back to try again. You can try switching to VNC which is more stable. Error code: X11_NOT_AVAILABLE.</string>
     <string name="switched_to_VNC">Switched to VNC. You can try running the virtual machine again now.</string>
     <string name="restore">Restore</string>
     <string name="restore_content">Deleted virtual machines will be restored if you previously chose to keep all files.</string>
@@ -459,6 +459,17 @@
     <string name="the_required_package_is_not_installed_content">The required package is not installed, you need to install it before using this feature.</string>
     <string name="need_install_termux_x11_content">Termux:X11 app is not installed, you need to install it to continue.</string>
     <string name="X11_display">X11 display</string>
+    <string name="settings_for_X11_display">Settings for X11 display.</string>
+    <string name="use_X11_display">Use X11 display</string>
+    <string name="check_before_extract">Check before extract</string>
+    <string name="check_before_extract_note">Quickly detect errors to avoid wasting time decompressing and errors occurring after decompression.</string>
+    <string name="checking">Checking…</string>
+    <string name="x11_display_cannot_be_used_at_this_time_content">X11 display cannot be used at this time, try closing and reopening the Vectras VM.</string>
+    <string name="run_qemu_with_xterm">Run Qemu with Xterm</string>
+    <string name="run_qemu_with_xterm_note">To run commands with Qemu monitor easier without switching.</string>
+    <string name="quick_edit">Quick edit</string>
+    <string name="write_something">Write something…</string>
+    <string name="switch_to_vnc">Switch to VNC</string>
 
 
     <!--======================TERMUX STRINGS====================-->

@@ -868,15 +868,15 @@ public class FileUtils {
 		return true;
 	}
 
-	public static void openFolder(Activity activity, String folderPath) {
+	public static void openFolder(Context context, String folderPath) {
 		File folder = new File(folderPath);
 
 		if (!folder.exists() || !folder.isDirectory()) {
 			DialogUtils.oneDialog(
-					activity,
-					activity.getString(R.string.oops),
-					activity.getString(R.string.directory_does_not_exist),
-					activity.getString(R.string.ok),
+					context,
+					context.getString(R.string.oops),
+					context.getString(R.string.directory_does_not_exist),
+					context.getString(R.string.ok),
 					true,
 					R.drawable.error_96px,
 					true,
@@ -888,8 +888,8 @@ public class FileUtils {
 		}
 
 		Uri uri = FileProvider.getUriForFile(
-				activity,
-				activity.getPackageName() + ".provider",
+				context,
+				context.getPackageName() + ".provider",
 				folder
 		);
 
@@ -900,13 +900,13 @@ public class FileUtils {
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
 		try {
-			activity.startActivity(intent);
+			context.startActivity(intent);
 		} catch (Exception e) {
 			DialogUtils.oneDialog(
-					activity,
-					activity.getString(R.string.oops),
-					activity.getString(R.string.there_is_no_app_to_perform_this_action),
-					activity.getString(R.string.ok),
+					context,
+					context.getString(R.string.oops),
+					context.getString(R.string.there_is_no_app_to_perform_this_action),
+					context.getString(R.string.ok),
 					true,
 					R.drawable.error_96px,
 					true,

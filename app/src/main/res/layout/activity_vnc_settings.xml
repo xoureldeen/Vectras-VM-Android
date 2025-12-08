@@ -16,8 +16,7 @@
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             style="@style/App.CollapsingToolbarLarge"
-            app:title="@string/vnc"
-            app:subtitle="@string/settings">
+            app:title="@string/vnc">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"

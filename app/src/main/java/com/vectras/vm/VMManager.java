@@ -35,6 +35,7 @@ import com.vectras.qemu.MainVNCActivity;
 import com.vectras.qemu.VNCConfig;
 import com.vectras.qemu.utils.QmpClient;
 import com.vectras.vm.home.HomeActivity;
+import com.vectras.vm.home.core.HomeStartVM;
 import com.vectras.vm.settings.VNCSettingsActivity;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
@@ -49,11 +50,13 @@ import org.json.JSONArray;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Random;
+import java.util.Vector;
 
 public class VMManager {
 
@@ -70,6 +73,7 @@ public class VMManager {
     public static int restoredVMs = 0;
     public static boolean isKeptSomeFiles = false;
     public static boolean isQemuStopedWithError = false;
+    public static boolean isTryAgain = false;
 
     public static String latestUnsafeCommandReason = "";
     public static String lastQemuCommand = "";
@@ -583,7 +587,7 @@ public class VMManager {
         }
     }
 
-    public static boolean isExecutedCommandError(@NonNull String _command, String _result, Activity _activity) {
+    public static boolean isExecutedCommandError(@NonNull String _command, String _result, Context _activity) {
         if (!_command.contains("qemu-system")) {
             isQemuStopedWithError = false;
             return false;
@@ -604,41 +608,51 @@ public class VMManager {
                         Intent intent = new Intent();
                         intent.setClass(_activity, SplashActivity.class);
                         _activity.startActivity(intent);
-                        _activity.finish();
                     },
                     null, null);
             isQemuStopedWithError = true;
             return true;
         } else if (_result.contains(") exists") && _result.contains("drive with bus")) {
             //Error code: DRIVE_INDEX_0_EXISTS
-            DialogUtils.oneDialog(_activity, _activity.getString(R.string.problem_has_been_detected), _activity.getString(R.string.error_DRIVE_INDEX_0_EXISTS) + "\n\n" + _result, _activity.getString(R.string.ok),true, R.drawable.hard_drive_24px, true,null, null);
+            DialogUtils.oneDialog(_activity, _activity.getString(R.string.problem_has_been_detected), _activity.getString(R.string.error_DRIVE_INDEX_0_EXISTS) + "\n\n" + _result, R.drawable.hard_drive_24px);
             isQemuStopedWithError = true;
             return true;
         } else if (_result.contains("gtk initialization failed") || _result.contains("x11 not available")) {
             //Error code: X11_NOT_AVAILABLE
-            DialogUtils.twoDialog(_activity, _activity.getString(R.string.problem_has_been_detected), _activity.getString(R.string.error_X11_NOT_AVAILABLE), _activity.getString(R.string.continuetext), _activity.getString(R.string.cancel), true, R.drawable.cast_24px, true,
+            DialogUtils.twoDialog(_activity, _activity.getString(R.string.problem_has_been_detected), _activity.getString(R.string.error_X11_NOT_AVAILABLE), _activity.getString(R.string.switch_to_vnc), _activity.getString(R.string.cancel), true, R.drawable.cast_24px, true,
                     () -> {
                         MainSettingsManager.setVmUi(_activity, "VNC");
-                        DialogUtils.oneDialog(_activity, _activity.getString(R.string.done), _activity.getString(R.string.switched_to_VNC), _activity.getString(R.string.ok),true, R.drawable.check_24px, true,null, null);
+                        DialogUtils.oneDialog(_activity, _activity.getString(R.string.done), _activity.getString(R.string.switched_to_VNC), R.drawable.check_24px);
                     },
                     null, null);
             isQemuStopedWithError = true;
             return true;
+        } else if (_result.contains("Couldn't connect to XServer")) {
+            if (isTryAgain) {
+                DialogUtils.oneDialog(_activity, _activity.getString(R.string.problem_has_been_detected), _activity.getString(R.string.x11_display_cannot_be_used_at_this_time_content) + "\n\n" + _result, R.drawable.cast_warning_24px);
+                _activity.stopService(new Intent(_activity, MainService.class));
+                isQemuStopedWithError = true;
+                isTryAgain = false;
+            } else {
+                HomeStartVM.startTryAgain(_activity);
+                isTryAgain = true;
+            }
+            return true;
         } else if (_result.contains("No such file or directory")) {
             //Error code: NO_SUCH_FILE_OR_DIRECTORY
-            DialogUtils.oneDialog(_activity, _activity.getString(R.string.problem_has_been_detected), _activity.getString(R.string.error_NO_SUCH_FILE_OR_DIRECTORY) + "\n\n" + _result, _activity.getString(R.string.ok),true, R.drawable.file_copy_24px, true,null, null);
+            DialogUtils.oneDialog(_activity, _activity.getString(R.string.problem_has_been_detected), _activity.getString(R.string.error_NO_SUCH_FILE_OR_DIRECTORY) + "\n\n" + _result, R.drawable.file_copy_24px);
             _activity.stopService(new Intent(_activity, MainService.class));
             isQemuStopedWithError = true;
             return true;
         } else if (_result.contains("another process using")) {
             //Error code: ANOTHER_PROCESS_USING_IMAGE
-            DialogUtils.oneDialog(_activity, _activity.getString(R.string.problem_has_been_detected), _activity.getString(R.string.error_ANOTHER_PROCESS_USING_IMAGE) + "\n\n" + _result, _activity.getString(R.string.ok),true, R.drawable.file_copy_24px, true,null, null);
+            DialogUtils.oneDialog(_activity, _activity.getString(R.string.problem_has_been_detected), _activity.getString(R.string.error_ANOTHER_PROCESS_USING_IMAGE) + "\n\n" + _result, R.drawable.file_copy_24px);
             _activity.stopService(new Intent(_activity, MainService.class));
             isQemuStopedWithError = true;
             return true;
         } else if (_command.contains("qemu-system") && _result.contains("qemu-system") && !_result.contains("warning:")) {
             //Error code: UNKNOW_ERROR
-            DialogUtils.oneDialog(_activity, _activity.getString(R.string.problem_has_been_detected), _activity.getString(R.string.vm_could_not_be_run_content) + "\n\n" + _result, _activity.getString(R.string.ok),true, R.drawable.error_96px, true,null, null);
+            DialogUtils.oneDialog(_activity, _activity.getString(R.string.problem_has_been_detected), _activity.getString(R.string.vm_could_not_be_run_content) + "\n\n" + _result, R.drawable.error_96px);
             _activity.stopService(new Intent(_activity, MainService.class));
             isQemuStopedWithError = true;
             return true;
@@ -672,11 +686,12 @@ public class VMManager {
     }
 
     public static void fixRomsDataJsonResult(Activity _context) {
-        if (restoredVMs == 0) {
-            DialogUtils.oneDialog(_context, _context.getString(R.string.done), _context.getString(R.string.roms_data_json_fixed_unsuccessfully), _context.getString(R.string.ok),true, R.drawable.error_96px, true,null, null);
-        } else {
-            DialogUtils.oneDialog(_context, _context.getString(R.string.done), _context.getString(R.string.roms_data_json_fixed_successfully), _context.getString(R.string.ok),true, R.drawable.check_24px, true,null, null);
-        }
+        DialogUtils.oneDialog(
+                _context,
+                _context.getString(R.string.done),
+                restoredVMs == 0 ? _context.getString(R.string.roms_data_json_fixed_unsuccessfully) : _context.getString(R.string.roms_data_json_fixed_successfully),
+                R.drawable.error_96px
+        );
         HomeActivity.refeshVMListNow();
         movetoRecycleBin();
     }
@@ -743,8 +758,8 @@ public class VMManager {
         return true;
     }
 
-    public static boolean isVMRunning(Activity activity, String vmID) {
-        String result = Terminal.executeShellCommandWithResult("ps -e", activity);
+    public static boolean isVMRunning(Context context, String vmID) {
+        String result = Terminal.executeShellCommandWithResult("ps -e", context);
         if (result.contains(Config.getCacheDir() + "/" + vmID + "/qmpsocket")) {
             Log.d("VMManager.isThisVMRunning", "Yes");
             return true;
