@@ -43,6 +43,11 @@ public class ZipUtils {
             TextView statusTextView,
             ProgressBar progressBar
     ) {
+        if (MainSettingsManager.getCheckBeforeExtract(context)) {
+            updateStatus(statusTextView, progressBar, context.getString(R.string.checking), 0);
+            if (isZipFileCorrupted(context, fileZip)) return false;
+        }
+
         try {
             File outdir = new File(destDir);
             if (!outdir.exists()) outdir.mkdirs();
@@ -210,6 +215,34 @@ public class ZipUtils {
             Log.e(TAG, "extract: ", e);
             lastErrorContent = e.toString();
             return false;
+        }
+    }
+
+    public static boolean isZipFileCorrupted(Context context, String path) {
+        try (ZipFile zip = new ZipFile(path)) {
+
+            Enumeration<? extends ZipEntry> entries = zip.entries();
+            byte[] buffer;
+            if (DeviceUtils.totalMemoryCapacity(context) < 4L * 1024 * 1024 * 1024)
+                buffer = new byte[64 * 1024];
+            else if (DeviceUtils.totalMemoryCapacity(context) < 11L * 1024 * 1024 * 1024)
+                buffer = new byte[128 * 1024];
+            else
+                buffer = new byte[256 * 1024];
+
+            while (entries.hasMoreElements()) {
+                ZipEntry entry = entries.nextElement();
+
+                try (InputStream is = zip.getInputStream(entry)) {
+                    while (is.read(buffer) != -1) {
+
+                    }
+                }
+            }
+
+            return false;
+        } catch (Exception e) {
+            return true;
         }
     }
 

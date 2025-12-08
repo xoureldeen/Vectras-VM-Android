@@ -41,6 +41,7 @@ public class SystemMonitorFragment extends Fragment {
     final String TAG = "SystemMonitorFragment";
     FragmentHomeSystemMonitorBinding binding;
     ExecutorService executor = Executors.newSingleThreadExecutor();
+    ScheduledExecutorService executorUpdate;
     boolean isStopUpdateMonitor = false;
 
     @Override
@@ -83,10 +84,18 @@ public class SystemMonitorFragment extends Fragment {
         stopMonitor();
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (executorUpdate != null && !executorUpdate.isShutdown()) {
+            executorUpdate.shutdownNow();
+        }
+    }
+
     private void initialize() {
         binding.btStopqemu.setOnClickListener(v -> VMManager.requestKillAllQemuProcess(requireActivity(), () -> {
 
-            ScheduledExecutorService executorUpdate = Executors.newSingleThreadScheduledExecutor();
+            executorUpdate = Executors.newSingleThreadScheduledExecutor();
             executorUpdate.schedule(() -> {
                 if (getContext() != null) {
                     requireActivity().runOnUiThread(this::getQemuInfo);
@@ -129,7 +138,7 @@ public class SystemMonitorFragment extends Fragment {
     private final Runnable monitorTask = new Runnable() {
         @Override
         public void run() {
-            if (isStopUpdateMonitor) return;
+            if (isStopUpdateMonitor || !isAdded()) return;
             updateSystemMonitor();
             handler.postDelayed(this, 1000);
         }
@@ -147,6 +156,8 @@ public class SystemMonitorFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     private void updateSystemMonitor() {
+        if (!isAdded()) return;
+
         ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
         ActivityManager activityManager = (ActivityManager) requireActivity().getSystemService(ACTIVITY_SERVICE);
         activityManager.getMemoryInfo(mi);
@@ -187,6 +198,8 @@ public class SystemMonitorFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     private void getQemuInfo() {
+        if (!isAdded()) return;
+
         String currentArch = MainSettingsManager.getArch(requireActivity());
 
         binding.tvQemuarch.setText(getString(R.string.arch) + " " + currentArch + ".");

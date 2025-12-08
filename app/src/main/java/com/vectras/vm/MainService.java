@@ -28,7 +28,6 @@ public class MainService extends Service {
     public static String env = null;
     private String TAG = "MainService";
     public static MainService service;
-    public static Activity activity;
 
     @Override
     public void onCreate() {
@@ -50,11 +49,11 @@ public class MainService extends Service {
 
         if (env != null) {
             if (service != null) {
-                Terminal vterm = new Terminal(activity);
+                Terminal vterm = new Terminal(this);
                 if (Build.VERSION.SDK_INT < 34) {
-                    vterm.executeShellCommand2("dwm", false, activity);
+                    vterm.executeShellCommand2("dwm", false, this);
                 }
-                vterm.executeShellCommand2(env, true, activity);
+                vterm.executeShellCommand2(env, true, this);
             }
         } else
             Log.e(TAG, "env is null");
@@ -70,7 +69,7 @@ public class MainService extends Service {
 
                 //TODO: Not Work
                 //Terminal.killQemuProcess();
-                VMManager.killallqemuprocesses(activity);
+                VMManager.killallqemuprocesses(VectrasApp.getContext());
             }
 
         });
@@ -110,11 +109,11 @@ public class MainService extends Service {
         }
     }
 
-    public static void startCommand(String _env, Activity _activity) {
-        Terminal vterm = new Terminal(_activity);
+    public static void startCommand(String _env, Context _context) {
+        Terminal vterm = new Terminal(_context);
         if (Build.VERSION.SDK_INT < 34) {
-            vterm.executeShellCommand2("dwm", false, _activity);
+            vterm.executeShellCommand2("dwm", false, _context);
         }
-        vterm.executeShellCommand2(_env, true, _activity);
+        vterm.executeShellCommand2(_env, true, _context);
     }
 }

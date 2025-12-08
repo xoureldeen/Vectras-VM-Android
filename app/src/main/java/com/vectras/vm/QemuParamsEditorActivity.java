@@ -22,12 +22,16 @@ public class QemuParamsEditorActivity extends AppCompatActivity {
         binding = ActivityQemuParamsEditorBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         UIUtils.setOnApplyWindowInsetsListener(findViewById(R.id.main));
+        binding.appbar.post(() -> binding.appbar.setExpanded(false, false));
+        setSupportActionBar(binding.toolbar);
+        binding.toolbar.setNavigationOnClickListener(v -> finish());
+
         if (getIntent().hasExtra("content")) {
             result = getIntent().getStringExtra("content");
             binding.edittext1.setText(result);
         }
 
-        binding.materialbutton1.setOnClickListener(v -> {
+        binding.done.setOnClickListener(v -> {
             result = binding.edittext1.getText().toString();
             finish();
         });

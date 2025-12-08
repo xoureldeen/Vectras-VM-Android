@@ -2,8 +2,8 @@ package com.vectras.vm.utils;
 
 import static android.content.Intent.ACTION_VIEW;
 
-import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -26,10 +26,14 @@ import com.vectras.vm.R;
 
 public class DialogUtils {
 
-    public static void oneDialog(Activity _context, String _title, String _message, String _textPositiveButton, boolean _isicon, int _iconid, boolean _cancel, Runnable _onPositive, Runnable _onDismiss) {
-        View buttonsView = LayoutInflater.from(_context).inflate(R.layout.dialog_layout, null);
+    public static void oneDialog(Context context, String title, String message, int iconid) {
+        oneDialog(context, title, message, context.getString(R.string.ok), iconid != -1, iconid, true, null, null);
+    }
 
-        AlertDialog dialog = new AlertDialog.Builder(_context).create();
+    public static void oneDialog(Context context, String _title, String _message, String _textPositiveButton, boolean _isicon, int _iconid, boolean _cancel, Runnable _onPositive, Runnable _onDismiss) {
+        View buttonsView = LayoutInflater.from(context).inflate(R.layout.dialog_layout, null);
+
+        AlertDialog dialog = new AlertDialog.Builder(context).create();
         dialog.setCancelable(_cancel);
         dialog.setView(buttonsView);
 
@@ -84,10 +88,10 @@ public class DialogUtils {
         dialog.show();
     }
 
-    public static void twoDialog(Activity _context, String _title, String _message, String _textPositiveButton, String _textNegativeButton, boolean _isicon, int _iconid, boolean _cancel, Runnable _onPositive, Runnable _onNegative, Runnable _onDismiss) {
-        View buttonsView = LayoutInflater.from(_context).inflate(R.layout.dialog_layout, null);
+    public static void twoDialog(Context context, String _title, String _message, String _textPositiveButton, String _textNegativeButton, boolean _isicon, int _iconid, boolean _cancel, Runnable _onPositive, Runnable _onNegative, Runnable _onDismiss) {
+        View buttonsView = LayoutInflater.from(context).inflate(R.layout.dialog_layout, null);
 
-        AlertDialog dialog = new AlertDialog.Builder(_context).create();
+        AlertDialog dialog = new AlertDialog.Builder(context).create();
         dialog.setCancelable(_cancel);
         dialog.setView(buttonsView);
 
@@ -151,10 +155,10 @@ public class DialogUtils {
         dialog.show();
     }
 
-    public static void threeDialog(Activity _context, String _title, String _message, String _textPositiveButton, String _textNegativeButton, String _textNeutralButton, boolean _isicon, int _iconid, boolean _cancel, Runnable _onPositive, Runnable _onNegative, Runnable _onNeutral, Runnable _onDismiss) {
-        View buttonsView = LayoutInflater.from(_context).inflate(R.layout.dialog_layout, null);
+    public static void threeDialog(Context context, String _title, String _message, String _textPositiveButton, String _textNegativeButton, String _textNeutralButton, boolean _isicon, int _iconid, boolean _cancel, Runnable _onPositive, Runnable _onNegative, Runnable _onNeutral, Runnable _onDismiss) {
+        View buttonsView = LayoutInflater.from(context).inflate(R.layout.dialog_layout, null);
 
-        AlertDialog dialog = new AlertDialog.Builder(_context).create();
+        AlertDialog dialog = new AlertDialog.Builder(context).create();
         dialog.setCancelable(_cancel);
         dialog.setView(buttonsView);
 
@@ -228,18 +232,18 @@ public class DialogUtils {
         dialog.show();
     }
 
-    public static void joinTelegram(Activity _activity) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(_activity);
+    public static void joinTelegram(Context _context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(_context);
         if (!prefs.getBoolean("tgDialog", false)) {
-            threeDialog(_activity, _activity.getResources().getString(R.string.join_us_on_telegram),
-                    _activity.getResources().getString(R.string.join_us_on_telegram_where_we_publish_all_the_news_and_updates_and_receive_your_opinions_and_bugs),
-                    _activity.getResources().getString(R.string.join), _activity.getResources().getString(R.string.cancel), _activity.getResources().getString(R.string.dont_show_again),
+            threeDialog(_context, _context.getResources().getString(R.string.join_us_on_telegram),
+                    _context.getResources().getString(R.string.join_us_on_telegram_where_we_publish_all_the_news_and_updates_and_receive_your_opinions_and_bugs),
+                    _context.getResources().getString(R.string.join), _context.getResources().getString(R.string.cancel), _context.getResources().getString(R.string.dont_show_again),
                     true, R.drawable.send_24px, true,
                     () -> {
                         String tg = "https://t.me/vectras_os";
                         Intent f = new Intent(ACTION_VIEW);
                         f.setData(Uri.parse(tg));
-                        _activity.startActivity(f);
+                        _context.startActivity(f);
                     }, null,
                     () -> {
                         SharedPreferences.Editor edit = prefs.edit();
@@ -249,26 +253,26 @@ public class DialogUtils {
         }
     }
 
-    public static void needInstallTermuxX11(Activity _activity) {
-        twoDialog(_activity, _activity.getResources().getString(R.string.action_needed),
-                _activity.getResources().getString(R.string.need_install_termux_x11_content),
-                _activity.getResources().getString(R.string.install), _activity.getResources().getString(R.string.cancel),
+    public static void needInstallTermuxX11(Context _context) {
+        twoDialog(_context, _context.getResources().getString(R.string.action_needed),
+                _context.getResources().getString(R.string.need_install_termux_x11_content),
+                _context.getResources().getString(R.string.install), _context.getResources().getString(R.string.cancel),
                 true, R.drawable.warning_24px, true,
                 () -> {
                     String tg = "https://github.com/termux/termux-x11/releases";
                     Intent f = new Intent(ACTION_VIEW);
                     f.setData(Uri.parse(tg));
-                    _activity.startActivity(f);
+                    _context.startActivity(f);
                 }, null, null);
     }
 
-    public static void fileDeletionResult(Activity activity, boolean isCompleted) {
+    public static void fileDeletionResult(Context _context, boolean isCompleted) {
         if (isCompleted) {
             DialogUtils.oneDialog(
-                    activity,
-                    activity.getString(R.string.done),
-                    activity.getString(R.string.file_deleted),
-                    activity.getString(R.string.ok),
+                    _context,
+                    _context.getString(R.string.done),
+                    _context.getString(R.string.file_deleted),
+                    _context.getString(R.string.ok),
                     true,
                     R.drawable.check_24px,
                     true,
@@ -277,10 +281,10 @@ public class DialogUtils {
             );
         } else {
             DialogUtils.oneDialog(
-                    activity,
-                    activity.getString(R.string.oops),
-                    activity.getString(R.string.delete_file_failed_content),
-                    activity.getString(R.string.ok),
+                    _context,
+                    _context.getString(R.string.oops),
+                    _context.getString(R.string.delete_file_failed_content),
+                    _context.getString(R.string.ok),
                     true,
                     R.drawable.error_96px,
                     true,

@@ -30,6 +30,15 @@
             android:targetClass="com.vectras.vm.settings.VNCSettingsActivity" />
     </Preference>
     <Preference
+        android:key="x11display"
+        android:title="@string/X11_display"
+        android:summary="@string/settings_for_X11_display"
+        app:iconSpaceReserved="false">
+        <intent
+            android:targetPackage="com.vectras.vm"
+            android:targetClass="com.vectras.vm.settings.X11DisplaySettingsActivity" />
+    </Preference>
+    <Preference
         android:key="x11"
         android:fragment="com.vectras.vm.x11.LoriePreferences$LoriePreferenceFragment"
         android:title="@string/x11"

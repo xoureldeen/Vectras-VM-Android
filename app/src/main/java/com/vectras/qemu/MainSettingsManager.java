@@ -490,117 +490,117 @@ public class MainSettingsManager extends AppCompatActivity
 
     }
 
-    public static boolean getVncExternal(Activity activity) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static boolean getVncExternal(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean("vncExternal", false);
     }
 
-    public static void setVncExternal(Activity activity, boolean vncExternal) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static void setVncExternal(Context context, boolean vncExternal) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putBoolean("vncExternal", vncExternal);
         edit.apply();
     }
 
-    public static String getVncExternalDisplay(Activity activity) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static String getVncExternalDisplay(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getString("vncExternalDisplay", "1");
     }
 
-    public static void setVncExternalDisplay(Activity activity, String vncExternalDisplay) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static void setVncExternalDisplay(Context context, String vncExternalDisplay) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putString("vncExternalDisplay", vncExternalDisplay);
         edit.apply();
     }
 
-    public static String getVncExternalPassword(Activity activity) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static String getVncExternalPassword(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getString("vncExternalPassword", "");
     }
 
-    public static void setVncExternalPassword(Activity activity, String vncExternalPassword) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static void setVncExternalPassword(Context context, String vncExternalPassword) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putString("vncExternalPassword", vncExternalPassword);
         edit.apply();
     }
 
-    public static int getOrientationSetting(Activity activity) {
+    public static int getOrientationSetting(Context context) {
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         // UIUtils.log("Getting First time: " + firstTime);
         return prefs.getInt("orientation", 0);
     }
 
-    public static void setOrientationSetting(Activity activity, int orientation) {
+    public static void setOrientationSetting(Context context, int orientation) {
 
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putInt("orientation", orientation);
         edit.apply();
     }
 
-    static boolean getPrio(Activity activity) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    static boolean getPrio(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean("HighPrio", false);
     }
 
-    public static void setPrio(Activity activity, boolean flag) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static void setPrio(Context context, boolean flag) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putBoolean("HighPrio", flag);
         edit.apply();
         // UIUtils.log("Setting First time: ");
     }
 
-    public static boolean getAlwaysShowMenuToolbar(Activity activity) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static boolean getAlwaysShowMenuToolbar(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean("AlwaysShowMenuToolbar", false);
     }
 
-    public static void setAlwaysShowMenuToolbar(Activity activity, boolean flag) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static void setAlwaysShowMenuToolbar(Context context, boolean flag) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putBoolean("AlwaysShowMenuToolbar", flag);
         edit.apply();
         // UIUtils.log("Setting First time: ");
     }
 
-    public static boolean getFullscreen(Activity activity) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static boolean getFullscreen(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean("ShowFullscreen", true);
     }
 
-    public static void setFullscreen(Activity activity, boolean flag) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static void setFullscreen(Context context, boolean flag) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putBoolean("ShowFullscreen", flag);
         edit.apply();
         // UIUtils.log("Setting First time: ");
     }
 
-    public static boolean getDesktopMode(Activity activity) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static boolean getDesktopMode(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean("DesktopMode", false);
     }
 
-    public static void setDesktopMode(Activity activity, boolean flag) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static void setDesktopMode(Context context, boolean flag) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putBoolean("DesktopMode", flag);
         edit.apply();
         // UIUtils.log("Setting First time: ");
     }
 
-    public static boolean getEnableLegacyFileManager(Activity activity) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static boolean getEnableLegacyFileManager(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean("EnableLegacyFileManager", false);
     }
 
 
-    public static void setEnableLegacyFileManager(Activity activity, boolean flag) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static void setEnableLegacyFileManager(Context context, boolean flag) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putBoolean("EnableLegacyFileManager", flag);
         edit.apply();
@@ -696,175 +696,175 @@ public class MainSettingsManager extends AppCompatActivity
         return prefs.getBoolean("modeNight", false);
     }
 
-    public static void setCusRam(Activity activity, Boolean cusRam) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static void setCusRam(Context context, Boolean cusRam) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putBoolean("customMemory", cusRam);
         edit.apply();
     }
 
-    public static boolean getCusRam(Activity activity) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static boolean getCusRam(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean("customMemory", false);
     }
 
-    public static boolean autoCreateDisk(Activity activity) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static boolean autoCreateDisk(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean("autoCreateDisk", false);
     }
 
-    public static boolean useDefaultBios(Activity activity) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static boolean useDefaultBios(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean("useDefaultBios", true);
     }
 
-    public static boolean useMemoryOvercommit(Activity activity) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static boolean useMemoryOvercommit(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean("useMemoryOvercommit", true);
     }
 
-    public static boolean useLocalTime(Activity activity) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static boolean useLocalTime(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean("useLocalTime", true);
     }
 
-    public static boolean copyFile(Activity activity) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static boolean copyFile(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean("copyFile", true);
     }
 
-    public static void setIfType(Activity activity, String type) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static void setIfType(Context context, String type) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putString("ifType", type);
         edit.apply();
     }
 
-    public static String getIfType(Activity activity) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static String getIfType(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getString("ifType", "");
     }
 
-    public static void setBoot(Activity activity, String boot) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static void setBoot(Context context, String boot) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putString("boot", boot);
         edit.apply();
     }
 
-    public static String getBoot(Activity activity) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static String getBoot(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getString("boot", "c");
     }
 
-    public static void setVmUi(Activity activity, String vmUi) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static void setVmUi(Context context, String vmUi) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putString("vmUi", vmUi);
         edit.apply();
     }
 
-    public static String getVmUi(Activity activity) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static String getVmUi(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getString("vmUi", "X11");
     }
 
-    public static void setResolution(Activity activity, String RESOLUTION) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static void setResolution(Context context, String RESOLUTION) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putString("RESOLUTION", RESOLUTION);
         edit.apply();
     }
 
-    public static String getResolution(Activity activity) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static String getResolution(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getString("RESOLUTION", "800x600x32");
     }
 
-    public static void setSoundCard(Activity activity, String soundCard) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static void setSoundCard(Context context, String soundCard) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putString("soundCard", soundCard);
         edit.apply();
     }
 
-    public static String getSoundCard(Activity activity) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static String getSoundCard(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getString("soundCard", "None");
     }
 
-    public static void setUsbTablet(Activity activity, boolean UsbTablet) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static void setUsbTablet(Context context, boolean UsbTablet) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putBoolean("UsbTablet", UsbTablet);
         edit.apply();
     }
 
-    public static boolean getUsbTablet(Activity activity) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static boolean getUsbTablet(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean("UsbTablet", false);
     }
 
-    public static void setSharedFolder(Activity activity, boolean enable) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static void setSharedFolder(Context context, boolean enable) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putBoolean("sharedFolder", enable);
         edit.apply();
     }
 
-    public static boolean getSharedFolder(Activity activity) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static boolean getSharedFolder(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean("sharedFolder", false);
     }
 
-    public static void setArch(Activity activity, String vmArch) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static void setArch(Context context, String vmArch) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putString("vmArch", vmArch);
         edit.apply();
     }
 
-    public static String getArch(Activity activity) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static String getArch(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getString("vmArch", "X86_64");
     }
 
-    public static void setLang(Activity activity, String language) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static void setLang(Context context, String language) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putString("language", language);
         edit.apply();
     }
 
-    public static String getLang(Activity activity) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static String getLang(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getString("language", "en");
     }
 
-    public static boolean isFirstLaunch(Activity activity) {
+    public static boolean isFirstLaunch(Context context) {
         PackageInfo pInfo = null;
 
         try {
-            pInfo = activity.getPackageManager().getPackageInfo(Objects.requireNonNull(activity.getClass().getPackage()).getName(),
+            pInfo = context.getPackageManager().getPackageInfo(Objects.requireNonNull(context.getClass().getPackage()).getName(),
                     PackageManager.GET_META_DATA);
         } catch (PackageManager.NameNotFoundException e) {
             Log.e(TAG, "isFirstLaunch", e);
         }
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         assert pInfo != null;
         return prefs.getBoolean("firstTime" + pInfo.versionName, true);
     }
 
-    public static void setFirstLaunch(Activity activity) {
+    public static void setFirstLaunch(Context context) {
         PackageInfo pInfo = null;
 
         try {
-            pInfo = activity.getPackageManager().getPackageInfo(Objects.requireNonNull(activity.getClass().getPackage()).getName(),
+            pInfo = context.getPackageManager().getPackageInfo(Objects.requireNonNull(context.getClass().getPackage()).getName(),
                     PackageManager.GET_META_DATA);
         } catch (PackageManager.NameNotFoundException e) {
             Log.e(TAG, "setFirstLaunch", e);
         }
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         assert pInfo != null;
         edit.putBoolean("firstTime" + pInfo.versionName, false);
@@ -872,28 +872,28 @@ public class MainSettingsManager extends AppCompatActivity
     }
 
 
-    public static boolean getPromptUpdateVersion(Activity activity) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static boolean getPromptUpdateVersion(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean("updateVersionPrompt", Config.defaultCheckNewVersion);
     }
 
 
-    public static void setPromptUpdateVersion(Activity activity, boolean flag) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static void setPromptUpdateVersion(Context context, boolean flag) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putBoolean("updateVersionPrompt", flag);
         edit.apply();
         // UIUtils.log("Setting First time: ");
     }
 
-    public static boolean getcheckforupdatesfromthebetachannel(Activity activity) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static boolean getcheckforupdatesfromthebetachannel(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean("checkforupdatesfromthebetachannel", false);
     }
 
 
-    public static void setcheckforupdatesfromthebetachannel(Activity activity, boolean flag) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+    public static void setcheckforupdatesfromthebetachannel(Context context, boolean flag) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
         edit.putBoolean("checkforupdatesfromthebetachannel", flag);
         edit.apply();
@@ -1078,5 +1078,29 @@ public class MainSettingsManager extends AppCompatActivity
     public static Boolean getCyclicRedundancyCheck(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean("cyclicRedundancyCheck", true);
+    }
+
+    public static void setCheckBeforeExtract(Context context, Boolean _boolean) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putBoolean("checkBeforeExtract", _boolean);
+        edit.apply();
+    }
+
+    public static Boolean getCheckBeforeExtract(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean("checkBeforeExtract", true);
+    }
+
+    public static void setRunQemuWithXterm(Context context, Boolean _boolean) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putBoolean("runQemuWithXterm", _boolean);
+        edit.apply();
+    }
+
+    public static Boolean getRunQemuWithXterm(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean("runQemuWithXterm", true);
     }
 }
