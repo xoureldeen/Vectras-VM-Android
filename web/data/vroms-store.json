@@ -1027,6 +1027,24 @@
     "id": "99683"
   },
   {
+    "rom_name": "Windows 11 26H1 (Micro 11)",
+    "rom_icon": "https://www.getmyos.com/app_public/files/t/1/2021/06/windows_11_logo_by_getmyos.png",
+    "rom_url": "https://anbui.ovh/get/vec/community/win/nt10/mr1126h1.html",
+    "rom_path": "Windows 11 26H1 (Micro 11).cvbi",
+    "rom_avail": true,
+    "rom_size": "Optimum",
+    "rom_arch": "X86_64",
+    "rom_kernel": "windows",
+    "rom_extra": "",
+    "final_rom_file_name": "",
+    "desc": "From @tokaevUser on Telegram and fixed by Nguyen Bao An Bui.\n\nWindows 11 is the latest major release of Microsoft's Windows NT operating system, released on October 5, 2021 as the successor to Windows 10 (2015). It is provided free for any Windows 10 devices that meet the new Windows 11 system requirements. A server version, Windows Server 2025, was released in 2024. Windows 11 is the first major version of Windows NT without a companion mobile version following the discontinuations of Windows Phone with Windows 10 Mobile.",
+    "file_size": "9 GB",
+    "creator": "tokaevUser",
+    "verified": true,
+    "vecid": "windows1126h1micro11cvbi",
+    "id": ""
+  },
+  {
     "rom_name": "Windows 11 build 22000.65",
     "rom_icon": "https://www.getmyos.com/app_public/files/t/1/2021/06/windows_11_logo_by_getmyos.png",
     "rom_url": "https://youtu.be/CpLtJJcPN-w",
@@ -1222,6 +1240,24 @@
     "creator": "Nguyen Bao An Bui",
     "verified": true,
     "vecid": "windows7build7600cvbi",
+    "id": ""
+  },
+  {
+    "rom_name": "Windows 7 Super Nano Lite (x64)",
+    "rom_icon": "https://upload.wikimedia.org/wikipedia/de/thumb/c/c2/Microsoft_Windows_7_logo.svg/2296px-Microsoft_Windows_7_logo.svg.png",
+    "rom_url": "https://anbui.ovh/get/vec/community/win/nt6/7snlx64.html",
+    "rom_path": "Windows 7 Super Nano Lite (x64).cvbi",
+    "rom_avail": true,
+    "rom_size": "Lighter than Windows 7",
+    "rom_arch": "X86_64",
+    "rom_kernel": "windows",
+    "rom_extra": "",
+    "final_rom_file_name": "",
+    "desc": "From @olikvos on Telegram and fixed by Nguyen Bao An Bui.\n\nindows 7 is a major release of the Windows NT operating system developed by Microsoft. It was released to manufacturing on July 22, 2009, and became generally available on October 22, 2009. It is the successor to Windows Vista, released nearly three years earlier. Windows 7's server counterpart, Windows Server 2008 R2, was released at the same time. It sold over 630 million copies before it was succeeded by Windows 8 in October 2012.",
+    "file_size": "1.5 GB",
+    "creator": "Olivka",
+    "verified": true,
+    "vecid": "windows7supernanolitex64cvbi",
     "id": ""
   },
   {
