@@ -1135,6 +1135,24 @@
     "id": ""
   },
   {
+    "rom_name": "Windows 2000 Super Nano Lite",
+    "rom_icon": "https://static.wikia.nocookie.net/freakylogo/images/c/c6/Windows_2000-0.png/revision/latest?cb=20181116231840",
+    "rom_url": "https://anbui.ovh/get/vec/community/win/nt5/2000snlru.html",
+    "rom_path": "Windows 2000 Super Nano Lite (RU).cvbi",
+    "rom_avail": true,
+    "rom_size": "Russian",
+    "rom_arch": "X86_64",
+    "rom_kernel": "windows",
+    "rom_extra": "",
+    "final_rom_file_name": "",
+    "desc": "From @olikvos on Telegram.\n\nWindows 2000 is a major release of the Windows NT operating system developed by Microsoft, targeting the server and business markets. It is the direct successor to Windows NT 4.0, and was released to manufacturing on December 15, 1999, and then to retail on February 17, 2000 for all versions, with Windows 2000 Datacenter Server being released to retail on September 26, 2000.",
+    "file_size": "200 MB",
+    "creator": "Olikvos",
+    "verified": true,
+    "vecid": "windows2000supernanoliterucvbi",
+    "id": ""
+  },
+  {
     "rom_name": "Windows 3.0",
     "rom_icon": "https://upload.wikimedia.org/wikipedia/commons/9/9b/Windows_3.0_29_12_2020_11_03_55_GER.png",
     "rom_url": "https://firebasestorage.googleapis.com/v0/b/anbui-71c6e.appspot.com/o/Windows%203.0.vdi?alt=media&token=7e266c1b-63b4-40bf-b1a3-f93f1c3f6da5",
@@ -1439,6 +1457,24 @@
     "verified": true,
     "vecid": "windowslonghornbuild4001cvbi",
     "id": "99691"
+  },
+  {
+    "rom_name": "Windows ME",
+    "rom_icon": "https://us1.discourse-cdn.com/spiceworks/original/4X/7/6/9/769321a6d76d43bedb35eaa01ebe096e4b92f751.jpeg",
+    "rom_url": "https://anbui.ovh/get/vec/community/win/msdos/me.html",
+    "rom_path": "Windows Millennium Edition.cvbi",
+    "rom_avail": true,
+    "rom_size": "codenamed Millennium",
+    "rom_arch": "X86_64",
+    "rom_kernel": "windows",
+    "rom_extra": "",
+    "final_rom_file_name": "",
+    "desc": "From @tokaevUser on Telegram and fixed by Nguyen Bao An Bui.\n\nWindows Me is an operating system developed by Microsoft as part of its Windows 9x line of Microsoft Windows, a family of graphical user shells and operating systems. It was the successor to Windows 98, and was released to manufacturing on June 19, 2000, and then to retail on September 14, 2000.",
+    "file_size": "600 MB",
+    "creator": "tokaevUser",
+    "verified": true,
+    "vecid": "windowsmillenniumeditioncvbi",
+    "id": ""
   },
   {
     "rom_name": "Windows Server 2003",
