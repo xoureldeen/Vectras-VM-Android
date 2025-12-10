@@ -343,6 +343,24 @@
     "id": ""
   },
   {
+    "rom_name": "Hannah Montana Linux",
+    "rom_icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgz8_uj5YO9CFIN24rZQ6hI0M1Mhi3mPU7zg&s",
+    "rom_url": "https://anbui.ovh/get/vec/community/linux/hannahmontana.html",
+    "rom_path": "Hannah Montana.cvbi",
+    "rom_avail": true,
+    "rom_size": "With KDE",
+    "rom_arch": "X86_64",
+    "rom_kernel": "linux",
+    "rom_extra": "",
+    "final_rom_file_name": "",
+    "desc": "From @tokaevUser on Telegram.\n\nHannah Montana Linux – a live Linux distribution based on Kubuntu with a Hannah Montana theme. It has been created to “attract young users to Linux”.",
+    "file_size": "3 GB",
+    "creator": "tokaevUser",
+    "verified": true,
+    "vecid": "hannahmontanacvbi",
+    "id": ""
+  },
+  {
     "rom_name": "KolibriOS",
     "rom_icon": "https://avatars.githubusercontent.com/u/19728236?s=280&v=4",
     "rom_url": "https://drive.google.com/file/d/1OOghfD_GmET2y8YlbfT0cITJFqcqM7yx/view",
@@ -394,6 +412,24 @@
     "creator": "SilentGamer191",
     "verified": true,
     "vecid": "linuxmintcvbi",
+    "id": ""
+  },
+  {
+    "rom_name": "Linux Mint 20.04",
+    "rom_icon": "https://shirishkadam.com/wp-content/uploads/2014/10/logo_linux_mint.png",
+    "rom_url": "https://anbui.ovh/get/vec/community/linux/linuxmint2004.html",
+    "rom_path": "Linux Mint 20.04.cvbi",
+    "rom_avail": true,
+    "rom_size": "Focal Fossa",
+    "rom_arch": "X86_64",
+    "rom_kernel": "linux",
+    "rom_extra": "",
+    "final_rom_file_name": "",
+    "desc": "From @tokaevUser on Telegram.\nPassword: 1234\n\nLinux Mint is a community-developed Linux distribution based primarily on Ubuntu, with an alternative version based on Debian known as Linux Mint Debian Edition (LMDE). It is available for x86-64 systems, while LMDE supported the IA-32 architecture until 2025. First released in 2006, Linux Mint is often noted for its ease of use, out-of-the-box functionality, and appeal to desktop users. It comes bundled with a selection of free and open-source software. The default desktop environment is Cinnamon, developed by the Linux Mint team, with MATE and Xfce available as alternatives.",
+    "file_size": "9.2 GB",
+    "creator": "tokaevUser",
+    "verified": true,
+    "vecid": "linuxmint2004cvbi",
     "id": ""
   },
   {
