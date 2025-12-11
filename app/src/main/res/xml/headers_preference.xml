@@ -38,12 +38,12 @@
             android:targetPackage="com.vectras.vm"
             android:targetClass="com.vectras.vm.settings.X11DisplaySettingsActivity" />
     </Preference>
-    <Preference
-        android:key="x11"
-        android:fragment="com.vectras.vm.x11.LoriePreferences$LoriePreferenceFragment"
-        android:title="@string/x11"
-        android:summary="@string/x11_settings_description"
-        app:iconSpaceReserved="false" />
+<!--    <Preference-->
+<!--        android:key="x11"-->
+<!--        android:fragment="com.vectras.vm.x11.LoriePreferences$LoriePreferenceFragment"-->
+<!--        android:title="@string/x11"-->
+<!--        android:summary="@string/x11_settings_description"-->
+<!--        app:iconSpaceReserved="false" />-->
     <Preference
         android:key="importandexport"
         android:title="@string/import_and_export"

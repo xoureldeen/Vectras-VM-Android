@@ -13,8 +13,8 @@ android {
         applicationId "com.vectras.vm"
         minSdk minApi
         targetSdk targetApi
-        versionCode 46
-        versionName "3.4.2"
+        versionCode 47
+        versionName "3.4.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -110,7 +110,7 @@ dependencies {
     implementation 'androidx.preference:preference-ktx:1.2.1'
     implementation "androidx.documentfile:documentfile:1.1.0"
     implementation 'androidx.core:core-ktx:1.17.0'
-    implementation 'androidx.activity:activity:1.12.1'
+    implementation 'androidx.activity:activity-ktx:1.12.1'
     compileOnly project(':shell-loader:stub')
     implementation project(":terminal-view")
     implementation project(":library")

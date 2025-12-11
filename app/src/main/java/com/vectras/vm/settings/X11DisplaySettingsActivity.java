@@ -1,5 +1,8 @@
 package com.vectras.vm.settings;
 
+import static android.os.Build.VERSION.SDK_INT;
+
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -39,8 +42,21 @@ public class X11DisplaySettingsActivity extends AppCompatActivity {
         });
         binding.lnEnabled.setOnClickListener(v -> binding.swEnabled.toggle());
 
+        binding.lnPreferences.setOnClickListener(v -> {
+            Intent intent = new Intent();
+            if (SDK_INT >= 36) {
+                intent.setClassName("com.termux.x11", "com.termux.x11.MainActivity");
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+            } else {
+                intent.setClass(this, MainSettingsManager.class);
+                intent.putExtra("goto", "termuxx11");
+            }
+            startActivity(intent);
+        });
+
         binding.swRunQemuWithXterm.setOnCheckedChangeListener((buttonView, isChecked) -> MainSettingsManager.setRunQemuWithXterm(this, isChecked));
-        binding.lnRunQemuWithXtermh.setOnClickListener(v -> binding.swRunQemuWithXterm.toggle());
+        binding.lnRunQemuWithXterm.setOnClickListener(v -> binding.swRunQemuWithXterm.toggle());
 
         isInitialized = true;
 
@@ -49,6 +65,7 @@ public class X11DisplaySettingsActivity extends AppCompatActivity {
 
     private void uiController(boolean isEnabled) {
         binding.lnAllOptions.setAlpha(isEnabled ? 1f : 0.5f);
-        binding.lnRunQemuWithXtermh.setEnabled(isEnabled);
+        binding.lnPreferences.setEnabled(isEnabled);
+        binding.lnRunQemuWithXterm.setEnabled(isEnabled);
     }
 }

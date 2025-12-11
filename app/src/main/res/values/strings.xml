@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">3.4.2</string>
+    <string name="app_version" translatable="false">3.4.3</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <!-- logger -->
     <string name="startvm">VM STARTED!</string>
@@ -470,6 +470,8 @@
     <string name="quick_edit">Quick edit</string>
     <string name="write_something">Write something…</string>
     <string name="switch_to_vnc">Switch to VNC</string>
+    <string name="preferences">Preferences</string>
+    <string name="go_to_termux_x11_settings">Go to Termux:X11 settings.</string>
 
 
     <!--======================TERMUX STRINGS====================-->
