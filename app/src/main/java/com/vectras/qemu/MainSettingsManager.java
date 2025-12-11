@@ -1,6 +1,5 @@
 package com.vectras.qemu;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -47,7 +46,6 @@ public class MainSettingsManager extends AppCompatActivity
 
     private static Handler mHandler;
     public static SharedPreferences sp;
-    public static int goToXML = -1;
     public static boolean isAllowFirstChangeSubtitle = true;
 
     @Override
@@ -60,27 +58,33 @@ public class MainSettingsManager extends AppCompatActivity
 
         sp = PreferenceManager.getDefaultSharedPreferences(activity);
 
-        PreferenceFragmentCompat preference = new MainPreferencesFragment();
+        if (getIntent().hasExtra("goto")) {
+            if (Objects.equals(getIntent().getStringExtra("goto"), "termuxx11")) {
+                Fragment fragment = new com.vectras.vm.x11.LoriePreferences.LoriePreferenceFragment();
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.settingz, fragment)
+                        .commit();
+            } else if (Objects.equals(getIntent().getStringExtra("goto"), "qemu")) {
+                PreferenceFragmentCompat preference = new QemuPreferencesFragment();
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.settingz, preference)
+                        .commit();
+            }
+        } else {
+            PreferenceFragmentCompat preference = new MainPreferencesFragment();
 
-        // add preference settings
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.settingz, preference)
-                .commit();
+            // add preference settings
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.settingz, preference)
+                    .commit();
+        }
+
 
         // toolbar
         Toolbar mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-
-        CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.collapsingToolbarLayout);
-
-        if (getIntent().hasExtra("goto")) {
-            isAllowFirstChangeSubtitle = false;
-            if (Objects.equals(getIntent().getStringExtra("goto"), "qemu")) {
-                goToXML = R.xml.qemu;
-                collapsingToolbarLayout.setSubtitle(getString(R.string.qemu));
-            }
-        }
     }
 
     @Override
@@ -147,8 +151,8 @@ public class MainSettingsManager extends AppCompatActivity
         @Override
         public void onCreatePreferences(Bundle bundle, String root_key) {
             // Load the Preferences from the XML file
-            setPreferencesFromResource(MainSettingsManager.goToXML == -1 ? R.xml.headers_preference : MainSettingsManager.goToXML, root_key);
-            MainSettingsManager.goToXML = -1;
+            if (!requireActivity().getIntent().hasExtra("goto"))
+                setPreferencesFromResource(R.xml.headers_preference, root_key);
         }
 
         @Override
@@ -1089,7 +1093,7 @@ public class MainSettingsManager extends AppCompatActivity
 
     public static Boolean getCheckBeforeExtract(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getBoolean("checkBeforeExtract", true);
+        return prefs.getBoolean("checkBeforeExtract", false);
     }
 
     public static void setRunQemuWithXterm(Context context, Boolean _boolean) {

@@ -50,7 +50,7 @@ public class RomInfo extends AppCompatActivity {
     private String currentViews = "0";
     private boolean isAnBuiID = false;
     private String contentID = "";
-    private String token = "";
+    private String currentToken = "";
     private String urlToGetInfo = "";
     private RequestNetwork net;
     private RequestNetwork.RequestListener _net_request_listener;
@@ -326,7 +326,7 @@ public class RomInfo extends AppCompatActivity {
                                 }.getType()
                         );
 
-                        if (map.containsKey("token")) token = Objects.requireNonNull(map.get("token")).toString();
+                        if (map.containsKey("token")) currentToken = Objects.requireNonNull(map.get("token")).toString();
 
                         binding.btnLike.setVisibility(View.VISIBLE);
                         String likeContent = getString(R.string.like);
@@ -376,8 +376,6 @@ public class RomInfo extends AppCompatActivity {
             urlToGetInfo = "https://go.anbui.ovh/egg/contentinfo?id=" + contentID + (isAnBuiID ? "" : "&app=vectrasvm");
             net.startRequestNetwork(RequestNetworkController.GET,urlToGetInfo,"contentinfo", _net_request_listener);
             Log.i(TAG, "urlToGetInfo: " + urlToGetInfo);
-
-            sendViewUpdate(contentID);
         }
     }
 
@@ -403,7 +401,7 @@ public class RomInfo extends AppCompatActivity {
                 + "\"id\":\"" + id + "\","
                 + "\"addcount\":" + addlikecount + ","
                 + (isAnBuiID ? "" : "\"app\":\"vectrasvm\",")
-                + "\"token\":" + "\"" + token + "\""
+                + "\"token\":" + "\"" + currentToken + "\""
                 + "}";
 
         RequestBody body = RequestBody.create(
@@ -475,7 +473,7 @@ public class RomInfo extends AppCompatActivity {
         String json = "{"
                 + "\"id\":\"" + id + "\","
                 + (isAnBuiID ? "" : "\"app\":\"vectrasvm\",")
-                + "\"token\":" + "\"" + token + "\""
+                + "\"token\":" + "\"" + currentToken + "\""
                 + "}";
 
         RequestBody body = RequestBody.create(
