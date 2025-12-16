@@ -102,22 +102,18 @@ public class DisplaySystem {
                 } else {
                     if (SDK_INT >= 34) {
                         Log.d(TAG, "launchX11: Opened: com.termux.x11.MainActivity.");
-                        //                        activity.startActivity(new Intent(activity, XServerActivity.class));
                         Intent intent = new Intent();
                         intent.setClassName("com.termux.x11", "com.termux.x11.MainActivity");
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                         context.startActivity(intent);
-                        try {
-                            TermuxX11.main(new String[]{":0"});
-                        } catch (Exception e) {
-                            Log.e(TAG, "TermuxX11.main: ", e);
-                        }
+
+                        startTermuxX11(context);
                     } else {
                         context.startActivity(new Intent(context, X11Activity.class));
                     }
                     if (isKill) {
-                        new Terminal(context).executeShellCommand2("killall fluxbox && " + (SDK_INT >= 34 ? "export DISPLAY=:0 && sleep 5 && " : "") + "fluxbox > /dev/null", false, context);
+                        new Terminal(context).executeShellCommand2((SDK_INT >= 34 ? "export DISPLAY=:0 && " : "killall fluxbox && ") + "fluxbox > /dev/null", false, context);
                     }
                 }
             });

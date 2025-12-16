@@ -27,16 +27,16 @@ public class VmsDiffUtil extends DiffUtil.Callback {
 
     @Override
     public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-        // So sánh bằng khóa duy nhất (vd: vmID)
+        // Compare using a unique key (e.g., vmID)
         return oldList.get(oldItemPosition).vmID.equals(newList.get(newItemPosition).vmID);
     }
 
     @Override
     public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-        // So sánh nội dung, nếu khác thì update item đó
+        // Compare the content, if it's different, update that item.
         DataMainRoms oldItem = oldList.get(oldItemPosition);
         DataMainRoms newItem = newList.get(newItemPosition);
-        return oldItem.equals(newItem); // Nếu bạn override equals trong DataMainRoms thì dùng cách này
+        return oldItem.equals(newItem); // If you override equals in DataMainRoms, use this method.
     }
 }
 

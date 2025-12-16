@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/update"
-        android:icon="@drawable/syncglass96"
+        android:icon="@drawable/round_file_download_24"
         android:title="@string/update"
         android:contentDescription="@string/update"
         app:showAsAction="always"/>

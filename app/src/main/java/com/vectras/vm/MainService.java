@@ -111,9 +111,6 @@ public class MainService extends Service {
 
     public static void startCommand(String _env, Context _context) {
         Terminal vterm = new Terminal(_context);
-        if (Build.VERSION.SDK_INT < 34) {
-            vterm.executeShellCommand2("dwm", false, _context);
-        }
         vterm.executeShellCommand2(_env, true, _context);
     }
 }

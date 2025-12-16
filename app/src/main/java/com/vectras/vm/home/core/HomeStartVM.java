@@ -32,6 +32,7 @@ import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.NetworkUtils;
 import com.vectras.vm.utils.PackageUtils;
 import com.vectras.vm.utils.ServiceUtils;
+import com.vectras.vterm.Terminal;
 
 import java.io.File;
 
@@ -197,9 +198,12 @@ public class HomeStartVM {
         String finalCommand = VMManager.addAudioDevSdl(String.format(runCommandFormat, env));
 
         if (MainSettingsManager.getVmUi(context).equals("X11") && SDK_INT >= 34) {
-            finalCommand = "export DISPLAY=:0 && sleep 5\nfluxbox > /dev/null &\n" + finalCommand;
+            finalCommand = "export DISPLAY=:0 &&" + finalCommand;
         }
         Log.i(TAG, finalCommand);
+
+        Terminal vterm = new Terminal(context);
+        vterm.executeShellCommand2("export DISPLAY=:0 && fluxbox > /dev/null", false, context);
 
         if (ServiceUtils.isServiceRunning(context, MainService.class)) {
             MainService.startCommand(finalCommand, context);

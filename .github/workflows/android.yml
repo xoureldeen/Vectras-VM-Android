@@ -68,7 +68,7 @@ jobs:
                   "-F chat_id=${{ secrets.TELEGRAM_CHAT_ID_VEC }}"; do
 
                   if curl -s -o /dev/null -F document=@"$file" $target \
-                          -F $'caption=Done! Note that this is a version that is automatically built when there are changes in the GitHub repository, not the official version. Please only install it if you really want to see what is new.\nRun ID: '${GITHUB_RUN_ID} \
+                          -F $'caption=Done! Note that this is a version that is automatically built when there are changes in the GitHub repository, not the official version. Please only install it if you really want to see what is new.\nExplore beta releases here: https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases\nRun ID: '${GITHUB_RUN_ID} \
                           https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument; then
                     success_targets=true
                   else
@@ -96,7 +96,7 @@ jobs:
                 "-d chat_id=${{ secrets.TELEGRAM_CHAT_ID_VEC }}"; do
                 curl -s -o /dev/null -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
                      $chat \
-                    -d $'text=Something went wrong and the APK file could not be uploaded.\nRun ID: '${GITHUB_RUN_ID}
+                    -d $'text=Something went wrong and the APK file could not be uploaded.\nExplore beta releases here: https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases\nRun ID: '${GITHUB_RUN_ID}
               done
             fi
           fi
