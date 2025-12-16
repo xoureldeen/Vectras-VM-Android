@@ -84,9 +84,7 @@ public class VmsFragment extends Fragment implements CallbackInterface.HomeCallT
         vmsHomeAdapter = new VmsHomeAdapter(requireActivity(), data);
         binding.rvRomlist.setAdapter(vmsHomeAdapter);
 
-        binding.bnRomstore.setOnClickListener(v -> {
-            vmsCallToHomeListener.openRomStore();
-        });
+        binding.bnRomstore.setOnClickListener(v -> vmsCallToHomeListener.openRomStore());
 
         binding.bnRepair.setOnClickListener(V -> {
             VMManager.startFixRomsDataJson();

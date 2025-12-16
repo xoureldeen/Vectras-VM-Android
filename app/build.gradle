@@ -13,8 +13,8 @@ android {
         applicationId "com.vectras.vm"
         minSdk minApi
         targetSdk targetApi
-        versionCode 47
-        versionName "3.4.3"
+        versionCode 48
+        versionName "3.4.4"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -113,7 +113,6 @@ dependencies {
     implementation 'androidx.activity:activity-ktx:1.12.1'
     compileOnly project(':shell-loader:stub')
     implementation project(":terminal-view")
-    implementation project(":library")
     
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:3.0.0'
