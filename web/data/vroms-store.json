@@ -1478,7 +1478,7 @@
   },
   {
     "rom_name": "Windows 95",
-    "rom_icon": "https://upload.wikimedia.org/wikipedia/commons/6/6d/Windows_Logo_%281992-2001%29.svg",
+    "rom_icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Windows_Logo_%281992-2001%29.svg/2368px-Windows_Logo_%281992-2001%29.svg.png",
     "rom_url": "https://anbui.ovh/get/vec/community/win/msdos/w95.html",
     "rom_path": "Windows 95.cvbi",
     "rom_avail": true,
@@ -1586,7 +1586,7 @@
   },
   {
     "rom_name": "Windows NT 4.0",
-    "rom_icon": "https://upload.wikimedia.org/wikipedia/commons/5/5d/Windows_NT_4.0_Workstation_logo.svg",
+    "rom_icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Windows_NT_4.0_Workstation_logo.svg/250px-Windows_NT_4.0_Workstation_logo.svg.png",
     "rom_url": "https://anbui.ovh/get/vec/community/win/nt4/40.html",
     "rom_path": "Windows NT 4.0.cvbi",
     "rom_avail": true,
