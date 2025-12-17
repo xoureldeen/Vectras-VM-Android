@@ -20,6 +20,8 @@ import com.vectras.vm.databinding.ActivityRomStoreBinding;
 import com.vectras.vm.home.romstore.RomStoreHomeAdapterSearch;
 import com.vectras.vm.Roms.AdapterRoms;
 import com.vectras.vm.Roms.DataRoms;
+import com.vectras.vm.network.RequestNetwork;
+import com.vectras.vm.network.RequestNetworkController;
 import com.vectras.vm.utils.UIUtils;
 
 import java.lang.reflect.Type;

@@ -23,8 +23,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import androidx.activity.OnBackPressedCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
@@ -44,15 +42,13 @@ import com.vectras.vm.AppConfig;
 import com.vectras.vm.VMCreatorActivity;
 import com.vectras.vm.Minitools;
 import com.vectras.vm.R;
-import com.vectras.vm.RequestNetwork;
-import com.vectras.vm.RequestNetworkController;
+import com.vectras.vm.network.RequestNetwork;
+import com.vectras.vm.network.RequestNetworkController;
 import com.vectras.vm.databinding.BottomsheetdialogLoggerBinding;
 import com.vectras.vm.databinding.UpdateBottomDialogLayoutBinding;
 import com.vectras.vm.home.romstore.RomStoreHomeAdapterSearch;
 import com.vectras.vm.Roms.DataRoms;
-import com.vectras.vm.RomStoreActivity;
 import com.vectras.vm.SetArchActivity;
-import com.vectras.vm.StoreActivity;
 import com.vectras.vm.VMManager;
 import com.vectras.vm.adapter.LogsAdapter;
 import com.vectras.vm.databinding.ActivityHomeBinding;
@@ -78,7 +74,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -344,69 +339,6 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
         new Handler(Looper.getMainLooper()).post(() -> DisplaySystem.startTermuxX11(this));
     }
 
-    private final ActivityResultLauncher<String> isoPicker =
-            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
-                if (uri == null) return;
-
-                if (VMManager.isAISOFile(FileUtils.getFileNameFromUri(this, uri))) {
-                    importFile(uri, AppConfig.importedDriveFolder + "/drive.iso");
-                } else {
-                    DialogUtils.twoDialog(this,
-                            getString(R.string.problem_has_been_detected),
-                            getString(R.string.file_format_is_not_supported),
-                            getResources().getString(R.string.continuetext),
-                            getResources().getString(R.string.cancel),
-                            true,
-                            R.drawable.album_24px,
-                            true,
-                            () -> importFile(uri, AppConfig.importedDriveFolder + "/drive.iso"),
-                            null,
-                            null);
-                }
-            });
-
-    private final ActivityResultLauncher<String> hdd1Picker =
-            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
-                if (uri == null) return;
-
-                if (VMManager.isADiskFile(FileUtils.getFileNameFromUri(this, uri))) {
-                    importFile(uri, AppConfig.importedDriveFolder + "/hdd1.qcow2");
-                } else {
-                    DialogUtils.twoDialog(this,
-                            getString(R.string.problem_has_been_detected),
-                            getString(R.string.file_format_is_not_supported),
-                            getResources().getString(R.string.continuetext),
-                            getResources().getString(R.string.cancel),
-                            true,
-                            R.drawable.hard_drive_24px,
-                            true,
-                            () -> importFile(uri, AppConfig.importedDriveFolder + "/hdd1.qcow2"),
-                            null,
-                            null);
-                }
-            });
-
-    private final ActivityResultLauncher<String> hdd2Picker =
-            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
-                if (uri == null) return;
-
-                if (VMManager.isADiskFile(FileUtils.getFileNameFromUri(this, uri))) {
-                    importFile(uri, AppConfig.importedDriveFolder + "/hdd2.qcow2");
-                } else {
-                    DialogUtils.twoDialog(this,
-                            getString(R.string.problem_has_been_detected),
-                            getString(R.string.file_format_is_not_supported),
-                            getResources().getString(R.string.continuetext),
-                            getResources().getString(R.string.cancel),
-                            true,
-                            R.drawable.hard_drive_24px,
-                            true,
-                            () -> importFile(uri, AppConfig.importedDriveFolder + "/hdd2.qcow2"),
-                            null,
-                            null);
-                }
-            });
-
     private void setupDrawer() {
         binding.drawerLayout.setScrimColor(Color.parseColor("#40000000")); //25%
 
@@ -431,84 +363,6 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
                 Intent w = new Intent(ACTION_VIEW);
                 w.setData(Uri.parse(tw));
                 startActivity(w);
-            } else if (id == R.id.navigation_item_import_iso) {
-                if (new File(AppConfig.importedDriveFolder + "/drive.iso").exists()) {
-                    DialogUtils.threeDialog(
-                            this,
-                            "Replace iso",
-                            "There is iso imported you want to replace it?",
-                            getString(R.string.replace),
-                            getString(R.string.cancel),
-                            getString(R.string.remove),
-                            true,
-                            R.drawable.album_24px,
-                            true,
-                            () -> isoPicker.launch("*/*"),
-                            null,
-                            () -> {
-                                try {
-                                    File isoFile = new File(AppConfig.importedDriveFolder + "/drive.iso");
-                                    DialogUtils.fileDeletionResult(this, isoFile.delete());
-                                } catch (Exception e) {
-                                    DialogUtils.fileDeletionResult(this, false);
-                                }
-                            },
-                            null);
-                } else {
-                    isoPicker.launch("*/*");
-                }
-            } else if (id == R.id.navigation_item_hdd1) {
-                if (new File(AppConfig.importedDriveFolder + "/hdd1.qcow2").exists()) {
-                    DialogUtils.threeDialog(
-                            this,
-                            "Replace HDD1",
-                            "There is HDD1 imported you want to replace it?",
-                            getString(R.string.replace),
-                            getString(R.string.cancel),
-                            getString(R.string.remove),
-                            true,
-                            R.drawable.hard_drive_24px,
-                            true,
-                            () -> hdd1Picker.launch("*/*"),
-                            null,
-                            () -> {
-                                try {
-                                    File hdd1File = new File(AppConfig.importedDriveFolder + "/hdd1.qcow2");
-                                    DialogUtils.fileDeletionResult(this, hdd1File.delete());
-                                } catch (Exception e) {
-                                    DialogUtils.fileDeletionResult(this, false);
-                                }
-                            },
-                            null);
-                } else {
-                    hdd1Picker.launch("*/*");
-                }
-            } else if (id == R.id.navigation_item_hdd2) {
-                if (new File(AppConfig.importedDriveFolder + "/hdd2.qcow2").exists()) {
-                    DialogUtils.threeDialog(
-                            this,
-                            "Replace HDD2",
-                            "There is HDD2 imported you want to replace it?",
-                            getString(R.string.replace),
-                            getString(R.string.cancel),
-                            getString(R.string.remove),
-                            true,
-                            R.drawable.hard_drive_24px,
-                            true,
-                            () -> hdd2Picker.launch("*/*"),
-                            null,
-                            () -> {
-                                try {
-                                    File hdd1File = new File(AppConfig.importedDriveFolder + "/hdd2.qcow2");
-                                    DialogUtils.fileDeletionResult(this, hdd1File.delete());
-                                } catch (Exception e) {
-                                    DialogUtils.fileDeletionResult(this, false);
-                                }
-                            },
-                            null);
-                } else {
-                    hdd2Picker.launch("*/*");
-                }
             } else if (id == R.id.navigation_item_desktop) {
                 DisplaySystem.launchX11(this, true);
             } else if (id == R.id.navigation_item_terminal) {
@@ -522,8 +376,6 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
                 showLogsDialog();
             } else if (id == R.id.navigation_item_settings) {
                 startActivity(new Intent(this, MainSettingsManager.class));
-            } else if (id == R.id.navigation_item_store) {
-                startActivity(new Intent(this, StoreActivity.class));
             } else if (id == R.id.navigation_data_explorer) {
 //                startActivity(new Intent(this, DataExplorerActivity.class));
                 FileUtils.openFolder(this, AppConfig.maindirpath);
@@ -532,10 +384,6 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
                 Intent w = new Intent(ACTION_VIEW);
                 w.setData(Uri.parse(tw));
                 startActivity(w);
-            } else if (id == R.id.navigation_item_get_rom) {
-                Intent intent = new Intent();
-                intent.setClass(getApplicationContext(), RomStoreActivity.class);
-                startActivity(intent);
             } else if (id == R.id.mini_tools) {
                 Intent intent = new Intent();
                 intent.setClass(this, Minitools.class);

@@ -16,12 +16,10 @@ import com.google.android.material.transition.MaterialFadeThrough;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.vectras.vm.AppConfig;
-import com.vectras.vm.RequestNetwork;
-import com.vectras.vm.RequestNetworkController;
-import com.vectras.vm.Roms.AdapterRoms;
+import com.vectras.vm.network.RequestNetwork;
+import com.vectras.vm.network.RequestNetworkController;
 import com.vectras.vm.Roms.DataRoms;
 import com.vectras.vm.databinding.FragmentHomeRomStoreBinding;
-import com.vectras.vm.home.HomeActivity;
 import com.vectras.vm.home.core.SharedData;
 
 import java.lang.reflect.Type;
