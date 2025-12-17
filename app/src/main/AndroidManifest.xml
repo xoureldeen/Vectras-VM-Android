@@ -82,7 +82,7 @@
             android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
             android:exported="false" />
         <activity
-            android:name=".ReceiveRomFileActivity"
+            android:name=".RomReceiverActivity"
             android:exported="true"
             android:label="@string/importRom">
             <intent-filter>

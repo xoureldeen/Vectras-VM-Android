@@ -3,7 +3,7 @@
     <string name="app_name">Vectras VM</string>
 
     <!--======================VECTRAS STRINGS====================-->
-    <string name="app_version" translatable="false">3.4.3</string>
+    <string name="app_version" translatable="false">3.4.5</string>
     <string name="qemu_version" translatable="false">Stable</string>
     <!-- logger -->
     <string name="startvm">VM STARTED!</string>
@@ -472,6 +472,9 @@
     <string name="switch_to_vnc">Switch to VNC</string>
     <string name="preferences">Preferences</string>
     <string name="go_to_termux_x11_settings">Go to Termux:X11 settings.</string>
+    <string name="size_gb">Size (GB)</string>
+    <string name="create_a_new_virtual_disk">Create a new virtual disk</string>
+    <string name="it_will_be_created_in">It will be created in</string>
 
 
     <!--======================TERMUX STRINGS====================-->

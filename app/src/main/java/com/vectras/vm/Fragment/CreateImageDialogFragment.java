@@ -22,6 +22,7 @@ import com.vectras.vm.R;
 import com.vectras.vterm.Terminal;
 
 import java.io.File;
+import java.util.Objects;
 
 public class CreateImageDialogFragment extends DialogFragment {
 
@@ -34,18 +35,14 @@ public class CreateImageDialogFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.create_vhd, container, false);
-
-        return view;
+        return inflater.inflate(R.layout.create_vhd, container, false);
     }
 
     // If you want to style the dialog to have no title or to adjust the width, etc., override onCreateDialog.
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.MainDialogTheme);
-
-        builder.setTitle("Create Image");
+        AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()), R.style.MainDialogTheme);
 
         View view = getActivity().getLayoutInflater().inflate(R.layout.create_vhd, null);
 
@@ -58,7 +55,7 @@ public class CreateImageDialogFragment extends DialogFragment {
 
         TextView createPath = view.findViewById(R.id.createPath);
 
-        createPath.setText(folder);
+        createPath.setText(requireContext().getString(R.string.it_will_be_created_in) + ": " + folder);
 
         if (customRom)
             createPath.append(filename + ".qcow2");
@@ -73,20 +70,13 @@ public class CreateImageDialogFragment extends DialogFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (isFilled(imageName) && isFilled(imageSize)) {
-                    createQcow2Btn.setEnabled(true);
-                } else {
-                    createQcow2Btn.setEnabled(false);
-                }
-                createPath.setText(folder + imageName.getText().toString() + ".qcow2");
+                createQcow2Btn.setEnabled(isFilled(imageName) && isFilled(imageSize));
+                createPath.setText(requireContext().getString(R.string.it_will_be_created_in) + ": " + folder + Objects.requireNonNull(imageName.getText()) + ".qcow2");
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (isFilled(imageName) && isFilled(imageSize))
-                    createQcow2Btn.setEnabled(true);
-                else
-                    createQcow2Btn.setEnabled(false);
+                createQcow2Btn.setEnabled(isFilled(imageName) && isFilled(imageSize));
             }
         };
         imageName.addTextChangedListener(afterTextChangedListener);
@@ -98,8 +88,8 @@ public class CreateImageDialogFragment extends DialogFragment {
                 vDir.mkdirs();
             }
             Terminal vterm = new Terminal(getActivity());
-            vterm.executeShellCommand("qemu-img create -f qcow2 \"" + folder + imageName.getText().toString() + ".qcow2\" " +
-                    imageSize.getText().toString() + "G", true, true, getActivity());
+            vterm.executeShellCommand("qemu-img create -f qcow2 \"" + folder + Objects.requireNonNull(imageName.getText()) + ".qcow2\" " +
+                    Objects.requireNonNull(imageSize.getText()) + "G", true, true, getActivity());
             if (customRom) {
                 if(drive != null)
                     drive.setText(folder + imageName.getText().toString() + ".qcow2");
@@ -116,9 +106,6 @@ public class CreateImageDialogFragment extends DialogFragment {
     }
 
     private boolean isFilled(TextInputEditText TXT) {
-        if (TXT.getText().toString().trim().length() > 0)
-            return true;
-        else
-            return false;
+        return !Objects.requireNonNull(TXT.getText()).toString().trim().isEmpty();
     }
 }
