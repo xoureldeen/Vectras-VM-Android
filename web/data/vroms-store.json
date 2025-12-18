@@ -471,7 +471,7 @@
   {
     "rom_name": "Lubuntu 18.04",
     "rom_icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Lubuntu.svg/1200px-Lubuntu.svg.png",
-    "rom_url": "https://go.anbui.ovh/vectrasvm/community/linux/Lubuntu%2018.04.cvbi",
+    "rom_url": "https://anbui.ovh/get/vec/community/linux/lubuntu1804.html",
     "rom_path": "Lubuntu 18.04.cvbi",
     "rom_avail": true,
     "rom_size": "Bionic Beaver",
