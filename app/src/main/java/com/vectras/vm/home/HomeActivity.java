@@ -272,6 +272,8 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
 
         if (MainSettingsManager.getPromptUpdateVersion(this))
             updateApp();
+
+        NotificationUtils.requestPermission(this);
     }
 
     @Override

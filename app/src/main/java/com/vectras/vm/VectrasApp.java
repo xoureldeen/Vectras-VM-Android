@@ -29,6 +29,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.google.android.material.color.DynamicColors;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.utils.FileUtils;
@@ -106,6 +107,8 @@ public class VectrasApp extends Application {
             @Override public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {}
             @Override public void onActivityDestroyed(@NonNull Activity activity) {}
         });
+
+        FirebaseAnalytics.getInstance(this);
 	}
 
 	public void overrideFont(String defaultFontNameToOverride, int customFontResourceId) {

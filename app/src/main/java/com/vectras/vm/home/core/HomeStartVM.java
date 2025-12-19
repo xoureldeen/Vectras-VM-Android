@@ -74,10 +74,12 @@ public class HomeStartVM {
             lastThumbnailFile = thumbnailFile;
 
             if (MainSettingsManager.getVmUi(context).equals("X11")) {
-                if (MainSettingsManager.getRunQemuWithXterm(context)) {
-                    runCommandFormat = String.format(runCommandFormat, "xterm -e bash -c '%s'");
-                } else {
-                    runCommandFormat = String.format(runCommandFormat, "bash -c '%s'");
+                if (!(env.contains("(") || env.contains(")"))) {
+                    if (MainSettingsManager.getRunQemuWithXterm(context)) {
+                        runCommandFormat = String.format(runCommandFormat, "xterm -e bash -c '%s'");
+                    } else {
+                        runCommandFormat = String.format(runCommandFormat, "bash -c '%s'");
+                    }
                 }
 
                 if (SDK_INT < 34) {
