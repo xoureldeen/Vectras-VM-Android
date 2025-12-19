@@ -3,6 +3,8 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
 }
 
 android {
@@ -13,8 +15,8 @@ android {
         applicationId "com.vectras.vm"
         minSdk minApi
         targetSdk targetApi
-        versionCode 49
-        versionName "3.4.5"
+        versionCode 50
+        versionName "3.4.6"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
@@ -82,21 +84,22 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.7.1'
-    implementation 'com.google.android.material:material:1.14.0-alpha07'
+    implementation 'com.google.android.material:material:1.14.0-alpha08'
     implementation "androidx.annotation:annotation:1.9.1"
     implementation "androidx.core:core-ktx:1.17.0"
     implementation "androidx.drawerlayout:drawerlayout:1.2.0"
     implementation "androidx.preference:preference-ktx:1.2.1"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.2.0"
     implementation "androidx.viewpager:viewpager:1.1.0"
-//    implementation platform('com.google.firebase:firebase-bom:34.2.0')
-//    implementation 'com.google.firebase:firebase-analytics'
+    implementation platform('com.google.firebase:firebase-bom:34.7.0')
+    implementation 'com.google.firebase:firebase-analytics'
 //    implementation("com.google.firebase:firebase-auth")
 //    implementation("com.google.firebase:firebase-database")
 //    implementation 'com.google.firebase:firebase-storage'
 //    implementation("com.google.android.gms:play-services-auth:21.4.0")
-//    implementation("com.google.firebase:firebase-crashlytics")
+    implementation("com.google.firebase:firebase-crashlytics")
 //    implementation 'com.google.android.gms:play-services-ads:24.6.0'
+    implementation 'com.google.firebase:firebase-messaging:25.0.1'
     implementation 'com.google.guava:guava:33.5.0-jre'
     implementation 'com.google.code.gson:gson:2.13.2'
     implementation 'com.squareup.okhttp3:okhttp:5.3.2'
@@ -110,7 +113,7 @@ dependencies {
     implementation 'androidx.preference:preference-ktx:1.2.1'
     implementation "androidx.documentfile:documentfile:1.1.0"
     implementation 'androidx.core:core-ktx:1.17.0'
-    implementation 'androidx.activity:activity-ktx:1.12.1'
+    implementation 'androidx.activity:activity-ktx:1.12.2'
     compileOnly project(':shell-loader:stub')
     implementation project(":terminal-view")
     

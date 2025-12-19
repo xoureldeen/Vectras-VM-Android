@@ -162,21 +162,7 @@
             android:hardwareAccelerated="true"
             android:label="@string/about_app" />
         <activity
-            android:name=".StoreActivity"
-            android:exported="true"
-            android:hardwareAccelerated="true"
-            android:label="@string/store" />
-        <activity
-            android:name=".StoreItemActivity"
-            android:exported="true"
-            android:hardwareAccelerated="true"
-            android:label="Download" />
-        <activity
             android:name=".ImagePrvActivity"
-            android:exported="true"
-            android:hardwareAccelerated="true" />
-        <activity
-            android:name=".PostActivity"
             android:exported="true"
             android:hardwareAccelerated="true" />
         <activity
@@ -288,6 +274,14 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_provider_paths" />
         </provider>
+
+        <service
+            android:name=".FCMService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
         <!--
  This (or rather, value 2.1 or higher) is needed to make the Samsung Galaxy S8 mark the
         app with "This app is optimized to run in full screen."
