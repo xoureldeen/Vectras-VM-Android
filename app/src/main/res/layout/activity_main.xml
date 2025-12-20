@@ -7,17 +7,56 @@
     android:layout_height="match_parent"
     android:keepScreenOn="true"
     android:background="?attr/colorSurface"
-    android:fitsSystemWindows="true"
-    tools:openDrawer="start" >
+    tools:openDrawer="start"
+    tools:context=".main.MainActivity" >
 
-    <include layout="@layout/main_content"/>
+    <include
+        android:id="@+id/maincontent"
+        layout="@layout/activity_main_content"/>
 
+    <com.google.android.material.search.SearchView
+        android:id="@+id/searchview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:hint="@string/search">
+
+        <LinearLayout
+            android:id="@+id/ln_searchempty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/search_96px" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
+                android:gravity="center"
+                android:text="@string/no_matching_results_found" />
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_romstoresearch"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/colorSurfaceContainerHigh"
+            android:paddingVertical="8dp"
+            android:clipToPadding="false"/>
+    </com.google.android.material.search.SearchView>
+
+    <!--Place NavigationView here to avoid interaction errors affected by other objects and cause unwanted effects to other objects.-->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/home_drawer_menu" />
 

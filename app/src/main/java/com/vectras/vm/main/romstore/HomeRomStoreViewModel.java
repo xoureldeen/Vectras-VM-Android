@@ -1,4 +1,4 @@
-package com.vectras.vm.home.romstore;
+package com.vectras.vm.main.romstore;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

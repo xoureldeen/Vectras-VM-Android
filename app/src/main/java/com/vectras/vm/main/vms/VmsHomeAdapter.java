@@ -1,4 +1,4 @@
-package com.vectras.vm.home.vms;
+package com.vectras.vm.main.vms;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -20,8 +20,8 @@ import com.vectras.vm.MainRoms.DataMainRoms;
 import com.vectras.vm.R;
 import com.vectras.vm.StartVM;
 import com.vectras.vm.VMManager;
-import com.vectras.vm.home.core.HomeStartVM;
-import com.vectras.vm.home.core.RomOptionsDialog;
+import com.vectras.vm.main.core.MainStartVM;
+import com.vectras.vm.main.core.RomOptionsDialog;
 
 import java.util.Collections;
 import java.util.List;
@@ -75,7 +75,7 @@ public class VmsHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
             Config.vmID = current.vmID;
             String env = StartVM.env(activity, current.itemExtra, current.itemPath, false);
-            HomeStartVM.startNow(activity, current.itemName, env, current.vmID, current.itemIcon);
+            MainStartVM.startNow(activity, current.itemName, env, current.vmID, current.itemIcon);
         });
 
         myHolder.cdRoms.setOnLongClickListener(v -> {

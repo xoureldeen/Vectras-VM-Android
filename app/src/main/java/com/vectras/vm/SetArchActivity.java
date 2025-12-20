@@ -15,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.databinding.ActivitySetArchBinding;
-import com.vectras.vm.home.HomeActivity;
+import com.vectras.vm.main.MainActivity;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.UIUtils;
 
@@ -47,7 +47,7 @@ public class SetArchActivity extends AppCompatActivity implements View.OnClickLi
 
         binding.toolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.roms_store) {
-                HomeActivity.isOpenRomStore = true;
+                MainActivity.isOpenRomStore = true;
                 finish();
                 return true;
             }

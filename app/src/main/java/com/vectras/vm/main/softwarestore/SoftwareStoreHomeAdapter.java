@@ -1,4 +1,4 @@
-package com.vectras.vm.home.romstore;
+package com.vectras.vm.main.softwarestore;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -16,22 +16,19 @@ import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-
-import com.vectras.vm.RomInfo;
 import com.vectras.vm.R;
+import com.vectras.vm.RomInfo;
 import com.vectras.vm.Roms.DataRoms;
 
 import java.util.Collections;
 import java.util.List;
 
-public class RomStoreHomeAdapterSearch extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
+public class SoftwareStoreHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     Context context;
     private final LayoutInflater inflater;
     static List<DataRoms> dataRom = Collections.emptyList();
-    private final String TAG = "RomStoreHomeAdapterSearch";
 
-    public RomStoreHomeAdapterSearch(Context context, List<DataRoms> data) {
+    public SoftwareStoreHomeAdapter(Context context, List<DataRoms> data) {
         this.context = context;
         inflater = LayoutInflater.from(context);
         dataRom = data;
@@ -55,7 +52,7 @@ public class RomStoreHomeAdapterSearch extends RecyclerView.Adapter<RecyclerView
         final DataRoms current = dataRom.get(position);
         Glide.with(context).load(current.romIcon).placeholder(R.drawable.ic_computer_180dp_with_padding).error(R.drawable.ic_computer_180dp_with_padding).into(myHolder.ivIcon);
         myHolder.textName.setText(current.romName);
-        myHolder.textSize.setText(current.romArch + " - " + current.fileSize);
+        myHolder.textSize.setText(current.romSize);
         if (current.romAvail) {
             myHolder.linearItem.setOnClickListener(v -> {
                 notifyItemRangeChanged(0, dataRom.size());
@@ -76,6 +73,7 @@ public class RomStoreHomeAdapterSearch extends RecyclerView.Adapter<RecyclerView
                 intent.putExtra("size", current.fileSize);
                 intent.putExtra("id", current.id);
                 intent.putExtra("vecid", current.vecid);
+                intent.putExtra("isRomInfo", false);
                 context.startActivity(intent);
             });
         } else {
@@ -84,20 +82,20 @@ public class RomStoreHomeAdapterSearch extends RecyclerView.Adapter<RecyclerView
         }
 
         if (dataRom.size() == 1) {
-            myHolder.linearItem.setBackground(AppCompatResources.getDrawable(context, R.drawable.object_shape_single_on_surface));
+            myHolder.linearItem.setBackground(AppCompatResources.getDrawable(context, R.drawable.object_shape_single));
         } else if (position == 0) {
-            myHolder.linearItem.setBackground(AppCompatResources.getDrawable(context, R.drawable.object_shape_top_on_surface));
+            myHolder.linearItem.setBackground(AppCompatResources.getDrawable(context, R.drawable.object_shape_top));
         } else if (position == dataRom.size() - 1) {
-            myHolder.linearItem.setBackground(AppCompatResources.getDrawable(context, R.drawable.object_shape_bottom_on_surface));
+            myHolder.linearItem.setBackground(AppCompatResources.getDrawable(context, R.drawable.object_shape_bottom));
         } else {
-            myHolder.linearItem.setBackground(AppCompatResources.getDrawable(context, R.drawable.object_shape_middle_on_surface));
+            myHolder.linearItem.setBackground(AppCompatResources.getDrawable(context, R.drawable.object_shape_middle));
         }
     }
 
     // return total item from List
     @Override
     public int getItemCount() {
-        return dataRom.size();
+        return dataRom == null ? 0 : dataRom.size();
     }
 
     static class MyHolder extends RecyclerView.ViewHolder {
@@ -118,5 +116,4 @@ public class RomStoreHomeAdapterSearch extends RecyclerView.Adapter<RecyclerView
         }
 
     }
-
 }

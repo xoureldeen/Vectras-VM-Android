@@ -5,26 +5,9 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
-import android.widget.ListView;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.vectras.vm.MainRoms.AdapterMainRoms;
-import com.vectras.vm.MainRoms.DataMainRoms;
-import com.vectras.vm.home.HomeActivity;
-import com.vectras.vm.utils.FileUtils;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import com.vectras.vm.main.MainActivity;
 
 public class WidgetProvider extends AppWidgetProvider {
 
@@ -34,7 +17,7 @@ public class WidgetProvider extends AppWidgetProvider {
         for (int i=0; i < appWidgetIds.length; i++) {
             int appWidgetId = appWidgetIds[i];
             // Create an Intent to launch ExampleActivity
-            Intent intent = new Intent(context, HomeActivity.class);
+            Intent intent = new Intent(context, MainActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(
                     /* context = */ context,
                     /* requestCode = */ 0,

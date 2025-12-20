@@ -1,4 +1,4 @@
-package com.vectras.vm.home.vms;
+package com.vectras.vm.main.vms;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -19,8 +19,8 @@ import com.vectras.vm.MainRoms.DataMainRoms;
 import com.vectras.vm.R;
 import com.vectras.vm.VMManager;
 import com.vectras.vm.databinding.FragmentHomeVmsBinding;
-import com.vectras.vm.home.HomeActivity;
-import com.vectras.vm.home.core.CallbackInterface;
+import com.vectras.vm.main.MainActivity;
+import com.vectras.vm.main.core.CallbackInterface;
 import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
@@ -78,7 +78,7 @@ public class VmsFragment extends Fragment implements CallbackInterface.HomeCallT
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        HomeActivity.homeCallToVmsListener = this;
+        MainActivity.homeCallToVmsListener = this;
 
         binding.rvRomlist.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
         vmsHomeAdapter = new VmsHomeAdapter(requireActivity(), data);

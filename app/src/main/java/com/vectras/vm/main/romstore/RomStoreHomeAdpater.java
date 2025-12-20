@@ -1,4 +1,4 @@
-package com.vectras.vm.home.romstore;
+package com.vectras.vm.main.romstore;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -73,6 +73,7 @@ public class RomStoreHomeAdpater extends RecyclerView.Adapter<RecyclerView.ViewH
                 intent.putExtra("size", current.fileSize);
                 intent.putExtra("id", current.id);
                 intent.putExtra("vecid", current.vecid);
+                intent.putExtra("isRomInfo", true);
                 context.startActivity(intent);
             });
         } else {

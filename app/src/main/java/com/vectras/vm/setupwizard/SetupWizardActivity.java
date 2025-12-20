@@ -41,7 +41,7 @@ import com.vectras.vm.databinding.ActivitySetupWizardBinding;
 import com.vectras.vm.databinding.SetupQemuAdvancedBinding;
 import com.vectras.vm.databinding.SetupQemuDoneBinding;
 import com.vectras.vm.databinding.SimpleLayoutForSpinerBinding;
-import com.vectras.vm.home.HomeActivity;
+import com.vectras.vm.main.MainActivity;
 import com.vectras.vm.utils.ClipboardUltils;
 import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.DialogUtils;
@@ -496,7 +496,7 @@ public class SetupWizardActivity extends AppCompatActivity {
                 Intent intent = new Intent(ACTION_VIEW, Uri.parse(AppConfig.patreonLink));
                 startActivity(intent);
             } else {
-                startActivity(new Intent(SetupWizardActivity.this, HomeActivity.class));
+                startActivity(new Intent(SetupWizardActivity.this, MainActivity.class));
                 finish();
             }
         });

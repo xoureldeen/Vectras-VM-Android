@@ -1,4 +1,4 @@
-package com.vectras.vm.home.core;
+package com.vectras.vm.main.core;
 
 public class CallbackInterface {
     //Fix Cyclic.

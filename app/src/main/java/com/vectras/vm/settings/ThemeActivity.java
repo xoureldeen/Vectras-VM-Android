@@ -13,7 +13,7 @@ import com.google.android.material.color.DynamicColors;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.R;
 import com.vectras.vm.databinding.ActivityThemeBinding;
-import com.vectras.vm.home.HomeActivity;
+import com.vectras.vm.main.MainActivity;
 import com.vectras.vm.utils.UIUtils;
 
 import java.util.Objects;
@@ -54,7 +54,7 @@ public class ThemeActivity extends AppCompatActivity {
     public void onStop() {
         super.onStop();
         if (!(oldDynamicColorData == newDynamicColorData))
-            HomeActivity.isNeedRecreate = true;
+            MainActivity.isNeedRecreate = true;
     }
 
     private void initialize() {

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:transitionGroup="true"
-    tools:context=".home.monitor.SystemMonitorFragment">
+    tools:context=".main.monitor.SystemMonitorFragment">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"

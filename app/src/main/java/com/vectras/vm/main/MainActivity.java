@@ -1,4 +1,4 @@
-package com.vectras.vm.home;
+package com.vectras.vm.main;
 
 import static android.content.Intent.ACTION_VIEW;
 import static com.vectras.vm.VectrasApp.getApp;
@@ -16,16 +16,13 @@ import android.os.StrictMode;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
@@ -33,7 +30,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.color.MaterialColors;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.termux.app.TermuxActivity;
 import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
@@ -42,24 +38,26 @@ import com.vectras.vm.AppConfig;
 import com.vectras.vm.VMCreatorActivity;
 import com.vectras.vm.Minitools;
 import com.vectras.vm.R;
+import com.vectras.vm.databinding.ActivityMainBinding;
+import com.vectras.vm.databinding.ActivityMainContentBinding;
+import com.vectras.vm.main.softwarestore.SoftwareStoreFragment;
+import com.vectras.vm.main.softwarestore.SoftwareStoreHomeAdapterSearch;
 import com.vectras.vm.network.RequestNetwork;
 import com.vectras.vm.network.RequestNetworkController;
 import com.vectras.vm.databinding.BottomsheetdialogLoggerBinding;
 import com.vectras.vm.databinding.UpdateBottomDialogLayoutBinding;
-import com.vectras.vm.home.romstore.RomStoreHomeAdapterSearch;
+import com.vectras.vm.main.romstore.RomStoreHomeAdapterSearch;
 import com.vectras.vm.Roms.DataRoms;
 import com.vectras.vm.SetArchActivity;
 import com.vectras.vm.VMManager;
 import com.vectras.vm.adapter.LogsAdapter;
-import com.vectras.vm.databinding.ActivityHomeBinding;
-import com.vectras.vm.databinding.ActivityHomeContentBinding;
-import com.vectras.vm.home.core.CallbackInterface;
-import com.vectras.vm.home.core.DisplaySystem;
-import com.vectras.vm.home.core.PendingCommand;
-import com.vectras.vm.home.core.SharedData;
-import com.vectras.vm.home.monitor.SystemMonitorFragment;
-import com.vectras.vm.home.romstore.RomStoreFragment;
-import com.vectras.vm.home.vms.VmsFragment;
+import com.vectras.vm.main.core.CallbackInterface;
+import com.vectras.vm.main.core.DisplaySystem;
+import com.vectras.vm.main.core.PendingCommand;
+import com.vectras.vm.main.core.SharedData;
+import com.vectras.vm.main.monitor.SystemMonitorFragment;
+import com.vectras.vm.main.romstore.RomStoreFragment;
+import com.vectras.vm.main.vms.VmsFragment;
 import com.vectras.vm.logger.VectrasStatus;
 import com.vectras.vm.settings.UpdaterActivity;
 import com.vectras.vm.utils.DeviceUtils;
@@ -79,21 +77,22 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
-public class HomeActivity extends AppCompatActivity implements RomStoreFragment.RomStoreCallToHomeListener, VmsFragment.VmsCallToHomeListener {
+public class MainActivity extends AppCompatActivity implements RomStoreFragment.RomStoreCallToHomeListener, VmsFragment.VmsCallToHomeListener, SoftwareStoreFragment.SoftwareStoreCallToHomeListener {
     private final String TAG = "HomeActivity";
+    private final int SEARCH_ROM_STORE = 0;
+    private final int SEARCH_SOFTWARE_STORE = 1;
+    private int currentSearchMode = 0;
     public static boolean isActivate = false;
     public static boolean isNeedRecreate = false;
     public static boolean isOpenHome = false;
     public static boolean isOpenRomStore = false;
-    private final ExecutorService executor = Executors.newSingleThreadExecutor();
-    ActivityHomeBinding binding;
-    ActivityHomeContentBinding bindingContent;
+    ActivityMainBinding binding;
+    ActivityMainContentBinding bindingContent;
     private RomStoreHomeAdapterSearch adapterRomStoreSearch;
+    private SoftwareStoreHomeAdapterSearch adapterSoftwareStoreSearch;
     private final List<DataRoms> dataRomStoreSearch = new ArrayList<>();
 
     public static CallbackInterface.HomeCallToVmsListener homeCallToVmsListener;
@@ -103,7 +102,7 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
     }
 
     @Override
-    public void updateDataStatus(boolean isReady) {
+    public void updateSearchStatus(boolean isReady) {
         bindingContent.searchbar.setEnabled(isReady);
     }
 
@@ -126,9 +125,10 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
 
         VmsFragment.vmsCallToHomeListener = this;
         RomStoreFragment.romStoreCallToHomeListener = this;
+        SoftwareStoreFragment.softwareStoreCallToHomeListener = this;
 
 //        EdgeToEdge.enable(this);
-        binding = ActivityHomeBinding.inflate(getLayoutInflater());
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
         bindingContent = binding.maincontent;
         setContentView(binding.getRoot());
         isActivate = true;
@@ -195,6 +195,17 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
                 bindingContent.efabCreate.setVisibility(View.GONE);
                 bindingContent.searchbar.setEnabled(true);
                 bindingContent.searchbar.setHint(getText(R.string.search));
+                currentSearchMode = SEARCH_ROM_STORE;
+                adapterRomStoreSearch = new RomStoreHomeAdapterSearch(this, dataRomStoreSearch);
+                binding.rvRomstoresearch.setAdapter(adapterRomStoreSearch);
+            } else if (id == R.id.item_softwarestore) {
+                selectedFragment = new SoftwareStoreFragment();
+                bindingContent.efabCreate.setVisibility(View.GONE);
+                bindingContent.searchbar.setEnabled(true);
+                bindingContent.searchbar.setHint(getText(R.string.search));
+                currentSearchMode = SEARCH_SOFTWARE_STORE;
+                adapterSoftwareStoreSearch = new SoftwareStoreHomeAdapterSearch(this, dataRomStoreSearch);
+                binding.rvRomstoresearch.setAdapter(adapterSoftwareStoreSearch);
             } else if (id == R.id.item_monitor) {
                 selectedFragment = new SystemMonitorFragment();
                 bindingContent.efabCreate.setVisibility(View.GONE);
@@ -220,11 +231,12 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
                     binding.drawerLayout.closeDrawer(GravityCompat.START);
                     //Prevent apps from exiting after the drawer is closed.
                     return;
-                } if (binding.searchview.isShowing()) {
+                }
+                if (binding.searchview.isShowing()) {
                     binding.searchview.hide();
                 } else if (bindingContent.bottomNavigation.getSelectedItemId() != R.id.item_home) {
                     bindingContent.bottomNavigation.setSelectedItemId(R.id.item_home);
-                } else if (MainSettingsManager.getQuickStart(HomeActivity.this)) {
+                } else if (MainSettingsManager.getQuickStart(MainActivity.this)) {
                     Intent intent = new Intent(Intent.ACTION_MAIN);
                     intent.addCategory(Intent.CATEGORY_HOME);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -235,13 +247,7 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
             }
         });
 
-        adapterRomStoreSearch = new
-
-                RomStoreHomeAdapterSearch(this, dataRomStoreSearch);
-        binding.rvRomstoresearch.setAdapter(adapterRomStoreSearch);
-        binding.rvRomstoresearch.setLayoutManager(new
-
-                LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        binding.rvRomstoresearch.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
         binding.searchview.getEditText().
 
@@ -260,11 +266,8 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
                     }
                 });
 
-        new
-
-                LibraryChecker(this).
-
-                checkMissingLibraries(this);
+        new LibraryChecker(this).
+        checkMissingLibraries(this);
 
         setupDrawer();
         DialogUtils.joinTelegram(this);
@@ -411,7 +414,7 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
 //                        String message;
 //                        String size;
 
-                        if (MainSettingsManager.getcheckforupdatesfromthebetachannel(HomeActivity.this)) {
+                        if (MainSettingsManager.getcheckforupdatesfromthebetachannel(MainActivity.this)) {
                             versionNameonUpdate = obj.getString("versionNameBeta");
                             versionCodeonUpdate = obj.getInt("versionCodeBeta");
 //                            message = obj.getString("MessageBeta");
@@ -424,9 +427,9 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
                         }
 
                         if ((versionCode < versionCodeonUpdate &&
-                                !MainSettingsManager.getSkipVersion(HomeActivity.this).equals(versionNameonUpdate))) {
+                                !MainSettingsManager.getSkipVersion(MainActivity.this).equals(versionNameonUpdate))) {
 
-                            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(HomeActivity.this);
+                            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(MainActivity.this);
                             UpdateBottomDialogLayoutBinding updateBottomDialogLayoutBinding = UpdateBottomDialogLayoutBinding.inflate(getLayoutInflater());
                             bottomSheetDialog.setContentView(updateBottomDialogLayoutBinding.getRoot());
 
@@ -436,14 +439,14 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
 //                            tvContent.setText(Html.fromHtml(message + "<br><br>Update size:<br>" + size));
 
                             updateBottomDialogLayoutBinding.bnSkip.setOnClickListener(view -> {
-                                MainSettingsManager.setSkipVersion(HomeActivity.this, versionNameonUpdate);
+                                MainSettingsManager.setSkipVersion(MainActivity.this, versionNameonUpdate);
                                 bottomSheetDialog.dismiss();
                             });
 
                             updateBottomDialogLayoutBinding.bnLater.setOnClickListener(view -> bottomSheetDialog.dismiss());
 
                             updateBottomDialogLayoutBinding.bnUpdate.setOnClickListener(view -> {
-                                startActivity(new Intent(HomeActivity.this, UpdaterActivity.class));
+                                startActivity(new Intent(MainActivity.this, UpdaterActivity.class));
                                 bottomSheetDialog.dismiss();
                             });
 
@@ -471,7 +474,7 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
             List<DataRoms> filteredData = new ArrayList<>();
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                filteredData = SharedData.dataRomStore.stream()
+                filteredData = (currentSearchMode == SEARCH_ROM_STORE ? SharedData.dataRomStore.stream() : SharedData.dataSoftwareStore.stream())
                         .filter(rom -> {
                             String romName = (rom.romName != null) ? rom.romName : "";
                             String romKernel = (rom.romKernel != null) ? rom.romKernel : "";
@@ -481,7 +484,7 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
                         })
                         .collect(Collectors.toList());
             } else {
-                for (DataRoms rom : SharedData.dataRomStore) {
+                for (DataRoms rom : (currentSearchMode == SEARCH_ROM_STORE ? SharedData.dataRomStore : SharedData.dataSoftwareStore)) {
                     if (rom.romName.toLowerCase().contains(keyword.toLowerCase()) ||
                             rom.romKernel.toLowerCase().contains(keyword.toLowerCase())) {
                         filteredData.add(rom);
@@ -501,44 +504,6 @@ public class HomeActivity extends AppCompatActivity implements RomStoreFragment.
             binding.rvRomstoresearch.setVisibility(View.VISIBLE);
 
         adapterRomStoreSearch.notifyDataSetChanged();
-    }
-
-    private void importFile(Uri uri, String copyTo) {
-        if (uri == null) return;
-
-        View progressView = LayoutInflater.from(this).inflate(R.layout.dialog_progress_style, null);
-        TextView progress_text = progressView.findViewById(R.id.progress_text);
-        progress_text.setText(getString(R.string.importing_file));
-        AlertDialog progressDialog = new MaterialAlertDialogBuilder(this, R.style.CenteredDialogTheme)
-                .setView(progressView)
-                .setCancelable(false)
-                .create();
-        progressDialog.show();
-
-        AtomicBoolean isCompleted = new AtomicBoolean(false);
-        executor.execute(() -> {
-            try {
-                FileUtils.copyFileFromUri(this, uri, copyTo);
-                isCompleted.set(true);
-            } catch (Exception e) {
-                isCompleted.set(false);
-            } finally {
-                runOnUiThread(() -> {
-                    progressDialog.dismiss();
-                    DialogUtils.oneDialog(
-                            this,
-                            isCompleted.get() ? getString(R.string.imported) : getString(R.string.oops),
-                            isCompleted.get() ? getString(R.string.file_imported_successfully) : getString(R.string.file_import_failed),
-                            getString(R.string.ok),
-                            true,
-                            isCompleted.get() ? R.drawable.check_24px : R.drawable.error_96px,
-                            true,
-                            null,
-                            null
-                    );
-                });
-            }
-        });
     }
 
     private void showLogsDialog() {

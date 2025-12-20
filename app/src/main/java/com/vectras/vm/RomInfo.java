@@ -70,42 +70,6 @@ public class RomInfo extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.toolbar);
-        binding.toolbar.setNavigationOnClickListener(v -> finish());
-
-        binding.btnDownload.setOnClickListener(v -> {
-            Intent openurl = new Intent();
-            openurl.setAction(Intent.ACTION_VIEW);
-            openurl.setData(Uri.parse(getIntent().getStringExtra("getrom")));
-            startActivity(openurl);
-        });
-
-        binding.btnPick.setOnClickListener(v -> romPicker.launch("*/*"));
-
-        if (getIntent().hasExtra("title")) {
-            binding.textName.setText(getIntent().getStringExtra("title"));
-        }
-        if (getIntent().hasExtra("shortdesc")) {
-            binding.textSize.setText(getIntent().getStringExtra("shortdesc"));
-        }
-        if (getIntent().hasExtra("desc")) {
-            binding.descTxt.setText(getIntent().getStringExtra("desc"));
-        }
-
-        if (getIntent().hasExtra("icon")) {
-            Glide.with(this).load(getIntent().getStringExtra("icon")).placeholder(R.drawable.ic_computer_180dp_with_padding).error(R.drawable.ic_computer_180dp_with_padding).into(binding.ivIcon);
-        }
-
-        if (getIntent().hasExtra("id") &&
-                !Objects.requireNonNull(getIntent().getStringExtra("id")).isEmpty()) {
-
-            isAnBuiID = true;
-            contentID = getIntent().getStringExtra("id");
-
-        } else if (getIntent().hasExtra("vecid") &&
-                !Objects.requireNonNull(getIntent().getStringExtra("vecid")).isEmpty()) {
-
-            contentID = getIntent().getStringExtra("vecid");
-        }
 
         initialize();
     }
@@ -206,6 +170,47 @@ public class RomInfo extends AppCompatActivity {
     }
 
     private void initialize() {
+        binding.toolbar.setNavigationOnClickListener(v -> finish());
+
+        binding.btnDownload.setOnClickListener(v -> {
+            Intent openurl = new Intent();
+            openurl.setAction(Intent.ACTION_VIEW);
+            openurl.setData(Uri.parse(getIntent().getStringExtra("getrom")));
+            startActivity(openurl);
+        });
+
+        if (getIntent().hasExtra("isRomInfo") && getIntent().getBooleanExtra("isRomInfo", false)) {
+            binding.btnPick.setOnClickListener(v -> romPicker.launch("*/*"));
+        } else {
+            binding.btnPick.setVisibility(View.GONE);
+        }
+
+        if (getIntent().hasExtra("title")) {
+            binding.textName.setText(getIntent().getStringExtra("title"));
+        }
+        if (getIntent().hasExtra("shortdesc")) {
+            binding.textSize.setText(getIntent().getStringExtra("shortdesc"));
+        }
+        if (getIntent().hasExtra("desc")) {
+            binding.descTxt.setText(getIntent().getStringExtra("desc"));
+        }
+
+        if (getIntent().hasExtra("icon")) {
+            Glide.with(this).load(getIntent().getStringExtra("icon")).placeholder(R.drawable.ic_computer_180dp_with_padding).error(R.drawable.ic_computer_180dp_with_padding).into(binding.ivIcon);
+        }
+
+        if (getIntent().hasExtra("id") &&
+                !Objects.requireNonNull(getIntent().getStringExtra("id")).isEmpty()) {
+
+            isAnBuiID = true;
+            contentID = getIntent().getStringExtra("id");
+
+        } else if (getIntent().hasExtra("vecid") &&
+                !Objects.requireNonNull(getIntent().getStringExtra("vecid")).isEmpty()) {
+
+            contentID = getIntent().getStringExtra("vecid");
+        }
+
         int currentVerifyIcon = R.drawable.verified_user_24px;
         String currentVerifyText = getString(R.string.verified);
         String currentVerifyContent = getString(R.string.verified_content);
@@ -271,7 +276,7 @@ public class RomInfo extends AppCompatActivity {
 
         binding.lnCreator.setOnClickListener((v -> DialogUtils.oneDialog(
                 RomInfo.this,
-                getString(R.string.who_created_this_rom),
+                getString(getIntent().hasExtra("isRomInfo") && getIntent().getBooleanExtra("isRomInfo", false) ? R.string.who_created_this_rom : R.string.shared_by),
                 getIntent().getStringExtra("creator") + ".",
                 getString(R.string.ok),
                 true,

@@ -29,9 +29,8 @@ import androidx.appcompat.widget.Toolbar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.termux.app.TermuxService;
 import com.vectras.qemu.MainSettingsManager;
-import com.vectras.vm.home.HomeActivity;
+import com.vectras.vm.main.MainActivity;
 import com.vectras.vm.setupwizard.SetupWizard2Activity;
-import com.vectras.vm.setupwizard.SetupWizardActivity;
 import com.vectras.vm.utils.CommandUtils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
@@ -292,7 +291,7 @@ public class Minitools extends AppCompatActivity {
         progressDialog.show();
 
         new Thread(() -> {
-            HomeActivity.isActivate = false;
+            MainActivity.isActivate = false;
             AppConfig.needreinstallsystem = true;
             VMManager.killallqemuprocesses(this);
             FileUtils.deleteDirectory(getFilesDir().getAbsolutePath() + "/data");

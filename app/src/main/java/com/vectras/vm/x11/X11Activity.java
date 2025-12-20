@@ -23,7 +23,7 @@ import com.vectras.vm.Fragment.ControlersOptionsFragment;
 import com.vectras.vm.Fragment.LoggerDialogFragment;
 import com.vectras.vm.MainService;
 import com.vectras.vm.VMManager;
-import com.vectras.vm.home.core.HomeStartVM;
+import com.vectras.vm.main.core.MainStartVM;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.widgets.JoystickView;
 import static com.vectras.vm.x11.CmdEntryPoint.ACTION_START;
@@ -740,7 +740,7 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
             }
         });
 
-        HomeStartVM.startPending(this);
+        MainStartVM.startPending(this);
     }
     
     private void keyDownUp(int keyEventCode) {

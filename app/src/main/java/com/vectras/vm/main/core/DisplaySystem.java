@@ -1,4 +1,4 @@
-package com.vectras.vm.home.core;
+package com.vectras.vm.main.core;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static com.vectras.vm.utils.LibraryChecker.isPackageInstalled2;

@@ -1,4 +1,4 @@
-package com.vectras.vm.home.core;
+package com.vectras.vm.main.core;
 
 import static android.os.Build.VERSION.SDK_INT;
 
@@ -36,7 +36,7 @@ import com.vectras.vterm.Terminal;
 
 import java.io.File;
 
-public class HomeStartVM {
+public class MainStartVM {
     public static final String TAG = "HomeStartVM";
     public static AlertDialog progressDialog;
     public static boolean skipIDEwithARM64DialogInStartVM = false;
@@ -74,12 +74,10 @@ public class HomeStartVM {
             lastThumbnailFile = thumbnailFile;
 
             if (MainSettingsManager.getVmUi(context).equals("X11")) {
-                if (!(env.contains("(") || env.contains(")"))) {
-                    if (MainSettingsManager.getRunQemuWithXterm(context)) {
-                        runCommandFormat = String.format(runCommandFormat, "xterm -e bash -c '%s'");
-                    } else {
-                        runCommandFormat = String.format(runCommandFormat, "bash -c '%s'");
-                    }
+                if (MainSettingsManager.getRunQemuWithXterm(context)) {
+                    runCommandFormat = String.format(runCommandFormat, "xterm -e bash -c \"%s\"");
+                } else {
+                    runCommandFormat = String.format(runCommandFormat, "bash -c \"%s\"");
                 }
 
                 if (SDK_INT < 34) {
