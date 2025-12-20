@@ -23,7 +23,7 @@
     "rom_url": "https://github.com/AnBui2004/Vectras-VM-Emu-Android/blob/master/3dfx/3dfx-wrappers-3.0.0.iso",
     "rom_path": "3dfx-wrappers-3.0.0.iso",
     "rom_avail": true,
-    "rom_size": "3.4.7",
+    "rom_size": "3.0.0",
     "rom_arch": "X86_64",
     "rom_kernel": "",
     "rom_extra": "",
