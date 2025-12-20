@@ -1,4 +1,4 @@
-package com.vectras.vm.home.vms;
+package com.vectras.vm.main.vms;
 
 import androidx.recyclerview.widget.DiffUtil;
 

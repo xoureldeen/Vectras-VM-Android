@@ -10,6 +10,11 @@
         android:icon="@drawable/ic_home_storage_selector"
         android:title="@string/roms_store"/>
     <item
+        android:id="@+id/item_softwarestore"
+        android:enabled="true"
+        android:icon="@drawable/ic_package_selector"
+        android:title="@string/software_and_driver"/>
+    <item
         android:id="@+id/item_monitor"
         android:enabled="true"
         android:icon="@drawable/ic_monitor_heart_selector"

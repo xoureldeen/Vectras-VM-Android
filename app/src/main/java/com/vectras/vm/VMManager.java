@@ -34,8 +34,8 @@ import com.vectras.qemu.MainSettingsManager;
 import com.vectras.qemu.MainVNCActivity;
 import com.vectras.qemu.VNCConfig;
 import com.vectras.qemu.utils.QmpClient;
-import com.vectras.vm.home.HomeActivity;
-import com.vectras.vm.home.core.HomeStartVM;
+import com.vectras.vm.main.MainActivity;
+import com.vectras.vm.main.core.MainStartVM;
 import com.vectras.vm.settings.VNCSettingsActivity;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
@@ -50,13 +50,11 @@ import org.json.JSONArray;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Random;
-import java.util.Vector;
 
 public class VMManager {
 
@@ -191,7 +189,7 @@ public class VMManager {
         }
         UIUtils.toastLong(_activity, _vmName + _activity.getString(R.string.are_removed_successfully));
 
-        HomeActivity.refeshVMListNow();
+        MainActivity.refeshVMListNow();
     }
 
     public static String idGenerator() {
@@ -601,7 +599,7 @@ public class VMManager {
         if (_result.contains("proot\": error=2,")) {
             DialogUtils.twoDialog(_activity, _activity.getResources().getString(R.string.problem_has_been_detected), _activity.getResources().getString(R.string.error_PROOT_IS_MISSING_0), _activity.getString(R.string.continuetext), _activity.getString(R.string.cancel), true, R.drawable.build_24px, true,
                     () -> {
-                        HomeActivity.isActivate = false;
+                        MainActivity.isActivate = false;
                         FileUtils.deleteDirectory(_activity.getFilesDir().getAbsolutePath() + "/data");
                         FileUtils.deleteDirectory(_activity.getFilesDir().getAbsolutePath() + "/distro");
                         FileUtils.deleteDirectory(_activity.getFilesDir().getAbsolutePath() + "/usr");
@@ -634,7 +632,7 @@ public class VMManager {
                 isQemuStopedWithError = true;
                 isTryAgain = false;
             } else {
-                HomeStartVM.startTryAgain(_activity);
+                MainStartVM.startTryAgain(_activity);
                 isTryAgain = true;
             }
             return true;
@@ -692,7 +690,7 @@ public class VMManager {
                 restoredVMs == 0 ? _context.getString(R.string.roms_data_json_fixed_unsuccessfully) : _context.getString(R.string.roms_data_json_fixed_successfully),
                 R.drawable.error_96px
         );
-        HomeActivity.refeshVMListNow();
+        MainActivity.refeshVMListNow();
         movetoRecycleBin();
     }
 

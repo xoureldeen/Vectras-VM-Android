@@ -21,7 +21,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.vectras.qemu.Config;
 import com.vectras.vm.VMCreatorActivity;
 import com.vectras.vm.ExportRomActivity;
-import com.vectras.vm.MainActivity;
 import com.vectras.vm.R;
 import com.vectras.vm.StartVM;
 import com.vectras.vm.VMManager;
@@ -110,7 +109,7 @@ public class AdapterMainRoms extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
             Config.vmID = current.vmID;
             String env = StartVM.env(activity, current.itemExtra, current.itemPath, false);
-            MainActivity.startVM(current.itemName, env, current.itemExtra, current.itemPath);
+            //MainActivity.startVM(current.itemName, env, current.itemExtra, current.itemPath);
         });
 
         myHolder.cdRoms.setOnLongClickListener(v -> {

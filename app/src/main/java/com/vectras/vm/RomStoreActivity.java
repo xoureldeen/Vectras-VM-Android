@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.vectras.vm.databinding.ActivityRomStoreBinding;
-import com.vectras.vm.home.romstore.RomStoreHomeAdapterSearch;
+import com.vectras.vm.main.romstore.RomStoreHomeAdapterSearch;
 import com.vectras.vm.Roms.AdapterRoms;
 import com.vectras.vm.Roms.DataRoms;
 import com.vectras.vm.network.RequestNetwork;

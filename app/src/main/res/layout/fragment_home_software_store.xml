@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:transitionGroup="true"
-    tools:context=".main.romstore.RomStoreFragment">
+    tools:context=".main.softwarestore.SoftwareStoreFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_romlist"
+        android:id="@+id/rv_softwarelist"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingBottom="8dp"

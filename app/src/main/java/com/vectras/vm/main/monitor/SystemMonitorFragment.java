@@ -1,4 +1,4 @@
-package com.vectras.vm.home.monitor;
+package com.vectras.vm.main.monitor;
 
 import static android.content.Context.ACTIVITY_SERVICE;
 import static android.os.Build.VERSION.SDK_INT;

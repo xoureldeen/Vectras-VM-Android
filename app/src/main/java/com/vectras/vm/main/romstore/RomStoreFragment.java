@@ -1,4 +1,4 @@
-package com.vectras.vm.home.romstore;
+package com.vectras.vm.main.romstore;
 
 import android.os.Bundle;
 
@@ -20,7 +20,7 @@ import com.vectras.vm.network.RequestNetwork;
 import com.vectras.vm.network.RequestNetworkController;
 import com.vectras.vm.Roms.DataRoms;
 import com.vectras.vm.databinding.FragmentHomeRomStoreBinding;
-import com.vectras.vm.home.core.SharedData;
+import com.vectras.vm.main.core.SharedData;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ public class RomStoreFragment extends Fragment {
 
     public static RomStoreCallToHomeListener romStoreCallToHomeListener;
     public interface RomStoreCallToHomeListener {
-        void updateDataStatus(boolean isReady);
+        void updateSearchStatus(boolean isReady);
     }
 
     @Override
@@ -80,7 +80,7 @@ public class RomStoreFragment extends Fragment {
     }
 
     private void loadFromServer() {
-        romStoreCallToHomeListener.updateDataStatus(false);
+        romStoreCallToHomeListener.updateSearchStatus(false);
 
         net = new RequestNetwork(requireActivity());
         _net_request_listener = new RequestNetwork.RequestListener() {
@@ -124,6 +124,6 @@ public class RomStoreFragment extends Fragment {
         data.addAll(dataRoms);
         mAdapter.notifyDataSetChanged();
         SharedData.dataRomStore.addAll(dataRoms);
-        romStoreCallToHomeListener.updateDataStatus(true);
+        romStoreCallToHomeListener.updateSearchStatus(true);
     }
 }

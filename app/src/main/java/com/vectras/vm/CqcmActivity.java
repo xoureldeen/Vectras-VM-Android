@@ -14,7 +14,7 @@ import androidx.core.app.ActivityCompat;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.vectras.vm.home.HomeActivity;
+import com.vectras.vm.main.MainActivity;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.JSONUtils;
 import com.vectras.vm.utils.PermissionUtils;
@@ -115,7 +115,7 @@ public class CqcmActivity extends AppCompatActivity {
         } else {
             Toast.makeText(getApplicationContext(), "The virtual machine list data is corrupted and new virtual machines cannot be added right now.", Toast.LENGTH_LONG).show();
         }
-        if(!HomeActivity.isActivate) {
+        if(!MainActivity.isActivate) {
             Log.i("CqcmActivity", "Vectras VM is not opening.");
             gotoActivity.setClass(getApplicationContext(), SplashActivity.class);
             startActivity(gotoActivity);
@@ -133,7 +133,7 @@ public class CqcmActivity extends AppCompatActivity {
     private void runCommand(String _command) {
         AppConfig.pendingCommand = _command;
 
-        if(!HomeActivity.isActivate) {
+        if(!MainActivity.isActivate) {
             Log.i("CqcmActivity", "Vectras VM is not opening.");
             gotoActivity.setClass(getApplicationContext(), SplashActivity.class);
             startActivity(gotoActivity);
@@ -142,7 +142,7 @@ public class CqcmActivity extends AppCompatActivity {
             Log.i("CqcmActivity", "Vectras VM is opening.");
             Intent intent = new Intent();
             intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-            intent.setClass(this, HomeActivity.class);
+            intent.setClass(this, MainActivity.class);
             startActivity(intent);
             Log.i("CqcmActivity", "Opened HomeActivity.");
         }
