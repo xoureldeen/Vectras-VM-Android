@@ -206,6 +206,7 @@ public class SystemMonitorFragment extends Fragment {
 
         executor.execute(() -> {
             String qemuVersionName = CommandUtils.getQemuVersionName();
+            if (!isAdded()) return;
             String result = Terminal.executeShellCommandWithResult("ps -e command", requireActivity());
             requireActivity().runOnUiThread(() -> {
                 binding.tvProcesses.setText(result);
@@ -242,6 +243,7 @@ public class SystemMonitorFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     private void getVNCServerStatus(String resultCommand) {
+        if (!isAdded()) return;
         binding.tvVncport.setText(getString(R.string.port_qemu) + " " + (Integer.parseInt(MainSettingsManager.getVncExternalDisplay(requireActivity())) + 5900) + ".");
 
         if (resultCommand.contains(Config.defaultVNCHost + ":" + Config.defaultVNCPort)) {

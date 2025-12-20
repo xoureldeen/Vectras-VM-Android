@@ -835,11 +835,11 @@ public class VMManager {
     }
 
     public static void shutdownCurrentVM() {
-        QmpClient.sendCommand("{ \"execute\": \"quit\" }");
+        new Thread(() -> QmpClient.sendCommand("{ \"execute\": \"quit\" }")).start();
     }
 
     public static void resetCurrentVM() {
-        QmpClient.sendCommand("{ \"execute\": \"system_reset\" }");
+        new Thread(() -> QmpClient.sendCommand("{ \"execute\": \"system_reset\" }")).start();
     }
 
     public static void showChangeRemovableDevicesDialog(Activity _activity, VncCanvasActivity vncCanvasActivity) {
@@ -1028,135 +1028,155 @@ public class VMManager {
     }
 
     public static void changeCDROM(String _path, Activity _activity) {
-        if (isUsingQ35(lastQemuCommand)) {
-            if (isQMPCommandSuccess(QmpClient.sendCommand(changeRemovableDevicesQMPCommand("ide2-cd0", _path)))) {
-                if (_activity != null && !_activity.isFinishing())
-                    Toast.makeText(_activity, _activity.getString(R.string.changed), Toast.LENGTH_SHORT).show();
+        new Thread(() -> {
+            if (isUsingQ35(lastQemuCommand)) {
+                if (isQMPCommandSuccess(QmpClient.sendCommand(changeRemovableDevicesQMPCommand("ide2-cd0", _path)))) {
+                    if (_activity != null && !_activity.isFinishing())
+                        _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.changed), Toast.LENGTH_SHORT).show());
+                } else {
+                    if (_activity != null && !_activity.isFinishing())
+                        _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.change_failed), Toast.LENGTH_SHORT).show());
+                }
             } else {
-                if (_activity != null && !_activity.isFinishing())
-                    Toast.makeText(_activity, _activity.getString(R.string.change_failed), Toast.LENGTH_SHORT).show();
+                if (isQMPCommandSuccess(QmpClient.sendCommand(changeRemovableDevicesQMPCommand("ide1-cd0", _path)))) {
+                    if (_activity != null && !_activity.isFinishing())
+                        _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.changed), Toast.LENGTH_SHORT).show());
+                } else {
+                    if (_activity != null && !_activity.isFinishing())
+                        _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.change_failed), Toast.LENGTH_SHORT).show());
+                }
             }
-        } else {
-            if (isQMPCommandSuccess(QmpClient.sendCommand(changeRemovableDevicesQMPCommand("ide1-cd0", _path)))) {
-                if (_activity != null && !_activity.isFinishing())
-                    Toast.makeText(_activity, _activity.getString(R.string.changed), Toast.LENGTH_SHORT).show();
-            } else {
-                if (_activity != null && !_activity.isFinishing())
-                    Toast.makeText(_activity, _activity.getString(R.string.change_failed), Toast.LENGTH_SHORT).show();
-            }
-        }
+        }).start();
     }
 
     public static void changeFloppyDriveA(String _path, Activity _activity) {
-        if (isQMPCommandSuccess(QmpClient.sendCommand(changeRemovableDevicesQMPCommand("floppy0", _path)))) {
-            if (_activity != null && !_activity.isFinishing())
-                Toast.makeText(_activity, _activity.getString(R.string.changed), Toast.LENGTH_SHORT).show();
-        } else {
-            if (_activity != null && !_activity.isFinishing())
-                Toast.makeText(_activity, _activity.getString(R.string.change_failed), Toast.LENGTH_SHORT).show();
-        }
+        new Thread(() -> {
+            if (isQMPCommandSuccess(QmpClient.sendCommand(changeRemovableDevicesQMPCommand("floppy0", _path)))) {
+                if (_activity != null && !_activity.isFinishing())
+                    _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.changed), Toast.LENGTH_SHORT).show());
+            } else {
+                if (_activity != null && !_activity.isFinishing())
+                    _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.change_failed), Toast.LENGTH_SHORT).show());
+            }
+        }).start();
     }
 
     public static void changeFloppyDriveB(String _path, Activity _activity) {
-        if (isQMPCommandSuccess(QmpClient.sendCommand(changeRemovableDevicesQMPCommand("floppy1", _path)))) {
-            if (_activity != null && !_activity.isFinishing())
-                Toast.makeText(_activity, _activity.getString(R.string.changed), Toast.LENGTH_SHORT).show();
-        } else {
-            if (_activity != null && !_activity.isFinishing())
-                Toast.makeText(_activity, _activity.getString(R.string.change_failed), Toast.LENGTH_SHORT).show();
-        }
+        new Thread(() -> {
+            if (isQMPCommandSuccess(QmpClient.sendCommand(changeRemovableDevicesQMPCommand("floppy1", _path)))) {
+                if (_activity != null && !_activity.isFinishing())
+                    _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.changed), Toast.LENGTH_SHORT).show());
+            } else {
+                if (_activity != null && !_activity.isFinishing())
+                    _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.change_failed), Toast.LENGTH_SHORT).show());
+            }
+        }).start();
     }
 
     public static void changeSDCard(String _path, Activity _activity) {
-        if (isQMPCommandSuccess(QmpClient.sendCommand(changeRemovableDevicesQMPCommand("sd0", _path)))) {
-            if (_activity != null && !_activity.isFinishing())
-                Toast.makeText(_activity, _activity.getString(R.string.changed), Toast.LENGTH_SHORT).show();
-        } else {
-            if (_activity != null && !_activity.isFinishing())
-                Toast.makeText(_activity, _activity.getString(R.string.change_failed), Toast.LENGTH_SHORT).show();
-        }
+        new Thread(() -> {
+            if (isQMPCommandSuccess(QmpClient.sendCommand(changeRemovableDevicesQMPCommand("sd0", _path)))) {
+                if (_activity != null && !_activity.isFinishing())
+                    _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.changed), Toast.LENGTH_SHORT).show());
+            } else {
+                if (_activity != null && !_activity.isFinishing())
+                    _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.change_failed), Toast.LENGTH_SHORT).show());
+            }
+        }).start();
     }
 
     public static void ejectCDROM(Activity _activity) {
-        if (isUsingQ35(lastQemuCommand)) {
-            if (isQMPCommandSuccess(QmpClient.sendCommand(ejectRemovableDevicesQMPCommand("ide2-cd0")))) {
-                if (_activity != null && !_activity.isFinishing())
-                    Toast.makeText(_activity, _activity.getString(R.string.ejected), Toast.LENGTH_SHORT).show();
+        new Thread(() -> {
+            if (isUsingQ35(lastQemuCommand)) {
+                if (isQMPCommandSuccess(QmpClient.sendCommand(ejectRemovableDevicesQMPCommand("ide2-cd0")))) {
+                    if (_activity != null && !_activity.isFinishing())
+                        _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.ejected), Toast.LENGTH_SHORT).show());
+                } else {
+                    if (_activity != null && !_activity.isFinishing())
+                        _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.eject_failed), Toast.LENGTH_SHORT).show());
+                }
             } else {
-                if (_activity != null && !_activity.isFinishing())
-                    Toast.makeText(_activity, _activity.getString(R.string.eject_failed), Toast.LENGTH_SHORT).show();
+                if (isQMPCommandSuccess(QmpClient.sendCommand(ejectRemovableDevicesQMPCommand("ide1-cd0")))) {
+                    if (_activity != null && !_activity.isFinishing())
+                        _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.ejected), Toast.LENGTH_SHORT).show());
+                } else {
+                    if (_activity != null && !_activity.isFinishing())
+                        _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.eject_failed), Toast.LENGTH_SHORT).show());
+                }
             }
-        } else {
-            if (isQMPCommandSuccess(QmpClient.sendCommand(ejectRemovableDevicesQMPCommand("ide1-cd0")))) {
-                if (_activity != null && !_activity.isFinishing())
-                    Toast.makeText(_activity, _activity.getString(R.string.ejected), Toast.LENGTH_SHORT).show();
-            } else {
-                if (_activity != null && !_activity.isFinishing())
-                    Toast.makeText(_activity, _activity.getString(R.string.eject_failed), Toast.LENGTH_SHORT).show();
-            }
-        }
+        }).start();
     }
 
     public static void ejectFloppyDriveA(Activity _activity) {
-        if (isQMPCommandSuccess(QmpClient.sendCommand(ejectRemovableDevicesQMPCommand("floppy0")))) {
-            if (_activity != null && !_activity.isFinishing())
-                Toast.makeText(_activity, _activity.getString(R.string.ejected), Toast.LENGTH_SHORT).show();
-        } else {
-            if (_activity != null && !_activity.isFinishing())
-                Toast.makeText(_activity, _activity.getString(R.string.eject_failed), Toast.LENGTH_SHORT).show();
-        }
+        new Thread(() -> {
+            if (isQMPCommandSuccess(QmpClient.sendCommand(ejectRemovableDevicesQMPCommand("floppy0")))) {
+                if (_activity != null && !_activity.isFinishing())
+                    _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.ejected), Toast.LENGTH_SHORT).show());
+            } else {
+                if (_activity != null && !_activity.isFinishing())
+                    _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.eject_failed), Toast.LENGTH_SHORT).show());
+            }
+        }).start();
     }
 
     public static void ejectFloppyDriveB(Activity _activity) {
-        if (isQMPCommandSuccess(QmpClient.sendCommand(ejectRemovableDevicesQMPCommand("floppy1")))) {
-            if (_activity != null && !_activity.isFinishing())
-                Toast.makeText(_activity, _activity.getString(R.string.ejected), Toast.LENGTH_SHORT).show();
-        } else {
-            if (_activity != null && !_activity.isFinishing())
-                Toast.makeText(_activity, _activity.getString(R.string.eject_failed), Toast.LENGTH_SHORT).show();
-        }
+        new Thread(() -> {
+            if (isQMPCommandSuccess(QmpClient.sendCommand(ejectRemovableDevicesQMPCommand("floppy1")))) {
+                if (_activity != null && !_activity.isFinishing())
+                    _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.ejected), Toast.LENGTH_SHORT).show());
+            } else {
+                if (_activity != null && !_activity.isFinishing())
+                    _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.eject_failed), Toast.LENGTH_SHORT).show());
+            }
+        }).start();
     }
 
     public static void ejectSDCard(Activity _activity) {
-        if (isQMPCommandSuccess(QmpClient.sendCommand(ejectRemovableDevicesQMPCommand("sd0")))) {
-            if (_activity != null && !_activity.isFinishing())
-                Toast.makeText(_activity, _activity.getString(R.string.ejected), Toast.LENGTH_SHORT).show();
-        } else {
-            if (_activity != null && !_activity.isFinishing())
-                Toast.makeText(_activity, _activity.getString(R.string.eject_failed), Toast.LENGTH_SHORT).show();
-        }
+        new Thread(() -> {
+            if (isQMPCommandSuccess(QmpClient.sendCommand(ejectRemovableDevicesQMPCommand("sd0")))) {
+                if (_activity != null && !_activity.isFinishing())
+                    _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.ejected), Toast.LENGTH_SHORT).show());
+            } else {
+                if (_activity != null && !_activity.isFinishing())
+                    _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.eject_failed), Toast.LENGTH_SHORT).show());
+            }
+        }).start();
     }
 
     public static void changeRemovableDevice(String _deviceID, String _filepath, Activity _activity) {
-        String _result = QmpClient.sendCommand(changeRemovableDevicesQMPCommand(_deviceID, _filepath));
-        if (isQMPCommandSuccess(_result)) {
-            if (_activity != null && !_activity.isFinishing())
-                Toast.makeText(_activity, _activity.getString(R.string.changed), Toast.LENGTH_SHORT).show();
-        } else {
-            if (_activity != null && !_activity.isFinishing()) {
-                if (_result.contains("is not removable")) {
-                    Toast.makeText(_activity, _activity.getString(R.string.this_is_not_a_removable_device), Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(_activity, _activity.getString(R.string.change_failed), Toast.LENGTH_SHORT).show();
+        new Thread(() -> {
+            String _result = QmpClient.sendCommand(changeRemovableDevicesQMPCommand(_deviceID, _filepath));
+            if (isQMPCommandSuccess(_result)) {
+                if (_activity != null && !_activity.isFinishing())
+                    _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.changed), Toast.LENGTH_SHORT).show());
+            } else {
+                if (_activity != null && !_activity.isFinishing()) {
+                    if (_result.contains("is not removable")) {
+                        _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.this_is_not_a_removable_device), Toast.LENGTH_SHORT).show());
+                    } else {
+                        _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.change_failed), Toast.LENGTH_SHORT).show());
+                    }
                 }
             }
-        }
+        }).start();
     }
 
     public static void ejectRemovableDevice(String _deviceID, Activity _activity) {
-        String _result = QmpClient.sendCommand(ejectRemovableDevicesQMPCommand(_deviceID));
-        if (isQMPCommandSuccess(_result)) {
-            if (_activity != null && !_activity.isFinishing())
-                Toast.makeText(_activity, _activity.getString(R.string.ejected), Toast.LENGTH_SHORT).show();
-        } else {
-            if (_activity != null && !_activity.isFinishing()) {
-                if (_result.contains("is not removable")) {
-                    Toast.makeText(_activity, _activity.getString(R.string.this_is_not_a_removable_device), Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(_activity, _activity.getString(R.string.eject_failed), Toast.LENGTH_SHORT).show();
+        new Thread(() -> {
+            String _result = QmpClient.sendCommand(ejectRemovableDevicesQMPCommand(_deviceID));
+            if (isQMPCommandSuccess(_result)) {
+                if (_activity != null && !_activity.isFinishing())
+                    _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.ejected), Toast.LENGTH_SHORT).show());
+            } else {
+                if (_activity != null && !_activity.isFinishing()) {
+                    if (_result.contains("is not removable")) {
+                        _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.this_is_not_a_removable_device), Toast.LENGTH_SHORT).show());
+                    } else {
+                        _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.eject_failed), Toast.LENGTH_SHORT).show());
+                    }
                 }
             }
-        }
+        }).start();
     }
 
     public static void setVNCPasswordWithDelay(String _password) {

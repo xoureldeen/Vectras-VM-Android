@@ -5,11 +5,11 @@
     "url": "https://github.com/xoureldeen/Vectras-VM-Android/releases",
     "Message": "<h2>3.4.0</h2>\n- Fixed the issue of exporting rom with virtual machine ID.\n- New dialog for copying files in creating new virtual machine.\n- New dialog showing information after successful rom import.\n- Fixed no sound playing with Termux.\n- Fixed invalid file path error when using Manual setup.\n- Fixed dialog showing content without line breaks.\n- Fixed rom export error.\n- Added Processes to System monitor.\n- Improved interface.\n- Thinner fonts.\n- Fixed an issue with interaction in Rom store.\n- Fixed the External VNC Server switch being incorrect in certain cases.\n- Removed unnecessary resources.\n- Updated Chinese (Simplified) language (contributed by @WeiguangTWK).\n- Fixed issue with installing system files after not completing the first time.\n- New setup wizard.\n- Added auto return to Home after importing rom and creating virtual machine in Rom store.\n- Improved image viewer.\n- Fixed Unknow display error in architecture in rom info if it is PowerPC architecture.\n- New setup wizard interface that automatically changes according to screen size.\n- New ID generator for virtual machine.\n- Added dialog when deleting virtual machine.",
     "cancellable": true,
-    "versionCodeBeta":"51",
-    "versionNameBeta":"3.4.7",
-    "versionNameBetas":"3.0.0,3.1.0,3.2.1,3.2.2,3.2.3,3.2.4,3.2.5,3.2.6,3.2.7,3.2.8,3.2.9,3.2.10,3.3.1,3.3.2,3.3.3,3.3.4,3.3.5,3.3.6,3.3.7,3.3.8,3.3.9,3.4.1,3.4.2,3.4.3,3.4.4,3.4.5,3.4.6,3.4.7",
-    "sizeBeta": "45 MB",
+    "versionCodeBeta":"52",
+    "versionNameBeta":"3.4.8",
+    "versionNameBetas":"3.0.0,3.1.0,3.2.1,3.2.2,3.2.3,3.2.4,3.2.5,3.2.6,3.2.7,3.2.8,3.2.9,3.2.10,3.3.1,3.3.2,3.3.3,3.3.4,3.3.5,3.3.6,3.3.7,3.3.8,3.3.9,3.4.1,3.4.2,3.4.3,3.4.4,3.4.5,3.4.6,3.4.7,3.4.8",
+    "sizeBeta": "46 MB",
     "urlBeta": "https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases",
-    "MessageBeta": "<h2>3.4.7</h2>Bugs fixed.",
+    "MessageBeta": "<h2>3.4.8</h2>Bugs fixed.",
     "cancellableBeta": true
 }

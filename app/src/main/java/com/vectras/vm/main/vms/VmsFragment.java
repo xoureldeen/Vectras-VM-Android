@@ -108,6 +108,8 @@ public class VmsFragment extends Fragment implements CallbackInterface.HomeCallT
             List<DataMainRoms> tempdata = new ArrayList<>();
 
             try {
+                if (!isAdded()) return;
+
                 jArray = new JSONArray(FileUtils.readFromFile(requireActivity(), new File(AppConfig.maindirpath
                         + "roms-data.json")));
 
@@ -146,12 +148,15 @@ public class VmsFragment extends Fragment implements CallbackInterface.HomeCallT
                     romsMainData.itemExtra = json_data.getString("imgExtra");
                     tempdata.add(romsMainData);
                 }
+                if (!isAdded()) return;
                 requireActivity().runOnUiThread(() -> binding.lnError.setVisibility(View.GONE));
             } catch (JSONException e) {
+                if (!isAdded()) return;
                 requireActivity().runOnUiThread(() -> binding.lnError.setVisibility(View.VISIBLE));
                 Log.e(TAG, "loadDataVbi: ", e);
             }
 
+            if (!isAdded()) return;
             requireActivity().runOnUiThread(() -> {
                 binding.lnLoad.setVisibility(View.GONE);
                 if (tempdata.isEmpty()) {
@@ -167,27 +172,32 @@ public class VmsFragment extends Fragment implements CallbackInterface.HomeCallT
     }
 
     private void checkAndLoad() {
+        if (!isAdded()) return;
         if (PermissionUtils.storagepermission(requireActivity(), true)) {
             loadDataVbi();
-            if (DeviceUtils.isStorageLow(requireActivity(), true)) {
-                DialogUtils.oneDialog(requireActivity(),
-                        getResources().getString(R.string.oops),
-                        getResources().getString(R.string.very_low_available_storage_space_content),
-                        getResources().getString(R.string.ok),
-                        true,
-                        R.drawable.warning_48px,
-                        true,
-                        null,
-                        () -> {
-                            if (DeviceUtils.isStorageLow(requireActivity(), true))
-                                requireActivity().finish();
-                        });
-            }
+            executor.execute(() -> {
+                if (DeviceUtils.isStorageLow(requireActivity(), true)) {
+                    if (!isAdded()) return;
+                    requireActivity().runOnUiThread(() -> DialogUtils.oneDialog(requireActivity(),
+                            getResources().getString(R.string.oops),
+                            getResources().getString(R.string.very_low_available_storage_space_content),
+                            getResources().getString(R.string.ok),
+                            true,
+                            R.drawable.warning_48px,
+                            true,
+                            null,
+                            () -> {
+                                if (DeviceUtils.isStorageLow(requireActivity(), true))
+                                    requireActivity().finish();
+                            }));
+                }
+            });
         }
     }
 
     @Override
     public void refeshVMList() {
+        if (!isAdded()) return;
         requireActivity().runOnUiThread(this::checkAndLoad);
     }
 

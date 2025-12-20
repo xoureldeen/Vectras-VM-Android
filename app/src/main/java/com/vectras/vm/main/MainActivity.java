@@ -24,12 +24,16 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.google.android.material.behavior.HideViewOnScrollBehavior;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.color.MaterialColors;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.termux.app.TermuxActivity;
 import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
@@ -84,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
     private final String TAG = "HomeActivity";
     private final int SEARCH_ROM_STORE = 0;
     private final int SEARCH_SOFTWARE_STORE = 1;
+    private int currentBottomBarSelectedItemId = 0;
     private int currentSearchMode = 0;
     public static boolean isActivate = false;
     public static boolean isNeedRecreate = false;
@@ -185,6 +190,14 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
             Fragment selectedFragment;
 
             int id = item.getItemId();
+
+            if (id == currentBottomBarSelectedItemId) {
+                if (id == R.id.item_romstore || id == R.id.item_softwarestore) {
+                    if (bindingContent.searchbar.isEnabled()) binding.searchview.show();
+                }
+                return true;
+            }
+
             if (id == R.id.item_home) {
                 selectedFragment = new VmsFragment();
                 bindingContent.efabCreate.setVisibility(View.VISIBLE);
@@ -221,8 +234,11 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
             getSupportFragmentManager().beginTransaction()
                     .replace(bindingContent.containerView.getId(), selectedFragment)
                     .commit();
+            currentBottomBarSelectedItemId = id;
             return true;
         });
+
+        currentBottomBarSelectedItemId = bindingContent.bottomNavigation.getSelectedItemId();
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
@@ -236,6 +252,7 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
                     binding.searchview.hide();
                 } else if (bindingContent.bottomNavigation.getSelectedItemId() != R.id.item_home) {
                     bindingContent.bottomNavigation.setSelectedItemId(R.id.item_home);
+                    showBottomBarAndFab();
                 } else if (MainSettingsManager.getQuickStart(MainActivity.this)) {
                     Intent intent = new Intent(Intent.ACTION_MAIN);
                     intent.addCategory(Intent.CATEGORY_HOME);
@@ -339,6 +356,7 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
             isOpenHome = false;
             if (binding.searchview.isShowing()) binding.searchview.hide();
             bindingContent.bottomNavigation.setSelectedItemId(R.id.item_home);
+            showBottomBarAndFab();
         }
 
         new Handler(Looper.getMainLooper()).post(() -> DisplaySystem.startTermuxX11(this));
@@ -395,6 +413,30 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
                 startActivity(intent);
             }
             return false;
+        });
+    }
+
+    private void showBottomBarAndFab() {
+        bindingContent.bottomNavigation.post(() -> {
+            CoordinatorLayout.LayoutParams lp =
+                    (CoordinatorLayout.LayoutParams) bindingContent.bottomNavigation.getLayoutParams();
+
+            HideViewOnScrollBehavior<BottomNavigationView> behavior = (HideViewOnScrollBehavior<BottomNavigationView>) lp.getBehavior();
+
+            if (behavior != null) {
+                behavior.slideIn(bindingContent.bottomNavigation);
+            }
+        });
+
+        bindingContent.efabCreate.post(() -> {
+            CoordinatorLayout.LayoutParams lpfab =
+                    (CoordinatorLayout.LayoutParams) bindingContent.efabCreate.getLayoutParams();
+
+            HideViewOnScrollBehavior<ExtendedFloatingActionButton> behaviorfab = (HideViewOnScrollBehavior<ExtendedFloatingActionButton>) lpfab.getBehavior();
+
+            if (behaviorfab != null) {
+                behaviorfab.slideIn(bindingContent.efabCreate);
+            }
         });
     }
 
