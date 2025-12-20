@@ -58,6 +58,8 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class SetupWizard2Activity extends AppCompatActivity {
     ActivitySetupWizard2Binding binding;
@@ -86,6 +88,7 @@ public class SetupWizard2Activity extends AppCompatActivity {
     boolean isNotEnoughStorageSpace = false;
     boolean isCustomSetupMode = false;
     final ArrayList<HashMap<String, String>> mirrorList = new ArrayList<>();
+    ExecutorService executor = Executors.newSingleThreadExecutor();
 
 
     @Override
@@ -346,26 +349,29 @@ public class SetupWizard2Activity extends AppCompatActivity {
     }
 
     private void extractSystemFiles() {
-        isNotEnoughStorageSpace = DeviceUtils.isStorageLow(this, false);
+        uiController(STEP_EXTRACTING_SYSTEM_FILES);
 
-        if (isNotEnoughStorageSpace) {
-            uiController(STEP_ERROR);
-            return;
-        } else {
-            uiController(STEP_EXTRACTING_SYSTEM_FILES);
-        }
-
-        new Thread(() -> {
-            boolean result = SetupFeatureCore.startExtractSystemFiles(this);
-
-            runOnUiThread(() -> new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                if (result) {
-                    getDataForStandardSetup();
-                } else {
-                    uiController(STEP_ERROR, getString(R.string.system_files_installation_failed_content) + (!SetupFeatureCore.lastErrorLog.isEmpty() ? "\n\n" + SetupFeatureCore.lastErrorLog : ""));
+        executor.execute(() -> {
+            isNotEnoughStorageSpace = DeviceUtils.isStorageLow(this, false);
+            runOnUiThread(() -> {
+                if (isNotEnoughStorageSpace) {
+                    uiController(STEP_ERROR);
+                    return;
                 }
-            }, 1000));
-        }).start();
+
+                new Thread(() -> {
+                    boolean result = SetupFeatureCore.startExtractSystemFiles(this);
+
+                    runOnUiThread(() -> new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                        if (result) {
+                            getDataForStandardSetup();
+                        } else {
+                            uiController(STEP_ERROR, getString(R.string.system_files_installation_failed_content) + (!SetupFeatureCore.lastErrorLog.isEmpty() ? "\n\n" + SetupFeatureCore.lastErrorLog : ""));
+                        }
+                    }, 1000));
+                }).start();
+            });
+        });
     }
 
     private void getDataForStandardSetup() {
