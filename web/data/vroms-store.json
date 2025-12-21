@@ -775,6 +775,24 @@
     "id": ""
   },
   {
+    "rom_name": "Ubuntu 7.10",
+    "rom_icon": "https://img.beget.com/cp/plain/shared/7Um-b5Q4nUooUrhtmYGD9ZofUPM7cKtw/ubuntu2x.png@.webp",
+    "rom_url": "https://youtu.be/slFUdvQY85U",
+    "rom_path": "Ubuntu 7.10.cvbi",
+    "rom_avail": true,
+    "rom_size": "Gutsy Gibbon",
+    "rom_arch": "X86_64",
+    "rom_kernel": "linux",
+    "rom_extra": "",
+    "final_rom_file_name": "",
+    "desc": "This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nUbuntu is a popular Linux distribution based on Debian. It is designed to be user-friendly and accessible, with a focus on ease of use and installation. Ubuntu features a modern desktop environment and comes with a wide range of pre-installed applications for productivity, multimedia, and internet browsing. The distribution is known for its strong community support and regular release cycle.",
+    "file_size": "5 GB",
+    "creator": "Nguyen Bao An Bui",
+    "verified": true,
+    "vecid": "ubuntu710cvbi",
+    "id": "99678"
+  },
+  {
     "rom_name": "Ubuntu 9.10",
     "rom_icon": "https://img.beget.com/cp/plain/shared/7Um-b5Q4nUooUrhtmYGD9ZofUPM7cKtw/ubuntu2x.png@.webp",
     "rom_url": "https://youtu.be/fURj6W92nOg",
@@ -915,7 +933,7 @@
     "file_size": "10 GB",
     "creator": "Nguyen Bao An Bui",
     "verified": true,
-    "vecid": "",
+    "vecid": "windows1022h2rcvbi",
     "id": "99679"
   },
   {
@@ -1131,7 +1149,7 @@
     "file_size": "11 GB",
     "creator": "Nguyen Bao An Bui",
     "verified": true,
-    "vecid": "",
+    "vecid": "windows1126h1build280001cvbi",
     "id": "99683"
   },
   {
@@ -1797,7 +1815,7 @@
     "file_size": "2 GB",
     "creator": "Nguyen Bao An Bui",
     "verified": true,
-    "vecid": "",
+    "vecid": "windowsxpstartereditioncvbi",
     "id": "99684"
   },
   {
