@@ -476,6 +476,8 @@
     <string name="it_will_be_created_in">It will be created in</string>
     <string name="software_and_driver">Software &amp; driver</string>
     <string name="shared_by">Shared by</string>
+    <string name="system_update">System update</string>
+    <string name="system_update_note">You are using an older system, update now.</string>
 
 
     <!--======================TERMUX STRINGS====================-->

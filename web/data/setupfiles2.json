@@ -1,0 +1,4 @@
+{
+    "aarch64":"https://go.anbui.ovh/vectrasvm/files/qemu/9.2.4-3dfx/base-vectras-vm-arm64-v8a.tar.gz",
+    "amd64":"https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/3.2.9/base-vectras-vm-x86_64.tar.gz"
+}

@@ -33,6 +33,7 @@ import com.termux.app.TermuxService;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.AppConfig;
 import com.vectras.vm.R;
+import com.vectras.vm.VMManager;
 import com.vectras.vm.network.RequestNetwork;
 import com.vectras.vm.network.RequestNetworkController;
 import com.vectras.vm.databinding.ActivitySetupWizard2Binding;
@@ -64,6 +65,7 @@ import java.util.concurrent.Executors;
 public class SetupWizard2Activity extends AppCompatActivity {
     ActivitySetupWizard2Binding binding;
     SetupQemuDoneBinding bindingFinalSteps;
+    public static final int ACTION_SYSTEM_UPDATE = 1;
     final int STEP_REQUEST_PERMISSION = 1;
     final int STEP_EXTRACTING_SYSTEM_FILES = 2;
     final int STEP_GETTING_DATA = 3;
@@ -73,6 +75,7 @@ public class SetupWizard2Activity extends AppCompatActivity {
     final int STEP_JOIN_COMMUNITY = 7;
     final int STEP_PATERON = 8;
     final int STEP_FINISH = 9;
+    final int STEP_SYSTEM_UPDATE = -1;
     int currentStep = 0;
     String logs = "";
     String bootstrapFileLink = "";
@@ -81,6 +84,7 @@ public class SetupWizard2Activity extends AppCompatActivity {
     String downloadBootstrapsCommand = "";
     String tarPath = "";
     String progressText ="0%";
+    boolean isSystemUpdateMode = false;
     boolean isExecutingCommand = false;
     boolean isLibProotError = false;
     boolean aria2Error = false;
@@ -184,7 +188,9 @@ public class SetupWizard2Activity extends AppCompatActivity {
         });
 
         binding.btnTryAgain.setOnClickListener(v -> {
-            if (isLibProotError) {
+            if (isSystemUpdateMode) {
+                uiController(STEP_SYSTEM_UPDATE);
+            } else if (isLibProotError) {
                 Intent intent = new Intent();
                 intent.setAction(ACTION_VIEW);
                 intent.setData(Uri.parse(AppConfig.telegramLink));
@@ -218,6 +224,31 @@ public class SetupWizard2Activity extends AppCompatActivity {
                 finish();
             }
         });
+
+
+        //System update
+        binding.btnSkipSystemUpdate.setOnClickListener(v -> {
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        });
+
+        binding.btnSystemUpdate.setOnClickListener(v -> {
+            uiController(STEP_EXTRACTING_SYSTEM_FILES);
+            new Thread(() -> {
+                VMManager.killallqemuprocesses(this);
+                FileUtils.deleteDirectory(getFilesDir().getAbsolutePath() + "/data");
+                FileUtils.deleteDirectory(getFilesDir().getAbsolutePath() + "/distro");
+                FileUtils.deleteDirectory(getFilesDir().getAbsolutePath() + "/usr");
+                runOnUiThread(this::extractSystemFiles);
+            }).start();
+        });
+
+        if (getIntent().hasExtra("action")) {
+            if (getIntent().getIntExtra("action", -1) == ACTION_SYSTEM_UPDATE) {
+                isSystemUpdateMode = true;
+                uiController(STEP_SYSTEM_UPDATE);
+            }
+        }
     }
 
     private void uiController(int step) {
@@ -233,6 +264,7 @@ public class SetupWizard2Activity extends AppCompatActivity {
         binding.lnGettingData.setVisibility(View.GONE);
         binding.lnSetupOptions.setVisibility(View.GONE);
         binding.lnInstallingPackages.setVisibility(View.GONE);
+        binding.lnSystemUpdate.setVisibility(View.GONE);
         binding.lnInstallingPackagesFailed.setVisibility(View.GONE);
 
         TransitionManager.beginDelayedTransition(binding.main);
@@ -247,6 +279,8 @@ public class SetupWizard2Activity extends AppCompatActivity {
             binding.lnSetupOptions.setVisibility(View.VISIBLE);
         } else if (step == STEP_INSTALLING_PACKAGES) {
             binding.lnInstallingPackages.setVisibility(View.VISIBLE);
+        } else if (step == STEP_SYSTEM_UPDATE) {
+            binding.lnSystemUpdate.setVisibility(View.VISIBLE);
         } else if (step == STEP_ERROR) {
             binding.lnInstallingPackagesFailed.setVisibility(View.VISIBLE);
             binding.tvErrorLogContent.setText(log.isEmpty() ? getString(R.string.there_are_no_logs) : log);
@@ -385,16 +419,22 @@ public class SetupWizard2Activity extends AppCompatActivity {
                     HashMap<String, Object> mmap;
                     mmap = new Gson().fromJson(response, new TypeToken<HashMap<String, Object>>() {
                     }.getType());
-                    if (mmap.containsKey("arm64-v8a") && mmap.containsKey("amd64")) {
+                    if (mmap.containsKey("aarch64") && mmap.containsKey("amd64")) {
                         if (Build.SUPPORTED_ABIS[0].contains("arm64")) {
-                            bootstrapFileLink = Objects.requireNonNull(mmap.get("arm64-v8a")).toString();
+                            bootstrapFileLink = Objects.requireNonNull(mmap.get("aarch64")).toString();
                         } else {
                             bootstrapFileLink = Objects.requireNonNull(mmap.get("amd64")).toString();
                         }
                         downloadBootstrapsCommand = " aria2c -x 4 --async-dns=false --disable-ipv6 --check-certificate=false -o setup.tar.gz " + bootstrapFileLink;
                     }
                 }
-                new Handler(Looper.getMainLooper()).postDelayed(() -> uiController(STEP_SETUP_OPTIONS), 1000);
+                new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                    if (isSystemUpdateMode) {
+                        startSetup();
+                    } else {
+                        uiController(STEP_SETUP_OPTIONS);
+                    }
+                }, 1000);
             }
 
             @Override
@@ -458,7 +498,6 @@ public class SetupWizard2Activity extends AppCompatActivity {
                                 runOnUiThread(() -> {
                                     isCustomSetupMode = true;
                                     startSetup();
-                                    MainSettingsManager.setsetUpWithManualSetupBefore(this, true);
                                 });
                             } catch (Exception e) {
                                 runOnUiThread(() -> uiController(STEP_ERROR, getString(R.string.the_file_could_not_be_processed_content)));
@@ -587,7 +626,12 @@ public class SetupWizard2Activity extends AppCompatActivity {
 
         if (newLog.contains("xssFjnj58Id")) {
             isExecutingCommand = false;
+            MainSettingsManager.setStandardSetupVersion(this, AppConfig.standardSetupVersion);
+            MainSettingsManager.setsetUpWithManualSetupBefore(this, isCustomSetupMode);
             uiController(STEP_JOIN_COMMUNITY);
+            if (isSystemUpdateMode) {
+                uiControllerFinalSteps(STEP_FINISH);
+            }
         } else if (newLog.contains("libproot.so --help") || newLog.contains("/bin/sh: can't fork:")) {
             isLibProotError = true;
         } else if (newLog.contains("not complete: /root/setup.tar.gz")) {
@@ -616,6 +660,10 @@ public class SetupWizard2Activity extends AppCompatActivity {
             progressText = "60% | ";
         } else if (newLog.contains("325/")) {
             progressText = "65% | ";
+        } else if (newLog.contains("350/")) {
+            progressText = "68% | ";
+        } else if (newLog.contains("375/")) {
+            progressText = "69% | ";
         } else if (newLog.contains("Downloading Qemu...") || newLog.contains("tar -xzvf ")) {
             progressText = "70% | ";
         } else if (newLog.contains("Installing Qemu...")) {

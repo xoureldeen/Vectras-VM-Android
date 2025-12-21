@@ -106,6 +106,24 @@
     "verified": true,
     "vecid": "cs16iso",
     "id": ""
+  },
+  {
+    "rom_name": "CPU-Z",
+    "rom_icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/CPU-Z_Icon.svg/1200px-CPU-Z_Icon.svg.png",
+    "rom_url": "https://archive.org/details/cpu-z_202512",
+    "rom_path": "CPU-Z.iso",
+    "rom_avail": true,
+    "rom_size": "2.16",
+    "rom_arch": "X86_64",
+    "rom_kernel": "",
+    "rom_extra": "",
+    "final_rom_file_name": "",
+    "desc": "CPU-Z is a freeware system profiling and monitoring application for Microsoft Windows and Android that detects the central processing unit, RAM, motherboard chipset, and other hardware features of a modern personal computer or Android device.",
+    "file_size": "13 MB",
+    "creator": "tokaevUser",
+    "verified": true,
+    "vecid": "cpuziso",
+    "id": ""
   }
 ]
 
