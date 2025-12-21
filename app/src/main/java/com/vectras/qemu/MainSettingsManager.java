@@ -1107,4 +1107,16 @@ public class MainSettingsManager extends AppCompatActivity
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean("runQemuWithXterm", true);
     }
+
+    public static void setStandardSetupVersion(Context context, int value) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putInt("standardSetupVersion", value);
+        edit.apply();
+    }
+
+    public static int getStandardSetupVersion(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getInt("standardSetupVersion", 0);
+    }
 }

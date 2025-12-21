@@ -13,6 +13,7 @@ import androidx.preference.PreferenceManager;
 
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.main.MainActivity;
+import com.vectras.vm.setupwizard.SetupFeatureCore;
 import com.vectras.vm.setupwizard.SetupWizard2Activity;
 import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.FileUtils;
@@ -125,8 +126,17 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
 
     @Override
     public void run() {
-        if ((new File(AppConfig.internalDataDirPath, "distro/usr/local/bin/qemu-system-x86_64").exists()) || (new File(AppConfig.internalDataDirPath, "distro/usr/bin/qemu-system-x86_64").exists())) {
-            startActivity(new Intent(this, MainActivity.class));
+        if (SetupFeatureCore.isInstalledQemu(this)) {
+            if (MainSettingsManager.getStandardSetupVersion(this) != AppConfig.standardSetupVersion &&
+                    !MainSettingsManager.getsetUpWithManualSetupBefore(this) &&
+                    DeviceUtils.is64bit()) {
+                Intent intent = new Intent();
+                intent.putExtra("action", SetupWizard2Activity.ACTION_SYSTEM_UPDATE);
+                intent.setClass(this, SetupWizard2Activity.class);
+                startActivity(intent);
+            } else {
+                startActivity(new Intent(this, MainActivity.class));
+            }
         } else {
             startActivity(new Intent(this, SetupWizard2Activity.class));
             //For Android 14+

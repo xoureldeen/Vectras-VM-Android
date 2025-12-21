@@ -38,6 +38,11 @@ public class SetupFeatureCore {
         return FileUtils.isFileExists(context.getFilesDir().getAbsolutePath() + "/distro/bin/busybox");
     }
 
+    public static boolean isInstalledQemu(Context context) {
+        return FileUtils.isFileExists(context.getFilesDir().getAbsolutePath() + "/distro/usr/local/bin/qemu-system-x86_64") ||
+                FileUtils.isFileExists(context.getFilesDir().getAbsolutePath() + "/distro/usr/bin/qemu-system-x86_64");
+    }
+
     public static boolean startExtractSystemFiles(Context context) {
         if (isInstalledSystemFiles(context)) return true;
         lastErrorLog = "";
