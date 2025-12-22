@@ -273,12 +273,9 @@ public class StartVM {
             params.add(spiceStr);
         } else if (MainSettingsManager.getVmUi(activity).equals("X11")) {
             params.add("-display");
-            params.add("gtk");
-
-            if (Build.VERSION.SDK_INT >= 34) {
-                params.add("-monitor");
-                params.add("stdio");
-            }
+            params.add(MainSettingsManager.getUseSdl(activity) ? "sdl" : "gtk");
+            params.add("-monitor");
+            params.add(MainSettingsManager.getRunQemuWithXterm(activity) ? "stdio" : "vc");
         }
 
         //params.add("-full-screen");

@@ -42,6 +42,7 @@ import com.vectras.vm.AppConfig;
 import com.vectras.vm.VMCreatorActivity;
 import com.vectras.vm.Minitools;
 import com.vectras.vm.R;
+import com.vectras.vm.WebViewActivity;
 import com.vectras.vm.databinding.ActivityMainBinding;
 import com.vectras.vm.databinding.ActivityMainContentBinding;
 import com.vectras.vm.main.softwarestore.SoftwareStoreFragment;
@@ -245,10 +246,7 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
             public void handleOnBackPressed() {
                 if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
                     binding.drawerLayout.closeDrawer(GravityCompat.START);
-                    //Prevent apps from exiting after the drawer is closed.
-                    return;
-                }
-                if (binding.searchview.isShowing()) {
+                } else if (binding.searchview.isShowing()) {
                     binding.searchview.hide();
                 } else if (bindingContent.bottomNavigation.getSelectedItemId() != R.id.item_home) {
                     bindingContent.bottomNavigation.setSelectedItemId(R.id.item_home);
@@ -410,6 +408,16 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
             } else if (id == R.id.mini_tools) {
                 Intent intent = new Intent();
                 intent.setClass(this, Minitools.class);
+                startActivity(intent);
+            } else if (id == R.id.navigation_qemu_doc) {
+                Intent intent = new Intent();
+                if (FileUtils.isFileExists(getFilesDir().getPath() + "/distro/usr/local/share/qemu/doc/index.html")) {
+                    intent.putExtra("url", "file://" + getFilesDir().getPath() + "/distro/usr/local/share/qemu/doc/index.html");
+                    intent.setClass(this, WebViewActivity.class);
+                } else {
+                    intent.setAction(ACTION_VIEW);
+                    intent.setData(Uri.parse("https://www.qemu.org/docs/master/"));
+                }
                 startActivity(intent);
             }
             return false;

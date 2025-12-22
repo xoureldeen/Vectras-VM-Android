@@ -1108,6 +1108,18 @@ public class MainSettingsManager extends AppCompatActivity
         return prefs.getBoolean("runQemuWithXterm", true);
     }
 
+    public static void setUseSdl(Context context, Boolean _boolean) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putBoolean("useSdl", _boolean);
+        edit.apply();
+    }
+
+    public static Boolean getUseSdl(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean("useSdl", false);
+    }
+
     public static void setStandardSetupVersion(Context context, int value) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();

@@ -478,6 +478,10 @@
     <string name="shared_by">Shared by</string>
     <string name="system_update">System update</string>
     <string name="system_update_note">You are using an older system, update now.</string>
+    <string name="use_sdl">Use SDL</string>
+    <string name="use_sdl_note">Turn it on if you want to use 3dfx and play old retro games.</string>
+    <string name="qemu_documentation">QEMU documentation</string>
+    <string name="you_need_to_switch_to_sdl_to_use_3dfx">You need to switch to SDL to use 3dfx.</string>
 
 
     <!--======================TERMUX STRINGS====================-->

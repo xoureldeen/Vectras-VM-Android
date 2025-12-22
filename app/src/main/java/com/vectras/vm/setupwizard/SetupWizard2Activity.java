@@ -458,7 +458,10 @@ public class SetupWizard2Activity extends AppCompatActivity {
                 " echo \"Starting setup...\";" +
                 " apk update;" +
                 " echo \"Installing packages...\";" +
-                " apk add " + (DeviceUtils.is64bit() ? AppConfig.neededPkgs : AppConfig.neededPkgs32bit) + ";" +
+                " apk add " + (DeviceUtils.is64bit() ? (
+                        DeviceUtils.isArm() ? AppConfig.neededPkgs :
+                                AppConfig.neededPkgs.replace("mesa-vulkan-ati mesa-vulkan-broadcom mesa-vulkan-freedreno", ""))
+                : AppConfig.neededPkgs32bit) + ";" +
                 " echo \"Downloading Qemu...\";";
 
         if (isCustomSetupMode) {

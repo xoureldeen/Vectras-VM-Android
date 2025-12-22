@@ -61,7 +61,10 @@ public class DeviceUtils {
     }
 
     public static boolean is64bit() {
-        return Build.SUPPORTED_ABIS[0].contains("arm64");
+        return Build.SUPPORTED_ABIS[0].contains("64");
+    }
+    public static boolean isArm() {
+        return Build.SUPPORTED_ABIS[0].contains("arm");
     }
 
     public static boolean isLargeScreen(Context context) {
