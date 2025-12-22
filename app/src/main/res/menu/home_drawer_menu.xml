@@ -36,6 +36,10 @@
         android:icon="@drawable/help_24px"
         android:title="@string/help"/>
     <item
+        android:id="@+id/navigation_qemu_doc"
+        android:icon="@drawable/docs_24px"
+        android:title="@string/qemu_documentation"/>
+    <item
         android:id="@+id/navigation_item_info"
         android:icon="@drawable/info_24px"
         android:title="@string/about"/>

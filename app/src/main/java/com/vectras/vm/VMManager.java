@@ -37,6 +37,7 @@ import com.vectras.qemu.utils.QmpClient;
 import com.vectras.vm.main.MainActivity;
 import com.vectras.vm.main.core.MainStartVM;
 import com.vectras.vm.settings.VNCSettingsActivity;
+import com.vectras.vm.settings.X11DisplaySettingsActivity;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.JSONUtils;
@@ -648,6 +649,22 @@ public class VMManager {
             _activity.stopService(new Intent(_activity, MainService.class));
             isQemuStopedWithError = true;
             return true;
+        } else if (_result.contains("mesapt: invalid sdl display")) {
+            DialogUtils.twoDialog(_activity,
+                    _activity.getResources().getString(R.string.problem_has_been_detected),
+                    _activity.getResources().getString(R.string.you_need_to_switch_to_sdl_to_use_3dfx),
+                    _activity.getString(R.string.go_to_settings),
+                    _activity.getString(R.string.close),
+                    true,
+                    R.drawable.desktop_24px,
+                    true,
+                    () -> {
+                        Intent intent = new Intent();
+                        intent.setClass(_activity, X11DisplaySettingsActivity.class);
+                        _activity.startActivity(intent);
+                    },
+                    null, null);
+            return false;
         } else if (_command.contains("qemu-system") && _result.contains("qemu-system") && !_result.contains("warning:")) {
             //Error code: UNKNOW_ERROR
             DialogUtils.oneDialog(_activity, _activity.getString(R.string.problem_has_been_detected), _activity.getString(R.string.vm_could_not_be_run_content) + "\n\n" + _result, R.drawable.error_96px);

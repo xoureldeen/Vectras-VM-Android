@@ -71,7 +71,8 @@ We publish a **new beta release after every commit** — so you can always test 
 
 ### Bootstraps
 QEMU 9.2.4 - 3dfx:
-- [arm64 (for phone or tablet)](https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/3.4.9/base-vectras-vm-arm64-v8a.tar.gz)
+- [arm64 (for phone or tablet)](https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/3.5.0/base-nosve-vectras-vm-arm64-v8a.tar.gz)
+- [x86_64 (for PC)](https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/3.5.0/base-vectras-vm-x86_64.tar.gz)
 
 QEMU 9.2.2 - 3dfx:
 - [arm64 (for phone or tablet)](https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/3.2.9/base-vectras-vm-arm64-v8a.tar.gz)
@@ -83,7 +84,7 @@ QEMU 8.2.0 - 3dfx:
 
 ### 3Dfx Wrappers
 
-- [For QEMU 9.2.2 - 3dfx](https://github.com/AnBui2004/Vectras-VM-Emu-Android/blob/master/3dfx/3dfx-wrappers-3.4.7.iso)
+- [For QEMU 9.2.4 - 3dfx](https://github.com/AnBui2004/Vectras-VM-Emu-Android/blob/master/3dfx/3dfx-wrappers-3.5.0.iso)
 - [For QEMU 8.2.0 - 3dfx](https://github.com/AnBui2004/Vectras-VM-Emu-Android/blob/master/3dfx/3dfx-wrappers-2.9.5.iso)
 
 # Donate

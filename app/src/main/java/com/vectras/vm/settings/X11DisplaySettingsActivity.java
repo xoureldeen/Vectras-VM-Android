@@ -35,6 +35,7 @@ public class X11DisplaySettingsActivity extends AppCompatActivity {
     private void initialize() {
         binding.swEnabled.setChecked(MainSettingsManager.getVmUi(this).equals("X11"));
         binding.swRunQemuWithXterm.setChecked(MainSettingsManager.getRunQemuWithXterm(this));
+        binding.swUseSdl.setChecked(MainSettingsManager.getUseSdl(this));
 
         binding.swEnabled.setOnCheckedChangeListener((buttonView, isChecked) -> {
             MainSettingsManager.setVmUi(this, isChecked ? "X11" : "VNC");
@@ -58,6 +59,9 @@ public class X11DisplaySettingsActivity extends AppCompatActivity {
         binding.swRunQemuWithXterm.setOnCheckedChangeListener((buttonView, isChecked) -> MainSettingsManager.setRunQemuWithXterm(this, isChecked));
         binding.lnRunQemuWithXterm.setOnClickListener(v -> binding.swRunQemuWithXterm.toggle());
 
+        binding.swUseSdl.setOnCheckedChangeListener((buttonView, isChecked) -> MainSettingsManager.setUseSdl(this, isChecked));
+        binding.lnUseSdl.setOnClickListener(v -> binding.swUseSdl.toggle());
+
         isInitialized = true;
 
         uiController(binding.swEnabled.isChecked());
@@ -67,5 +71,6 @@ public class X11DisplaySettingsActivity extends AppCompatActivity {
         binding.lnAllOptions.setAlpha(isEnabled ? 1f : 0.5f);
         binding.lnPreferences.setEnabled(isEnabled);
         binding.lnRunQemuWithXterm.setEnabled(isEnabled);
+        binding.lnUseSdl.setEnabled(isEnabled);
     }
 }
