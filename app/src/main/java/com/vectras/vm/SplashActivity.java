@@ -128,8 +128,7 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
     public void run() {
         if (SetupFeatureCore.isInstalledQemu(this)) {
             if (MainSettingsManager.getStandardSetupVersion(this) != AppConfig.standardSetupVersion &&
-                    !MainSettingsManager.getsetUpWithManualSetupBefore(this) &&
-                    DeviceUtils.is64bit()) {
+                    !MainSettingsManager.getsetUpWithManualSetupBefore(this)) {
                 Intent intent = new Intent();
                 intent.putExtra("action", SetupWizard2Activity.ACTION_SYSTEM_UPDATE);
                 intent.setClass(this, SetupWizard2Activity.class);

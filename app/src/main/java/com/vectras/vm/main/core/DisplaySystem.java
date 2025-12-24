@@ -59,7 +59,7 @@ public class DisplaySystem {
                     null
             );
         } else {
-            if (SDK_INT >= 34 && !PackageUtils.isInstalled("com.termux.x11", context)) {
+            if ((SDK_INT >= 34 || !DeviceUtils.isArm()) && !PackageUtils.isInstalled("com.termux.x11", context)) {
                 DialogUtils.needInstallTermuxX11(context);
                 return;
             }
@@ -100,7 +100,7 @@ public class DisplaySystem {
                             null
                     );
                 } else {
-                    if (SDK_INT >= 34) {
+                    if (SDK_INT >= 34 || !DeviceUtils.isArm()) {
                         Log.d(TAG, "launchX11: Opened: com.termux.x11.MainActivity.");
                         Intent intent = new Intent();
                         intent.setClassName("com.termux.x11", "com.termux.x11.MainActivity");
@@ -125,7 +125,7 @@ public class DisplaySystem {
         isTermuxClassLoaded = true;
 
         Log.d(TAG, "startTermuxX11...");
-        if (Build.VERSION.SDK_INT < 34) {
+        if (Build.VERSION.SDK_INT < 34 && DeviceUtils.isArm()) {
             ShellExecutor shellExec = new ShellExecutor();
             shellExec.exec(TermuxService.PREFIX_PATH + "/bin/termux-x11 :0");
         } else {
