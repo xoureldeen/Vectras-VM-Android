@@ -45,7 +45,7 @@ public class X11DisplaySettingsActivity extends AppCompatActivity {
 
         binding.lnPreferences.setOnClickListener(v -> {
             Intent intent = new Intent();
-            if (SDK_INT >= 36) {
+            if (SDK_INT >= 34) {
                 intent.setClassName("com.termux.x11", "com.termux.x11.MainActivity");
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
