@@ -253,6 +253,24 @@
     "id": ""
   },
   {
+    "rom_name": "Debian 4.0",
+    "rom_icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRw2CcpHNKIioANF5MV4H-Zw2H3S7hPDMaqeA&s",
+    "rom_url": "https://youtu.be/WJGnGqKMAIg",
+    "rom_path": "Debian 4.0r9.cvbi",
+    "rom_avail": true,
+    "rom_size": "Etch",
+    "rom_arch": "X86_64",
+    "rom_kernel": "linux",
+    "rom_extra": "",
+    "final_rom_file_name": "",
+    "desc": "This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nDebian (/ˈdɛbiən/) is a free and open source Linux distribution, developed by the Debian Project, which was established by Ian Murdock in August 1993. Debian is one of the oldest operating systems based on the Linux kernel, and is the basis of many other Linux distributions.",
+    "file_size": "5 GB",
+    "creator": "Nguyen Bao An Bui",
+    "verified": true,
+    "vecid": "debian40r9cvbi",
+    "id": "99677"
+  },
+  {
     "rom_name": "elementary OS 5.1",
     "rom_icon": "https://static-00.iconduck.com/assets.00/elementary-os-icon-2048x2048-r076wdiz.png",
     "rom_url": "https://anbui.ovh/get/vec/community/linux/elementaryos51.html",
