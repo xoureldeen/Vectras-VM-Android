@@ -207,9 +207,9 @@ public class SystemMonitorFragment extends Fragment {
         executor.execute(() -> {
             String qemuVersionName = CommandUtils.getQemuVersionName();
             if (!isAdded()) return;
-            String result = Terminal.executeShellCommandWithResult("ps -e command", requireActivity());
+            String result = Terminal.executeShellCommandWithResult("ps -e command && echo \"psendhere\" && cat /proc/cpuinfo", requireActivity());
             requireActivity().runOnUiThread(() -> {
-                binding.tvProcesses.setText(result);
+                binding.tvProcesses.setText(result.substring(0, result.indexOf("\npsendhere")));
                 binding.tvQemuversion.setText(getString(R.string.version) + " " + (qemuVersionName.isEmpty() ? getString(R.string.unknow) : qemuVersionName) + ".");
 
                 if (!result.isEmpty()) {
@@ -237,6 +237,7 @@ public class SystemMonitorFragment extends Fragment {
                 }
 
                 getVNCServerStatus(result);
+                get3dfxStatus(result);
             });
         });
     }
@@ -254,4 +255,11 @@ public class SystemMonitorFragment extends Fragment {
             binding.btStopvmvnc.setVisibility(View.GONE);
         }
     }
+    private void get3dfxStatus(String resultCommand) {
+        if (!isAdded()) return;
+        binding.tv3dfxContent.setText(
+                requireActivity().getString(resultCommand.contains("crc32") || resultCommand.contains("sse4_2") ?
+                        R.string.cpu_support_3dfx_content : R.string.cpu_not_support_3dfx_content));
+    }
+
 }

@@ -42,6 +42,16 @@ public class RomOptionsDialog {
             VMManager.deleteVMDialog(vmName, position, activity);
             bottomSheetDialog.cancel();
         });
+
+        if (VMManager.isVMRunning(activity, vmID)) {
+            removeRomBtn.setVisibility(View.GONE);
+            Button deviceManagerBtn = v.findViewById(R.id.deviceManagerBtn);
+            deviceManagerBtn.setOnClickListener(v1 -> {
+                VMManager.showChangeRemovableDevicesDialog(activity, null);
+                bottomSheetDialog.cancel();
+            });
+            deviceManagerBtn.setVisibility(View.VISIBLE);
+        }
         bottomSheetDialog.show();
     }
 }

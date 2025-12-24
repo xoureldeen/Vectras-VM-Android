@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:paddingTop="0dp"
     android:paddingLeft="20dp"
@@ -32,13 +33,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/modify"
-            app:icon="@drawable/round_edit_24"
+            app:icon="@drawable/edit_24px"
             app:iconTint="?attr/colorSurfaceInverse"
             android:textColor="?attr/colorSurfaceInverse"
             app:iconGravity="top"
             app:iconPadding="8dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/exportRomBtn"/>
+            app:layout_constraintEnd_toStartOf="@id/exportRomBtn"/>
 
         <Button
             android:id="@+id/exportRomBtn"
@@ -51,8 +52,24 @@
             android:textColor="?attr/colorSurfaceInverse"
             app:iconGravity="top"
             app:iconPadding="8dp"
-            app:layout_constraintStart_toEndOf="@+id/modifyRomBtn"
-            app:layout_constraintEnd_toStartOf="@+id/removeRomBtn"/>
+            app:layout_constraintStart_toEndOf="@id/modifyRomBtn"
+            app:layout_constraintEnd_toStartOf="@id/deviceManagerBtn"/>
+
+        <Button
+            android:id="@+id/deviceManagerBtn"
+            style="@style/MaterialAlertDialog.NegativeButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/device_manager"
+            app:icon="@drawable/devices_other_24px"
+            app:iconTint="?attr/colorSurfaceInverse"
+            android:textColor="?attr/colorSurfaceInverse"
+            app:iconGravity="top"
+            app:iconPadding="8dp"
+            app:layout_constraintStart_toEndOf="@id/exportRomBtn"
+            app:layout_constraintEnd_toStartOf="@id/removeRomBtn"
+            android:visibility="gone"
+            tools:visibility="visible"/>
 
         <Button
             android:id="@+id/removeRomBtn"
@@ -65,7 +82,7 @@
             android:textColor="@color/red_error"
             app:iconGravity="top"
             app:iconPadding="8dp"
-            app:layout_constraintStart_toEndOf="@+id/exportRomBtn"
+            app:layout_constraintStart_toEndOf="@id/deviceManagerBtn"
             app:layout_constraintEnd_toEndOf="parent"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

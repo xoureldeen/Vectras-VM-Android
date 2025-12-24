@@ -479,9 +479,15 @@
     <string name="system_update">System update</string>
     <string name="system_update_note">You are using an older system, update now.</string>
     <string name="use_sdl">Use SDL</string>
-    <string name="use_sdl_note">Turn it on if you want to use 3dfx and play old retro games.</string>
+    <string name="use_sdl_note">Turn it on if you want to use 3dfx and play old retro games (only with x86_64 and i386).</string>
     <string name="qemu_documentation">QEMU documentation</string>
     <string name="you_need_to_switch_to_sdl_to_use_3dfx">You need to switch to SDL to use 3dfx.</string>
+    <string name="device_manager">Device manager</string>
+    <string name="show_in_folder">Show in folder</string>
+    <string name="exit">Exit</string>
+    <string name="threedfx">3dfx</string>
+    <string name="cpu_support_3dfx_content">Your device\'s CPU supports acceleration for 3dfx. But it may be unstable or not working.</string>
+    <string name="cpu_not_support_3dfx_content">Your device\'s CPU does not support acceleration for 3dfx.</string>
 
 
     <!--======================TERMUX STRINGS====================-->

@@ -15,6 +15,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -1042,6 +1043,13 @@ public class VMManager {
         _dialog.setButton(DialogInterface.BUTTON_NEGATIVE, _activity.getString(R.string.close), (dialog, which) -> _dialog.dismiss());
 
         _dialog.show();
+
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            _edittext.requestFocus();
+            _edittext.setSelection(_edittext.getText().length());
+            InputMethodManager imm = (InputMethodManager) _activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(_edittext, InputMethodManager.SHOW_IMPLICIT);
+        }, 200);
     }
 
     public static void changeCDROM(String _path, Activity _activity) {

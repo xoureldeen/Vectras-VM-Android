@@ -81,6 +81,7 @@ public class VmsFragment extends Fragment implements CallbackInterface.HomeCallT
         MainActivity.homeCallToVmsListener = this;
 
         binding.rvRomlist.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
+        if (!isAdded()) return;
         vmsHomeAdapter = new VmsHomeAdapter(requireActivity(), data);
         binding.rvRomlist.setAdapter(vmsHomeAdapter);
 
@@ -176,6 +177,7 @@ public class VmsFragment extends Fragment implements CallbackInterface.HomeCallT
         if (PermissionUtils.storagepermission(requireActivity(), true)) {
             loadDataVbi();
             executor.execute(() -> {
+                if (!isAdded()) return;
                 if (DeviceUtils.isStorageLow(requireActivity(), true)) {
                     if (!isAdded()) return;
                     requireActivity().runOnUiThread(() -> DialogUtils.oneDialog(requireActivity(),

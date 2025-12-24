@@ -37,6 +37,7 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.termux.app.TermuxActivity;
 import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
+import com.vectras.qemu.MainVNCActivity;
 import com.vectras.vm.AboutActivity;
 import com.vectras.vm.AppConfig;
 import com.vectras.vm.VMCreatorActivity;
@@ -77,11 +78,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
@@ -358,6 +361,48 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
         }
 
         new Handler(Looper.getMainLooper()).post(() -> DisplaySystem.startTermuxX11(this));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            Uri content_describer = data.getData();
+            File selectedFilePath;
+            try {
+                selectedFilePath = new File(Objects.requireNonNull(FileUtils.getPath(this, content_describer)));
+            } catch (Exception e) {
+                DialogUtils.oneDialog(this,
+                        getString(R.string.oops),
+                        getString(R.string.invalid_file_path_content),
+                        getString(R.string.ok),
+                        true,
+                        R.drawable.error_96px,
+                        true,
+                        null,
+                        null
+                );
+                return;
+            }
+
+            switch (requestCode) {
+                case 120:
+                    VMManager.changeCDROM(selectedFilePath.getAbsolutePath(), this);
+                    break;
+                case 889:
+                    VMManager.changeFloppyDriveA(selectedFilePath.getAbsolutePath(), this);
+                    break;
+                case 13335:
+                    VMManager.changeFloppyDriveB(selectedFilePath.getAbsolutePath(), this);
+                    break;
+                case 32:
+                    VMManager.changeSDCard(selectedFilePath.getAbsolutePath(), this);
+                    break;
+                case 1996:
+                    VMManager.changeRemovableDevice(VMManager.pendingDeviceID, selectedFilePath.getAbsolutePath(), this);
+                    break;
+            }
+        }
     }
 
     private void setupDrawer() {

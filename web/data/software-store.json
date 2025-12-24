@@ -73,7 +73,7 @@
   },
   {
     "rom_name": "7-Zip",
-    "rom_icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/7-Zip_Icon.svg/2560px-7-Zip_Icon.svg.png",
+    "rom_icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/7-Zip_Icon.svg/250px-7-Zip_Icon.svg.png",
     "rom_url": "https://archive.org/details/7-zip_202512",
     "rom_path": "7Zip.iso",
     "rom_avail": true,
