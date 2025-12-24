@@ -432,7 +432,7 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
             } else if (id == R.id.navigation_item_desktop) {
                 DisplaySystem.launchX11(this, true);
             } else if (id == R.id.navigation_item_terminal) {
-                if (DeviceUtils.is64bit()) {
+                if (DeviceUtils.is64bit() && DeviceUtils.isArm()) {
                     startActivity(new Intent(this, TermuxActivity.class));
                 } else {
                     com.vectras.vterm.TerminalBottomSheetDialog VTERM = new com.vectras.vterm.TerminalBottomSheetDialog(this);

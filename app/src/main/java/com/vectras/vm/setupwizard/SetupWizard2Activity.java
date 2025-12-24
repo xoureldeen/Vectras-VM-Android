@@ -179,7 +179,7 @@ public class SetupWizard2Activity extends AppCompatActivity {
         binding.selectMirrorOption.setOnClickListener(v -> selectMirror());
 
         binding.ivOpenTerminal.setOnClickListener(v -> {
-            if (DeviceUtils.is64bit()) {
+            if (DeviceUtils.is64bit() && DeviceUtils.isArm()) {
                 startActivity(new Intent(this, TermuxActivity.class));
             } else {
                 TerminalBottomSheetDialog VTERM = new TerminalBottomSheetDialog(this);
@@ -458,9 +458,7 @@ public class SetupWizard2Activity extends AppCompatActivity {
                 " echo \"Starting setup...\";" +
                 " apk update;" +
                 " echo \"Installing packages...\";" +
-                " apk add " + (DeviceUtils.is64bit() ? (
-                        DeviceUtils.isArm() ? AppConfig.neededPkgs :
-                                AppConfig.neededPkgs.replace("mesa-vulkan-ati mesa-vulkan-broadcom mesa-vulkan-freedreno", ""))
+                " apk add " + (DeviceUtils.is64bit() ? AppConfig.neededPkgs()
                 : AppConfig.neededPkgs32bit) + ";" +
                 " echo \"Downloading Qemu...\";";
 
@@ -469,6 +467,9 @@ public class SetupWizard2Activity extends AppCompatActivity {
                     " rm " + tarPath + ";" +
                     " chmod 775 /usr/local/bin/*;";
         } else if (DeviceUtils.is64bit()) {
+            if (FileUtils.isFileExists(getFilesDir().getAbsolutePath() + "/distro/root/setup.tar.gz"))
+                FileUtils.deleteDirectory(getFilesDir().getAbsolutePath() + "/distro/root/setup.tar.gz");
+            
             cmd += downloadBootstrapsCommand + ";" +
                     " echo \"Installing Qemu...\";" +
                     " tar -xzvf setup.tar.gz -C /;" +

@@ -273,7 +273,7 @@ public class StartVM {
             params.add(spiceStr);
         } else if (MainSettingsManager.getVmUi(activity).equals("X11")) {
             params.add("-display");
-            params.add(MainSettingsManager.getUseSdl(activity) ? "sdl" : "gtk");
+            params.add(MainSettingsManager.getUseSdl(activity) ? "sdl" : "gtk" + ",gl=on");
             params.add("-monitor");
             params.add(MainSettingsManager.getRunQemuWithXterm(activity) ? "stdio" : "vc");
         }

@@ -260,7 +260,7 @@ public class SetupWizardActivity extends AppCompatActivity {
                 " echo \"Starting setup...\";" +
                 " apk update;" +
                 " echo \"Installing packages...\";" +
-                " apk add " + (DeviceUtils.is64bit() ? AppConfig.neededPkgs : AppConfig.neededPkgs32bit) + ";" +
+                " apk add " + (DeviceUtils.is64bit() ? AppConfig.neededPkgs() : AppConfig.neededPkgs32bit) + ";" +
                 " echo \"Downloading Qemu...\";";
 
         if (isManualMode) {
