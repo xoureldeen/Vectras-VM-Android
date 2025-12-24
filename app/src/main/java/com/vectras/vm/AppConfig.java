@@ -17,7 +17,7 @@ public class AppConfig {
     // App Config
     public static String vectrasVersion = "3.5.0";
     public static int vectrasVersionCode = 54;
-    public static final int standardSetupVersion = 9241;
+    public static final int standardSetupVersion = 922;
     public static String vectrasWebsite = "https://vectras.vercel.app/";
     public static String vectrasWebsiteRaw = "https://raw.githubusercontent.com/AnBui2004/Vectras-VM-Emu-Android/refs/heads/master/web/";
     public static String bootstrapfileslink = vectrasWebsiteRaw + "/data/setupfiles3.json";
