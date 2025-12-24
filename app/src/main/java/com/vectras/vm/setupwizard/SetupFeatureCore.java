@@ -57,11 +57,7 @@ public class SetupFeatureCore {
 
             if (isInstalledDistro(context)) return true;
 
-            if (Build.SUPPORTED_ABIS[0].contains("64")) {
-                return extractSystemFiles(context, "alpine19", "distro");
-            } else {
-                return extractSystemFiles(context, "alpine21", "distro");
-            }
+            return extractSystemFiles(context, "alpine19", "distro");
         }
         return false;
     }

@@ -18,6 +18,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.vectras.vm.databinding.ActivityExportRomBinding;
+import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.PackageUtils;
 import com.vectras.vm.utils.UIUtils;
@@ -49,22 +50,22 @@ public class ExportRomActivity extends AppCompatActivity {
         binding = ActivityExportRomBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         UIUtils.setOnApplyWindowInsetsListener(findViewById(R.id.main));
+        binding.appbar.post(() -> binding.appbar.setExpanded(false, false));
+        setSupportActionBar(binding.toolbar);
+        binding.toolbar.setNavigationOnClickListener(v -> finish());
 
-        binding.materialbutton1.setOnClickListener(v -> {
-            binding.edittext1.setEnabled(false);
-            binding.edittext2.setEnabled(false);
-            binding.edittext1.setEnabled(true);
-            binding.edittext2.setEnabled(true);
+        binding.btnDone.setOnClickListener(v -> {
+            binding.edAuthor.setEnabled(false);
+            binding.edContent.setEnabled(false);
+            binding.edAuthor.setEnabled(true);
+            binding.edContent.setEnabled(true);
             startCreate();
         });
 
-        binding.buttonexit.setOnClickListener(v -> finish());
+        data = getSharedPreferences("data", Activity.MODE_PRIVATE);
 
-        binding.buttonexit2.setOnClickListener(v -> finish());
-        data= getSharedPreferences("data", Activity.MODE_PRIVATE);
-
-        binding.edittext1.setText(data.getString("author", ""));
-        binding.edittext2.setText(data.getString("desc", ""));
+        binding.edAuthor.setText(data.getString("author", ""));
+        binding.edContent.setText(data.getString("desc", ""));
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
@@ -77,8 +78,8 @@ public class ExportRomActivity extends AppCompatActivity {
     @Override
     public void onPause() {
         super.onPause();
-        data.edit().putString("author", Objects.requireNonNull(binding.edittext1.getText()).toString()).apply();
-        data.edit().putString("desc", Objects.requireNonNull(binding.edittext2.getText()).toString()).apply();
+        data.edit().putString("author", Objects.requireNonNull(binding.edAuthor.getText()).toString()).apply();
+        data.edit().putString("desc", Objects.requireNonNull(binding.edContent.getText()).toString()).apply();
     }
 
     private void onBack() {
@@ -86,37 +87,28 @@ public class ExportRomActivity extends AppCompatActivity {
     }
 
     @SuppressLint("SetTextI18n")
-    private void UIControler(int _status, String _content) {
-        if (_status == 0) {
-            binding.linearall.setVisibility(View.GONE);
-            binding.linearload.setVisibility(View.VISIBLE);
-        } else if (_status == 1) {
-            binding.linearall.setVisibility(View.GONE);
-            binding.linearload.setVisibility(View.GONE);
-            binding.lineardone.setVisibility(View.VISIBLE);
-            binding.textviewfilename.setText(getString(R.string.saved_in) + " " + _content);
-        } else if (_status == 2) {
-            binding.linearall.setVisibility(View.GONE);
-            binding.linearload.setVisibility(View.GONE);
-            binding.lineardone.setVisibility(View.GONE);
-            binding.linearerror.setVisibility(View.VISIBLE);
-            binding.textviewerrorcontent.setText(_content);
-        }
-    }
-
-    @SuppressLint("SetTextI18n")
     private void startCreate() {
         File vDir = new File(AppConfig.cvbiFolder);
         if (!vDir.exists()) {
-            if(!vDir.mkdirs()) {
-                UIControler(2, getString(R.string.could_not_create_dir_to_save_cvbi_content));
+            if (!vDir.mkdirs()) {
+                DialogUtils.oneDialog(this,
+                        getString(R.string.oops),
+                        getString(R.string.could_not_create_dir_to_save_cvbi_content),
+                        getString(R.string.ok),
+                        true,
+                        R.drawable.error_96px,
+                        true,
+                        null,
+                        this::finish
+                );
             }
         }
 
         listmapForGetData.clear();
         mapForGetData.clear();
 
-        listmapForGetData = new Gson().fromJson(FileUtils.readAFile(AppConfig.romsdatajson), new TypeToken<ArrayList<HashMap<String, Object>>>(){}.getType());
+        listmapForGetData = new Gson().fromJson(FileUtils.readAFile(AppConfig.romsdatajson), new TypeToken<ArrayList<HashMap<String, Object>>>() {
+        }.getType());
 
         getRomPath = AppConfig.vmFolder + Objects.requireNonNull(listmapForGetData.get(pendingPosition).get("vmID")) + "/";
 
@@ -129,7 +121,7 @@ public class ExportRomActivity extends AppCompatActivity {
             iconfile = Objects.requireNonNull(listmapForGetData.get(pendingPosition).get("imgIcon")).toString();
             try {
                 mapForGetData.put("icon", Uri.parse(Objects.requireNonNull(listmapForGetData.get(pendingPosition).get("imgIcon")).toString()).getLastPathSegment());
-            } catch (Exception _e){
+            } catch (Exception _e) {
                 mapForGetData.put("icon", Objects.requireNonNull(listmapForGetData.get(pendingPosition).get("imgIcon")).toString());
             }
         } else {
@@ -167,15 +159,15 @@ public class ExportRomActivity extends AppCompatActivity {
         } else {
             mapForGetData.put("arch", "");
         }
-        if (Objects.requireNonNull(binding.edittext1.getText()).toString().isEmpty()) {
+        if (Objects.requireNonNull(binding.edAuthor.getText()).toString().isEmpty()) {
             mapForGetData.put("author", "Unknow");
         } else {
-            mapForGetData.put("author", binding.edittext1.getText().toString());
+            mapForGetData.put("author", binding.edAuthor.getText().toString());
         }
-        if (Objects.requireNonNull(binding.edittext2.getText()).toString().isEmpty()) {
+        if (Objects.requireNonNull(binding.edContent.getText()).toString().isEmpty()) {
             mapForGetData.put("desc", "Empty.");
         } else {
-            mapForGetData.put("desc", binding.edittext2.getText().toString());
+            mapForGetData.put("desc", binding.edContent.getText().toString());
         }
 
         mapForGetData.put("versioncode", PackageUtils.getThisVersionCode(getApplicationContext()));
@@ -239,11 +231,36 @@ public class ExportRomActivity extends AppCompatActivity {
                 isExporting = false;
                 progressDialog.dismiss();
 
+                String title;
+                String content;
                 if (result) {
-                    UIControler(1, outputPath);
+                    title = getString(R.string.done);
+                    content = getString(R.string.saved_in) + ": " + outputPath + ".";
                 } else {
-                    UIControler(2, ZipUtils.lastErrorContent);
+                    title = getString(R.string.oops);
+                    content = getString(R.string.something_went_wrong) + ":\n\n" + ZipUtils.lastErrorContent;
                 }
+
+                DialogUtils.twoDialog(this,
+                        title,
+                        content,
+                        getString(result ? R.string.show_in_folder : R.string.ok),
+                        getString(result ? R.string.close : R.string.exit),
+                        true,
+                        result ? R.drawable.check_24px : R.drawable.error_96px,
+                        true,
+                        () -> {
+                            if (result) {
+                                File file = new File(outputPath);
+                                FileUtils.openFolder(this, file.getParent());
+                            }
+                        },
+                        () -> {
+                            if (!result) {
+                                finish();
+                            }
+                        },
+                        null);
             });
         }).start();
     }

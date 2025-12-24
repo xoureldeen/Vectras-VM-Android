@@ -854,7 +854,22 @@ public class MainVNCActivity extends VncCanvasActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             Uri content_describer = data.getData();
-            File selectedFilePath = new File(getPath(content_describer));
+            File selectedFilePath;
+            try {
+                selectedFilePath = new File(Objects.requireNonNull(getPath(content_describer)));
+            } catch (Exception e) {
+                DialogUtils.oneDialog(this,
+                        getString(R.string.oops),
+                        getString(R.string.invalid_file_path_content),
+                        getString(R.string.ok),
+                        true,
+                        R.drawable.error_96px,
+                        true,
+                        null,
+                        null
+                );
+                return;
+            }
 
             switch (requestCode) {
                 case 120:

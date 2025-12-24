@@ -524,7 +524,7 @@ public class SetupWizard2Activity extends AppCompatActivity {
         isExecutingCommand = true;
         new Thread(() -> {
             try {
-                // Setup the process builder to start PRoot with environmental variables and commands
+                // Set up the process builder to start PRoot with environmental variables and commands
                 ProcessBuilder processBuilder = new ProcessBuilder();
 
                 // Adjust these environment variables as necessary for your app
