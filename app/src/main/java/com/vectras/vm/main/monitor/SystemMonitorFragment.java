@@ -237,7 +237,7 @@ public class SystemMonitorFragment extends Fragment {
                 }
 
                 getVNCServerStatus(result);
-                get3dfxStatus(result);
+                get3dfxStatus(qemuVersionName, result);
             });
         });
     }
@@ -255,11 +255,16 @@ public class SystemMonitorFragment extends Fragment {
             binding.btStopvmvnc.setVisibility(View.GONE);
         }
     }
-    private void get3dfxStatus(String resultCommand) {
-        if (!isAdded()) return;
-        binding.tv3dfxContent.setText(
-                requireActivity().getString(resultCommand.contains("crc32") || resultCommand.contains("sse4_2") ?
-                        R.string.cpu_support_3dfx_content : R.string.cpu_not_support_3dfx_content));
+    private void get3dfxStatus(String qemuVersion, String resultCommand) {
+        if(qemuVersion.contains("3dfx")) {
+            if (!isAdded()) return;
+            binding.tv3dfxContent.setText(
+                    requireActivity().getString(resultCommand.contains("crc32") || resultCommand.contains("sse4_2") ?
+                            R.string.cpu_support_3dfx_content : R.string.cpu_not_support_3dfx_content));
+        } else {
+            if (!isAdded()) return;
+            binding.tv3dfxContent.setText(getText(R.string.threedfx_is_not_available));
+        }
     }
 
 }

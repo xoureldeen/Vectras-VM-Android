@@ -20,7 +20,7 @@ public class AppConfig {
     public static final int standardSetupVersion = 9241;
     public static String vectrasWebsite = "https://vectras.vercel.app/";
     public static String vectrasWebsiteRaw = "https://raw.githubusercontent.com/AnBui2004/Vectras-VM-Emu-Android/refs/heads/master/web/";
-    public static String bootstrapfileslink = vectrasWebsiteRaw + "/data/setupfiles2.json";
+    public static String bootstrapfileslink = vectrasWebsiteRaw + "/data/setupfiles3.json";
     public static String vectrasHelp = vectrasWebsite + "how.html";
     public static String community = vectrasWebsite + "community.html";
     public static String vectrasRaw = vectrasWebsiteRaw + "data/";
