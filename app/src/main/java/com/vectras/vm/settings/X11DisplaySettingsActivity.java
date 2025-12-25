@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.R;
 import com.vectras.vm.databinding.ActivityX11DisplaySettingsBinding;
+import com.vectras.vm.utils.DeviceUtils;
 
 import java.util.Objects;
 
@@ -45,7 +46,7 @@ public class X11DisplaySettingsActivity extends AppCompatActivity {
 
         binding.lnPreferences.setOnClickListener(v -> {
             Intent intent = new Intent();
-            if (SDK_INT >= 34) {
+            if (SDK_INT >= 34 || !DeviceUtils.isArm()) {
                 intent.setClassName("com.termux.x11", "com.termux.x11.MainActivity");
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);

@@ -47,7 +47,7 @@ public class DisplaySystem {
     }
 
     public static void launchX11(Context context, boolean isKill) {
-        if (!DeviceUtils.is64bit()) {
+        if (DeviceUtils.isArm() && !DeviceUtils.is64bit()) {
             DialogUtils.oneDialog(
                     context,
                     context.getString(R.string.x11_feature_not_supported),
