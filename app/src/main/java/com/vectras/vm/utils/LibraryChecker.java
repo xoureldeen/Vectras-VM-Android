@@ -22,7 +22,7 @@ public class LibraryChecker {
 
     public void checkMissingLibraries(Activity activity) {
         // List of required libraries
-        String[] requiredLibraries = DeviceUtils.is64bit() ? AppConfig.neededPkgs().split(" ") : AppConfig.neededPkgs32bit.split(" ");
+        String[] requiredLibraries = DeviceUtils.is64bit() ? AppConfig.neededPkgs().split(" ") : AppConfig.neededPkgs32bit().split(" ");
 
         // Get the list of installed packages
         isPackageInstalled(null, (output, errors) -> {

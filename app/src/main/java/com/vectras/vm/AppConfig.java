@@ -92,9 +92,19 @@ public class AppConfig {
         }
     }
 
-    public static String neededPkgs32bit = "bash aria2 tar dwm xterm libslirp libslirp-dev pulseaudio-dev glib-dev pixman-dev zlib-dev spice-dev" +
-            " libusbredirparser usbredir-dev libiscsi-dev sdl2 sdl2-dev libepoxy-dev virglrenderer-dev rdma-core pulseaudio pulseaudio-alsa alsa-plugins-pulse" +
-            " libusb ncurses-libs curl libnfs gtk+3.0 fuse libpulse libseccomp jack pipewire liburing tigervnc qemu-audio-sdl fluxbox";
+    public static String neededPkgs32bit() {
+        if (DeviceUtils.isArm()) {
+            return "bash aria2 tar dwm xterm libslirp libslirp-dev pulseaudio-dev glib-dev pixman-dev zlib-dev spice-dev" +
+                    " libusbredirparser usbredir-dev libiscsi-dev sdl2 sdl2-dev libepoxy-dev virglrenderer-dev rdma-core pulseaudio pulseaudio-alsa alsa-plugins-pulse" +
+                    " libusb ncurses-libs curl libnfs gtk+3.0 fuse libpulse libseccomp jack pipewire liburing tigervnc qemu-audio-sdl fluxbox";
+        } else {
+            return "bash aria2 tar dwm xterm libslirp libslirp-dev pulseaudio-dev glib-dev pixman-dev zlib-dev spice-dev" +
+                    " libusbredirparser usbredir-dev sdl2 sdl2-dev sdl2_image-dev libepoxy-dev virglrenderer-dev rdma-core fluxbox" +
+                    " libusb libaio ncurses-libs curl libnfs gtk+3.0 gtk+3.0-dev fuse libpulse libseccomp jack pipewire liburing pulseaudio pulseaudio-alsa alsa-plugins-pulse" +
+                    " mesa-dri-gallium mesa-vulkan-swrast vulkan-loader mesa-utils mesa-egl" +
+                    " qemu-audio-sdl capstone libcbor snappy lzo ndctl keyutils-libs vde2-libs libdw libbpf sndio-libs linux-pam fuse3-libs libssh vte3";
+        }
+    }
 
     public static boolean needreinstallsystem = false;
 
