@@ -190,6 +190,7 @@ public class SetupWizard2Activity extends AppCompatActivity {
         binding.btnTryAgain.setOnClickListener(v -> {
             if (isSystemUpdateMode) {
                 uiController(STEP_SYSTEM_UPDATE);
+                binding.btnSkipSystemUpdate.setVisibility(View.GONE);
             } else if (isLibProotError) {
                 Intent intent = new Intent();
                 intent.setAction(ACTION_VIEW);

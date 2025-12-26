@@ -970,8 +970,15 @@ public class VMManager {
         }
 
         if (vncCanvasActivity != null) {
+            _view.findViewById(R.id.ln_refresh).setOnClickListener(v -> {
+                _activity.startActivity(new Intent(_activity, MainVNCActivity.class));
+                _activity.overridePendingTransition(0, 0);
+                _activity.finish();
+                _dialog.dismiss();
+            });
+
             _view.findViewById(R.id.ln_mouse).setOnClickListener(v -> {
-                MainVNCActivity.activity.onMouseMode();
+                MainVNCActivity.getContext.onMouseMode();
                 _dialog.dismiss();
             });
 

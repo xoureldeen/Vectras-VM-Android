@@ -198,7 +198,7 @@ public class MainStartVM {
 
         String finalCommand = VMManager.addAudioDevSdl(String.format(runCommandFormat, env));
 
-        if (MainSettingsManager.getVmUi(context).equals("X11") && SDK_INT >= 34) {
+        if (MainSettingsManager.getVmUi(context).equals("X11") && (SDK_INT >= 34 || !DeviceUtils.isArm())) {
             finalCommand = "export DISPLAY=:0 &&" + finalCommand;
         }
         Log.i(TAG, finalCommand);
@@ -219,7 +219,7 @@ public class MainStartVM {
             }
         }
 
-        if (MainSettingsManager.getVmUi(context).equals("X11") && SDK_INT >= 34) {
+        if (MainSettingsManager.getVmUi(context).equals("X11") && (SDK_INT >= 34 || !DeviceUtils.isArm())) {
             if (!PackageUtils.isInstalled("com.termux.x11", context)) {
                 DialogUtils.needInstallTermuxX11(context);
                 return;
@@ -253,7 +253,7 @@ public class MainStartVM {
                         }
 
                         Log.i(TAG, "Virtual machine running.");
-                    } if (MainSettingsManager.getVmUi(context).equals("X11") && SDK_INT >= 34) {
+                    } if (MainSettingsManager.getVmUi(context).equals("X11") && (SDK_INT >= 34 && !DeviceUtils.isArm())) {
                         Intent intent = new Intent();
                         intent.setClassName("com.termux.x11", "com.termux.x11.MainActivity");
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

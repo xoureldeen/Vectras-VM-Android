@@ -47,77 +47,64 @@ public class DisplaySystem {
     }
 
     public static void launchX11(Context context, boolean isKill) {
-        if (DeviceUtils.isArm() && !DeviceUtils.is64bit()) {
-            DialogUtils.oneDialog(
-                    context,
-                    context.getString(R.string.x11_feature_not_supported),
-                    context.getString(R.string.cpu_not_support_64_xfce),
-                    context.getString(R.string.ok),
-                    true, R.drawable.error_96px,
-                    true,
-                    null,
-                    null
-            );
-        } else {
-            if ((SDK_INT >= 34 || !DeviceUtils.isArm()) && !PackageUtils.isInstalled("com.termux.x11", context)) {
-                DialogUtils.needInstallTermuxX11(context);
-                return;
+        if ((SDK_INT >= 34 || !DeviceUtils.isArm()) && !PackageUtils.isInstalled("com.termux.x11", context)) {
+            DialogUtils.needInstallTermuxX11(context);
+            return;
+        }
+
+        // XFCE4 meta-package
+        String necessaryPackage = "fluxbox";
+
+        // Check if XFCE4 is installed
+        isPackageInstalled2(context, necessaryPackage, (output, errors) -> {
+            boolean isInstalled = false;
+
+            // Check if the package exists in the installed packages output
+            if (output != null) {
+                Set<String> installedPackages = new HashSet<>();
+                for (String installedPackage : output.split("\n")) {
+                    installedPackages.add(installedPackage.trim());
+                }
+
+                isInstalled = installedPackages.contains(necessaryPackage.trim());
             }
 
-            // XFCE4 meta-package
-            String necessaryPackage = "fluxbox";
+            // If not installed, show a dialog to install it
+            if (!isInstalled) {
+                DialogUtils.twoDialog(
+                        context,
+                        context.getString(R.string.action_needed),
+                        context.getString(R.string.the_required_package_is_not_installed_content),
+                        context.getString(R.string.install),
+                        context.getString(R.string.cancel),
+                        true,
+                        R.drawable.desktop_24px,
+                        true,
+                        () -> {
+                            String installCommand = "apk add " + necessaryPackage;
+                            new Terminal(context).executeShellCommand(installCommand, true, true, context.getString(R.string.just_a_moment), context);
+                        },
+                        null,
+                        null
+                );
+            } else {
+                if (SDK_INT >= 34 || !DeviceUtils.isArm()) {
+                    Log.d(TAG, "launchX11: Opened: com.termux.x11.MainActivity.");
+                    Intent intent = new Intent();
+                    intent.setClassName("com.termux.x11", "com.termux.x11.MainActivity");
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                    context.startActivity(intent);
 
-            // Check if XFCE4 is installed
-            isPackageInstalled2(context, necessaryPackage, (output, errors) -> {
-                boolean isInstalled = false;
-
-                // Check if the package exists in the installed packages output
-                if (output != null) {
-                    Set<String> installedPackages = new HashSet<>();
-                    for (String installedPackage : output.split("\n")) {
-                        installedPackages.add(installedPackage.trim());
-                    }
-
-                    isInstalled = installedPackages.contains(necessaryPackage.trim());
-                }
-
-                // If not installed, show a dialog to install it
-                if (!isInstalled) {
-                    DialogUtils.twoDialog(
-                            context,
-                            context.getString(R.string.action_needed),
-                            context.getString(R.string.the_required_package_is_not_installed_content),
-                            context.getString(R.string.install),
-                            context.getString(R.string.cancel),
-                            true,
-                            R.drawable.desktop_24px,
-                            true,
-                            () -> {
-                                String installCommand = "apk add " + necessaryPackage;
-                                new Terminal(context).executeShellCommand(installCommand, true, true, context.getString(R.string.just_a_moment), context);
-                            },
-                            null,
-                            null
-                    );
+                    startTermuxX11(context);
                 } else {
-                    if (SDK_INT >= 34 || !DeviceUtils.isArm()) {
-                        Log.d(TAG, "launchX11: Opened: com.termux.x11.MainActivity.");
-                        Intent intent = new Intent();
-                        intent.setClassName("com.termux.x11", "com.termux.x11.MainActivity");
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                        context.startActivity(intent);
-
-                        startTermuxX11(context);
-                    } else {
-                        context.startActivity(new Intent(context, X11Activity.class));
-                    }
-                    if (isKill) {
-                        new Terminal(context).executeShellCommand2((SDK_INT >= 34 ? "export DISPLAY=:0 && " : "killall fluxbox && ") + "fluxbox > /dev/null", false, context);
-                    }
+                    context.startActivity(new Intent(context, X11Activity.class));
                 }
-            });
-        }
+                if (isKill) {
+                    new Terminal(context).executeShellCommand2(((SDK_INT >= 34 || !DeviceUtils.isArm()) ? "export DISPLAY=:0 && " : "killall fluxbox && ") + "fluxbox > /dev/null", false, context);
+                }
+            }
+        });
     }
 
     public static void startTermuxX11(Context context) {
