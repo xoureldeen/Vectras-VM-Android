@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Build;
 import android.util.Log;
 
+import com.vectras.vm.AppConfig;
 import com.vectras.vm.R;
 import com.vectras.vm.VMManager;
 import com.vectras.vm.utils.DeviceUtils;
@@ -56,6 +57,15 @@ public class SetupFeatureCore {
             }
 
             if (isInstalledDistro(context)) return true;
+
+            File tmpDir = new File(context.getFilesDir(), "usr/tmp");
+            if (!tmpDir.isDirectory()) {
+                if (tmpDir.mkdirs()) {
+                    FileUtils.chmod(tmpDir, 0771);
+                } else {
+                    Log.e(TAG, "startExtractSystemFiles: Failed to create folder: tmp.");
+                }
+            }
 
             return extractSystemFiles(context, "alpine19", "distro");
         }
