@@ -77,6 +77,7 @@ import org.json.JSONObject;
 public class MainVNCActivity extends VncCanvasActivity {
 
     private final String TAG = "MainVNCActivity";
+    public static MainVNCActivity getContext;
     private final int retryLimit = 3;
     private ActivityVncBinding binding;
     private ControlsFragmentBinding bindingControls;
@@ -96,7 +97,6 @@ public class MainVNCActivity extends VncCanvasActivity {
 
     public boolean ctrlClicked = false;
     public boolean altClicked = false;
-    public static MainVNCActivity activity;
     public static LinearLayout desktop;
     public static LinearLayout gamepad;
     private final ArrayList<HashMap<String, Object>> listmapForSendKey = new ArrayList<>();
@@ -105,8 +105,8 @@ public class MainVNCActivity extends VncCanvasActivity {
     @Override
     public void onCreate(Bundle b) {
         super.onCreate(b);
-        activity = this;
 
+        getContext = this;
         initializeControlFragment();
         initializeDesktopControl();
         initializeGameControl();
@@ -147,13 +147,13 @@ public class MainVNCActivity extends VncCanvasActivity {
         desktop = findViewById(R.id.desktop);
         gamepad = findViewById(R.id.gamepad);
 
-        if (Objects.equals(MainSettingsManager.getControlMode(activity), "D")) {
+        if (Objects.equals(MainSettingsManager.getControlMode(this), "D")) {
             desktop.setVisibility(View.VISIBLE);
             gamepad.setVisibility(View.GONE);
-        } else if (Objects.equals(MainSettingsManager.getControlMode(activity), "G")) {
+        } else if (Objects.equals(MainSettingsManager.getControlMode(this), "G")) {
             desktop.setVisibility(View.GONE);
             gamepad.setVisibility(View.VISIBLE);
-        } else if (Objects.equals(MainSettingsManager.getControlMode(activity), "H")) {
+        } else if (Objects.equals(MainSettingsManager.getControlMode(this), "H")) {
             desktop.setVisibility(View.GONE);
             gamepad.setVisibility(View.GONE);
         }
@@ -290,7 +290,8 @@ public class MainVNCActivity extends VncCanvasActivity {
 
     public void onDestroy() {
         if (NetworkUtils.isPortOpen("127.0.0.1", Config.QMPPort, 100) && started) {
-            activity.startActivity(new Intent(activity, MainVNCActivity.class));
+            startActivity(new Intent(this, MainVNCActivity.class));
+            overridePendingTransition(0, 0);
         }
         super.onDestroy();
         this.stopTimeListener();
@@ -901,11 +902,11 @@ public class MainVNCActivity extends VncCanvasActivity {
             newFragment.show(ft, "Logger");
         });
 
-        bindingControls.shutdownBtn.setOnClickListener(v -> DialogUtils.threeDialog(activity, getString(R.string.power), getString(R.string.shutdown_or_reset_content_vnc), getString(R.string.shutdown), getString(R.string.reset), getString(R.string.close), true, R.drawable.power_settings_new_24px, true,
+        bindingControls.shutdownBtn.setOnClickListener(v -> DialogUtils.threeDialog(this, getString(R.string.power), getString(R.string.shutdown_or_reset_content_vnc), getString(R.string.shutdown), getString(R.string.reset), getString(R.string.close), true, R.drawable.power_settings_new_24px, true,
                 this::shutdownthisvm, VMManager::resetCurrentVM, null, null));
 
         bindingControls.shutdownBtn.setOnLongClickListener(view -> {
-            DialogUtils.twoDialog(activity, "Exit", "You will be left here but the virtual machine will continue to run.", "Exit", getString(R.string.cancel), true, R.drawable.exit_to_app_24px, true,
+            DialogUtils.twoDialog(this, "Exit", "You will be left here but the virtual machine will continue to run.", "Exit", getString(R.string.cancel), true, R.drawable.exit_to_app_24px, true,
                     () -> {
                         started = false;
                         finish();
@@ -913,7 +914,7 @@ public class MainVNCActivity extends VncCanvasActivity {
             return false;
         });
 
-        bindingControls.kbdBtn.setOnClickListener(v -> new Handler(Looper.getMainLooper()).postDelayed(() -> toggleKeyboardFlag = UIUtils.onKeyboard(activity, toggleKeyboardFlag, vncCanvas), 200));
+        bindingControls.kbdBtn.setOnClickListener(v -> new Handler(Looper.getMainLooper()).postDelayed(() -> toggleKeyboardFlag = UIUtils.onKeyboard(this, toggleKeyboardFlag, vncCanvas), 200));
 
         bindingControls.kbdBtn.setOnLongClickListener(v -> {
             if (bindingSendKey.sendkeylayout.getVisibility() == View.VISIBLE) {

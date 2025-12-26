@@ -2,7 +2,6 @@ package com.vectras.vm.utils;
 
 import android.app.Activity;
 
-import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.VectrasApp;
 import com.vectras.vterm.Terminal;
 
@@ -26,7 +25,8 @@ public class CommandUtils {
     public static String getQemuVersionName() {
         String qemuVersion = getQemuVersion();
 
-        if (qemuVersion.toLowerCase().contains("failed")) return "";
+        if (qemuVersion.toLowerCase().contains("failed") || qemuVersion.toLowerCase().contains("not found"))
+            return "";
 
         return (qemuVersion.contains("Error") ? qemuVersion.substring(0, qemuVersion.indexOf("Error")) : qemuVersion) + (is3dfxVersion() ? " - 3dfx" : "");
     }

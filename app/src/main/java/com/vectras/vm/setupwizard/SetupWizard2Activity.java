@@ -190,6 +190,7 @@ public class SetupWizard2Activity extends AppCompatActivity {
         binding.btnTryAgain.setOnClickListener(v -> {
             if (isSystemUpdateMode) {
                 uiController(STEP_SYSTEM_UPDATE);
+                binding.btnSkipSystemUpdate.setVisibility(View.GONE);
             } else if (isLibProotError) {
                 Intent intent = new Intent();
                 intent.setAction(ACTION_VIEW);
@@ -419,11 +420,11 @@ public class SetupWizard2Activity extends AppCompatActivity {
                     HashMap<String, Object> mmap;
                     mmap = new Gson().fromJson(response, new TypeToken<HashMap<String, Object>>() {
                     }.getType());
-                    if (mmap.containsKey("aarch64") && mmap.containsKey("amd64")) {
+                    if (mmap.containsKey("aarch64") && mmap.containsKey("amd64") && mmap.containsKey("x86")) {
                         if (Build.SUPPORTED_ABIS[0].contains("arm64")) {
                             bootstrapFileLink = Objects.requireNonNull(mmap.get("aarch64")).toString();
                         } else {
-                            bootstrapFileLink = Objects.requireNonNull(mmap.get("amd64")).toString();
+                            bootstrapFileLink = Objects.requireNonNull(mmap.get(DeviceUtils.is64bit() ? "amd64" : "x86")).toString();
                         }
                         downloadBootstrapsCommand = " aria2c -x 4 --async-dns=false --disable-ipv6 --check-certificate=false -o setup.tar.gz " + bootstrapFileLink;
                     }
@@ -459,14 +460,14 @@ public class SetupWizard2Activity extends AppCompatActivity {
                 " apk update;" +
                 " echo \"Installing packages...\";" +
                 " apk add " + (DeviceUtils.is64bit() ? AppConfig.neededPkgs()
-                : AppConfig.neededPkgs32bit) + ";" +
+                : AppConfig.neededPkgs32bit()) + ";" +
                 " echo \"Downloading Qemu...\";";
 
         if (isCustomSetupMode) {
             cmd += " tar -xzvf " + tarPath + " -C /;" +
                     " rm " + tarPath + ";" +
                     " chmod 775 /usr/local/bin/*;";
-        } else if (DeviceUtils.is64bit()) {
+        } else if (DeviceUtils.is64bit() || !DeviceUtils.isArm()) {
             if (FileUtils.isFileExists(getFilesDir().getAbsolutePath() + "/distro/root/setup.tar.gz"))
                 FileUtils.deleteDirectory(getFilesDir().getAbsolutePath() + "/distro/root/setup.tar.gz");
             
