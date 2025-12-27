@@ -30,6 +30,10 @@ public class DisplaySystem {
     private static final String TAG = "DisplaySystem";
     private static boolean isTermuxClassLoaded = false;
 
+    public static boolean isUseBuiltInX11() {
+        return SDK_INT < 34 && DeviceUtils.isArm();
+    }
+
     public static void launch(Context context) {
         if (MainSettingsManager.getVmUi(context).equals("VNC")) {
             context.startActivity(new Intent(context, MainVNCActivity.class));
@@ -47,7 +51,7 @@ public class DisplaySystem {
     }
 
     public static void launchX11(Context context, boolean isKill) {
-        if ((SDK_INT >= 34 || !DeviceUtils.isArm()) && !PackageUtils.isInstalled("com.termux.x11", context)) {
+        if (!isUseBuiltInX11() && !PackageUtils.isInstalled("com.termux.x11", context)) {
             DialogUtils.needInstallTermuxX11(context);
             return;
         }
@@ -88,7 +92,7 @@ public class DisplaySystem {
                         null
                 );
             } else {
-                if (SDK_INT >= 34 || !DeviceUtils.isArm()) {
+                if (!isUseBuiltInX11() ) {
                     Log.d(TAG, "launchX11: Opened: com.termux.x11.MainActivity.");
                     Intent intent = new Intent();
                     intent.setClassName("com.termux.x11", "com.termux.x11.MainActivity");
@@ -100,11 +104,13 @@ public class DisplaySystem {
                 } else {
                     context.startActivity(new Intent(context, X11Activity.class));
                 }
-                if (isKill) {
-                    new Terminal(context).executeShellCommand2(((SDK_INT >= 34 || !DeviceUtils.isArm()) ? "export DISPLAY=:0 && " : "killall fluxbox && ") + "fluxbox > /dev/null", false, context);
-                }
+                startDisktop(context);
             }
         });
+    }
+
+    public static void startDisktop(Context context) {
+        new Terminal(context).executeShellCommand2("export DISPLAY=:0 && fluxbox > /dev/null", false, context);
     }
 
     public static void startTermuxX11(Context context) {
@@ -112,7 +118,7 @@ public class DisplaySystem {
         isTermuxClassLoaded = true;
 
         Log.d(TAG, "startTermuxX11...");
-        if (Build.VERSION.SDK_INT < 34 && DeviceUtils.isArm()) {
+        if (isUseBuiltInX11()) {
             ShellExecutor shellExec = new ShellExecutor();
             shellExec.exec(TermuxService.PREFIX_PATH + "/bin/termux-x11 :0");
         } else {

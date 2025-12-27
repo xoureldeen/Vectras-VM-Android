@@ -74,14 +74,14 @@ public class MainStartVM {
             lastVMID = vmID;
             lastThumbnailFile = thumbnailFile;
 
-            if (MainSettingsManager.getVmUi(context).equals("X11")) {
+            if (MainSettingsManager.getVmUi(context).equals("X11") && !VMManager.isVMRunning(context, vmID)) {
                 if (MainSettingsManager.getRunQemuWithXterm(context)) {
                     runCommandFormat = String.format(runCommandFormat, "xterm -e bash -c \"%s\"");
                 } else {
                     runCommandFormat = String.format(runCommandFormat, "bash -c \"%s\"");
                 }
 
-                if (SDK_INT < 34 && DeviceUtils.isArm()) {
+                if (DisplaySystem.isUseBuiltInX11()) {
                     pendingVMName = vmName;
                     pendingEnv = env;
                     pendingVMID = vmID;
@@ -149,10 +149,7 @@ public class MainStartVM {
 
         if (VMManager.isVMRunning(context, finalvmID)) {
             Toast.makeText(context, "This VM is already running.", Toast.LENGTH_LONG).show();
-            if (MainSettingsManager.getVmUi(context).equals("VNC"))
-                context.startActivity(new Intent(context, MainVNCActivity.class));
-            else if (MainSettingsManager.getVmUi(context).equals("X11"))
-                DisplaySystem.launchX11(context, false);
+            DisplaySystem.launch(context);
             return;
         }
 
@@ -203,8 +200,7 @@ public class MainStartVM {
         }
         Log.i(TAG, finalCommand);
 
-        Terminal vterm = new Terminal(context);
-        vterm.executeShellCommand2("export DISPLAY=:0 && fluxbox > /dev/null", false, context);
+        DisplaySystem.startDisktop(context);
 
         if (ServiceUtils.isServiceRunning(context, MainService.class)) {
             MainService.startCommand(finalCommand, context);
@@ -219,12 +215,11 @@ public class MainStartVM {
             }
         }
 
-        if (MainSettingsManager.getVmUi(context).equals("X11") && (SDK_INT >= 34 || !DeviceUtils.isArm())) {
+        if (MainSettingsManager.getVmUi(context).equals("X11") && !DisplaySystem.isUseBuiltInX11()) {
             if (!PackageUtils.isInstalled("com.termux.x11", context)) {
                 DialogUtils.needInstallTermuxX11(context);
                 return;
             }
-            DisplaySystem.launchX11(context, false);
         }
 
         tickForLaunch = new Runnable() {
@@ -250,15 +245,11 @@ public class MainStartVM {
                             }
 //                    } else if (MainSettingsManager.getVmUi(activity).equals("SPICE")) {
 //                        //This feature is not available yet.
+                        } else if (MainSettingsManager.getVmUi(context).equals("X11") && !DisplaySystem.isUseBuiltInX11()) {
+                            DisplaySystem.launch(context);
                         }
 
                         Log.i(TAG, "Virtual machine running.");
-                    } if (MainSettingsManager.getVmUi(context).equals("X11") && (SDK_INT >= 34 && !DeviceUtils.isArm())) {
-                        Intent intent = new Intent();
-                        intent.setClassName("com.termux.x11", "com.termux.x11.MainActivity");
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                        context.startActivity(intent);
                     }
 
                     skipIDEwithARM64DialogInStartVM = false;

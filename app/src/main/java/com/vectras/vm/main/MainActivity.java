@@ -430,7 +430,7 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
                 w.setData(Uri.parse(tw));
                 startActivity(w);
             } else if (id == R.id.navigation_item_desktop) {
-                DisplaySystem.launchX11(this, true);
+                DisplaySystem.launch(this);
             } else if (id == R.id.navigation_item_terminal) {
                 if (DeviceUtils.is64bit() && DeviceUtils.isArm()) {
                     startActivity(new Intent(this, TermuxActivity.class));

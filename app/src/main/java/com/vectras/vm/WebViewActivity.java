@@ -1,5 +1,6 @@
 package com.vectras.vm;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -20,6 +21,7 @@ import java.util.Objects;
 
 public class WebViewActivity extends AppCompatActivity {
     ActivityWebViewBinding binding;
+    String oringialDomain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,16 +42,30 @@ public class WebViewActivity extends AppCompatActivity {
         binding.webview.getSettings().setDatabaseEnabled(true);
         binding.webview.getSettings().setDomStorageEnabled(true);
 
-        if (getIntent().hasExtra("url") && getIntent().getStringExtra("url") != null)
+        if (getIntent().hasExtra("url") && getIntent().getStringExtra("url") != null) {
             binding.webview.loadUrl(Objects.requireNonNull(getIntent().getStringExtra("url")));
-        else
+            oringialDomain= Uri.parse(getIntent().getStringExtra("url")).getAuthority();
+        } else {
             binding.webview.loadUrl(AppConfig.vectrasWebsite);
+            oringialDomain = Uri.parse(AppConfig.vectrasWebsite).getAuthority();
+        }
 
         binding.webview.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 Uri url = request.getUrl();
                 String scheme = url.getScheme();
+                String domain = url.getAuthority();
+
+                if (domain != null && !domain.equals(oringialDomain)) {
+                    Intent openInBrowser = new Intent();
+                    openInBrowser.setAction(Intent.ACTION_VIEW);
+                    openInBrowser.setData(url);
+                    startActivity(openInBrowser);
+                    //Do not load this URL in the webview, return true.
+                    return true;
+                }
+
                 if ("file".equals(scheme) || "http".equals(scheme) || "https".equals(scheme)) {
                     return false;
                 }
