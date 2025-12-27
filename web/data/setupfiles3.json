@@ -1,5 +1,6 @@
 {
     "aarch64":"https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/3.5.1/base-genegic-nosve-vectras-vm-arm64-v8a.tar.gz",
+    "armhf": "https://go.anbui.ovh/vectrasvm/files/qemu/9.2.2/base-vectras-vm-armeabi-v7a.tar.gz",
     "amd64":"https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/3.5.1/base-generic-vectras-vm-x86_64.tar.gz",
     "x86": "https://go.anbui.ovh/vectrasvm/files/qemu/9.2.2/base-vectras-vm-x86.tar.gz"
 }

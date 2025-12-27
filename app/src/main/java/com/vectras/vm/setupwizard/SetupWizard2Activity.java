@@ -420,9 +420,9 @@ public class SetupWizard2Activity extends AppCompatActivity {
                     HashMap<String, Object> mmap;
                     mmap = new Gson().fromJson(response, new TypeToken<HashMap<String, Object>>() {
                     }.getType());
-                    if (mmap.containsKey("aarch64") && mmap.containsKey("amd64") && mmap.containsKey("x86")) {
-                        if (Build.SUPPORTED_ABIS[0].contains("arm64")) {
-                            bootstrapFileLink = Objects.requireNonNull(mmap.get("aarch64")).toString();
+                    if (mmap.containsKey("aarch64") && mmap.containsKey("armhf") && mmap.containsKey("amd64") && mmap.containsKey("x86")) {
+                        if (DeviceUtils.isArm()) {
+                            bootstrapFileLink = Objects.requireNonNull(mmap.get(DeviceUtils.is64bit() ? "aarch64" : "armhf")).toString();
                         } else {
                             bootstrapFileLink = Objects.requireNonNull(mmap.get(DeviceUtils.is64bit() ? "amd64" : "x86")).toString();
                         }
@@ -467,18 +467,15 @@ public class SetupWizard2Activity extends AppCompatActivity {
             cmd += " tar -xzvf " + tarPath + " -C /;" +
                     " rm " + tarPath + ";" +
                     " chmod 775 /usr/local/bin/*;";
-        } else if (DeviceUtils.is64bit() || !DeviceUtils.isArm()) {
+        } else {
             if (FileUtils.isFileExists(getFilesDir().getAbsolutePath() + "/distro/root/setup.tar.gz"))
                 FileUtils.deleteDirectory(getFilesDir().getAbsolutePath() + "/distro/root/setup.tar.gz");
-            
+
             cmd += downloadBootstrapsCommand + ";" +
                     " echo \"Installing Qemu...\";" +
                     " tar -xzvf setup.tar.gz -C /;" +
                     " rm setup.tar.gz;" +
                     " chmod 775 /usr/local/bin/*;";
-        } else {
-            cmd += " apk add qemu-system-x86_64 qemu-system-ppc qemu-system-i386 qemu-system-aarch64" +
-                    " qemu-pr-helper qemu-img mesa-dri-gallium;";
         }
 
         cmd += " echo \"Just a sec...\";" +

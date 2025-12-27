@@ -81,7 +81,7 @@ public class MainStartVM {
                     runCommandFormat = String.format(runCommandFormat, "bash -c \"%s\"");
                 }
 
-                if (SDK_INT < 34 && DeviceUtils.isArm()) {
+                if (SDK_INT < 34 && DeviceUtils.isArm() && DeviceUtils.is64bit()) {
                     pendingVMName = vmName;
                     pendingEnv = env;
                     pendingVMID = vmID;
