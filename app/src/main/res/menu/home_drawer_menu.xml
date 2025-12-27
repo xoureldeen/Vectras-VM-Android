@@ -2,7 +2,7 @@
     <item
         android:id="@+id/navigation_item_desktop"
         android:icon="@drawable/desktop_24px"
-        android:title="@string/X11_display"/>
+        android:title="@string/display"/>
     <item
         android:id="@+id/navigation_item_terminal"
         android:icon="@drawable/terminal_24px"

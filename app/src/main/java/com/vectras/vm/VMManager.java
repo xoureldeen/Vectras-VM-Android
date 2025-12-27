@@ -90,9 +90,10 @@ public class VMManager {
         mapForCreateNewVM.put("qmpPort", port);
 
         listmapForCreateNewVM.clear();
-        listmapForCreateNewVM = new Gson().fromJson(FileUtils.readAFile(AppConfig.romsdatajson), new TypeToken<ArrayList<HashMap<String, Object>>>(){}.getType());
+        listmapForCreateNewVM = new Gson().fromJson(FileUtils.readAFile(AppConfig.romsdatajson), new TypeToken<ArrayList<HashMap<String, Object>>>() {
+        }.getType());
 
-        listmapForCreateNewVM.add(0,mapForCreateNewVM);
+        listmapForCreateNewVM.add(0, mapForCreateNewVM);
         finalJson = new Gson().toJson(listmapForCreateNewVM);
 
         FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", finalJson);
@@ -103,7 +104,8 @@ public class VMManager {
 
     public static void editVM(String name, String thumbnail, String drive, String arch, String cdrom, String params, int position) {
         listmapForCreateNewVM.clear();
-        listmapForCreateNewVM = new Gson().fromJson(FileUtils.readAFile(AppConfig.romsdatajson), new TypeToken<ArrayList<HashMap<String, Object>>>(){}.getType());
+        listmapForCreateNewVM = new Gson().fromJson(FileUtils.readAFile(AppConfig.romsdatajson), new TypeToken<ArrayList<HashMap<String, Object>>>() {
+        }.getType());
 
         mapForCreateNewVM.clear();
         mapForCreateNewVM.put("imgName", name);
@@ -124,7 +126,7 @@ public class VMManager {
             mapForCreateNewVM.put("vmID", idGenerator());
         }
 
-        listmapForCreateNewVM.set(position,mapForCreateNewVM);
+        listmapForCreateNewVM.set(position, mapForCreateNewVM);
         finalJson = new Gson().toJson(listmapForCreateNewVM);
         FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", finalJson);
         finalJson = new Gson().toJson(mapForCreateNewVM);
@@ -136,7 +138,7 @@ public class VMManager {
         pendingPosition = _position;
         pendingJsonContent = FileUtils.readAFile(AppConfig.maindirpath + "roms-data.json");
 
-        DialogUtils.threeDialog(_activity, _activity.getString(R.string.remove)+ " " + _vmName, _activity.getString(R.string.remove_vm_content), _activity.getString(R.string.remove_and_do_not_keep_files), _activity.getString(R.string.remove_but_keep_files), _activity.getString(R.string.cancel),true, R.drawable.delete_24px, true,
+        DialogUtils.threeDialog(_activity, _activity.getString(R.string.remove) + " " + _vmName, _activity.getString(R.string.remove_vm_content), _activity.getString(R.string.remove_and_do_not_keep_files), _activity.getString(R.string.remove_but_keep_files), _activity.getString(R.string.cancel), true, R.drawable.delete_24px, true,
                 () -> {
                     View progressView = LayoutInflater.from(_activity).inflate(R.layout.dialog_progress_style, null);
                     TextView progress_text = progressView.findViewById(R.id.progress_text);
@@ -241,10 +243,11 @@ public class VMManager {
 
     public static void deleteVM() {
         listmapForRemoveVM.clear();
-        listmapForRemoveVM = new Gson().fromJson(pendingJsonContent, new TypeToken<ArrayList<HashMap<String, Object>>>(){}.getType());
+        listmapForRemoveVM = new Gson().fromJson(pendingJsonContent, new TypeToken<ArrayList<HashMap<String, Object>>>() {
+        }.getType());
         if (listmapForRemoveVM.get(pendingPosition).containsKey("vmID")) {
             pendingVMID = Objects.requireNonNull(listmapForRemoveVM.get(pendingPosition).get("vmID")).toString();
-            FileUtils.deleteDirectory(Config.getCacheDir()+ "/" + pendingVMID);
+            FileUtils.deleteDirectory(Config.getCacheDir() + "/" + pendingVMID);
             Log.i("VMManager", "deleteVM: ID obtained: " + pendingVMID);
         } else {
             Log.e("VMManager", "deleteVM: Cannot get ID.");
@@ -306,7 +309,8 @@ public class VMManager {
 
     public static void hideVMIDWithPosition() {
         listmapForHideVMID.clear();
-        listmapForHideVMID = new Gson().fromJson(pendingJsonContent, new TypeToken<ArrayList<HashMap<String, Object>>>(){}.getType());
+        listmapForHideVMID = new Gson().fromJson(pendingJsonContent, new TypeToken<ArrayList<HashMap<String, Object>>>() {
+        }.getType());
         if (listmapForHideVMID.get(pendingPosition).containsKey("vmID")) {
             pendingVMID = Objects.requireNonNull(listmapForHideVMID.get(pendingPosition).get("vmID")).toString();
         } else {
@@ -533,7 +537,7 @@ public class VMManager {
         return "";
     }
 
-    public static boolean isADiskFile (@NonNull String _filepath) {
+    public static boolean isADiskFile(@NonNull String _filepath) {
         if (_filepath.contains(".")) {
             String _getFileName = Objects.requireNonNull(Uri.parse(_filepath).getLastPathSegment()).toLowerCase();
             String _getFileFormat = _getFileName.substring(_getFileName.lastIndexOf(".") + 1);
@@ -561,7 +565,7 @@ public class VMManager {
         return "";
     }
 
-    public static boolean isAISOFile (@NonNull String _filepath) {
+    public static boolean isAISOFile(@NonNull String _filepath) {
         if (_filepath.contains(".")) {
             String _getFileName = Objects.requireNonNull(Uri.parse(_filepath).getLastPathSegment()).toLowerCase();
             String _getFileFormat = _getFileName.substring(_getFileName.lastIndexOf(".") + 1);
@@ -742,7 +746,7 @@ public class VMManager {
     public static boolean isthiscommandsafeimg(@NonNull String _command, Context _context) {
         if (!_command.contains("qcow2")) {
             String _getsize = _command.substring(_command.lastIndexOf(" ") + 1);
-            if (_getsize.toLowerCase().endsWith("t") || _getsize.toLowerCase().endsWith("p")  || _getsize.toLowerCase().endsWith("e")) {
+            if (_getsize.toLowerCase().endsWith("t") || _getsize.toLowerCase().endsWith("p") || _getsize.toLowerCase().endsWith("e")) {
                 latestUnsafeCommandReason = _context.getString(R.string.size_too_large_try_qcow2_format);
                 return false;
             }
@@ -803,7 +807,7 @@ public class VMManager {
 
     public static void setIconWithName(ImageView imageview, String name) {
         String itemName = name.toLowerCase();
-        if (itemName.contains("linux") || itemName.contains("ubuntu")  || itemName.contains("debian") || itemName.contains("arch") || itemName.contains("kali")) {
+        if (itemName.contains("linux") || itemName.contains("ubuntu") || itemName.contains("debian") || itemName.contains("arch") || itemName.contains("kali")) {
             imageview.setImageResource(R.drawable.linux);
         } else if (itemName.contains("windows")) {
             imageview.setImageResource(R.drawable.windows);
@@ -819,8 +823,8 @@ public class VMManager {
     public static void requestKillAllQemuProcess(Activity activity, Runnable runnable) {
         DialogUtils.twoDialog(activity, activity.getString(R.string.do_you_want_to_kill_all_qemu_processes), activity.getString(R.string.all_running_vms_will_be_forcibly_shut_down), activity.getString(R.string.kill_all), activity.getString(R.string.cancel), true, R.drawable.power_settings_new_24px, true,
                 () -> {
-                   killallqemuprocesses(activity);
-                   if (runnable != null) runnable.run();
+                    killallqemuprocesses(activity);
+                    if (runnable != null) runnable.run();
                 }, null, null);
     }
 
@@ -861,156 +865,159 @@ public class VMManager {
     }
 
     public static void showChangeRemovableDevicesDialog(Activity _activity, VncCanvasActivity vncCanvasActivity) {
+        new Thread(() -> {
+            String allDevice = getAllDevicesInQemu();
 
-        String allDevice = getAllDevicesInQemu();
+            _activity.runOnUiThread(() -> {
+                View _view = LayoutInflater.from(_activity).inflate(R.layout.dialog_change_removable_devices, null);
+                AlertDialog _dialog = new MaterialAlertDialogBuilder(_activity, R.style.CenteredDialogTheme)
+                        .setView(_view)
+                        .create();
 
-        View _view = LayoutInflater.from(_activity).inflate(R.layout.dialog_change_removable_devices, null);
-        AlertDialog _dialog = new MaterialAlertDialogBuilder(_activity, R.style.CenteredDialogTheme)
-                .setView(_view)
-                .create();
+                if (allDevice != null && (allDevice.contains("ide1-cd0")
+                        || allDevice.contains("ide2-cd0")
+                        || allDevice.contains("floppy0")
+                        || allDevice.contains("floppy1")
+                        || allDevice.contains("sd0"))) {
 
-        if (allDevice != null && (allDevice.contains("ide1-cd0")
-                || allDevice.contains("ide2-cd0")
-                || allDevice.contains("floppy0")
-                || allDevice.contains("floppy1")
-                || allDevice.contains("sd0"))) {
+                    if (allDevice.contains("ide1-cd0")
+                            || allDevice.contains("ide2-cd0")) {
 
-            if (allDevice.contains("ide1-cd0")
-                    || allDevice.contains("ide2-cd0")) {
+                        _view.findViewById(R.id.ln_cdrom).setOnClickListener(v -> {
+                            Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
+                            intent.addCategory(Intent.CATEGORY_OPENABLE);
+                            intent.setType("*/*");
+                            _activity.startActivityForResult(intent, 120);
+                            _dialog.dismiss();
+                        });
 
-                _view.findViewById(R.id.ln_cdrom).setOnClickListener(v -> {
-                    Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
-                    intent.addCategory(Intent.CATEGORY_OPENABLE);
-                    intent.setType("*/*");
-                    _activity.startActivityForResult(intent, 120);
-                    _dialog.dismiss();
-                });
+                        _view.findViewById(R.id.iv_ejectcdrom).setOnClickListener(v -> {
+                            ejectCDROM(_activity);
+                            _dialog.dismiss();
+                        });
+                    } else {
+                        _view.findViewById(R.id.ln_cdrom).setVisibility(View.GONE);
+                    }
 
-                _view.findViewById(R.id.iv_ejectcdrom).setOnClickListener(v -> {
-                    ejectCDROM(_activity);
-                    _dialog.dismiss();
-                });
-            } else {
-                _view.findViewById(R.id.ln_cdrom).setVisibility(View.GONE);
-            }
+                    if (allDevice.contains("floppy0")) {
+                        _view.findViewById(R.id.ln_fda).setOnClickListener(v -> {
+                            Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
+                            intent.addCategory(Intent.CATEGORY_OPENABLE);
+                            intent.setType("*/*");
+                            _activity.startActivityForResult(intent, 889);
+                            _dialog.dismiss();
+                        });
 
-            if (allDevice.contains("floppy0")) {
-                _view.findViewById(R.id.ln_fda).setOnClickListener(v -> {
-                    Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
-                    intent.addCategory(Intent.CATEGORY_OPENABLE);
-                    intent.setType("*/*");
-                    _activity.startActivityForResult(intent, 889);
-                    _dialog.dismiss();
-                });
+                        _view.findViewById(R.id.iv_ejectfda).setOnClickListener(v -> {
+                            ejectFloppyDriveA(_activity);
+                            _dialog.dismiss();
+                        });
 
-                _view.findViewById(R.id.iv_ejectfda).setOnClickListener(v -> {
-                    ejectFloppyDriveA(_activity);
-                    _dialog.dismiss();
-                });
+                        if (!allDevice.contains("floppy1")) {
+                            TextView tvFda = _view.findViewById(R.id.tv_fda);
+                            tvFda.setText(R.string.floppy_drive);
+                        }
+                    } else {
+                        _view.findViewById(R.id.ln_fda).setVisibility(View.GONE);
+                    }
 
-                if (!allDevice.contains("floppy1")) {
-                    TextView tvFda = _view.findViewById(R.id.tv_fda);
-                    tvFda.setText(R.string.floppy_drive);
+                    if (allDevice.contains("floppy1")) {
+                        _view.findViewById(R.id.ln_fdb).setOnClickListener(v -> {
+                            Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
+                            intent.addCategory(Intent.CATEGORY_OPENABLE);
+                            intent.setType("*/*");
+                            _activity.startActivityForResult(intent, 13335);
+                            _dialog.dismiss();
+                        });
+
+                        _view.findViewById(R.id.iv_ejectfdb).setOnClickListener(v -> {
+                            ejectFloppyDriveB(_activity);
+                            _dialog.dismiss();
+                        });
+
+                        if (!allDevice.contains("floppy0")) {
+                            TextView tvFdb = _view.findViewById(R.id.tv_fdb);
+                            tvFdb.setText(R.string.floppy_drive);
+                        }
+                    } else {
+                        _view.findViewById(R.id.ln_fdb).setVisibility(View.GONE);
+                    }
+
+                    if (allDevice.contains("sd0")) {
+                        _view.findViewById(R.id.ln_sd).setOnClickListener(v -> {
+                            Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
+                            intent.addCategory(Intent.CATEGORY_OPENABLE);
+                            intent.setType("*/*");
+                            _activity.startActivityForResult(intent, 32);
+                            _dialog.dismiss();
+                        });
+
+                        _view.findViewById(R.id.iv_ejectsd).setOnClickListener(v -> {
+                            ejectSDCard(_activity);
+                            _dialog.dismiss();
+                        });
+                    } else {
+                        _view.findViewById(R.id.ln_sd).setVisibility(View.GONE);
+                    }
+
+                    _view.findViewById(R.id.ln_otherdevice).setOnClickListener(v -> {
+                        showChangeRemovableDevicesWithIDDialog(_activity);
+                        _dialog.dismiss();
+                    });
+                } else {
+                    TextView tvFdb = _view.findViewById(R.id.tv_otherdevice);
+                    tvFdb.setText(R.string.change_or_eject_a_device);
+
+                    _view.findViewById(R.id.ln_cdrom).setVisibility(View.GONE);
+                    _view.findViewById(R.id.ln_fda).setVisibility(View.GONE);
+                    _view.findViewById(R.id.ln_fdb).setVisibility(View.GONE);
+                    _view.findViewById(R.id.ln_sd).setVisibility(View.GONE);
                 }
-            } else {
-                _view.findViewById(R.id.ln_fda).setVisibility(View.GONE);
-            }
 
-            if (allDevice.contains("floppy1")) {
-                _view.findViewById(R.id.ln_fdb).setOnClickListener(v -> {
-                    Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
-                    intent.addCategory(Intent.CATEGORY_OPENABLE);
-                    intent.setType("*/*");
-                    _activity.startActivityForResult(intent, 13335);
-                    _dialog.dismiss();
-                });
+                if (vncCanvasActivity != null) {
+                    _view.findViewById(R.id.ln_refresh).setOnClickListener(v -> {
+                        _activity.startActivity(new Intent(_activity, MainVNCActivity.class));
+                        _activity.overridePendingTransition(0, 0);
+                        _activity.finish();
+                        _dialog.dismiss();
+                    });
 
-                _view.findViewById(R.id.iv_ejectfdb).setOnClickListener(v -> {
-                    ejectFloppyDriveB(_activity);
-                    _dialog.dismiss();
-                });
+                    _view.findViewById(R.id.ln_mouse).setOnClickListener(v -> {
+                        MainVNCActivity.getContext.onMouseMode();
+                        _dialog.dismiss();
+                    });
 
-                if (!allDevice.contains("floppy0")) {
-                    TextView tvFdb = _view.findViewById(R.id.tv_fdb);
-                    tvFdb.setText(R.string.floppy_drive);
+                    _view.findViewById(R.id.ln_settings).setOnClickListener(v -> {
+                        _activity.startActivity(new Intent(_activity, VNCSettingsActivity.class));
+                        _dialog.dismiss();
+                    });
+
+                    if (MainSettingsManager.getVNCScaleMode(_activity) == VNCConfig.oneToOne) {
+                        _view.findViewById(R.id.iv_screenOneToOne).setBackgroundResource(R.drawable.dialog_shape_single_button);
+                    } else {
+                        _view.findViewById(R.id.iv_screenFit).setBackgroundResource(R.drawable.dialog_shape_single_button);
+                    }
+
+                    _view.findViewById(R.id.iv_screenOneToOne).setOnClickListener(v -> {
+                        AbstractScaling.getById(R.id.itemOneToOne)
+                                .setScaleTypeForActivity(vncCanvasActivity);
+                        MainSettingsManager.setVNCScaleMode(_activity, VNCConfig.oneToOne);
+                        _dialog.dismiss();
+                    });
+
+                    _view.findViewById(R.id.iv_screenFit).setOnClickListener(v -> {
+                        AbstractScaling.getById(R.id.itemFitToScreen)
+                                .setScaleTypeForActivity(vncCanvasActivity);
+                        MainSettingsManager.setVNCScaleMode(_activity, VNCConfig.fitToScreen);
+                        _dialog.dismiss();
+                    });
+                } else {
+                    _view.findViewById(R.id.ln_user_interface).setVisibility(View.GONE);
                 }
-            } else {
-                _view.findViewById(R.id.ln_fdb).setVisibility(View.GONE);
-            }
 
-            if (allDevice.contains("sd0")) {
-                _view.findViewById(R.id.ln_sd).setOnClickListener(v -> {
-                    Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
-                    intent.addCategory(Intent.CATEGORY_OPENABLE);
-                    intent.setType("*/*");
-                    _activity.startActivityForResult(intent, 32);
-                    _dialog.dismiss();
-                });
-
-                _view.findViewById(R.id.iv_ejectsd).setOnClickListener(v -> {
-                    ejectSDCard(_activity);
-                    _dialog.dismiss();
-                });
-            } else {
-                _view.findViewById(R.id.ln_sd).setVisibility(View.GONE);
-            }
-
-            _view.findViewById(R.id.ln_otherdevice).setOnClickListener(v -> {
-                showChangeRemovableDevicesWithIDDialog(_activity);
-                _dialog.dismiss();
+                _dialog.show();
             });
-        } else {
-            TextView tvFdb = _view.findViewById(R.id.tv_otherdevice);
-            tvFdb.setText(R.string.change_or_eject_a_device);
-
-            _view.findViewById(R.id.ln_cdrom).setVisibility(View.GONE);
-            _view.findViewById(R.id.ln_fda).setVisibility(View.GONE);
-            _view.findViewById(R.id.ln_fdb).setVisibility(View.GONE);
-            _view.findViewById(R.id.ln_sd).setVisibility(View.GONE);
-        }
-
-        if (vncCanvasActivity != null) {
-            _view.findViewById(R.id.ln_refresh).setOnClickListener(v -> {
-                _activity.startActivity(new Intent(_activity, MainVNCActivity.class));
-                _activity.overridePendingTransition(0, 0);
-                _activity.finish();
-                _dialog.dismiss();
-            });
-
-            _view.findViewById(R.id.ln_mouse).setOnClickListener(v -> {
-                MainVNCActivity.getContext.onMouseMode();
-                _dialog.dismiss();
-            });
-
-            _view.findViewById(R.id.ln_settings).setOnClickListener(v -> {
-                _activity.startActivity(new Intent(_activity, VNCSettingsActivity.class));
-                _dialog.dismiss();
-            });
-
-            if (MainSettingsManager.getVNCScaleMode(_activity) == VNCConfig.oneToOne) {
-                _view.findViewById(R.id.iv_screenOneToOne).setBackgroundResource(R.drawable.dialog_shape_single_button);
-            } else {
-                _view.findViewById(R.id.iv_screenFit).setBackgroundResource(R.drawable.dialog_shape_single_button);
-            }
-
-            _view.findViewById(R.id.iv_screenOneToOne).setOnClickListener(v -> {
-                AbstractScaling.getById(R.id.itemOneToOne)
-                        .setScaleTypeForActivity(vncCanvasActivity);
-                MainSettingsManager.setVNCScaleMode(_activity, VNCConfig.oneToOne);
-                _dialog.dismiss();
-            });
-
-            _view.findViewById(R.id.iv_screenFit).setOnClickListener(v -> {
-                AbstractScaling.getById(R.id.itemFitToScreen)
-                        .setScaleTypeForActivity(vncCanvasActivity);
-                MainSettingsManager.setVNCScaleMode(_activity, VNCConfig.fitToScreen);
-                _dialog.dismiss();
-            });
-        } else {
-            _view.findViewById(R.id.ln_user_interface).setVisibility(View.GONE);
-        }
-
-        _dialog.show();
+        }).start();
     }
 
     public static void showChangeRemovableDevicesWithIDDialog(Activity _activity) {
@@ -1248,7 +1255,7 @@ public class VMManager {
     @NonNull
     @Contract(pure = true)
     public static String ejectRemovableDevicesQMPCommand(String _device) {
-        return "{ \"execute\": \"eject\", \"arguments\": { \"device\": \""+ _device +"\" } }";
+        return "{ \"execute\": \"eject\", \"arguments\": { \"device\": \"" + _device + "\" } }";
     }
 
     public static String getAllDevicesInQemu() {
@@ -1256,7 +1263,7 @@ public class VMManager {
     }
 
     public static String changeVNCPasswordQMPCommand(String _password) {
-        return "{ \"execute\": \"change-vnc-password\", \"arguments\": { \"password\": \"" + _password +"\" } }";
+        return "{ \"execute\": \"change-vnc-password\", \"arguments\": { \"password\": \"" + _password + "\" } }";
     }
 
     public static boolean isQMPCommandSuccess(String _result) {

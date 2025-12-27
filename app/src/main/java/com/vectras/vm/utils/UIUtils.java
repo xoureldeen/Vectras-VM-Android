@@ -10,6 +10,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -22,6 +23,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.Html;
@@ -48,6 +50,7 @@ import com.vectras.vm.R;
 import com.vectras.vm.logger.VectrasStatus;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class UIUtils {
@@ -58,7 +61,7 @@ public class UIUtils {
 
         Scanner scanner = null;
         Spannable formattedString = new SpannableString(contents);
-        if(contents.length()==0)
+        if(contents.isEmpty())
             return formattedString;
 
         try {
@@ -90,7 +93,7 @@ public class UIUtils {
                     scanner.close();
                 } catch (Exception ex) {
                     if(Config.debug)
-                        ex.printStackTrace();
+                        Log.e(TAG, "formatAndroidLog: ", ex);
                 }
             }
 
@@ -166,7 +169,7 @@ public class UIUtils {
     }
 
     public static void toastShort(final Context context, final String errStr) {
-        toast(context, errStr, Gravity.CENTER | Gravity.CENTER, Toast.LENGTH_SHORT);
+        toast(context, errStr, Gravity.CENTER, Toast.LENGTH_SHORT);
 
     }
 
@@ -196,18 +199,17 @@ public class UIUtils {
         PackageInfo pInfo = null;
 
         try {
-            pInfo = activity.getPackageManager().getPackageInfo(activity.getClass().getPackage().getName(),
+            pInfo = activity.getPackageManager().getPackageInfo(Objects.requireNonNull(activity.getClass().getPackage()).getName(),
                     PackageManager.GET_META_DATA);
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            Log.e(TAG, "onChangeLog: ", e);
         }
-        com.vectras.qemu.utils.FileUtils fileutils = new com.vectras.qemu.utils.FileUtils();
+        com.vectras.qemu.utils.FileUtils fileutils = new FileUtils();
         try {
             UIUtils.UIAlert(activity,"CHANGELOG", fileutils.LoadFile(activity, "CHANGELOG", false),
                     0, false, "OK", null, null, null, null, null);
         } catch (IOException e) {
-
-            e.printStackTrace();
+            Log.e(TAG, "onChangeLog: ", e);
         }
     }
 
@@ -250,7 +252,11 @@ public class UIUtils {
         AlertDialog alertDialog;
         alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
         alertDialog.setTitle(title);
-        alertDialog.setMessage(Html.fromHtml(body, Html.FROM_HTML_MODE_LEGACY));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            alertDialog.setMessage(Html.fromHtml(body, Html.FROM_HTML_MODE_LEGACY));
+        } else {
+            alertDialog.setMessage(body);
+        }
         alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 return;
@@ -535,5 +541,15 @@ public class UIUtils {
 
         WindowCompat.getInsetsController(window, window.getDecorView())
                 .setAppearanceLightStatusBars(isEnable);
+    }
+
+    public static void fullScreen(Activity activity) {
+        WindowInsetsControllerCompat windowInsetsController =
+                WindowCompat.getInsetsController(activity.getWindow(), activity.getWindow().getDecorView());
+
+        windowInsetsController.hide(WindowInsetsCompat.Type.systemBars());
+        windowInsetsController.setSystemBarsBehavior(
+                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        );
     }
 }

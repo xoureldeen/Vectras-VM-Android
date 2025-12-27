@@ -25,6 +25,7 @@ import com.vectras.vm.MainService;
 import com.vectras.vm.VMManager;
 import com.vectras.vm.main.core.MainStartVM;
 import com.vectras.vm.utils.DialogUtils;
+import com.vectras.vm.utils.UIUtils;
 import com.vectras.vm.widgets.JoystickView;
 import static com.vectras.vm.x11.CmdEntryPoint.ACTION_START;
 import static com.vectras.vm.x11.LoriePreferences.ACTION_PREFERENCES_CHANGED;
@@ -187,6 +188,8 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
     })
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        UIUtils.fullScreen(this);
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         int modeValue = Integer.parseInt(preferences.getString("touchMode", "1")) - 1;
@@ -549,15 +552,7 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
             LoggerDialogFragment newFragment = new LoggerDialogFragment();
             newFragment.show(ft, "Logger");
         });
-        shutdownBtn.setOnClickListener(v -> DialogUtils.threeDialog(activity, getString(R.string.power), getString(R.string.shutdown_or_reset_content_vnc), getString(R.string.shutdown), getString(R.string.reset), getString(R.string.close), true, R.drawable.power_settings_new_24px, true,
-                this::shutdownthisvm, VMManager::resetCurrentVM, null, null));
-
-        shutdownBtn.setOnLongClickListener(view -> {
-            DialogUtils.twoDialog(activity, "Exit", "You will be left here but the virtual machine will continue to run.", "Exit", getString(R.string.cancel), true, R.drawable.exit_to_app_24px, true,
-                    this::finish, null, null);
-
-            return false;
-        });
+        shutdownBtn.setOnClickListener(v -> finish());
 
         keyboardBtn.setOnClickListener(v -> new Handler(Looper.getMainLooper()).postDelayed(() -> toggleKeyboardVisibility(X11Activity.this), 200));
         controllersBtn.setOnClickListener(v -> {

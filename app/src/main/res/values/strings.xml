@@ -477,7 +477,7 @@
     <string name="software_and_driver">Software &amp; driver</string>
     <string name="shared_by">Shared by</string>
     <string name="system_update">System update</string>
-    <string name="system_update_note">You are using an older system, update now.</string>
+    <string name="system_update_note">A system update is available, update now for a full experience.</string>
     <string name="use_sdl">Use SDL</string>
     <string name="use_sdl_note">Turn it on if you want to use 3dfx and play old retro games (only with x86_64 and i386).</string>
     <string name="qemu_documentation">QEMU documentation</string>
