@@ -11,7 +11,13 @@ import android.os.storage.StorageManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
+import com.vectras.vm.VectrasApp;
+
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -65,6 +71,18 @@ public class DeviceUtils {
     }
     public static boolean isArm() {
         return Build.SUPPORTED_ABIS[0].contains("arm");
+    }
+
+    public static String getKernel() {
+        String v = System.getProperty("os.version");
+        if (v != null && !v.isEmpty()) return v;
+
+        try (BufferedReader br = new BufferedReader(
+                new FileReader("/proc/version"))) {
+            return br.readLine();
+        } catch (Exception e) {
+            return "Unknown";
+        }
     }
 
     public static boolean isLargeScreen(Context context) {

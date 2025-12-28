@@ -15,12 +15,13 @@ android {
         applicationId "com.vectras.vm"
         minSdk minApi
         targetSdk targetApi
-        versionCode 58
-        versionName "3.5.4"
+        versionCode 59
+        versionName "3.5.5"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
         resValue "string", "app_version", versionName
+        resValue "integer", "app_version_code", versionCode.toString()
     }
 
     signingConfigs {

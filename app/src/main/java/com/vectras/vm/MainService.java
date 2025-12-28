@@ -50,9 +50,6 @@ public class MainService extends Service {
         if (env != null) {
             if (service != null) {
                 Terminal vterm = new Terminal(this);
-                if (Build.VERSION.SDK_INT < 34) {
-                    vterm.executeShellCommand2("dwm", false, this);
-                }
                 vterm.executeShellCommand2(env, true, this);
             }
         } else

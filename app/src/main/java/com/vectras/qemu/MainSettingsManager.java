@@ -1131,4 +1131,16 @@ public class MainSettingsManager extends AppCompatActivity
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getInt("standardSetupVersion", 0);
     }
+
+    public static void setShowLastCrashLog(Context context, Boolean _boolean) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putBoolean("showLastCrashLog", _boolean);
+        edit.apply();
+    }
+
+    public static Boolean getShowLastCrashLog(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean("showLastCrashLog", false);
+    }
 }

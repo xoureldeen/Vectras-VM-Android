@@ -490,6 +490,7 @@
     <string name="cpu_not_support_3dfx_content">Your device\'s CPU does not support acceleration for 3dfx.</string>
     <string name="threedfx_is_not_available">3dfx is not available.</string>
     <string name="refresh">Refresh</string>
+    <string name="last_crash_note">We are very sorry about an incident that occurred and app crashed earlier.</string>
 
 
     <!--======================TERMUX STRINGS====================-->
