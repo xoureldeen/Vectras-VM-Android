@@ -88,10 +88,13 @@ public class Minitools extends AppCompatActivity {
                             ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                             ClipData clip = ClipData.newPlainText("Setup", "curl -o setup.sh https://raw.githubusercontent.com/AnBui2004/termux/refs/heads/main/installpulseaudio.sh && chmod +rwx setup.sh && ./setup.sh && rm setup.sh");
                             clipboard.setPrimaryClip(clip);
-                            Intent intent = new Intent();
-                            intent.setAction(ACTION_VIEW);
-                            intent.setData(Uri.parse("android-app://com.termux"));
-                            startActivity(intent);
+                            Intent intent = getPackageManager()
+                                    .getLaunchIntentForPackage("com.termux");
+
+                            if (intent != null) {
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                            }
                             Toast.makeText(getApplicationContext(), getResources().getString(R.string.copied), Toast.LENGTH_LONG).show();
                         }, null, null);
             } else {

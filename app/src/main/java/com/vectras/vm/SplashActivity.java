@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
 import com.vectras.qemu.MainSettingsManager;
+import com.vectras.vm.crashtracker.LastCrashActivity;
 import com.vectras.vm.main.MainActivity;
 import com.vectras.vm.setupwizard.SetupFeatureCore;
 import com.vectras.vm.setupwizard.SetupWizard2Activity;
@@ -73,27 +74,30 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
 
         File vDir = new File(com.vectras.vm.AppConfig.maindirpath);
         if (!vDir.exists()) {
-            if (!vDir.mkdirs()) Log.e(TAG, com.vectras.vm.AppConfig.maindirpath + ": Directory creation failed!");
+            if (!vDir.mkdirs())
+                Log.e(TAG, com.vectras.vm.AppConfig.maindirpath + ": Directory creation failed!");
         }
 
         File distroDir = new File(AppConfig.internalDataDirPath + "distro");
         if (!distroDir.exists()) {
-            if(!distroDir.mkdirs()) Log.e(TAG, "distro: Directory creation failed!");
+            if (!distroDir.mkdirs()) Log.e(TAG, "distro: Directory creation failed!");
         }
 
         File cvbiDir = new File(FileUtils.getExternalFilesDirectory(activity).getPath() + "/cvbi");
         if (!cvbiDir.exists()) {
-            if(!cvbiDir.mkdirs()) Log.e(TAG, "cvbi: Directory creation failed!");
+            if (!cvbiDir.mkdirs()) Log.e(TAG, "cvbi: Directory creation failed!");
         }
 
         File sharedDir = new File(AppConfig.sharedFolder);
         if (!sharedDir.exists()) {
-            if(!sharedDir.mkdirs()) Log.e(TAG, AppConfig.sharedFolder + ": Directory creation failed!");
+            if (!sharedDir.mkdirs())
+                Log.e(TAG, AppConfig.sharedFolder + ": Directory creation failed!");
         }
 
         File downloadsDir = new File(AppConfig.downloadsFolder);
         if (!downloadsDir.exists()) {
-            if(!downloadsDir.mkdirs()) Log.e(TAG, AppConfig.downloadsFolder+ ": Directory creation failed!");
+            if (!downloadsDir.mkdirs())
+                Log.e(TAG, AppConfig.downloadsFolder + ": Directory creation failed!");
         }
 
         File jsonFile = new File(AppConfig.maindirpath
@@ -126,7 +130,9 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
 
     @Override
     public void run() {
-        if (SetupFeatureCore.isInstalledQemu(this)) {
+        if (MainSettingsManager.getShowLastCrashLog(this)) {
+            startActivity(new Intent(this, LastCrashActivity.class));
+        } else if (SetupFeatureCore.isInstalledQemu(this)) {
             if (MainSettingsManager.getStandardSetupVersion(this) != AppConfig.standardSetupVersion &&
                     !MainSettingsManager.getsetUpWithManualSetupBefore(this)) {
                 Intent intent = new Intent();
