@@ -1,8 +1,6 @@
 package com.vectras.vterm;
 
-import android.app.Activity;
 import android.content.Context;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -26,10 +24,7 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import com.vectras.qemu.MainVNCActivity;
 import com.vectras.vm.R;
 import com.vectras.vm.VMManager;
 import com.vectras.vm.AppConfig;
@@ -57,8 +52,8 @@ public class Terminal {
                 NetworkInterface intf = en.nextElement();
                 for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
                     InetAddress inetAddress = enumIpAddr.nextElement();
-                    if (!inetAddress.isLoopbackAddress() && inetAddress.getHostAddress().toString().contains(".")) {
-                        return inetAddress.getHostAddress().toString();
+                    if (!inetAddress.isLoopbackAddress() && Objects.requireNonNull(inetAddress.getHostAddress()).contains(".")) {
+                        return inetAddress.getHostAddress();
                     }
                 }
             }
@@ -187,7 +182,7 @@ public class Terminal {
         com.vectras.vm.logger.VectrasStatus.logError("<font color='#4db6ac'>VTERM: >" + userCommand + "</font>");
         new Thread(() -> {
             try {
-                // Setup the qemuProcess builder to start PRoot with environmental variables and commands
+                // Set up the qemuProcess builder to start PRoot with environmental variables and commands
                 ProcessBuilder processBuilder = new ProcessBuilder();
 
                 // Adjust these environment variables as necessary for your app
@@ -264,13 +259,11 @@ public class Terminal {
                 int exitCode = qemuProcess.waitFor(); // Wait for the process to finish
                 if (exitCode == 0) {
                     output.append("Execution finished successfully.\n");
-                    output.append(reader.readLine()).append("\n");
-                    Log.i(TAG, reader.readLine());
                 } else {
                     output.append("Execution finished with exit code: ").append(exitCode).append("\n");
-                    output.append(reader.readLine()).append("\n");
-                    Log.i(TAG, reader.readLine());
                 }
+                output.append(reader.readLine()).append("\n");
+                Log.i(TAG, reader.readLine());
             } catch (IOException | InterruptedException e) {
                 output.append(e.getMessage());
                 errors.append(Log.getStackTraceString(e));
@@ -365,109 +358,6 @@ public class Terminal {
             errors.append(Log.getStackTraceString(e));
         }
         return output.toString();
-    }
-
-    public void extractQemuVersion(String userCommand, boolean showResultDialog, Activity dialogActivity, CommandCallback callback) {
-        StringBuilder output = new StringBuilder();
-        StringBuilder errors = new StringBuilder();
-        Log.d(TAG, userCommand);
-        com.vectras.vm.logger.VectrasStatus.logError("<font color='#4db6ac'>VTERM: >" + userCommand + "</font>");
-
-        new Thread(() -> {
-            try {
-                // Process setup (same as your original code)
-                ProcessBuilder processBuilder = new ProcessBuilder();
-
-                String filesDir = Objects.requireNonNull(context.getFilesDir().getAbsolutePath());
-                File tmpDir = new File(Objects.requireNonNull(context.getFilesDir()), "usr/tmp");
-
-                processBuilder.environment().put("PROOT_TMP_DIR", tmpDir.getAbsolutePath());
-                processBuilder.environment().put("HOME", "/root");
-                processBuilder.environment().put("USER", user);
-                processBuilder.environment().put("TERM", "xterm-256color");
-                processBuilder.environment().put("TMPDIR", "/tmp");
-                processBuilder.environment().put("SHELL", "/bin/sh");
-                processBuilder.environment().put("DISPLAY", DISPLAY);
-                processBuilder.environment().put("PULSE_SERVER", "127.0.0.1");
-                processBuilder.environment().put("XDG_RUNTIME_DIR", "${TMPDIR}");
-                processBuilder.environment().put("SDL_VIDEODRIVER", "x11");
-
-                String[] prootCommand = {
-                        TermuxService.PREFIX_PATH + "/bin/proot",
-                        "--kill-on-exit",
-                        "--link2symlink",
-                        "-0",
-                        "-r", filesDir + "/distro",
-                        "-b", "/dev",
-                        "-b", "/proc",
-                        "-b", "/sys",
-                        "-b", AppConfig.internalDataDirPath + "distro/root:/dev/shm",
-                        "-b", "/sdcard",
-                        "-b", "/storage",
-                        "-b", "/data",
-                        "-b", AppConfig.internalDataDirPath + "usr/tmp:/tmp",
-                        "-w", "/root",
-                        "/bin/sh",
-                        "--login"
-                };
-
-                processBuilder.command(prootCommand);
-                qemuProcess = processBuilder.start();
-
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(qemuProcess.getOutputStream()));
-                BufferedReader reader = new BufferedReader(new InputStreamReader(qemuProcess.getInputStream()));
-                BufferedReader errorReader = new BufferedReader(new InputStreamReader(qemuProcess.getErrorStream()));
-
-                writer.write(userCommand);
-                writer.newLine();
-                writer.flush();
-                writer.close();
-
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    output.append(line).append("\n");
-                }
-
-                while ((line = errorReader.readLine()) != null) {
-                    errors.append(line).append("\n");
-                }
-
-                reader.close();
-                errorReader.close();
-
-                qemuProcess.waitFor();
-
-            } catch (IOException | InterruptedException e) {
-                output.append(e.getMessage());
-                errors.append(Log.getStackTraceString(e));
-            } finally {
-                String finalOutput = output.toString();
-                String finalErrors = errors.toString();
-
-                // Extract version using regex
-                String version = extractVersion(finalOutput);
-
-                // Run callback on main thread
-                new Handler(Looper.getMainLooper()).post(() -> {
-                    if (callback != null) {
-                        callback.onCommandCompleted(version != null ? version : finalOutput, finalErrors);
-                    }
-                    if (showResultDialog) {
-                        showDialog(finalOutput.isEmpty() ? finalErrors : finalOutput, dialogActivity, userCommand);
-                    }
-                });
-            }
-        }).start();
-    }
-
-    private String extractVersion(String output) {
-        String regex = "QEMU emulator version ([\\d.]+)";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(output);
-        if (matcher.find()) {
-            return matcher.group(1); // Return the version number
-        }
-        return null;
     }
 
     public interface CommandCallback {

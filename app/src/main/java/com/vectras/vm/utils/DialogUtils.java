@@ -2,6 +2,7 @@ package com.vectras.vm.utils;
 
 import static android.content.Intent.ACTION_VIEW;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -31,6 +32,8 @@ public class DialogUtils {
     }
 
     public static void oneDialog(Context context, String _title, String _message, String _textPositiveButton, boolean _isicon, int _iconid, boolean _cancel, Runnable _onPositive, Runnable _onDismiss) {
+        if (!isAllowShow(context)) return;
+
         View buttonsView = LayoutInflater.from(context).inflate(R.layout.dialog_layout, null);
 
         AlertDialog dialog = new AlertDialog.Builder(context).create();
@@ -89,6 +92,8 @@ public class DialogUtils {
     }
 
     public static void twoDialog(Context context, String _title, String _message, String _textPositiveButton, String _textNegativeButton, boolean _isicon, int _iconid, boolean _cancel, Runnable _onPositive, Runnable _onNegative, Runnable _onDismiss) {
+        if (!isAllowShow(context)) return;
+
         View buttonsView = LayoutInflater.from(context).inflate(R.layout.dialog_layout, null);
 
         AlertDialog dialog = new AlertDialog.Builder(context).create();
@@ -156,6 +161,8 @@ public class DialogUtils {
     }
 
     public static void threeDialog(Context context, String _title, String _message, String _textPositiveButton, String _textNegativeButton, String _textNeutralButton, boolean _isicon, int _iconid, boolean _cancel, Runnable _onPositive, Runnable _onNegative, Runnable _onNeutral, Runnable _onDismiss) {
+        if (!isAllowShow(context)) return;
+
         View buttonsView = LayoutInflater.from(context).inflate(R.layout.dialog_layout, null);
 
         AlertDialog dialog = new AlertDialog.Builder(context).create();
@@ -230,6 +237,10 @@ public class DialogUtils {
             if (_onDismiss != null) _onDismiss.run();
         });
         dialog.show();
+    }
+
+    public static boolean isAllowShow(Context context) {
+        return context instanceof Activity;
     }
 
     public static void joinTelegram(Context _context) {

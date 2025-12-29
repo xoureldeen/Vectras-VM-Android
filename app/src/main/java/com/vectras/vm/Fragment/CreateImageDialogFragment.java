@@ -1,5 +1,6 @@
 package com.vectras.vm.Fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.os.Bundle;
 
@@ -39,12 +40,13 @@ public class CreateImageDialogFragment extends DialogFragment {
     }
 
     // If you want to style the dialog to have no title or to adjust the width, etc., override onCreateDialog.
+    @SuppressLint("SetTextI18n")
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(Objects.requireNonNull(getActivity()), R.style.MainDialogTheme);
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity(), R.style.MainDialogTheme);
 
-        View view = getActivity().getLayoutInflater().inflate(R.layout.create_vhd, null);
+        View view = requireActivity().getLayoutInflater().inflate(R.layout.create_vhd, null);
 
         TextInputEditText imageSize = view.findViewById(R.id.size);
 

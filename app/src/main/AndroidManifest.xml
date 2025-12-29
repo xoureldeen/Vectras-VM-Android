@@ -147,19 +147,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".setupwizard.SetupWizardActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
-            android:exported="false"
-            android:hardwareAccelerated="true"
-            tools:ignore="DiscouragedApi" /> <!-- stupid android issue -->
-        <activity
-            android:name=".RomStoreActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
-            android:exported="false"
-            android:hardwareAccelerated="true"
-            android:label="Roms"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
             android:name=".AboutActivity"
             android:exported="true"
             android:hardwareAccelerated="true"
@@ -168,11 +155,6 @@
             android:name=".ImagePrvActivity"
             android:exported="true"
             android:hardwareAccelerated="true" />
-        <activity
-            android:name=".VectrasApp$CrashActivity"
-            android:exported="true"
-            android:hardwareAccelerated="true"
-            android:label="App Crash" />
         <activity
             android:name="com.vectras.qemu.MainVNCActivity"
             android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|screenLayout|fontScale|uiMode|orientation|screenSize|smallestScreenSize"

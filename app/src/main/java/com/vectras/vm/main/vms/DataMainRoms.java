@@ -1,4 +1,4 @@
-package com.vectras.vm.MainRoms;
+package com.vectras.vm.main.vms;
 public class DataMainRoms {
     public String itemIcon;
     public String itemName;

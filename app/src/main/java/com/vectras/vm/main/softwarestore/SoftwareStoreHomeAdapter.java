@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.vectras.vm.R;
 import com.vectras.vm.RomInfo;
-import com.vectras.vm.Roms.DataRoms;
+import com.vectras.vm.main.romstore.DataRoms;
 
 import java.util.Collections;
 import java.util.List;

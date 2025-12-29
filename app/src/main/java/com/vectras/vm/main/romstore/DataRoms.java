@@ -1,4 +1,4 @@
-package com.vectras.vm.Roms;
+package com.vectras.vm.main.romstore;
 
 import com.google.gson.annotations.SerializedName;
 
