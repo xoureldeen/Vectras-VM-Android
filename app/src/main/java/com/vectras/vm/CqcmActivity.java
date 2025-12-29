@@ -24,10 +24,6 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class CqcmActivity extends AppCompatActivity {
-
-    private final Intent gotoActivity = new Intent();
-    private final Intent openURL = new Intent();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,17 +111,14 @@ public class CqcmActivity extends AppCompatActivity {
         } else {
             Toast.makeText(getApplicationContext(), "The virtual machine list data is corrupted and new virtual machines cannot be added right now.", Toast.LENGTH_LONG).show();
         }
-        if(!MainActivity.isActivate) {
-            Log.i("CqcmActivity", "Vectras VM is not opening.");
-            gotoActivity.setClass(getApplicationContext(), SplashActivity.class);
-            startActivity(gotoActivity);
-            Log.i("CqcmActivity", "Opened SplashActivity");
+
+        if (!MainActivity.isActivate) {
+            startActivity(new Intent(this, SplashActivity.class));
         } else {
-            Log.i("CqcmActivity", "Vectras VM is opening.");
-            openURL.setAction(Intent.ACTION_VIEW);
-            openURL.setData(Uri.parse("android-app://com.vectras.vm"));
-            startActivity(openURL);
-            Log.i("CqcmActivity", "Opened Vectras VM using URL.");
+            Intent intent = new Intent();
+            intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            intent.setClass(this, MainActivity.class);
+            startActivity(intent);
         }
         finish();
     }
@@ -133,18 +126,13 @@ public class CqcmActivity extends AppCompatActivity {
     private void runCommand(String _command) {
         AppConfig.pendingCommand = _command;
 
-        if(!MainActivity.isActivate) {
-            Log.i("CqcmActivity", "Vectras VM is not opening.");
-            gotoActivity.setClass(getApplicationContext(), SplashActivity.class);
-            startActivity(gotoActivity);
-            Log.i("CqcmActivity", "Opened SplashActivity");
+        if (!MainActivity.isActivate) {
+            startActivity(new Intent(this, SplashActivity.class));
         } else {
-            Log.i("CqcmActivity", "Vectras VM is opening.");
             Intent intent = new Intent();
             intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             intent.setClass(this, MainActivity.class);
             startActivity(intent);
-            Log.i("CqcmActivity", "Opened HomeActivity.");
         }
         finish();
     }
