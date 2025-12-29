@@ -240,7 +240,10 @@ public class DialogUtils {
     }
 
     public static boolean isAllowShow(Context context) {
-        return context instanceof Activity;
+        if (context instanceof Activity activity) {
+            return !activity.isFinishing() && !activity.isDestroyed();
+        }
+        return false;
     }
 
     public static void joinTelegram(Context _context) {
