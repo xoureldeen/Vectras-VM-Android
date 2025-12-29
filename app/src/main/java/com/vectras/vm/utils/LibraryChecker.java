@@ -59,7 +59,7 @@ public class LibraryChecker {
                 .setMessage("The following libraries are missing:\n\n" + missingLibraries)
                 .setCancelable(false)
                 .setPositiveButton("Install", (dialog, which) -> {
-                    // Create the install command
+                    // Create the installation command
                     String installCommand = "apk add " + missingLibraries.replace("\n", " ");
                     new Terminal(context).executeShellCommand(installCommand, true, true, activity);
                 })

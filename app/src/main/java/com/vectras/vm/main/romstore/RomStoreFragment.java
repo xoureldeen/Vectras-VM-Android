@@ -18,7 +18,6 @@ import com.google.gson.Gson;
 import com.vectras.vm.AppConfig;
 import com.vectras.vm.network.RequestNetwork;
 import com.vectras.vm.network.RequestNetworkController;
-import com.vectras.vm.Roms.DataRoms;
 import com.vectras.vm.databinding.FragmentHomeRomStoreBinding;
 import com.vectras.vm.main.core.SharedData;
 

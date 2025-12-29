@@ -8,7 +8,7 @@ import android.widget.Button;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.vectras.vm.VMCreatorActivity;
 import com.vectras.vm.ExportRomActivity;
-import com.vectras.vm.MainRoms.DataMainRoms;
+import com.vectras.vm.main.vms.DataMainRoms;
 import com.vectras.vm.R;
 import com.vectras.vm.VMManager;
 

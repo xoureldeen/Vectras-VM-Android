@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.vectras.qemu.Config;
-import com.vectras.vm.MainRoms.DataMainRoms;
 import com.vectras.vm.R;
 import com.vectras.vm.StartVM;
 import com.vectras.vm.VMManager;

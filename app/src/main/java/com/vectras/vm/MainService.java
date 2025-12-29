@@ -1,6 +1,5 @@
 package com.vectras.vm;
 
-import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -14,12 +13,7 @@ import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
-import com.vectras.qemu.MainVNCActivity;
-import com.vectras.vm.core.PulseAudio;
 import com.vectras.vterm.Terminal;
-
-import java.io.File;
-import java.util.Objects;
 
 public class MainService extends Service {
     public static String CHANNEL_ID = "Vectras VM Service";
@@ -28,6 +22,7 @@ public class MainService extends Service {
     public static String env = null;
     private String TAG = "MainService";
     public static MainService service;
+    public static Context activityContext;
 
     @Override
     public void onCreate() {
@@ -49,8 +44,8 @@ public class MainService extends Service {
 
         if (env != null) {
             if (service != null) {
-                Terminal vterm = new Terminal(this);
-                vterm.executeShellCommand2(env, true, this);
+                Terminal vterm = new Terminal(activityContext);
+                vterm.executeShellCommand2(env, true, activityContext);
             }
         } else
             Log.e(TAG, "env is null");

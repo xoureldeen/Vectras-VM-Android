@@ -37,7 +37,6 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.termux.app.TermuxActivity;
 import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
-import com.vectras.qemu.MainVNCActivity;
 import com.vectras.vm.AboutActivity;
 import com.vectras.vm.AppConfig;
 import com.vectras.vm.VMCreatorActivity;
@@ -53,7 +52,7 @@ import com.vectras.vm.network.RequestNetworkController;
 import com.vectras.vm.databinding.BottomsheetdialogLoggerBinding;
 import com.vectras.vm.databinding.UpdateBottomDialogLayoutBinding;
 import com.vectras.vm.main.romstore.RomStoreHomeAdapterSearch;
-import com.vectras.vm.Roms.DataRoms;
+import com.vectras.vm.main.romstore.DataRoms;
 import com.vectras.vm.SetArchActivity;
 import com.vectras.vm.VMManager;
 import com.vectras.vm.adapter.LogsAdapter;
@@ -565,7 +564,7 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
     @SuppressLint("NotifyDataSetChanged")
     private void search(String keyword) {
         try {
-            // Extract data from json and store into ArrayList as class objects
+            // Extract data from JSON and store into ArrayList as class objects
             List<DataRoms> filteredData = new ArrayList<>();
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -598,7 +597,11 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
         else
             binding.rvRomstoresearch.setVisibility(View.VISIBLE);
 
-        adapterRomStoreSearch.notifyDataSetChanged();
+        if (currentSearchMode == SEARCH_ROM_STORE ) {
+            if (adapterRomStoreSearch != null) adapterRomStoreSearch.notifyDataSetChanged();
+        } else {
+            if (adapterSoftwareStoreSearch != null) adapterSoftwareStoreSearch.notifyDataSetChanged();
+        }
     }
 
     private void showLogsDialog() {

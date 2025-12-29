@@ -26,7 +26,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.Fragment.CreateImageDialogFragment;
-import com.vectras.vm.MainRoms.DataMainRoms;
+import com.vectras.vm.main.vms.DataMainRoms;
 import com.vectras.vm.databinding.ActivityVmCreatorBinding;
 import com.vectras.vm.databinding.DialogProgressStyleBinding;
 import com.vectras.vm.main.MainActivity;
