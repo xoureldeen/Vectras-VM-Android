@@ -11,7 +11,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.R;
 import com.vectras.vm.databinding.ActivityX11DisplaySettingsBinding;
+import com.vectras.vm.main.core.DisplaySystem;
 import com.vectras.vm.utils.DeviceUtils;
+import com.vectras.vm.utils.DialogUtils;
+import com.vectras.vm.utils.PackageUtils;
 
 import java.util.Objects;
 
@@ -46,13 +49,17 @@ public class X11DisplaySettingsActivity extends AppCompatActivity {
 
         binding.lnPreferences.setOnClickListener(v -> {
             Intent intent = new Intent();
-            if (SDK_INT >= 34 || !DeviceUtils.isArm()) {
-                intent.setClassName("com.termux.x11", "com.termux.x11.MainActivity");
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-            } else {
+            if (DisplaySystem.isUseBuiltInX11()) {
                 intent.setClass(this, MainSettingsManager.class);
                 intent.putExtra("goto", "termuxx11");
+            } else {
+                if (PackageUtils.isInstalled("com.termux.x11", this)) {
+                    intent.setClassName("com.termux.x11", "com.termux.x11.MainActivity");
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                } else {
+                    DialogUtils.needInstallTermuxX11(this);
+                }
             }
             startActivity(intent);
         });
