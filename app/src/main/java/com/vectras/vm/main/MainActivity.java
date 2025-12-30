@@ -299,7 +299,7 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        homeCallToVmsListener.configurationChanged(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
+        if (homeCallToVmsListener != null) homeCallToVmsListener.configurationChanged(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
     }
 
     @Override

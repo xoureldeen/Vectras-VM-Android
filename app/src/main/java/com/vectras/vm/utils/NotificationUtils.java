@@ -143,6 +143,7 @@ public class NotificationUtils {
     }
 
     public static void createChannel(String title, String description, String id, int importance, Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         try {
             if (!isChannelExist(id, context)) {
                 NotificationChannel channel = new NotificationChannel(id, title, importance);
@@ -152,6 +153,7 @@ public class NotificationUtils {
             }
         } catch (Exception e) {
             Log.e(TAG, "Error: ", e);
+        }
         }
     }
 
@@ -163,7 +165,7 @@ public class NotificationUtils {
     }
 
     public static void requestPermission(Activity activity) {
-        if (!isPermissionGranted(activity))
+        if (Build.VERSION.SDK_INT >= 33 && !isPermissionGranted(activity))
             ActivityCompat.requestPermissions(activity, new String[] {Manifest.permission.POST_NOTIFICATIONS}, 1000);
     }
 }

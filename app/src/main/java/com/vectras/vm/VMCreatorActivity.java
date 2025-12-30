@@ -333,7 +333,7 @@ public class VMCreatorActivity extends AppCompatActivity {
         if (isImportingCVBI) return;
 
         if (!created && !modify) {
-            FileUtils.deleteDirectory(AppConfig.vmFolder + vmID);
+            new Thread(() -> FileUtils.deleteDirectory(AppConfig.vmFolder + vmID)).start();
         }
         modify = false;
         finish();
@@ -341,7 +341,7 @@ public class VMCreatorActivity extends AppCompatActivity {
 
     public void onDestroy() {
         if (!created && !modify) {
-            FileUtils.deleteDirectory(AppConfig.vmFolder + vmID);
+            new Thread(() -> FileUtils.deleteDirectory(AppConfig.vmFolder + vmID)).start();
         }
         modify = false;
         super.onDestroy();
@@ -606,7 +606,7 @@ public class VMCreatorActivity extends AppCompatActivity {
                         null));
             } finally {
                 runOnUiThread(() -> {
-                    if (!isImportingCVBI) progressDialog.dismiss();
+                    if (!isImportingCVBI && !isFinishing() && !isDestroyed()) progressDialog.dismiss();
                 });
             }
         });
@@ -802,6 +802,11 @@ public class VMCreatorActivity extends AppCompatActivity {
             );
 
             runOnUiThread(() -> {
+                if (isFinishing() || isDestroyed()) {
+                    new Thread(() -> FileUtils.deleteDirectory(AppConfig.vmFolder + vmID)).start();
+                    return;
+                }
+
                 progressDialog.dismiss();
 
                 if (result) {

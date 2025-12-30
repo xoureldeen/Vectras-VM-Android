@@ -58,10 +58,7 @@ public class MainService extends Service {
             if (service != null) {
                 service.stopForeground(true);
                 service.stopSelf();
-
-                //TODO: Not Work
-                //Terminal.killQemuProcess();
-                VMManager.killallqemuprocesses(VectrasApp.getContext());
+                VMManager.killallqemuprocesses(activityContext);
             }
 
         });
