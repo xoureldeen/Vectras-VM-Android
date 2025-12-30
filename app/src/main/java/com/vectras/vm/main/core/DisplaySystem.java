@@ -104,12 +104,12 @@ public class DisplaySystem {
                 } else {
                     context.startActivity(new Intent(context, X11Activity.class));
                 }
-                startDisktop(context);
+                startDesktop(context);
             }
         });
     }
 
-    public static void startDisktop(Context context) {
+    public static void startDesktop(Context context) {
         new Terminal(context).executeShellCommand2("export DISPLAY=:0 && fluxbox > /dev/null", false, context);
     }
 

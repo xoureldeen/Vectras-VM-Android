@@ -195,12 +195,11 @@ public class MainStartVM {
 
         String finalCommand = VMManager.addAudioDevSdl(String.format(runCommandFormat, env));
 
-        if (MainSettingsManager.getVmUi(context).equals("X11") && (SDK_INT >= 34 || !DeviceUtils.isArm())) {
-            finalCommand = "export DISPLAY=:0 &&" + finalCommand;
+        if (MainSettingsManager.getVmUi(context).equals("X11")) {
+            finalCommand = "export DISPLAY=:0 && " + finalCommand;
+            DisplaySystem.startDesktop(context);
         }
         Log.i(TAG, finalCommand);
-
-        DisplaySystem.startDisktop(context);
 
         if (ServiceUtils.isServiceRunning(context, MainService.class)) {
             MainService.startCommand(finalCommand, context);

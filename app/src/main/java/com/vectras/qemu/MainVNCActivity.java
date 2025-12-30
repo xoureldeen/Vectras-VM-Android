@@ -1068,9 +1068,13 @@ public class MainVNCActivity extends VncCanvasActivity {
         });
 
         bindingDesktopControls.leftClickBtn.setOnClickListener(v -> {
-            MotionEvent e = MotionEvent.obtain(1000, 1000, MotionEvent.ACTION_DOWN, vncCanvas.mouseX, vncCanvas.mouseY,
-                    0);
-            ((TouchpadInputHandler) VncCanvasActivity.inputHandler).leftClick(e);
+            try {
+                MotionEvent e = MotionEvent.obtain(1000, 1000, MotionEvent.ACTION_DOWN, vncCanvas.mouseX, vncCanvas.mouseY,
+                        0);
+                ((TouchpadInputHandler) VncCanvasActivity.inputHandler).leftClick(e);
+            } catch (Exception e) {
+                VMManager.sendLeftMouseKey();
+            }
         });
 
         bindingDesktopControls.winBtn.setOnClickListener(v -> {

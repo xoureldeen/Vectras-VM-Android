@@ -1015,6 +1015,7 @@ public class VMManager {
                     _view.findViewById(R.id.ln_user_interface).setVisibility(View.GONE);
                 }
 
+                if (!DialogUtils.isAllowShow(_activity)) return;
                 _dialog.show();
             });
         }).start();
@@ -1216,6 +1217,43 @@ public class VMManager {
                 }
             }
         }).start();
+    }
+
+    public static void sendLeftMouseKey() {
+        new Thread(() -> {
+            try {
+                keyDown("left");
+                Thread.sleep(50);
+                keyUp("left");
+            } catch (InterruptedException e) {
+                Log.d(TAG, "sendLeftMouseKey: " + e.getMessage());
+            }
+        }).start();
+    }
+
+    public static void keyDown(String key) {
+        QmpClient.sendCommand(sendKeyCommand(key, true));
+    }
+
+    public static void keyUp(String key) {
+        QmpClient.sendCommand(sendKeyCommand(key, false));
+    }
+
+    public static String sendKeyCommand(String key, Boolean isDown) {
+        return "{" +
+                "  \"execute\": \"input-send-event\"," +
+                "  \"arguments\": {" +
+                "    \"events\": [" +
+                "      {" +
+                "        \"type\": \"btn\"," +
+                "        \"data\": {" +
+                "          \"button\": \"" + key + "\"," +
+                "          \"down\": " + (isDown ? "true" : "false") +
+                "        }" +
+                "      }" +
+                "    ]" +
+                "  }" +
+                "}";
     }
 
     public static void setVNCPasswordWithDelay(String _password) {
