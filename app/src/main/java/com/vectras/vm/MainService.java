@@ -29,6 +29,7 @@ public class MainService extends Service {
         super.onCreate();
         service = this;
         createNotificationChannel();
+
         Intent stopSelf = new Intent(this, MainService.class);
         stopSelf.setAction("STOP");
         PendingIntent pStopSelf = PendingIntent.getService(
@@ -42,15 +43,16 @@ public class MainService extends Service {
                 .addAction(R.drawable.round_logout_24, "Stop", pStopSelf)
                 .build();
 
+        startForeground(NOTIFICATION_ID, notification);
+
         if (env != null) {
             if (service != null) {
                 Terminal vterm = new Terminal(activityContext);
                 vterm.executeShellCommand2(env, true, activityContext);
             }
-        } else
+        } else {
             Log.e(TAG, "env is null");
-
-        startForeground(NOTIFICATION_ID, notification);
+        }
     }
 
     public static void stopService() {

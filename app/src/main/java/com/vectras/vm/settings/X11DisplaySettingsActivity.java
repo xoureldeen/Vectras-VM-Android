@@ -59,6 +59,7 @@ public class X11DisplaySettingsActivity extends AppCompatActivity {
                     intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
                 } else {
                     DialogUtils.needInstallTermuxX11(this);
+                    return;
                 }
             }
             startActivity(intent);

@@ -245,6 +245,9 @@ public class VMManager {
         listmapForRemoveVM.clear();
         listmapForRemoveVM = new Gson().fromJson(pendingJsonContent, new TypeToken<ArrayList<HashMap<String, Object>>>() {
         }.getType());
+
+        if (pendingPosition > listmapForCreateNewVM.size() - 1) return;
+
         if (listmapForRemoveVM.get(pendingPosition).containsKey("vmID")) {
             pendingVMID = Objects.requireNonNull(listmapForRemoveVM.get(pendingPosition).get("vmID")).toString();
             FileUtils.deleteDirectory(Config.getCacheDir() + "/" + pendingVMID);
@@ -1227,6 +1230,30 @@ public class VMManager {
                 keyUp("left");
             } catch (InterruptedException e) {
                 Log.d(TAG, "sendLeftMouseKey: " + e.getMessage());
+            }
+        }).start();
+    }
+
+    public static void sendRightMouseKey() {
+        new Thread(() -> {
+            try {
+                keyDown("right");
+                Thread.sleep(50);
+                keyUp("right");
+            } catch (InterruptedException e) {
+                Log.d(TAG, "sendRightMouseKey: " + e.getMessage());
+            }
+        }).start();
+    }
+
+    public static void sendMiddleMouseKey() {
+        new Thread(() -> {
+            try {
+                keyDown("middle");
+                Thread.sleep(50);
+                keyUp("middle");
+            } catch (InterruptedException e) {
+                Log.d(TAG, "sendMiddleMouseKey: " + e.getMessage());
             }
         }).start();
     }

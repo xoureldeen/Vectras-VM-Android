@@ -27,6 +27,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.google.android.material.behavior.HideViewOnScrollBehavior;
@@ -234,9 +235,12 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
                 bindingContent.searchbar.setEnabled(false);
             }
 
-            getSupportFragmentManager().beginTransaction()
-                    .replace(bindingContent.containerView.getId(), selectedFragment)
-                    .commit();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            if (!fragmentManager.isStateSaved()) {
+                fragmentManager.beginTransaction()
+                        .replace(bindingContent.containerView.getId(), selectedFragment)
+                        .commit();
+            }
             currentBottomBarSelectedItemId = id;
             return true;
         });

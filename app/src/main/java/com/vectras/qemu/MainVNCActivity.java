@@ -289,10 +289,6 @@ public class MainVNCActivity extends VncCanvasActivity {
     }
 
     public void onDestroy() {
-        if (NetworkUtils.isPortOpen("127.0.0.1", Config.QMPPort, 100) && started) {
-            startActivity(new Intent(this, MainVNCActivity.class));
-            overridePendingTransition(0, 0);
-        }
         super.onDestroy();
         this.stopTimeListener();
         //Terminal.killQemuProcess();
@@ -669,8 +665,13 @@ public class MainVNCActivity extends VncCanvasActivity {
         if (event.getAction() == KeyEvent.ACTION_MULTIPLE && event.getKeyCode() == KeyEvent.KEYCODE_UNKNOWN) {
             vncCanvas.sendText(event.getCharacters());
             return true;
-        } else
-            return super.dispatchKeyEvent(event);
+        } else {
+            try {
+                return super.dispatchKeyEvent(event);
+            } catch (ClassCastException e) {
+                return true;
+            }
+        }
 
     }
 
@@ -803,6 +804,8 @@ public class MainVNCActivity extends VncCanvasActivity {
         } else {
             // Try reconnect.
             if (Config.forceRefeshVNCDisplay) {
+                startActivity(new Intent(this, MainVNCActivity.class));
+                overridePendingTransition(0, 0);
                 finish();
             } else {
                 tryReconnect();
@@ -818,9 +821,17 @@ public class MainVNCActivity extends VncCanvasActivity {
             public void run() {
                 count++;
 
-                if (!isFinishing() && !isConnected && count < retryLimit) {
+                if (!isFinishing() && !isDestroyed() && !isConnected && count < retryLimit) {
                     // Do not attempt to reconnect while connected.
-                    reconnect();
+                    if (Config.forceRefeshVNCDisplay) {
+                        runOnUiThread(() -> {
+                            startActivity(new Intent(MainVNCActivity.this, MainVNCActivity.class));
+                            overridePendingTransition(0, 0);
+                            finish();
+                        });
+                    } else {
+                        reconnect();
+                    }
                     new Handler(Looper.getMainLooper()).postDelayed(this, 1000);
                 }
             }
@@ -836,9 +847,13 @@ public class MainVNCActivity extends VncCanvasActivity {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_POINTER_DOWN:
                 if (pointerCount == 3) {
-                    MotionEvent e = MotionEvent.obtain(1000, 1000, MotionEvent.ACTION_DOWN, vncCanvas.mouseX, vncCanvas.mouseY,
-                            0);
-                    ((TouchpadInputHandler) VncCanvasActivity.inputHandler).middleClick(e);
+                    try {
+                        MotionEvent e = MotionEvent.obtain(1000, 1000, MotionEvent.ACTION_DOWN, vncCanvas.mouseX, vncCanvas.mouseY,
+                                0);
+                        ((TouchpadInputHandler) VncCanvasActivity.inputHandler).middleClick(e);
+                    } catch (Exception e) {
+                        VMManager.sendMiddleMouseKey();
+                    }
                 } else if (pointerCount == 2) {
                     MotionEvent e = MotionEvent.obtain(1000, 1000, MotionEvent.ACTION_DOWN, vncCanvas.mouseX, vncCanvas.mouseY,
                             0);
@@ -1056,9 +1071,13 @@ public class MainVNCActivity extends VncCanvasActivity {
         });
 
         bindingDesktopControls.rightClickBtn.setOnClickListener(v -> {
-            MotionEvent e = MotionEvent.obtain(1000, 1000, MotionEvent.ACTION_DOWN, vncCanvas.mouseX, vncCanvas.mouseY,
-                    0);
-            ((TouchpadInputHandler) VncCanvasActivity.inputHandler).rightClick(e);
+            try {
+                MotionEvent e = MotionEvent.obtain(1000, 1000, MotionEvent.ACTION_DOWN, vncCanvas.mouseX, vncCanvas.mouseY,
+                        0);
+                ((TouchpadInputHandler) VncCanvasActivity.inputHandler).rightClick(e);
+            } catch (Exception e) {
+                VMManager.sendRightMouseKey();
+            }
         });
 
         bindingDesktopControls.middleBtn.setOnClickListener(v -> {

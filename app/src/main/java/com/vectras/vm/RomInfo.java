@@ -29,6 +29,7 @@ import com.vectras.vm.network.RequestNetworkController;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.ImageUtils;
+import com.vectras.vm.utils.JSONUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -327,7 +328,7 @@ public class RomInfo extends AppCompatActivity {
                 @Override
                 public void onResponse(String tag, String response, HashMap<String, Object> responseHeaders) {
                     Log.i(TAG, response);
-                    if (!response.isEmpty()) {
+                    if (!response.isEmpty() && JSONUtils.isValidFromString(response)) {
                         HashMap<String, Object> map = new Gson().fromJson(
                                 response, new TypeToken<HashMap<String, Object>>() {
                                 }.getType()
