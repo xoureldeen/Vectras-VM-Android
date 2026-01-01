@@ -2,6 +2,7 @@ package com.vectras.vm.main.core;
 
 import static android.os.Build.VERSION.SDK_INT;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -228,7 +229,13 @@ public class MainStartVM {
                 if (isStopNow || VMManager.isQemuStopedWithError || FileUtils.isFileExists(Config.getLocalQMPSocketPath())) {
                     handlerForLaunch.removeCallbacks(this);
 
-                    progressDialog.dismiss();
+                    if (context instanceof Activity activity) {
+                        if (!activity.isFinishing() && !activity.isDestroyed()) {
+                            if (progressDialog != null && progressDialog.isShowing()) {
+                                progressDialog.dismiss();
+                            }
+                        }
+                    }
 
                     if (!isStopNow && !VMManager.isQemuStopedWithError) {
                         if (MainSettingsManager.getVmUi(context).equals("VNC")) {

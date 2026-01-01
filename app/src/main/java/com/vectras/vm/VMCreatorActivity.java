@@ -230,7 +230,7 @@ public class VMCreatorActivity extends AppCompatActivity {
             binding.collapsingToolbarLayout.setTitle(getString(R.string.edit));
             created = true;
             binding.addRomBtn.setText(R.string.save_changes);
-            binding.title.setText(current.itemName);
+            if (current.itemName != null) binding.title.setText(current.itemName);
             binding.drive.setText(current.itemPath);
             binding.cdrom.setText(current.imgCdrom);
             thumbnailPath = current.itemIcon;
