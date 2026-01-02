@@ -79,7 +79,7 @@ public class MainVNCActivity extends VncCanvasActivity {
     private final String TAG = "MainVNCActivity";
     public static MainVNCActivity getContext;
     private final int retryLimit = 3;
-    private ActivityVncBinding binding;
+    public ActivityVncBinding binding;
     private ControlsFragmentBinding bindingControls;
     private DesktopControlsBinding bindingDesktopControls;
     private GameControlsBinding bindingGameControls;
@@ -163,6 +163,8 @@ public class MainVNCActivity extends VncCanvasActivity {
             // Do not attempt to reconnect while connected.
             reconnect();
         });
+
+        binding.cursorView.setVisibility(MainSettingsManager.getShowVirtualMouse(this) || VMManager.isNeedUseVirtualMouse() ? View.VISIBLE : View.GONE);
     }
 
     private void setDefaulViewMode() {
@@ -668,7 +670,7 @@ public class MainVNCActivity extends VncCanvasActivity {
         } else {
             try {
                 return super.dispatchKeyEvent(event);
-            } catch (ClassCastException e) {
+            } catch (Exception e) {
                 return true;
             }
         }
@@ -767,6 +769,7 @@ public class MainVNCActivity extends VncCanvasActivity {
 
             binding.lnNosignal.setVisibility(View.GONE);
             this.vncCanvas.setFocusableInTouchMode(true);
+            syncCursorViewWithBitmap();
         });
     }
 
@@ -1081,9 +1084,14 @@ public class MainVNCActivity extends VncCanvasActivity {
         });
 
         bindingDesktopControls.middleBtn.setOnClickListener(v -> {
-            MotionEvent e = MotionEvent.obtain(1000, 1000, MotionEvent.ACTION_DOWN, vncCanvas.mouseX, vncCanvas.mouseY,
-                    0);
-            ((TouchpadInputHandler) VncCanvasActivity.inputHandler).middleClick(e);
+            try {
+                MotionEvent e = MotionEvent.obtain(1000, 1000, MotionEvent.ACTION_DOWN, vncCanvas.mouseX, vncCanvas.mouseY,
+                        0);
+                ((TouchpadInputHandler) VncCanvasActivity.inputHandler).middleClick(e);
+            } catch (Exception e) {
+                VMManager.sendMiddleMouseKey();
+                VMManager.sendMiddleMouseKey();
+            }
         });
 
         bindingDesktopControls.leftClickBtn.setOnClickListener(v -> {

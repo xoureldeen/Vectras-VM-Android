@@ -222,6 +222,8 @@ public class VMManager {
         return result.toString();
     }
 
+    //This can be removed because QMP currently uses sockets instead of open ports.
+    @Deprecated
     public static int startRandomPort() {
         int _result;
         Random _random = new Random();
@@ -229,13 +231,15 @@ public class VMManager {
         int _max = 65535;
         _result = _random.nextInt(_max - _min + 1) + _min;
 
-        if (FileUtils.isFileExists(AppConfig.romsdatajson)) {
+        if (FileUtils.isFileExists(AppConfig.romsdatajson) || FileUtils.canRead(AppConfig.romsdatajson)) {
             if (FileUtils.readAFile(AppConfig.romsdatajson).contains("\"qmpPort\":" + _result)) {
                 _result = _random.nextInt(_max - _min + 1) + _min;
             }
             if (FileUtils.readAFile(AppConfig.romsdatajson).contains("\"qmpPort\":" + _result)) {
                 _result = _random.nextInt(_max - _min + 1) + _min;
             }
+        } else {
+            _result = 8080;
         }
 
         return _result;
@@ -985,6 +989,12 @@ public class VMManager {
                         _dialog.dismiss();
                     });
 
+                    _view.findViewById(R.id.ln_virtualmouse).setOnClickListener(v -> {
+                        MainVNCActivity.getContext.binding.cursorView.setVisibility(MainVNCActivity.getContext.binding.cursorView.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
+                        MainSettingsManager.setShowVirtualMouse(_activity, MainVNCActivity.getContext.binding.cursorView.getVisibility() == View.VISIBLE);
+                        _dialog.dismiss();
+                    });
+
                     _view.findViewById(R.id.ln_mouse).setOnClickListener(v -> {
                         MainVNCActivity.getContext.onMouseMode();
                         _dialog.dismiss();
@@ -1354,6 +1364,14 @@ public class VMManager {
                 || _qemuCommand.contains("-machine q35")
                 || _qemuCommand.contains("-M pc-q35")
                 || _qemuCommand.contains("-machine pc-q35");
+    }
+
+    public static boolean isNeedUseVirtualMouse() {
+        return lastQemuCommand.contains("-vga qxl") ||
+                lastQemuCommand.contains("-vga virtio") ||
+                lastQemuCommand.contains("-device qxl-vga") ||
+                lastQemuCommand.contains("-device virtio-vga") ||
+                lastQemuCommand.contains("-device virtio-gpu");
     }
 
     public static String addAudioDevSdl(String env) {

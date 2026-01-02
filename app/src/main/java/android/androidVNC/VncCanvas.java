@@ -2055,6 +2055,17 @@ public class VncCanvas extends AppCompatImageView {
 		activity.onDisconnected();
 	}
 
+    public float getFramebufferWidth() {
+        return bitmapData.framebufferwidth;
+    }
+
+    public float getFramebufferHeight() {
+        return bitmapData.framebufferheight;
+    }
+
+    public AbstractBitmapData getBitmapData() {
+        return bitmapData;
+    }
 
     class VNCOnTouchListener implements View.OnTouchListener {
 
