@@ -1747,6 +1747,24 @@
     "id": "99688"
   },
   {
+    "rom_name": "Windows Server 2025",
+    "rom_icon": "https://www.getmyos.com/app_public/files/t/1/2021/06/windows_11_logo_by_getmyos.png",
+    "rom_url": "https://youtu.be/gWB-oFY6uyo",
+    "rom_path": "Windows Server 2025.cvbi",
+    "rom_avail": true,
+    "rom_size": "24H2",
+    "rom_arch": "X86_64",
+    "rom_kernel": "windows",
+    "rom_extra": "",
+    "final_rom_file_name": "",
+    "desc": "This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows Server 2025 is the fourteenth and current major version of the Windows NT operating system produced by Microsoft to be released under the Windows Server brand name. It was released on November 1, 2024.",
+    "file_size": "5 GB",
+    "creator": "Nguyen Bao An Bui",
+    "verified": true,
+    "vecid": "windowsserver2025cvbi",
+    "id": "99675"
+  },
+  {
     "rom_name": "Windows Thin PC",
     "rom_icon": "https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/10/15/windows_logo_2006_1_c0e5e8a8271301cfed289ab6118e38b2.png",
     "rom_url": "https://anbui.ovh/get/vec/community/win/nt6/wtpc.html",
