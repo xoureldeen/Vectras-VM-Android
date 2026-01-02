@@ -627,7 +627,7 @@ public class VMCreatorActivity extends AppCompatActivity {
                         .into(binding.ivIcon);
             } else {
                 binding.ivAddThubnail.setImageResource(R.drawable.round_add_24);
-                VMManager.setIconWithName(binding.ivIcon, current.itemName);
+                VMManager.setIconWithName(binding.ivIcon, Objects.requireNonNull(binding.title.getText()).toString());
             }
         } else {
             binding.ivAddThubnail.setImageResource(R.drawable.round_add_24);

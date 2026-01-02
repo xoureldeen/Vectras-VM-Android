@@ -491,6 +491,8 @@
     <string name="threedfx_is_not_available">3dfx is not available.</string>
     <string name="refresh">Refresh</string>
     <string name="last_crash_note">We are very sorry about an incident that occurred and app crashed earlier.</string>
+    <string name="show_virtual_mouse">Show virtual mouse</string>
+    <string name="hide_virtual_mouse">Hide virtual mouse</string>
 
 
     <!--======================TERMUX STRINGS====================-->

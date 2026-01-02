@@ -1143,4 +1143,16 @@ public class MainSettingsManager extends AppCompatActivity
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean("showLastCrashLog", false);
     }
+
+    public static void setShowVirtualMouse(Context context, Boolean _boolean) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putBoolean("showVirtualMouse", _boolean);
+        edit.apply();
+    }
+
+    public static Boolean getShowVirtualMouse(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean("showVirtualMouse", false);
+    }
 }

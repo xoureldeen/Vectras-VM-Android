@@ -598,18 +598,19 @@ public class FileUtils {
 	public static boolean moveFile(String oldfilename, String newFolderPath, String newFilename) {
 		File folder = new File(newFolderPath);
 		if (!folder.exists())
-		folder.mkdirs();
+		    folder.mkdirs();
 
 		File oldfile = new File(oldfilename);
 		File newFile = new File(newFolderPath, newFilename);
 
-		if (!newFile.exists())
-		try {
-			newFile.createNewFile();
-			} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		if (!newFile.exists()) {
+            try {
+                newFile.createNewFile();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
 		return oldfile.renameTo(newFile);
 	}
 
@@ -738,6 +739,11 @@ public class FileUtils {
 			Log.e("ERROR", "Deletion failed. " + _dir);
 		}
 	}
+
+    public static boolean canRead(String filePath) {
+        File file = new File(filePath);
+        return file.canRead();
+    }
 
 	public static String readAFile(String filePath) {
 		StringBuilder content = new StringBuilder();
