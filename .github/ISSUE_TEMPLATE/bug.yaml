@@ -30,11 +30,14 @@ body:
       label: Version
       description: What version of our software are you running?
       options:
+        - 3.5.0
+        - 3.4.0
+        - 3.3.0
+        - 3.2.0
+        - 3.1.0
+        - 3.0.0
         - 2.9.5
-        - 2.9.4
-        - 2.9.3
-        - 2.9.2
-        - 2.9.1
+        - Other
       default: 0
     validations:
       required: true
@@ -45,9 +48,16 @@ body:
       multiple: true
       options:
         - Samsung
+        - Xiaomi, Redmi, Poco
+        - Oppo, OnePlus, Realme
+        - Vivo, iQOO
         - Google Pixel
-        - Xiaomi (HyperOS)
-        - RedMagic
+        - Motorola, Lenovo
+        - ZTE, RedMagic
+        - Sony
+        - Huawei, Honor
+        - Asus, ROG
+        - Other
     validations:
       required: true
 
