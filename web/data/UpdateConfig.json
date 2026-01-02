@@ -1,9 +1,9 @@
 {
-    "versionCode":"54",
-    "versionName":"3.5.0",
-    "size": "46 MB",
+    "versionCode":"64",
+    "versionName":"3.6.0",
+    "size": "43 MB",
     "url": "https://github.com/xoureldeen/Vectras-VM-Android/releases",
-    "Message": "<h2>3.5.0</h2>\n3dfx is back!",
+    "Message": "<h2>3.6.0</h2>\nBugs fixed.",
     "cancellable": true,
     "versionCodeBeta":"64",
     "versionNameBeta":"3.6.0",
