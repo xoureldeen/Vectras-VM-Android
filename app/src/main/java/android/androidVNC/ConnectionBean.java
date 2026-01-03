@@ -23,7 +23,7 @@ public class ConnectionBean {
 	private String scaleMode = "";
 	private String nickname = "vectras";
 	private long forceFull = 0;
-	private boolean useLocalCursor = false;
+	public static boolean useLocalCursor = false;
 	private boolean followMouse = true;
 	private String userName;
 	private long id = 0;

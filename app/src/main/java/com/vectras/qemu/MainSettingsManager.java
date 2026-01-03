@@ -345,12 +345,6 @@ public class MainSettingsManager extends AppCompatActivity
                 });
             }
 
-            Preference prefAVX = findPreference("AVX");
-            if (!getArch(activity).equals("X86_64"))
-                if (prefAVX != null) {
-                    prefAVX.setVisible(false);
-                }
-
 //            if (Objects.equals(getArch(activity), "I386")) { // I386 DOES NOT SUPPORT SHARED FOLDER
 //                SwitchPreferenceCompat sharedPref = findPreference("sharedFolder");
 //                sharedPref.setEnabled(false);
@@ -444,6 +438,12 @@ public class MainSettingsManager extends AppCompatActivity
                 }
                 return true;
             });
+
+            Preference prefAVX = findPreference("AVX");
+            if (!getArch(requireContext()).equals("X86_64"))
+                if (prefAVX != null) {
+                    prefAVX.setVisible(false);
+                }
         }
 
         @Override

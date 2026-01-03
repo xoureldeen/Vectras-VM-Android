@@ -9,6 +9,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.os.Build;
+import android.view.View;
 import android.widget.ImageView;
 
 /**
@@ -47,8 +49,14 @@ abstract class AbstractBitmapData {
         if (vncCanvas.connection.getUseLocalCursor()) {
             if (drawable == null)
                 drawable = createDrawable();
-            drawable.setCursorRect(vncCanvas.mouseX, vncCanvas.mouseY);
-            vncCanvas.invalidate(drawable.cursorRect);
+
+            if (drawable != null) {
+                if (Build.VERSION.SDK_INT >= 35) {
+                    drawable.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+                }
+                drawable.setCursorRect(vncCanvas.mouseX, vncCanvas.mouseY);
+                vncCanvas.invalidate(drawable.cursorRect);
+            }
         }
     }
 
@@ -129,6 +137,9 @@ abstract class AbstractBitmapData {
             drawable = createDrawable();
 
         if (drawable != null) {
+            if (Build.VERSION.SDK_INT >= 35) {
+                drawable.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+            }
             v.setImageDrawable(drawable);
             v.invalidate();
         }

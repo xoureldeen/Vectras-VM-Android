@@ -15,8 +15,8 @@ android {
         applicationId "com.vectras.vm"
         minSdk minApi
         targetSdk targetApi
-        versionCode 64
-        versionName "3.6.0"
+        versionCode 65
+        versionName "3.6.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 

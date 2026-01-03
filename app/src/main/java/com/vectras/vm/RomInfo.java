@@ -36,6 +36,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -62,6 +64,7 @@ public class RomInfo extends AppCompatActivity {
     private boolean hasRetriedView;
     private boolean hasRetriedLike;
     private boolean waitingForUpdateLike;
+    ExecutorService executor = Executors.newSingleThreadExecutor();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,88 +85,101 @@ public class RomInfo extends AppCompatActivity {
         isFinishNow = false;
     }
 
+    public void onDestroy() {
+        executor.shutdown();
+        super.onDestroy();
+    }
+
     private final ActivityResultLauncher<String> romPicker =
             registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
 
                 if (uri == null) return;
 
-                String filePath;
-                try {
-                    File selectedFilePath = new File(getPath(uri));
-                    filePath = selectedFilePath.getPath();
-                } catch (Exception e) {
-                    filePath = "";
-                }
-
-                String selectedFileName = FileUtils.getFileNameFromUri(this, uri);
-                if (selectedFileName.equals(getIntent().getStringExtra("filename")) ||
-                        (selectedFileName.endsWith(".cvbi.zip") && selectedFileName.equals(getIntent().getStringExtra("filename") + ".zip"))) {
-                    Intent intent = new Intent();
-
-                    if (getIntent().hasExtra("icon") &&
-                            !Objects.requireNonNull(getIntent().getStringExtra("icon")).isEmpty() &&
-                            (!selectedFileName.endsWith(".cvbi")
-                                    || !selectedFileName.endsWith(".cvbi.zip"))) {
-
-                        Glide.with(this)
-                                .asBitmap()
-                                .load(getIntent().getStringExtra("icon"))
-                                .into(new CustomTarget<Bitmap>() {
-                                    @Override
-                                    public void onResourceReady(@NonNull Bitmap resource,
-                                                                @Nullable Transition<? super Bitmap> transition) {
-                                        ImageUtils.saveBitmapToPNGFile(resource, Objects.requireNonNull(getExternalCacheDir()).getAbsolutePath(), "thumbnail.png");
-                                        intent.putExtra("romicon", getExternalCacheDir().getAbsolutePath() + "/thumbnail.png");
-                                    }
-
-                                    @Override
-                                    public void onLoadCleared(@Nullable Drawable placeholder) {
-                                        intent.putExtra("romicon", "");
-                                    }
-                                });
-                    } else {
-                        intent.putExtra("romicon", "");
+                executor.execute(() -> {
+                    String filePath;
+                    try {
+                        File selectedFilePath = new File(getPath(uri));
+                        filePath = selectedFilePath.getPath();
+                    } catch (Exception e) {
+                        filePath = "";
                     }
 
-                    intent.setClass(getApplicationContext(), VMCreatorActivity.class);
-                    intent.putExtra("addromnow", "");
-                    intent.putExtra("romname", getIntent().getStringExtra("title"));
-                    intent.putExtra("romfilename", getIntent().getStringExtra("filename"));
-                    intent.putExtra("finalromfilename", getIntent().getStringExtra("finalromfilename"));
-                    intent.putExtra("rompath", filePath);
-                    intent.putExtra("romuri", uri.toString());
-                    if (Objects.requireNonNull(getIntent().getStringExtra("extra")).contains(selectedFileName)) {
-                        intent.putExtra("addtodrive", "");
-                        intent.putExtra("romextra", getIntent().getStringExtra("extra"));
-                    } else {
-                        intent.putExtra("addtodrive", "1");
-                        intent.putExtra("romextra", getIntent().getStringExtra("extra"));
-                    }
-                    switch (Objects.requireNonNull(getIntent().getStringExtra("arch"))) {
-                        case "X86_64":
-                            MainSettingsManager.setArch(this, "X86_64");
-                            break;
-                        case "i386":
-                            MainSettingsManager.setArch(this, "I386");
-                            break;
-                        case "ARM64":
-                            MainSettingsManager.setArch(this, "ARM64");
-                            break;
-                        case "PowerPC":
-                            MainSettingsManager.setArch(this, "PPC");
-                            break;
-                    }
-                    startActivity(intent);
-                } else {
-                    DialogUtils.oneDialog(RomInfo.this,
-                            getString(R.string.problem_has_been_detected),
-                            getString(R.string.please_select) + " " + getIntent().getStringExtra("filename"),
-                            getString(R.string.ok),
-                            true, R.drawable.warning_48px,
-                            true,
-                            null,
-                            null);
-                }
+                    String selectedFileName = FileUtils.getFileNameFromUri(this, uri);
+
+                    if (isFinishing() || isDestroyed()) return;
+
+                    String finalFilePath = filePath;
+                    runOnUiThread(() -> {
+                        if (selectedFileName.equals(getIntent().getStringExtra("filename")) ||
+                                (selectedFileName.endsWith(".cvbi.zip") && selectedFileName.equals(getIntent().getStringExtra("filename") + ".zip"))) {
+                            Intent intent = new Intent();
+
+                            if (getIntent().hasExtra("icon") &&
+                                    !Objects.requireNonNull(getIntent().getStringExtra("icon")).isEmpty() &&
+                                    (!selectedFileName.endsWith(".cvbi")
+                                            || !selectedFileName.endsWith(".cvbi.zip"))) {
+
+                                Glide.with(this)
+                                        .asBitmap()
+                                        .load(getIntent().getStringExtra("icon"))
+                                        .into(new CustomTarget<Bitmap>() {
+                                            @Override
+                                            public void onResourceReady(@NonNull Bitmap resource,
+                                                                        @Nullable Transition<? super Bitmap> transition) {
+                                                ImageUtils.saveBitmapToPNGFile(resource, Objects.requireNonNull(getExternalCacheDir()).getAbsolutePath(), "thumbnail.png");
+                                                intent.putExtra("romicon", getExternalCacheDir().getAbsolutePath() + "/thumbnail.png");
+                                            }
+
+                                            @Override
+                                            public void onLoadCleared(@Nullable Drawable placeholder) {
+                                                intent.putExtra("romicon", "");
+                                            }
+                                        });
+                            } else {
+                                intent.putExtra("romicon", "");
+                            }
+
+                            intent.setClass(getApplicationContext(), VMCreatorActivity.class);
+                            intent.putExtra("addromnow", "");
+                            intent.putExtra("romname", getIntent().getStringExtra("title"));
+                            intent.putExtra("romfilename", getIntent().getStringExtra("filename"));
+                            intent.putExtra("finalromfilename", getIntent().getStringExtra("finalromfilename"));
+                            intent.putExtra("rompath", finalFilePath);
+                            intent.putExtra("romuri", uri.toString());
+                            if (Objects.requireNonNull(getIntent().getStringExtra("extra")).contains(selectedFileName)) {
+                                intent.putExtra("addtodrive", "");
+                                intent.putExtra("romextra", getIntent().getStringExtra("extra"));
+                            } else {
+                                intent.putExtra("addtodrive", "1");
+                                intent.putExtra("romextra", getIntent().getStringExtra("extra"));
+                            }
+                            switch (Objects.requireNonNull(getIntent().getStringExtra("arch"))) {
+                                case "X86_64":
+                                    MainSettingsManager.setArch(this, "X86_64");
+                                    break;
+                                case "i386":
+                                    MainSettingsManager.setArch(this, "I386");
+                                    break;
+                                case "ARM64":
+                                    MainSettingsManager.setArch(this, "ARM64");
+                                    break;
+                                case "PowerPC":
+                                    MainSettingsManager.setArch(this, "PPC");
+                                    break;
+                            }
+                            startActivity(intent);
+                        } else {
+                            DialogUtils.oneDialog(RomInfo.this,
+                                    getString(R.string.problem_has_been_detected),
+                                    getString(R.string.please_select) + " " + getIntent().getStringExtra("filename"),
+                                    getString(R.string.ok),
+                                    true, R.drawable.warning_48px,
+                                    true,
+                                    null,
+                                    null);
+                        }
+                    });
+                });
             });
 
     public String getPath(Uri uri) {

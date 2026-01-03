@@ -1,6 +1,7 @@
 package com.vectras.qemu;
 
 import android.androidVNC.AbstractScaling;
+import android.androidVNC.ConnectionBean;
 import android.androidVNC.VncCanvasActivity;
 
 import androidx.annotation.NonNull;
@@ -164,7 +165,7 @@ public class MainVNCActivity extends VncCanvasActivity {
             reconnect();
         });
 
-        binding.cursorView.setVisibility(MainSettingsManager.getShowVirtualMouse(this) || VMManager.isNeedUseVirtualMouse() ? View.VISIBLE : View.GONE);
+        ConnectionBean.useLocalCursor = MainSettingsManager.getShowVirtualMouse(this) || VMManager.isNeedUseVirtualMouse();
     }
 
     private void setDefaulViewMode() {
@@ -769,7 +770,7 @@ public class MainVNCActivity extends VncCanvasActivity {
 
             binding.lnNosignal.setVisibility(View.GONE);
             this.vncCanvas.setFocusableInTouchMode(true);
-            syncCursorViewWithBitmap();
+//            syncCursorViewWithBitmap();
         });
     }
 
@@ -778,7 +779,7 @@ public class MainVNCActivity extends VncCanvasActivity {
         runOnUiThread(() -> {
             isConnected = false;
             binding.lnNosignal.setVisibility(View.VISIBLE);
-            isQMPPortOpening(firstConnection);
+            if (started) isQMPPortOpening(firstConnection);
         });
     }
 
@@ -858,9 +859,13 @@ public class MainVNCActivity extends VncCanvasActivity {
                         VMManager.sendMiddleMouseKey();
                     }
                 } else if (pointerCount == 2) {
-                    MotionEvent e = MotionEvent.obtain(1000, 1000, MotionEvent.ACTION_DOWN, vncCanvas.mouseX, vncCanvas.mouseY,
-                            0);
-                    ((TouchpadInputHandler) VncCanvasActivity.inputHandler).rightClick(e);
+                    try {
+                        MotionEvent e = MotionEvent.obtain(1000, 1000, MotionEvent.ACTION_DOWN, vncCanvas.mouseX, vncCanvas.mouseY,
+                                0);
+                        ((TouchpadInputHandler) VncCanvasActivity.inputHandler).rightClick(e);
+                    } catch (Exception e) {
+                        VMManager.sendRightMouseKey();
+                    }
                 }
                 break;
         }

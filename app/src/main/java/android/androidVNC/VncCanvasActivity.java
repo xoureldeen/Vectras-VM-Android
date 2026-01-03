@@ -438,11 +438,11 @@ public abstract class VncCanvasActivity extends AppCompatActivity {
                 dragX = e2.getX();
                 dragY = e2.getY();
                 e2.setLocation(newRemoteX, newRemoteY);
-                updateVirtualMouse(e2);
+//                updateVirtualMouse(e2);
                 return vncCanvas.processPointerEvent(e2, true);
             } else {
                 e2.setLocation(newRemoteX, newRemoteY);
-                updateVirtualMouse(e2);
+//                updateVirtualMouse(e2);
                 vncCanvas.processPointerEvent(e2, false);
             }
 //			}
@@ -493,26 +493,26 @@ public abstract class VncCanvasActivity extends AppCompatActivity {
                 }
 
                 e.setLocation(newRemoteX, newRemoteY);
-                updateVirtualMouse(e);
+//                updateVirtualMouse(e);
                 vncCanvas.processPointerEvent(e, down);
                 return super.onTouchEvent(e);
 
             } else if (!Config.enableDragOnLongPress && e.getAction() == MotionEvent.ACTION_MOVE) {
                 e.setLocation(newRemoteX, newRemoteY);
-                updateVirtualMouse(e);
+//                updateVirtualMouse(e);
                 return vncCanvas.processPointerEvent(e, false);
             } else {
                 return super.onTouchEvent(e);
             }
         }
 
-        public void updateVirtualMouse(MotionEvent e) {
-            if (cursorView.getVisibility() == View.VISIBLE) {
-                float viewX = e.getX();
-                float viewY = e.getY();
-                cursorView.update(viewX * scale, viewY * scale);
-            }
-        }
+//        public void updateVirtualMouse(MotionEvent e) {
+//            if (cursorView.getVisibility() == View.VISIBLE) {
+//                float viewX = e.getX();
+//                float viewY = e.getY();
+//                cursorView.update(viewX * scale, viewY * scale);
+//            }
+//        }
 
         public boolean rightClick(final MotionEvent e) {
             Thread t = new Thread(new Runnable() {
@@ -742,7 +742,7 @@ public abstract class VncCanvasActivity extends AppCompatActivity {
     private final static String TAG = "VncCanvasActivity";
     public static AbstractInputHandler inputHandler;
     public VncCanvas vncCanvas;
-    public VncCursorView cursorView;
+//    public VncCursorView cursorView;
 
     public MenuItem[] inputModeMenuItems;
     public AbstractInputHandler inputModeHandlers[];
@@ -821,7 +821,7 @@ public abstract class VncCanvasActivity extends AppCompatActivity {
 
         vncCanvas = (VncCanvas) findViewById(R.id.vnc_canvas);
         zoomer = (ZoomControls) findViewById(R.id.zoomer);
-        cursorView = findViewById(R.id.cursorView);
+//        cursorView = findViewById(R.id.cursorView);
 
         vncCanvas.initializeVncCanvas(connection, new Runnable() {
             public void run() {
@@ -1847,17 +1847,17 @@ public abstract class VncCanvasActivity extends AppCompatActivity {
         });
     }
 
-    public void syncCursorViewWithBitmap() {
-        scale = (float) vncCanvas.getHeight() / vncCanvas.getFramebufferHeight();
-
-        vncCanvas.post(() -> {
-            LinearLayout.LayoutParams lp =
-                    (LinearLayout.LayoutParams) cursorView.getLayoutParams();
-
-            lp.width = Math.round(vncCanvas.getFramebufferWidth() * scale);
-            lp.height = Math.round(vncCanvas.getFramebufferHeight() * scale);
-
-            cursorView.setLayoutParams(lp);
-        });
-    }
+//    public void syncCursorViewWithBitmap() {
+//        scale = (float) vncCanvas.getHeight() / vncCanvas.getFramebufferHeight();
+//
+//        vncCanvas.post(() -> {
+//            LinearLayout.LayoutParams lp =
+//                    (LinearLayout.LayoutParams) cursorView.getLayoutParams();
+//
+//            lp.width = Math.round(vncCanvas.getFramebufferWidth() * scale);
+//            lp.height = Math.round(vncCanvas.getFramebufferHeight() * scale);
+//
+//            cursorView.setLayoutParams(lp);
+//        });
+//    }
 }
