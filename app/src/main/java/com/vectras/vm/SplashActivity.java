@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
 import com.vectras.qemu.MainSettingsManager;
+import com.vectras.qemu.utils.FileInstaller;
 import com.vectras.vm.crashtracker.LastCrashActivity;
 import com.vectras.vm.main.MainActivity;
 import com.vectras.vm.setupwizard.SetupFeatureCore;
@@ -117,7 +118,7 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
                 Log.e(TAG, "Create roms-data.json file failed: ", e);
             }
 
-        com.vectras.qemu.utils.FileInstaller.installFiles(activity, true);
+        new Thread(() -> FileInstaller.installFiles(getApplicationContext(), true)).start();
     }
 
     public static void setupFolders() {

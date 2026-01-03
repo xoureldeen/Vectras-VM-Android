@@ -120,6 +120,7 @@ public class SetArchActivity extends AppCompatActivity implements View.OnClickLi
         } else if (id == R.id.webBtn) {
             String qe = "https://www.qemu.org/";
             Intent q = new Intent(Intent.ACTION_VIEW);
+            q.addCategory(Intent.CATEGORY_BROWSABLE);
             q.setData(Uri.parse(qe));
             startActivity(q);
         } else if (id == R.id.buttongetcm) {

@@ -29,16 +29,16 @@
                 android:keepScreenOn="true" />
         </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/cursorViewContianer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center">
-            <android.androidVNC.VncCursorView
-                android:id="@+id/cursorView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
+<!--        <LinearLayout-->
+<!--            android:id="@+id/cursorViewContianer"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:gravity="center">-->
+<!--            <android.androidVNC.VncCursorView-->
+<!--                android:id="@+id/cursorView"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"/>-->
+<!--        </LinearLayout>-->
 
         <include
             android:id="@+id/controlsfragment"

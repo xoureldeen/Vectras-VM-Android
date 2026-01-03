@@ -19,6 +19,7 @@
 package com.vectras.qemu.utils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.AssetManager;
 import android.net.Uri;
 import androidx.documentfile.provider.DocumentFile;
@@ -41,7 +42,7 @@ import java.util.logging.Logger;
  */
 public class FileInstaller {
 
-    public static void installFiles(Activity activity, boolean force) {
+    public static void installFiles(Context context, boolean force) {
 
         Log.v("Installer", "Installing files...");
         File tmpDir = new File(Config.getBasefileDir());
@@ -69,7 +70,7 @@ public class FileInstaller {
         String destDir = Config.getBasefileDir();
 
         //Get each file in assets under ./roms/ and install in SDCARD
-        AssetManager am = activity.getResources().getAssets();
+        AssetManager am = context.getResources().getAssets();
         String[] files = null;
         try {
             files = am.list("roms");
@@ -103,14 +104,14 @@ public class FileInstaller {
                     File file = new File(destDir, files[i] + "/" + subfiles[k]);
                     if(!file.exists() || force) {
                         Log.v("Installer", "Installing file: " + file.getPath());
-                        installAssetFile(activity, files[i] + "/" + subfiles[k], destDir, "roms", null);
+                        installAssetFile(context, files[i] + "/" + subfiles[k], destDir, "roms", null);
                     }
                 }
             } else {
                 File file = new File(destDir, files[i]);
                 if(!file.exists() || force) {
                     Log.v("Installer", "Installing file: " + file.getPath());
-                    installAssetFile(activity, files[i], Config.getBasefileDir(), "roms", null);
+                    installAssetFile(context, files[i], Config.getBasefileDir(), "roms", null);
                 }
             }
         }
@@ -118,16 +119,16 @@ public class FileInstaller {
 
     }
 
-    public static boolean installAssetFile(Activity activity, String srcFile,
+    public static boolean installAssetFile(Context context, String srcFile,
                                            String destDir, String assetsDir, String destFile) {
         try {
-            AssetManager am = activity.getResources().getAssets(); // get the local asset manager
+            AssetManager am = context.getResources().getAssets(); // get the local asset manager
             InputStream is = am.open(assetsDir + "/" + srcFile); // open the input stream for reading
             File destDirF = new File(destDir);
             if (!destDirF.exists()) {
                 boolean res = destDirF.mkdirs();
                 if(!res){
-                	UIUtils.toastShort(activity, "Could not create directory for image");
+                    if (context instanceof Activity activity) UIUtils.toastShort(activity, "Could not create directory for image");
                 }
             }
             

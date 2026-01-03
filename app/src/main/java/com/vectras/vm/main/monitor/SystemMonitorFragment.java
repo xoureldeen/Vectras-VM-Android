@@ -209,7 +209,7 @@ public class SystemMonitorFragment extends Fragment {
             if (!isAdded()) return;
             String result = Terminal.executeShellCommandWithResult("ps -e command && echo \"psendhere\" && cat /proc/cpuinfo", requireActivity());
             requireActivity().runOnUiThread(() -> {
-                binding.tvProcesses.setText(result.substring(0, result.indexOf("\npsendhere")));
+                binding.tvProcesses.setText(result.isEmpty() ? getString(R.string.nothing_here) : result.substring(0, result.indexOf("\npsendhere")));
                 binding.tvQemuversion.setText(getString(R.string.version) + " " + (qemuVersionName.isEmpty() ? getString(R.string.unknow) : qemuVersionName) + ".");
 
                 if (!result.isEmpty()) {

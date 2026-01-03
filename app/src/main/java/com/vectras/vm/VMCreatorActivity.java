@@ -230,9 +230,19 @@ public class VMCreatorActivity extends AppCompatActivity {
             binding.collapsingToolbarLayout.setTitle(getString(R.string.edit));
             created = true;
             binding.addRomBtn.setText(R.string.save_changes);
-            if (current.itemName != null) binding.title.setText(current.itemName);
-            binding.drive.setText(current.itemPath);
-            binding.cdrom.setText(current.imgCdrom);
+
+            if (binding != null && current.itemName != null) {
+                binding.title.setText(current.itemName);
+            }
+
+            if (binding != null && current.itemPath != null) {
+                binding.drive.setText(current.itemPath);
+            }
+
+            if (binding != null && current.imgCdrom != null) {
+                binding.cdrom.setText(current.imgCdrom);
+            }
+
             thumbnailPath = current.itemIcon;
             vmID = getIntent().getStringExtra("VMID");
 
@@ -440,14 +450,18 @@ public class VMCreatorActivity extends AppCompatActivity {
                 if (uri == null)
                     return;
 
-                String filePath;
-                try {
-                    File selectedFilePath = new File(getPath(uri));
-                    filePath = selectedFilePath.getPath();
-                } catch (Exception e) {
-                    filePath = "";
-                }
-                importRom(uri, filePath, FileUtils.getFileNameFromUri(this, uri));
+                executor.execute(() -> {
+                    String filePath;
+                    try {
+                        File selectedFilePath = new File(getPath(uri));
+                        filePath = selectedFilePath.getPath();
+                    } catch (Exception e) {
+                        filePath = "";
+                    }
+
+                    String finalFilePath = filePath;
+                    runOnUiThread(() -> importRom(uri, finalFilePath, FileUtils.getFileNameFromUri(this, uri)));
+                });
             });
 
     private void setDefault() {

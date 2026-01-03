@@ -76,7 +76,7 @@ class FullBufferBitmapData extends AbstractBitmapData {
                     // this fixes the issue with Nougat Devices displaying black screen for 24bit color mode C24bit
                     Bitmap bitmapTmp = Bitmap.createBitmap(framebufferwidth, framebufferheight, Config.bitmapConfig);
                     bitmapTmp.setPixels(bitmapPixels, offset(xo, yo), data.framebufferwidth, 0, 0, drawWidth, drawHeight);
-                    canvas.drawBitmap(bitmapTmp, xo, yo, null);
+                    canvas.drawBitmap(bitmapTmp, (float) vncCanvas.getWidth() / -2 + (float) framebufferwidth / 2, (float) vncCanvas.getHeight() / 2 - (float) framebufferheight / 2, null);
 
 				/*
 				}
@@ -94,7 +94,10 @@ class FullBufferBitmapData extends AbstractBitmapData {
 			}
 			if(data.vncCanvas.connection.getUseLocalCursor())
 			{
-				setCursorRect(data.vncCanvas.mouseX, data.vncCanvas.mouseY);
+                int locationX = vncCanvas.getScaleType() == ImageView.ScaleType.FIT_CENTER ? data.vncCanvas.mouseX : vncCanvas.getWidth() / -2 + framebufferwidth / 2 + data.vncCanvas.mouseX;
+                int locationY = vncCanvas.getScaleType() == ImageView.ScaleType.FIT_CENTER ? data.vncCanvas.mouseY : vncCanvas.getHeight() / 2 - framebufferheight / 2 + data.vncCanvas.mouseY;
+
+				setCursorRect(locationX, locationY);
 				clipRect.set(cursorRect);
 				if (canvas.clipRect(cursorRect))
 				{

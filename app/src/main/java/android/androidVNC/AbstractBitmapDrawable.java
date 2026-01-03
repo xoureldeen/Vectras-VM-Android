@@ -3,11 +3,16 @@
  */
 package android.androidVNC;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.drawable.DrawableContainer;
+
+import com.vectras.vm.R;
+import com.vectras.vm.VectrasApp;
 
 /**
  * @author Michael A. MacDonald
@@ -31,7 +36,15 @@ public class AbstractBitmapDrawable extends DrawableContainer {
 		_blackPaint.setColor(0xff000000);
 	}
 
-	AbstractBitmapDrawable(AbstractBitmapData data)
+    public static final int CURSOR_HEIGHT_DP = 16;
+    public static final int CURSOR_WIDTH_DP = 10;
+
+    private Bitmap cursorBitmap= BitmapFactory.decodeResource(
+            VectrasApp.getContext().getResources(),
+            R.drawable.xc_left_ptr
+    );
+
+    AbstractBitmapDrawable(AbstractBitmapData data)
 	{
 		this.data = data;
 		cursorRect = new Rect();
@@ -54,16 +67,28 @@ public class AbstractBitmapDrawable extends DrawableContainer {
 	
 	void drawCursor(Canvas canvas)
 	{
-		canvas.drawRect(cursorRect,_whitePaint);
-		canvas.drawRect((float)cursorRect.left + 1, (float)cursorRect.top + 1, (float)cursorRect.right - 1, (float)cursorRect.bottom - 1, _blackPaint);
+        if (cursorBitmap == null) return;
+
+        canvas.drawBitmap(
+                cursorBitmap,
+                null,
+                cursorRect,
+                null
+        );
+//		canvas.drawRect(cursorRect,_whitePaint);
+//		canvas.drawRect((float)cursorRect.left + 1, (float)cursorRect.top + 1, (float)cursorRect.right - 1, (float)cursorRect.bottom - 1, _blackPaint);
 	}
 	
 	void setCursorRect(int mouseX, int mouseY)
 	{
-		cursorRect.left = mouseX - 2;
-		cursorRect.right = cursorRect.left + 4;
-		cursorRect.top = mouseY - 2;
-		cursorRect.bottom = cursorRect.top + 4;			
+        cursorRect.left = mouseX;
+        cursorRect.top = mouseY;
+        cursorRect.right = cursorRect.left + CURSOR_WIDTH_DP;
+        cursorRect.bottom = cursorRect.top + CURSOR_HEIGHT_DP;
+//		cursorRect.left = mouseX - 2;
+//		cursorRect.right = cursorRect.left + 4;
+//		cursorRect.top = mouseY - 2;
+//		cursorRect.bottom = cursorRect.top + 4;
 	}
 
 	/* (non-Javadoc)

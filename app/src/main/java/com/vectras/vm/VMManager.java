@@ -4,6 +4,7 @@ import static android.content.Intent.ACTION_OPEN_DOCUMENT;
 import static com.vectras.vm.utils.FileUtils.isFileExists;
 
 import android.androidVNC.AbstractScaling;
+import android.androidVNC.ConnectionBean;
 import android.androidVNC.VncCanvasActivity;
 import android.app.Activity;
 import android.content.Context;
@@ -114,13 +115,13 @@ public class VMManager {
         mapForCreateNewVM.put("imgCdrom", cdrom);
         mapForCreateNewVM.put("imgExtra", params);
         mapForCreateNewVM.put("imgArch", arch);
-        if (listmapForCreateNewVM.get(position).containsKey("qmpPort")) {
+        if (!listmapForCreateNewVM.isEmpty() && listmapForCreateNewVM.get(position).containsKey("qmpPort")) {
             mapForCreateNewVM.put("qmpPort", listmapForCreateNewVM.get(position).get("qmpPort"));
         } else {
             mapForCreateNewVM.put("qmpPort", startRandomPort());
         }
 
-        if (listmapForCreateNewVM.get(position).containsKey("vmID")) {
+        if (!listmapForCreateNewVM.isEmpty() && listmapForCreateNewVM.get(position).containsKey("vmID")) {
             mapForCreateNewVM.put("vmID", Objects.requireNonNull(listmapForCreateNewVM.get(position).get("vmID")).toString());
         } else {
             mapForCreateNewVM.put("vmID", idGenerator());
@@ -318,6 +319,9 @@ public class VMManager {
         listmapForHideVMID.clear();
         listmapForHideVMID = new Gson().fromJson(pendingJsonContent, new TypeToken<ArrayList<HashMap<String, Object>>>() {
         }.getType());
+
+        if(listmapForHideVMID.isEmpty()) return;
+
         if (listmapForHideVMID.get(pendingPosition).containsKey("vmID")) {
             pendingVMID = Objects.requireNonNull(listmapForHideVMID.get(pendingPosition).get("vmID")).toString();
         } else {
@@ -989,9 +993,14 @@ public class VMManager {
                         _dialog.dismiss();
                     });
 
+                    if (ConnectionBean.useLocalCursor) {
+                        TextView tvvirtualmouse = _view.findViewById(R.id.tv_virtualmouse);
+                        tvvirtualmouse.setText(_activity.getString(R.string.hide_virtual_mouse));
+                    }
+
                     _view.findViewById(R.id.ln_virtualmouse).setOnClickListener(v -> {
-                        MainVNCActivity.getContext.binding.cursorView.setVisibility(MainVNCActivity.getContext.binding.cursorView.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
-                        MainSettingsManager.setShowVirtualMouse(_activity, MainVNCActivity.getContext.binding.cursorView.getVisibility() == View.VISIBLE);
+                        MainSettingsManager.setShowVirtualMouse(_activity, !ConnectionBean.useLocalCursor);
+                        ConnectionBean.useLocalCursor = !ConnectionBean.useLocalCursor;
                         _dialog.dismiss();
                     });
 
@@ -1012,16 +1021,18 @@ public class VMManager {
                     }
 
                     _view.findViewById(R.id.iv_screenOneToOne).setOnClickListener(v -> {
-                        AbstractScaling.getById(R.id.itemOneToOne)
-                                .setScaleTypeForActivity(vncCanvasActivity);
                         MainSettingsManager.setVNCScaleMode(_activity, VNCConfig.oneToOne);
+                        _activity.startActivity(new Intent(_activity, MainVNCActivity.class));
+                        _activity.overridePendingTransition(0, 0);
+                        _activity.finish();
                         _dialog.dismiss();
                     });
 
                     _view.findViewById(R.id.iv_screenFit).setOnClickListener(v -> {
-                        AbstractScaling.getById(R.id.itemFitToScreen)
-                                .setScaleTypeForActivity(vncCanvasActivity);
                         MainSettingsManager.setVNCScaleMode(_activity, VNCConfig.fitToScreen);
+                        _activity.startActivity(new Intent(_activity, MainVNCActivity.class));
+                        _activity.overridePendingTransition(0, 0);
+                        _activity.finish();
                         _dialog.dismiss();
                     });
                 } else {

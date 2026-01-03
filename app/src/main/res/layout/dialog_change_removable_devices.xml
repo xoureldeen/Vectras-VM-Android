@@ -185,18 +185,20 @@
                         android:id="@+id/iv_screenOneToOne"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="4dp"
                         android:padding="8dp"
                         android:layout_weight="1"
                         android:src="@drawable/view_real_size_24px"
-                        android:background="?attr/selectableItemBackgroundBorderless"/>
+                        android:background="@drawable/dialog_shape_click_effect_button"/>
                     <ImageView
                         android:id="@+id/iv_screenFit"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_marginStart="4dp"
                         android:padding="8dp"
+                        android:layout_weight="1"
                         android:src="@drawable/fullscreen_24px"
-                        android:background="?attr/selectableItemBackgroundBorderless"/>
+                        android:background="@drawable/dialog_shape_click_effect_button"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -232,6 +234,7 @@
                         android:layout_height="wrap_content"
                         android:src="@drawable/highlight_mouse_cursor_24px"/>
                     <TextView
+                        android:id="@+id/tv_virtualmouse"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="8dp"
