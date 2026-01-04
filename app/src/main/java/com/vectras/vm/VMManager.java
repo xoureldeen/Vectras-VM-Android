@@ -3,7 +3,6 @@ package com.vectras.vm;
 import static android.content.Intent.ACTION_OPEN_DOCUMENT;
 import static com.vectras.vm.utils.FileUtils.isFileExists;
 
-import android.androidVNC.AbstractScaling;
 import android.androidVNC.ConnectionBean;
 import android.androidVNC.VncCanvasActivity;
 import android.app.Activity;
@@ -62,83 +61,78 @@ import java.util.Random;
 public class VMManager {
 
     public static final String TAG = "VMManager";
-    public static HashMap<String, Object> mapForCreateNewVM = new HashMap<>();
-    public static ArrayList<HashMap<String, Object>> listmapForCreateNewVM = new ArrayList<>();
-    public static ArrayList<HashMap<String, Object>> listmapForRemoveVM = new ArrayList<>();
-    public static ArrayList<HashMap<String, Object>> listmapForHideVMID = new ArrayList<>();
     public static String finalJson = "";
-    public static String pendingJsonContent = "";
-    public static String pendingVMID = "";
-    public static int pendingPosition = 0;
     public static String pendingDeviceID = "";
     public static int restoredVMs = 0;
     public static boolean isKeptSomeFiles = false;
     public static boolean isQemuStopedWithError = false;
     public static boolean isTryAgain = false;
-
     public static String latestUnsafeCommandReason = "";
     public static String lastQemuCommand = "";
 
-    public static void createNewVM(String name, String thumbnail, String drive, String arch, String cdrom, String params, String vmID, int port) {
-        mapForCreateNewVM.clear();
-        mapForCreateNewVM.put("imgName", name);
-        mapForCreateNewVM.put("imgIcon", thumbnail);
-        mapForCreateNewVM.put("imgPath", drive);
-        mapForCreateNewVM.put("imgCdrom", cdrom);
-        mapForCreateNewVM.put("imgExtra", params);
-        mapForCreateNewVM.put("imgArch", arch);
-        mapForCreateNewVM.put("vmID", vmID);
-        mapForCreateNewVM.put("qmpPort", port);
+    public static void writeToVMList(String content) {
+        FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", content);
+    }
 
-        listmapForCreateNewVM.clear();
-        listmapForCreateNewVM = new Gson().fromJson(FileUtils.readAFile(AppConfig.romsdatajson), new TypeToken<ArrayList<HashMap<String, Object>>>() {
+    public static void writeToVMConfig(String vmID, String content) {
+        FileUtils.writeToFile(AppConfig.maindirpath + "/roms/" + vmID, "rom-data.json", content.replace("\\u003d", "="));
+        FileUtils.writeToFile(AppConfig.maindirpath + "/roms/" + vmID, "vmID.txt", vmID);
+    }
+
+    public static void createNewVM(String name, String thumbnail, String drive, String arch, String cdrom, String params, String vmID, int port) {
+        ArrayList<HashMap<String, Object>> vmList;
+
+        HashMap<String, Object> vmConfigMap = new HashMap<>();
+        vmConfigMap.put("imgName", name);
+        vmConfigMap.put("imgIcon", thumbnail);
+        vmConfigMap.put("imgPath", drive);
+        vmConfigMap.put("imgCdrom", cdrom);
+        vmConfigMap.put("imgExtra", params);
+        vmConfigMap.put("imgArch", arch);
+        vmConfigMap.put("vmID", vmID);
+        vmConfigMap.put("qmpPort", port);
+
+        vmList = new Gson().fromJson(FileUtils.readAFile(AppConfig.romsdatajson), new TypeToken<ArrayList<HashMap<String, Object>>>() {
         }.getType());
 
-        listmapForCreateNewVM.add(0, mapForCreateNewVM);
-        finalJson = new Gson().toJson(listmapForCreateNewVM);
+        vmList.add(0, vmConfigMap);
 
-        FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", finalJson);
-        finalJson = new Gson().toJson(mapForCreateNewVM);
-        FileUtils.writeToFile(AppConfig.maindirpath + "/roms/" + Objects.requireNonNull(mapForCreateNewVM.get("vmID")), "rom-data.json", finalJson.replace("\\u003d", "="));
-        FileUtils.writeToFile(AppConfig.maindirpath + "/roms/" + Objects.requireNonNull(mapForCreateNewVM.get("vmID")), "vmID.txt", Objects.requireNonNull(mapForCreateNewVM.get("vmID")).toString());
+        writeToVMList(new Gson().toJson(vmList));
+        writeToVMConfig(vmID, new Gson().toJson(vmConfigMap));
     }
 
     public static void editVM(String name, String thumbnail, String drive, String arch, String cdrom, String params, int position) {
-        listmapForCreateNewVM.clear();
-        listmapForCreateNewVM = new Gson().fromJson(FileUtils.readAFile(AppConfig.romsdatajson), new TypeToken<ArrayList<HashMap<String, Object>>>() {
+        ArrayList<HashMap<String, Object>> vmList;
+
+        vmList = new Gson().fromJson(FileUtils.readAFile(AppConfig.romsdatajson), new TypeToken<ArrayList<HashMap<String, Object>>>() {
         }.getType());
 
-        mapForCreateNewVM.clear();
-        mapForCreateNewVM.put("imgName", name);
-        mapForCreateNewVM.put("imgIcon", thumbnail);
-        mapForCreateNewVM.put("imgPath", drive);
-        mapForCreateNewVM.put("imgCdrom", cdrom);
-        mapForCreateNewVM.put("imgExtra", params);
-        mapForCreateNewVM.put("imgArch", arch);
-        if (!listmapForCreateNewVM.isEmpty() && listmapForCreateNewVM.get(position).containsKey("qmpPort")) {
-            mapForCreateNewVM.put("qmpPort", listmapForCreateNewVM.get(position).get("qmpPort"));
+        HashMap<String, Object> vmConfigMap = new HashMap<>();
+        vmConfigMap.put("imgName", name);
+        vmConfigMap.put("imgIcon", thumbnail);
+        vmConfigMap.put("imgPath", drive);
+        vmConfigMap.put("imgCdrom", cdrom);
+        vmConfigMap.put("imgExtra", params);
+        vmConfigMap.put("imgArch", arch);
+        if (!vmList.isEmpty() && vmList.get(position).containsKey("qmpPort")) {
+            vmConfigMap.put("qmpPort", vmList.get(position).get("qmpPort"));
         } else {
-            mapForCreateNewVM.put("qmpPort", startRandomPort());
+            vmConfigMap.put("qmpPort", startRandomPort());
         }
 
-        if (!listmapForCreateNewVM.isEmpty() && listmapForCreateNewVM.get(position).containsKey("vmID")) {
-            mapForCreateNewVM.put("vmID", Objects.requireNonNull(listmapForCreateNewVM.get(position).get("vmID")).toString());
+        if (!vmList.isEmpty() && vmList.get(position).containsKey("vmID")) {
+            vmConfigMap.put("vmID", Objects.requireNonNull(vmList.get(position).get("vmID")).toString());
         } else {
-            mapForCreateNewVM.put("vmID", idGenerator());
+            vmConfigMap.put("vmID", idGenerator());
         }
 
-        listmapForCreateNewVM.set(position, mapForCreateNewVM);
-        finalJson = new Gson().toJson(listmapForCreateNewVM);
-        FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", finalJson);
-        finalJson = new Gson().toJson(mapForCreateNewVM);
-        FileUtils.writeToFile(AppConfig.maindirpath + "/roms/" + Objects.requireNonNull(mapForCreateNewVM.get("vmID")), "rom-data.json", finalJson.replace("\\u003d", "="));
-        FileUtils.writeToFile(AppConfig.maindirpath + "/roms/" + Objects.requireNonNull(mapForCreateNewVM.get("vmID")), "vmID.txt", Objects.requireNonNull(mapForCreateNewVM.get("vmID")).toString());
+        vmList.set(position, vmConfigMap);
+
+        writeToVMList(new Gson().toJson(vmList));
+        writeToVMConfig(Objects.requireNonNull(vmConfigMap.get("vmID")).toString(), new Gson().toJson(vmConfigMap));
     }
 
     public static void deleteVMDialog(String _vmName, int _position, Activity _activity) {
-        pendingPosition = _position;
-        pendingJsonContent = FileUtils.readAFile(AppConfig.maindirpath + "roms-data.json");
-
         DialogUtils.threeDialog(_activity, _activity.getString(R.string.remove) + " " + _vmName, _activity.getString(R.string.remove_vm_content), _activity.getString(R.string.remove_and_do_not_keep_files), _activity.getString(R.string.remove_but_keep_files), _activity.getString(R.string.cancel), true, R.drawable.delete_24px, true,
                 () -> {
                     View progressView = LayoutInflater.from(_activity).inflate(R.layout.dialog_progress_style, null);
@@ -152,7 +146,7 @@ public class VMManager {
 
                     new Thread(() -> {
                         isKeptSomeFiles = false;
-                        deleteVM();
+                        deleteVM(_position);
                         removeInRomsDataJson(_activity, _vmName, _position);
                         _activity.runOnUiThread(() -> new Handler(Looper.getMainLooper()).postDelayed(progressDialog::dismiss, 500));
                     }).start();
@@ -168,7 +162,7 @@ public class VMManager {
                     progressDialog.show();
 
                     new Thread(() -> {
-                        hideVMIDWithPosition();
+                        hideVMIDWithPosition(_position);
                         removeInRomsDataJson(_activity, _vmName, _position);
                         _activity.runOnUiThread(() -> new Handler(Looper.getMainLooper()).postDelayed(progressDialog::dismiss, 500));
                     }).start();
@@ -246,24 +240,25 @@ public class VMManager {
         return _result;
     }
 
-    public static void deleteVM() {
-        listmapForRemoveVM.clear();
-        listmapForRemoveVM = new Gson().fromJson(pendingJsonContent, new TypeToken<ArrayList<HashMap<String, Object>>>() {
+    public static void deleteVM(int position) {
+        String vmId;
+        ArrayList<HashMap<String, Object>> vmList;
+        vmList = new Gson().fromJson(FileUtils.readAFile(AppConfig.maindirpath + "roms-data.json"), new TypeToken<ArrayList<HashMap<String, Object>>>() {
         }.getType());
 
-        if (pendingPosition > listmapForCreateNewVM.size() - 1) return;
+        if (position > vmList.size() - 1) return;
 
-        if (listmapForRemoveVM.get(pendingPosition).containsKey("vmID")) {
-            pendingVMID = Objects.requireNonNull(listmapForRemoveVM.get(pendingPosition).get("vmID")).toString();
-            FileUtils.deleteDirectory(Config.getCacheDir() + "/" + pendingVMID);
-            Log.i("VMManager", "deleteVM: ID obtained: " + pendingVMID);
+        if (vmList.get(position).containsKey("vmID")) {
+            vmId = Objects.requireNonNull(vmList.get(position).get("vmID")).toString();
+            FileUtils.deleteDirectory(Config.getCacheDir() + "/" + vmId);
+            Log.i("VMManager", "deleteVM: ID obtained: " + vmId);
         } else {
             Log.e("VMManager", "deleteVM: Cannot get ID.");
             return;
         }
-        listmapForRemoveVM.remove(pendingPosition);
-        finalJson = new Gson().toJson(listmapForRemoveVM);
-        if (!pendingVMID.isEmpty()) {
+        vmList.remove(position);
+        finalJson = new Gson().toJson(vmList);
+        if (!vmId.isEmpty()) {
             int _startRepeat = 0;
             String _currentVMIDToScan;
             ArrayList<String> _filelist = new ArrayList<>();
@@ -274,12 +269,12 @@ public class VMManager {
                         if (isFileExists(_filelist.get(_startRepeat) + "/vmID.txt")) {
                             _currentVMIDToScan = FileUtils.readAFile(_filelist.get(_startRepeat) + "/vmID.txt").replace("\n", "");
                             if (!_currentVMIDToScan.isEmpty()) {
-                                if (_currentVMIDToScan.equals(pendingVMID)) {
+                                if (_currentVMIDToScan.equals(vmId)) {
                                     if (!finalJson.contains(_filelist.get(_startRepeat))) {
                                         FileUtils.deleteDirectory(_filelist.get(_startRepeat));
                                     } else {
                                         isKeptSomeFiles = true;
-                                        hideVMID(pendingVMID);
+                                        hideVMID(vmId);
                                     }
                                 }
                             }
@@ -315,19 +310,20 @@ public class VMManager {
         }
     }
 
-    public static void hideVMIDWithPosition() {
-        listmapForHideVMID.clear();
-        listmapForHideVMID = new Gson().fromJson(pendingJsonContent, new TypeToken<ArrayList<HashMap<String, Object>>>() {
+    public static void hideVMIDWithPosition(int position) {
+        String vmId;
+        ArrayList<HashMap<String, Object>> vmList;
+        vmList = new Gson().fromJson(FileUtils.readAFile(AppConfig.maindirpath + "roms-data.json"), new TypeToken<ArrayList<HashMap<String, Object>>>() {
         }.getType());
 
-        if(listmapForHideVMID.isEmpty()) return;
+        if (vmList.isEmpty()) return;
 
-        if (listmapForHideVMID.get(pendingPosition).containsKey("vmID")) {
-            pendingVMID = Objects.requireNonNull(listmapForHideVMID.get(pendingPosition).get("vmID")).toString();
+        if (vmList.get(position).containsKey("vmID")) {
+            vmId = Objects.requireNonNull(vmList.get(position).get("vmID")).toString();
         } else {
             return;
         }
-        if (!pendingVMID.isEmpty()) {
+        if (!vmId.isEmpty()) {
             int _startRepeat = 0;
             String _currentVMIDToScan;
             ArrayList<String> _filelist = new ArrayList<>();
@@ -338,7 +334,7 @@ public class VMManager {
                         if (isFileExists(_filelist.get(_startRepeat) + "/vmID.txt")) {
                             _currentVMIDToScan = FileUtils.readAFile(_filelist.get(_startRepeat) + "/vmID.txt").replace("\n", "");
                             if (!_currentVMIDToScan.isEmpty()) {
-                                if (_currentVMIDToScan.equals(pendingVMID)) {
+                                if (_currentVMIDToScan.equals(vmId)) {
                                     FileUtils.moveAFile(_filelist.get(_startRepeat) + "/vmID.txt", _filelist.get(_startRepeat) + "/vmID.old.txt");
                                 }
                             }

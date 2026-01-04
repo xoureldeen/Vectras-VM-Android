@@ -493,6 +493,7 @@
     <string name="last_crash_note">We are very sorry about an incident that occurred and app crashed earlier.</string>
     <string name="show_virtual_mouse">Show virtual mouse</string>
     <string name="hide_virtual_mouse">Hide virtual mouse</string>
+    <string name="this_bootstrap_file_is_invalid">This bootstrap file is invalid.</string>
 
 
     <!--======================TERMUX STRINGS====================-->

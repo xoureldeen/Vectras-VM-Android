@@ -72,42 +72,44 @@ public class ZipUtils {
                 buffer = new byte[128 * 1024];
 
             while ((entry = zin.getNextEntry()) != null) {
-                File newFile = new File(outdir, entry.getName());
+                if (isAllowExtract(entry, destDir)) {
+                    File newFile = new File(outdir, entry.getName());
 
-                if (entry.isDirectory()) {
-                    newFile.mkdirs();
-                    continue;
-                }
-
-                newFile.getParentFile().mkdirs();
-
-                FileOutputStream fos = new FileOutputStream(newFile);
-                int len;
-                long fileExtracted = 0;
-
-                long lastProgress = -1;
-                while ((len = zin.read(buffer)) > 0) {
-                    fos.write(buffer, 0, len);
-                    fileExtracted += len;
-                    extractedSize += len;
-
-                    long progress = (totalSize > 0) ? (extractedSize * 100 / totalSize) : 0;
-
-                    if (progress > lastProgress) {
-                        lastProgress = progress;
-                        updateStatus(
-                                statusTextView,
-                                progressBar,
-                                (progress == 0 || progress > 100 ?
-                                        context.getString(R.string.importing) :
-                                        context.getString(R.string.completed) + " " + progress + "%")
-                                        + "\n" + context.getString(R.string.please_stay_here),
-                                (int) progress
-                        );
+                    if (entry.isDirectory()) {
+                        newFile.mkdirs();
+                        continue;
                     }
+
+                    newFile.getParentFile().mkdirs();
+
+                    FileOutputStream fos = new FileOutputStream(newFile);
+                    int len;
+                    long fileExtracted = 0;
+
+                    long lastProgress = -1;
+                    while ((len = zin.read(buffer)) > 0) {
+                        fos.write(buffer, 0, len);
+                        fileExtracted += len;
+                        extractedSize += len;
+
+                        long progress = (totalSize > 0) ? (extractedSize * 100 / totalSize) : 0;
+
+                        if (progress > lastProgress) {
+                            lastProgress = progress;
+                            updateStatus(
+                                    statusTextView,
+                                    progressBar,
+                                    (progress == 0 || progress > 100 ?
+                                            context.getString(R.string.importing) :
+                                            context.getString(R.string.completed) + " " + progress + "%")
+                                            + "\n" + context.getString(R.string.please_stay_here),
+                                    (int) progress
+                            );
+                        }
+                    }
+                    fos.close();
+                    zin.closeEntry();
                 }
-                fos.close();
-                zin.closeEntry();
             }
             zin.close();
             return true;
@@ -146,8 +148,10 @@ public class ZipUtils {
                 ZipInputStream sizeCounter = new ZipInputStream(new BufferedInputStream(inputStream));
                 ZipEntry e;
                 while ((e = sizeCounter.getNextEntry()) != null) {
-                    if (!e.isDirectory() && e.getSize() > 0)
-                        totalSize += e.getSize();
+                    if (isAllowExtract(e, destDir)) {
+                        if (!e.isDirectory() && e.getSize() > 0)
+                            totalSize += e.getSize();
+                    }
                 }
                 //sizeCounter also closes the inputstream
                 sizeCounter.close();
@@ -355,5 +359,26 @@ public class ZipUtils {
             }
         }
         return crc.getValue();
+    }
+
+    public static boolean isAllowExtract(ZipEntry entry, String targetDir) throws IOException {
+        String entryName = entry.getName();
+
+        if (entryName.startsWith("/") || entryName.startsWith("\\")) {
+            Log.w(TAG, "Absolute path blocked: " + entryName);
+            return false;
+        }
+
+        File destDir = new File(targetDir);
+        File outFile = new File(destDir, entryName);
+
+        String destPath = destDir.getCanonicalPath();
+        String outPath  = outFile.getCanonicalPath();
+
+        if (!outPath.startsWith(destPath + File.separator)) {
+            Log.w(TAG, "ZipSlip detected: " + entryName);
+            return false;
+        }
+        return true;
     }
 }
