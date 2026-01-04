@@ -47,6 +47,7 @@ import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.JSONUtils;
 import com.vectras.vm.utils.ListUtils;
 import com.vectras.vm.utils.PermissionUtils;
+import com.vectras.vm.utils.TarUtils;
 import com.vectras.vm.utils.UIUtils;
 import com.vectras.vterm.TerminalBottomSheetDialog;
 
@@ -448,44 +449,63 @@ public class SetupWizard2Activity extends AppCompatActivity {
     }
 
     private void startSetup() {
-        logs = "";
-        progressText = "";
-        aria2Error = false;
-        isServerError = false;
         uiController(STEP_INSTALLING_PACKAGES);
 
-        String cmd = selectedMirrorCommand + ";" +
-                " set -e;" +
-                " echo \"Starting setup...\";" +
-                " apk update;" +
-                " echo \"Installing packages...\";" +
-                " apk add " + (DeviceUtils.is64bit() ? AppConfig.neededPkgs()
-                : AppConfig.neededPkgs32bit()) + ";" +
-                " echo \"Downloading Qemu...\";";
+        new Thread(() -> {
+            if (isCustomSetupMode) {
+                runOnUiThread(() -> appendTextAndScroll(" | " + getString(R.string.checking)));
 
-        if (isCustomSetupMode) {
-            cmd += " tar -xzvf " + tarPath + " -C /;" +
-                    " rm " + tarPath + ";" +
-                    " chmod 775 /usr/local/bin/*;";
-        } else {
-            if (FileUtils.isFileExists(getFilesDir().getAbsolutePath() + "/distro/root/setup.tar.gz"))
-                FileUtils.deleteDirectory(getFilesDir().getAbsolutePath() + "/distro/root/setup.tar.gz");
+                try {
+                    if (!TarUtils.isAllowExtract(tarPath)) {
+                        runOnUiThread(() -> uiController(STEP_ERROR, getString(R.string.this_bootstrap_file_is_invalid)));
+                        return;
+                    }
+                } catch (Exception e) {
+                    runOnUiThread(() -> uiController(STEP_ERROR, e.toString()));
+                    return;
+                }
+            }
 
-            cmd += downloadBootstrapsCommand + ";" +
-                    " echo \"Installing Qemu...\";" +
-                    " tar -xzvf setup.tar.gz -C /;" +
-                    " rm setup.tar.gz;" +
-                    " chmod 775 /usr/local/bin/*;";
-        }
+            runOnUiThread(() -> {
+                logs = "";
+                progressText = "";
+                aria2Error = false;
+                isServerError = false;
 
-        cmd += " echo \"Just a sec...\";" +
-                " echo export TMPDIR=/tmp >> /etc/profile;" +
-                " mkdir -p $TMPDIR/pulse;" +
-                " echo export PULSE_SERVER=127.0.0.1 >> /etc/profile;" +
-                " mkdir -p ~/.vnc && echo -e \"555555\\n555555\" | vncpasswd -f > ~/.vnc/passwd && chmod 0600 ~/.vnc/passwd;" +
-                " echo \"Installation successful! xssFjnj58Id\"";
+                String cmd = selectedMirrorCommand + ";" +
+                        " set -e;" +
+                        " echo \"Starting setup...\";" +
+                        " apk update;" +
+                        " echo \"Installing packages...\";" +
+                        " apk add " + (DeviceUtils.is64bit() ? AppConfig.neededPkgs()
+                        : AppConfig.neededPkgs32bit()) + ";" +
+                        " echo \"Downloading Qemu...\";";
 
-        executeShellCommand(cmd);
+                if (isCustomSetupMode) {
+                    cmd += " tar -xzvf " + tarPath + " -C /;" +
+                            " rm " + tarPath + ";" +
+                            " chmod 775 /usr/local/bin/*;";
+                } else {
+                    if (FileUtils.isFileExists(getFilesDir().getAbsolutePath() + "/distro/root/setup.tar.gz"))
+                        FileUtils.deleteDirectory(getFilesDir().getAbsolutePath() + "/distro/root/setup.tar.gz");
+
+                    cmd += downloadBootstrapsCommand + ";" +
+                            " echo \"Installing Qemu...\";" +
+                            " tar -xzvf setup.tar.gz -C /;" +
+                            " rm setup.tar.gz;" +
+                            " chmod 775 /usr/local/bin/*;";
+                }
+
+                cmd += " echo \"Just a sec...\";" +
+                        " echo export TMPDIR=/tmp >> /etc/profile;" +
+                        " mkdir -p $TMPDIR/pulse;" +
+                        " echo export PULSE_SERVER=127.0.0.1 >> /etc/profile;" +
+                        " mkdir -p ~/.vnc && echo -e \"555555\\n555555\" | vncpasswd -f > ~/.vnc/passwd && chmod 0600 ~/.vnc/passwd;" +
+                        " echo \"Installation successful! xssFjnj58Id\"";
+
+                executeShellCommand(cmd);
+            });
+        }).start();
     }
 
     private final ActivityResultLauncher<String> bootstrapFilePicker =

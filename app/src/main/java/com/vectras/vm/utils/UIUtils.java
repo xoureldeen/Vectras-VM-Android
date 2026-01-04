@@ -149,21 +149,18 @@ public class UIUtils {
     }
 
     public static void toastShortTop(final Activity activity, final String errStr) {
-        UIUtils.toast(activity, errStr, Gravity.TOP | Gravity.CENTER, Toast.LENGTH_SHORT);
+        if (!activity.isFinishing() && !activity.isDestroyed()) UIUtils.toast(activity, errStr, Gravity.TOP | Gravity.CENTER, Toast.LENGTH_SHORT);
     }
 
     public static void toast(final Context context, final String errStr, final int gravity, final int length) {
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                if(context instanceof Activity && ((Activity) context).isFinishing()) {
-                    return ;
-                }
-                Toast toast = Toast.makeText(context, errStr, length);
-                toast.setGravity(gravity, 0, 0);
-                toast.show();
-
+        new Handler(Looper.getMainLooper()).post(() -> {
+            if(context instanceof Activity && ((Activity) context).isFinishing()) {
+                return ;
             }
+            Toast toast = Toast.makeText(context, errStr, length);
+            toast.setGravity(gravity, 0, 0);
+            toast.show();
+
         });
 
     }
