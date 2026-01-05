@@ -494,6 +494,12 @@
     <string name="show_virtual_mouse">Show virtual mouse</string>
     <string name="hide_virtual_mouse">Hide virtual mouse</string>
     <string name="this_bootstrap_file_is_invalid">This bootstrap file is invalid.</string>
+    <string name="vm_has_been_created">VM has been created.</string>
+    <string name="vm_has_been_edited">VM has been edited.</string>
+    <string name="an_error_occurred_and_vm_was_not_created">An error occurred and VM was not created.</string>
+    <string name="an_error_occurred_and_vm_was_not_modified">An error occurred and VM was not modified.</string>
+    <string name="edit_with_create_command">Edit with Create command</string>
+    <string name="edit_with_create_command_content">You can edit this VM with Create command app.</string>
 
 
     <!--======================TERMUX STRINGS====================-->

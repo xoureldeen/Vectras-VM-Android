@@ -63,12 +63,84 @@ public class VMManager {
     public static final String TAG = "VMManager";
     public static String finalJson = "";
     public static String pendingDeviceID = "";
+    public static String generatedVMId = "";
     public static int restoredVMs = 0;
     public static boolean isKeptSomeFiles = false;
     public static boolean isQemuStopedWithError = false;
     public static boolean isTryAgain = false;
     public static String latestUnsafeCommandReason = "";
     public static String lastQemuCommand = "";
+
+    public static boolean isVMExist(String vmId) {
+        String vmJsonListContent = FileUtils.readAFile(AppConfig.romsdatajson);
+
+        if (!JSONUtils.isValidFromString(vmJsonListContent) || vmId.isEmpty()) return false;
+
+        ArrayList<HashMap<String, Object>> vmList = new Gson().fromJson(vmJsonListContent, new TypeToken<ArrayList<HashMap<String, Object>>>() {
+        }.getType());
+
+        for (int _repeat = 0; _repeat < vmList.size(); _repeat++) {
+            if (vmList.get(_repeat).containsKey("vmID")
+                    && Objects.requireNonNull(vmList.get(_repeat).get("vmID")).toString().equals(vmId)) {
+                Log.i(TAG, "isVMExist: " + vmId + " - YES.");
+                return true;
+            }
+        }
+
+        Log.i(TAG, "isVMExist: " + vmId + " - NO.");
+        return false;
+    }
+
+    public static boolean addToVMList(String vmConfigJson, String vmID) {
+        String vmListJson = FileUtils.readAFile(AppConfig.romsdatajson);
+        if (!JSONUtils.isValidFromString(vmListJson) || !JSONUtils.isValidFromString(vmConfigJson)) return false;
+
+        ArrayList<HashMap<String, Object>> vmList = new Gson().fromJson(vmListJson, new TypeToken<ArrayList<HashMap<String, Object>>>() {
+        }.getType());
+        HashMap<String, Object> vmConfigMap = new Gson().fromJson(vmConfigJson, new TypeToken<HashMap<String, Object>>() {
+        }.getType());
+
+        if (!vmID.isEmpty()) {
+            generatedVMId = vmID;
+            vmConfigMap.put("vmID", generatedVMId);
+        }
+
+        vmList.add(0, vmConfigMap);
+        writeToVMList(new Gson().toJson(vmList));
+        writeToVMConfig(Objects.requireNonNull(vmConfigMap.get("vmID")).toString(), new Gson().toJson(vmConfigMap));
+        return true;
+    }
+
+    public static boolean replaceToVMList(int postion, String vmId, String vmConfigJson) {
+        String vmListJson = FileUtils.readAFile(AppConfig.romsdatajson);
+        if (!JSONUtils.isValidFromString(vmListJson) || !JSONUtils.isValidFromString(vmConfigJson)) return false;
+
+        int finalPosition = postion;
+        ArrayList<HashMap<String, Object>> vmList = new Gson().fromJson(vmListJson, new TypeToken<ArrayList<HashMap<String, Object>>>() {
+        }.getType());
+        HashMap<String, Object> vmConfigMap = new Gson().fromJson(vmConfigJson, new TypeToken<HashMap<String, Object>>() {
+        }.getType());
+
+        if (postion == -1) {
+            for (int _repeat = 0; _repeat < vmList.size(); _repeat++) {
+                if (vmList.get(_repeat).containsKey("vmID")
+                        && ((!vmId.isEmpty() && Objects.requireNonNull(vmList.get(_repeat).get("vmID")).toString().equals(vmId)) || Objects.requireNonNull(vmList.get(_repeat).get("vmID")).toString().equals(Objects.requireNonNull(vmConfigMap.get("vmID")).toString()))) {
+                    finalPosition = _repeat;
+                    break;
+                }
+            }
+        }
+
+        if (finalPosition >= 0 && finalPosition < vmList.size()) {
+            vmList.set(finalPosition, vmConfigMap);
+        } else {
+            return false;
+        }
+
+        writeToVMList(new Gson().toJson(vmList));
+        writeToVMConfig(Objects.requireNonNull(vmConfigMap.get("vmID")).toString(), new Gson().toJson(vmConfigMap));
+        return true;
+    }
 
     public static void writeToVMList(String content) {
         FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", content);

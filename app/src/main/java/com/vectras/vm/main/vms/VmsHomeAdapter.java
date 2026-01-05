@@ -15,13 +15,17 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.vectras.qemu.Config;
 import com.vectras.vm.R;
 import com.vectras.vm.StartVM;
 import com.vectras.vm.VMManager;
 import com.vectras.vm.main.core.MainStartVM;
 import com.vectras.vm.main.core.RomOptionsDialog;
+import com.vectras.vm.utils.FileUtils;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.List;
 
@@ -58,9 +62,16 @@ public class VmsHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         myHolder.textArch.setText(current.itemArch);
         if (current.itemIcon.isEmpty()){
             VMManager.setIconWithName(myHolder.ivIcon, current.itemName);
+        } else if (FileUtils.isFileExists(current.itemIcon)){
+            Glide.with(activity.getApplicationContext())
+                    .load(new File(current.itemIcon))
+                    .placeholder(R.drawable.ic_computer_180dp_with_padding)
+                    .error(R.drawable.ic_computer_180dp_with_padding)
+                    .skipMemoryCache(true)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .into(myHolder.ivIcon);
         } else {
-            Bitmap bmImg = BitmapFactory.decodeFile(current.itemIcon);
-            myHolder.ivIcon.setImageBitmap(bmImg);
+            myHolder.ivIcon.setImageResource(R.drawable.ic_computer_180dp_with_padding);
         }
         myHolder.optionsBtn.setOnClickListener(view -> RomOptionsDialog.showNow(activity, data, position, current.vmID, current.itemName, current.itemArch));
 

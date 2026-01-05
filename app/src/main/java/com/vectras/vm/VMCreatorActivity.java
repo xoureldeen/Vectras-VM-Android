@@ -1,6 +1,7 @@
 package com.vectras.vm;
 
 import android.annotation.SuppressLint;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -34,6 +35,8 @@ import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.ImageUtils;
+import com.vectras.vm.utils.JSONUtils;
+import com.vectras.vm.utils.PackageUtils;
 import com.vectras.vm.utils.UIUtils;
 
 import org.json.JSONException;
@@ -188,21 +191,6 @@ public class VMCreatorActivity extends AppCompatActivity {
         binding.drive.addTextChangedListener(afterTextChangedListener);
         binding.qemu.addTextChangedListener(afterTextChangedListener);
 
-
-        binding.qemuField.setEndIconOnClickListener(v -> {
-            PackageManager pm = getPackageManager();
-            Intent intent = pm.getLaunchIntentForPackage("com.anbui.cqcm.app");
-
-            if (intent != null) {
-                startActivity(intent);
-            } else {
-                Intent intenturl = new Intent();
-                intenturl.setAction(Intent.ACTION_VIEW);
-                intenturl.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.anbui.cqcm.app"));
-                startActivity(intenturl);
-            }
-        });
-
         binding.ivIcon.setOnClickListener(v -> {
             if (thumbnailPath.isEmpty()) {
                 thumbnailPicker.launch("image/*");
@@ -319,6 +307,27 @@ public class VMCreatorActivity extends AppCompatActivity {
                 }
 
             }
+        }
+
+        if (PackageUtils.getVersionCode("com.anbui.cqcm.app", this) < 735 || !FileUtils.isFileExists(AppConfig.vmFolder + vmID + "/cqcm.json")) {
+            binding.opencqcm.setVisibility(View.GONE);
+        } else {
+            binding.opencqcm.setOnClickListener(v -> {
+                if (PackageUtils.isInstalled("com.anbui.cqcm.app", this)) {
+                    Intent intentcqcm = new Intent();
+                    intentcqcm.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intentcqcm.setComponent(new ComponentName("com.anbui.cqcm.app", "com.anbui.cqcm.app.DownloadActivity"));
+                    intentcqcm.putExtra("content", FileUtils.readAFile(AppConfig.vmFolder + vmID + "/cqcm.json"));
+                    intentcqcm.putExtra("vectrasVMId", vmID);
+                    startActivity(intentcqcm);
+                    finish();
+                } else {
+                    Intent intenturl = new Intent();
+                    intenturl.setAction(Intent.ACTION_VIEW);
+                    intenturl.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.anbui.cqcm.app"));
+                    startActivity(intenturl);
+                }
+            });
         }
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {

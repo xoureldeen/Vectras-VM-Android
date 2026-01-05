@@ -76,34 +76,60 @@ public class CqcmActivity extends AppCompatActivity {
 
         if (JSONUtils.isValidFromFile(AppConfig.romsdatajson)) {
             if (getIntent().hasExtra("content")) {
-                if (Objects.requireNonNull(getIntent().getStringExtra("content")).endsWith("}]")) {
-                    _map = Objects.requireNonNull(getIntent().getStringExtra("content")).substring(0, Objects.requireNonNull(getIntent().getStringExtra("content")).length() - 1);
+                if (getIntent().hasExtra("cqcmcontent")) {
+                    if (JSONUtils.isValidFromString(getIntent().getStringExtra("content"))) {
+                        String vmId;
+                        boolean isForceCreateNew = getIntent().hasExtra("forceCreateNew") && getIntent().getBooleanExtra("forceCreateNew", false);
+                        if (!isForceCreateNew && VMManager.isVMExist(getIntent().getStringExtra("vmId"))) {
+                            vmId = getIntent().getStringExtra("vmId");
+                            if (VMManager.replaceToVMList(-1, getIntent().getStringExtra("vmId"), getIntent().getStringExtra("content"))) {
+                                Toast.makeText(getApplicationContext(), getString(R.string.vm_has_been_edited), Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(getApplicationContext(), getString(R.string.an_error_occurred_and_vm_was_not_modified), Toast.LENGTH_LONG).show();
+                            }
+                        } else {
+                            vmId = VMManager.isVMExist(getIntent().getStringExtra("vmId")) ? VMManager.idGenerator() : getIntent().getStringExtra("vmId");
+                            if (VMManager.addToVMList(getIntent().getStringExtra("content"), vmId)) {
+                                Toast.makeText(getApplicationContext(), getString(R.string.vm_has_been_created), Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(getApplicationContext(), getString(R.string.an_error_occurred_and_vm_was_not_created), Toast.LENGTH_LONG).show();
+                            }
+                        }
+                        FileUtils.writeToFile(AppConfig.vmFolder + vmId, "cqcm.json", getIntent().getStringExtra("cqcmcontent"));
+                    } else {
+                        Toast.makeText(getApplicationContext(), "An error occurred and it was not possible to create or edit a virtual machine.", Toast.LENGTH_LONG).show();
+                    }
                 } else {
-                    _map = Objects.requireNonNull(getIntent().getStringExtra("content"));
-                }
-                if (JSONUtils.isValidFromString(_map)) {
-                    mapForCreateNewVM = new Gson().fromJson(_map, new TypeToken<HashMap<String, Object>>(){}.getType());
-                    if (mapForCreateNewVM.containsKey("imgName")) {
-                        imgName = Objects.requireNonNull(mapForCreateNewVM.get("imgName")).toString();
+                    if (Objects.requireNonNull(getIntent().getStringExtra("content")).endsWith("}]")) {
+                        _map = Objects.requireNonNull(getIntent().getStringExtra("content")).substring(0, Objects.requireNonNull(getIntent().getStringExtra("content")).length() - 1);
+                    } else {
+                        _map = Objects.requireNonNull(getIntent().getStringExtra("content"));
                     }
-                    if (mapForCreateNewVM.containsKey("imgIcon")) {
-                        imgIcon = Objects.requireNonNull(mapForCreateNewVM.get("imgIcon")).toString();
+                    if (JSONUtils.isValidFromString(_map)) {
+                        mapForCreateNewVM = new Gson().fromJson(_map, new TypeToken<HashMap<String, Object>>() {
+                        }.getType());
+                        if (mapForCreateNewVM.containsKey("imgName")) {
+                            imgName = Objects.requireNonNull(mapForCreateNewVM.get("imgName")).toString();
+                        }
+                        if (mapForCreateNewVM.containsKey("imgIcon")) {
+                            imgIcon = Objects.requireNonNull(mapForCreateNewVM.get("imgIcon")).toString();
+                        }
+                        if (mapForCreateNewVM.containsKey("imgPath")) {
+                            imgPath = Objects.requireNonNull(mapForCreateNewVM.get("imgPath")).toString();
+                        }
+                        if (mapForCreateNewVM.containsKey("imgArch")) {
+                            imgArch = Objects.requireNonNull(mapForCreateNewVM.get("imgArch")).toString();
+                        }
+                        if (mapForCreateNewVM.containsKey("imgCdrom")) {
+                            imgCdrom = Objects.requireNonNull(mapForCreateNewVM.get("imgCdrom")).toString();
+                        }
+                        if (mapForCreateNewVM.containsKey("imgExtra")) {
+                            imgExtra = Objects.requireNonNull(mapForCreateNewVM.get("imgExtra")).toString();
+                        }
+                        VMManager.createNewVM(imgName, imgIcon, imgPath, imgArch, imgCdrom, imgExtra, vmID, VMManager.startRandomPort());
+                    } else {
+                        Toast.makeText(getApplicationContext(), "The data for the new virtual machine is corrupted and cannot be created.", Toast.LENGTH_LONG).show();
                     }
-                    if (mapForCreateNewVM.containsKey("imgPath")) {
-                        imgPath = Objects.requireNonNull(mapForCreateNewVM.get("imgPath")).toString();
-                    }
-                    if (mapForCreateNewVM.containsKey("imgArch")) {
-                        imgArch = Objects.requireNonNull(mapForCreateNewVM.get("imgArch")).toString();
-                    }
-                    if (mapForCreateNewVM.containsKey("imgCdrom")) {
-                        imgCdrom = Objects.requireNonNull(mapForCreateNewVM.get("imgCdrom")).toString();
-                    }
-                    if (mapForCreateNewVM.containsKey("imgExtra")) {
-                        imgExtra = Objects.requireNonNull(mapForCreateNewVM.get("imgExtra")).toString();
-                    }
-                    VMManager.createNewVM(imgName, imgIcon, imgPath, imgArch, imgCdrom, imgExtra, vmID, VMManager.startRandomPort());
-                } else {
-                    Toast.makeText(getApplicationContext(), "The data for the new virtual machine is corrupted and cannot be created.", Toast.LENGTH_LONG).show();
                 }
             } else {
                 Toast.makeText(getApplicationContext(), "There is no data about the new virtual machine to create.", Toast.LENGTH_LONG).show();

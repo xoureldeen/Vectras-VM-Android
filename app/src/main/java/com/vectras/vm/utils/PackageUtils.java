@@ -3,10 +3,13 @@ package com.vectras.vm.utils;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.util.Log;
 
 import com.vectras.vm.AppConfig;
 
 public class PackageUtils {
+    private static final String TAG = "PackageUtils";
+
     public static boolean isInstalled(String packagename, Context context) {
         PackageManager pm = context.getPackageManager();
         try {
@@ -15,6 +18,16 @@ public class PackageUtils {
         } catch (PackageManager.NameNotFoundException e) {
             return  false;
         }
+    }
+
+    public static int getVersionCode(String packageName, Context context) {
+        try {
+            PackageInfo packageInfo = context.getPackageManager().getPackageInfo(packageName, 0);
+            return packageInfo.versionCode;
+        } catch (Exception e){
+            Log.e(TAG, "getVersionCode: ", e);
+        }
+        return 0;
     }
 
     public static int getThisVersionCode(Context context) {
