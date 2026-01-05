@@ -27,13 +27,11 @@ import java.io.IOException;
 import java.util.Locale;
 
 public class SplashActivity extends AppCompatActivity implements Runnable {
-    public static SplashActivity activity;
     private static final String TAG = "SplashActivity";
 
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        activity = this;
         UIUtils.edgeToEdge(this);
         setContentView(R.layout.activity_splash);
         UIUtils.setOnApplyWindowInsetsListener(findViewById(R.id.main));
@@ -41,11 +39,11 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
         setupFolders();
 
         try {
-            new Handler().postDelayed(activity, 1000);
+            new Handler().postDelayed(this, 1000);
         } catch (Exception e) {
             Log.e(TAG, "Handler().postDelayed: ", e);
         }
-        MainSettingsManager.setOrientationSetting(activity, 1);
+        MainSettingsManager.setOrientationSetting(this, 1);
 
         setupFiles();
 
@@ -64,7 +62,7 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
     }
 
     public void setupFiles() {
-        File tmpDir = new File(activity.getFilesDir(), "usr/tmp");
+        File tmpDir = new File(getFilesDir(), "usr/tmp");
         if (!tmpDir.isDirectory()) {
             if (tmpDir.mkdirs()) {
                 FileUtils.chmod(tmpDir, 0771);
@@ -84,7 +82,7 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
             if (!distroDir.mkdirs()) Log.e(TAG, "distro: Directory creation failed!");
         }
 
-        File cvbiDir = new File(FileUtils.getExternalFilesDirectory(activity).getPath() + "/cvbi");
+        File cvbiDir = new File(FileUtils.getExternalFilesDirectory(this).getPath() + "/cvbi");
         if (!cvbiDir.exists()) {
             if (!cvbiDir.mkdirs()) Log.e(TAG, "cvbi: Directory creation failed!");
         }
@@ -121,11 +119,11 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
         new Thread(() -> FileInstaller.installFiles(getApplicationContext(), true)).start();
     }
 
-    public static void setupFolders() {
+    private void setupFolders() {
         try {
-            StartVM.cache = activity.getCacheDir().getAbsolutePath();
+            StartVM.cache = getCacheDir().getAbsolutePath();
         } catch (Exception e) {
-            Log.e(TAG, activity.getCacheDir().getAbsolutePath() + ": Directory creation failed!", e);
+            Log.e(TAG, getCacheDir().getAbsolutePath() + ": Directory creation failed!", e);
         }
     }
 
