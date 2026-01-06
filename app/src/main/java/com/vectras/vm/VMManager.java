@@ -1343,6 +1343,10 @@ public class VMManager {
         }).start();
     }
 
+    public static void pressPowerButton() {
+        new Thread(() -> QmpClient.sendCommand("{ \"execute\": \"system_powerdown\" }")).start();
+    }
+
     public static void sendLeftMouseKey() {
         pressAKey("left");
     }
