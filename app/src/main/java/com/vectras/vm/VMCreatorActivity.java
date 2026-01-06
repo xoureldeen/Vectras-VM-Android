@@ -564,8 +564,9 @@ public class VMCreatorActivity extends AppCompatActivity {
             FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", "[]");
         }
 
+        boolean isSaveCompleted;
         if (modify) {
-            VMManager.editVM(Objects.requireNonNull(binding.title.getText()).toString(),
+            isSaveCompleted = VMManager.editVM(Objects.requireNonNull(binding.title.getText()).toString(),
                     thumbnailPath,
                     Objects.requireNonNull(binding.drive.getText()).toString(),
                     MainSettingsManager.getArch(this),
@@ -573,12 +574,21 @@ public class VMCreatorActivity extends AppCompatActivity {
                     Objects.requireNonNull(binding.qemu.getText()).toString(),
                     getIntent().getIntExtra("POS", 0));
         } else {
-            VMManager.createNewVM(Objects.requireNonNull(binding.title.getText()).toString(),
+            isSaveCompleted = VMManager.createNewVM(Objects.requireNonNull(binding.title.getText()).toString(),
                     thumbnailPath,
                     Objects.requireNonNull(binding.drive.getText()).toString(),
                     MainSettingsManager.getArch(this),
                     Objects.requireNonNull(binding.cdrom.getText()).toString(),
                     Objects.requireNonNull(binding.qemu.getText()).toString(), vmID, port);
+        }
+
+        if (!isSaveCompleted) {
+            DialogUtils.oneDialog(
+                    this,
+                    getString(R.string.oops),
+                    getString(R.string.unable_to_save_please_try_again_later),
+                    R.drawable.error_96px);
+            return;
         }
 
         created = true;
@@ -808,6 +818,8 @@ public class VMCreatorActivity extends AppCompatActivity {
                 .create();
 
         progressDialog.show();
+
+        Log.i(TAG, "importRom: Extracting from " + filePath + " to " + AppConfig.vmFolder + vmID);
 
         new Thread(() -> {
             boolean result = isUseUri ? ZipUtils.extract(

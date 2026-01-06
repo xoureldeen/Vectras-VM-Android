@@ -761,20 +761,22 @@ public class FileUtils {
 
 	}
 
-	public static void writeToFile(String folderPath, String fileName, String content) {
+	public static boolean writeToFile(String folderPath, String fileName, String content) {
 		File vDir = new File(folderPath);
 		if (!vDir.exists()) {
-			vDir.mkdirs();
+			if (!vDir.mkdirs()) return false;
 		}
 		File file = new File(folderPath, fileName);
-		FileOutputStream outputStream = null;
+		FileOutputStream outputStream;
 		try {
 			outputStream = new FileOutputStream(file);
 			outputStream.write(content.getBytes());
 			outputStream.close();
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			Log.e(TAG, "writeToFile: ", e);
+			return false;
 		}
+		return true;
 	}
 
 	public static void getAListOfAllFilesAndFoldersInADirectory(String path, ArrayList<String> list) {

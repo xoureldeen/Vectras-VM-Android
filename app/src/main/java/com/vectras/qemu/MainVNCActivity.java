@@ -1350,7 +1350,10 @@ public class MainVNCActivity extends VncCanvasActivity {
                     sendCtrlAtlDelKey();
                 } else {
                     Boolean useKeyEvent = (Boolean) _data.get(_position).get("useKeyEvent");
-                    if (useKeyEvent != null && useKeyEvent) {
+                    Boolean sendWithQMP = (Boolean) _data.get(_position).get("useQMP");
+                    if (sendWithQMP != null && sendWithQMP) {
+                        VMManager.pressAKey(Objects.requireNonNull(_data.get(_position).get("keycode")).toString());
+                    } else if (useKeyEvent != null && useKeyEvent) {
                         dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, Integer.parseInt(Objects.requireNonNull(_data.get(_position).get("keycode")).toString())));
                         dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, Integer.parseInt(Objects.requireNonNull(_data.get(_position).get("keycode")).toString())));
                     } else {
