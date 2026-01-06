@@ -239,14 +239,14 @@ public class Terminal {
 
                 // Read the input stream for the output of the command
                 String line;
-                while ((line = reader.readLine()) != null) {
+                while (qemuProcess.isAlive() && (line = reader.readLine()) != null) {
 //                    Log.d(TAG, line);
                     com.vectras.vm.logger.VectrasStatus.logError("<font color='#4db6ac'>VTERM: >" + line + "</font>");
                     output.append(line).append("\n");
                 }
 
                 // Read any errors from the error stream
-                while ((line = errorReader.readLine()) != null) {
+                while (qemuProcess.isAlive() && (line = errorReader.readLine()) != null) {
                     Log.w(TAG, line);
                     com.vectras.vm.logger.VectrasStatus.logError("<font color='red'>VTERM ERROR: >" + line + "</font>");
                     output.append(line).append("\n");

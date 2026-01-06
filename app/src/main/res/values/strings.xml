@@ -500,6 +500,7 @@
     <string name="an_error_occurred_and_vm_was_not_modified">An error occurred and VM was not modified.</string>
     <string name="edit_with_create_command">Edit with Create command</string>
     <string name="edit_with_create_command_content">You can edit this VM with Create command app.</string>
+    <string name="unable_to_save_please_try_again_later">Unable to save, please try again later.</string>
 
 
     <!--======================TERMUX STRINGS====================-->

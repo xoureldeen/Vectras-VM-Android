@@ -201,6 +201,7 @@ public class ListUtils {
 
         mapForAddItems.put("keyname", "Ctrl + Alt + Del");
         mapForAddItems.put("keycode", 0);
+        mapForAddItems.put("useQMP", false);
         mapForAddItems.put("useKeyEvent", false);
         mapForAddItems.put("useIcon", false);
         mapForAddItems.put("rIcon", 0);
@@ -209,6 +210,7 @@ public class ListUtils {
         mapForAddItems = new HashMap<>();
         mapForAddItems.put("keyname", "Esc");
         mapForAddItems.put("keycode", KeyEvent.KEYCODE_ESCAPE);
+        mapForAddItems.put("useQMP", false);
         mapForAddItems.put("useKeyEvent", true);
         mapForAddItems.put("useIcon", false);
         mapForAddItems.put("rIcon", 0);
@@ -216,7 +218,8 @@ public class ListUtils {
 
         mapForAddItems = new HashMap<>();
         mapForAddItems.put("keyname", "Windows");
-        mapForAddItems.put("keycode", 91);
+        mapForAddItems.put("keycode", "KEY_LEFTMETA");
+        mapForAddItems.put("useQMP", true);
         mapForAddItems.put("useKeyEvent", false);
         mapForAddItems.put("useIcon", true);
         mapForAddItems.put("rIcon", R.drawable.grid_view_24px);
@@ -225,7 +228,8 @@ public class ListUtils {
 //		mapForAddItems = new HashMap<>();
 //		mapForAddItems.put("keyname", "Menu");
 //		mapForAddItems.put("keycode", 93);
-//		mapForAddItems.put("useKeyEvent", false);
+//		mapForAddItems.put("useQMP", false);
+        mapForAddItems.put("useKeyEvent", false);
 //		mapForAddItems.put("useIcon", true);
 //		mapForAddItems.put("rIcon", R.drawable.menu_24px);
 //		listmapForSendKey.add(mapForAddItems);
@@ -233,6 +237,7 @@ public class ListUtils {
         mapForAddItems = new HashMap<>();
         mapForAddItems.put("keyname", "Backspace");
         mapForAddItems.put("keycode", KeyEvent.KEYCODE_DEL);
+        mapForAddItems.put("useQMP", false);
         mapForAddItems.put("useKeyEvent", true);
         mapForAddItems.put("useIcon", true);
         mapForAddItems.put("rIcon", R.drawable.backspace_24px);
@@ -241,6 +246,7 @@ public class ListUtils {
         mapForAddItems = new HashMap<>();
         mapForAddItems.put("keyname", "Enter");
         mapForAddItems.put("keycode", KeyEvent.KEYCODE_ENTER);
+        mapForAddItems.put("useQMP", false);
         mapForAddItems.put("useKeyEvent", true);
         mapForAddItems.put("useIcon", true);
         mapForAddItems.put("rIcon", R.drawable.keyboard_return_24px);
@@ -249,6 +255,7 @@ public class ListUtils {
         mapForAddItems = new HashMap<>();
         mapForAddItems.put("keyname", "Tab");
         mapForAddItems.put("keycode", KeyEvent.KEYCODE_TAB);
+        mapForAddItems.put("useQMP", false);
         mapForAddItems.put("useKeyEvent", true);
         mapForAddItems.put("useIcon", true);
         mapForAddItems.put("rIcon", R.drawable.sync_alt_24px);
@@ -257,6 +264,7 @@ public class ListUtils {
         mapForAddItems = new HashMap<>();
         mapForAddItems.put("keyname", "Up");
         mapForAddItems.put("keycode", KeyEvent.KEYCODE_DPAD_UP);
+        mapForAddItems.put("useQMP", false);
         mapForAddItems.put("useKeyEvent", true);
         mapForAddItems.put("useIcon", true);
         mapForAddItems.put("rIcon", R.drawable.arrow_upward_24px);
@@ -265,6 +273,7 @@ public class ListUtils {
         mapForAddItems = new HashMap<>();
         mapForAddItems.put("keyname", "Down");
         mapForAddItems.put("keycode", KeyEvent.KEYCODE_DPAD_DOWN);
+        mapForAddItems.put("useQMP", false);
         mapForAddItems.put("useKeyEvent", true);
         mapForAddItems.put("useIcon", true);
         mapForAddItems.put("rIcon", R.drawable.arrow_downward_24px);
@@ -273,6 +282,7 @@ public class ListUtils {
         mapForAddItems = new HashMap<>();
         mapForAddItems.put("keyname", "Left");
         mapForAddItems.put("keycode", KeyEvent.KEYCODE_DPAD_LEFT);
+        mapForAddItems.put("useQMP", false);
         mapForAddItems.put("useKeyEvent", true);
         mapForAddItems.put("useIcon", true);
         mapForAddItems.put("rIcon", R.drawable.arrow_back_24px);
@@ -281,6 +291,7 @@ public class ListUtils {
         mapForAddItems = new HashMap<>();
         mapForAddItems.put("keyname", "Left");
         mapForAddItems.put("keycode", KeyEvent.KEYCODE_DPAD_RIGHT);
+        mapForAddItems.put("useQMP", false);
         mapForAddItems.put("useKeyEvent", true);
         mapForAddItems.put("useIcon", true);
         mapForAddItems.put("rIcon", R.drawable.arrow_forward_24px);
@@ -289,6 +300,7 @@ public class ListUtils {
         mapForAddItems = new HashMap<>();
         mapForAddItems.put("keyname", "Home");
         mapForAddItems.put("keycode", KeyEvent.KEYCODE_MOVE_HOME);
+        mapForAddItems.put("useQMP", false);
         mapForAddItems.put("useKeyEvent", true);
         mapForAddItems.put("useIcon", true);
         mapForAddItems.put("rIcon", R.drawable.vertical_align_top_24px);
@@ -297,6 +309,7 @@ public class ListUtils {
         mapForAddItems = new HashMap<>();
         mapForAddItems.put("keyname", "End");
         mapForAddItems.put("keycode", KeyEvent.KEYCODE_MOVE_END);
+        mapForAddItems.put("useQMP", false);
         mapForAddItems.put("useKeyEvent", true);
         mapForAddItems.put("useIcon", true);
         mapForAddItems.put("rIcon", R.drawable.vertical_align_bottom_24px);
@@ -305,6 +318,7 @@ public class ListUtils {
         mapForAddItems = new HashMap<>();
         mapForAddItems.put("keyname", "End");
         mapForAddItems.put("keycode", KeyEvent.KEYCODE_PAGE_UP);
+        mapForAddItems.put("useQMP", false);
         mapForAddItems.put("useKeyEvent", true);
         mapForAddItems.put("useIcon", true);
         mapForAddItems.put("rIcon", R.drawable.arrow_warm_up_24px);
@@ -313,6 +327,7 @@ public class ListUtils {
         mapForAddItems = new HashMap<>();
         mapForAddItems.put("keyname", "End");
         mapForAddItems.put("keycode", KeyEvent.KEYCODE_PAGE_DOWN);
+        mapForAddItems.put("useQMP", false);
         mapForAddItems.put("useKeyEvent", true);
         mapForAddItems.put("useIcon", true);
         mapForAddItems.put("rIcon", R.drawable.arrow_cool_down_24px);
@@ -321,6 +336,7 @@ public class ListUtils {
         mapForAddItems = new HashMap<>();
         mapForAddItems.put("keyname", "End");
         mapForAddItems.put("keycode", KeyEvent.KEYCODE_INSERT);
+        mapForAddItems.put("useQMP", false);
         mapForAddItems.put("useKeyEvent", true);
         mapForAddItems.put("useIcon", true);
         mapForAddItems.put("rIcon", R.drawable.insert_text_24px);
@@ -329,6 +345,7 @@ public class ListUtils {
         mapForAddItems = new HashMap<>();
         mapForAddItems.put("keyname", "F1");
         mapForAddItems.put("keycode", KeyEvent.KEYCODE_F1);
+        mapForAddItems.put("useQMP", false);
         mapForAddItems.put("useKeyEvent", true);
         mapForAddItems.put("useIcon", false);
         mapForAddItems.put("rIcon", 0);
@@ -337,6 +354,7 @@ public class ListUtils {
         mapForAddItems = new HashMap<>();
         mapForAddItems.put("keyname", "F2");
         mapForAddItems.put("keycode", KeyEvent.KEYCODE_F2);
+        mapForAddItems.put("useQMP", false);
         mapForAddItems.put("useKeyEvent", true);
         mapForAddItems.put("useIcon", false);
         mapForAddItems.put("rIcon", 0);
@@ -345,6 +363,7 @@ public class ListUtils {
         mapForAddItems = new HashMap<>();
         mapForAddItems.put("keyname", "F3");
         mapForAddItems.put("keycode", KeyEvent.KEYCODE_F3);
+        mapForAddItems.put("useQMP", false);
         mapForAddItems.put("useKeyEvent", true);
         mapForAddItems.put("useIcon", false);
         mapForAddItems.put("rIcon", 0);
@@ -353,6 +372,7 @@ public class ListUtils {
         mapForAddItems = new HashMap<>();
         mapForAddItems.put("keyname", "F4");
         mapForAddItems.put("keycode", KeyEvent.KEYCODE_F4);
+        mapForAddItems.put("useQMP", false);
         mapForAddItems.put("useKeyEvent", true);
         mapForAddItems.put("useIcon", false);
         mapForAddItems.put("rIcon", 0);
@@ -361,6 +381,7 @@ public class ListUtils {
         mapForAddItems = new HashMap<>();
         mapForAddItems.put("keyname", "F5");
         mapForAddItems.put("keycode", KeyEvent.KEYCODE_F5);
+        mapForAddItems.put("useQMP", false);
         mapForAddItems.put("useKeyEvent", true);
         mapForAddItems.put("useIcon", false);
         mapForAddItems.put("rIcon", 0);
@@ -369,6 +390,7 @@ public class ListUtils {
         mapForAddItems = new HashMap<>();
         mapForAddItems.put("keyname", "F6");
         mapForAddItems.put("keycode", KeyEvent.KEYCODE_F6);
+        mapForAddItems.put("useQMP", false);
         mapForAddItems.put("useKeyEvent", true);
         mapForAddItems.put("useIcon", false);
         mapForAddItems.put("rIcon", 0);
@@ -377,6 +399,7 @@ public class ListUtils {
         mapForAddItems = new HashMap<>();
         mapForAddItems.put("keyname", "F7");
         mapForAddItems.put("keycode", KeyEvent.KEYCODE_F7);
+        mapForAddItems.put("useQMP", false);
         mapForAddItems.put("useKeyEvent", true);
         mapForAddItems.put("useIcon", false);
         mapForAddItems.put("rIcon", 0);
@@ -385,6 +408,7 @@ public class ListUtils {
         mapForAddItems = new HashMap<>();
         mapForAddItems.put("keyname", "F8");
         mapForAddItems.put("keycode", KeyEvent.KEYCODE_F8);
+        mapForAddItems.put("useQMP", false);
         mapForAddItems.put("useKeyEvent", true);
         mapForAddItems.put("useIcon", false);
         mapForAddItems.put("rIcon", 0);
@@ -393,6 +417,7 @@ public class ListUtils {
         mapForAddItems = new HashMap<>();
         mapForAddItems.put("keyname", "F9");
         mapForAddItems.put("keycode", KeyEvent.KEYCODE_F9);
+        mapForAddItems.put("useQMP", false);
         mapForAddItems.put("useKeyEvent", true);
         mapForAddItems.put("useIcon", false);
         mapForAddItems.put("rIcon", 0);
@@ -401,6 +426,7 @@ public class ListUtils {
         mapForAddItems = new HashMap<>();
         mapForAddItems.put("keyname", "F10");
         mapForAddItems.put("keycode", KeyEvent.KEYCODE_F10);
+        mapForAddItems.put("useQMP", false);
         mapForAddItems.put("useKeyEvent", true);
         mapForAddItems.put("useIcon", false);
         mapForAddItems.put("rIcon", 0);
@@ -409,6 +435,7 @@ public class ListUtils {
         mapForAddItems = new HashMap<>();
         mapForAddItems.put("keyname", "F11");
         mapForAddItems.put("keycode", KeyEvent.KEYCODE_F11);
+        mapForAddItems.put("useQMP", false);
         mapForAddItems.put("useKeyEvent", true);
         mapForAddItems.put("useIcon", false);
         mapForAddItems.put("rIcon", 0);
@@ -417,6 +444,7 @@ public class ListUtils {
         mapForAddItems = new HashMap<>();
         mapForAddItems.put("keyname", "F12");
         mapForAddItems.put("keycode", KeyEvent.KEYCODE_F12);
+        mapForAddItems.put("useQMP", false);
         mapForAddItems.put("useKeyEvent", true);
         mapForAddItems.put("useIcon", false);
         mapForAddItems.put("rIcon", 0);

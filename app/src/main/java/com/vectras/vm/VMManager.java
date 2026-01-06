@@ -106,9 +106,25 @@ public class VMManager {
         }
 
         vmList.add(0, vmConfigMap);
-        writeToVMList(new Gson().toJson(vmList));
-        writeToVMConfig(Objects.requireNonNull(vmConfigMap.get("vmID")).toString(), new Gson().toJson(vmConfigMap));
-        return true;
+        return writeToVMList(new Gson().toJson(vmList)) &&
+                writeToVMConfig(Objects.requireNonNull(vmConfigMap.get("vmID")).toString(), new Gson().toJson(vmConfigMap));
+    }
+
+    public static boolean addToVMList(HashMap<String, Object> vmConfigMap, String vmID) {
+        String vmListJson = FileUtils.readAFile(AppConfig.romsdatajson);
+        if (!JSONUtils.isValidFromString(vmListJson)) return false;
+
+        ArrayList<HashMap<String, Object>> vmList = new Gson().fromJson(vmListJson, new TypeToken<ArrayList<HashMap<String, Object>>>() {
+        }.getType());
+
+        if (!vmID.isEmpty()) {
+            generatedVMId = vmID;
+            vmConfigMap.put("vmID", generatedVMId);
+        }
+
+        vmList.add(0, vmConfigMap);
+        return writeToVMList(new Gson().toJson(vmList)) &&
+                writeToVMConfig(Objects.requireNonNull(vmConfigMap.get("vmID")).toString(), new Gson().toJson(vmConfigMap));
     }
 
     public static boolean replaceToVMList(int postion, String vmId, String vmConfigJson) {
@@ -137,23 +153,48 @@ public class VMManager {
             return false;
         }
 
-        writeToVMList(new Gson().toJson(vmList));
-        writeToVMConfig(Objects.requireNonNull(vmConfigMap.get("vmID")).toString(), new Gson().toJson(vmConfigMap));
-        return true;
+        return writeToVMList(new Gson().toJson(vmList)) &&
+                writeToVMConfig(Objects.requireNonNull(vmConfigMap.get("vmID")).toString(), new Gson().toJson(vmConfigMap));
     }
 
-    public static void writeToVMList(String content) {
-        FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", content);
+    public static boolean replaceToVMList(int postion, String vmId, HashMap<String, Object> vmConfigMap) {
+        String vmListJson = FileUtils.readAFile(AppConfig.romsdatajson);
+        if (!JSONUtils.isValidFromString(vmListJson)) return false;
+
+        int finalPosition = postion;
+        ArrayList<HashMap<String, Object>> vmList = new Gson().fromJson(vmListJson, new TypeToken<ArrayList<HashMap<String, Object>>>() {
+        }.getType());
+
+        if (postion == -1) {
+            for (int _repeat = 0; _repeat < vmList.size(); _repeat++) {
+                if (vmList.get(_repeat).containsKey("vmID")
+                        && ((!vmId.isEmpty() && Objects.requireNonNull(vmList.get(_repeat).get("vmID")).toString().equals(vmId)) || Objects.requireNonNull(vmList.get(_repeat).get("vmID")).toString().equals(Objects.requireNonNull(vmConfigMap.get("vmID")).toString()))) {
+                    finalPosition = _repeat;
+                    break;
+                }
+            }
+        }
+
+        if (finalPosition >= 0 && finalPosition < vmList.size()) {
+            vmList.set(finalPosition, vmConfigMap);
+        } else {
+            return false;
+        }
+
+        return writeToVMList(new Gson().toJson(vmList)) &&
+                writeToVMConfig(Objects.requireNonNull(vmConfigMap.get("vmID")).toString(), new Gson().toJson(vmConfigMap));
     }
 
-    public static void writeToVMConfig(String vmID, String content) {
-        FileUtils.writeToFile(AppConfig.maindirpath + "/roms/" + vmID, "rom-data.json", content.replace("\\u003d", "="));
-        FileUtils.writeToFile(AppConfig.maindirpath + "/roms/" + vmID, "vmID.txt", vmID);
+    public static boolean writeToVMList(String content) {
+        return FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", content);
     }
 
-    public static void createNewVM(String name, String thumbnail, String drive, String arch, String cdrom, String params, String vmID, int port) {
-        ArrayList<HashMap<String, Object>> vmList;
+    public static boolean writeToVMConfig(String vmID, String content) {
+        return FileUtils.writeToFile(AppConfig.maindirpath + "/roms/" + vmID, "rom-data.json", content.replace("\\u003d", "=")) &&
+                FileUtils.writeToFile(AppConfig.maindirpath + "/roms/" + vmID, "vmID.txt", vmID);
+    }
 
+    public static boolean createNewVM(String name, String thumbnail, String drive, String arch, String cdrom, String params, String vmID, int port) {
         HashMap<String, Object> vmConfigMap = new HashMap<>();
         vmConfigMap.put("imgName", name);
         vmConfigMap.put("imgIcon", thumbnail);
@@ -164,16 +205,10 @@ public class VMManager {
         vmConfigMap.put("vmID", vmID);
         vmConfigMap.put("qmpPort", port);
 
-        vmList = new Gson().fromJson(FileUtils.readAFile(AppConfig.romsdatajson), new TypeToken<ArrayList<HashMap<String, Object>>>() {
-        }.getType());
-
-        vmList.add(0, vmConfigMap);
-
-        writeToVMList(new Gson().toJson(vmList));
-        writeToVMConfig(vmID, new Gson().toJson(vmConfigMap));
+        return addToVMList(vmConfigMap, vmID);
     }
 
-    public static void editVM(String name, String thumbnail, String drive, String arch, String cdrom, String params, int position) {
+    public static boolean editVM(String name, String thumbnail, String drive, String arch, String cdrom, String params, int position) {
         ArrayList<HashMap<String, Object>> vmList;
 
         vmList = new Gson().fromJson(FileUtils.readAFile(AppConfig.romsdatajson), new TypeToken<ArrayList<HashMap<String, Object>>>() {
@@ -198,10 +233,7 @@ public class VMManager {
             vmConfigMap.put("vmID", idGenerator());
         }
 
-        vmList.set(position, vmConfigMap);
-
-        writeToVMList(new Gson().toJson(vmList));
-        writeToVMConfig(Objects.requireNonNull(vmConfigMap.get("vmID")).toString(), new Gson().toJson(vmConfigMap));
+        return replaceToVMList(position, "", vmConfigMap);
     }
 
     public static void deleteVMDialog(String _vmName, int _position, Activity _activity) {
@@ -1312,37 +1344,37 @@ public class VMManager {
     }
 
     public static void sendLeftMouseKey() {
-        new Thread(() -> {
-            try {
-                keyDown("left");
-                Thread.sleep(50);
-                keyUp("left");
-            } catch (InterruptedException e) {
-                Log.d(TAG, "sendLeftMouseKey: " + e.getMessage());
-            }
-        }).start();
+        pressAKey("left");
     }
 
     public static void sendRightMouseKey() {
-        new Thread(() -> {
-            try {
-                keyDown("right");
-                Thread.sleep(50);
-                keyUp("right");
-            } catch (InterruptedException e) {
-                Log.d(TAG, "sendRightMouseKey: " + e.getMessage());
-            }
-        }).start();
+        pressAKey("right");
     }
 
     public static void sendMiddleMouseKey() {
+        pressAKey("middle");
+    }
+
+    public static void sendSuperKey() {
+        keyDown("KEY_LEFTMETA");
+    }
+
+    public static void sendHoldSuperKey() {
+        keyDown("KEY_LEFTMETA");
+    }
+
+    public static void sendReleaseSuperKey() {
+        keyUp("KEY_LEFTMETA");
+    }
+
+    public static void pressAKey(String key) {
         new Thread(() -> {
             try {
-                keyDown("middle");
+                keyDown(key);
                 Thread.sleep(50);
-                keyUp("middle");
+                keyUp(key);
             } catch (InterruptedException e) {
-                Log.d(TAG, "sendMiddleMouseKey: " + e.getMessage());
+                Log.d(TAG, "pressAKey: " + e.getMessage());
             }
         }).start();
     }

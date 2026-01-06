@@ -165,8 +165,6 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/qemu_params"
                 android:theme="@style/AppTheme.TextInput"
-                app:endIconContentDescription="@string/qemu_create_cmd"
-                app:endIconMode="custom"
                 app:startIconDrawable="@drawable/ic_qemu">
 
                 <com.google.android.material.textfield.TextInputEditText

@@ -364,11 +364,6 @@ public class ZipUtils {
     public static boolean isAllowExtract(ZipEntry entry, String targetDir) throws IOException {
         String entryName = entry.getName();
 
-        if (entryName.startsWith("/") || entryName.startsWith("\\")) {
-            Log.w(TAG, "Absolute path blocked: " + entryName);
-            return false;
-        }
-
         File destDir = new File(targetDir);
         File outFile = new File(destDir, entryName);
 
