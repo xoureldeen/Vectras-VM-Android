@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.vectras.qemu.MainSettingsManager;
+import com.vectras.vm.utils.TextUtils;
 
 public class RamInfo {
     public static Activity activity;
@@ -29,7 +30,7 @@ public class RamInfo {
         int freeRamInt = safeLongToInt(freeMem);
         int totalRamInt = safeLongToInt(totalMem);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        if (prefs.getBoolean("customMemory", false)) {
+        if (prefs.getBoolean("customMemory", false) && TextUtils.isNumberOnly(prefs.getString("memory", String.valueOf(256)))) {
             return Integer.parseInt(prefs.getString("memory", String.valueOf(256)));
         } else {
             return freeRamInt - 100;

@@ -925,8 +925,8 @@ public class MainVNCActivity extends VncCanvasActivity {
             newFragment.show(ft, "Logger");
         });
 
-        bindingControls.shutdownBtn.setOnClickListener(v -> DialogUtils.threeDialog(this, getString(R.string.power), getString(R.string.shutdown_or_reset_content_vnc), getString(R.string.shutdown), getString(R.string.reset), getString(R.string.close), true, R.drawable.power_settings_new_24px, true,
-                this::shutdownthisvm, VMManager::resetCurrentVM, null, null));
+        bindingControls.shutdownBtn.setOnClickListener(v -> DialogUtils.threeDialog(this, getString(R.string.power), getString(R.string.shutdown_or_reset_content_vnc), getString(R.string.shutdown), getString(R.string.reset), getString(R.string.power), true, R.drawable.power_settings_new_24px, true,
+                this::shutdownthisvm, VMManager::resetCurrentVM, VMManager::pressPowerButton, null));
 
         bindingControls.shutdownBtn.setOnLongClickListener(view -> {
             DialogUtils.twoDialog(this, "Exit", "You will be left here but the virtual machine will continue to run.", "Exit", getString(R.string.cancel), true, R.drawable.exit_to_app_24px, true,

@@ -9,6 +9,8 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.util.Log;
 
 import androidx.preference.PreferenceManager;
@@ -423,6 +425,13 @@ public class MainSettingsManager extends AppCompatActivity
             assert customMemory != null;
             EditTextPreference memory = findPreference("memory");
             assert memory != null;
+
+            memory.setOnBindEditTextListener(editText -> {
+                editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                editText.setFilters(new InputFilter[]{
+                        new InputFilter.LengthFilter(4)
+                });
+            });
 
             if (!customMemory.isChecked()) {
                 memory.setEnabled(false);

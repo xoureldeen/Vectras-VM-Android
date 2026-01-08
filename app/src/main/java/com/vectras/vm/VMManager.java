@@ -79,6 +79,8 @@ public class VMManager {
         ArrayList<HashMap<String, Object>> vmList = new Gson().fromJson(vmJsonListContent, new TypeToken<ArrayList<HashMap<String, Object>>>() {
         }.getType());
 
+        if (vmList == null) return false;
+
         for (int _repeat = 0; _repeat < vmList.size(); _repeat++) {
             if (vmList.get(_repeat).containsKey("vmID")
                     && Objects.requireNonNull(vmList.get(_repeat).get("vmID")).toString().equals(vmId)) {
@@ -97,6 +99,9 @@ public class VMManager {
 
         ArrayList<HashMap<String, Object>> vmList = new Gson().fromJson(vmListJson, new TypeToken<ArrayList<HashMap<String, Object>>>() {
         }.getType());
+
+        if (vmList == null) return false;
+
         HashMap<String, Object> vmConfigMap = new Gson().fromJson(vmConfigJson, new TypeToken<HashMap<String, Object>>() {
         }.getType());
 
@@ -117,6 +122,8 @@ public class VMManager {
         ArrayList<HashMap<String, Object>> vmList = new Gson().fromJson(vmListJson, new TypeToken<ArrayList<HashMap<String, Object>>>() {
         }.getType());
 
+        if (vmList == null) return false;
+
         if (!vmID.isEmpty()) {
             generatedVMId = vmID;
             vmConfigMap.put("vmID", generatedVMId);
@@ -134,6 +141,9 @@ public class VMManager {
         int finalPosition = postion;
         ArrayList<HashMap<String, Object>> vmList = new Gson().fromJson(vmListJson, new TypeToken<ArrayList<HashMap<String, Object>>>() {
         }.getType());
+
+        if (vmList == null) return false;
+
         HashMap<String, Object> vmConfigMap = new Gson().fromJson(vmConfigJson, new TypeToken<HashMap<String, Object>>() {
         }.getType());
 
@@ -164,6 +174,8 @@ public class VMManager {
         int finalPosition = postion;
         ArrayList<HashMap<String, Object>> vmList = new Gson().fromJson(vmListJson, new TypeToken<ArrayList<HashMap<String, Object>>>() {
         }.getType());
+
+        if (vmList == null) return false;
 
         if (postion == -1) {
             for (int _repeat = 0; _repeat < vmList.size(); _repeat++) {
@@ -1341,6 +1353,10 @@ public class VMManager {
                 }
             }
         }).start();
+    }
+
+    public static void pressPowerButton() {
+        new Thread(() -> QmpClient.sendCommand("{ \"execute\": \"system_powerdown\" }")).start();
     }
 
     public static void sendLeftMouseKey() {

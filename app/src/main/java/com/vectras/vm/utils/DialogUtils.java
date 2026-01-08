@@ -23,6 +23,7 @@ import android.widget.TextView;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.color.MaterialColors;
+import com.vectras.vm.AppConfig;
 import com.vectras.vm.R;
 
 public class DialogUtils {
@@ -254,10 +255,10 @@ public class DialogUtils {
                     _context.getResources().getString(R.string.join), _context.getResources().getString(R.string.cancel), _context.getResources().getString(R.string.dont_show_again),
                     true, R.drawable.send_24px, true,
                     () -> {
-                        String tg = "https://t.me/vectras_os";
-                        Intent f = new Intent(ACTION_VIEW);
-                        f.setData(Uri.parse(tg));
-                        _context.startActivity(f);
+                        Intent intent = new Intent(ACTION_VIEW);
+                        intent.addCategory(Intent.CATEGORY_BROWSABLE);
+                        intent.setData(Uri.parse(AppConfig.telegramLink));
+                        _context.startActivity(intent);
                     }, null,
                     () -> {
                         SharedPreferences.Editor edit = prefs.edit();

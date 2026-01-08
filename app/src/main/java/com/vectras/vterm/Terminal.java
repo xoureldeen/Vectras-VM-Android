@@ -24,6 +24,7 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
 import com.vectras.vm.R;
 import com.vectras.vm.VMManager;
@@ -35,32 +36,14 @@ import com.vectras.vm.utils.NotificationUtils;
 
 public class Terminal {
     private static final String TAG = "Vterm";
-    private Context context;
-    private static String user = "root";
+    private final Context context;
+    private static final String user = "root";
 
     public static Process qemuProcess;
     public static String DISPLAY = ":0";
 
     public Terminal(Context context) {
         this.context = context;
-    }
-
-
-    private String getLocalIpAddress() {
-        try {
-            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
-                NetworkInterface intf = en.nextElement();
-                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
-                    InetAddress inetAddress = enumIpAddr.nextElement();
-                    if (!inetAddress.isLoopbackAddress() && Objects.requireNonNull(inetAddress.getHostAddress()).contains(".")) {
-                        return inetAddress.getHostAddress();
-                    }
-                }
-            }
-        } catch (SocketException ex) {
-            ex.printStackTrace();
-        }
-        return null;
     }
 
     private void showDialog(String message, Context context, String usercommand) {
@@ -77,7 +60,7 @@ public class Terminal {
     }
 
     public void executeShellCommand(String userCommand, boolean showResultDialog, boolean showProgressDialog, String progressDialogMessage, Context dialogActivity) {
-        StringBuilder output = new StringBuilder();
+        AtomicReference<StringBuilder> output = new AtomicReference<>(new StringBuilder());
         StringBuilder errors = new StringBuilder();
         Log.d(TAG, userCommand);
         com.vectras.vm.logger.VectrasStatus.logError("<font color='#4db6ac'>VTERM: >" + userCommand + "</font>");
@@ -131,35 +114,10 @@ public class Terminal {
                 processBuilder.command(prootCommand);
                 qemuProcess = processBuilder.start();
 
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(qemuProcess.getOutputStream()));
-                BufferedReader reader = new BufferedReader(new InputStreamReader(qemuProcess.getInputStream()));
-                BufferedReader errorReader = new BufferedReader(new InputStreamReader(qemuProcess.getErrorStream()));
-
-                writer.write(userCommand);
-                writer.newLine();
-                writer.flush();
-                writer.close();
-
-                String line;
-                while ((line = reader.readLine()) != null) {
-//                    Log.d(TAG, line);
-                    com.vectras.vm.logger.VectrasStatus.logError("<font color='#4db6ac'>VTERM: >" + line + "</font>");
-                    output.append(line).append("\n");
-                }
-
-                while ((line = errorReader.readLine()) != null) {
-                    Log.w(TAG, line);
-                    com.vectras.vm.logger.VectrasStatus.logError("<font color='red'>VTERM ERROR: >" + line + "</font>");
-                    output.append(line).append("\n");
-                }
-
-                int exitCode = qemuProcess.waitFor();
-                if (exitCode != 0) {
-                    output.append("Execution finished with exit code: ").append(exitCode).append("\n");
-                }
-            } catch (IOException | InterruptedException e) {
+                output.set(streamLog(userCommand, qemuProcess, false));
+            } catch (IOException e) {
                 progressDialog.dismiss(); // Dismiss ProgressDialog
-                output.append(e.getMessage());
+                output.get().append(e.getMessage());
                 errors.append(Log.getStackTraceString(e));
             } finally {
                 new Handler(Looper.getMainLooper()).post(() -> {
@@ -176,7 +134,7 @@ public class Terminal {
     }
 
     public void executeShellCommand2(String userCommand, boolean showResultDialog, Context dialogActivity) {
-        StringBuilder output = new StringBuilder();
+        AtomicReference<StringBuilder> output = new AtomicReference<>(new StringBuilder());
         StringBuilder errors = new StringBuilder();
         Log.d(TAG, userCommand);
         com.vectras.vm.logger.VectrasStatus.logError("<font color='#4db6ac'>VTERM: >" + userCommand + "</font>");
@@ -226,46 +184,10 @@ public class Terminal {
 
                 processBuilder.command(prootCommand);
                 qemuProcess = processBuilder.start();
-                // Get the input and output streams of the qemuProcess
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(qemuProcess.getOutputStream()));
-                BufferedReader reader = new BufferedReader(new InputStreamReader(qemuProcess.getInputStream()));
-                BufferedReader errorReader = new BufferedReader(new InputStreamReader(qemuProcess.getErrorStream()));
 
-                // Send user command to PRoot
-                writer.write(userCommand);
-                writer.newLine();
-                writer.flush();
-                writer.close();
-
-                // Read the input stream for the output of the command
-                String line;
-                while (qemuProcess.isAlive() && (line = reader.readLine()) != null) {
-//                    Log.d(TAG, line);
-                    com.vectras.vm.logger.VectrasStatus.logError("<font color='#4db6ac'>VTERM: >" + line + "</font>");
-                    output.append(line).append("\n");
-                }
-
-                // Read any errors from the error stream
-                while (qemuProcess.isAlive() && (line = errorReader.readLine()) != null) {
-                    Log.w(TAG, line);
-                    com.vectras.vm.logger.VectrasStatus.logError("<font color='red'>VTERM ERROR: >" + line + "</font>");
-                    output.append(line).append("\n");
-                }
-
-                // Clean up
-                reader.close();
-                errorReader.close();
-
-                int exitCode = qemuProcess.waitFor(); // Wait for the process to finish
-                if (exitCode == 0) {
-                    output.append("Execution finished successfully.\n");
-                } else {
-                    output.append("Execution finished with exit code: ").append(exitCode).append("\n");
-                }
-                output.append(reader.readLine()).append("\n");
-                Log.i(TAG, reader.readLine());
-            } catch (IOException | InterruptedException e) {
-                output.append(e.getMessage());
+                output.set(streamLog(userCommand, qemuProcess, false));
+            } catch (IOException e) {
+                output.get().append(e.getMessage());
                 errors.append(Log.getStackTraceString(e));
                 NotificationUtils.clearAll(VectrasApp.getContext());
             } finally {
@@ -327,33 +249,8 @@ public class Terminal {
             processBuilder.command(prootCommand);
             qemuProcess = processBuilder.start();
 
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(qemuProcess.getOutputStream()));
-            BufferedReader reader = new BufferedReader(new InputStreamReader(qemuProcess.getInputStream()));
-            BufferedReader errorReader = new BufferedReader(new InputStreamReader(qemuProcess.getErrorStream()));
-
-            writer.write(userCommand);
-            writer.newLine();
-            writer.flush();
-            writer.close();
-
-            String line;
-            while ((line = reader.readLine()) != null) {
-//                Log.d(TAG, line);
-                com.vectras.vm.logger.VectrasStatus.logError("<font color='#4db6ac'>VTERM: >" + line + "</font>");
-                output.append(line).append("\n");
-            }
-
-            while ((line = errorReader.readLine()) != null) {
-                Log.w(TAG, line);
-                com.vectras.vm.logger.VectrasStatus.logError("<font color='red'>VTERM ERROR: >" + line + "</font>");
-                output.append(line).append("\n");
-            }
-
-            int exitCode = qemuProcess.waitFor();
-            if (exitCode != 0) {
-                output.append("Execution finished with exit code: ").append(exitCode).append("\n");
-            }
-        } catch (IOException | InterruptedException e) {
+            output = streamLog(userCommand, qemuProcess, false);
+        } catch (IOException e) {
             output.append(e.getMessage());
             errors.append(Log.getStackTraceString(e));
         }
@@ -365,7 +262,7 @@ public class Terminal {
     }
 
     public String executeShellCommand(String userCommand, Context dialogActivity, boolean isShowProgressDialog, CommandCallback callback) {
-        StringBuilder output = new StringBuilder();
+        AtomicReference<StringBuilder> output = new AtomicReference<>(new StringBuilder());
         StringBuilder errors = new StringBuilder();
         Log.d(TAG, userCommand);
         com.vectras.vm.logger.VectrasStatus.logError("<font color='#4db6ac'>VTERM: >" + userCommand + "</font>");
@@ -420,46 +317,17 @@ public class Terminal {
                 processBuilder.command(prootCommand);
                 qemuProcess = processBuilder.start();
 
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(qemuProcess.getOutputStream()));
-                BufferedReader reader = new BufferedReader(new InputStreamReader(qemuProcess.getInputStream()));
-                BufferedReader errorReader = new BufferedReader(new InputStreamReader(qemuProcess.getErrorStream()));
+                output.set(streamLog(userCommand, qemuProcess, true));
 
-                writer.write(userCommand);
-                writer.newLine();
-                writer.flush();
-                writer.close();
-
-                String line;
-                while ((line = reader.readLine()) != null) {
-//                    Log.d(TAG, line);
-                    com.vectras.vm.logger.VectrasStatus.logError("<font color='#4db6ac'>VTERM: >" + line + "</font>");
-                    output.append(line).append("\n");
-                }
-
-                while ((line = errorReader.readLine()) != null) {
-                    Log.w(TAG, line);
-                    com.vectras.vm.logger.VectrasStatus.logError("<font color='red'>VTERM ERROR: >" + line + "</font>");
-                    errors.append(line).append("\n");
-                }
-
-                int exitCode = qemuProcess.waitFor();
-                if (exitCode != 0) {
-                    output.append("Execution finished with exit code: ").append(exitCode).append("\n");
-                }
-
-            } catch (IOException | InterruptedException e) {
-                output.append(e.getMessage());
+            } catch (IOException e) {
+                output.get().append(e.getMessage());
                 errors.append(Log.getStackTraceString(e));
             } finally {
                 // Dismiss ProgressDialog on the main thread
                 new Handler(Looper.getMainLooper()).post(progressDialog::dismiss);
 
-                // Return the output and errors via callback on the main thread
-                String finalOutput = output.toString();
-                String finalErrors = errors.toString();
-
                 // Use callback to return both output and errors
-                new Handler(Looper.getMainLooper()).post(() -> callback.onCommandCompleted(finalOutput, finalErrors));
+                new Handler(Looper.getMainLooper()).post(() -> callback.onCommandCompleted(output.toString(), errors.toString()));
             }
         }).start();
 
@@ -487,6 +355,48 @@ public class Terminal {
             Log.e(TAG, "Error checking package: " + packageName, e);
         }
         return false;
+    }
+
+    public static StringBuilder streamLog(String command, Process process, boolean isShortProcess) {
+        StringBuilder output = new StringBuilder();
+        try {
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+
+            writer.write(command);
+            writer.newLine();
+            writer.flush();
+            writer.close();
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                com.vectras.vm.logger.VectrasStatus.logError("<font color='#4db6ac'>VTERM: >" + line + "</font>");
+                output.append(line).append("\n");
+            }
+
+            while ((line = errorReader.readLine()) != null) {
+                Log.w(TAG, line);
+                com.vectras.vm.logger.VectrasStatus.logError("<font color='red'>VTERM ERROR: >" + line + "</font>");
+                output.append(line).append("\n");
+            }
+
+            if (isShortProcess) {
+                int exitCode = process.waitFor();
+                if (exitCode == 0) {
+                    output.append("Execution finished successfully.\n");
+                } else {
+                    output.append("Execution finished with exit code: ").append(exitCode).append("\n");
+                }
+            }
+
+            reader.close();
+            errorReader.close();
+        } catch (Exception e) {
+            output.append(e.getMessage());
+            Log.e(TAG, "streamLog: ", e);
+        }
+        return output;
     }
 
     private Context getContext() {

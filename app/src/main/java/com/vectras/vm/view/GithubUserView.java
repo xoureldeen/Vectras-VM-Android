@@ -1,5 +1,6 @@
 package com.vectras.vm.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -79,7 +80,10 @@ public class GithubUserView extends LinearLayout {
                     userName.setText(!user.getLogin().isEmpty() ? user.getLogin() : getContext().getString(R.string.unknow));
                     userDescription.setText(!user.getBio().isEmpty() ? user.getBio() : getContext().getString(R.string.unknow));
                     if (!user.getAvatarUrl().isEmpty()) {
-                        Glide.with(getContext()).load(user.getAvatarUrl()).placeholder(R.drawable.account_circle_24px).error(R.drawable.account_circle_24px).into(profileImage);
+                        if (getContext() instanceof Activity activity) {
+                            if (!activity.isFinishing() && !activity.isDestroyed())
+                                Glide.with(getContext()).load(user.getAvatarUrl()).placeholder(R.drawable.account_circle_24px).error(R.drawable.account_circle_24px).into(profileImage);
+                        }
                     } else {
                         profileImage.setImageResource(R.drawable.account_circle_24px);
                     }
