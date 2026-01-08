@@ -9,19 +9,29 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.vectras.vm.R;
+
 import android.content.Context;
+
 import java.util.Locale;
 import java.util.UnknownFormatConversionException;
 import java.util.FormatFlagsConversionMismatchException;
+
 import android.annotation.SuppressLint;
+
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+
 import android.content.pm.PackageManager;
+
 import java.io.ByteArrayInputStream;
+
 import android.content.pm.Signature;
+
 import java.security.MessageDigest;
 import java.util.Arrays;
+
 import android.content.pm.PackageInfo;
+
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 
@@ -29,33 +39,33 @@ import java.security.cert.CertificateException;
  * Created by arne on 24.04.16.
  */
 public class LogItem implements Parcelable {
-    
-	private Object[] mArgs = null;
+
+    private Object[] mArgs = null;
     private String mMessage = null;
-	private int mResourceId;
+    private int mResourceId;
     // Default log priority
     VectrasStatus.LogLevel mLevel = VectrasStatus.LogLevel.INFO;
     private long logtime = System.currentTimeMillis();
     private int mVerbosityLevel = -1;
-	
-	public LogItem(int resId, Object... args) {
+
+    public LogItem(int resId, Object... args) {
         mResourceId = resId;
-		mArgs = args;
+        mArgs = args;
     }
-	
-	public LogItem(VectrasStatus.LogLevel loglevel, int verblevel, String msg) {
+
+    public LogItem(VectrasStatus.LogLevel loglevel, int verblevel, String msg) {
         mLevel = loglevel;
         mMessage = msg;
-		mVerbosityLevel = verblevel;
+        mVerbosityLevel = verblevel;
     }
 
     public LogItem(VectrasStatus.LogLevel level, int resId, Object... args) {
         mLevel = level;
-		mResourceId = resId;
-		mArgs = args;
+        mResourceId = resId;
+        mArgs = args;
     }
-	
-	public LogItem(VectrasStatus.LogLevel loglevel, String msg) {
+
+    public LogItem(VectrasStatus.LogLevel loglevel, String msg) {
         mLevel = loglevel;
         mMessage = msg;
     }
@@ -65,8 +75,8 @@ public class LogItem implements Parcelable {
         mResourceId = ressourceId;
         mLevel = loglevel;
     }
-	
-	@Override
+
+    @Override
     public String toString() {
         return getString(null);
     }
@@ -80,16 +90,16 @@ public class LogItem implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeArray(mArgs);
         dest.writeString(mMessage);
-		dest.writeInt(mResourceId);
+        dest.writeInt(mResourceId);
         dest.writeInt(mLevel.getInt());
-        
+
         dest.writeLong(logtime);
     }
 
     public LogItem(Parcel in) {
         mArgs = in.readArray(Object.class.getClassLoader());
         mMessage = in.readString();
-		mResourceId = in.readInt();
+        mResourceId = in.readInt();
         mLevel = VectrasStatus.LogLevel.getEnumByValue(in.readInt());
         logtime = in.readLong();
     }
@@ -112,18 +122,18 @@ public class LogItem implements Parcelable {
     public long getLogtime() {
         return logtime;
     }
-	
-	public String getMessage() {
-		return mMessage;
-	}
 
-	public String getString(Context c) {
+    public String getMessage() {
+        return mMessage;
+    }
+
+    public String getString(Context c) {
         try {
             if (mMessage != null) {
                 return mMessage;
             } else {
                 if (c != null) {
-					if (mResourceId == R.string.app_name)
+                    if (mResourceId == R.string.app_name)
                         return getAppInfoString(c);
                     else if (mArgs == null)
                         return c.getString(mResourceId);
@@ -149,10 +159,10 @@ public class LogItem implements Parcelable {
                 throw e;
         }
     }
-	
-	//private String listb = "";
-	
-	// The lint is wrong here
+
+    //private String listb = "";
+
+    // The lint is wrong here
     @SuppressLint("StringFormatMatches")
     private String getAppInfoString(Context c) {
         c.getPackageManager();
@@ -161,7 +171,7 @@ public class LogItem implements Parcelable {
         String version = "error getting version";
         try {
             @SuppressLint("PackageManagerGetSignatures")
-			Signature raw = c.getPackageManager().getPackageInfo(c.getPackageName(), PackageManager.GET_SIGNATURES).signatures[0];
+            Signature raw = c.getPackageManager().getPackageInfo(c.getPackageName(), PackageManager.GET_SIGNATURES).signatures[0];
             CertificateFactory cf = CertificateFactory.getInstance("X.509");
             X509Certificate cert = (X509Certificate) cf.generateCertificate(new ByteArrayInputStream(raw.toByteArray()));
             MessageDigest md = MessageDigest.getInstance("SHA-1");
@@ -174,7 +184,7 @@ public class LogItem implements Parcelable {
             version = String.format("%s Projeto %d", packageinfo.versionName, packageinfo.versionCode);
 
         } catch (PackageManager.NameNotFoundException | CertificateException |
-				NoSuchAlgorithmException ignored) {
+                 NoSuchAlgorithmException ignored) {
         }
 
        /* Object[] argsext = Arrays.copyOf(mArgs, mArgs.length);
@@ -184,8 +194,8 @@ public class LogItem implements Parcelable {
         return c.getString(R.string.app_name, version, apksign);
 
     }
-	
-	// TextUtils.join will cause not macked exeception in tests ....
+
+    // TextUtils.join will cause not macked exeception in tests ....
     public static String join(CharSequence delimiter, Object[] tokens) {
         StringBuilder sb = new StringBuilder();
         boolean firstTime = true;
@@ -199,8 +209,8 @@ public class LogItem implements Parcelable {
         }
         return sb.toString();
     }
-	
-	public int getVerbosityLevel() {
+
+    public int getVerbosityLevel() {
         if (mVerbosityLevel == -1) {
             // Hack:
             // For message not from OpenVPN, report the status level as log level

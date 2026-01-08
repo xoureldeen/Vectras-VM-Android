@@ -3,7 +3,6 @@ package com.vectras.vm;
 import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -35,7 +34,6 @@ import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.ImageUtils;
-import com.vectras.vm.utils.JSONUtils;
 import com.vectras.vm.utils.PackageUtils;
 import com.vectras.vm.utils.UIUtils;
 
@@ -219,19 +217,13 @@ public class VMCreatorActivity extends AppCompatActivity {
             created = true;
             binding.addRomBtn.setText(R.string.save_changes);
 
-            if (binding != null && current.itemName != null) {
-                binding.title.setText(current.itemName);
+            if (binding != null && current != null) {
+                if (current.itemName != null) binding.title.setText(current.itemName);
+                if (current.itemPath != null) binding.drive.setText(current.itemPath);
+                if (current.imgCdrom != null) binding.cdrom.setText(current.imgCdrom);
+                if (current.itemIcon != null) thumbnailPath = current.itemIcon;
             }
 
-            if (binding != null && current.itemPath != null) {
-                binding.drive.setText(current.itemPath);
-            }
-
-            if (binding != null && current.imgCdrom != null) {
-                binding.cdrom.setText(current.imgCdrom);
-            }
-
-            thumbnailPath = current.itemIcon;
             vmID = getIntent().getStringExtra("VMID");
 
             if (vmID == null || vmID.isEmpty()) {
@@ -669,13 +661,17 @@ public class VMCreatorActivity extends AppCompatActivity {
 
     private void selectedDiskFile(Uri _content_describer, boolean _addtodrive) {
         if (FileUtils.isValidFilePath(this, FileUtils.getPath(this, _content_describer), false)) {
-            File selectedFilePath = new File(getPath(_content_describer));
-            if (VMManager.isADiskFile(selectedFilePath.getPath())) {
-                startProcessingHardDriveFile(_content_describer, _addtodrive);
-            } else {
-                DialogUtils.twoDialog(this, getString(R.string.problem_has_been_detected), getString(R.string.file_format_is_not_supported), getResources().getString(R.string.continuetext), getResources().getString(R.string.cancel), true, R.drawable.hard_drive_24px, true,
-                        () -> startProcessingHardDriveFile(_content_describer, _addtodrive), null, null);
-            }
+            new Thread(() -> {
+                File selectedFilePath = new File(getPath(_content_describer));
+                runOnUiThread(() -> {
+                    if (VMManager.isADiskFile(selectedFilePath.getPath())) {
+                        startProcessingHardDriveFile(_content_describer, _addtodrive);
+                    } else {
+                        DialogUtils.twoDialog(this, getString(R.string.problem_has_been_detected), getString(R.string.file_format_is_not_supported), getResources().getString(R.string.continuetext), getResources().getString(R.string.cancel), true, R.drawable.hard_drive_24px, true,
+                                () -> startProcessingHardDriveFile(_content_describer, _addtodrive), null, null);
+                    }
+                });
+            }).start();
         } else {
             startProcessingHardDriveFile(_content_describer, _addtodrive);
         }

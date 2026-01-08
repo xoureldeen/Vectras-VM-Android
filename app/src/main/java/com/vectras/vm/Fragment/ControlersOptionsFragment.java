@@ -27,8 +27,8 @@ public class ControlersOptionsFragment extends DialogFragment {
             public void onClick(View v) {
                 MainSettingsManager.setControlMode(getActivity(), "G");
                 if (MainSettingsManager.getVmUi(getActivity()).equals("X11")) {
-                    X11Activity.desktop.setVisibility(View.GONE);
-                    X11Activity.gamepad.setVisibility(View.VISIBLE);
+                    if (X11Activity.desktop != null ) X11Activity.desktop.setVisibility(View.GONE);
+                    if (X11Activity.gamepad != null ) X11Activity.gamepad.setVisibility(View.VISIBLE);
                 } else if (MainSettingsManager.getVmUi(getActivity()).equals("VNC")) {
                     MainVNCActivity.desktop.setVisibility(View.GONE);
                     MainVNCActivity.gamepad.setVisibility(View.VISIBLE);

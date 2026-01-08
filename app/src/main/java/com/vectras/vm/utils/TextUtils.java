@@ -3,6 +3,10 @@ package com.vectras.vm.utils;
 import java.util.Random;
 
 public class TextUtils {
+    public static boolean isNumberOnly(String content) {
+        return content.matches("\\d+");
+    }
+
     public static String randomALetter() {
         String addAdb;
         Random random = new Random();
