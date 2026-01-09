@@ -14,6 +14,7 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.vectras.qemu.MainSettingsManager;
+import com.vectras.vm.creator.VMCreatorActivity;
 import com.vectras.vm.databinding.ActivitySetArchBinding;
 import com.vectras.vm.main.MainActivity;
 import com.vectras.vm.utils.FileUtils;

@@ -167,7 +167,7 @@
             android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|screenLayout|fontScale|orientation|screenSize|smallestScreenSize"
             android:label="@string/settings" />
         <activity
-            android:name=".VMCreatorActivity"
+            android:name=".creator.VMCreatorActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout" />
         <activity
             android:name=".DataExplorerActivity"

@@ -149,6 +149,16 @@ public class ExportRomActivity extends AppCompatActivity {
             cdromfile = VMManager.quickScanISOFileInFolder(getRomPath);
             mapForGetData.put("cdrom", "");
         }
+        if (listmapForGetData.get(pendingPosition).containsKey("bootFrom")) {
+            mapForGetData.put("bootFrom", listmapForGetData.get(pendingPosition).get("bootFrom"));
+        } else {
+            mapForGetData.put("bootFrom", "");
+        }
+        if (listmapForGetData.get(pendingPosition).containsKey("isShowBootMenu")) {
+            mapForGetData.put("isShowBootMenu", listmapForGetData.get(pendingPosition).get("isShowBootMenu"));
+        } else {
+            mapForGetData.put("isShowBootMenu", "");
+        }
         if (listmapForGetData.get(pendingPosition).containsKey("imgExtra")) {
             mapForGetData.put("qemu", Objects.requireNonNull(listmapForGetData.get(pendingPosition).get("imgExtra")).toString().replaceAll(getRomPath, "OhnoIjustrealizeditsmidnightandIstillhavetodothis"));
         } else {

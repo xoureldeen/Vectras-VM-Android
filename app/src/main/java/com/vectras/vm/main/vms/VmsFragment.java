@@ -145,6 +145,16 @@ public class VmsFragment extends Fragment implements CallbackInterface.HomeCallT
                     } catch (JSONException ignored) {
                         romsMainData.itemDrv1 = "";
                     }
+                    try {
+                        romsMainData.bootFrom = json_data.getInt("bootFrom");
+                    } catch (JSONException ignored) {
+                        romsMainData.bootFrom = 0;
+                    }
+                    try {
+                        romsMainData.isShowBootMenu = json_data.getBoolean("isShowBootMenu");
+                    } catch (JSONException ignored) {
+                        romsMainData.isShowBootMenu = false;
+                    }
                     romsMainData.itemExtra = json_data.getString("imgExtra");
                     tempdata.add(romsMainData);
                 }

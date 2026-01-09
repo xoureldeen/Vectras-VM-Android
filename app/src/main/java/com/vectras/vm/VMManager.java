@@ -37,6 +37,7 @@ import com.vectras.qemu.VNCConfig;
 import com.vectras.qemu.utils.QmpClient;
 import com.vectras.vm.main.MainActivity;
 import com.vectras.vm.main.core.MainStartVM;
+import com.vectras.vm.main.vms.DataMainRoms;
 import com.vectras.vm.settings.VNCSettingsActivity;
 import com.vectras.vm.settings.X11DisplaySettingsActivity;
 import com.vectras.vm.utils.DialogUtils;
@@ -70,6 +71,11 @@ public class VMManager {
     public static boolean isTryAgain = false;
     public static String latestUnsafeCommandReason = "";
     public static String lastQemuCommand = "";
+
+    public static DataMainRoms getVMConfig(int position) {
+        JsonArray arr = JsonParser.parseString(FileUtils.readAFile(AppConfig.romsdatajson)).getAsJsonArray();
+        return new Gson().fromJson(arr.get(position), DataMainRoms.class);
+    }
 
     public static boolean isVMExist(String vmId) {
         String vmJsonListContent = FileUtils.readAFile(AppConfig.romsdatajson);
@@ -204,6 +210,10 @@ public class VMManager {
     public static boolean writeToVMConfig(String vmID, String content) {
         return FileUtils.writeToFile(AppConfig.maindirpath + "/roms/" + vmID, "rom-data.json", content.replace("\\u003d", "=")) &&
                 FileUtils.writeToFile(AppConfig.maindirpath + "/roms/" + vmID, "vmID.txt", vmID);
+    }
+
+    public static boolean addVM(HashMap<String, Object> vmConfigMap, int position) {
+        return position == -1 ? addToVMList(vmConfigMap, Objects.requireNonNull(vmConfigMap.get("vmID")).toString()) : replaceToVMList(position, "", vmConfigMap);
     }
 
     public static boolean createNewVM(String name, String thumbnail, String drive, String arch, String cdrom, String params, String vmID, int port) {

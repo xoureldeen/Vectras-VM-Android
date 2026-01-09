@@ -1,11 +1,12 @@
 package com.vectras.vm;
 
 import android.app.Activity;
-import android.os.Build;
 
 import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.qemu.utils.RamInfo;
+import com.vectras.vm.creator.VMCreatorSelector;
+import com.vectras.vm.main.vms.DataMainRoms;
 import com.vectras.vm.utils.FileUtils;
 
 import java.io.File;
@@ -17,6 +18,21 @@ public class StartVM {
     public static String cache;
 
     public static String cdrompath;
+
+    public static String env(Activity activity, DataMainRoms vmData) {
+        String extraParams = vmData.itemExtra;
+
+        String bootFromParams = Objects.requireNonNull(VMCreatorSelector.getBootFrom(activity, vmData.bootFrom).get("value")).toString();
+        String showBootMenuParams = vmData.isShowBootMenu ? "menu=on" : "";
+        String bootParams = "";
+        if (!bootFromParams.isEmpty() || !showBootMenuParams.isEmpty()) {
+            bootParams = "-boot " + bootFromParams + (!bootFromParams.isEmpty() && !showBootMenuParams.isEmpty() ? "," : "") + showBootMenuParams + " ";
+        }
+
+        extraParams = bootParams + extraParams;
+        cdrompath = vmData.imgCdrom;
+        return env(activity, extraParams, vmData.itemPath, false);
+    }
 
     public static String env(Activity activity, String extras, String img, boolean isQuickRun) {
 
@@ -158,13 +174,13 @@ public class StartVM {
                 memoryStr += RamInfo.vectrasMemory(activity);
             }
 
-            String boot = "-boot ";
-            if (extras.contains(".iso ")) {
-
-                boot += MainSettingsManager.getBoot(activity);
-            } else {
-                boot += "c";
-            }
+//            String boot = "-boot ";
+//            if (extras.contains(".iso ")) {
+//
+//                boot += MainSettingsManager.getBoot(activity);
+//            } else {
+//                boot += "c";
+//            }
 
             //String soundDevice = "-audiodev pa,id=pa -device AC97,audiodev=pa";
 
@@ -218,7 +234,7 @@ public class StartVM {
             params.add(bios);
             //}
 
-            params.add(boot);
+//            params.add(boot);
 
             params.add(memoryStr);
 

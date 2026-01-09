@@ -73,7 +73,7 @@ public class VmsHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         } else {
             myHolder.ivIcon.setImageResource(R.drawable.ic_computer_180dp_with_padding);
         }
-        myHolder.optionsBtn.setOnClickListener(view -> RomOptionsDialog.showNow(activity, data, position, current.vmID, current.itemName, current.itemArch));
+        myHolder.optionsBtn.setOnClickListener(view -> RomOptionsDialog.showNow(activity, position, current.vmID, current.itemName));
 
         myHolder.cdRoms.setOnClickListener(view -> {
             VMManager.setArch(current.itemArch, activity);
@@ -84,7 +84,7 @@ public class VmsHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 Config.QMPPort = current.qmpPort;
             }
             Config.vmID = current.vmID;
-            String env = StartVM.env(activity, current.itemExtra, current.itemPath, false);
+            String env = StartVM.env(activity, current);
             MainStartVM.startNow(activity, current.itemName, env, current.vmID, current.itemIcon);
         });
 
