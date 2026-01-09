@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.vectras.vm.VMCreatorActivity;
+import com.vectras.vm.creator.VMCreatorActivity;
 import com.vectras.vm.ExportRomActivity;
 import com.vectras.vm.main.vms.DataMainRoms;
 import com.vectras.vm.R;
@@ -15,15 +15,13 @@ import com.vectras.vm.VMManager;
 import java.util.List;
 
 public class RomOptionsDialog {
-    public static void showNow(Activity activity, List<DataMainRoms> data, int position, String vmID, String vmName, String arch) {
+    public static void showNow(Activity activity, int position, String vmID, String vmName) {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(activity);
         View v = activity.getLayoutInflater().inflate(R.layout.rom_options_dialog, null);
         bottomSheetDialog.setContentView(v);
 
         Button modifyRomBtn = v.findViewById(R.id.modifyRomBtn);
         modifyRomBtn.setOnClickListener(v3 -> {
-            VMCreatorActivity.current = data.get(position);
-            VMManager.setArch(arch, activity);
             activity.startActivity(new Intent(activity, VMCreatorActivity.class).putExtra("POS", position).putExtra("MODIFY", true).putExtra("VMID", vmID));
             bottomSheetDialog.cancel();
         });

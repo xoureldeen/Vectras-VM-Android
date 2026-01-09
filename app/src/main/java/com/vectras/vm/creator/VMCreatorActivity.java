@@ -1,4 +1,4 @@
-package com.vectras.vm;
+package com.vectras.vm.creator;
 
 import android.annotation.SuppressLint;
 import android.content.ComponentName;
@@ -24,8 +24,15 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.Gson;
 import com.vectras.qemu.MainSettingsManager;
+import com.vectras.vm.AppConfig;
 import com.vectras.vm.Fragment.CreateImageDialogFragment;
+import com.vectras.vm.QemuParamsEditorActivity;
+import com.vectras.vm.R;
+import com.vectras.vm.RomInfo;
+import com.vectras.vm.SplashActivity;
+import com.vectras.vm.VMManager;
 import com.vectras.vm.main.vms.DataMainRoms;
 import com.vectras.vm.databinding.ActivityVmCreatorBinding;
 import com.vectras.vm.databinding.DialogProgressStyleBinding;
@@ -41,6 +48,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -57,13 +65,14 @@ public class VMCreatorActivity extends AppCompatActivity {
     boolean iseditparams = false;
     public String previousName = "";
     public boolean addromnowdone = false;
-    private String vmID = VMManager.idGenerator();
-    private int port = VMManager.startRandomPort();
     private boolean created = false;
-    private String thumbnailPath = "";
     boolean modify;
-    public static DataMainRoms current;
     private boolean isImportingCVBI = false;
+    public static DataMainRoms current;
+    private String thumbnailPath = "";
+    private String vmID = VMManager.idGenerator();
+    private boolean isShowBootMenu = false;
+    private int bootFrom = 0;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -120,7 +129,7 @@ public class VMCreatorActivity extends AppCompatActivity {
                                 FileUtils.deleteDirectory(Objects.requireNonNull(binding.drive.getText()).toString());
                             }
                             binding.drive.setText("");
-                            binding.driveField.setEndIconDrawable(R.drawable.round_add_24);
+                            binding.driveField.setEndIconDrawable(R.drawable.add_24px);
                         },
                         () -> {
                             if (createVMFolder(true)) {
@@ -146,8 +155,6 @@ public class VMCreatorActivity extends AppCompatActivity {
                 binding.cdromField.setEndIconMode(TextInputLayout.END_ICON_NONE);
             }
         });
-
-        binding.addRomBtn.setOnClickListener(v -> startCreateVM());
 
         binding.qemu.setOnClickListener(v -> {
             iseditparams = true;
@@ -203,7 +210,7 @@ public class VMCreatorActivity extends AppCompatActivity {
                         () -> thumbnailPicker.launch("image/*"),
                         () -> {
                             thumbnailPath = "";
-                            binding.ivAddThubnail.setImageResource(R.drawable.round_add_24);
+                            binding.ivAddThubnail.setImageResource(R.drawable.add_24px);
                             VMManager.setIconWithName(binding.ivIcon, Objects.requireNonNull(binding.title.getText()).toString());
                         }, null);
             }
@@ -211,37 +218,29 @@ public class VMCreatorActivity extends AppCompatActivity {
 
         binding.lineardisclaimer.setOnClickListener(v -> DialogUtils.oneDialog(this, getResources().getString(R.string.dont_miss_out), getResources().getString(R.string.disclaimer_when_using_rom), getResources().getString(R.string.i_agree), true, R.drawable.verified_user_24px, true, null, null));
 
+        binding.lnShowbootmenu.setOnClickListener(v -> binding.cbShowbootmenu.toggle());
+        binding.cbShowbootmenu.setOnCheckedChangeListener((button, isChecked) -> {
+            isShowBootMenu = isChecked;
+        });
+
+        binding.lnBootfrom.setOnClickListener(v -> {
+            VMCreatorSelector.bootFrom(this, bootFrom, ((position, name, value) -> {
+                bootFrom = position;
+                binding.tvBootfrom.setText(name);
+            }));
+        });
+
         modify = getIntent().getBooleanExtra("MODIFY", false);
         if (modify) {
             binding.collapsingToolbarLayout.setTitle(getString(R.string.edit));
             created = true;
-            binding.addRomBtn.setText(R.string.save_changes);
 
-            if (binding != null && current != null) {
-                if (current.itemName != null) binding.title.setText(current.itemName);
-                if (current.itemPath != null) binding.drive.setText(current.itemPath);
-                if (current.imgCdrom != null) binding.cdrom.setText(current.imgCdrom);
-                if (current.itemIcon != null) thumbnailPath = current.itemIcon;
-            }
+            loadConfig(VMManager.getVMConfig(getIntent().getIntExtra("POS", 0)));
 
             vmID = getIntent().getStringExtra("VMID");
 
             if (vmID == null || vmID.isEmpty()) {
                 vmID = VMManager.idGenerator();
-            }
-
-            binding.qemu.setText(current.itemExtra);
-
-            thumbnailProcessing();
-
-            if (Objects.requireNonNull(binding.drive.getText()).toString().isEmpty()) {
-                binding.driveField.setEndIconDrawable(R.drawable.round_add_24);
-            }
-
-            if (!Objects.requireNonNull(binding.cdrom.getText()).toString().isEmpty()) {
-                binding.cdromField.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
-                binding.cdromField.setEndIconDrawable(R.drawable.close_24px);
-                changeOnClickCdrom();
             }
 
             previousName = current.itemName;
@@ -274,12 +273,12 @@ public class VMCreatorActivity extends AppCompatActivity {
                     if (!Objects.requireNonNull(getIntent().getStringExtra("addtodrive")).isEmpty()) {
                         binding.drive.setText(AppConfig.vmFolder + vmID + "/" + getIntent().getStringExtra("romfilename"));
                         if (Objects.requireNonNull(binding.drive.getText()).toString().isEmpty()) {
-                            binding.driveField.setEndIconDrawable(R.drawable.round_add_24);
+                            binding.driveField.setEndIconDrawable(R.drawable.add_24px);
                         } else {
                             binding.driveField.setEndIconDrawable(R.drawable.more_vert_24px);
                         }
                     } else {
-                        binding.driveField.setEndIconDrawable(R.drawable.round_add_24);
+                        binding.driveField.setEndIconDrawable(R.drawable.add_24px);
                     }
                 }
 
@@ -295,7 +294,7 @@ public class VMCreatorActivity extends AppCompatActivity {
                         binding.drive.setText(AppConfig.vmFolder + vmID + "/disk.qcow2");
                     }
                 } else {
-                    binding.driveField.setEndIconDrawable(R.drawable.round_add_24);
+                    binding.driveField.setEndIconDrawable(R.drawable.add_24px);
                 }
 
             }
@@ -465,6 +464,54 @@ public class VMCreatorActivity extends AppCompatActivity {
                 });
             });
 
+    private void loadConfig(DataMainRoms vmConfig) {
+        if (vmConfig != null) current = vmConfig;
+        if (binding != null && current != null) {
+            if (current.itemArch != null) {
+                MainSettingsManager.setArch(this, current.itemArch);
+                binding.collapsingToolbarLayout.setSubtitle(MainSettingsManager.getArch(this));
+            }
+
+            if (current.itemName != null) {
+                binding.title.setText(current.itemName);
+            }
+
+            if (current.itemPath != null && !current.itemPath.isEmpty()) {
+                binding.drive.setText((current.itemPath.contains("/") ? "" : AppConfig.vmFolder + vmID + "/").concat(current.itemPath));
+            }
+
+            if (Objects.requireNonNull(binding.drive.getText()).toString().isEmpty()) {
+                binding.driveField.setEndIconDrawable(R.drawable.add_24px);
+            } else {
+                binding.driveField.setEndIconDrawable(R.drawable.more_vert_24px);
+            }
+
+            if (current.imgCdrom != null && !current.imgCdrom.isEmpty()) {
+                binding.cdrom.setText((current.imgCdrom.contains("/") ? "" : AppConfig.vmFolder + vmID + "/").concat(current.imgCdrom));
+            }
+
+            if (!Objects.requireNonNull(binding.cdrom.getText()).toString().isEmpty()) {
+                binding.cdromField.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
+                binding.cdromField.setEndIconDrawable(R.drawable.close_24px);
+                changeOnClickCdrom();
+            }
+
+            if (current.itemIcon != null && !current.itemIcon.isEmpty()) {
+                thumbnailPath = (current.itemIcon.contains("/") ? "" : AppConfig.vmFolder + vmID + "/") + current.itemIcon;
+                thumbnailProcessing();
+            }
+
+            if (current.itemExtra != null) {
+                binding.qemu.setText(current.itemExtra.replaceAll("OhnoIjustrealizeditsmidnightandIstillhavetodothis", AppConfig.vmFolder + vmID + "/"));
+            }
+
+            bootFrom = current.bootFrom;
+            binding.tvBootfrom.setText(Objects.requireNonNull(VMCreatorSelector.getBootFrom(this, current.bootFrom).get("name")).toString());
+            isShowBootMenu = current.isShowBootMenu;
+            binding.cbShowbootmenu.setChecked(isShowBootMenu);
+        }
+    }
+
     private void setDefault() {
         String defQemuParams;
         if (DeviceUtils.is64bit()) {
@@ -495,7 +542,6 @@ public class VMCreatorActivity extends AppCompatActivity {
     private void checkVMID() {
         if (FileUtils.isFileExists(AppConfig.maindirpath + "/roms/" + vmID) || vmID.isEmpty()) {
             vmID = VMManager.idGenerator();
-            port = VMManager.startRandomPort();
         }
     }
 
@@ -556,25 +602,7 @@ public class VMCreatorActivity extends AppCompatActivity {
             FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", "[]");
         }
 
-        boolean isSaveCompleted;
-        if (modify) {
-            isSaveCompleted = VMManager.editVM(Objects.requireNonNull(binding.title.getText()).toString(),
-                    thumbnailPath,
-                    Objects.requireNonNull(binding.drive.getText()).toString(),
-                    MainSettingsManager.getArch(this),
-                    Objects.requireNonNull(binding.cdrom.getText()).toString(),
-                    Objects.requireNonNull(binding.qemu.getText()).toString(),
-                    getIntent().getIntExtra("POS", 0));
-        } else {
-            isSaveCompleted = VMManager.createNewVM(Objects.requireNonNull(binding.title.getText()).toString(),
-                    thumbnailPath,
-                    Objects.requireNonNull(binding.drive.getText()).toString(),
-                    MainSettingsManager.getArch(this),
-                    Objects.requireNonNull(binding.cdrom.getText()).toString(),
-                    Objects.requireNonNull(binding.qemu.getText()).toString(), vmID, port);
-        }
-
-        if (!isSaveCompleted) {
+        if (!VMManager.addVM(finalDataConfig(), modify ? getIntent().getIntExtra("POS", 0) : -1)) {
             DialogUtils.oneDialog(
                     this,
                     getString(R.string.oops),
@@ -600,6 +628,21 @@ public class VMCreatorActivity extends AppCompatActivity {
             startActivity(intent);
         }
         finish();
+    }
+
+    private HashMap<String, Object> finalDataConfig() {
+        HashMap<String, Object> vmConfigMap = new HashMap<>();
+        vmConfigMap.put("imgName", Objects.requireNonNull(binding.title.getText()).toString());
+        vmConfigMap.put("imgIcon", thumbnailPath);
+        vmConfigMap.put("imgPath", Objects.requireNonNull(binding.drive.getText()).toString());
+        vmConfigMap.put("imgCdrom", Objects.requireNonNull(binding.cdrom.getText()).toString());
+        vmConfigMap.put("imgExtra", Objects.requireNonNull(binding.qemu.getText()).toString());
+        vmConfigMap.put("imgArch", MainSettingsManager.getArch(this));
+        vmConfigMap.put("bootFrom", bootFrom);
+        vmConfigMap.put("isShowBootMenu", isShowBootMenu);
+        vmConfigMap.put("vmID", vmID);
+        vmConfigMap.put("qmpPort", 8080);
+        return vmConfigMap;
     }
 
     private void startProcessingThumbnail(Uri uri) {
@@ -631,7 +674,8 @@ public class VMCreatorActivity extends AppCompatActivity {
                         null));
             } finally {
                 runOnUiThread(() -> {
-                    if (!isImportingCVBI && !isFinishing() && !isDestroyed()) progressDialog.dismiss();
+                    if (!isImportingCVBI && !isFinishing() && !isDestroyed())
+                        progressDialog.dismiss();
                 });
             }
         });
@@ -651,11 +695,11 @@ public class VMCreatorActivity extends AppCompatActivity {
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(binding.ivIcon);
             } else {
-                binding.ivAddThubnail.setImageResource(R.drawable.round_add_24);
+                binding.ivAddThubnail.setImageResource(R.drawable.add_24px);
                 VMManager.setIconWithName(binding.ivIcon, Objects.requireNonNull(binding.title.getText()).toString());
             }
         } else {
-            binding.ivAddThubnail.setImageResource(R.drawable.round_add_24);
+            binding.ivAddThubnail.setImageResource(R.drawable.add_24px);
         }
     }
 
@@ -681,7 +725,7 @@ public class VMCreatorActivity extends AppCompatActivity {
     private void startProcessingHardDriveFile(Uri _content_describer, boolean _addtodrive) {
         if (MainSettingsManager.copyFile(this)) {
 
-            if (!createVMFolder(true)) return;
+            if (isFinishing() || isDestroyed() || !createVMFolder(true)) return;
 
             View progressView = LayoutInflater.from(this).inflate(R.layout.dialog_progress_style, null);
             TextView progressText = progressView.findViewById(R.id.progress_text);
@@ -753,6 +797,8 @@ public class VMCreatorActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private void importRom(Uri fileUri, String filePath, String fileName) {
+        if (isFinishing() || isDestroyed()) return;
+
         if (!(fileName.endsWith(".cvbi") || filePath.endsWith(".cvbi.zip"))) {
             DialogUtils.oneDialog(this,
                     getResources().getString(R.string.problem_has_been_detected),
@@ -855,12 +901,6 @@ public class VMCreatorActivity extends AppCompatActivity {
                 }
             });
         }).start();
-
-        if (Objects.requireNonNull(binding.drive.getText()).toString().isEmpty()) {
-            binding.driveField.setEndIconDrawable(R.drawable.round_add_24);
-        } else {
-            binding.driveField.setEndIconDrawable(R.drawable.more_vert_24px);
-        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -913,6 +953,7 @@ public class VMCreatorActivity extends AppCompatActivity {
                     }
                 }
             } else {
+                loadConfig(new Gson().fromJson(FileUtils.readFromFile(this, new File(AppConfig.vmFolder + vmID + "/rom-data.json")), DataMainRoms.class));
                 JSONObject jObj = new JSONObject(FileUtils.readFromFile(this, new File(AppConfig.vmFolder + vmID + "/rom-data.json")));
 
                 if (jObj.has("vmID")) {
@@ -922,51 +963,6 @@ public class VMCreatorActivity extends AppCompatActivity {
                             vmID = jObj.getString("vmID");
                         }
                     }
-                }
-
-                if (jObj.has("title") && !jObj.isNull("title")) {
-                    binding.title.setText(jObj.getString("title"));
-                }
-
-                if (jObj.has("drive") && !jObj.isNull("drive")) {
-                    if (!jObj.getString("drive").isEmpty()) {
-                        binding.drive.setText(AppConfig.vmFolder + vmID + "/" + jObj.getString("drive"));
-                    }
-
-                }
-
-                if (jObj.has("qemu") && !jObj.isNull("qemu")) {
-                    if (!jObj.getString("qemu").isEmpty()) {
-                        binding.qemu.setText(jObj.getString("qemu").replaceAll("OhnoIjustrealizeditsmidnightandIstillhavetodothis", AppConfig.vmFolder + vmID + "/"));
-                    }
-                }
-
-                if (jObj.has("icon") && !jObj.isNull("icon")) {
-                    binding.ivAddThubnail.setImageResource(R.drawable.edit_24px);
-                    thumbnailPath = AppConfig.vmFolder + vmID + "/" + jObj.getString("icon");
-                    thumbnailProcessing();
-                } else {
-                    binding.ivAddThubnail.setImageResource(R.drawable.round_add_24);
-                    VMManager.setIconWithName(binding.ivIcon, Objects.requireNonNull(binding.title.getText()).toString());
-                }
-
-                if (jObj.has("cdrom") && !jObj.isNull("cdrom")) {
-                    if (!jObj.getString("cdrom").isEmpty()) {
-                        binding.cdrom.setText(AppConfig.vmFolder + vmID + "/" + jObj.getString("cdrom"));
-                        binding.cdromField.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
-                        binding.cdromField.setEndIconDrawable(R.drawable.close_24px);
-                        changeOnClickCdrom();
-                    } else {
-                        binding.cdromField.setEndIconMode(TextInputLayout.END_ICON_NONE);
-                    }
-                } else {
-                    binding.cdromField.setEndIconMode(TextInputLayout.END_ICON_NONE);
-                }
-
-                if (jObj.has("arch") && !jObj.isNull("arch")) {
-                    VMManager.setArch(jObj.getString("arch"), this);
-                } else {
-                    VMManager.setArch("x86_64", this);
                 }
 
                 FileUtils.moveAFile(AppConfig.vmFolder + _filename.replace(".cvbi", ""), AppConfig.vmFolder + vmID);
@@ -991,7 +987,6 @@ public class VMCreatorActivity extends AppCompatActivity {
                             null);
                 }
             }
-            binding.collapsingToolbarLayout.setSubtitle(MainSettingsManager.getArch(this));
         } catch (JSONException e) {
             Log.e(TAG, "afterExtractCVBIFile: " + e.getMessage());
         }

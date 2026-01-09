@@ -23,6 +23,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.vectras.qemu.MainSettingsManager;
+import com.vectras.vm.creator.VMCreatorActivity;
 import com.vectras.vm.databinding.ActivityRomInfoBinding;
 import com.vectras.vm.network.RequestNetwork;
 import com.vectras.vm.network.RequestNetworkController;

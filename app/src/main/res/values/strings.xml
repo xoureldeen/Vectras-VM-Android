@@ -321,7 +321,7 @@
     <string name="who_created_this_rom">Who created this rom?</string>
     <string name="setup_command">Setup command</string>
     <string name="later">Later</string>
-    <string name="cdrom">CDROM</string>
+    <string name="cdrom">CD-ROM</string>
     <string name="floppy_drive">Floppy drive</string>
     <string name="floppy_drive_a">Floppy drive A</string>
     <string name="floppy_drive_b">Floppy drive B</string>
@@ -501,6 +501,13 @@
     <string name="edit_with_create_command">Edit with Create command</string>
     <string name="edit_with_create_command_content">You can edit this VM with Create command app.</string>
     <string name="unable_to_save_please_try_again_later">Unable to save, please try again later.</string>
+    <string name="advanced">Advanced</string>
+    <string name="boot">Boot</string>
+    <string name="show_boot_menu">Show boot menu</string>
+    <string name="defaulttext">Default</string>
+    <string name="hard_disk">Hard disk</string>
+    <string name="floppy_disk">Floppy disk</string>
+    <string name="network">Network</string>
 
 
     <!--======================TERMUX STRINGS====================-->
@@ -703,7 +710,7 @@
     <!-- VM Creation & Setup -->
     <string name="vm_action_create_new">New VM</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string> <!-- Was: new_vm -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
     <!-- Was: verified_content -->
     <!-- Was: not_verified_content -->
 

@@ -17,28 +17,30 @@
             android:id="@+id/collapsingToolbarLayout"
             style="@style/App.CollapsingToolbarLarge"
             app:title="@string/create"
-            app:toolbarId="@id/toolbar" >
+            app:toolbarId="@id/toolbar">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 app:layout_collapseMode="pin">
+
                 <com.google.android.material.appbar.MaterialToolbar
                     android:id="@+id/toolbar"
                     style="@style/App.CollapsingMaterialToolbar"
                     android:layout_width="0dp"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
+
                 <com.google.android.material.button.MaterialButton
-                    style="?attr/materialIconButtonFilledStyle"
                     android:id="@+id/btn_create"
+                    style="?attr/materialIconButtonFilledStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
                     android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="8dp"
                     app:icon="@drawable/check_24px"
-                    app:iconSize="24dp"
-                    app:iconGravity="textStart"/>
+                    app:iconGravity="textStart"
+                    app:iconSize="24dp" />
             </LinearLayout>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
@@ -59,159 +61,86 @@
 
             <com.google.android.material.card.MaterialCardView
                 style="?attr/materialCardViewFilledStyle"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_gravity="center_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginVertical="8dp"
                 app:cardBackgroundColor="?attr/colorCard">
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-                    <ImageView
-                        android:id="@+id/ivIcon"
+                    <TextView
+                        style="@style/MaterialAlertDialog.Material3Expressive.Title.Text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="16dp"
+                        android:text="@string/personalization" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginVertical="8dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:id="@+id/ivIcon"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="?attr/selectableItemBackground"
+                                android:scaleType="centerCrop"
+                                app:srcCompat="@drawable/ic_computer_180dp_with_padding" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="bottom|end">
+
+                                <ImageView
+                                    android:id="@+id/ivAddThubnail"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/backgroud_round_only_left_25_black_50_style"
+                                    android:padding="4dp"
+                                    app:srcCompat="@drawable/round_add_24"
+                                    app:tint="@android:color/white" />
+                            </LinearLayout>
+                        </RelativeLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/titleField"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="?attr/selectableItemBackground"
-                        android:scaleType="centerCrop"
-                        app:srcCompat="@drawable/ic_computer_180dp_with_padding" />
+                        android:layout_height="wrap_content"
+                        android:hint="@string/rom_name"
+                        android:theme="@style/AppTheme.TextInput"
+                        app:startIconDrawable="@drawable/edit_24px">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="bottom|end">
-
-                        <ImageView
-                            android:id="@+id/ivAddThubnail"
-                            android:layout_width="wrap_content"
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/title"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/backgroud_round_only_left_25_black_50_style"
-                            android:padding="4dp"
-                            app:srcCompat="@drawable/round_add_24"
-                            app:tint="@android:color/white" />
-                    </LinearLayout>
-                </RelativeLayout>
+                            android:inputType="text"
+                            android:selectAllOnFocus="true"
+                            android:singleLine="true" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/titleField"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/rom_name"
-                android:theme="@style/AppTheme.TextInput"
-                app:startIconDrawable="@drawable/edit_24px">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:selectAllOnFocus="true"
-                    android:singleLine="true" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/driveField"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                android:hint="@string/rom_drive_qcow2_img_etc"
-                android:theme="@style/AppTheme.TextInput"
-                app:endIconContentDescription="@string/make_image"
-                app:endIconDrawable="@drawable/more_vert_24px"
-                app:endIconMode="custom"
-                app:startIconDrawable="@drawable/hard_drive_24px">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/drive"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:editable="false"
-                    android:focusable="false"
-                    android:inputType="text"
-                    android:selectAllOnFocus="true"
-                    android:singleLine="true" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/cdromField"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="true"
-                android:hint="@string/cdrom_hint"
-                android:theme="@style/AppTheme.TextInput"
-                app:endIconDrawable="@drawable/close_24px"
-                app:startIconDrawable="@drawable/album_24px">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/cdrom"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:editable="false"
-                    android:focusable="false"
-                    android:inputType="text"
-                    android:selectAllOnFocus="true"
-                    android:singleLine="true" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/qemuField"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/qemu_params"
-                android:theme="@style/AppTheme.TextInput"
-                app:startIconDrawable="@drawable/ic_qemu">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/qemu"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:focusable="false"
-                    android:inputType="none"
-                    android:selectAllOnFocus="true"
-                    android:singleLine="true" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <Button
-                android:id="@+id/addRomBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/add"
-                android:visibility="gone" />
-
-            <LinearLayout
-                android:id="@+id/lineardisclaimer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?android:attr/selectableItemBackground"
-                android:gravity="center_vertical"
-                android:layout_marginVertical="16dp"
-                android:paddingVertical="8dp">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:src="@drawable/verified_user_24px" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/disclaimer_here" />
-            </LinearLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/opencqcm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="8dp"
                 android:background="@drawable/object_shape_single_high"
-                android:padding="16dp"
-                android:layout_marginBottom="16dp">
+                android:padding="16dp">
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -246,6 +175,212 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                style="?attr/materialCardViewFilledStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="8dp"
+                app:cardBackgroundColor="?attr/colorCard">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        style="@style/MaterialAlertDialog.Material3Expressive.Title.Text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="16dp"
+                        android:text="@string/storage" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/driveField"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:hint="@string/rom_drive_qcow2_img_etc"
+                        android:theme="@style/AppTheme.TextInput"
+                        app:endIconContentDescription="@string/make_image"
+                        app:endIconDrawable="@drawable/more_vert_24px"
+                        app:endIconMode="custom"
+                        app:startIconDrawable="@drawable/hard_drive_24px">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/drive"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:editable="false"
+                            android:focusable="false"
+                            android:inputType="text"
+                            android:selectAllOnFocus="true"
+                            android:singleLine="true" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/cdromField"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:hint="@string/cdrom_hint"
+                        android:theme="@style/AppTheme.TextInput"
+                        app:endIconDrawable="@drawable/close_24px"
+                        app:startIconDrawable="@drawable/album_24px">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/cdrom"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:editable="false"
+                            android:focusable="false"
+                            android:inputType="text"
+                            android:selectAllOnFocus="true"
+                            android:singleLine="true" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                style="?attr/materialCardViewFilledStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="8dp"
+                app:cardBackgroundColor="?attr/colorCard">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingTop="16dp">
+
+                    <TextView
+                        style="@style/MaterialAlertDialog.Material3Expressive.Title.Text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="16dp"
+                        android:paddingBottom="8dp"
+                        android:text="@string/boot" />
+
+                    <LinearLayout
+                        android:id="@+id/ln_bootfrom"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="16dp"
+                        android:paddingVertical="8dp"
+                        android:gravity="center_vertical"
+                        android:background="?attr/selectableItemBackground">
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/boot_from"
+                                android:textSize="18sp" />
+                            <TextView
+                                android:id="@+id/tv_bootfrom"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/defaulttext" />
+                        </LinearLayout>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/keyboard_arrow_right_24px" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ln_showbootmenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingVertical="8dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="8dp"
+                        android:gravity="center_vertical"
+                        android:background="?attr/selectableItemBackground">
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/show_boot_menu" />
+                        <CheckBox
+                            android:id="@+id/cb_showbootmenu"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:clickable="false"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                style="?attr/materialCardViewFilledStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="8dp"
+                app:cardBackgroundColor="?attr/colorCard">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        style="@style/MaterialAlertDialog.Material3Expressive.Title.Text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="16dp"
+                        android:text="@string/advanced" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/qemuField"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/qemu_params"
+                        android:theme="@style/AppTheme.TextInput"
+                        app:startIconDrawable="@drawable/ic_qemu">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/qemu"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:focusable="false"
+                            android:inputType="none"
+                            android:selectAllOnFocus="true"
+                            android:singleLine="true" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <LinearLayout
+                android:id="@+id/lineardisclaimer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="16dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:paddingVertical="8dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:src="@drawable/verified_user_24px" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/disclaimer_here" />
+            </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

@@ -40,7 +40,7 @@ import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.AboutActivity;
 import com.vectras.vm.AppConfig;
-import com.vectras.vm.VMCreatorActivity;
+import com.vectras.vm.creator.VMCreatorActivity;
 import com.vectras.vm.Minitools;
 import com.vectras.vm.R;
 import com.vectras.vm.WebViewActivity;
