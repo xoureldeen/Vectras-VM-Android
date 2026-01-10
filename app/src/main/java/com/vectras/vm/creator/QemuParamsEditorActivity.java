@@ -1,4 +1,4 @@
-package com.vectras.vm;
+package com.vectras.vm.creator;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -7,6 +7,7 @@ import android.view.inputmethod.InputMethodManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.vectras.vm.R;
 import com.vectras.vm.databinding.ActivityQemuParamsEditorBinding;
 import com.vectras.vm.utils.UIUtils;
 

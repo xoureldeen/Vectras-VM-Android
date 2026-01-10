@@ -14,9 +14,11 @@ import com.vectras.vm.R;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Enumeration;
 import java.util.zip.CRC32;
 import java.util.zip.ZipEntry;
@@ -258,70 +260,101 @@ public class ZipUtils {
             ProgressBar progressBar
     ) {
         try {
-            long totalBytes = 0;
-            for (String path : filePaths) {
-                File f = new File(path);
-                if (f.isFile()) totalBytes += f.length();
-            }
-
-            long bytesWritten = 0;
-            byte[] buffer;
-
             try (FileOutputStream fos = new FileOutputStream(outputZip);
                  ZipOutputStream zos = new ZipOutputStream(fos)) {
 
-                for (String filePath : filePaths) {
-                    File file = new File(filePath);
-                    long size = file.length();
-                    long crc = calculateCrc(context, file);
-
-                    try (FileInputStream fis = new FileInputStream(file)) {
-                        ZipEntry entry = new ZipEntry(file.getName());
-
-                        entry.setMethod(ZipEntry.DEFLATED);
-                        entry.setSize(size);
-
-                        if (MainSettingsManager.getCyclicRedundancyCheck(context))
-                            entry.setCrc(crc);
-
-                        zos.putNextEntry(entry);
-
-                        if (DeviceUtils.totalMemoryCapacity(context) < 4L * 1024 * 1024 * 1024)
-                            buffer = new byte[64 * 1024];
-                        else
-                            buffer = new byte[128 * 1024];
-
-                        int len;
-                        long lastProgress = -1;
-                        while ((len = fis.read(buffer)) != -1) {
-                            zos.write(buffer, 0, len);
-                            bytesWritten += len;
-
-                            final int progress = (int) ((bytesWritten * 100L) / totalBytes);
-
-                            if (progress > lastProgress) {
-                                lastProgress = progress;
-                                updateStatus(
-                                        statusTextView,
-                                        progressBar,
-                                        (progress == 0 || progress > 100 ?
-                                                context.getString(R.string.exporting) :
-                                                context.getString(R.string.completed) + " " + progress + "%")
-                                                + "\n" + context.getString(R.string.please_stay_here),
-                                        progress
-                                );
-                            }
-                        }
-
-                        zos.closeEntry();
-                    }
-                }
+                compressCore(context, filePaths, zos, statusTextView, progressBar);
             }
             return true;
         } catch (Exception e) {
             Log.e(TAG, "compress: ", e);
             lastErrorContent = e.toString();
             return false;
+        }
+    }
+
+    public static boolean compress(
+            Context context,
+            String[] filePaths,
+            Uri outputZip,
+            TextView statusTextView,
+            ProgressBar progressBar
+    ) {
+        try {
+            try (OutputStream os = context.getContentResolver().openOutputStream(outputZip);
+                 ZipOutputStream zos = new ZipOutputStream(os)) {
+
+                compressCore(context, filePaths, zos, statusTextView, progressBar);
+            }
+            return true;
+        } catch (Exception e) {
+            Log.e(TAG, "compress: ", e);
+            lastErrorContent = e.toString();
+            return false;
+        }
+    }
+
+    public static void compressCore(
+            Context context,
+            String[] filePaths,
+            ZipOutputStream zos,
+            TextView statusTextView,
+            ProgressBar progressBar) throws Exception {
+
+        long totalBytes = 0;
+        for (String path : filePaths) {
+            File f = new File(path);
+            if (f.isFile()) totalBytes += f.length();
+        }
+
+        long bytesWritten = 0;
+        byte[] buffer;
+
+        for (String filePath : filePaths) {
+            File file = new File(filePath);
+            long size = file.length();
+            long crc = calculateCrc(context, file);
+
+            try (FileInputStream fis = new FileInputStream(file)) {
+                ZipEntry entry = new ZipEntry(file.getName());
+
+                entry.setMethod(ZipEntry.DEFLATED);
+                entry.setSize(size);
+
+                if (MainSettingsManager.getCyclicRedundancyCheck(context))
+                    entry.setCrc(crc);
+
+                zos.putNextEntry(entry);
+
+                if (DeviceUtils.totalMemoryCapacity(context) < 4L * 1024 * 1024 * 1024)
+                    buffer = new byte[64 * 1024];
+                else
+                    buffer = new byte[128 * 1024];
+
+                int len;
+                long lastProgress = -1;
+                while ((len = fis.read(buffer)) != -1) {
+                    zos.write(buffer, 0, len);
+                    bytesWritten += len;
+
+                    final int progress = (int) ((bytesWritten * 100L) / totalBytes);
+
+                    if (progress > lastProgress) {
+                        lastProgress = progress;
+                        updateStatus(
+                                statusTextView,
+                                progressBar,
+                                (totalBytes > 0 && (progress == 0 || progress > 100) ?
+                                        context.getString(R.string.exporting) :
+                                        context.getString(R.string.completed) + " " + progress + "%")
+                                        + "\n" + context.getString(R.string.please_stay_here),
+                                progress
+                        );
+                    }
+                }
+
+                zos.closeEntry();
+            }
         }
     }
 

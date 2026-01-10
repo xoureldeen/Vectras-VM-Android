@@ -28,9 +28,9 @@ public class RomOptionsDialog {
 
         Button exportRomBtn = v.findViewById(R.id.exportRomBtn);
         exportRomBtn.setOnClickListener(v2 -> {
-            ExportRomActivity.pendingPosition = position;
             Intent intent = new Intent();
             intent.setClass(activity, ExportRomActivity.class);
+            intent.putExtra("POS", position);
             activity.startActivity(intent);
             bottomSheetDialog.cancel();
         });

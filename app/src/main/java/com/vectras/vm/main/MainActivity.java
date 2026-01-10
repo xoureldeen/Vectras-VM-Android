@@ -54,7 +54,7 @@ import com.vectras.vm.databinding.BottomsheetdialogLoggerBinding;
 import com.vectras.vm.databinding.UpdateBottomDialogLayoutBinding;
 import com.vectras.vm.main.romstore.RomStoreHomeAdapterSearch;
 import com.vectras.vm.main.romstore.DataRoms;
-import com.vectras.vm.SetArchActivity;
+import com.vectras.vm.creator.SetArchActivity;
 import com.vectras.vm.VMManager;
 import com.vectras.vm.adapter.LogsAdapter;
 import com.vectras.vm.main.core.CallbackInterface;
@@ -69,6 +69,7 @@ import com.vectras.vm.settings.UpdaterActivity;
 import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
+import com.vectras.vm.utils.IntentUtils;
 import com.vectras.vm.utils.LibraryChecker;
 import com.vectras.vm.utils.NotificationUtils;
 import com.vectras.vm.utils.PackageUtils;
@@ -423,10 +424,7 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
                 startActivity(new Intent(this, AboutActivity.class));
             }
             if (id == R.id.navigation_item_help) {
-                String tw = AppConfig.vectrasHelp;
-                Intent w = new Intent(ACTION_VIEW);
-                w.setData(Uri.parse(tw));
-                startActivity(w);
+                IntentUtils.openUrl(this, AppConfig.vectrasHelp, true);
             } else if (id == R.id.navigation_item_website) {
                 String tw = AppConfig.vectrasWebsite;
                 Intent w = new Intent(ACTION_VIEW);

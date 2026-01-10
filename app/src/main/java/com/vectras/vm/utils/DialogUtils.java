@@ -254,12 +254,7 @@ public class DialogUtils {
                     _context.getResources().getString(R.string.join_us_on_telegram_where_we_publish_all_the_news_and_updates_and_receive_your_opinions_and_bugs),
                     _context.getResources().getString(R.string.join), _context.getResources().getString(R.string.cancel), _context.getResources().getString(R.string.dont_show_again),
                     true, R.drawable.send_24px, true,
-                    () -> {
-                        Intent intent = new Intent(ACTION_VIEW);
-                        intent.addCategory(Intent.CATEGORY_BROWSABLE);
-                        intent.setData(Uri.parse(AppConfig.telegramLink));
-                        _context.startActivity(intent);
-                    }, null,
+                    () -> IntentUtils.openTelegramLink(_context), null,
                     () -> {
                         SharedPreferences.Editor edit = prefs.edit();
                         edit.putBoolean("tgDialog", true);

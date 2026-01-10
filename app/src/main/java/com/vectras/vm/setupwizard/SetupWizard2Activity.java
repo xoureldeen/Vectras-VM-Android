@@ -44,6 +44,7 @@ import com.vectras.vm.main.MainActivity;
 import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
+import com.vectras.vm.utils.IntentUtils;
 import com.vectras.vm.utils.JSONUtils;
 import com.vectras.vm.utils.ListUtils;
 import com.vectras.vm.utils.PermissionUtils;
@@ -193,10 +194,7 @@ public class SetupWizard2Activity extends AppCompatActivity {
                 uiController(STEP_SYSTEM_UPDATE);
                 binding.btnSkipSystemUpdate.setVisibility(View.GONE);
             } else if (isLibProotError) {
-                Intent intent = new Intent();
-                intent.setAction(ACTION_VIEW);
-                intent.setData(Uri.parse(AppConfig.telegramLink));
-                startActivity(intent);
+                IntentUtils.openTelegramLink(this);
             } else if (SetupFeatureCore.isInstalledSystemFiles(this)) {
                 getDataForStandardSetup();
             } else {
@@ -210,8 +208,7 @@ public class SetupWizard2Activity extends AppCompatActivity {
         bindingFinalSteps.btnContinue.setOnClickListener(v -> {
             if (currentStep == STEP_JOIN_COMMUNITY) {
                 uiControllerFinalSteps(currentStep + 1);
-                Intent intent = new Intent(ACTION_VIEW, Uri.parse(AppConfig.telegramLink));
-                startActivity(intent);
+                IntentUtils.openTelegramLink(this);
                 //Don't show join Telegram dialog again
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
                 SharedPreferences.Editor edit = prefs.edit();
@@ -772,7 +769,7 @@ public class SetupWizard2Activity extends AppCompatActivity {
             // Assign data
             HashMap<String, String> item = data.get(position);
             holder.simpleLayoutListViewWithCheckBinding.textview.setText(item.get("location"));
-            holder.simpleLayoutListViewWithCheckBinding.ivCheck.setVisibility(position == selectedPosition ? View.VISIBLE : View.GONE);
+            holder.simpleLayoutListViewWithCheckBinding.ivCheck.setVisibility(position == selectedPosition ? View.VISIBLE : View.INVISIBLE);
 
 
             return convertView;

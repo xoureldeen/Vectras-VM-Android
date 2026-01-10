@@ -2,8 +2,6 @@ package com.vectras.vm.creator;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +12,10 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.vectras.vm.R;
-import com.vectras.vm.databinding.RecyclerViewBinding;
+import com.vectras.vm.databinding.DialogListSelectorLayoutBinding;
 import com.vectras.vm.databinding.SimpleLayoutListViewWithCheckBinding;
 
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -43,19 +37,30 @@ public class VMCreatorSelector {
 
     public static void showDialog(Activity activity, ArrayList<HashMap<String, Object>> list, int position,SelectorCallback callback, String title) {
         LinearLayoutManager layoutmanager = new LinearLayoutManager(activity);
-        RecyclerViewBinding binding = RecyclerViewBinding.inflate(activity.getLayoutInflater());
+        DialogListSelectorLayoutBinding binding = DialogListSelectorLayoutBinding.inflate(activity.getLayoutInflater());
 
         AlertDialog dialog = new AlertDialog.Builder(activity)
                 .setView(binding.getRoot())
                 .create();
 
-        dialog.setTitle(title);
-        dialog.setButton(AlertDialog.BUTTON_POSITIVE, activity.getString(R.string.close), (dialog1, which) -> dialog1.dismiss());
+        binding.tvTitle.setText(title);
+        binding.btnClose.setOnClickListener(v -> dialog.dismiss());
 
         binding.list.setAdapter(new RecyclerviewAdapter(activity, dialog, list, position, callback));
         binding.list.setLayoutManager(layoutmanager);
 
         dialog.show();
+
+        binding.list.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView rv, int dx, int dy) {
+                boolean canScrollUp = rv.canScrollVertically(-1);
+                boolean canScrollDown = rv.canScrollVertically(1);
+
+                binding.dvTop.setVisibility(canScrollUp ? View.VISIBLE : View.INVISIBLE);
+                binding.dvBottom.setVisibility(canScrollDown ? View.VISIBLE : View.INVISIBLE);
+            }
+        });
 
         if (position > -1) binding.list.scrollToPosition(position);
     }
@@ -90,7 +95,7 @@ public class VMCreatorSelector {
             View view = holder.itemView;
             TextView title = view.findViewById(R.id.textview);
             title.setText(Objects.requireNonNull(data.get(position).get("name")).toString());
-            view.findViewById(R.id.iv_check).setVisibility(position == currentPosition ? View.VISIBLE : View.GONE);
+            view.findViewById(R.id.iv_check).setVisibility(position == currentPosition ? View.VISIBLE : View.INVISIBLE);
             view.findViewById(R.id.main).setOnClickListener(v -> {
                 callback.onSelected(
                         position,

@@ -5,19 +5,22 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.vectras.vm.databinding.ActivityExportRomBinding;
+import com.vectras.vm.main.vms.DataMainRoms;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.PackageUtils;
@@ -31,16 +34,12 @@ import java.util.Objects;
 
 public class ExportRomActivity extends AppCompatActivity {
 
+    private final String TAG = "ExportRomActivity";
     ActivityExportRomBinding binding;
-    public static int pendingPosition = 0;
-    public static HashMap<String, Object> mapForGetData = new HashMap<>();
-    public static ArrayList<HashMap<String, Object>> listmapForGetData = new ArrayList<>();
     private SharedPreferences data;
-    public String getRomPath = "";
-    public String iconfile = "";
-    public String diskfile = "";
-    public String cdromfile = "";
     private boolean isExporting = false;
+    private ActivityResultLauncher<String> folderPicker;
+    private DataMainRoms current;
 
 
     @Override
@@ -59,13 +58,23 @@ public class ExportRomActivity extends AppCompatActivity {
             binding.edContent.setEnabled(false);
             binding.edAuthor.setEnabled(true);
             binding.edContent.setEnabled(true);
-            startCreate();
+            folderPicker.launch(current.itemName + ".cvbi");
         });
 
         data = getSharedPreferences("data", Activity.MODE_PRIVATE);
 
         binding.edAuthor.setText(data.getString("author", ""));
         binding.edContent.setText(data.getString("desc", ""));
+
+        current = VMManager.getVMConfig(getIntent().getIntExtra("POS", 0));
+
+        folderPicker = registerForActivityResult(
+                new ActivityResultContracts.CreateDocument("application/octet-stream"),
+                uri -> {
+                    if (uri != null) {
+                        startCreate(uri);
+                    }
+                });
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
@@ -87,8 +96,9 @@ public class ExportRomActivity extends AppCompatActivity {
     }
 
     @SuppressLint("SetTextI18n")
-    private void startCreate() {
-        File vDir = new File(AppConfig.cvbiFolder);
+    private void startCreate(Uri uri) {
+        String cvbiFolder = Objects.requireNonNull(getExternalCacheDir()).getAbsolutePath() + "/cvbi/";
+        File vDir = new File(cvbiFolder);
         if (!vDir.exists()) {
             if (!vDir.mkdirs()) {
                 DialogUtils.oneDialog(this,
@@ -104,90 +114,53 @@ public class ExportRomActivity extends AppCompatActivity {
             }
         }
 
-        listmapForGetData.clear();
-        mapForGetData.clear();
+        String getRomPath = AppConfig.vmFolder + current.vmID + "/";
+        HashMap<String, Object> vmConfigMap = new HashMap<>();
 
-        listmapForGetData = new Gson().fromJson(FileUtils.readAFile(AppConfig.romsdatajson), new TypeToken<ArrayList<HashMap<String, Object>>>() {
-        }.getType());
+        vmConfigMap.put("title", current.itemName);
 
-        getRomPath = AppConfig.vmFolder + Objects.requireNonNull(listmapForGetData.get(pendingPosition).get("vmID")) + "/";
+        if (FileUtils.isFileExists(current.itemIcon)) {
+            vmConfigMap.put("icon", new File(Objects.requireNonNull(Uri.parse(current.itemIcon).getPath())).getName());
+        } else {
+            vmConfigMap.put("icon", current.itemIcon);
+        }
 
-        if (listmapForGetData.get(pendingPosition).containsKey("imgName")) {
-            mapForGetData.put("title", Objects.requireNonNull(listmapForGetData.get(pendingPosition).get("imgName")).toString());
+        if (FileUtils.isFileExists(current.itemPath)) {
+            vmConfigMap.put("drive", new File(Objects.requireNonNull(Uri.parse(current.itemPath).getPath())).getName());
         } else {
-            mapForGetData.put("title", "");
+            vmConfigMap.put("drive", VMManager.quickScanDiskFileInFolder(getRomPath));
         }
-        if (listmapForGetData.get(pendingPosition).containsKey("imgIcon")) {
-            iconfile = Objects.requireNonNull(listmapForGetData.get(pendingPosition).get("imgIcon")).toString();
-            try {
-                mapForGetData.put("icon", Uri.parse(Objects.requireNonNull(listmapForGetData.get(pendingPosition).get("imgIcon")).toString()).getLastPathSegment());
-            } catch (Exception _e) {
-                mapForGetData.put("icon", Objects.requireNonNull(listmapForGetData.get(pendingPosition).get("imgIcon")).toString());
-            }
+
+        if (FileUtils.isFileExists(current.imgCdrom)) {
+            vmConfigMap.put("cdrom", new File(Objects.requireNonNull(Uri.parse(current.imgCdrom).getPath())).getName());
         } else {
-            mapForGetData.put("icon", "");
+            vmConfigMap.put("cdrom", VMManager.quickScanISOFileInFolder(getRomPath));
         }
-        if (listmapForGetData.get(pendingPosition).containsKey("imgPath")) {
-            if (Objects.requireNonNull(listmapForGetData.get(pendingPosition).get("imgPath")).toString().isEmpty()) {
-                diskfile = VMManager.quickScanDiskFileInFolder(getRomPath);
-            } else {
-                diskfile = Objects.requireNonNull(listmapForGetData.get(pendingPosition).get("imgPath")).toString();
-            }
-            mapForGetData.put("drive", Objects.requireNonNull(listmapForGetData.get(pendingPosition).get("imgPath")).toString().replaceAll(getRomPath, ""));
-        } else {
-            diskfile = VMManager.quickScanDiskFileInFolder(getRomPath);
-            mapForGetData.put("drive", "");
-        }
-        if (listmapForGetData.get(pendingPosition).containsKey("imgCdrom")) {
-            if (Objects.requireNonNull(listmapForGetData.get(pendingPosition).get("imgCdrom")).toString().isEmpty()) {
-                cdromfile = VMManager.quickScanISOFileInFolder(getRomPath);
-            } else {
-                cdromfile = Objects.requireNonNull(listmapForGetData.get(pendingPosition).get("imgCdrom")).toString();
-            }
-            mapForGetData.put("cdrom", Objects.requireNonNull(listmapForGetData.get(pendingPosition).get("imgCdrom")).toString().replaceAll(getRomPath, ""));
-        } else {
-            cdromfile = VMManager.quickScanISOFileInFolder(getRomPath);
-            mapForGetData.put("cdrom", "");
-        }
-        if (listmapForGetData.get(pendingPosition).containsKey("bootFrom")) {
-            mapForGetData.put("bootFrom", listmapForGetData.get(pendingPosition).get("bootFrom"));
-        } else {
-            mapForGetData.put("bootFrom", "");
-        }
-        if (listmapForGetData.get(pendingPosition).containsKey("isShowBootMenu")) {
-            mapForGetData.put("isShowBootMenu", listmapForGetData.get(pendingPosition).get("isShowBootMenu"));
-        } else {
-            mapForGetData.put("isShowBootMenu", "");
-        }
-        if (listmapForGetData.get(pendingPosition).containsKey("imgExtra")) {
-            mapForGetData.put("qemu", Objects.requireNonNull(listmapForGetData.get(pendingPosition).get("imgExtra")).toString().replaceAll(getRomPath, "OhnoIjustrealizeditsmidnightandIstillhavetodothis"));
-        } else {
-            mapForGetData.put("qemu", "");
-        }
-        if (listmapForGetData.get(pendingPosition).containsKey("imgArch")) {
-            mapForGetData.put("arch", Objects.requireNonNull(listmapForGetData.get(pendingPosition).get("imgArch")).toString());
-        } else {
-            mapForGetData.put("arch", "");
-        }
+
+        vmConfigMap.put("bootFrom", current.bootFrom);
+        vmConfigMap.put("isShowBootMenu", current.isShowBootMenu);
+        vmConfigMap.put("qemu", current.itemExtra);
+        vmConfigMap.put("arch", current.itemArch);
+
         if (Objects.requireNonNull(binding.edAuthor.getText()).toString().isEmpty()) {
-            mapForGetData.put("author", "Unknow");
+            vmConfigMap.put("author", "Unknow");
         } else {
-            mapForGetData.put("author", binding.edAuthor.getText().toString());
+            vmConfigMap.put("author", binding.edAuthor.getText().toString());
         }
         if (Objects.requireNonNull(binding.edContent.getText()).toString().isEmpty()) {
-            mapForGetData.put("desc", "Empty.");
+            vmConfigMap.put("desc", "Empty.");
         } else {
-            mapForGetData.put("desc", binding.edContent.getText().toString());
+            vmConfigMap.put("desc", binding.edContent.getText().toString());
         }
 
-        mapForGetData.put("versioncode", PackageUtils.getThisVersionCode(getApplicationContext()));
+        vmConfigMap.put("versioncode", PackageUtils.getThisVersionCode(getApplicationContext()));
 
-        FileUtils.writeToFile(new File(String.valueOf(getExternalFilesDir("data"))).getPath(), "rom-data.json", new Gson().toJson(mapForGetData));
+        FileUtils.writeToFile(new File(String.valueOf(getExternalFilesDir("data"))).getPath(), "rom-data.json", new Gson().toJson(vmConfigMap));
 
         String[] filePaths = new String[0];
 
         ArrayList<String> _filelist = new ArrayList<>();
-        FileUtils.getAListOfAllFilesAndFoldersInADirectory(AppConfig.vmFolder + Objects.requireNonNull(listmapForGetData.get(pendingPosition).get("vmID")), _filelist);
+        FileUtils.getAListOfAllFilesAndFoldersInADirectory(AppConfig.vmFolder + current.vmID, _filelist);
         if (!_filelist.isEmpty()) {
             for (int _repeat = 0; _repeat < _filelist.size(); _repeat++) {
                 if (!_filelist.get(_repeat).endsWith("vmID.txt") &&
@@ -215,14 +188,15 @@ public class ExportRomActivity extends AppCompatActivity {
             isExporting = true;
 
             String outputPath;
-            if (!FileUtils.isFileExists(AppConfig.cvbiFolder + Objects.requireNonNull(mapForGetData.get("title")) + ".cvbi")) {
-                outputPath = AppConfig.cvbiFolder + Objects.requireNonNull(mapForGetData.get("title")) + ".cvbi";
+            String outputFileName = current.itemName + ".cvbi";
+            if (!FileUtils.isFileExists(cvbiFolder + current.itemName + ".cvbi")) {
+                outputPath = cvbiFolder + outputFileName;
             } else {
-                String outputFileName = Objects.requireNonNull(mapForGetData.get("title")).toString();
                 int prefix = 0;
                 while (true) {
-                    if (!FileUtils.isFileExists(AppConfig.cvbiFolder + outputFileName + "_" + prefix + ".cvbi")) {
-                        outputPath = AppConfig.cvbiFolder + outputFileName + "_" + prefix + ".cvbi";
+                    if (!FileUtils.isFileExists(cvbiFolder + current.itemName + "_" + prefix + ".cvbi")) {
+                        outputFileName = current.itemName + "_" + prefix + ".cvbi";
+                        outputPath = cvbiFolder + outputFileName;
                         break;
                     } else {
                         prefix++;
@@ -230,23 +204,31 @@ public class ExportRomActivity extends AppCompatActivity {
                 }
             }
 
-            boolean result = ZipUtils.compress(
+            final boolean[] result = {ZipUtils.compress(
                     this,
                     finalFilePaths,
-                    outputPath,
+                    uri,
                     progressText,
                     progressBar
-            );
-
+            )};
             runOnUiThread(() -> {
                 isExporting = false;
                 progressDialog.dismiss();
 
+                String finalOutputPath = "";
+                try {
+                    FileUtils.deleteDirectory(outputPath);
+                    finalOutputPath = FileUtils.getPath(this, uri);
+                } catch (Exception e) {
+                    Log.e(TAG, "startCreate: ", e);
+                }
+
+                String finalOutputPath1 = finalOutputPath;
                 String title;
                 String content;
-                if (result) {
+                if (result[0]) {
                     title = getString(R.string.done);
-                    content = getString(R.string.saved_in) + ": " + outputPath + ".";
+                    content = finalOutputPath1 == null || finalOutputPath1.isEmpty() ? getString(R.string.rom_successfully_exported) : getString(R.string.saved_in) + ": " + finalOutputPath1 + ".";
                 } else {
                     title = getString(R.string.oops);
                     content = getString(R.string.something_went_wrong) + ":\n\n" + ZipUtils.lastErrorContent;
@@ -255,19 +237,20 @@ public class ExportRomActivity extends AppCompatActivity {
                 DialogUtils.twoDialog(this,
                         title,
                         content,
-                        getString(result ? R.string.show_in_folder : R.string.ok),
-                        getString(result ? R.string.close : R.string.exit),
+                        getString(result[0] ? R.string.show_in_folder : R.string.ok),
+                        getString(result[0] ? R.string.close : R.string.exit),
                         true,
-                        result ? R.drawable.check_24px : R.drawable.error_96px,
+                        result[0] ? R.drawable.check_24px : R.drawable.error_96px,
                         true,
                         () -> {
-                            if (result) {
-                                File file = new File(outputPath);
+                            if (result[0]) {
+                                assert finalOutputPath1 != null;
+                                File file = new File(finalOutputPath1.isEmpty() ? outputPath : finalOutputPath1);
                                 FileUtils.openFolder(this, file.getParent());
                             }
                         },
                         () -> {
-                            if (!result) {
+                            if (!result[0]) {
                                 finish();
                             }
                         },

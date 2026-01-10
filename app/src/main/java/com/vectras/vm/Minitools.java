@@ -310,30 +310,4 @@ public class Minitools extends AppCompatActivity {
             });
         }).start();
     }
-
-    public void extractLoaderApk() {
-        String apkLoaderAssetPath = "bootstrap/loader.apk";
-        String apkLoaderextractedFilePath = TermuxService.PREFIX_PATH + "/libexec/termux-x11/loader.apk";
-
-        FileUtils.deleteDirectory(apkLoaderextractedFilePath);
-        if (copyAssetToFile(apkLoaderAssetPath, apkLoaderextractedFilePath)) {
-            FileUtils.copyAFile(TermuxService.PREFIX_PATH + "/libexec/termux-x11/loader.apk", AppConfig.maindirpath);
-        }
-    }
-
-    private boolean copyAssetToFile(String assetPath, String outputPath) {
-        try (InputStream in = getAssets().open(assetPath);
-             OutputStream out = new FileOutputStream(outputPath)) {
-            byte[] buffer = new byte[1024];
-            int read;
-            while ((read = in.read(buffer)) != -1) {
-                out.write(buffer, 0, read);
-            }
-            out.flush();
-            return true;
-        } catch (IOException e) {
-            Log.e(TAG, "copyAssetToFile: ", e);
-            return false;
-        }
-    }
 }

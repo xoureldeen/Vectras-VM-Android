@@ -508,6 +508,8 @@
     <string name="hard_disk">Hard disk</string>
     <string name="floppy_disk">Floppy disk</string>
     <string name="network">Network</string>
+    <string name="rom_successfully_exported">Rom successfully exported.</string>
+    <string name="options">Options</string>
 
 
     <!--======================TERMUX STRINGS====================-->
