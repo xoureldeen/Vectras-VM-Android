@@ -130,7 +130,7 @@
             android:exported="true"
             android:hardwareAccelerated="true" />
         <activity
-            android:name=".QemuParamsEditorActivity"
+            android:name=".creator.QemuParamsEditorActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
             android:exported="false"
             android:hardwareAccelerated="true"
@@ -174,7 +174,7 @@
             android:exported="true"
             android:label="Data Explorer" />
         <activity
-            android:name=".SetArchActivity"
+            android:name=".creator.SetArchActivity"
             android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
             android:label="Set Qemu Version" />
 

@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true"
     android:id="@+id/main"
-    tools:context=".QemuParamsEditorActivity">
+    tools:context=".creator.QemuParamsEditorActivity">
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"

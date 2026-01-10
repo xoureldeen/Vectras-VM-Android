@@ -19,10 +19,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.util.Enumeration;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -30,6 +26,7 @@ import com.vectras.vm.R;
 import com.vectras.vm.VMManager;
 import com.vectras.vm.AppConfig;
 import com.vectras.vm.VectrasApp;
+import com.vectras.vm.logger.VectrasStatus;
 import com.vectras.vm.utils.ClipboardUltils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.NotificationUtils;
@@ -63,18 +60,23 @@ public class Terminal {
         AtomicReference<StringBuilder> output = new AtomicReference<>(new StringBuilder());
         StringBuilder errors = new StringBuilder();
         Log.d(TAG, userCommand);
-        com.vectras.vm.logger.VectrasStatus.logError("<font color='#4db6ac'>VTERM: >" + userCommand + "</font>");
+        VectrasStatus.logError("<font color='#4db6ac'>VTERM: >" + userCommand + "</font>");
 
         // Show ProgressDialog
-        View progressView = LayoutInflater.from(dialogActivity).inflate(R.layout.dialog_progress_style, null);
-        TextView progress_text = progressView.findViewById(R.id.progress_text);
-        progress_text.setText(progressDialogMessage);
-        AlertDialog progressDialog = new MaterialAlertDialogBuilder(dialogActivity, R.style.CenteredDialogTheme)
-                .setView(progressView)
-                .setCancelable(false)
-                .create();
+        AlertDialog progressDialog;
+        if (dialogActivity != null) {
+            View progressView = LayoutInflater.from(dialogActivity).inflate(R.layout.dialog_progress_style, null);
+            TextView progress_text = progressView.findViewById(R.id.progress_text);
+            progress_text.setText(progressDialogMessage);
+            progressDialog = new MaterialAlertDialogBuilder(dialogActivity, R.style.CenteredDialogTheme)
+                    .setView(progressView)
+                    .setCancelable(false)
+                    .create();
 
-        if (showProgressDialog) progressDialog.show();
+            if (showProgressDialog) progressDialog.show();
+        } else {
+            progressDialog = null;
+        }
 
         new Thread(() -> {
             try {
@@ -116,17 +118,18 @@ public class Terminal {
 
                 output.set(streamLog(userCommand, qemuProcess, false));
             } catch (IOException e) {
-                progressDialog.dismiss(); // Dismiss ProgressDialog
                 output.get().append(e.getMessage());
                 errors.append(Log.getStackTraceString(e));
             } finally {
                 new Handler(Looper.getMainLooper()).post(() -> {
-                    progressDialog.dismiss(); // Dismiss ProgressDialog
                     AppConfig.temporaryLastedTerminalOutput = output.toString();
-                    if (showResultDialog) {
-                        String finalOutput = output.toString();
-                        String finalErrors = errors.toString();
-                        showDialog(finalOutput.isEmpty() ? finalErrors : finalOutput.replace("read interrupted", "Done!"), dialogActivity, userCommand);
+                    if (dialogActivity != null) {
+                        progressDialog.dismiss(); // Dismiss ProgressDialog
+                        if (showResultDialog) {
+                            String finalOutput = output.toString();
+                            String finalErrors = errors.toString();
+                            showDialog(finalOutput.isEmpty() ? finalErrors : finalOutput.replace("read interrupted", "Done!"), dialogActivity, userCommand);
+                        }
                     }
                 });
             }
@@ -137,7 +140,7 @@ public class Terminal {
         AtomicReference<StringBuilder> output = new AtomicReference<>(new StringBuilder());
         StringBuilder errors = new StringBuilder();
         Log.d(TAG, userCommand);
-        com.vectras.vm.logger.VectrasStatus.logError("<font color='#4db6ac'>VTERM: >" + userCommand + "</font>");
+        VectrasStatus.logError("<font color='#4db6ac'>VTERM: >" + userCommand + "</font>");
         new Thread(() -> {
             try {
                 // Set up the qemuProcess builder to start PRoot with environmental variables and commands
@@ -185,7 +188,7 @@ public class Terminal {
                 processBuilder.command(prootCommand);
                 qemuProcess = processBuilder.start();
 
-                output.set(streamLog(userCommand, qemuProcess, false));
+                output.set(streamLog(userCommand, qemuProcess, true));
             } catch (IOException e) {
                 output.get().append(e.getMessage());
                 errors.append(Log.getStackTraceString(e));
@@ -210,7 +213,7 @@ public class Terminal {
         StringBuilder output = new StringBuilder();
         StringBuilder errors = new StringBuilder();
         Log.d(TAG, userCommand);
-        com.vectras.vm.logger.VectrasStatus.logError("<font color='#4db6ac'>VTERM: >" + userCommand + "</font>");
+        VectrasStatus.logError("<font color='#4db6ac'>VTERM: >" + userCommand + "</font>");
 
         try {
             ProcessBuilder processBuilder = new ProcessBuilder();
@@ -261,11 +264,11 @@ public class Terminal {
         void onCommandCompleted(String output, String errors);
     }
 
-    public String executeShellCommand(String userCommand, Context dialogActivity, boolean isShowProgressDialog, CommandCallback callback) {
+    public void executeShellCommand(String userCommand, Context dialogActivity, boolean isShowProgressDialog, CommandCallback callback) {
         AtomicReference<StringBuilder> output = new AtomicReference<>(new StringBuilder());
         StringBuilder errors = new StringBuilder();
         Log.d(TAG, userCommand);
-        com.vectras.vm.logger.VectrasStatus.logError("<font color='#4db6ac'>VTERM: >" + userCommand + "</font>");
+        VectrasStatus.logError("<font color='#4db6ac'>VTERM: >" + userCommand + "</font>");
 
         // Show ProgressDialog on the main thread
         View progressView = LayoutInflater.from(dialogActivity).inflate(R.layout.dialog_progress_style, null);
@@ -330,8 +333,6 @@ public class Terminal {
                 new Handler(Looper.getMainLooper()).post(() -> callback.onCommandCompleted(output.toString(), errors.toString()));
             }
         }).start();
-
-        return "Execution is in progress..."; // Returning a message indicating the command execution is ongoing
     }
 
     /**
@@ -357,7 +358,7 @@ public class Terminal {
         return false;
     }
 
-    public static StringBuilder streamLog(String command, Process process, boolean isShortProcess) {
+    public static StringBuilder streamLog(String command, Process process, boolean isShowResultCode) {
         StringBuilder output = new StringBuilder();
         try {
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()));
@@ -371,23 +372,29 @@ public class Terminal {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                com.vectras.vm.logger.VectrasStatus.logError("<font color='#4db6ac'>VTERM: >" + line + "</font>");
+                VectrasStatus.logError("<font color='#4db6ac'>VTERM: >" + line + "</font>");
                 output.append(line).append("\n");
             }
 
             while ((line = errorReader.readLine()) != null) {
                 Log.w(TAG, line);
-                com.vectras.vm.logger.VectrasStatus.logError("<font color='red'>VTERM ERROR: >" + line + "</font>");
+                VectrasStatus.logError("<font color='red'>VTERM ERROR: >" + line + "</font>");
                 output.append(line).append("\n");
             }
 
-            if (isShortProcess) {
-                int exitCode = process.waitFor();
-                if (exitCode == 0) {
-                    output.append("Execution finished successfully.\n");
-                } else {
-                    output.append("Execution finished with exit code: ").append(exitCode).append("\n");
+            if (isShowResultCode) {
+            new Thread(() -> {
+                int exitCode;
+                try {
+                    exitCode = process.waitFor();
+                    if (exitCode == 0) {
+                        output.append("\nExecution finished successfully.\n");
+                    } else {
+                        output.append("\nExecution finished with exit code: ").append(exitCode).append("\n");
+                    }
+                } catch (Exception ignored) {
                 }
+            }).start();
             }
 
             reader.close();

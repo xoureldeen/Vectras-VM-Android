@@ -28,7 +28,6 @@ import com.google.gson.Gson;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.AppConfig;
 import com.vectras.vm.Fragment.CreateImageDialogFragment;
-import com.vectras.vm.QemuParamsEditorActivity;
 import com.vectras.vm.R;
 import com.vectras.vm.RomInfo;
 import com.vectras.vm.SplashActivity;
@@ -674,7 +673,7 @@ public class VMCreatorActivity extends AppCompatActivity {
                         null));
             } finally {
                 runOnUiThread(() -> {
-                    if (!isImportingCVBI && !isFinishing() && !isDestroyed())
+                    if (!isImportingCVBI && progressDialog.isShowing() && !isFinishing() && !isDestroyed())
                         progressDialog.dismiss();
                 });
             }
@@ -879,12 +878,13 @@ public class VMCreatorActivity extends AppCompatActivity {
             );
 
             runOnUiThread(() -> {
+                if (progressDialog.isShowing() && !isFinishing() && !isDestroyed())
+                    progressDialog.dismiss();
+
                 if (isFinishing() || isDestroyed()) {
                     new Thread(() -> FileUtils.deleteDirectory(AppConfig.vmFolder + vmID)).start();
                     return;
                 }
-
-                progressDialog.dismiss();
 
                 if (result) {
                     afterExtractCVBIFile(fileName);

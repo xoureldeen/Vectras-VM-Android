@@ -2,22 +2,20 @@ package com.vectras.vm.view;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Button;
+
+import androidx.annotation.NonNull;
 
 import com.bumptech.glide.Glide;
 import com.vectras.vm.R;
 import com.vectras.vm.model.GithubUser;
 import com.vectras.vm.network.GithubApiService;
+import com.vectras.vm.utils.IntentUtils;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -73,7 +71,7 @@ public class GithubUserView extends LinearLayout {
         Call<GithubUser> call = service.getUser(username);
         call.enqueue(new Callback<GithubUser>() {
             @Override
-            public void onResponse(Call<GithubUser> call, Response<GithubUser> response) {
+            public void onResponse(@NonNull Call<GithubUser> call, @NonNull Response<GithubUser> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     GithubUser user = response.body();
                     thisUserNameGitHub = user.getLogin();
@@ -95,7 +93,7 @@ public class GithubUserView extends LinearLayout {
             }
 
             @Override
-            public void onFailure(Call<GithubUser> call, Throwable t) {
+            public void onFailure(@NonNull Call<GithubUser> call, @NonNull Throwable t) {
                 userName.setText(getContext().getString(R.string.unknow));
                 userDescription.setText(getContext().getString(R.string.unknow));
                 profileImage.setImageResource(R.drawable.account_circle_24px);
@@ -104,8 +102,6 @@ public class GithubUserView extends LinearLayout {
     }
 
     private void openGithubProfile(Context context) {
-        String url = "https://github.com/" + thisUserNameGitHub;
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-        context.startActivity(intent);
+        IntentUtils.openUrl(context, "https://github.com/" + thisUserNameGitHub, true);
     }
 }

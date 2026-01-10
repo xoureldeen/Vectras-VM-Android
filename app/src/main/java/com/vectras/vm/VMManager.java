@@ -983,10 +983,7 @@ public class VMManager {
 
     public static void killallqemuprocesses(Context context) {
         Terminal vterm = new Terminal(context);
-        vterm.executeShellCommand2("killall -15 qemu-system-i386", false, null);
-        vterm.executeShellCommand2("killall -15 qemu-system-x86_64", false, null);
-        vterm.executeShellCommand2("killall -15 qemu-system-aarch64", false, null);
-        vterm.executeShellCommand2("killall -15 qemu-system-ppc", false, null);
+        vterm.executeShellCommand2("killall -15 qemu-system-i386 && killall -15 qemu-system-x86_64 && killall -15 qemu-system-aarch64 && killall -15 qemu-system-ppc", false, null);
     }
 
     public static void shutdownCurrentVM() {
