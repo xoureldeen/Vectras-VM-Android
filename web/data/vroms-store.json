@@ -1063,6 +1063,24 @@
     "id": ""
   },
   {
+    "rom_name": "Windows 10 Mobile",
+    "rom_icon": "https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/09/17/windows-logo_1_926ed76111646acbbe332bc5af0cf2ce.png",
+    "rom_url": "https://youtu.be/0UOm8HQ07A4",
+    "rom_path": "Windows 10 Mobile.cvbi",
+    "rom_avail": true,
+    "rom_size": "1607",
+    "rom_arch": "X86_64",
+    "rom_kernel": "windows",
+    "rom_extra": "",
+    "final_rom_file_name": "",
+    "desc": "This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 10 Mobile is a phone-oriented version of the Windows 10 family of operating systems, which was released on 16 November 2015 coinciding with the launch of the Lumia 950 and the Lumia 950 XL.",
+    "file_size": "3 GB",
+    "creator": "Nguyen Bao An Bui",
+    "verified": true,
+    "vecid": "windows10mobilecvbi",
+    "id": "99672"
+  },
+  {
     "rom_name": "Windows 11 21H2",
     "rom_icon": "https://www.getmyos.com/app_public/files/t/1/2021/06/windows_11_logo_by_getmyos.png",
     "rom_url": "https://youtu.be/5Vyo5NoO294",
