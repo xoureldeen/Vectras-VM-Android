@@ -411,7 +411,11 @@ public class VMCreatorActivity extends AppCompatActivity {
                                     null));
                             Log.e(TAG, "isoPicker: " + e.getMessage());
                         } finally {
-                            runOnUiThread(progressDialog::dismiss);
+                            runOnUiThread(() -> {
+                                if (!isFinishing() && !isDestroyed()) {
+                                    progressDialog.dismiss();
+                                }
+                            });
                         }
                     });
                 } else {

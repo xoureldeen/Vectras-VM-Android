@@ -16,6 +16,7 @@ public class FCMService
         if (message.getNotification() != null) {
             String title = message.getNotification().getTitle();
             String body = message.getNotification().getBody();
+            String image = message.getNotification().getImageUrl() != null ? message.getNotification().getImageUrl().toString() : null;
 
             Map<String, String> data = message.getData();
 
@@ -24,8 +25,8 @@ public class FCMService
                     NotificationUtils.generalChannelId,
                     title,
                     body,
-                    R.drawable.ic_vectras_vm_48 ,
-                    data.get("largeImage") ,
+                    R.drawable.ic_vectras_vm_48,
+                    image,
                     -1,
                     data.get("url"),
                     null);
