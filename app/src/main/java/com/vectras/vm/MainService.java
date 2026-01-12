@@ -37,10 +37,10 @@ public class MainService extends Service {
         );
 
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("Vectras VM")
+                .setContentTitle(getString(R.string.app_name))
                 .setContentText(MACHINE_NAME + " running in background.")
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .addAction(R.drawable.round_logout_24, "Stop", pStopSelf)
+                .setSmallIcon(R.drawable.ic_vectras_vm_48)
+                .addAction(R.drawable.close_24px, getString(R.string.stop), pStopSelf)
                 .build();
 
         startForeground(NOTIFICATION_ID, notification);
@@ -62,7 +62,6 @@ public class MainService extends Service {
                 service.stopSelf();
                 VMManager.killallqemuprocesses(activityContext);
             }
-
         });
         t.setName("HomeStartVM");
         t.start();
@@ -71,13 +70,9 @@ public class MainService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null && "STOP".equals(intent.getAction())) {
+            VMManager.killallqemuprocesses(this);
             stopForeground(true);
             stopSelf();
-
-            //TODO: Not Work
-            //Terminal.killQemuProcess();
-            VMManager.killallqemuprocesses(this);
-
             return START_NOT_STICKY;
         }
         return START_NOT_STICKY;
@@ -92,7 +87,7 @@ public class MainService extends Service {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel serviceChannel = new NotificationChannel(
                     CHANNEL_ID, CHANNEL_ID,
-                    NotificationManager.IMPORTANCE_DEFAULT
+                    NotificationManager.IMPORTANCE_LOW
             );
 
             NotificationManager manager = getSystemService(NotificationManager.class);

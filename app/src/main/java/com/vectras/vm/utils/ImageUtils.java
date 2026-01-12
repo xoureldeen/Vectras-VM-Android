@@ -39,18 +39,24 @@ public class ImageUtils {
             File folder = new File(saveTo);
             if (!folder.exists()) {
                 if (!folder.mkdirs()) {
-                    Log.e(TAG, "Failed to create folder: " + saveTo);
+                    Log.e(TAG, "saveBitmapToPNGFile: Failed to create folder: " + saveTo);
                     return;
                 }
             }
 
             File file = new File(saveTo, fileName);
             FileOutputStream out = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+
+            if (bitmap == null) {
+                Log.e(TAG, "saveBitmapToPNGFile: Bitmap is null.");
+            } else {
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+            }
+
             out.flush();
             out.close();
         } catch (IOException e) {
-            Log.e(TAG, "Failed to save bitmap to file: " + e.getMessage());
+            Log.e(TAG, "saveBitmapToPNGFile: Failed to save bitmap to file: " + e.getMessage());
         }
     }
 
