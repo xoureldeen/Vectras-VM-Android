@@ -720,6 +720,8 @@ public class FileUtils {
                 int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
                 result = cursor.getString(nameIndex);
             }
+        } catch (SecurityException ignored) {
+
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -727,7 +729,11 @@ public class FileUtils {
         }
 
         if (result == null) {
-            result = uri.getLastPathSegment();
+            String path = uri.getLastPathSegment();
+            if (path != null) {
+                int cut = path.lastIndexOf('/');
+                result = cut != -1 ? path.substring(cut + 1) : path;
+            }
         }
 
         return result;
