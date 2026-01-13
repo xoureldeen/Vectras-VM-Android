@@ -139,7 +139,7 @@ public class ExportRomActivity extends AppCompatActivity {
 
         vmConfigMap.put("bootFrom", current.bootFrom);
         vmConfigMap.put("isShowBootMenu", current.isShowBootMenu);
-        vmConfigMap.put("qemu", current.itemExtra);
+        vmConfigMap.put("qemu", current.itemExtra.replace(AppConfig.vmFolder + current.vmID + "/", "OhnoIjustrealizeditsmidnightandIstillhavetodothis"));
         vmConfigMap.put("arch", current.itemArch);
 
         if (Objects.requireNonNull(binding.edAuthor.getText()).toString().isEmpty()) {
