@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
     ActivityMainContentBinding bindingContent;
     private RomStoreHomeAdapterSearch adapterRomStoreSearch;
     private SoftwareStoreHomeAdapterSearch adapterSoftwareStoreSearch;
-    private final List<DataRoms> dataRomStoreSearch = new ArrayList<>();
+    private final List<DataRoms> listSearchData = new ArrayList<>();
 
     public static CallbackInterface.HomeCallToVmsListener homeCallToVmsListener;
 
@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
 
 //        UIUtils.setOnApplyWindowInsetsListenerTop(bindingContent.main);
 //        UIUtils.setOnApplyWindowInsetsListenerLeftOnly(binding.navView);
-        UIUtils.setOnApplyWindowInsetsListenerBottomOnly(binding.rvRomstoresearch);
+        UIUtils.setOnApplyWindowInsetsListenerBottomOnly(binding.rvSearch);
         UIUtils.setOnApplyWindowInsetsListenerBottomOnly(binding.lnSearchempty);
 
         initialize(bundle);
@@ -214,16 +214,16 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
                 bindingContent.searchbar.setEnabled(true);
                 bindingContent.searchbar.setHint(getText(R.string.search));
                 currentSearchMode = SEARCH_ROM_STORE;
-                adapterRomStoreSearch = new RomStoreHomeAdapterSearch(this, dataRomStoreSearch);
-                binding.rvRomstoresearch.setAdapter(adapterRomStoreSearch);
+                adapterRomStoreSearch = new RomStoreHomeAdapterSearch(this, listSearchData);
+                binding.rvSearch.setAdapter(adapterRomStoreSearch);
             } else if (id == R.id.item_softwarestore) {
                 selectedFragment = new SoftwareStoreFragment();
                 bindingContent.efabCreate.setVisibility(View.GONE);
                 bindingContent.searchbar.setEnabled(true);
                 bindingContent.searchbar.setHint(getText(R.string.search));
                 currentSearchMode = SEARCH_SOFTWARE_STORE;
-                adapterSoftwareStoreSearch = new SoftwareStoreHomeAdapterSearch(this, dataRomStoreSearch);
-                binding.rvRomstoresearch.setAdapter(adapterSoftwareStoreSearch);
+                adapterSoftwareStoreSearch = new SoftwareStoreHomeAdapterSearch(this, listSearchData);
+                binding.rvSearch.setAdapter(adapterSoftwareStoreSearch);
             } else if (id == R.id.item_monitor) {
                 selectedFragment = new SystemMonitorFragment();
                 bindingContent.efabCreate.setVisibility(View.GONE);
@@ -269,7 +269,7 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
             }
         });
 
-        binding.rvRomstoresearch.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        binding.rvSearch.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
 
         binding.searchview.getEditText().
 
@@ -588,16 +588,16 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
                 }
             }
 
-            dataRomStoreSearch.clear();
-            dataRomStoreSearch.addAll(filteredData);
+            listSearchData.clear();
+            listSearchData.addAll(filteredData);
         } catch (Exception e) {
             Log.e("RomManagerActivity", "Json parsing error: " + e.getMessage());
         }
 
-        if (dataRomStoreSearch.isEmpty())
-            binding.rvRomstoresearch.setVisibility(View.GONE);
+        if (listSearchData.isEmpty())
+            binding.rvSearch.setVisibility(View.GONE);
         else
-            binding.rvRomstoresearch.setVisibility(View.VISIBLE);
+            binding.rvSearch.setVisibility(View.VISIBLE);
 
         if (currentSearchMode == SEARCH_ROM_STORE ) {
             if (adapterRomStoreSearch != null) adapterRomStoreSearch.notifyDataSetChanged();

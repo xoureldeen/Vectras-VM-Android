@@ -510,6 +510,10 @@
     <string name="network">Network</string>
     <string name="rom_successfully_exported">Rom successfully exported.</string>
     <string name="options">Options</string>
+    <string name="add_file">Add file</string>
+    <string name="file_added">File added</string>
+    <string name="copy_full_path">Copy full path</string>
+    <string name="adding_file_failed_content">Adding file failed, please try again later.</string>
 
 
     <!--======================TERMUX STRINGS====================-->

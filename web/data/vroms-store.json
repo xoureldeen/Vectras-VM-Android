@@ -1513,6 +1513,24 @@
     "id": ""
   },
   {
+    "rom_name": "Windows 8 build 7898",
+    "rom_icon": "https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/09/17/windows-logo_1_926ed76111646acbbe332bc5af0cf2ce.png",
+    "rom_url": "https://youtu.be/NBVMv6hm7-M",
+    "rom_path": "Windows 8 build 7898.cvbi",
+    "rom_avail": true,
+    "rom_size": "fbl_core1_kernel_npc_ext",
+    "rom_arch": "X86_64",
+    "rom_kernel": "windows",
+    "rom_extra": "",
+    "final_rom_file_name": "",
+    "desc": "This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 8 is a major release of the Windows NT operating system developed by Microsoft. It was released to manufacturing on August 1, 2012, made available for download via MSDN and TechNet on August 15, 2012, and generally released for retail on October 26, 2012.",
+    "file_size": "7 GB",
+    "creator": "Nguyen Bao An Bui",
+    "verified": true,
+    "vecid": "windows8build7898cvbi",
+    "id": "99671"
+  },
+  {
     "rom_name": "Windows 8 build 7955",
     "rom_icon": "https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/09/17/windows-logo_1_926ed76111646acbbe332bc5af0cf2ce.png",
     "rom_url": "https://youtu.be/l-i9hdPpwo4",
