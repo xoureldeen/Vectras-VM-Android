@@ -16,8 +16,7 @@
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             style="@style/App.CollapsingToolbarLarge"
-            app:title="@string/import_and_export"
-            app:subtitle="@string/settings">
+            app:title="@string/import_and_export">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar"

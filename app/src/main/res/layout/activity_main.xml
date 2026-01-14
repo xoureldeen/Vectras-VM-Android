@@ -43,7 +43,7 @@
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_romstoresearch"
+            android:id="@+id/rv_search"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="?attr/colorSurfaceContainerHigh"

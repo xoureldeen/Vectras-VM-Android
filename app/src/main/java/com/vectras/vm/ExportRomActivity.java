@@ -155,7 +155,9 @@ public class ExportRomActivity extends AppCompatActivity {
 
         vmConfigMap.put("versioncode", PackageUtils.getThisVersionCode(getApplicationContext()));
 
-        FileUtils.writeToFile(new File(String.valueOf(getExternalFilesDir("data"))).getPath(), "rom-data.json", new Gson().toJson(vmConfigMap));
+        String tempFolder = Objects.requireNonNull(getExternalCacheDir()).getAbsolutePath() + "/temp/";
+
+        FileUtils.writeToFile(tempFolder, "rom-data.json", new Gson().toJson(vmConfigMap));
 
         String[] filePaths = new String[0];
 
@@ -164,10 +166,17 @@ public class ExportRomActivity extends AppCompatActivity {
         if (!_filelist.isEmpty()) {
             for (int _repeat = 0; _repeat < _filelist.size(); _repeat++) {
                 if (!_filelist.get(_repeat).endsWith("vmID.txt") &&
-                        !_filelist.get(_repeat).endsWith("vmID.old.txt") &&
-                        !_filelist.get(_repeat).endsWith("cqcm.json")) {
+                        !_filelist.get(_repeat).endsWith("vmID.old.txt")) {
                     filePaths = java.util.Arrays.copyOf(filePaths, filePaths.length + 1);
-                    filePaths[filePaths.length - 1] = !_filelist.get(_repeat).endsWith("rom-data.json") ? _filelist.get(_repeat) : getExternalFilesDir("data") + "/rom-data.json";
+
+                    if (_filelist.get(_repeat).endsWith("rom-data.json")) {
+                        filePaths[filePaths.length - 1] = tempFolder + "rom-data.json";
+                    } else if (_filelist.get(_repeat).endsWith("cqcm.json")) {
+                        FileUtils.writeToFile(tempFolder, "cqcm.json", FileUtils.readAFile(_filelist.get(_repeat)).replace(AppConfig.vmFolder + current.vmID + "/", "OhnoIjustrealizeditsmidnightandIstillhavetodothis"));
+                        filePaths[filePaths.length - 1] = tempFolder + "cqcm.json";
+                    } else {
+                        filePaths[filePaths.length - 1] = _filelist.get(_repeat);
+                    }
                 }
             }
         }
@@ -218,6 +227,7 @@ public class ExportRomActivity extends AppCompatActivity {
                 String finalOutputPath = "";
                 try {
                     FileUtils.deleteDirectory(outputPath);
+                    FileUtils.deleteDirectory(tempFolder);
                     finalOutputPath = FileUtils.getPath(this, uri);
                 } catch (Exception e) {
                     Log.e(TAG, "startCreate: ", e);

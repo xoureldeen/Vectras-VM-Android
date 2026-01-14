@@ -739,6 +739,14 @@ public class FileUtils {
         return result;
     }
 
+    public static boolean createDirectory(String path) {
+        File dir = new File(path);
+        if (!dir.exists()) {
+            return dir.mkdirs();
+        }
+        return true;
+    }
+
     public static void deleteDirectory(String _pathToDelete) {
         File _dir = new File(_pathToDelete);
         if (_dir.isDirectory()) {

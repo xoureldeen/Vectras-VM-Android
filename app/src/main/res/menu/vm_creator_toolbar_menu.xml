@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/add_file"
+        android:icon="@drawable/note_add_24px"
+        android:title="@string/add_file"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/show_in_folder"
+        android:icon="@drawable/folder_open_24px"
+        android:title="@string/show_in_folder"
+        app:showAsAction="always"/>
+</menu>

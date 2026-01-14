@@ -9,6 +9,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -36,6 +37,7 @@ import com.vectras.vm.main.vms.DataMainRoms;
 import com.vectras.vm.databinding.ActivityVmCreatorBinding;
 import com.vectras.vm.databinding.DialogProgressStyleBinding;
 import com.vectras.vm.main.MainActivity;
+import com.vectras.vm.utils.ClipboardUltils;
 import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
@@ -75,16 +77,27 @@ public class VMCreatorActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-        return switch (item.getItemId()) {
-            case android.R.id.home -> {
-                finish();
-                yield true;
-            }
-            default -> super.onOptionsItemSelected(item);
-        };
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            finish();
+            return true;
+        } else if (id == R.id.add_file) {
+            filePicker.launch("*/*");
+            return true;
+        } else if (id == R.id.show_in_folder) {
+            FileUtils.createDirectory(AppConfig.vmFolder + vmID);
+            FileUtils.openFolder(this, AppConfig.vmFolder + vmID);
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.vm_creator_toolbar_menu, menu);
+        return true;
+    }
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -218,16 +231,12 @@ public class VMCreatorActivity extends AppCompatActivity {
         binding.lineardisclaimer.setOnClickListener(v -> DialogUtils.oneDialog(this, getResources().getString(R.string.dont_miss_out), getResources().getString(R.string.disclaimer_when_using_rom), getResources().getString(R.string.i_agree), true, R.drawable.verified_user_24px, true, null, null));
 
         binding.lnShowbootmenu.setOnClickListener(v -> binding.cbShowbootmenu.toggle());
-        binding.cbShowbootmenu.setOnCheckedChangeListener((button, isChecked) -> {
-            isShowBootMenu = isChecked;
-        });
+        binding.cbShowbootmenu.setOnCheckedChangeListener((button, isChecked) -> isShowBootMenu = isChecked);
 
-        binding.lnBootfrom.setOnClickListener(v -> {
-            VMCreatorSelector.bootFrom(this, bootFrom, ((position, name, value) -> {
-                bootFrom = position;
-                binding.tvBootfrom.setText(name);
-            }));
-        });
+        binding.lnBootfrom.setOnClickListener(v -> VMCreatorSelector.bootFrom(this, bootFrom, ((position, name, value) -> {
+            bootFrom = position;
+            binding.tvBootfrom.setText(name);
+        })));
 
         modify = getIntent().getBooleanExtra("MODIFY", false);
         if (modify) {
@@ -464,6 +473,63 @@ public class VMCreatorActivity extends AppCompatActivity {
 
                     String finalFilePath = filePath;
                     runOnUiThread(() -> importRom(uri, finalFilePath, FileUtils.getFileNameFromUri(this, uri)));
+                });
+            });
+
+    @SuppressLint("SetTextI18n")
+    private final ActivityResultLauncher<String> filePicker =
+            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
+                if (uri == null) return;
+
+                DialogProgressStyleBinding dialogProgressStyleBinding = DialogProgressStyleBinding.inflate(getLayoutInflater());
+                dialogProgressStyleBinding.progressText.setText(getString(R.string.copying_file));
+                AlertDialog progressDialog = new MaterialAlertDialogBuilder(this, R.style.CenteredDialogTheme)
+                        .setView(dialogProgressStyleBinding.getRoot())
+                        .setCancelable(false)
+                        .create();
+
+                progressDialog.show();
+
+                executor.execute(() -> {
+                    try {
+                        String _filename = FileUtils.getFileNameFromUri(this, uri);
+                        if (_filename == null || _filename.isEmpty()) {
+                            _filename = String.valueOf(System.currentTimeMillis());
+                        }
+
+                        String filePath = AppConfig.vmFolder + vmID + "/" + _filename;
+
+                        FileUtils.copyFileFromUri(this, uri, filePath);
+
+                        runOnUiThread(() -> DialogUtils.twoDialog(this,
+                                getString(R.string.file_added),
+                                filePath,
+                                getString(R.string.copy_full_path),
+                                getString(R.string.close),
+                                true,
+                                R.drawable.check_24px,
+                                true,
+                                () -> ClipboardUltils.copyToClipboard(this, filePath),
+                                null,
+                                null));
+                    } catch (Exception e) {
+                        runOnUiThread(() -> DialogUtils.oneDialog(this,
+                                getString(R.string.oops),
+                                getString(R.string.adding_file_failed_content),
+                                getString(R.string.ok),
+                                true,
+                                R.drawable.error_96px,
+                                true,
+                                null,
+                                null));
+                        Log.e(TAG, "filePicker: " + e.getMessage());
+                    } finally {
+                        runOnUiThread(() -> {
+                            if (!isFinishing() && !isDestroyed()) {
+                                progressDialog.dismiss();
+                            }
+                        });
+                    }
                 });
             });
 
@@ -993,6 +1059,10 @@ public class VMCreatorActivity extends AppCompatActivity {
             }
         } catch (JSONException e) {
             Log.e(TAG, "afterExtractCVBIFile: " + e.getMessage());
+        }
+
+        if (FileUtils.isFileExists(AppConfig.vmFolder + vmID + "/cqcm.json")) {
+            FileUtils.writeToFile(AppConfig.vmFolder + vmID, "cqcm.json", FileUtils.readAFile(AppConfig.vmFolder + vmID + "/cqcm.json").replace("OhnoIjustrealizeditsmidnightandIstillhavetodothis", AppConfig.vmFolder + current.vmID + "/"));
         }
     }
 
