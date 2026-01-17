@@ -706,19 +706,24 @@ public class FileUtils {
 
     public static String getFileNameFromUri(Context context, Uri uri) {
         String result = null;
-
-        Cursor cursor = context.getContentResolver().query(
-                uri,
-                null,
-                null,
-                null,
-                null
-        );
+        Cursor cursor = null;
 
         try {
+            cursor = context.getContentResolver().query(
+                    uri,
+                    null,
+                    null,
+                    null,
+                    null
+            );
+
             if (cursor != null && cursor.moveToFirst()) {
                 int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
                 result = cursor.getString(nameIndex);
+            }
+
+            if (cursor != null) {
+                cursor.close();
             }
         } catch (SecurityException ignored) {
 
@@ -909,7 +914,7 @@ public class FileUtils {
     public static void openFolder(Context context, String folderPath) {
         File folder = new File(folderPath);
 
-        if (!folder.exists() || !folder.isDirectory()) {
+        if (!folder.exists() || !folder.isDirectory() || folderPath.equals(Environment.getExternalStorageDirectory().toString())) {
             DialogUtils.oneDialog(
                     context,
                     context.getString(R.string.oops),

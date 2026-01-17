@@ -1,8 +1,5 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
     id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
 }
@@ -15,8 +12,8 @@ android {
         applicationId "com.vectras.vm"
         minSdk minApi
         targetSdk targetApi
-        versionCode 74
-        versionName "3.7.0"
+        versionCode 75
+        versionName "3.7.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -56,17 +53,13 @@ android {
         viewBinding true
         buildConfig true
         aidl true
+        resValues = true
     }
 
     splits {
         abi {
             enable false
         }
-    }
-
-    lintOptions {
-        checkReleaseBuilds false
-        abortOnError false
     }
 
     compileOptions {
@@ -77,10 +70,9 @@ android {
     buildToolsVersion '36.1.0'
     ndkVersion '21'
 
-    kotlin {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_21)
-        }
+    lint {
+        abortOnError false
+        checkReleaseBuilds false
     }
 }
 
@@ -94,7 +86,7 @@ dependencies {
     implementation "androidx.preference:preference-ktx:1.2.1"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.2.0"
     implementation "androidx.viewpager:viewpager:1.1.0"
-    implementation platform('com.google.firebase:firebase-bom:34.7.0')
+    implementation platform('com.google.firebase:firebase-bom:34.8.0')
     implementation 'com.google.firebase:firebase-analytics'
 //    implementation("com.google.firebase:firebase-auth")
 //    implementation("com.google.firebase:firebase-database")

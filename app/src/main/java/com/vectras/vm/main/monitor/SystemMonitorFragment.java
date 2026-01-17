@@ -5,6 +5,7 @@ import static android.os.Build.VERSION.SDK_INT;
 
 import android.annotation.SuppressLint;
 import android.app.ActivityManager;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -16,6 +17,8 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.StatFs;
+import android.os.storage.StorageManager;
+import android.os.storage.StorageVolume;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +34,7 @@ import com.vectras.vm.utils.CommandUtils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vterm.Terminal;
 
+import java.io.File;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -178,21 +182,40 @@ public class SystemMonitorFragment extends Fragment {
         }
 
 
-        StatFs externalStatFs = new StatFs( Environment.getExternalStorageDirectory().getAbsolutePath() );
+        try {
+            StatFs externalStatFs;
+            if (SDK_INT >= 30) {
+                if(!isAdded()) return;
+                StorageManager sm =
+                        (StorageManager) requireContext().getSystemService(Context.STORAGE_SERVICE);
 
-        double totalStorage = (externalStatFs.getBlockCountLong() * externalStatFs.getBlockSizeLong()) * Math.pow(10, -9);
-        double freeStorage = (externalStatFs.getAvailableBlocksLong() * externalStatFs.getBlockSizeLong()) * Math.pow(10, -9);
-        double usedStorage = totalStorage - freeStorage;
-        double percentageOfStorage = (100 / totalStorage) * usedStorage;
+                StorageVolume volume = sm.getPrimaryStorageVolume();
+                File dir = volume.getDirectory();
+                assert dir != null;
+                externalStatFs = new StatFs(dir.getAbsolutePath());
+            } else {
+                externalStatFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
+            }
 
-        binding.tvTotalstorage.setText(getString(R.string.total_memory) + " " + String.format(Locale.US, "%.1f", totalStorage) + " GB");
-        binding.tvUsedstorage.setText(getString(R.string.used_memory)  + " " + String.format(Locale.US, "%.1f", usedStorage) + " GB");
-        binding.tvFreestorage.setText(getString(R.string.free_memory)  + " " + String.format(Locale.US, "%.1f", freeStorage) + " GB");
-        binding.tvPercentageofstorage.setText((int) percentageOfStorage + "%");
-        if (SDK_INT >= Build.VERSION_CODES.N) {
-            binding.cpiStorage.setProgress((int) percentageOfStorage, true);
-        } else {
-            binding.cpiStorage.setProgress((int) percentageOfStorage);
+            double totalStorage = (externalStatFs.getBlockCountLong() * externalStatFs.getBlockSizeLong()) * Math.pow(10, -9);
+            double freeStorage = (externalStatFs.getAvailableBlocksLong() * externalStatFs.getBlockSizeLong()) * Math.pow(10, -9);
+            double usedStorage = totalStorage - freeStorage;
+            double percentageOfStorage = (100 / totalStorage) * usedStorage;
+
+            binding.tvTotalstorage.setText(getString(R.string.total_memory) + " " + String.format(Locale.US, "%.1f", totalStorage) + " GB");
+            binding.tvUsedstorage.setText(getString(R.string.used_memory) + " " + String.format(Locale.US, "%.1f", usedStorage) + " GB");
+            binding.tvFreestorage.setText(getString(R.string.free_memory) + " " + String.format(Locale.US, "%.1f", freeStorage) + " GB");
+            binding.tvPercentageofstorage.setText((int) percentageOfStorage + "%");
+            if (SDK_INT >= Build.VERSION_CODES.N) {
+                binding.cpiStorage.setProgress((int) percentageOfStorage, true);
+            } else {
+                binding.cpiStorage.setProgress((int) percentageOfStorage);
+            }
+        } catch (Exception e) {
+            binding.tvTotalstorage.setText(getString(R.string.total_memory) + " " + getString(R.string.unknow));
+            binding.tvUsedstorage.setText(getString(R.string.used_memory) + " " + getString(R.string.unknow));
+            binding.tvFreestorage.setText(getString(R.string.free_memory) + " " + getString(R.string.unknow));
+            binding.tvPercentageofstorage.setText(getString(R.string.unknow));
         }
     }
 
@@ -208,8 +231,9 @@ public class SystemMonitorFragment extends Fragment {
             String qemuVersionName = CommandUtils.getQemuVersionName();
             if (!isAdded()) return;
             String result = Terminal.executeShellCommandWithResult("ps -e command && echo \"psendhere\" && cat /proc/cpuinfo", requireActivity());
+            if (!isAdded()) return;
             requireActivity().runOnUiThread(() -> {
-                binding.tvProcesses.setText(result.isEmpty() && !result.contains("\npsendhere") ? getString(R.string.nothing_here) : result.substring(0, result.indexOf("\npsendhere")));
+                binding.tvProcesses.setText(!result.contains("\npsendhere") ? getString(R.string.nothing_here) : result.substring(0, result.indexOf("\npsendhere")));
                 binding.tvQemuversion.setText(getString(R.string.version) + " " + (qemuVersionName.isEmpty() ? getString(R.string.unknow) : qemuVersionName) + ".");
 
                 if (!result.isEmpty()) {

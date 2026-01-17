@@ -3,8 +3,8 @@ apply plugin: 'com.android.application'
 
 android {
 
-    buildToolsVersion '35.0.0'
-    compileSdk 35
+    buildToolsVersion '36.1.0'
+    compileSdk 36
 }
 
 android.namespace 'com.vectras.vm'
@@ -14,7 +14,13 @@ android.buildFeatures.buildConfig true
 android.compileOptions.sourceCompatibility SDK_VERSION
 android.compileOptions.targetCompatibility SDK_VERSION
 dependencies.compileOnly project(':shell-loader:stub')
-android.applicationVariants.configureEach { outputs.configureEach { outputFileName = "loader.apk" } }
+androidComponents {
+    onVariants(selector().all()) { variant ->
+        variant.outputs.forEach { output ->
+            output.outputFileName.set("loader.apk")
+        }
+    }
+}
 
 def signingConfig = project(':app').android.signingConfigs.debug
 def keyStore = java.security.KeyStore.getInstance(java.security.KeyStore.getDefaultType())

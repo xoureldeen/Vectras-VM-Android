@@ -1314,18 +1314,30 @@ public class VncCanvas extends AppCompatImageView {
 	}
 
 	public int getImageWidth() {
+		if (bitmapData == null) {
+			return 0;
+		}
 		return bitmapData.framebufferwidth;
 	}
 
 	public int getImageHeight() {
+		if (bitmapData == null) {
+			return 0;
+		}
 		return bitmapData.framebufferheight;
 	}
 
 	public int getCenteredXOffset() {
+		if (bitmapData == null) {
+			return 0;
+		}
         return (bitmapData.framebufferwidth - getWidth()) / 2;
 	}
 
 	public int getCenteredYOffset() {
+		if (bitmapData == null) {
+			return 0;
+		}
         return (bitmapData.framebufferheight - getHeight()) / 2;
 	}
 

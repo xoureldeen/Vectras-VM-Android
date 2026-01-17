@@ -773,8 +773,8 @@ public class VMCreatorActivity extends AppCompatActivity {
     }
 
     private void selectedDiskFile(Uri _content_describer, boolean _addtodrive) {
-        if (FileUtils.isValidFilePath(this, FileUtils.getPath(this, _content_describer), false)) {
-            new Thread(() -> {
+        new Thread(() -> {
+            if (FileUtils.isValidFilePath(this, FileUtils.getPath(this, _content_describer), false)) {
                 File selectedFilePath = new File(getPath(_content_describer));
                 runOnUiThread(() -> {
                     if (VMManager.isADiskFile(selectedFilePath.getPath())) {
@@ -784,10 +784,10 @@ public class VMCreatorActivity extends AppCompatActivity {
                                 () -> startProcessingHardDriveFile(_content_describer, _addtodrive), null, null);
                     }
                 });
-            }).start();
-        } else {
-            startProcessingHardDriveFile(_content_describer, _addtodrive);
-        }
+            } else {
+                runOnUiThread(() ->startProcessingHardDriveFile(_content_describer, _addtodrive));
+            }
+        }).start();
     }
 
     @SuppressLint("SetTextI18n")

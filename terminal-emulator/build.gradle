@@ -8,14 +8,13 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
     defaultConfig {
         minSdkVersion 21
         //noinspection ExpiredTargetSdkVersion
-        targetSdkVersion 28
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -26,6 +25,10 @@ android {
 
     testOptions {
         unitTests.returnDefaultValues = true
+        targetSdk 28
+    }
+    lint {
+        targetSdk 28
     }
 
 }
