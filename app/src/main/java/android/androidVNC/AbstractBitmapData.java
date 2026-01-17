@@ -137,7 +137,7 @@ abstract class AbstractBitmapData {
             drawable = createDrawable();
 
         if (drawable != null) {
-            if (Build.VERSION.SDK_INT >= 34) {
+            if (Build.VERSION.SDK_INT >= 32) {
                 v.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
             }
             v.setImageDrawable(drawable);

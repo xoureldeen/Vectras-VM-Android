@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.app.Dialog;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static android.os.Build.VERSION.SDK_INT;
+
+import android.content.pm.PackageManager;
 import android.os.Looper;
 import static android.view.InputDevice.KEYBOARD_TYPE_ALPHABETIC;
 import static android.view.KeyEvent.*;
@@ -435,7 +437,7 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
             Dialog dialog = new Dialog(activity);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.dialog_programs);
-            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
 
             WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
             layoutParams.alpha = 1f;
@@ -460,80 +462,68 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                 dialog.dismiss();
             });
 
-            dialog.show();
+            if (!isFinishing() && !isDestroyed()) dialog.show();
         });
 
-        upGameBtn.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    sendKey(KEYCODE_DPAD_UP, false);
-                    v.animate().scaleXBy(-0.2f).setDuration(200).start();
-                    v.animate().scaleYBy(-0.2f).setDuration(200).start();
-                    return true;
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    sendKey(KEYCODE_DPAD_UP, true);
-                    v.animate().cancel();
-                    v.animate().scaleX(1f).setDuration(200).start();
-                    v.animate().scaleY(1f).setDuration(200).start();
-                    return true;
-                }
-                return false;
+        upGameBtn.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                sendKey(KEYCODE_DPAD_UP, false);
+                v.animate().scaleXBy(-0.2f).setDuration(200).start();
+                v.animate().scaleYBy(-0.2f).setDuration(200).start();
+                return true;
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                sendKey(KEYCODE_DPAD_UP, true);
+                v.animate().cancel();
+                v.animate().scaleX(1f).setDuration(200).start();
+                v.animate().scaleY(1f).setDuration(200).start();
+                return true;
             }
+            return false;
         });
-        leftGameBtn.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    sendKey(KEYCODE_DPAD_LEFT, false);
-                    v.animate().scaleXBy(-0.2f).setDuration(200).start();
-                    v.animate().scaleYBy(-0.2f).setDuration(200).start();
-                    return true;
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    sendKey(KEYCODE_DPAD_LEFT, true);
-                    v.animate().cancel();
-                    v.animate().scaleX(1f).setDuration(200).start();
-                    v.animate().scaleY(1f).setDuration(200).start();
-                    return true;
-                }
-                return false;
+        leftGameBtn.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                sendKey(KEYCODE_DPAD_LEFT, false);
+                v.animate().scaleXBy(-0.2f).setDuration(200).start();
+                v.animate().scaleYBy(-0.2f).setDuration(200).start();
+                return true;
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                sendKey(KEYCODE_DPAD_LEFT, true);
+                v.animate().cancel();
+                v.animate().scaleX(1f).setDuration(200).start();
+                v.animate().scaleY(1f).setDuration(200).start();
+                return true;
             }
+            return false;
         });
-        downGameBtn.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    sendKey(KEYCODE_DPAD_DOWN, false);
-                    v.animate().scaleXBy(-0.2f).setDuration(200).start();
-                    v.animate().scaleYBy(-0.2f).setDuration(200).start();
-                    return true;
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    sendKey(KEYCODE_DPAD_DOWN, true);
-                    v.animate().cancel();
-                    v.animate().scaleX(1f).setDuration(200).start();
-                    v.animate().scaleY(1f).setDuration(200).start();
-                    return true;
-                }
-                return false;
+        downGameBtn.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                sendKey(KEYCODE_DPAD_DOWN, false);
+                v.animate().scaleXBy(-0.2f).setDuration(200).start();
+                v.animate().scaleYBy(-0.2f).setDuration(200).start();
+                return true;
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                sendKey(KEYCODE_DPAD_DOWN, true);
+                v.animate().cancel();
+                v.animate().scaleX(1f).setDuration(200).start();
+                v.animate().scaleY(1f).setDuration(200).start();
+                return true;
             }
+            return false;
         });
-        rightGameBtn.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    sendKey(KEYCODE_DPAD_RIGHT, false);
-                    v.animate().scaleXBy(-0.2f).setDuration(200).start();
-                    v.animate().scaleYBy(-0.2f).setDuration(200).start();
-                    return true;
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    sendKey(KEYCODE_DPAD_RIGHT, true);
-                    v.animate().cancel();
-                    v.animate().scaleX(1f).setDuration(200).start();
-                    v.animate().scaleY(1f).setDuration(200).start();
-                    return true;
-                }
-                return false;
+        rightGameBtn.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                sendKey(KEYCODE_DPAD_RIGHT, false);
+                v.animate().scaleXBy(-0.2f).setDuration(200).start();
+                v.animate().scaleYBy(-0.2f).setDuration(200).start();
+                return true;
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                sendKey(KEYCODE_DPAD_RIGHT, true);
+                v.animate().cancel();
+                v.animate().scaleX(1f).setDuration(200).start();
+                v.animate().scaleY(1f).setDuration(200).start();
+                return true;
             }
+            return false;
         });
         JoystickView joystick = findViewById(R.id.joyStick);
         joystick.setVisibility(View.GONE);
@@ -1388,7 +1378,8 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
         super.onUserLeaveHint();
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         if (preferences.getBoolean("PIP", false) && hasPipPermission(this)) {
-            if (SDK_INT >= VERSION_CODES.N) {
+            if (SDK_INT >= VERSION_CODES.N &&
+                    getPackageManager().hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE)) {
                 enterPictureInPictureMode();
             }
         }

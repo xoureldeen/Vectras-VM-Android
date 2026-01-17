@@ -23,6 +23,7 @@ import android.view.SurfaceView;
 import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 
+import com.vectras.vm.utils.PackageUtils;
 import com.vectras.vm.x11.input.InputStub;
 
 import java.nio.charset.StandardCharsets;
@@ -200,6 +201,7 @@ public class LorieView extends SurfaceView implements InputStub {
 
     @Override
     public void sendMouseWheelEvent(float deltaX, float deltaY) {
+        if (!PackageUtils.isClassAvailable("com.termux.x11.CmdEntryPoint")) return;
         sendMouseEvent(deltaX, deltaY, BUTTON_SCROLL, false, true);
     }
 

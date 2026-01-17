@@ -817,7 +817,7 @@ public class VMManager {
 
     public static boolean isRomsDataJsonValid(Boolean _needfix, Activity _context) {
         if (isFileExists(AppConfig.romsdatajson)) {
-            if (!JSONUtils.isValidFromFile(AppConfig.romsdatajson)) {
+            if (!JSONUtils.isValidVmList()) {
                 if (_needfix) {
                     DialogUtils.twoDialog(_context, _context.getString(R.string.problem_has_been_detected), _context.getString(R.string.need_fix_json_before_create), _context.getString(R.string.continuetext), _context.getString(R.string.cancel), true, R.drawable.build_24px, true,
                             () -> {

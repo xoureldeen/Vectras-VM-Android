@@ -15,6 +15,8 @@ import java.util.Objects;
 
 public class NetworkUtils {
     public static boolean isPortOpen(String host, int port, int timeout) {
+        if (port > 65535) return false;
+
         Socket socket = new Socket();
         try {
             socket.connect(new InetSocketAddress(host, port), timeout);

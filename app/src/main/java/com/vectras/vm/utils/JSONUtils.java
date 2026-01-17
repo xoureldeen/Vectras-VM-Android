@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
+import com.vectras.vm.AppConfig;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +24,16 @@ public class JSONUtils {
         if (FileUtils.isFileExists(_filepath)) {
             return isValidFromString(FileUtils.readAFile(_filepath));
         } else {
+            return false;
+        }
+    }
+
+    public static boolean isValidVmList() {
+        try {
+            ArrayList<HashMap<String, Object>> vmList = new Gson().fromJson(FileUtils.readAFile(AppConfig.romsdatajson), new TypeToken<ArrayList<HashMap<String, Object>>>() {
+            }.getType());
+            return true;
+        } catch (Exception e) {
             return false;
         }
     }

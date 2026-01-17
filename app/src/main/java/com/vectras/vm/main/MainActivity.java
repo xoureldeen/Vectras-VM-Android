@@ -258,11 +258,17 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
                 } else if (bindingContent.bottomNavigation.getSelectedItemId() != R.id.item_home) {
                     bindingContent.bottomNavigation.setSelectedItemId(R.id.item_home);
                     showBottomBarAndFab();
+                } else if (bindingContent.efabCreate.getTranslationX() != 0f) {
+                    showBottomBarAndFab();
                 } else if (MainSettingsManager.getQuickStart(MainActivity.this)) {
-                    Intent intent = new Intent(Intent.ACTION_MAIN);
-                    intent.addCategory(Intent.CATEGORY_HOME);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
+                    try {
+                        Intent intent = new Intent(Intent.ACTION_MAIN);
+                        intent.addCategory(Intent.CATEGORY_HOME);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    } catch (Exception e) {
+                        finish();
+                    }
                 } else {
                     finish();
                 }
