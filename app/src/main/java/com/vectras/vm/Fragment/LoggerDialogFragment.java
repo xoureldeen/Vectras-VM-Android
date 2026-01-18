@@ -1,24 +1,20 @@
 package com.vectras.vm.Fragment;
 
-import android.app.Activity;
 import android.app.Dialog;
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AlertDialog;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Toast;
 
-import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.R;
 import com.vectras.vm.VectrasApp;
 import com.vectras.vm.adapter.LogsAdapter;
@@ -27,28 +23,25 @@ import com.vectras.vm.logger.VectrasStatus;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class LoggerDialogFragment extends DialogFragment {
+    private final String TAG = "LoggerDialogFragment";
+    private final Timer _timer = new Timer();
+    private boolean isReading;
 
-    private final String CREDENTIAL_SHARED_PREF = "settings_prefs";
-    private LogsAdapter mLogAdapter;
-    private RecyclerView logList;
-    private Timer _timer = new Timer();
-    private TimerTask t;
-    Activity activity;
-
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        activity = getActivity();
-        final Dialog alertDialog = new Dialog(getActivity(), R.style.MainDialogTheme);
+        final Dialog alertDialog = new Dialog(requireActivity(), R.style.MainDialogTheme);
         alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        Objects.requireNonNull(alertDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         alertDialog.setContentView(R.layout.fragment_logs);
         LinearLayoutManager layoutManager = new LinearLayoutManager(VectrasApp.getApp());
-        mLogAdapter = new LogsAdapter(layoutManager, VectrasApp.getApp());
-        logList = (RecyclerView) alertDialog.findViewById(R.id.recyclerLog);
+        LogsAdapter mLogAdapter = new LogsAdapter(layoutManager, VectrasApp.getApp());
+        RecyclerView logList = alertDialog.findViewById(R.id.recyclerLog);
         logList.setAdapter(mLogAdapter);
         logList.setLayoutManager(layoutManager);
         mLogAdapter.scrollToLastPosition();
@@ -60,32 +53,54 @@ public class LoggerDialogFragment extends DialogFragment {
             BufferedReader bufferedReader2 = new BufferedReader(
                     new InputStreamReader(process2.getInputStream()));
 
-            t = new TimerTask() {
+            TimerTask t = new TimerTask() {
                 @Override
                 public void run() {
-                    activity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                if (bufferedReader.readLine() != null || bufferedReader2.readLine() != null) {
-                                    String logLine = bufferedReader.readLine();
-                                    String logLine2 = bufferedReader2.readLine();
-                                    VectrasStatus.logError("<font color='red'>[E] "+logLine+"</font>");
-                                    VectrasStatus.logError("<font color='#FFC107'>[W] "+logLine2+"</font>");
-                                }
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
+                    new Thread(() -> {
+                        if (isReading) return;
+                        String logLine = "";
+                        String logLine2 = "";
+                        try {
+                            isReading = true;
+                            if (bufferedReader.readLine() != null || bufferedReader2.readLine() != null) {
+                                logLine = bufferedReader.readLine();
+                                logLine2 = bufferedReader2.readLine();
                             }
+
+                            String finalLogLine = logLine;
+                            String finalLogLine1 = logLine2;
+                            if (!isAdded()) {
+                                _timer.cancel();
+                                return;
+                            }
+                            requireActivity().runOnUiThread(() -> {
+                                if (!finalLogLine.isEmpty())
+                                    VectrasStatus.logError("<font color='red'>[E] " + finalLogLine + "</font>");
+                                if (!finalLogLine1.isEmpty())
+                                    VectrasStatus.logError("<font color='#FFC107'>[W] " + finalLogLine1 + "</font>");
+                                isReading = false;
+                            });
+                        } catch (IOException e) {
+                            Log.e(TAG, "onCreateDialog: ", e);
+                        } finally {
+                            isReading = false;
                         }
-                    });
+                    }).start();
                 }
             };
-            _timer.scheduleAtFixedRate(t, (int) (0), (int) (100));
+            _timer.schedule(t, 0, 1000);
         } catch (IOException e) {
-            Toast.makeText(activity, "There was an error: " + Log.getStackTraceString(e), Toast.LENGTH_LONG).show();
-            e.printStackTrace();
+            if (isAdded())
+                Toast.makeText(requireActivity(), "There was an error: " + Log.getStackTraceString(e), Toast.LENGTH_LONG).show();
+            Log.e(TAG, "onCreateDialog: ", e);
         }
+
         alertDialog.show();
         return alertDialog;
+    }
+
+    public void onDismiss(@NonNull DialogInterface dialogInterface) {
+        super.onDismiss(dialogInterface);
+        _timer.cancel();
     }
 }

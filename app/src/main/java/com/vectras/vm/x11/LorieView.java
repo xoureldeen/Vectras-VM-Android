@@ -201,7 +201,6 @@ public class LorieView extends SurfaceView implements InputStub {
 
     @Override
     public void sendMouseWheelEvent(float deltaX, float deltaY) {
-        if (!PackageUtils.isClassAvailable("com.termux.x11.CmdEntryPoint")) return;
         sendMouseEvent(deltaX, deltaY, BUTTON_SCROLL, false, true);
     }
 

@@ -14,6 +14,7 @@ import android.graphics.PointF;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
+import com.vectras.vm.utils.PackageUtils;
 import com.vectras.vm.x11.X11Activity;
 
 import java.util.List;
@@ -75,6 +76,7 @@ public final class InputEventSender {
     }
 
     public void sendCursorMove(float x, float y, boolean relative) {
+        if (!PackageUtils.isClassAvailable("com.termux.x11.CmdEntryPoint")) return;
         mInjector.sendMouseEvent(x, y, BUTTON_UNDEFINED, false, relative);
     }
 

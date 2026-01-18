@@ -1,5 +1,7 @@
 package com.vectras.vm.utils;
 
+import static android.os.Build.VERSION.SDK_INT;
+
 import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
@@ -14,7 +16,6 @@ import com.vectras.vm.R;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -138,12 +139,12 @@ public class ZipUtils {
 
             if (MainSettingsManager.getSmartSizeCalculation(context)) {
                 // >7GB
-                sizeCalculation = DeviceUtils.totalMemoryCapacity(context) > 7L * 1024 * 1024 * 1024;
+                sizeCalculation = SDK_INT < 31 && DeviceUtils.totalMemoryCapacity(context) > 7L * 1024 * 1024 * 1024;
             } else {
-                sizeCalculation = true;
+                sizeCalculation = false;
             }
 
-            //Can be skipped as it may not get the size and is time consuming.
+            //Can be skipped as it may not get the size and is time-consuming.
             if (sizeCalculation) {
                 InputStream inputStream = context.getContentResolver().openInputStream(fileZip);
 
@@ -190,12 +191,10 @@ public class ZipUtils {
                 long lastProgress = -1;
                 while ((len = zin.read(buffer)) > 0) {
                     fos.write(buffer, 0, len);
-
-                    if (totalSize < 0) {
-                        fileExtracted += len;
-                        extractedSize += len;
-
-                        long progress = (totalSize > 0) ? (extractedSize * 100 / totalSize) : 0;
+                    fileExtracted += len;
+                    extractedSize += len;
+                    if (totalSize > 0) {
+                        long progress = extractedSize * 100 / totalSize;
 
                         if (progress > lastProgress) {
                             lastProgress = progress;
@@ -207,6 +206,20 @@ public class ZipUtils {
                                             context.getString(R.string.completed) + " " + progress + "%")
                                             + "\n" + context.getString(R.string.please_stay_here),
                                     (int) progress
+                            );
+                        }
+                    } else {
+                        if (extractedSize > lastProgress + (1024 * 1024) || lastProgress < 1) {
+                            lastProgress = extractedSize;
+                            long mb = extractedSize / (1024 * 1024);
+                            updateStatus(
+                                    statusTextView,
+                                    progressBar,
+                                    (mb == 0 ?
+                                            context.getString(R.string.importing) :
+                                            context.getString(R.string.completed) + " " + NumberUtils.getFormatSizeFromMB(mb))
+                                            + "\n" + context.getString(R.string.please_stay_here),
+                                    0
                             );
                         }
                     }
@@ -369,7 +382,7 @@ public class ZipUtils {
 
                 if (progressbar.getMax() != 100) progressbar.setMax(100);
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                if (SDK_INT >= Build.VERSION_CODES.N) {
                     progressbar.setProgress(progress, true);
                 } else {
                     progressbar.setProgress(progress);
