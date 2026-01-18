@@ -36,6 +36,24 @@
     "id": ""
   },
   {
+    "rom_name": "7-Zip",
+    "rom_icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/7-Zip_Icon.svg/250px-7-Zip_Icon.svg.png",
+    "rom_url": "https://archive.org/details/7-zip-x-86",
+    "rom_path": "7Zip x86.iso",
+    "rom_avail": true,
+    "rom_size": "25.01 (x86)",
+    "rom_arch": "X86_64",
+    "rom_kernel": "",
+    "rom_extra": "",
+    "final_rom_file_name": "",
+    "desc": "7-Zip is a free and open-source file archiver, a utility used to place groups of files within compressed containers known as archives.",
+    "file_size": "2 MB",
+    "creator": "tokaevUser",
+    "verified": true,
+    "vecid": "7zipx86iso",
+    "id": ""
+  },
+  {
     "rom_name": "AIDA64",
     "rom_icon": "https://store-images.microsoft.com/image/apps.3123.13510798884987542.689d0953-1168-4bc4-8942-23b988b99331.cb456ed4-e854-4ade-b494-f3ebe3f7cfe5",
     "rom_url": "https://archive.org/details/aida64_202512",
