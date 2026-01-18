@@ -351,7 +351,7 @@ public class VMCreatorActivity extends AppCompatActivity {
         if (isImportingCVBI) return;
 
         if (!created && !modify) {
-            new Thread(() -> FileUtils.deleteDirectory(AppConfig.vmFolder + vmID)).start();
+            new Thread(() -> FileUtils.delete(new File (AppConfig.vmFolder + vmID))).start();
         }
         modify = false;
         finish();
@@ -466,7 +466,7 @@ public class VMCreatorActivity extends AppCompatActivity {
                     String filePath;
                     try {
                         File selectedFilePath = new File(getPath(uri));
-                        filePath = selectedFilePath.getPath();
+                        filePath = selectedFilePath.getAbsolutePath();
                     } catch (Exception e) {
                         filePath = "";
                     }
@@ -930,7 +930,7 @@ public class VMCreatorActivity extends AppCompatActivity {
 
         progressDialog.show();
 
-        Log.i(TAG, "importRom: Extracting from " + filePath + " to " + AppConfig.vmFolder + vmID);
+        Log.i(TAG, "importRom: Extracting with " + (isUseUri ? "uri" : "path") + " from " + filePath + " to " + AppConfig.vmFolder + vmID);
 
         new Thread(() -> {
             boolean result = isUseUri ? ZipUtils.extract(

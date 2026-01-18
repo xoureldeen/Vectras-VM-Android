@@ -752,25 +752,32 @@ public class FileUtils {
         return true;
     }
 
+    @Deprecated
     public static void deleteDirectory(String _pathToDelete) {
-        File _dir = new File(_pathToDelete);
-        if (_dir.isDirectory()) {
-            String[] children = _dir.list();
+        delete(new File(_pathToDelete));
+    }
+
+    public static boolean delete(File file) {
+        if (!file.exists()) return true;
+        if (file.isDirectory()) {
+            String[] children = file.list();
 
             if (children == null) {
-                Log.e("ERROR", "Deletion failed. " + _dir);
-                return;
+                Log.e(TAG, "delete: Failed:" + file);
+                return false;
             }
 
             for (int i = 0; i < children.length; i++) {
-                File temp = new File(_dir, children[i]);
-                deleteDirectory(String.valueOf(temp));
+                File temp = new File(file, children[i]);
+                delete(temp);
             }
         }
-        boolean success = _dir.delete();
+        boolean success = file.delete();
         if (!success) {
-            Log.e("ERROR", "Deletion failed. " + _dir);
+            Log.e(TAG, "delete: Failed: " + file);
         }
+
+        return success;
     }
 
     public static boolean canRead(String filePath) {
