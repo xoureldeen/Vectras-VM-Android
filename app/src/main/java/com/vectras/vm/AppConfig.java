@@ -64,8 +64,8 @@ public class AppConfig {
     }
     public static String internalDataDirPath = "/data/data/com.vectras.vm/files/";
     public static String basefiledir = "";
-    public static String maindirpath = "/sdcard/Documents/VectrasVM";
-    public static String recyclebin = "";
+    public static String maindirpath = "/sdcard/Documents/VectrasVM/";
+    public static String recyclebin = maindirpath + "RecycleBin/";
     //public static String basefiledir = datadirpath(SplashActivity.activity) + "/.qemu/";
     //public static String maindirpath = FileUtils.getExternalFilesDirectory(SplashActivity.activity).getPath() + "/";
     public static String sharedFolder = maindirpath + "SharedFolder/";

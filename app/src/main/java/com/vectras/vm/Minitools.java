@@ -114,8 +114,8 @@ public class Minitools extends AppCompatActivity {
 
         restore.setOnClickListener(v -> DialogUtils.twoDialog(Minitools.this, getResources().getString(R.string.restore), getResources().getString(R.string.restore_content), getResources().getString(R.string.continuetext), getResources().getString(R.string.cancel), true, R.drawable.settings_backup_restore_24px, true,
                 () -> {
-                    VMManager.restoreVMs();
-                    UIUtils.oneDialog(getResources().getString(R.string.done), getResources().getString(R.string.restored) + " " + VMManager.restoredVMs + ".", true, false, Minitools.this);
+                    int result = VMManager.restoreAll();
+                    DialogUtils.oneDialog(Minitools.this, getString(R.string.done), getString(R.string.restored) + " " + result + ".", R.drawable.settings_backup_restore_24px);
                     restore.setVisibility(GONE);
                 }, null, null));
 
@@ -215,11 +215,25 @@ public class Minitools extends AppCompatActivity {
         progressDialog.show();
 
         new Thread(() -> {
-            VMManager.cleanUp();
+            int result = VMManager.cleanUp();
 
             runOnUiThread(() -> {
                 progressDialog.dismiss();
-                Toast.makeText(getApplicationContext(), getResources().getString(R.string.done), Toast.LENGTH_LONG).show();
+                DialogUtils.twoDialog(
+                        this,
+                        getString(R.string.done),
+                        result + " " + getString(R.string.items_have_been_cleared),
+                        getString(R.string.show_recycle_bin),
+                        getString(R.string.close),
+                        true,
+                        R.drawable.cleaning_services_24px,
+                        true,
+                        () -> {
+                            FileUtils.createDirectory(AppConfig.recyclebin);
+                            FileUtils.openFolder(this, AppConfig.recyclebin);
+                        },
+                        null,
+                        null);
                 restore.setVisibility(GONE);
                 cleanup.setVisibility(GONE);
             });

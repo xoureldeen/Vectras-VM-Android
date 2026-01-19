@@ -1,7 +1,10 @@
 package com.vectras.vm.core;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import com.termux.app.TermuxService;
+import com.vectras.vm.AppConfig;
 import com.vectras.vm.logger.VectrasStatus;
 import java.io.BufferedReader;
 import java.io.FileWriter;
@@ -23,7 +26,7 @@ public class ShellExecutor {
     }
 
     public void exec(String command) {
-        String logPath = "/sdcard/Documents/shell-executor.log";
+        String logPath = AppConfig.maindirpath + "shell-executor.log";
         String shellPath = "/system/bin/sh";
 
         Runnable processRunnable = () -> {
@@ -41,7 +44,8 @@ public class ShellExecutor {
                     logWriter.write(line + "\n");
                     logWriter.flush();
                     Log.d(TAG, line);
-                    VectrasStatus.logInfo(TAG + " > " + line);
+                    String finalLine = line;
+                    new Handler(Looper.getMainLooper()).post(() -> VectrasStatus.logInfo(TAG + " > " + finalLine));
                 }
             } catch (IOException e) {
                 Log.e(TAG, "Error starting ShellExecutor", e);
