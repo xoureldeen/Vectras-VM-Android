@@ -36,6 +36,7 @@ public class VMCreatorSelector {
     }
 
     public static void showDialog(Activity activity, ArrayList<HashMap<String, Object>> list, int position,SelectorCallback callback, String title) {
+        if (activity.isFinishing() || activity.isDestroyed()) return;
         LinearLayoutManager layoutmanager = new LinearLayoutManager(activity);
         DialogListSelectorLayoutBinding binding = DialogListSelectorLayoutBinding.inflate(activity.getLayoutInflater());
 
@@ -49,6 +50,7 @@ public class VMCreatorSelector {
         binding.list.setAdapter(new RecyclerviewAdapter(activity, dialog, list, position, callback));
         binding.list.setLayoutManager(layoutmanager);
 
+        if (activity.isFinishing() || activity.isDestroyed()) return;
         dialog.show();
 
         binding.list.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -97,6 +99,7 @@ public class VMCreatorSelector {
             title.setText(Objects.requireNonNull(data.get(position).get("name")).toString());
             view.findViewById(R.id.iv_check).setVisibility(position == currentPosition ? View.VISIBLE : View.INVISIBLE);
             view.findViewById(R.id.main).setOnClickListener(v -> {
+                if (activity.isFinishing() || activity.isDestroyed()) return;
                 callback.onSelected(
                         position,
                         Objects.requireNonNull(data.get(position).get("name")).toString(),

@@ -752,6 +752,66 @@ public class FileUtils {
         return true;
     }
 
+    public static boolean rename(String path, String newName) {
+        if (!isFileExists(path) || newName.isEmpty()) return false;
+        String parent = new File(path).getParent();
+        if (parent == null) return false;
+        return move(path, parent + "/" + newName);
+    }
+
+    public static boolean moveToFolder(String src, String dst) {
+        createDirectory(dst);
+        return move(src, dst + "/" + new File(src).getName());
+    }
+
+    public static boolean move(String oldPath, String newPath) {
+        if (!new File(oldPath).exists() || newPath.isEmpty()) return false;
+        createDirectory(new File(newPath).getParent());
+        File src = new File(oldPath);
+        File dst = new File(newPath);
+        if (dst.getParentFile() == null || !dst.getParentFile().exists()) return false;
+        Log.d(TAG, "move: " + oldPath + " to " + newPath);
+        if (!src.renameTo(dst)) {
+            try {
+                Log.d(TAG, "move: Moving with copy and delete.");
+                copy(new File(oldPath), new File(newPath));
+                return delete(new File(oldPath));
+            } catch (Exception e) {
+                Log.e(TAG, "move: ", e);
+            }
+        }
+        return true;
+    }
+
+    static void copy(File src, File dst) throws IOException {
+        if (!src.exists()) return;
+        if (src.isDirectory()) {
+            if (!dst.exists()) dst.mkdirs();
+            File[] files = src.listFiles();
+            if (files != null) {
+                for (File f : files) {
+                    copy(f, new File(dst, f.getName()));
+                }
+            }
+        } else {
+            if (dst.getParentFile() != null && !dst.getParentFile().exists()) {
+                createDirectory(dst.getParent());
+            }
+            FileInputStream inStream = new FileInputStream(src);
+            FileOutputStream outStream = new FileOutputStream(dst);
+
+            byte[] buffer = new byte[8192];
+            int length;
+            while ((length = inStream.read(buffer))
+                    > 0) {
+                outStream.write(buffer, 0, length);
+            }
+
+            inStream.close();
+            outStream.close();
+        }
+    }
+
     @Deprecated
     public static void deleteDirectory(String _pathToDelete) {
         delete(new File(_pathToDelete));

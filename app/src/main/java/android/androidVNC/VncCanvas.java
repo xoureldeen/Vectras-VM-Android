@@ -37,6 +37,7 @@ import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -147,6 +148,10 @@ public class VncCanvas extends AppCompatImageView {
 	void initializeVncCanvas(ConnectionBean bean, final Runnable setModes) {
 		connection = bean;
 		this.pendingColorModel = COLORMODEL.valueOf(bean.getColorModel());
+
+		if (Build.VERSION.SDK_INT >= 28) {
+			this.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+		}
 
         setOnGenericMotionListener(new VNCGenericMotionListener_API12());
         setOnTouchListener(new VNCOnTouchListener());

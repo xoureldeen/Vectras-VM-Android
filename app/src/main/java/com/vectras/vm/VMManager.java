@@ -28,6 +28,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.vectras.qemu.Config;
@@ -49,6 +50,8 @@ import com.vectras.vterm.Terminal;
 
 import org.jetbrains.annotations.Contract;
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -56,6 +59,7 @@ import java.io.FileWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
@@ -101,7 +105,8 @@ public class VMManager {
 
     public static boolean addToVMList(String vmConfigJson, String vmID) {
         String vmListJson = FileUtils.readAFile(AppConfig.romsdatajson);
-        if (!JSONUtils.isValidFromString(vmListJson) || !JSONUtils.isValidFromString(vmConfigJson)) return false;
+        if (!JSONUtils.isValidFromString(vmListJson) || !JSONUtils.isValidFromString(vmConfigJson))
+            return false;
 
         ArrayList<HashMap<String, Object>> vmList = new Gson().fromJson(vmListJson, new TypeToken<ArrayList<HashMap<String, Object>>>() {
         }.getType());
@@ -142,7 +147,8 @@ public class VMManager {
 
     public static boolean replaceToVMList(int postion, String vmId, String vmConfigJson) {
         String vmListJson = FileUtils.readAFile(AppConfig.romsdatajson);
-        if (!JSONUtils.isValidFromString(vmListJson) || !JSONUtils.isValidFromString(vmConfigJson)) return false;
+        if (!JSONUtils.isValidFromString(vmListJson) || !JSONUtils.isValidFromString(vmConfigJson))
+            return false;
 
         int finalPosition = postion;
         ArrayList<HashMap<String, Object>> vmList = new Gson().fromJson(vmListJson, new TypeToken<ArrayList<HashMap<String, Object>>>() {
@@ -210,6 +216,7 @@ public class VMManager {
     public static boolean writeToVMConfig(String vmID, String content) {
         return FileUtils.writeToFile(AppConfig.maindirpath + "/roms/" + vmID, "rom-data.json", content.replace("\\u003d", "=")) &&
                 FileUtils.writeToFile(AppConfig.maindirpath + "/roms/" + vmID, "vmID.txt", vmID);
+        // TODO: vmID.txt can be removed, it is being retained for backward compatibility.
     }
 
     public static boolean addVM(HashMap<String, Object> vmConfigMap, int position) {
@@ -272,9 +279,11 @@ public class VMManager {
 
                     new Thread(() -> {
                         isKeptSomeFiles = false;
-                        deleteVM(_position);
-                        removeInRomsDataJson(_activity, _vmName, _position);
-                        _activity.runOnUiThread(() -> new Handler(Looper.getMainLooper()).postDelayed(progressDialog::dismiss, 500));
+                        deleteVm(_activity, _position, false);
+                        _activity.runOnUiThread(() -> new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                            progressDialog.dismiss();
+                            MainActivity.refeshVMListNow();
+                        }, 500));
                     }).start();
                 },
                 () -> {
@@ -288,33 +297,126 @@ public class VMManager {
                     progressDialog.show();
 
                     new Thread(() -> {
-                        hideVMIDWithPosition(_position);
-                        removeInRomsDataJson(_activity, _vmName, _position);
-                        _activity.runOnUiThread(() -> new Handler(Looper.getMainLooper()).postDelayed(progressDialog::dismiss, 500));
+                        deleteVm(_activity, _position, true);
+                        _activity.runOnUiThread(() -> new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                            progressDialog.dismiss();
+                            MainActivity.refeshVMListNow();
+                        }, 500));
                     }).start();
                 },
                 null,
                 null);
     }
 
-    public static void removeInRomsDataJson(Activity _activity, String _vmName, int _position) {
-        try {
-            JSONArray jSONArray = new JSONArray(FileUtils.readFromFile(_activity, new File(AppConfig.maindirpath
-                    + "roms-data.json")));
-            jSONArray.remove(_position);
+    public static void deleteVm(Context context, int position, boolean isKeepFiles) {
+        if (!JSONUtils.isValidVmList()) return;
+        String vmList = FileUtils.readFromFile(context, new File(AppConfig.maindirpath + "roms-data.json"));
+        JsonArray arr = JsonParser.parseString(vmList).getAsJsonArray();
+        if (position < 0 || position > arr.size() - 1) return;
+        JsonObject obj = arr.get(position).getAsJsonObject();
+        String vmId = obj.has("vmID") ? obj.get("vmID").getAsString() : null;
+        arr.remove(position);
 
+        vmList = new Gson().toJson(arr);
 
-            Writer output;
-            File jsonFile = new File(AppConfig.maindirpath + "roms-data" + ".json");
-            output = new BufferedWriter(new FileWriter(jsonFile));
-            output.write(jSONArray.toString());
-            output.close();
-        } catch (Exception e) {
-            UIUtils.toastLong(_activity, e.toString());
+        if (vmId == null || vmId.isEmpty()) return;
+        if (isKeepFiles) {
+            FileUtils.rename(AppConfig.vmFolder + vmId, "_" + vmId);
+            if (isVmFilesInUse(vmId, vmList)) {
+                vmList = vmList.replace(AppConfig.vmFolder + vmId, AppConfig.vmFolder + "_" + vmId);
+            }
+        } else {
+            if (isVmFilesInUse(vmId, vmList)) {
+                isKeptSomeFiles = true;
+                FileUtils.rename(AppConfig.vmFolder + vmId, "_" + vmId);
+                vmList = vmList.replace(AppConfig.vmFolder + vmId, AppConfig.vmFolder + "_" + vmId);
+            } else {
+                FileUtils.delete(new File(AppConfig.vmFolder + vmId));
+            }
         }
-        UIUtils.toastLong(_activity, _vmName + _activity.getString(R.string.are_removed_successfully));
 
-        MainActivity.refeshVMListNow();
+        FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", vmList);
+    }
+
+    public static int restoreAll() {
+        if (!JSONUtils.isValidVmList()) return 0;
+        JsonArray arr = JsonParser.parseString(FileUtils.readAFile(AppConfig.romsdatajson)).getAsJsonArray();
+        File[] vmFolders = new File(AppConfig.vmFolder).listFiles();
+        if (vmFolders == null) return 0;
+        List<String> restoredVms = new ArrayList<>();
+        for (File f : vmFolders) {
+            if (f.getName().startsWith("_") && isFileExists(f.getAbsolutePath() + "/rom-data.json")) {
+                String vmConfig = FileUtils.readAFile(f.getAbsolutePath() + "/rom-data.json");
+                if (JSONUtils.isValidFromString(vmConfig)) {
+                    if (f.getName().startsWith("_"))
+                        FileUtils.rename(f.getAbsolutePath(), f.getName().replace("_", ""));
+                    arr.add(JsonParser.parseString(vmConfig));
+                    restoredVms.add(f.getName().replaceAll("_", ""));
+                }
+            }
+        }
+
+        String finalvmList = new Gson().toJson(arr);
+
+        for (int i = 0; i < restoredVms.size(); i++) {
+            if (finalvmList.contains(AppConfig.vmFolder + "_" + restoredVms.get(i))) {
+                finalvmList = finalvmList.replace(AppConfig.vmFolder + "_" + restoredVms.get(i), AppConfig.vmFolder + restoredVms.get(i));
+            }
+        }
+
+        FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", finalvmList);
+        return restoredVms.size();
+    }
+
+    public static int cleanUp() {
+        int cleared = 0;
+        String vmList = FileUtils.readAFile(AppConfig.romsdatajson);
+        File[] vmFolders = new File(AppConfig.vmFolder).listFiles();
+        if (vmFolders == null) return 0;
+        for (File f : vmFolders) {
+            if (!isVmFilesInUse(f.getName(), vmList)) {
+                if (f.getName().startsWith("_")) {
+                    FileUtils.delete(new File(f.getAbsolutePath()));
+                } else if (!isFileExists(f.getAbsolutePath() + "/rom-data.json")) {
+                    FileUtils.moveToFolder(f.getAbsolutePath(), AppConfig.recyclebin);
+                }
+                cleared++;
+            }
+        }
+        return cleared;
+    }
+
+    public static boolean isVmFilesInUse(String vmId) {
+        return isVmFilesInUse(vmId, FileUtils.readAFile(AppConfig.romsdatajson));
+    }
+
+    public static boolean isVmFilesInUse(String vmId, String vmList) {
+        File[] files = new File(AppConfig.vmFolder + vmId).listFiles();
+        if (files == null) return false;
+        for (File f : files) {
+            if (vmList.contains(f.getAbsolutePath())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static int moveAllBrokenVMRecycleBin() {
+        if (!isFileExists(AppConfig.vmFolder)) return 0;
+        int moved = 0;
+        FileUtils.createDirectory(AppConfig.recyclebin);
+        String vmList = FileUtils.readAFile(AppConfig.romsdatajson);
+        if (!vmList.isEmpty()) {
+            File[] vmFolders = new File(AppConfig.vmFolder).listFiles();
+            if (vmFolders == null) return 0;
+            for (File f : vmFolders) {
+                if (!vmList.contains(f.getName())) {
+                    FileUtils.moveToFolder(f.getAbsolutePath(), AppConfig.recyclebin);
+                    moved++;
+                }
+            }
+        }
+        return moved;
     }
 
     public static String idGenerator() {
@@ -343,7 +445,7 @@ public class VMManager {
         return result.toString();
     }
 
-    //This can be removed because QMP currently uses sockets instead of open ports.
+    // TODO: This can be removed because QMP currently uses sockets instead of open ports.
     @Deprecated
     public static int startRandomPort() {
         int _result;
@@ -352,7 +454,7 @@ public class VMManager {
         int _max = 65535;
         _result = _random.nextInt(_max - _min + 1) + _min;
 
-        if (FileUtils.isFileExists(AppConfig.romsdatajson) || FileUtils.canRead(AppConfig.romsdatajson)) {
+        if (isFileExists(AppConfig.romsdatajson) || FileUtils.canRead(AppConfig.romsdatajson)) {
             if (FileUtils.readAFile(AppConfig.romsdatajson).contains("\"qmpPort\":" + _result)) {
                 _result = _random.nextInt(_max - _min + 1) + _min;
             }
@@ -364,214 +466,6 @@ public class VMManager {
         }
 
         return _result;
-    }
-
-    public static void deleteVM(int position) {
-        String vmId;
-        ArrayList<HashMap<String, Object>> vmList;
-        vmList = new Gson().fromJson(FileUtils.readAFile(AppConfig.maindirpath + "roms-data.json"), new TypeToken<ArrayList<HashMap<String, Object>>>() {
-        }.getType());
-
-        if (position > vmList.size() - 1) return;
-
-        if (vmList.get(position).containsKey("vmID")) {
-            vmId = Objects.requireNonNull(vmList.get(position).get("vmID")).toString();
-            FileUtils.deleteDirectory(Config.getCacheDir() + "/" + vmId);
-            Log.i("VMManager", "deleteVM: ID obtained: " + vmId);
-        } else {
-            Log.e("VMManager", "deleteVM: Cannot get ID.");
-            return;
-        }
-        vmList.remove(position);
-        finalJson = new Gson().toJson(vmList);
-        if (!vmId.isEmpty()) {
-            int _startRepeat = 0;
-            String _currentVMIDToScan;
-            ArrayList<String> _filelist = new ArrayList<>();
-            FileUtils.getAListOfAllFilesAndFoldersInADirectory(AppConfig.vmFolder, _filelist);
-            if (!_filelist.isEmpty()) {
-                for (int _repeat = 0; _repeat < _filelist.size(); _repeat++) {
-                    if (_startRepeat < _filelist.size()) {
-                        if (isFileExists(_filelist.get(_startRepeat) + "/vmID.txt")) {
-                            _currentVMIDToScan = FileUtils.readAFile(_filelist.get(_startRepeat) + "/vmID.txt").replace("\n", "");
-                            if (!_currentVMIDToScan.isEmpty()) {
-                                if (_currentVMIDToScan.equals(vmId)) {
-                                    if (!finalJson.contains(_filelist.get(_startRepeat))) {
-                                        FileUtils.deleteDirectory(_filelist.get(_startRepeat));
-                                    } else {
-                                        isKeptSomeFiles = true;
-                                        hideVMID(vmId);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    _startRepeat++;
-                }
-            }
-        }
-    }
-
-    public static void hideVMID(@NonNull String _vmID) {
-        if (!_vmID.isEmpty()) {
-            int _startRepeat = 0;
-            String _currentVMIDToScan;
-            ArrayList<String> _filelist = new ArrayList<>();
-            FileUtils.getAListOfAllFilesAndFoldersInADirectory(AppConfig.vmFolder, _filelist);
-            if (!_filelist.isEmpty()) {
-                for (int _repeat = 0; _repeat < _filelist.size(); _repeat++) {
-                    if (_startRepeat < _filelist.size()) {
-                        if (isFileExists(_filelist.get(_startRepeat) + "/vmID.txt")) {
-                            _currentVMIDToScan = FileUtils.readAFile(_filelist.get(_startRepeat) + "/vmID.txt").replace("\n", "");
-                            if (!_currentVMIDToScan.isEmpty()) {
-                                if (_currentVMIDToScan.equals(_vmID)) {
-                                    FileUtils.moveAFile(_filelist.get(_startRepeat) + "/vmID.txt", _filelist.get(_startRepeat) + "/vmID.old.txt");
-                                }
-                            }
-                        }
-                    }
-                    _startRepeat++;
-                }
-            }
-        }
-    }
-
-    public static void hideVMIDWithPosition(int position) {
-        String vmId;
-        ArrayList<HashMap<String, Object>> vmList;
-        vmList = new Gson().fromJson(FileUtils.readAFile(AppConfig.maindirpath + "roms-data.json"), new TypeToken<ArrayList<HashMap<String, Object>>>() {
-        }.getType());
-
-        if (vmList.isEmpty()) return;
-
-        if (vmList.get(position).containsKey("vmID")) {
-            vmId = Objects.requireNonNull(vmList.get(position).get("vmID")).toString();
-        } else {
-            return;
-        }
-        if (!vmId.isEmpty()) {
-            int _startRepeat = 0;
-            String _currentVMIDToScan;
-            ArrayList<String> _filelist = new ArrayList<>();
-            FileUtils.getAListOfAllFilesAndFoldersInADirectory(AppConfig.vmFolder, _filelist);
-            if (!_filelist.isEmpty()) {
-                for (int _repeat = 0; _repeat < _filelist.size(); _repeat++) {
-                    if (_startRepeat < _filelist.size()) {
-                        if (isFileExists(_filelist.get(_startRepeat) + "/vmID.txt")) {
-                            _currentVMIDToScan = FileUtils.readAFile(_filelist.get(_startRepeat) + "/vmID.txt").replace("\n", "");
-                            if (!_currentVMIDToScan.isEmpty()) {
-                                if (_currentVMIDToScan.equals(vmId)) {
-                                    FileUtils.moveAFile(_filelist.get(_startRepeat) + "/vmID.txt", _filelist.get(_startRepeat) + "/vmID.old.txt");
-                                }
-                            }
-                        }
-                    }
-                    _startRepeat++;
-                }
-            }
-        }
-    }
-
-    public static void cleanUp() {
-        finalJson = FileUtils.readAFile(AppConfig.romsdatajson);
-        if (!finalJson.isEmpty()) {
-            int _startRepeat = 0;
-            ArrayList<String> _filelist = new ArrayList<>();
-            FileUtils.getAListOfAllFilesAndFoldersInADirectory(AppConfig.vmFolder, _filelist);
-            if (!_filelist.isEmpty()) {
-                for (int _repeat = 0; _repeat < _filelist.size(); _repeat++) {
-                    if (_startRepeat < _filelist.size()) {
-                        if (!isFileExists(_filelist.get(_startRepeat) + "/vmID.txt")) {
-                            if (!finalJson.contains(_filelist.get(_startRepeat))) {
-                                FileUtils.deleteDirectory(_filelist.get(_startRepeat));
-                            }
-                        }
-                    }
-                    _startRepeat++;
-                }
-            }
-        }
-    }
-
-    public static void restoreVMs() {
-        int _startRepeat = 0;
-        StringBuilder _resulttemp = new StringBuilder();
-        StringBuilder _result = new StringBuilder();
-        restoredVMs = 0;
-        ArrayList<String> _filelist = new ArrayList<>();
-        FileUtils.getAListOfAllFilesAndFoldersInADirectory(AppConfig.vmFolder, _filelist);
-        if (!_filelist.isEmpty()) {
-            for (int _repeat = 0; _repeat < _filelist.size(); _repeat++) {
-                if (_startRepeat < _filelist.size()) {
-                    if (!isFileExists(_filelist.get(_startRepeat) + "/vmID.txt")) {
-                        if (isFileExists(_filelist.get(_startRepeat) + "/rom-data.json")) {
-                            if (JSONUtils.isValidFromString(FileUtils.readAFile(_filelist.get(_startRepeat) + "/rom-data.json"))) {
-                                if (_resulttemp.toString().contains("}")) {
-                                    _resulttemp.append(",").append(FileUtils.readAFile(_filelist.get(_startRepeat) + "/rom-data.json"));
-                                } else {
-                                    _resulttemp = new StringBuilder(FileUtils.readAFile(_filelist.get(_startRepeat) + "/rom-data.json"));
-                                }
-                                if (JSONUtils.isValidFromString(FileUtils.readAFile(AppConfig.maindirpath + "/roms-data.json").replaceAll("]", _resulttemp + "]"))) {
-                                    if (_result.toString().contains("}")) {
-                                        _result.append(",").append(FileUtils.readAFile(_filelist.get(_startRepeat) + "/rom-data.json"));
-                                    } else {
-                                        _result = new StringBuilder(FileUtils.readAFile(_filelist.get(_startRepeat) + "/rom-data.json"));
-                                    }
-                                    if (isFileExists(_filelist.get(_startRepeat) + "/vmID.old.txt")) {
-                                        enableVMID(FileUtils.readAFile(_filelist.get(_startRepeat) + "/vmID.old.txt"));
-                                    } else {
-                                        FileUtils.writeToFile(_filelist.get(_startRepeat), "/vmID.txt", VMManager.idGenerator());
-                                    }
-                                    restoredVMs++;
-                                } else if (JSONUtils.isValidFromString(FileUtils.readAFile(AppConfig.maindirpath + "/roms-data.json").replaceAll("]", "," + _resulttemp + "]"))) {
-                                    if (_result.toString().contains("}")) {
-                                        _result.append(",").append(FileUtils.readAFile(_filelist.get(_startRepeat) + "/rom-data.json"));
-                                    } else {
-                                        _result = new StringBuilder("," + FileUtils.readAFile(_filelist.get(_startRepeat) + "/rom-data.json"));
-                                    }
-                                    if (isFileExists(_filelist.get(_startRepeat) + "/vmID.old.txt")) {
-                                        enableVMID(FileUtils.readAFile(_filelist.get(_startRepeat) + "/vmID.old.txt"));
-                                    } else {
-                                        FileUtils.writeToFile(_filelist.get(_startRepeat), "/vmID.txt", VMManager.idGenerator());
-                                    }
-                                    restoredVMs++;
-                                } else {
-                                    Log.i("CqcmActivity", FileUtils.readAFile(AppConfig.maindirpath + "/roms-data.json").replaceAll("]", _resulttemp + "]"));
-                                }
-                            }
-                        }
-                    }
-
-                    _startRepeat++;
-                    if (_startRepeat == _filelist.size()) {
-                        if (_result.length() > 0) {
-                            if (JSONUtils.isValidFromString("[" + _result + "]")) {
-                                if (isFileExists(AppConfig.romsdatajson)) {
-                                    if (JSONUtils.isValidFromFile(AppConfig.romsdatajson)) {
-                                        String _JSONcontent = FileUtils.readAFile(AppConfig.romsdatajson);
-                                        String _JSONcontentnew = _JSONcontent.replaceAll("]", _result + "]");
-                                        if (JSONUtils.isValidFromString(_JSONcontentnew)) {
-                                            FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", _JSONcontentnew);
-                                        } else {
-                                            restoredVMs = 0;
-                                        }
-                                    } else {
-                                        restoredVMs = 0;
-                                    }
-                                } else {
-                                    FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", "[" + _result + "]");
-                                }
-                            } else {
-                                restoredVMs = 0;
-                            }
-                        } else {
-                            restoredVMs = 0;
-                        }
-                    }
-                }
-            }
-
-        }
     }
 
     public static void startFixRomsDataJson() {
@@ -603,51 +497,6 @@ public class VMManager {
                 }
             }
 
-        }
-    }
-
-    public static void enableVMID(@NonNull String _vmID) {
-        if (_vmID.isEmpty())
-            return;
-        int _startRepeat = 0;
-        ArrayList<String> _filelist = new ArrayList<>();
-        FileUtils.getAListOfAllFilesAndFoldersInADirectory(AppConfig.vmFolder, _filelist);
-        if (!_filelist.isEmpty()) {
-            for (int _repeat = 0; _repeat < _filelist.size(); _repeat++) {
-                if (_startRepeat < _filelist.size()) {
-                    if (isFileExists(_filelist.get(_startRepeat) + "/vmID.old.txt")) {
-                        if (FileUtils.readAFile(_filelist.get(_startRepeat) + "/vmID.old.txt").equals(_vmID)) {
-                            FileUtils.moveAFile(_filelist.get(_startRepeat) + "/vmID.old.txt", _filelist.get(_startRepeat) + "/vmID.txt");
-                        }
-                    }
-                }
-                _startRepeat++;
-            }
-        }
-    }
-
-    public static void movetoRecycleBin() {
-        File vDir = new File(AppConfig.recyclebin);
-        if (!vDir.exists()) {
-            if (!vDir.mkdirs()) {
-                return;
-            }
-        }
-        finalJson = FileUtils.readAFile(AppConfig.romsdatajson);
-        if (!finalJson.isEmpty()) {
-            int _startRepeat = 0;
-            ArrayList<String> _filelist = new ArrayList<>();
-            FileUtils.getAListOfAllFilesAndFoldersInADirectory(AppConfig.vmFolder, _filelist);
-            if (!_filelist.isEmpty()) {
-                for (int _repeat = 0; _repeat < _filelist.size(); _repeat++) {
-                    if (_startRepeat < _filelist.size()) {
-                        if (!finalJson.contains(Objects.requireNonNull(Uri.parse(_filelist.get(_startRepeat)).getLastPathSegment()))) {
-                            FileUtils.moveAFile(_filelist.get(_startRepeat), AppConfig.recyclebin + Uri.parse(_filelist.get(_startRepeat)).getLastPathSegment());
-                        }
-                    }
-                    _startRepeat++;
-                }
-            }
         }
     }
 
@@ -846,7 +695,7 @@ public class VMManager {
                 R.drawable.error_96px
         );
         MainActivity.refeshVMListNow();
-        movetoRecycleBin();
+        moveAllBrokenVMRecycleBin();
     }
 
     public static boolean isthiscommandsafe(@NonNull String _command, Context _context) {

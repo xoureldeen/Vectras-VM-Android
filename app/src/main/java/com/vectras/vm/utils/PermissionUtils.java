@@ -20,7 +20,7 @@ public class PermissionUtils {
         if (ContextCompat.checkSelfPermission(activity, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
             return true;
         } else {
-            if (request) {
+            if (request && !activity.isFinishing() && !activity.isDestroyed()) {
                 DialogUtils.oneDialog(activity, activity.getString(R.string.allow_permissions), activity.getString(R.string.you_need_to_grant_permission_to_access_the_storage_before_use), activity.getString(R.string.allow), true, R.drawable.folder_24px, false,
                         () -> {
                             if (activity.shouldShowRequestPermissionRationale(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {

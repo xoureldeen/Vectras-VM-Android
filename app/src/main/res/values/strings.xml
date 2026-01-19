@@ -514,6 +514,8 @@
     <string name="file_added">File added</string>
     <string name="copy_full_path">Copy full path</string>
     <string name="adding_file_failed_content">Adding file failed, please try again later.</string>
+    <string name="items_have_been_cleared">items have been cleared.</string>
+    <string name="show_recycle_bin">Show recycle bin</string>
 
 
     <!--======================TERMUX STRINGS====================-->
