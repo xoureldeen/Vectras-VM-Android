@@ -68,7 +68,7 @@ public class VMCreatorActivity extends AppCompatActivity {
     public boolean addromnowdone = false;
     private boolean created = false;
     boolean modify;
-    private boolean isImportingCVBI = false;
+    private boolean isProcessingFile = false;
     public static DataMainRoms current;
     private String thumbnailPath = "";
     private String vmID = VMManager.idGenerator();
@@ -348,7 +348,7 @@ public class VMCreatorActivity extends AppCompatActivity {
     }
 
     private void onBack() {
-        if (isImportingCVBI) return;
+        if (isProcessingFile) return;
 
         if (!created && !modify) {
             new Thread(() -> FileUtils.delete(new File (AppConfig.vmFolder + vmID))).start();
@@ -359,7 +359,7 @@ public class VMCreatorActivity extends AppCompatActivity {
 
     public void onDestroy() {
         if (!created && !modify) {
-            new Thread(() -> FileUtils.deleteDirectory(AppConfig.vmFolder + vmID)).start();
+            new Thread(() -> FileUtils.delete(new File(AppConfig.vmFolder + vmID))).start();
         }
         modify = false;
         super.onDestroy();
@@ -394,6 +394,7 @@ public class VMCreatorActivity extends AppCompatActivity {
 
                     executor.execute(() -> {
                         try {
+                            isProcessingFile = true;
                             String _filename = FileUtils.getFileNameFromUri(this, uri);
                             if (_filename == null || _filename.isEmpty()) {
                                 _filename = String.valueOf(System.currentTimeMillis());
@@ -420,11 +421,8 @@ public class VMCreatorActivity extends AppCompatActivity {
                                     null));
                             Log.e(TAG, "isoPicker: " + e.getMessage());
                         } finally {
-                            runOnUiThread(() -> {
-                                if (!isFinishing() && !isDestroyed()) {
-                                    progressDialog.dismiss();
-                                }
-                            });
+                            isProcessingFile = false;
+                            runOnUiThread(() -> DialogUtils.safeDismiss(this, progressDialog));
                         }
                     });
                 } else {
@@ -492,6 +490,7 @@ public class VMCreatorActivity extends AppCompatActivity {
 
                 executor.execute(() -> {
                     try {
+                        isProcessingFile = true;
                         String _filename = FileUtils.getFileNameFromUri(this, uri);
                         if (_filename == null || _filename.isEmpty()) {
                             _filename = String.valueOf(System.currentTimeMillis());
@@ -524,11 +523,8 @@ public class VMCreatorActivity extends AppCompatActivity {
                                 null));
                         Log.e(TAG, "filePicker: " + e.getMessage());
                     } finally {
-                        runOnUiThread(() -> {
-                            if (!isFinishing() && !isDestroyed()) {
-                                progressDialog.dismiss();
-                            }
-                        });
+                        isProcessingFile = false;
+                        runOnUiThread(() -> DialogUtils.safeDismiss(this, progressDialog));
                     }
                 });
             });
@@ -727,6 +723,7 @@ public class VMCreatorActivity extends AppCompatActivity {
 
         executor.execute(() -> {
             try {
+                isProcessingFile = true;
                 ImageUtils.convertToPng(this, uri, AppConfig.vmFolder + vmID + "/thumbnail.png");
 
                 thumbnailPath = AppConfig.vmFolder + vmID + "/thumbnail.png";
@@ -742,10 +739,8 @@ public class VMCreatorActivity extends AppCompatActivity {
                         null,
                         null));
             } finally {
-                runOnUiThread(() -> {
-                    if (!isImportingCVBI && progressDialog.isShowing() && !isFinishing() && !isDestroyed())
-                        progressDialog.dismiss();
-                });
+                isProcessingFile = false;
+                runOnUiThread(() -> DialogUtils.safeDismiss(this, progressDialog));
             }
         });
     }
@@ -917,7 +912,7 @@ public class VMCreatorActivity extends AppCompatActivity {
             return;
         }
 
-        isImportingCVBI = true;
+        isProcessingFile = true;
 
         View progressView = LayoutInflater.from(this).inflate(R.layout.dialog_progress_style, null);
         TextView progressText = progressView.findViewById(R.id.progress_text);
@@ -948,11 +943,10 @@ public class VMCreatorActivity extends AppCompatActivity {
             );
 
             runOnUiThread(() -> {
-                if (progressDialog.isShowing() && !isFinishing() && !isDestroyed())
-                    progressDialog.dismiss();
+                DialogUtils.safeDismiss(this, progressDialog);
 
                 if (isFinishing() || isDestroyed()) {
-                    new Thread(() -> FileUtils.deleteDirectory(AppConfig.vmFolder + vmID)).start();
+                    new Thread(() -> FileUtils.delete(new File(AppConfig.vmFolder + vmID))).start();
                     return;
                 }
 
@@ -975,7 +969,7 @@ public class VMCreatorActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private void afterExtractCVBIFile(String _filename) {
-        isImportingCVBI = false;
+        isProcessingFile = false;
         binding.ivIcon.setEnabled(true);
         try {
             if (!FileUtils.isFileExists(AppConfig.vmFolder + vmID + "/rom-data.json")) {

@@ -418,7 +418,7 @@ public class SetupWizard2Activity extends AppCompatActivity {
                     HashMap<String, Object> mmap;
                     mmap = new Gson().fromJson(response, new TypeToken<HashMap<String, Object>>() {
                     }.getType());
-                    if (mmap.containsKey("aarch64") && mmap.containsKey("armhf") && mmap.containsKey("amd64") && mmap.containsKey("x86")) {
+                    if (mmap != null && mmap.containsKey("aarch64") && mmap.containsKey("armhf") && mmap.containsKey("amd64") && mmap.containsKey("x86")) {
                         if (DeviceUtils.isArm()) {
                             bootstrapFileLink = Objects.requireNonNull(mmap.get(DeviceUtils.is64bit() ? "aarch64" : "armhf")).toString();
                         } else {
