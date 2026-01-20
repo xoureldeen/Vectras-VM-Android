@@ -3,7 +3,7 @@ package com.vectras.vm.utils;
 import static android.content.Intent.ACTION_VIEW;
 
 import android.app.Activity;
-import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,7 +23,6 @@ import android.widget.TextView;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.color.MaterialColors;
-import com.vectras.vm.AppConfig;
 import com.vectras.vm.R;
 
 public class DialogUtils {
@@ -245,6 +244,12 @@ public class DialogUtils {
             return !activity.isFinishing() && !activity.isDestroyed();
         }
         return false;
+    }
+
+    public static void safeDismiss(Activity activity, AlertDialog dialog) {
+        if (activity.isFinishing() || activity.isDestroyed()) return;
+        if (dialog == null || !dialog.isShowing() || dialog.getWindow() == null) return;
+        if (dialog.getWindow().getDecorView().getWindowToken() != null) dialog.dismiss();
     }
 
     public static void joinTelegram(Context _context) {
