@@ -70,6 +70,9 @@ public class FileUtils {
 
     @SuppressLint("NewApi")
     public static String getPath(Context context, final Uri uri) {
+        if (uri.toString().startsWith("content://ru.zdevs.zarchiver") && uri.getPath() != null && isFileExists(uri.getPath()))
+            return uri.getPath();
+
         // check here to KITKAT or new version
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
         String selection = null;

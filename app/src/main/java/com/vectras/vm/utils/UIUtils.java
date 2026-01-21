@@ -549,4 +549,16 @@ public class UIUtils {
                 WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         );
     }
+
+    public static void setBackgroundItemInList(View view, int position, int listsize, boolean isBrighter) {
+        if (listsize == 1) {
+            view.setBackgroundResource(isBrighter ? R.drawable.object_shape_single_high : R.drawable.object_shape_single);
+        } else if (position == 0) {
+            view.setBackgroundResource(isBrighter ? R.drawable.object_shape_top_high : R.drawable.object_shape_top);
+        } else if (position == listsize - 1) {
+            view.setBackgroundResource(isBrighter ? R.drawable.object_shape_bottom_high : R.drawable.object_shape_bottom);
+        } else {
+            view.setBackgroundResource(isBrighter ? R.drawable.object_shape_middle_high : R.drawable.object_shape_middle);
+        }
+    }
 }

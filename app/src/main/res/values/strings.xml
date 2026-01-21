@@ -248,6 +248,7 @@
     <string name="do_you_want_to_change_the_mirror_before_setting_up_the_current_mirror_is">Do you want to change the mirror before setting up?\nThe current mirror is:</string>
     <string name="connecting_to_mirror_in">Connecting to mirror in</string>
     <string name="mirror">Mirror</string>
+    <string name="mirrors">Mirrors</string>
     <string name="letstart">Let\'s start</string>
     <string name="welcome">Welcome!</string>
     <string name="welcome_to_vectras_vm_lets_get_started">Welcome to Vectras VM. Let\'s get started!</string>

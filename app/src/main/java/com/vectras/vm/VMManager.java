@@ -377,10 +377,11 @@ public class VMManager {
             if (!isVmFilesInUse(f.getName(), vmList)) {
                 if (f.getName().startsWith("_")) {
                     FileUtils.delete(new File(f.getAbsolutePath()));
+                    cleared++;
                 } else if (!isFileExists(f.getAbsolutePath() + "/rom-data.json")) {
                     FileUtils.moveToFolder(f.getAbsolutePath(), AppConfig.recyclebin);
+                    cleared++;
                 }
-                cleared++;
             }
         }
         return cleared;

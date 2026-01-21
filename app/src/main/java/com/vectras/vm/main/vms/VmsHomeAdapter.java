@@ -1,8 +1,6 @@
 package com.vectras.vm.main.vms;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,13 +24,12 @@ import com.vectras.vm.main.core.RomOptionsDialog;
 import com.vectras.vm.utils.FileUtils;
 
 import java.io.File;
-import java.util.Collections;
 import java.util.List;
 
 public class VmsHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private final Activity activity;
     private final LayoutInflater inflater;
-    public List<DataMainRoms> data = Collections.emptyList();
+    private final List<DataMainRoms> data;
 
     public VmsHomeAdapter(Activity activity, List<DataMainRoms> data) {
         this.activity = activity;

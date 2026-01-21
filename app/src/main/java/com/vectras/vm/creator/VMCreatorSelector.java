@@ -35,7 +35,7 @@ public class VMCreatorSelector {
         showDialog(activity, ListManager.bootFrom(activity), position, callback, activity.getString(R.string.boot_from));
     }
 
-    public static void showDialog(Activity activity, ArrayList<HashMap<String, Object>> list, int position,SelectorCallback callback, String title) {
+    public static void showDialog(Activity activity, ArrayList<HashMap<String, Object>> list, int position, SelectorCallback callback, String title) {
         if (activity.isFinishing() || activity.isDestroyed()) return;
         LinearLayoutManager layoutmanager = new LinearLayoutManager(activity);
         DialogListSelectorLayoutBinding binding = DialogListSelectorLayoutBinding.inflate(activity.getLayoutInflater());
@@ -97,6 +97,7 @@ public class VMCreatorSelector {
             View view = holder.itemView;
             TextView title = view.findViewById(R.id.textview);
             title.setText(Objects.requireNonNull(data.get(position).get("name")).toString());
+            view.setBackgroundResource(position == currentPosition ? R.drawable.dialog_shape_single_button : R.drawable.dialog_shape_click_effect_button);
             view.findViewById(R.id.iv_check).setVisibility(position == currentPosition ? View.VISIBLE : View.INVISIBLE);
             view.findViewById(R.id.main).setOnClickListener(v -> {
                 if (activity.isFinishing() || activity.isDestroyed()) return;

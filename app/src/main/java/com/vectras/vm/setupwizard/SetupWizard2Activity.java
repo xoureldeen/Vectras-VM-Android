@@ -34,6 +34,7 @@ import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.AppConfig;
 import com.vectras.vm.R;
 import com.vectras.vm.VMManager;
+import com.vectras.vm.creator.VMCreatorSelector;
 import com.vectras.vm.network.RequestNetwork;
 import com.vectras.vm.network.RequestNetworkController;
 import com.vectras.vm.databinding.ActivitySetupWizard2Binding;
@@ -93,7 +94,7 @@ public class SetupWizard2Activity extends AppCompatActivity {
     boolean isServerError = false;
     boolean isNotEnoughStorageSpace = false;
     boolean isCustomSetupMode = false;
-    final ArrayList<HashMap<String, String>> mirrorList = new ArrayList<>();
+    final ArrayList<HashMap<String, Object>> mirrorList = new ArrayList<>();
     ExecutorService executor = Executors.newSingleThreadExecutor();
 
 
@@ -140,9 +141,9 @@ public class SetupWizard2Activity extends AppCompatActivity {
 
         ListUtils.setupMirrorListForListmap(mirrorList);
 
-        HashMap<String, String> item = mirrorList.get(MainSettingsManager.getSelectedMirror(this));
-        selectedMirrorCommand = Objects.requireNonNull(item.get("mirror"));
-        selectedMirrorLocation = Objects.requireNonNull(item.get("location"));
+        HashMap<String, Object> item = mirrorList.get(MainSettingsManager.getSelectedMirror(this));
+        selectedMirrorCommand = Objects.requireNonNull(item.get("value")).toString();
+        selectedMirrorLocation = Objects.requireNonNull(item.get("name")).toString();
 
         bindingFinalSteps.main.setVisibility(View.GONE);
 
@@ -697,28 +698,11 @@ public class SetupWizard2Activity extends AppCompatActivity {
     }
 
     private void selectMirror() {
-        ListViewBinding listViewBinding = ListViewBinding.inflate(getLayoutInflater());
-        SpinnerSelectMirrorAdapter adapter =
-                new SpinnerSelectMirrorAdapter(this, mirrorList);
-
-        listViewBinding.list.setAdapter(adapter);
-
-        AlertDialog dialog = new AlertDialog.Builder(this)
-                .setView(listViewBinding.getRoot())
-                .create();
-
-        listViewBinding.list.setOnItemClickListener((parent, view1, position, id) -> {
-            HashMap<String, String> item = mirrorList.get(position);
-            selectedMirrorCommand = Objects.requireNonNull(item.get("mirror"));
-            selectedMirrorLocation = Objects.requireNonNull(item.get("location"));
+        VMCreatorSelector.showDialog(this, mirrorList, MainSettingsManager.getSelectedMirror(this), ((position, name, value) -> {
+            selectedMirrorCommand = value;
+            selectedMirrorLocation = name;
             MainSettingsManager.setSelectedMirror(SetupWizard2Activity.this, position);
-
-            dialog.dismiss();
-        });
-
-        listViewBinding.list.post(() -> listViewBinding.list.setSelection(MainSettingsManager.getSelectedMirror(this)));
-
-        dialog.show();
+        }), getString(R.string.mirrors));
     }
 
     public static class SpinnerSelectMirrorAdapter extends BaseAdapter {
