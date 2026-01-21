@@ -13,22 +13,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.BaseAdapter;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.termux.app.TermuxService;
 import com.vectras.qemu.MainSettingsManager;
+import com.vectras.vm.creator.VMCreatorSelector;
+import com.vectras.vm.databinding.ActivityMinitoolsBinding;
 import com.vectras.vm.main.MainActivity;
 import com.vectras.vm.setupwizard.SetupWizard2Activity;
 import com.vectras.vm.utils.CommandUtils;
@@ -36,52 +31,31 @@ import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.ListUtils;
 import com.vectras.vm.utils.PackageUtils;
-import com.vectras.vm.utils.UIUtils;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
 public class Minitools extends AppCompatActivity {
     private final String TAG = "Minitools";
-    private final ArrayList<HashMap<String, String>> listmapForSelectMirrors = new ArrayList<>();
-    private Spinner spinnerselectmirror;
-    private String selectedMirrorCommand = "";
-
-    LinearLayout setupsoundfortermux;
-    LinearLayout cleanup;
-    LinearLayout restore;
-    LinearLayout deleteallvm;
-    LinearLayout reinstallsystem;
-    LinearLayout deleteall;
+    private ActivityMinitoolsBinding binding;
+    private final ArrayList<HashMap<String, Object>> mirrorlist = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_minitools);
+        binding = ActivityMinitoolsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 //        UIUtils.setOnApplyWindowInsetsListener(findViewById(R.id.main));
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        toolbar.setTitle(getString(R.string.mini_tools));
+        binding.toolbar.setTitle(getString(R.string.mini_tools));
 
-        setupsoundfortermux = findViewById(R.id.setupsoundfortermux);
-        cleanup = findViewById(R.id.cleanup);
-        restore = findViewById(R.id.restore);
-        deleteallvm = findViewById(R.id.deleteallvm);
-        reinstallsystem = findViewById(R.id.reinstallsystem);
-        deleteall = findViewById(R.id.deleteall);
-        spinnerselectmirror = findViewById(R.id.spinnerselectmirror);
-
-        setupsoundfortermux.setOnClickListener(v -> {
+        binding.setupsoundfortermux.setOnClickListener(v -> {
             if (PackageUtils.isInstalled("com.termux", getApplicationContext())) {
                 DialogUtils.twoDialog(Minitools.this, getString(R.string.setup_sound), getResources().getString(R.string.setup_sound_guide_content), getString(R.string.start_setup), getString(R.string.cancel), true, R.drawable.volume_up_24px, true,
                         () -> {
@@ -109,40 +83,31 @@ public class Minitools extends AppCompatActivity {
 
         });
 
-        cleanup.setOnClickListener(v -> DialogUtils.twoDialog(Minitools.this, getResources().getString(R.string.clean_up), getResources().getString(R.string.clean_up_content), getResources().getString(R.string.clean_up), getResources().getString(R.string.cancel), true, R.drawable.cleaning_services_24px, true,
+        binding.mirror.setOnClickListener(v -> VMCreatorSelector.showDialog(Minitools.this, mirrorlist, MainSettingsManager.getSelectedMirror(this), ((position, name, value) -> {
+            MainSettingsManager.setSelectedMirror(Minitools.this, position);
+            CommandUtils.run(value + "&& exit", false, Minitools.this);
+        }), getString(R.string.mirrors)));
+
+        binding.cleanup.setOnClickListener(v -> DialogUtils.twoDialog(Minitools.this, getResources().getString(R.string.clean_up), getResources().getString(R.string.clean_up_content), getResources().getString(R.string.clean_up), getResources().getString(R.string.cancel), true, R.drawable.cleaning_services_24px, true,
                 this::cleanUp, null, null));
 
-        restore.setOnClickListener(v -> DialogUtils.twoDialog(Minitools.this, getResources().getString(R.string.restore), getResources().getString(R.string.restore_content), getResources().getString(R.string.continuetext), getResources().getString(R.string.cancel), true, R.drawable.settings_backup_restore_24px, true,
+        binding.restore.setOnClickListener(v -> DialogUtils.twoDialog(Minitools.this, getResources().getString(R.string.restore), getResources().getString(R.string.restore_content), getResources().getString(R.string.continuetext), getResources().getString(R.string.cancel), true, R.drawable.settings_backup_restore_24px, true,
                 () -> {
                     int result = VMManager.restoreAll();
                     DialogUtils.oneDialog(Minitools.this, getString(R.string.done), getString(R.string.restored) + " " + result + ".", R.drawable.settings_backup_restore_24px);
-                    restore.setVisibility(GONE);
+                    binding.restore.setVisibility(GONE);
                 }, null, null));
 
-        deleteallvm.setOnClickListener(v -> DialogUtils.twoDialog(Minitools.this, getResources().getString(R.string.delete_all_vm), getResources().getString(R.string.delete_all_vm_content), getResources().getString(R.string.delete_all), getResources().getString(R.string.cancel), true, R.drawable.delete_24px, true,
+        binding.deleteallvm.setOnClickListener(v -> DialogUtils.twoDialog(Minitools.this, getResources().getString(R.string.delete_all_vm), getResources().getString(R.string.delete_all_vm_content), getResources().getString(R.string.delete_all), getResources().getString(R.string.cancel), true, R.drawable.delete_24px, true,
                 this::eraserAllVM, null, null));
 
-        deleteall.setOnClickListener(v -> DialogUtils.twoDialog(Minitools.this, getResources().getString(R.string.delete_all), getResources().getString(R.string.delete_all_content), getResources().getString(R.string.delete_all), getResources().getString(R.string.cancel), true, R.drawable.delete_forever_24px, true,
+        binding.deleteall.setOnClickListener(v -> DialogUtils.twoDialog(Minitools.this, getResources().getString(R.string.delete_all), getResources().getString(R.string.delete_all_content), getResources().getString(R.string.delete_all), getResources().getString(R.string.cancel), true, R.drawable.delete_forever_24px, true,
                 this::eraserData, null, null));
 
-        reinstallsystem.setOnClickListener(v -> DialogUtils.twoDialog(Minitools.this, getResources().getString(R.string.reinstall_system), getResources().getString(R.string.reinstall_system_content), getResources().getString(R.string.continuetext), getResources().getString(R.string.cancel), true, R.drawable.system_update_24px, true,
+        binding.reinstallsystem.setOnClickListener(v -> DialogUtils.twoDialog(Minitools.this, getResources().getString(R.string.reinstall_system), getResources().getString(R.string.reinstall_system_content), getResources().getString(R.string.continuetext), getResources().getString(R.string.cancel), true, R.drawable.system_update_24px, true,
                 this::eraserSystem, null, null));
 
-        spinnerselectmirror.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedMirrorCommand = listmapForSelectMirrors.get(position).get("mirror");
-                MainSettingsManager.setSelectedMirror(Minitools.this, position);
-                CommandUtils.run(selectedMirrorCommand + "&& exit", false, Minitools.this);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        setupSpiner();
+        ListUtils.setupMirrorListForListmap(mirrorlist);
     }
 
     @Override
@@ -156,52 +121,6 @@ public class Minitools extends AppCompatActivity {
             }
             default -> super.onOptionsItemSelected(item);
         };
-    }
-
-    private void setupSpiner() {
-        ListUtils.setupMirrorListForListmap(listmapForSelectMirrors);
-
-        spinnerselectmirror.setAdapter(new SpinnerSelectMirrorAdapter(listmapForSelectMirrors));
-        spinnerselectmirror.setSelection(MainSettingsManager.getSelectedMirror(Minitools.this));
-    }
-
-    public class SpinnerSelectMirrorAdapter extends BaseAdapter {
-
-        ArrayList<HashMap<String, String>> _data;
-
-        public SpinnerSelectMirrorAdapter(ArrayList<HashMap<String, String>> _arr) {
-            _data = _arr;
-        }
-
-        @Override
-        public int getCount() {
-            return _data.size();
-        }
-
-        @Override
-        public HashMap<String, String> getItem(int _index) {
-            return _data.get(_index);
-        }
-
-        @Override
-        public long getItemId(int _index) {
-            return _index;
-        }
-
-        @Override
-        public View getView(final int _position, View _v, ViewGroup _container) {
-            LayoutInflater _inflater = getLayoutInflater();
-            View _view = _v;
-            if (_view == null) {
-                _view = _inflater.inflate(R.layout.simple_layout_for_spiner, null);
-            }
-
-            final TextView textViewLocation = _view.findViewById(R.id.textViewLocation);
-
-            textViewLocation.setText(_data.get(_position).get("location"));
-
-            return _view;
-        }
     }
 
     private void cleanUp() {
@@ -234,8 +153,8 @@ public class Minitools extends AppCompatActivity {
                         },
                         null,
                         null);
-                restore.setVisibility(GONE);
-                cleanup.setVisibility(GONE);
+                binding.restore.setVisibility(GONE);
+                binding.cleanup.setVisibility(GONE);
             });
         }).start();
     }
@@ -252,18 +171,18 @@ public class Minitools extends AppCompatActivity {
 
         new Thread(() -> {
             VMManager.killallqemuprocesses(this);
-            FileUtils.deleteDirectory(AppConfig.vmFolder);
-            FileUtils.deleteDirectory(AppConfig.recyclebin);
-            FileUtils.deleteDirectory(AppConfig.romsdatajson);
+            FileUtils.delete(new File(AppConfig.vmFolder));
+            FileUtils.delete(new File(AppConfig.recyclebin));
+            FileUtils.delete(new File(AppConfig.romsdatajson));
             File vDir = new File(AppConfig.maindirpath);
             if (!vDir.mkdirs()) Log.e(TAG, "Unable to create folder: " + AppConfig.maindirpath);
             FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", "[]");
 
             runOnUiThread(() -> {
                 progressDialog.dismiss();
-                cleanup.setVisibility(GONE);
-                restore.setVisibility(GONE);
-                deleteallvm.setVisibility(GONE);
+                binding.cleanup.setVisibility(GONE);
+                binding.restore.setVisibility(GONE);
+                binding.deleteallvm.setVisibility(GONE);
                 Toast.makeText(this, getResources().getString(R.string.done), Toast.LENGTH_LONG).show();
             });
         }).start();
@@ -281,17 +200,17 @@ public class Minitools extends AppCompatActivity {
 
         new Thread(() -> {
             VMManager.killallqemuprocesses(this);
-            FileUtils.deleteDirectory(AppConfig.maindirpath);
+            FileUtils.delete(new File(AppConfig.maindirpath));
             File vDir = new File(AppConfig.maindirpath);
             if (!vDir.mkdirs()) Log.e(TAG, "Unable to create folder: " + AppConfig.maindirpath);
             FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", "[]");
 
            runOnUiThread(() -> {
                 progressDialog.dismiss();
-                cleanup.setVisibility(GONE);
-                restore.setVisibility(GONE);
-                deleteallvm.setVisibility(GONE);
-                deleteall.setVisibility(GONE);
+                binding.cleanup.setVisibility(GONE);
+                binding.restore.setVisibility(GONE);
+                binding.deleteallvm.setVisibility(GONE);
+                binding.deleteall.setVisibility(GONE);
                 Toast.makeText(this, getResources().getString(R.string.done), Toast.LENGTH_LONG).show();
             });
         }).start();
@@ -311,9 +230,9 @@ public class Minitools extends AppCompatActivity {
             MainActivity.isActivate = false;
             AppConfig.needreinstallsystem = true;
             VMManager.killallqemuprocesses(this);
-            FileUtils.deleteDirectory(getFilesDir().getAbsolutePath() + "/data");
-            FileUtils.deleteDirectory(getFilesDir().getAbsolutePath() + "/distro");
-            FileUtils.deleteDirectory(getFilesDir().getAbsolutePath() + "/usr");
+            FileUtils.delete(new File(getFilesDir().getAbsolutePath() + "/data"));
+            FileUtils.delete(new File(getFilesDir().getAbsolutePath() + "/distro"));
+            FileUtils.delete(new File(getFilesDir().getAbsolutePath() + "/usr"));
 
             runOnUiThread(() -> {
                 progressDialog.dismiss();

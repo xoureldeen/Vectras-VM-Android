@@ -46,10 +46,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/object_shape_top_high"
                 android:gravity="center_vertical"
-                android:paddingLeft="16dp"
-                android:paddingTop="2dp"
-                android:paddingRight="2dp"
-                android:paddingBottom="2dp">
+                android:padding="16dp">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -60,21 +57,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
-                    android:layout_weight="1"
                     android:text="@string/mirror" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/object_shape_inside_object_top">
-
-                    <Spinner
-                        android:id="@+id/spinnerselectmirror"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:spinnerMode="dialog"
-                        tools:listitem="@layout/simple_layout_for_spiner" />
-                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout

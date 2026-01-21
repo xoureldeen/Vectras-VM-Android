@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:background="?attr/colorSurfaceContainer"
+    android:background="?attr/colorSurfaceContainerHigh"
     android:animateLayoutChanges="true">
     <TextView
         style="@style/MaterialAlertDialog.Material3Expressive.Title.Text"
@@ -22,10 +22,10 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:scrollbars="vertical"
-        android:fadeScrollbars="false"/>
+        android:fadeScrollbars="true"/>
     <com.google.android.material.divider.MaterialDivider
         android:id="@+id/dv_bottom"
         android:layout_width="match_parent"
@@ -35,7 +35,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical|right"
+        android:gravity="center_vertical|end"
         android:padding="16dp">
         <com.google.android.material.button.MaterialButton
             style="@style/Widget.Material3Expressive.Button.OutlinedButton"

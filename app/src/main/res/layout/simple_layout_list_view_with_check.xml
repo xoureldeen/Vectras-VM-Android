@@ -4,8 +4,8 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:padding="16dp"
-    android:id="@+id/main"
-    android:background="?attr/selectableItemBackground">
+    android:layout_marginHorizontal="16dp"
+    android:id="@+id/main">
 
     <TextView
         android:id="@+id/textview"

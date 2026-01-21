@@ -61,7 +61,7 @@ public class RomStoreFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mAdapter = new RomStoreHomeAdpater(getContext(), data);
+        mAdapter = new RomStoreHomeAdpater(getContext(), data, false);
         binding.rvRomlist.setAdapter(mAdapter);
         binding.rvRomlist.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 

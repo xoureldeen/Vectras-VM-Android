@@ -46,13 +46,13 @@ import com.vectras.vm.R;
 import com.vectras.vm.WebViewActivity;
 import com.vectras.vm.databinding.ActivityMainBinding;
 import com.vectras.vm.databinding.ActivityMainContentBinding;
+import com.vectras.vm.main.romstore.RomStoreHomeAdpater;
 import com.vectras.vm.main.softwarestore.SoftwareStoreFragment;
-import com.vectras.vm.main.softwarestore.SoftwareStoreHomeAdapterSearch;
+import com.vectras.vm.main.softwarestore.SoftwareStoreHomeAdapter;
 import com.vectras.vm.network.RequestNetwork;
 import com.vectras.vm.network.RequestNetworkController;
 import com.vectras.vm.databinding.BottomsheetdialogLoggerBinding;
 import com.vectras.vm.databinding.UpdateBottomDialogLayoutBinding;
-import com.vectras.vm.main.romstore.RomStoreHomeAdapterSearch;
 import com.vectras.vm.main.romstore.DataRoms;
 import com.vectras.vm.creator.SetArchActivity;
 import com.vectras.vm.VMManager;
@@ -101,8 +101,8 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
     public static boolean isOpenRomStore = false;
     ActivityMainBinding binding;
     ActivityMainContentBinding bindingContent;
-    private RomStoreHomeAdapterSearch adapterRomStoreSearch;
-    private SoftwareStoreHomeAdapterSearch adapterSoftwareStoreSearch;
+    private RomStoreHomeAdpater adapterRomStore;
+    private SoftwareStoreHomeAdapter adapterSoftwareStore;
     private final List<DataRoms> listSearchData = new ArrayList<>();
 
     public static CallbackInterface.HomeCallToVmsListener homeCallToVmsListener;
@@ -214,16 +214,16 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
                 bindingContent.searchbar.setEnabled(true);
                 bindingContent.searchbar.setHint(getText(R.string.search));
                 currentSearchMode = SEARCH_ROM_STORE;
-                adapterRomStoreSearch = new RomStoreHomeAdapterSearch(this, listSearchData);
-                binding.rvSearch.setAdapter(adapterRomStoreSearch);
+                adapterRomStore = new RomStoreHomeAdpater(this, listSearchData, true);
+                binding.rvSearch.setAdapter(adapterRomStore);
             } else if (id == R.id.item_softwarestore) {
                 selectedFragment = new SoftwareStoreFragment();
                 bindingContent.efabCreate.setVisibility(View.GONE);
                 bindingContent.searchbar.setEnabled(true);
                 bindingContent.searchbar.setHint(getText(R.string.search));
                 currentSearchMode = SEARCH_SOFTWARE_STORE;
-                adapterSoftwareStoreSearch = new SoftwareStoreHomeAdapterSearch(this, listSearchData);
-                binding.rvSearch.setAdapter(adapterSoftwareStoreSearch);
+                adapterSoftwareStore = new SoftwareStoreHomeAdapter(this, listSearchData, true);
+                binding.rvSearch.setAdapter(adapterSoftwareStore);
             } else if (id == R.id.item_monitor) {
                 selectedFragment = new SystemMonitorFragment();
                 bindingContent.efabCreate.setVisibility(View.GONE);
@@ -376,11 +376,10 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            Uri content_describer = data.getData();
+        if (resultCode == RESULT_OK && data.getData() != null) {
             File selectedFilePath;
             try {
-                selectedFilePath = new File(Objects.requireNonNull(FileUtils.getPath(this, content_describer)));
+                selectedFilePath = new File(Objects.requireNonNull(FileUtils.getPath(this, data.getData())));
             } catch (Exception e) {
                 DialogUtils.oneDialog(this,
                         getString(R.string.oops),
@@ -606,9 +605,9 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
             binding.rvSearch.setVisibility(View.VISIBLE);
 
         if (currentSearchMode == SEARCH_ROM_STORE ) {
-            if (adapterRomStoreSearch != null) adapterRomStoreSearch.notifyDataSetChanged();
+            if (adapterRomStore != null) adapterRomStore.notifyDataSetChanged();
         } else {
-            if (adapterSoftwareStoreSearch != null) adapterSoftwareStoreSearch.notifyDataSetChanged();
+            if (adapterSoftwareStore != null) adapterSoftwareStore.notifyDataSetChanged();
         }
     }
 
