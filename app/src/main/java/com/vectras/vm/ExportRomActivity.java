@@ -222,12 +222,12 @@ public class ExportRomActivity extends AppCompatActivity {
             )};
             runOnUiThread(() -> {
                 isExporting = false;
-                progressDialog.dismiss();
+                DialogUtils.safeDismiss(this, progressDialog);
 
                 String finalOutputPath = "";
                 try {
-                    FileUtils.deleteDirectory(outputPath);
-                    FileUtils.deleteDirectory(tempFolder);
+                    FileUtils.delete(new File(outputPath));
+                    FileUtils.delete(new File(tempFolder));
                     finalOutputPath = FileUtils.getPath(this, uri);
                 } catch (Exception e) {
                     Log.e(TAG, "startCreate: ", e);

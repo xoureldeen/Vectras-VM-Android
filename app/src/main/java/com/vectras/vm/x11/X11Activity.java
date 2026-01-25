@@ -462,7 +462,12 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                 dialog.dismiss();
             });
 
-            if (!isFinishing() && !isDestroyed()) dialog.show();
+            if (!isFinishing()
+                    && !isDestroyed()
+                    && getWindow() != null
+                    && getWindow().getDecorView().isShown()) {
+                dialog.show();
+            }
         });
 
         upGameBtn.setOnTouchListener((v, event) -> {
