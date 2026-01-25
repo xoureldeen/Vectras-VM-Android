@@ -517,7 +517,12 @@ public class MainSettingsManager extends AppCompatActivity
 
     public static String getVncExternalDisplay(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getString("vncExternalDisplay", "1");
+        String value = prefs.getString("vncExternalDisplay", "1");
+        if (value.isEmpty()) {
+            return "1";
+        } else {
+            return value;
+        }
     }
 
     public static void setVncExternalDisplay(Context context, String vncExternalDisplay) {

@@ -20,6 +20,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.vectras.vm.AppConfig;
 import com.vectras.vm.R;
+import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vterm.Terminal;
 
 import java.io.File;
@@ -100,7 +101,7 @@ public class CreateImageDialogFragment extends DialogFragment {
                     driveLayout.setEndIconDrawable(R.drawable.more_vert_24px);
             }
 
-            dismiss();
+            DialogUtils.safeDismiss(requireActivity(), builder.create());
         });
 
         builder.setView(view);

@@ -8,12 +8,9 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -63,6 +60,8 @@ public class VMCreatorActivity extends AppCompatActivity {
     private final String TAG = "VMCreatorActivity";
     private ActivityVmCreatorBinding binding;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private DialogProgressStyleBinding dialogProgressStyleBinding;
+    private AlertDialog progressDialog;
     boolean iseditparams = false;
     public String previousName = "";
     public boolean addromnowdone = false;
@@ -107,6 +106,12 @@ public class VMCreatorActivity extends AppCompatActivity {
         binding = ActivityVmCreatorBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        dialogProgressStyleBinding = DialogProgressStyleBinding.inflate(getLayoutInflater());
+        progressDialog = new MaterialAlertDialogBuilder(this)
+                .setView(dialogProgressStyleBinding.getRoot())
+                .setCancelable(false)
+                .create();
+
         setSupportActionBar(binding.toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
@@ -138,7 +143,7 @@ public class VMCreatorActivity extends AppCompatActivity {
                         () -> diskPicker.launch("*/*"),
                         () -> {
                             if (binding.drive.getText().toString().contains(AppConfig.vmFolder + vmID)) {
-                                FileUtils.deleteDirectory(Objects.requireNonNull(binding.drive.getText()).toString());
+                                FileUtils.delete(new File(Objects.requireNonNull(binding.drive.getText()).toString()));
                             }
                             binding.drive.setText("");
                             binding.driveField.setEndIconDrawable(R.drawable.add_24px);
@@ -383,14 +388,7 @@ public class VMCreatorActivity extends AppCompatActivity {
                 if (uri == null) return;
 
                 if (MainSettingsManager.copyFile(this)) {
-                    DialogProgressStyleBinding dialogProgressStyleBinding = DialogProgressStyleBinding.inflate(getLayoutInflater());
-                    dialogProgressStyleBinding.progressText.setText(getString(R.string.copying_file));
-                    AlertDialog progressDialog = new MaterialAlertDialogBuilder(this, R.style.CenteredDialogTheme)
-                            .setView(dialogProgressStyleBinding.getRoot())
-                            .setCancelable(false)
-                            .create();
-
-                    progressDialog.show();
+                    showProgressDialog(getString(R.string.copying_file));
 
                     executor.execute(() -> {
                         try {
@@ -478,15 +476,7 @@ public class VMCreatorActivity extends AppCompatActivity {
     private final ActivityResultLauncher<String> filePicker =
             registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
                 if (uri == null) return;
-
-                DialogProgressStyleBinding dialogProgressStyleBinding = DialogProgressStyleBinding.inflate(getLayoutInflater());
-                dialogProgressStyleBinding.progressText.setText(getString(R.string.copying_file));
-                AlertDialog progressDialog = new MaterialAlertDialogBuilder(this, R.style.CenteredDialogTheme)
-                        .setView(dialogProgressStyleBinding.getRoot())
-                        .setCancelable(false)
-                        .create();
-
-                progressDialog.show();
+                showProgressDialog(getString(R.string.copying_file));
 
                 executor.execute(() -> {
                     try {
@@ -711,15 +701,7 @@ public class VMCreatorActivity extends AppCompatActivity {
     }
 
     private void startProcessingThumbnail(Uri uri) {
-        View progressView = LayoutInflater.from(this).inflate(R.layout.dialog_progress_style, null);
-        TextView progressText = progressView.findViewById(R.id.progress_text);
-        progressText.setText(getString(R.string.just_a_sec));
-        AlertDialog progressDialog = new MaterialAlertDialogBuilder(this, R.style.CenteredDialogTheme)
-                .setView(progressView)
-                .setCancelable(false)
-                .create();
-
-        progressDialog.show();
+        showProgressDialog(getString(R.string.just_a_sec));
 
         executor.execute(() -> {
             try {
@@ -790,16 +772,7 @@ public class VMCreatorActivity extends AppCompatActivity {
         if (MainSettingsManager.copyFile(this)) {
 
             if (isFinishing() || isDestroyed() || !createVMFolder(true)) return;
-
-            View progressView = LayoutInflater.from(this).inflate(R.layout.dialog_progress_style, null);
-            TextView progressText = progressView.findViewById(R.id.progress_text);
-            progressText.setText(getString(R.string.copying_file));
-            AlertDialog progressDialog = new MaterialAlertDialogBuilder(this, R.style.CenteredDialogTheme)
-                    .setView(progressView)
-                    .setCancelable(false)
-                    .create();
-
-            progressDialog.show();
+            showProgressDialog(getString(R.string.copying_file));
 
             executor.execute(() -> {
                 try {
@@ -914,16 +887,7 @@ public class VMCreatorActivity extends AppCompatActivity {
 
         isProcessingFile = true;
 
-        View progressView = LayoutInflater.from(this).inflate(R.layout.dialog_progress_style, null);
-        TextView progressText = progressView.findViewById(R.id.progress_text);
-        progressText.setText(getString(R.string.importing) + "\n" + getString(R.string.please_stay_here));
-        ProgressBar progressBar = progressView.findViewById(R.id.progress_bar);
-        AlertDialog progressDialog = new MaterialAlertDialogBuilder(this, R.style.CenteredDialogTheme)
-                .setView(progressView)
-                .setCancelable(false)
-                .create();
-
-        progressDialog.show();
+        showProgressDialog(getString(R.string.importing) + "\n" + getString(R.string.please_stay_here));
 
         Log.i(TAG, "importRom: Extracting with " + (isUseUri ? "uri" : "path") + " from " + filePath + " to " + AppConfig.vmFolder + vmID);
 
@@ -932,14 +896,14 @@ public class VMCreatorActivity extends AppCompatActivity {
                     this,
                     fileUri,
                     AppConfig.vmFolder + vmID,
-                    progressText,
-                    progressBar
+                    dialogProgressStyleBinding.progressText,
+                    dialogProgressStyleBinding.progressBar
             ) : ZipUtils.extract(
                     this,
                     filePath,
                     AppConfig.vmFolder + vmID,
-                    progressText,
-                    progressBar
+                    dialogProgressStyleBinding.progressText,
+                    dialogProgressStyleBinding.progressBar
             );
 
             runOnUiThread(() -> {
@@ -1058,6 +1022,12 @@ public class VMCreatorActivity extends AppCompatActivity {
         if (FileUtils.isFileExists(AppConfig.vmFolder + vmID + "/cqcm.json")) {
             FileUtils.writeToFile(AppConfig.vmFolder + vmID, "cqcm.json", FileUtils.readAFile(AppConfig.vmFolder + vmID + "/cqcm.json").replace("OhnoIjustrealizeditsmidnightandIstillhavetodothis", AppConfig.vmFolder + current.vmID + "/"));
         }
+    }
+
+    private void showProgressDialog(String message) {
+        dialogProgressStyleBinding.progressText.setText(message);
+        dialogProgressStyleBinding.progressBar.setIndeterminate(true);
+        progressDialog.show();
     }
 
     public String getPath(Uri uri) {
