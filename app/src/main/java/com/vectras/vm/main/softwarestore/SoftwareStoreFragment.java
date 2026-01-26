@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +20,6 @@ import com.vectras.vm.AppConfig;
 import com.vectras.vm.main.romstore.DataRoms;
 import com.vectras.vm.databinding.FragmentHomeSoftwareStoreBinding;
 import com.vectras.vm.main.core.SharedData;
-import com.vectras.vm.main.romstore.RomStoreFragment;
 import com.vectras.vm.network.RequestNetwork;
 import com.vectras.vm.network.RequestNetworkController;
 
@@ -37,8 +37,9 @@ public class SoftwareStoreFragment extends Fragment {
     SoftwareStoreViewModel homeSoftwareStoreViewModel;
     SoftwareStoreHomeAdapter mAdapter;
     List<DataRoms> data = new ArrayList<>();
+    LinearLayoutManager layoutManager;
 
-    public static RomStoreFragment.RomStoreCallToHomeListener softwareStoreCallToHomeListener;
+    public static SoftwareStoreFragment.SoftwareStoreCallToHomeListener softwareStoreCallToHomeListener;
     public interface SoftwareStoreCallToHomeListener {
         void updateSearchStatus(boolean isReady);
     }
@@ -64,8 +65,23 @@ public class SoftwareStoreFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         mAdapter = new SoftwareStoreHomeAdapter(getContext(), data, false);
+        layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         binding.rvSoftwarelist.setAdapter(mAdapter);
-        binding.rvSoftwarelist.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        binding.rvSoftwarelist.setLayoutManager(layoutManager);
+
+        binding.rvSoftwarelist.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                int totalItemCount = layoutManager.getItemCount();
+                int lastVisibleItem = layoutManager.findLastVisibleItemPosition();
+
+                if (lastVisibleItem >= totalItemCount - 2) {
+                    mAdapter.loadMore();
+                }
+            }
+        });
 
         homeSoftwareStoreViewModel = new ViewModelProvider(requireActivity()).get(SoftwareStoreViewModel.class);
         homeSoftwareStoreViewModel.getSoftwareList().observe(getViewLifecycleOwner(), roms -> {
@@ -73,9 +89,7 @@ public class SoftwareStoreFragment extends Fragment {
                 loadFromServer();
             } else {
                 binding.linearload.setVisibility(View.GONE);
-                data.clear();
-                data.addAll(roms);
-                mAdapter.notifyDataSetChanged();
+                mAdapter.submitList(roms);
             }
         });
     }
@@ -123,7 +137,9 @@ public class SoftwareStoreFragment extends Fragment {
         homeSoftwareStoreViewModel.setSoftwareList(dataSoftware);
         data.clear();
         data.addAll(dataSoftware);
-        mAdapter.notifyDataSetChanged();
+
+        mAdapter.submitList(data);
+
         SharedData.dataSoftwareStore.addAll(dataSoftware);
         softwareStoreCallToHomeListener.updateSearchStatus(true);
     }

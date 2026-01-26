@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +36,7 @@ public class RomStoreFragment extends Fragment {
     HomeRomStoreViewModel homeRomStoreViewModel;
     RomStoreHomeAdpater mAdapter;
     List<DataRoms> data = new ArrayList<>();
+    LinearLayoutManager layoutManager;
 
     public static RomStoreCallToHomeListener romStoreCallToHomeListener;
     public interface RomStoreCallToHomeListener {
@@ -62,8 +64,23 @@ public class RomStoreFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         mAdapter = new RomStoreHomeAdpater(getContext(), data, false);
+        layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         binding.rvRomlist.setAdapter(mAdapter);
-        binding.rvRomlist.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        binding.rvRomlist.setLayoutManager(layoutManager);
+
+        binding.rvRomlist.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                int totalItemCount = layoutManager.getItemCount();
+                int lastVisibleItem = layoutManager.findLastVisibleItemPosition();
+
+                if (lastVisibleItem >= totalItemCount - 2) {
+                    mAdapter.loadMore();
+                }
+            }
+        });
 
         homeRomStoreViewModel = new ViewModelProvider(requireActivity()).get(HomeRomStoreViewModel.class);
         homeRomStoreViewModel.getRomsList().observe(getViewLifecycleOwner(), roms -> {
@@ -71,9 +88,7 @@ public class RomStoreFragment extends Fragment {
                 loadFromServer();
             } else {
                 binding.linearload.setVisibility(View.GONE);
-                data.clear();
-                data.addAll(roms);
-                mAdapter.notifyDataSetChanged();
+                mAdapter.submitList(roms);
             }
         });
     }
@@ -121,7 +136,9 @@ public class RomStoreFragment extends Fragment {
         homeRomStoreViewModel.setRomsList(dataRoms);
         data.clear();
         data.addAll(dataRoms);
-        mAdapter.notifyDataSetChanged();
+
+        mAdapter.submitList(data);
+
         SharedData.dataRomStore.addAll(dataRoms);
         romStoreCallToHomeListener.updateSearchStatus(true);
     }

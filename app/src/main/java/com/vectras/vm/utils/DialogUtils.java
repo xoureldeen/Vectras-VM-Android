@@ -78,7 +78,7 @@ public class DialogUtils {
 
         positiveButton.setOnClickListener(v -> {
             if (_onPositive != null) _onPositive.run();
-            dialog.dismiss();
+            safeDismiss((Activity) context, dialog);
         });
 
 //        dialog.setPositiveButton(_textPositiveButton, (dialog2, which) -> {
@@ -139,12 +139,12 @@ public class DialogUtils {
 
         positiveButton.setOnClickListener(v -> {
             if (_onPositive != null) _onPositive.run();
-            dialog.dismiss();
+            safeDismiss((Activity) context, dialog);
         });
 
         negativeButton.setOnClickListener(v -> {
             if (_onNegative != null) _onNegative.run();
-            dialog.dismiss();
+            safeDismiss((Activity) context, dialog);
         });
 //        dialog.setPositiveButton(_textPositiveButton, (dialog2, which) -> {
 //            if (_onPositive != null) _onPositive.run();
@@ -208,17 +208,17 @@ public class DialogUtils {
 
         positiveButton.setOnClickListener(v -> {
             if (_onPositive != null) _onPositive.run();
-            dialog.dismiss();
+            safeDismiss((Activity) context, dialog);
         });
 
         negativeButton.setOnClickListener(v -> {
             if (_onNegative != null) _onNegative.run();
-            dialog.dismiss();
+            safeDismiss((Activity) context, dialog);
         });
 
         neutralButton.setOnClickListener(v -> {
             if (_onNeutral != null) _onNeutral.run();
-            dialog.dismiss();
+            safeDismiss((Activity) context, dialog);
         });
 
 //        dialog.setPositiveButton(_textPositiveButton, (dialog2, which) -> {

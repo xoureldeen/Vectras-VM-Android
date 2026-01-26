@@ -19,19 +19,23 @@ import com.vectras.vm.R;
 import com.vectras.vm.RomInfo;
 import com.vectras.vm.utils.UIUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RomStoreHomeAdpater extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final Context context;
     private final LayoutInflater inflater;
-    private final List<DataRoms> dataRom;
+    private List<DataRoms> fullList;
+    private final List<DataRoms> displayList;
     private final boolean isBrighterItemBackground;
 
     public RomStoreHomeAdpater(Context context, List<DataRoms> data, boolean isBrighterItemBackground) {
         this.context = context;
         inflater = LayoutInflater.from(context);
-        dataRom = data;
+        fullList = data;
         this.isBrighterItemBackground = isBrighterItemBackground;
+        displayList = new ArrayList<>();
+        loadMore();
     }
 
     // Inflate the layout when viewholder created
@@ -49,7 +53,7 @@ public class RomStoreHomeAdpater extends RecyclerView.Adapter<RecyclerView.ViewH
 
         // Get current position of item in recyclerview to bind data and assign values from list
         final MyHolder myHolder = (MyHolder) holder;
-        final DataRoms current = dataRom.get(position);
+        final DataRoms current = displayList.get(position);
         Glide.with(context).load(current.romIcon).override(180, 180).placeholder(R.drawable.ic_computer_180dp_with_padding).error(R.drawable.ic_computer_180dp_with_padding).into(myHolder.ivIcon);
         myHolder.textName.setText(current.romName);
         myHolder.textSize.setText(current.romArch + " - " + current.fileSize);
@@ -79,13 +83,13 @@ public class RomStoreHomeAdpater extends RecyclerView.Adapter<RecyclerView.ViewH
             myHolder.textAvail.setTextColor(Color.RED);
         }
 
-        UIUtils.setBackgroundItemInList(myHolder.linearItem, position, dataRom.size(), isBrighterItemBackground);
+        UIUtils.setBackgroundItemInList(myHolder.linearItem, position, displayList.size(), isBrighterItemBackground);
     }
 
     // return total item from List
     @Override
     public int getItemCount() {
-        return dataRom == null ? 0 : dataRom.size();
+        return displayList == null ? 0 : displayList.size();
     }
 
     static class MyHolder extends RecyclerView.ViewHolder {
@@ -105,5 +109,25 @@ public class RomStoreHomeAdpater extends RecyclerView.Adapter<RecyclerView.ViewH
             linearItem = itemView.findViewById(R.id.linearItem);
         }
 
+    }
+
+    public void loadMore() {
+        int currentSize = displayList.size();
+        int nextLimit = Math.min(currentSize + 10, fullList.size());
+
+        if (currentSize >= nextLimit) return;
+
+        displayList.addAll(fullList.subList(currentSize, nextLimit));
+        notifyItemRangeInserted(currentSize, nextLimit - currentSize);
+    }
+
+    public void submitList(List<DataRoms> newData) {
+        fullList.clear();
+        fullList = new ArrayList<>(newData);
+
+        displayList.clear();
+        notifyDataSetChanged();
+
+        loadMore();
     }
 }

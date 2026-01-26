@@ -108,25 +108,8 @@ public class CqcmActivity extends AppCompatActivity {
                     if (JSONUtils.isValidFromString(_map)) {
                         mapForCreateNewVM = new Gson().fromJson(_map, new TypeToken<HashMap<String, Object>>() {
                         }.getType());
-                        if (mapForCreateNewVM.containsKey("imgName")) {
-                            imgName = Objects.requireNonNull(mapForCreateNewVM.get("imgName")).toString();
-                        }
-                        if (mapForCreateNewVM.containsKey("imgIcon")) {
-                            imgIcon = Objects.requireNonNull(mapForCreateNewVM.get("imgIcon")).toString();
-                        }
-                        if (mapForCreateNewVM.containsKey("imgPath")) {
-                            imgPath = Objects.requireNonNull(mapForCreateNewVM.get("imgPath")).toString();
-                        }
-                        if (mapForCreateNewVM.containsKey("imgArch")) {
-                            imgArch = Objects.requireNonNull(mapForCreateNewVM.get("imgArch")).toString();
-                        }
-                        if (mapForCreateNewVM.containsKey("imgCdrom")) {
-                            imgCdrom = Objects.requireNonNull(mapForCreateNewVM.get("imgCdrom")).toString();
-                        }
-                        if (mapForCreateNewVM.containsKey("imgExtra")) {
-                            imgExtra = Objects.requireNonNull(mapForCreateNewVM.get("imgExtra")).toString();
-                        }
-                        VMManager.createNewVM(imgName, imgIcon, imgPath, imgArch, imgCdrom, imgExtra, vmID, VMManager.startRandomPort());
+                        mapForCreateNewVM.put("vmID", VMManager.startRamdomVMID());
+                        VMManager.addVM(mapForCreateNewVM, -1);
                     } else {
                         Toast.makeText(getApplicationContext(), "The data for the new virtual machine is corrupted and cannot be created.", Toast.LENGTH_LONG).show();
                     }

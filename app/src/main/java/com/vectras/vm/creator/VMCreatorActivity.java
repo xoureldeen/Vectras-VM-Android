@@ -115,6 +115,8 @@ public class VMCreatorActivity extends AppCompatActivity {
         setSupportActionBar(binding.toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
+        UIUtils.setOnApplyWindowInsetsListener(binding.main);
+
         binding.collapsingToolbarLayout.setSubtitle(MainSettingsManager.getArch(this));
 
         binding.btnCreate.setOnClickListener(v -> startCreateVM());
@@ -996,11 +998,11 @@ public class VMCreatorActivity extends AppCompatActivity {
                 FileUtils.moveAFile(AppConfig.vmFolder + _filename.replace(".cvbi", ""), AppConfig.vmFolder + vmID);
 
                 if (!jObj.has("drive") && !jObj.has("cdrom") && !jObj.has("qemu")) {
-                    UIUtils.oneDialog(getResources().getString(R.string.problem_has_been_detected), getResources().getString(R.string.this_rom_is_missing_too_much_information), true, false, this);
+                    DialogUtils.oneDialog(this, getResources().getString(R.string.problem_has_been_detected), getResources().getString(R.string.this_rom_is_missing_too_much_information), R.drawable.warning_24px);
                 }
 
                 if (!jObj.has("versioncode")) {
-                    UIUtils.oneDialog(getResources().getString(R.string.problem_has_been_detected), getResources().getString(R.string.this_rom_may_not_be_compatible), true, false, this);
+                    DialogUtils.oneDialog(this, getResources().getString(R.string.problem_has_been_detected), getResources().getString(R.string.this_rom_may_not_be_compatible), R.drawable.warning_24px);
                 }
 
                 if (jObj.has("author") && !jObj.isNull("author") && jObj.has("desc") && !jObj.isNull("desc")) {
