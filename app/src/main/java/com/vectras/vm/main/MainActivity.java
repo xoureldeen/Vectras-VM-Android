@@ -29,6 +29,7 @@ import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.behavior.HideViewOnScrollBehavior;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -104,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
     private RomStoreHomeAdpater adapterRomStore;
     private SoftwareStoreHomeAdapter adapterSoftwareStore;
     private final List<DataRoms> listSearchData = new ArrayList<>();
+    private LinearLayoutManager layoutManager;
 
     public static CallbackInterface.HomeCallToVmsListener homeCallToVmsListener;
 
@@ -275,7 +277,25 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
             }
         });
 
-        binding.rvSearch.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        binding.rvSearch.setLayoutManager(layoutManager);
+        binding.rvSearch.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                int totalItemCount = layoutManager.getItemCount();
+                int lastVisibleItem = layoutManager.findLastVisibleItemPosition();
+
+                if (lastVisibleItem >= totalItemCount - 2) {
+                    if (currentSearchMode == SEARCH_ROM_STORE) {
+                        adapterRomStore.loadMore();
+                    } else {
+                        adapterSoftwareStore.loadMore();
+                    }
+                }
+            }
+        });
 
         binding.searchview.getEditText().
 
@@ -605,9 +625,13 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
             binding.rvSearch.setVisibility(View.VISIBLE);
 
         if (currentSearchMode == SEARCH_ROM_STORE ) {
-            if (adapterRomStore != null) adapterRomStore.notifyDataSetChanged();
+            if (adapterRomStore != null) {
+                adapterRomStore.submitList(listSearchData);
+            }
         } else {
-            if (adapterSoftwareStore != null) adapterSoftwareStore.notifyDataSetChanged();
+            if (adapterSoftwareStore != null) {
+                adapterSoftwareStore.submitList(listSearchData);
+            }
         }
     }
 

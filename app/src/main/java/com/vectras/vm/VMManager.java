@@ -66,7 +66,6 @@ import java.util.Random;
 public class VMManager {
 
     public static final String TAG = "VMManager";
-    public static String finalJson = "";
     public static String pendingDeviceID = "";
     public static String generatedVMId = "";
     public static int restoredVMs = 0;
