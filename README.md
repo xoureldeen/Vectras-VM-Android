@@ -7,7 +7,7 @@
 </p>
 </div>
 
-# Vectras VM
+# 🪴 Vectras VM
 [![Ceasefire Now](https://badge.techforpalestine.org/default)](https://techforpalestine.org/learn-more)
 
 ![GitHub Repo stars](https://img.shields.io/github/stars/xoureldeen/Vectras-VM-Android)
@@ -24,26 +24,33 @@ If you need help, check out [our documentation](https://vectras.vercel.app/how.h
 
 [![Tutorial for beginners](https://img.youtube.com/vi/AlNbverd0xE/mqdefault.jpg)](https://www.youtube.com/watch?v=AlNbverd0xE)
 
-## Device Compatibility
+## 📱 Device Compatibility
 
 Works fine on devices manufactured in 2021 or later and devices equipped with Snapdragon 855 CPU or better. You can try running Vectras VM on unsupported devices, but we cannot guarantee stability or support. Here are the devices tested:
 
-| Stable           | Unstable                                        |
-| --------------- | ------------------------------------------- |
-| Samsung      | Oppo      |
-| Google Pixel      | Realme      |
-| Xiaomi      | OnePlus      |
-| Redmi      | Huawei      |
-| Poco      | Honor      |
-| ZTE      | vivo      |
-| RedMagic      | IQOO      |
+| Brands       | Compatibility status |
+| ------------ | -------------------- |
+| Samsung      | ⭐⭐⭐⭐⭐         |
+| Google Pixel | ⭐⭐⭐⭐⭐         |
+| Xiaomi       | ⭐⭐⭐⭐⭐         |
+| Redmi        | ⭐⭐⭐⭐⭐         |
+| Poco         | ⭐⭐⭐⭐⭐         |
+| ZTE          | ⭐⭐⭐⭐           |
+| RedMagic     | ⭐⭐⭐⭐           |
+| Oppo         | ⭐⭐⭐              |
+| Realme       | ⭐⭐⭐              |
+| OnePlus      | ⭐⭐                |
+| vivo         | ⭐⭐                |
+| IQOO         | ⭐⭐                |
+| Huawei       | ⭐                   |
+| Honor        | ⭐                   |
 
-### Minimum System Requirements
+### ⚡ Minimum System Requirements
 - Android 6.0 and up.
 - 3GB RAM (1GB of free RAM).
 - A good processor.
 
-### Recommended System Requirements
+### 💡 Recommended System Requirements
 - Android 8.1 and up.
 - 8GB RAM (3GB of free RAM).
 - CPU and Android OS support 64-bit.
@@ -52,9 +59,9 @@ Works fine on devices manufactured in 2021 or later and devices equipped with Sn
 > [!TIP]
 > If the OS you are trying to emulate crashes, try using an older version.
 
-# Installation
+# ⬇️ Installation
 
-### Stable Releases
+### ✅ Stable Releases
 
 You can download Vectras VM from the [releases](https://github.com/xoureldeen/Vectras-VM-Android/releases) page or the [official website](https://vectras.vercel.app/download.html).
 
@@ -63,13 +70,13 @@ or
 
 [![OpenAPK](https://img.shields.io/badge/Get%20it%20on-OpenAPK-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://www.openapk.net/vectras-vm/com.vectras.vm/)
 
-### Beta Releases
+### 🧪 Beta Releases
 
 We publish a **new beta release after every commit** — so you can always test the latest features and improvements!
 
 [![Download Beta](https://img.shields.io/badge/Download-Beta-blue?style=for-the-badge&logo=github)](https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases)
 
-### Bootstraps
+### ⚙️ Bootstraps
 QEMU 9.2.4 - 3dfx (only for Vectras VM 3.5.0):
 - [For Android ARM (64-bit)](https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/3.5.0/base-nosve-vectras-vm-arm64-v8a.tar.gz)
 - [For Android x86 (64-bit)](https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/3.5.0/base-vectras-vm-x86_64.tar.gz)
@@ -93,13 +100,13 @@ QEMU 8.2.0 - 3dfx (only for Vectras VM 2.9.5):
 - [For QEMU 9.2.x - 3dfx](https://github.com/AnBui2004/Vectras-VM-Emu-Android/blob/master/3dfx/3dfx-wrappers-3.5.0.iso)
 - [For QEMU 8.2.0 - 3dfx](https://github.com/AnBui2004/Vectras-VM-Emu-Android/blob/master/3dfx/3dfx-wrappers-2.9.5.iso)
 
-# Donate
+# 💕 Donate
 Help support the project by contributing!
 
 [![Buy Me a Coffee at ko-fi.com][ico-ko-fi]][link-ko-fi]
 [![Support me on Patreon](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fshieldsio-patreon.vercel.app%2Fapi%3Fusername%3Dendel%26type%3Dpatrons&style=flat)](https://patreon.com/VectrasTeam)
 
-# Thanks to
+# ❤️ Thanks to
 - [3DFX QEMU PATCH](https://github.com/kjliew/qemu-3dfx)
 - [Alpine Linux](https://www.alpinelinux.org/)
 - [Glide](https://github.com/bumptech/glide)
@@ -110,7 +117,7 @@ Help support the project by contributing!
 - [Termux](https://github.com/termux)
 - [ZoomImageView](https://github.com/k1slay/ZoomImageView)
 
-## Star History
+## ⭐ Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=xoureldeen/Vectras-VM-Android,AnBui2004/Vectras-VM-Emu-Android&type=date&legend=top-left)](https://www.star-history.com/#xoureldeen/Vectras-VM-Android&AnBui2004/Vectras-VM-Emu-Android&type=date&legend=top-left)
 
