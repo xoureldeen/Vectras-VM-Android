@@ -95,7 +95,7 @@ QEMU 8.2.0 - 3dfx (only for Vectras VM 2.9.5):
 - [For Android ARM (64-bit)](https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/3.2.9/vectras-vm-arm64-v8a.tar.gz)
 - [For Android x86 (64-bit)](https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/3.2.9/vectras-vm-x86_64.tar.gz)
 
-### 3Dfx Wrappers
+### 💽 3Dfx Wrappers
 
 - [For QEMU 9.2.x - 3dfx](https://github.com/AnBui2004/Vectras-VM-Emu-Android/blob/master/3dfx/3dfx-wrappers-3.5.0.iso)
 - [For QEMU 8.2.0 - 3dfx](https://github.com/AnBui2004/Vectras-VM-Emu-Android/blob/master/3dfx/3dfx-wrappers-2.9.5.iso)
