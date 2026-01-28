@@ -93,6 +93,11 @@ public class DisplaySystem {
                 );
             } else {
                 if (!isUseBuiltInX11() ) {
+                    if (!PackageUtils.isInstalled("com.termux.x11", context)) {
+                        DialogUtils.needInstallTermuxX11(context);
+                        return;
+                    }
+
                     Log.d(TAG, "launchX11: Opened: com.termux.x11.MainActivity.");
                     Intent intent = new Intent();
                     intent.setClassName("com.termux.x11", "com.termux.x11.MainActivity");
