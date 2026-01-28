@@ -359,6 +359,7 @@ public class Terminal {
     }
 
     public static StringBuilder streamLog(String command, Process process, boolean isShowResultCode) {
+        int MAX_LOG_SIZE = 200_000; // ~200KB text
         StringBuilder output = new StringBuilder();
         try {
             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()));
@@ -374,12 +375,22 @@ public class Terminal {
             while ((line = reader.readLine()) != null) {
                 VectrasStatus.logError("<font color='#4db6ac'>VTERM: >" + line + "</font>");
                 output.append(line).append("\n");
+
+                if (output.length() > MAX_LOG_SIZE) {
+                    int overflow = output.length() - MAX_LOG_SIZE;
+                    output.delete(0, overflow);
+                }
             }
 
             while ((line = errorReader.readLine()) != null) {
                 Log.w(TAG, line);
                 VectrasStatus.logError("<font color='red'>VTERM ERROR: >" + line + "</font>");
                 output.append(line).append("\n");
+
+                if (output.length() > MAX_LOG_SIZE) {
+                    int overflow = output.length() - MAX_LOG_SIZE;
+                    output.delete(0, overflow);
+                }
             }
 
             if (isShowResultCode) {
