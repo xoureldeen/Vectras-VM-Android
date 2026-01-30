@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -139,16 +140,17 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
         RomStoreFragment.romStoreCallToHomeListener = this;
         SoftwareStoreFragment.softwareStoreCallToHomeListener = this;
 
-//        EdgeToEdge.enable(this);
+        EdgeToEdge.enable(this);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         bindingContent = binding.maincontent;
         setContentView(binding.getRoot());
         isActivate = true;
 
-//        UIUtils.setOnApplyWindowInsetsListenerTop(bindingContent.main);
-//        UIUtils.setOnApplyWindowInsetsListenerLeftOnly(binding.navView);
-        UIUtils.setOnApplyWindowInsetsListenerBottomOnly(binding.rvSearch);
-        UIUtils.setOnApplyWindowInsetsListenerBottomOnly(binding.lnSearchempty);
+        UIUtils.setOnApplyWindowInsetsListenerHorizontal(bindingContent.main);
+        UIUtils.setOnApplyWindowInsetsListenerBottomOnly(bindingContent.containerView);
+        UIUtils.setOnApplyWindowInsetsListenerNavigationView(binding.navView);
+        UIUtils.setOnApplyWindowInsetsListenerBottom(binding.rvSearch);
+        UIUtils.setOnApplyWindowInsetsListenerBottom(binding.lnSearchempty);
 
         initialize(bundle);
     }
@@ -435,8 +437,6 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
     }
 
     private void setupDrawer() {
-        binding.drawerLayout.setScrimColor(Color.parseColor("#40000000")); //25%
-
         //Setting Navigation View Item Selected Listener to handle the item click of the navigation menu
         // This method will trigger on item Click of navigation menu
         binding.navView.setNavigationItemSelectedListener(menuItem -> {

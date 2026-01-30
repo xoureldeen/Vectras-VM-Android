@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:fitsSystemWindows="true"
     tools:context=".main.MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -53,9 +52,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/create"
-        android:layout_gravity="bottom|end"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="80dp"
+        android:translationY="-56dp"
+        app:layout_anchor="@id/bottom_navigation"
+        app:layout_anchorGravity="top|end"
         app:icon="@drawable/add_24px"
         app:layout_behavior="com.google.android.material.behavior.HideViewOnScrollBehavior"
         tools:ignore="ContentDescription" />
