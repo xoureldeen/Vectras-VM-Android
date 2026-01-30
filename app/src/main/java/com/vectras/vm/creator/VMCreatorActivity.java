@@ -730,6 +730,7 @@ public class VMCreatorActivity extends AppCompatActivity {
     }
 
     private void thumbnailProcessing() {
+        if (isFinishing() || isDestroyed()) return;
         if (!thumbnailPath.isEmpty()) {
             binding.ivAddThubnail.setImageResource(R.drawable.edit_24px);
             File imgFile = new File(thumbnailPath);

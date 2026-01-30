@@ -12,8 +12,8 @@ android {
         applicationId "com.vectras.vm"
         minSdk minApi
         targetSdk targetApi
-        versionCode 82
-        versionName "3.7.8"
+        versionCode 83
+        versionName "3.7.9"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -79,7 +79,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.appcompat:appcompat:1.7.1'
-    implementation 'com.google.android.material:material:1.14.0-alpha08'
+    implementation 'com.google.android.material:material:1.14.0-alpha09'
     implementation "androidx.annotation:annotation:1.9.1"
     implementation "androidx.core:core-ktx:1.17.0"
     implementation "androidx.drawerlayout:drawerlayout:1.2.0"
@@ -103,12 +103,12 @@ dependencies {
     implementation 'com.airbnb.android:lottie:6.7.1'
     implementation 'org.apache.commons:commons-compress:1.28.0'
 //    implementation 'com.google.firebase:firebase-crashlytics-buildtools:3.0.6'
-    implementation 'androidx.activity:activity-ktx:1.12.2'
+    implementation 'androidx.activity:activity-ktx:1.12.3'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
     implementation 'androidx.preference:preference-ktx:1.2.1'
     implementation "androidx.documentfile:documentfile:1.1.0"
     implementation 'androidx.core:core-ktx:1.17.0'
-    implementation 'androidx.activity:activity-ktx:1.12.2'
+    implementation 'androidx.activity:activity-ktx:1.12.3'
     compileOnly project(':shell-loader:stub')
     implementation project(":terminal-view")
     

@@ -35,6 +35,7 @@ import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -494,7 +495,7 @@ public class UIUtils {
         });
     }
 
-    public static void setOnApplyWindowInsetsListenerHorizontalOnly(View _view) {
+    public static void setOnApplyWindowInsetsListenerHorizontal(View _view) {
         int originalPaddingLeft = _view.getPaddingLeft();
         int originalPaddingTop = _view.getPaddingTop();
         int originalPaddingRight = _view.getPaddingRight();
@@ -503,6 +504,24 @@ public class UIUtils {
         ViewCompat.setOnApplyWindowInsetsListener(_view, (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout() | WindowInsetsCompat.Type.ime());
             v.setPadding(systemBars.left + originalPaddingLeft, originalPaddingTop, systemBars.right + originalPaddingRight, originalPaddingBottom);
+            return insets;
+        });
+    }
+
+    public static void setOnApplyWindowInsetsListenerNavigationView(View _view) {
+        int originalPaddingLeft = _view.getPaddingLeft();
+        int originalPaddingTop = _view.getPaddingTop();
+        int originalPaddingRight = _view.getPaddingRight();
+        int originalPaddingBottom = _view.getPaddingBottom();
+
+
+        ViewCompat.setOnApplyWindowInsetsListener(_view, (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout() | WindowInsetsCompat.Type.ime());
+            v.setPadding(systemBars.left + originalPaddingLeft  , originalPaddingTop, originalPaddingRight, originalPaddingBottom);
+
+            ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+            lp.bottomMargin = systemBars.bottom;
+            v.setLayoutParams(lp);
             return insets;
         });
     }
