@@ -11,10 +11,10 @@ import static com.vectras.vm.x11.input.InputStub.*;
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 import android.graphics.PointF;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
-import com.vectras.vm.utils.PackageUtils;
 import com.vectras.vm.x11.X11Activity;
 
 import java.util.List;
@@ -25,6 +25,7 @@ import java.util.TreeSet;
  * remote host machine. This class uses a {@link InputStub} to do the real injections.
  */
 public final class InputEventSender {
+    public final String TAG = "InputEventSender";
     private static final int XI_TouchBegin = 18;
     private static final int XI_TouchUpdate = 19;
     private static final int XI_TouchEnd = 20;
@@ -76,8 +77,11 @@ public final class InputEventSender {
     }
 
     public void sendCursorMove(float x, float y, boolean relative) {
-        if (!PackageUtils.isClassAvailable("com.termux.x11.CmdEntryPoint")) return;
-        mInjector.sendMouseEvent(x, y, BUTTON_UNDEFINED, false, relative);
+        try {
+            mInjector.sendMouseEvent(x, y, BUTTON_UNDEFINED, false, relative);
+        } catch (Exception e) {
+            Log.e(TAG, "sendCursorMove: ", e);
+        }
     }
 
     public void sendMouseWheelEvent(float distanceX, float distanceY) {
