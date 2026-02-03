@@ -728,7 +728,7 @@ public class FileUtils {
             if (cursor != null) {
                 cursor.close();
             }
-        } catch (SecurityException ignored) {
+        } catch (SecurityException | IllegalArgumentException ignored) {
 
         } finally {
             if (cursor != null) {

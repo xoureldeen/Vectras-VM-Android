@@ -788,6 +788,11 @@ public class VMCreatorActivity extends AppCompatActivity {
 
                     String final_filename = _filename;
                     runOnUiThread(() -> {
+                        if ((isFinishing() || isDestroyed())) {
+                            if (!vmID.isEmpty())
+                                FileUtils.delete(new File(AppConfig.vmFolder + vmID + "/" + final_filename));
+                            return;
+                        }
                         if (_addtodrive) {
                             binding.drive.setText(AppConfig.vmFolder + vmID + "/" + final_filename);
                             binding.driveField.setEndIconDrawable(R.drawable.more_vert_24px);
@@ -804,7 +809,7 @@ public class VMCreatorActivity extends AppCompatActivity {
                             null,
                             null));
                 } finally {
-                    runOnUiThread(progressDialog::dismiss);
+                    runOnUiThread(() -> DialogUtils.safeDismiss(this, progressDialog));
                 }
             });
         } else {
