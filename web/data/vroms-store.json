@@ -1369,6 +1369,24 @@
     "id": ""
   },
   {
+    "rom_name": "Windows 3.1",
+    "rom_icon": "https://upload.wikimedia.org/wikipedia/commons/9/9b/Windows_3.0_29_12_2020_11_03_55_GER.png",
+    "rom_url": "https://youtu.be/xOtbdTmnlqE",
+    "rom_path": "Windows 3.1.cvbi",
+    "rom_avail": true,
+    "rom_size": "The operating system is too light",
+    "rom_arch": "X86_64",
+    "rom_kernel": "windows",
+    "rom_extra": "",
+    "final_rom_file_name": "",
+    "desc": "This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 3.1 is a major release of Microsoft Windows, a family of graphical user shells and operating systems. It was released to manufacturing on April 6, 1992, as a successor to Windows 3.0. Like its predecessors, the Windows 3.1 series ran as a shell on top of MS-DOS; it was the last Windows 16-bit operating environment as all future versions of Windows had moved to 32-bit.",
+    "file_size": "26 MB",
+    "creator": "Nguyen Bao An Bui",
+    "verified": true,
+    "vecid": "windows31cvbi",
+    "id": "99665"
+  },
+  {
     "rom_name": "Windows 7",
     "rom_icon": "https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/10/15/windows_logo_2006_1_c0e5e8a8271301cfed289ab6118e38b2.png",
     "rom_url": "https://youtu.be/HsT6DdIAUls",
