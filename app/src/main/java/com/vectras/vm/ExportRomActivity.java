@@ -125,16 +125,18 @@ public class ExportRomActivity extends AppCompatActivity {
             vmConfigMap.put("icon", current.itemIcon);
         }
 
+        boolean isUsingDiskInQemuExtraParams = VMManager.isHaveADisk(current.itemExtra);
+
         if (FileUtils.isFileExists(current.itemPath)) {
             vmConfigMap.put("drive", new File(Objects.requireNonNull(Uri.parse(current.itemPath).getPath())).getName());
         } else {
-            vmConfigMap.put("drive", VMManager.quickScanDiskFileInFolder(getRomPath));
+            vmConfigMap.put("drive", isUsingDiskInQemuExtraParams ? "" : VMManager.quickScanDiskFileInFolder(getRomPath));
         }
 
         if (FileUtils.isFileExists(current.imgCdrom)) {
             vmConfigMap.put("cdrom", new File(Objects.requireNonNull(Uri.parse(current.imgCdrom).getPath())).getName());
         } else {
-            vmConfigMap.put("cdrom", VMManager.quickScanISOFileInFolder(getRomPath));
+            vmConfigMap.put("cdrom", isUsingDiskInQemuExtraParams || FileUtils.isFileExists(Objects.requireNonNull(vmConfigMap.get("drive")).toString()) ? "" : VMManager.quickScanISOFileInFolder(getRomPath));
         }
 
         vmConfigMap.put("bootFrom", current.bootFrom);
