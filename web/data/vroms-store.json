@@ -1873,6 +1873,24 @@
     "id": "99688"
   },
   {
+    "rom_name": "Windows Server 2016 build 14300",
+    "rom_icon": "https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/09/17/windows-logo_1_926ed76111646acbbe332bc5af0cf2ce.png",
+    "rom_url": "https://youtu.be/Q5MgUiO_oBo",
+    "rom_path": "Windows Server 2016 build 14300.cvbi",
+    "rom_avail": true,
+    "rom_size": "rs1_release_svc",
+    "rom_arch": "X86_64",
+    "rom_kernel": "windows",
+    "rom_extra": "",
+    "final_rom_file_name": "",
+    "desc": "This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows Server 2016 build 14300 (rs1_release_svc) is the official Technical Preview 5 build of Windows Server 2016, which was released to evaluators on 27 April 2016. The client version of this build was briefly showcased during the 2016 Cloud & Datacenter Conference Germany event keynote; its Enterprise SKU variant was later shared online on 12 February 2017.",
+    "file_size": "10 GB",
+    "creator": "Nguyen Bao An Bui",
+    "verified": true,
+    "vecid": "windowsserver2016build14300cvbi",
+    "id": "99664"
+  },
+  {
     "rom_name": "Windows Server 2025",
     "rom_icon": "https://www.getmyos.com/app_public/files/t/1/2021/06/windows_11_logo_by_getmyos.png",
     "rom_url": "https://youtu.be/gWB-oFY6uyo",
