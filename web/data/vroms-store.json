@@ -1153,6 +1153,24 @@
     "id": ""
   },
   {
+    "rom_name": "Windows 11 22H2",
+    "rom_icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGdZ3UWM5f8Bz9xUPQ21x973GSDQPcgIEJwA&s",
+    "rom_url": "https://youtu.be/giAk6BflKEM",
+    "rom_path": "Windows 11 22H2 R.cvbi",
+    "rom_avail": true,
+    "rom_size": "Sun Valley 2",
+    "rom_arch": "X86_64",
+    "rom_kernel": "windows",
+    "rom_extra": "",
+    "final_rom_file_name": "",
+    "desc": "This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 11 is the latest major release of Microsoft's Windows NT operating system, released on October 5, 2021 as the successor to Windows 10 (2015). It is provided free for any Windows 10 devices that meet the new Windows 11 system requirements. A server version, Windows Server 2025, was released in 2024. Windows 11 is the first major version of Windows NT without a companion mobile version following the discontinuations of Windows Phone with Windows 10 Mobile.",
+    "file_size": "11 GB",
+    "creator": "Nguyen Bao An Bui",
+    "verified": true,
+    "vecid": "windows1122h2rcvbi",
+    "id": "99661"
+  },
+  {
     "rom_name": "Windows 11 23H2",
     "rom_icon": "https://www.getmyos.com/app_public/files/t/1/2021/06/windows_11_logo_by_getmyos.png",
     "rom_url": "https://youtu.be/GnIx5vWU2tU",
