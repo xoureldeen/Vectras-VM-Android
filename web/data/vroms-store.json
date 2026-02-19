@@ -685,6 +685,24 @@
     "id": "99686"
   },
   {
+    "rom_name": "Raspbian Jessie",
+    "rom_icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0kY92rnz3_YPO3rrKdiQoT5Dm0pcF5PswaQ&s",
+    "rom_url": "https://youtu.be/M4lkjD5mJqg",
+    "rom_path": "Raspbian Jessie.cvbi",
+    "rom_avail": true,
+    "rom_size": "Jessie",
+    "rom_arch": "X86_64",
+    "rom_kernel": "linux",
+    "rom_extra": "",
+    "final_rom_file_name": "",
+    "desc": "This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nRaspberry Pi OS is a Unix-like operating system developed for the Raspberry Pi line of single-board computers. Based on Debian, a Linux distribution, it is maintained by Raspberry Pi Holdings and optimized for the Pi's hardware, with low memory requirements and support for both 32-bit and 64-bit architectures. Originally released in July 2012 under the name Raspbian, it was introduced shortly after the launch of the first Raspberry Pi model.",
+    "file_size": "6 GB",
+    "creator": "Nguyen Bao An Bui",
+    "verified": true,
+    "vecid": "raspbianjessiecvbi",
+    "id": "99660"
+  },
+  {
     "rom_name": "ReactOS",
     "rom_icon": "https://www.linuxinsider.com/wp-content/uploads/sites/2/2021/05/2016-react-os-1.jpg",
     "rom_url": "https://anbui.ovh/get/vec/community/linux/reactos.html",
