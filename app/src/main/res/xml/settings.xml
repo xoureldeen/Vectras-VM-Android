@@ -51,7 +51,7 @@
             android:title="@string/language"
             android:entries="@array/languageLabels"
             android:entryValues="@array/languageValues"
-            android:defaultValue="en"
+            android:defaultValue=""
             android:summary="@string/tap_here_to_select_language"
             app:isPreferenceVisible="true"
             app:icon="@drawable/round_language_24" />

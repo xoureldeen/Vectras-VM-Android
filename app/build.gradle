@@ -12,8 +12,8 @@ android {
         applicationId "com.vectras.vm"
         minSdk minApi
         targetSdk targetApi
-        versionCode 87
-        versionName "3.8.3"
+        versionCode 88
+        versionName "3.8.4"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -86,7 +86,7 @@ dependencies {
     implementation "androidx.preference:preference-ktx:1.2.1"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.2.0"
     implementation "androidx.viewpager:viewpager:1.1.0"
-    implementation platform('com.google.firebase:firebase-bom:34.9.0')
+    implementation platform('com.google.firebase:firebase-bom:34.10.0')
     implementation 'com.google.firebase:firebase-analytics'
 //    implementation("com.google.firebase:firebase-auth")
 //    implementation("com.google.firebase:firebase-database")

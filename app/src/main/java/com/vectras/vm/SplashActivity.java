@@ -9,6 +9,8 @@ import android.os.Handler;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.os.LocaleListCompat;
 import androidx.preference.PreferenceManager;
 
 import com.vectras.qemu.MainSettingsManager;
@@ -28,10 +30,12 @@ import java.util.Locale;
 
 public class SplashActivity extends AppCompatActivity implements Runnable {
     private static final String TAG = "SplashActivity";
+    private String sessionId = VMManager.startRamdomVMID();
 
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
+        AppConfig.splashActivitySessionId = sessionId;
         UIUtils.edgeToEdge(this);
         setContentView(R.layout.activity_splash);
         UIUtils.setOnApplyWindowInsetsListener(findViewById(R.id.main));
@@ -52,13 +56,17 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
 
     private void updateLocale() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String languageCode = sharedPreferences.getString("language", "en");
+        String languageCode = sharedPreferences.getString("language", "");
 
-        Locale locale = new Locale(languageCode);
-        Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        config.setLocale(locale);
-        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+        if (!languageCode.isEmpty()) {
+            AppCompatDelegate.setApplicationLocales(
+                    LocaleListCompat.forLanguageTags(languageCode)
+            );
+        } else {
+            AppCompatDelegate.setApplicationLocales(
+                    LocaleListCompat.getEmptyLocaleList()
+            );
+        }
     }
 
     public void setupFiles() {
@@ -129,23 +137,25 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
 
     @Override
     public void run() {
-        if (MainSettingsManager.getShowLastCrashLog(this)) {
-            startActivity(new Intent(this, LastCrashActivity.class));
-        } else if (SetupFeatureCore.isInstalledQemu(this)) {
-            if (MainSettingsManager.getStandardSetupVersion(this) != AppConfig.standardSetupVersion &&
-                    !MainSettingsManager.getsetUpWithManualSetupBefore(this)) {
-                Intent intent = new Intent();
-                intent.putExtra("action", SetupWizard2Activity.ACTION_SYSTEM_UPDATE);
-                intent.setClass(this, SetupWizard2Activity.class);
-                startActivity(intent);
+        if (sessionId.equals(AppConfig.splashActivitySessionId)) {
+            if (MainSettingsManager.getShowLastCrashLog(this)) {
+                startActivity(new Intent(this, LastCrashActivity.class));
+            } else if (SetupFeatureCore.isInstalledQemu(this)) {
+                if (MainSettingsManager.getStandardSetupVersion(this) != AppConfig.standardSetupVersion &&
+                        !MainSettingsManager.getsetUpWithManualSetupBefore(this)) {
+                    Intent intent = new Intent();
+                    intent.putExtra("action", SetupWizard2Activity.ACTION_SYSTEM_UPDATE);
+                    intent.setClass(this, SetupWizard2Activity.class);
+                    startActivity(intent);
+                } else {
+                    startActivity(new Intent(this, MainActivity.class));
+                }
             } else {
-                startActivity(new Intent(this, MainActivity.class));
-            }
-        } else {
-            startActivity(new Intent(this, SetupWizard2Activity.class));
-            //For Android 14+
-            if (!DeviceUtils.is64bit() || Build.VERSION.SDK_INT >= 34) {
-                MainSettingsManager.setVmUi(this, "VNC");
+                startActivity(new Intent(this, SetupWizard2Activity.class));
+                //For Android 14+
+                if (!DeviceUtils.is64bit() || Build.VERSION.SDK_INT >= 34) {
+                    MainSettingsManager.setVmUi(this, "VNC");
+                }
             }
         }
         finish();

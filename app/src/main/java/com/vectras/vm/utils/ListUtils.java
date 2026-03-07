@@ -3,6 +3,7 @@ package com.vectras.vm.utils;
 import android.view.KeyEvent;
 
 import com.vectras.vm.R;
+import com.vectras.vm.VectrasApp;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,7 +12,7 @@ public class ListUtils {
     public static void setupMirrorListForListmap(ArrayList<HashMap<String, Object>> listmapForSelectMirrors) {
         HashMap<String, Object> mapForAddItems = new HashMap<>();
 
-        mapForAddItems.put("name", "United States (Default)");
+        mapForAddItems.put("name", "United States (" + VectrasApp.getContext().getString(R.string.defaulttext) + ")");
         mapForAddItems.put("value", CommandUtils.createForSelectedMirror(true, "dl-cdn.alpinelinux.org", "/alpine"));
         listmapForSelectMirrors.add(mapForAddItems);
 
