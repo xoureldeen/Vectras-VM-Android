@@ -117,4 +117,6 @@ public class AppConfig {
 
     public static String patreonLink = "https://www.patreon.com/VectrasTeam";
 
+    public static String splashActivitySessionId = "";
+
 }

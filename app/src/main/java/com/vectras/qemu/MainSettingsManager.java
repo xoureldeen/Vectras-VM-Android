@@ -247,13 +247,14 @@ public class MainSettingsManager extends AppCompatActivity
         }
 
         private void updateLocale(String languageCode) {
-            Locale locale = new Locale(languageCode);
-            Locale.setDefault(locale);
-            Configuration config = new Configuration();
-            config.setLocale(locale);
+            if (!languageCode.isEmpty()) {
+                Locale locale = new Locale(languageCode);
+                Locale.setDefault(locale);
+                Configuration config = new Configuration();
+                config.setLocale(locale);
 
-            getResources().updateConfiguration(config, getResources().getDisplayMetrics());
-
+                getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+            }
             Intent intent = new Intent(requireActivity().getApplicationContext(), SplashActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
@@ -856,7 +857,7 @@ public class MainSettingsManager extends AppCompatActivity
 
     public static String getLang(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getString("language", "en");
+        return prefs.getString("language", "");
     }
 
     public static boolean isFirstLaunch(Context context) {

@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="languageLabels">
+        <item>@string/system</item>
         <item>English</item>
         <item>العربية</item>
         <item>中文</item>
         <item>русский</item>
+        <item>Tiếng Việt</item>
     </string-array>
 
     <string-array name="languageValues">
+        <item></item>
         <item>en</item>
         <item>ar</item>
         <item>zh</item>
         <item>ru</item>
+        <item>vi</item>
     </string-array>
 
     <string-array name="vmUiLabels">
@@ -25,17 +29,17 @@
         <item>VNC</item>
     </string-array>
     <string-array name="bootLabels">
-        <item>HARDDISK</item>
-        <item>CDROM</item>
+        <item>@string/hard_disk</item>
+        <item>@string/cdrom</item>
     </string-array>
     <string-array name="bootValues">
         <item>c</item>
         <item>d</item>
     </string-array>
     <string-array name="iftypeLabels">
-        <item>DEFAULT</item>
+        <item>@string/defaulttext</item>
         <item>IDE</item>
-        <item>VIRTIO</item>
+        <item>VirtIO</item>
     </string-array>
     <string-array name="iftypeValues">
         <item></item>

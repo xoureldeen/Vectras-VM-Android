@@ -45,8 +45,8 @@ public class VectrasApp extends Application {
         }
         setupTheme();
 
-        Locale locale = Locale.getDefault();
-        String language = locale.getLanguage();
+//        Locale locale = Locale.getDefault();
+//        String language = locale.getLanguage();
 
 //		if (language.contains("ar")) {
 //			overrideFont("DEFAULT", R.font.cairo_regular);
