@@ -44,6 +44,7 @@ import com.vectras.vm.settings.X11DisplaySettingsActivity;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.JSONUtils;
+import com.vectras.vm.utils.ProgressDialog;
 import com.vectras.vm.utils.TextUtils;
 import com.vectras.vm.utils.UIUtils;
 import com.vectras.vterm.Terminal;
@@ -222,6 +223,18 @@ public class VMManager {
         return position == -1 ? addToVMList(vmConfigMap, Objects.requireNonNull(vmConfigMap.get("vmID")).toString()) : replaceToVMList(position, "", vmConfigMap);
     }
 
+    public static boolean isVMHidden(String vmPath) {
+        return new File(vmPath).getName().startsWith("_");
+    }
+
+    public static boolean hideVM(String vmId) {
+        return FileUtils.rename(AppConfig.vmFolder + vmId, "_" + vmId);
+    }
+    public static boolean unHideVM(String vmPath) {
+        return FileUtils.rename(vmPath, new File(vmPath).getName().replace("_", ""));
+    }
+
+
     public static boolean createNewVM(String name, String thumbnail, String drive, String arch, String cdrom, String params, String vmID, int port) {
         HashMap<String, Object> vmConfigMap = new HashMap<>();
         vmConfigMap.put("imgName", name);
@@ -267,39 +280,35 @@ public class VMManager {
     public static void deleteVMDialog(String _vmName, int _position, Activity _activity) {
         DialogUtils.threeDialog(_activity, _activity.getString(R.string.remove) + " " + _vmName, _activity.getString(R.string.remove_vm_content), _activity.getString(R.string.remove_and_do_not_keep_files), _activity.getString(R.string.remove_but_keep_files), _activity.getString(R.string.cancel), true, R.drawable.delete_24px, true,
                 () -> {
-                    View progressView = LayoutInflater.from(_activity).inflate(R.layout.dialog_progress_style, null);
-                    TextView progress_text = progressView.findViewById(R.id.progress_text);
-                    progress_text.setText(_activity.getString(R.string.just_a_moment));
-                    AlertDialog progressDialog = new MaterialAlertDialogBuilder(_activity, R.style.CenteredDialogTheme)
-                            .setView(progressView)
-                            .setCancelable(false)
-                            .create();
+                    ProgressDialog progressDialog = new ProgressDialog(_activity);
+                    progressDialog.setText(_activity.getString(R.string.just_a_moment));
                     progressDialog.show();
 
                     new Thread(() -> {
                         isKeptSomeFiles = false;
-                        deleteVm(_activity, _position, false);
+                        boolean result = deleteVm(_activity, _position, false);
                         _activity.runOnUiThread(() -> new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                            progressDialog.dismiss();
+                            progressDialog.reset();
                             MainActivity.refeshVMListNow();
+                            if (!result) {
+                                DialogUtils.oopsDialog(_activity, _activity.getString(R.string.an_error_occurred_while_deleting_the_vm));
+                            } else if (isKeptSomeFiles) {
+                                DialogUtils.oneDialog(_activity, _activity.getString(R.string.done), _activity.getString(R.string.the_vm_files_were_retained_because_they_are_still_being_used_elsewhere), R.drawable.check_24px);
+                            }
                         }, 500));
                     }).start();
                 },
                 () -> {
-                    View progressView = LayoutInflater.from(_activity).inflate(R.layout.dialog_progress_style, null);
-                    TextView progress_text = progressView.findViewById(R.id.progress_text);
-                    progress_text.setText(_activity.getString(R.string.just_a_moment));
-                    AlertDialog progressDialog = new MaterialAlertDialogBuilder(_activity, R.style.CenteredDialogTheme)
-                            .setView(progressView)
-                            .setCancelable(false)
-                            .create();
+                    ProgressDialog progressDialog = new ProgressDialog(_activity);
+                    progressDialog.setText(_activity.getString(R.string.just_a_moment));
                     progressDialog.show();
 
                     new Thread(() -> {
-                        deleteVm(_activity, _position, true);
+                        boolean result = deleteVm(_activity, _position, true);
                         _activity.runOnUiThread(() -> new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                            progressDialog.dismiss();
+                            progressDialog.reset();
                             MainActivity.refeshVMListNow();
+                            if (!result) DialogUtils.oopsDialog(_activity, _activity.getString(R.string.an_error_occurred_while_deleting_the_vm));
                         }, 500));
                     }).start();
                 },
@@ -307,34 +316,38 @@ public class VMManager {
                 null);
     }
 
-    public static void deleteVm(Context context, int position, boolean isKeepFiles) {
-        if (!JSONUtils.isValidVmList()) return;
+    public static boolean deleteVm(Context context, int position, boolean isKeepFiles) {
+        if (!JSONUtils.isValidVmList()) return false;
         String vmList = FileUtils.readFromFile(context, new File(AppConfig.maindirpath + "roms-data.json"));
         JsonArray arr = JsonParser.parseString(vmList).getAsJsonArray();
-        if (position < 0 || position > arr.size() - 1) return;
+        if (position < 0 || position > arr.size() - 1) return false;
         JsonObject obj = arr.get(position).getAsJsonObject();
         String vmId = obj.has("vmID") ? obj.get("vmID").getAsString() : null;
         arr.remove(position);
 
         vmList = new Gson().toJson(arr);
 
-        if (vmId == null || vmId.isEmpty()) return;
+        if (vmId == null || vmId.isEmpty()) return false;
+
+        boolean isCompleted;
         if (isKeepFiles) {
-            FileUtils.rename(AppConfig.vmFolder + vmId, "_" + vmId);
-            if (isVmFilesInUse(vmId, vmList)) {
+            isCompleted = hideVM(vmId);
+            if (isCompleted && isVmFilesInUse(vmId, vmList)) {
                 vmList = vmList.replace(AppConfig.vmFolder + vmId, AppConfig.vmFolder + "_" + vmId);
             }
         } else {
             if (isVmFilesInUse(vmId, vmList)) {
                 isKeptSomeFiles = true;
-                FileUtils.rename(AppConfig.vmFolder + vmId, "_" + vmId);
-                vmList = vmList.replace(AppConfig.vmFolder + vmId, AppConfig.vmFolder + "_" + vmId);
+                isCompleted = hideVM(vmId);
+                if (isCompleted) vmList = vmList.replace(AppConfig.vmFolder + vmId, AppConfig.vmFolder + "_" + vmId);
             } else {
-                FileUtils.delete(new File(AppConfig.vmFolder + vmId));
+                isCompleted = FileUtils.delete(new File(AppConfig.vmFolder + vmId));
             }
         }
 
-        FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", vmList);
+        if (isCompleted) FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", vmList);
+
+        return isCompleted;
     }
 
     public static int restoreAll() {
@@ -344,11 +357,11 @@ public class VMManager {
         if (vmFolders == null) return 0;
         List<String> restoredVms = new ArrayList<>();
         for (File f : vmFolders) {
-            if (f.getName().startsWith("_") && isFileExists(f.getAbsolutePath() + "/rom-data.json")) {
+            if (isVMHidden(f.getAbsolutePath()) && isFileExists(f.getAbsolutePath() + "/rom-data.json")) {
                 String vmConfig = FileUtils.readAFile(f.getAbsolutePath() + "/rom-data.json");
                 if (JSONUtils.isValidFromString(vmConfig)) {
-                    if (f.getName().startsWith("_"))
-                        FileUtils.rename(f.getAbsolutePath(), f.getName().replace("_", ""));
+                    if (isVMHidden(f.getAbsolutePath()))
+                        unHideVM(f.getAbsolutePath());
                     arr.add(JsonParser.parseString(vmConfig));
                     restoredVms.add(f.getName().replaceAll("_", ""));
                 }
@@ -374,7 +387,7 @@ public class VMManager {
         if (vmFolders == null) return 0;
         for (File f : vmFolders) {
             if (!isVmFilesInUse(f.getName(), vmList)) {
-                if (f.getName().startsWith("_")) {
+                if (isVMHidden(f.getAbsolutePath())) {
                     FileUtils.delete(new File(f.getAbsolutePath()));
                     cleared++;
                 } else if (!isFileExists(f.getAbsolutePath() + "/rom-data.json")) {
@@ -490,9 +503,7 @@ public class VMManager {
 
                     _startRepeat++;
                     if (_startRepeat == _filelist.size()) {
-                        if (restoredVMs > 0) {
-                            FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", arr.toString());
-                        }
+                        FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", restoredVMs > 0 ? arr.toString() : "[]");
                     }
                 }
             }
