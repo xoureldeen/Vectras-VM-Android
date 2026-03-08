@@ -139,6 +139,7 @@ public class RomStoreFragment extends Fragment {
 
         mAdapter.submitList(data);
 
+        SharedData.dataRomStore.clear();
         SharedData.dataRomStore.addAll(dataRoms);
         romStoreCallToHomeListener.updateSearchStatus(true);
     }

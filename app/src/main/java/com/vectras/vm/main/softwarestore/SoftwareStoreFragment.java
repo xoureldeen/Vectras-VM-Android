@@ -140,6 +140,7 @@ public class SoftwareStoreFragment extends Fragment {
 
         mAdapter.submitList(data);
 
+        SharedData.dataSoftwareStore.clear();
         SharedData.dataSoftwareStore.addAll(dataSoftware);
         softwareStoreCallToHomeListener.updateSearchStatus(true);
     }

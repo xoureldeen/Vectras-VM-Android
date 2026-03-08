@@ -31,6 +31,10 @@ public class DialogUtils {
         oneDialog(context, title, message, context.getString(R.string.ok), iconid != -1, iconid, true, null, null);
     }
 
+    public static void oopsDialog(Context context, String message) {
+        oneDialog(context, context.getString(R.string.oops), message, R.drawable.error_96px);
+    }
+
     public static void oneDialog(Context context, String _title, String _message, String _textPositiveButton, boolean _isicon, int _iconid, boolean _cancel, Runnable _onPositive, Runnable _onDismiss) {
         if (!isAllowShow(context)) return;
 

@@ -517,6 +517,8 @@
     <string name="adding_file_failed_content">Adding file failed, please try again later.</string>
     <string name="items_have_been_cleared">items have been cleared.</string>
     <string name="show_recycle_bin">Show recycle bin</string>
+    <string name="an_error_occurred_while_deleting_the_vm">An error occurred while deleting the virtual machine.</string>
+    <string name="the_vm_files_were_retained_because_they_are_still_being_used_elsewhere">The virtual machine\'s files were retained because they are still being used elsewhere.</string>
 
 
     <!--======================TERMUX STRINGS====================-->
