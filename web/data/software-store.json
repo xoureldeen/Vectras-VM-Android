@@ -162,6 +162,24 @@
     "id": ""
   },
   {
+    "rom_name": "VMware SVGA driver",
+    "rom_icon": "https://img.icons8.com/fluent/1200/video-card.jpg",
+    "rom_url": "https://archive.org/download/svga-xp-2-k/SVGA%20%28XP%2C2K%29.iso",
+    "rom_path": "SVGA (XP,2K).iso",
+    "rom_avail": true,
+    "rom_size": "For Windows XP & 2000",
+    "rom_arch": "X86_64",
+    "rom_kernel": "",
+    "rom_extra": "",
+    "final_rom_file_name": "",
+    "desc": "VMware SVGA is a virtualized graphics adapter included with VMware products, enabling high-resolution 32-bit displays, 3D acceleration, and improved performance for virtual machines. Installed via VMware Tools, this driver supports SVGA II, 2D framebuffers, and 3D functionality (Direct3D/OpenGL). It is crucial for proper display rendering in Windows/Linux guest operating systems.",
+    "file_size": "38 MB",
+    "creator": "tokaevUser",
+    "verified": true,
+    "vecid": "svgaxp2kiso",
+    "id": ""
+  },
+  {
     "rom_name": "Windows VirtIO Drivers",
     "rom_icon": "https://www.qemu.org/docs/master/_static/qemu_128x128.png",
     "rom_url": "https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/",
