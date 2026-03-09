@@ -54,6 +54,24 @@
     "id": ""
   },
   {
+    "rom_name": "Android TV 6",
+    "rom_icon": "https://upload.wikimedia.org/wikipedia/commons/0/0d/Android_Marshmallow_logo.png",
+    "rom_url": "https://anbui.ovh/get/vec/community/android/atv6.html",
+    "rom_path": "AndroidTV.cvbi",
+    "rom_avail": true,
+    "rom_size": "Marshmallow",
+    "rom_arch": "X86_64",
+    "rom_kernel": "android",
+    "rom_extra": "",
+    "final_rom_file_name": "",
+    "desc": "From @tokaevUser on Telegram.\n\nAndroid TV is an operating system developed by Google, it is a closed-source Android distribution. Android TV features a user interface designed around content discovery and voice search, content aggregation from various media apps and services, and integration with other recent Google technologies such as Assistant, Cast, and Knowledge Graph.",
+    "file_size": "500 MB",
+    "creator": "tokaevUser",
+    "verified": true,
+    "vecid": "androidtvcvbi",
+    "id": ""
+  },
+  {
     "rom_name": "Anonym.OS",
     "rom_icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQlezHOdq-S2UjgmEoIcVxBA4jlDO6bPGsLA&usqp=CAU",
     "rom_url": "https://anbui.ovh/get/vec/community/linux/anonymos.html",
