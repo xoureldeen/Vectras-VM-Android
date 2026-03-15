@@ -46,18 +46,11 @@ import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.JSONUtils;
 import com.vectras.vm.utils.ProgressDialog;
 import com.vectras.vm.utils.TextUtils;
-import com.vectras.vm.utils.UIUtils;
 import com.vectras.vterm.Terminal;
 
 import org.jetbrains.annotations.Contract;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -512,7 +505,9 @@ public class VMManager {
     }
 
     public static String getVMLogFilePath(Context context, String vmID) {
-        String cachePath = Objects.requireNonNull(context.getExternalCacheDir()).getAbsolutePath();
+        File cachePathFile = context.getExternalCacheDir();
+        if (cachePathFile == null) return "/tmp/" + vmID + ".log";
+        String cachePath = cachePathFile.getAbsolutePath();
         FileUtils.createDirectory(cachePath + "/logs");
         return cachePath + "/logs/" + vmID + ".log";
     }
