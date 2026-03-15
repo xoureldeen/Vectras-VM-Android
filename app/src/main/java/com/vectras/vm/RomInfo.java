@@ -127,8 +127,12 @@ public class RomInfo extends AppCompatActivity {
                                             @Override
                                             public void onResourceReady(@NonNull Bitmap resource,
                                                                         @Nullable Transition<? super Bitmap> transition) {
-                                                ImageUtils.saveBitmapToPNGFile(resource, Objects.requireNonNull(getExternalCacheDir()).getAbsolutePath(), "thumbnail.png");
-                                                intent.putExtra("romicon", getExternalCacheDir().getAbsolutePath() + "/thumbnail.png");
+                                                File cacheDir = getExternalCacheDir();
+
+                                                if (cacheDir != null)
+                                                    ImageUtils.saveBitmapToPNGFile(resource, cacheDir.getAbsolutePath(), "thumbnail.png");
+
+                                                intent.putExtra("romicon", cacheDir != null ? cacheDir.getAbsolutePath() + "/thumbnail.png" : "");
                                             }
 
                                             @Override

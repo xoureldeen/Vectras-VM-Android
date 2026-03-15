@@ -17,331 +17,296 @@
             android:paddingHorizontal="16dp"
             android:orientation="vertical">
 
-            <com.google.android.material.card.MaterialCardView
-                style="@style/Widget.Material3.CardView.Filled"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="8dp"
-                app:cardBackgroundColor="?attr/colorSurfaceContainer">
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginTop="8dp"
+                android:padding="16dp"
+                android:background="@drawable/object_shape_top">
+
+                <TextView
+                    style="@style/MaterialAlertDialog.Material3Expressive.Title.Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/storage" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="16dp">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center_vertical">
 
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <com.google.android.material.progressindicator.CircularProgressIndicator
+                            android:id="@+id/cpi_storage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:max="100"
+                            app:indicatorSize="64dp"/>
+
+                        <TextView
+                            android:id="@+id/tv_percentageofstorage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="0%" />
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_totalstorage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingHorizontal="8dp"
+                            android:paddingVertical="4dp"
+                            android:text="@string/total_memory" />
+
+                        <TextView
+                            android:id="@+id/tv_usedstorage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingHorizontal="8dp"
+                            android:paddingVertical="4dp"
+                            android:text="@string/used_memory" />
+
+                        <TextView
+                            android:id="@+id/tv_freestorage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingHorizontal="8dp"
+                            android:paddingVertical="4dp"
+                            android:text="@string/free_memory" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="8dp"
+                android:padding="16dp"
+                android:background="@drawable/object_shape_bottom">
+
+                <TextView
+                    style="@style/MaterialAlertDialog.Material3Expressive.Title.Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/memory" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center_vertical">
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <com.google.android.material.progressindicator.CircularProgressIndicator
+                            android:id="@+id/cpi_memory"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:max="100"
+                            app:indicatorSize="64dp"/>
+
+                        <TextView
+                            android:id="@+id/tv_percentageofram"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:text="0%" />
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_totalram"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingHorizontal="8dp"
+                            android:paddingVertical="4dp"
+                            android:text="@string/total_memory" />
+
+                        <TextView
+                            android:id="@+id/tv_usedram"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingHorizontal="8dp"
+                            android:paddingVertical="4dp"
+                            android:text="@string/used_memory" />
+
+                        <TextView
+                            android:id="@+id/tv_freeram"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingHorizontal="8dp"
+                            android:paddingVertical="4dp"
+                            android:text="@string/free_memory" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginTop="8dp"
+                android:padding="16dp"
+                android:background="@drawable/object_shape_top">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
                     <TextView
                         style="@style/MaterialAlertDialog.Material3Expressive.Title.Text"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/qemu" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/bt_stopqemu"
+                        style="@style/Widget.Material3Expressive.Button.OutlinedButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/storage" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:gravity="center_vertical">
-
-                        <FrameLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
-
-                            <com.google.android.material.progressindicator.CircularProgressIndicator
-                                android:id="@+id/cpi_storage"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:max="100"
-                                app:indicatorSize="64dp"/>
-
-                            <TextView
-                                android:id="@+id/tv_percentageofstorage"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:text="0%" />
-                        </FrameLayout>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/tv_totalstorage"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingHorizontal="8dp"
-                                android:paddingVertical="4dp"
-                                android:text="@string/total_memory" />
-
-                            <TextView
-                                android:id="@+id/tv_usedstorage"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingHorizontal="8dp"
-                                android:paddingVertical="4dp"
-                                android:text="@string/used_memory" />
-
-                            <TextView
-                                android:id="@+id/tv_freestorage"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingHorizontal="8dp"
-                                android:paddingVertical="4dp"
-                                android:text="@string/free_memory" />
-                        </LinearLayout>
-                    </LinearLayout>
+                        android:text="@string/stop"
+                        android:visibility="gone"
+                        tools:visibility="visible"/>
                 </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
 
-            <com.google.android.material.card.MaterialCardView
-                style="@style/Widget.Material3.CardView.Filled"
+                <TextView
+                    android:id="@+id/tv_qemuversion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="8dp"
+                    android:text="@string/version" />
+
+                <TextView
+                    android:id="@+id/tv_qemuarch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="8dp"
+                    android:text="@string/arch" />
+
+                <TextView
+                    android:id="@+id/tv_qemustatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="8dp"
+                    android:text="@string/status_qemu" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="8dp"
-                app:cardBackgroundColor="?attr/colorSurfaceContainer">
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginVertical="2dp"
+                android:padding="16dp"
+                android:background="@drawable/object_shape_middle">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
+                    android:layout_height="wrap_content">
                     <TextView
                         style="@style/MaterialAlertDialog.Material3Expressive.Title.Text"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/vnc_server" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/bt_stopvmvnc"
+                        style="@style/Widget.Material3Expressive.Button.OutlinedButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/memory" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:gravity="center_vertical">
-
-                        <FrameLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
-
-                            <com.google.android.material.progressindicator.CircularProgressIndicator
-                                android:id="@+id/cpi_memory"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:max="100"
-                                app:indicatorSize="64dp"/>
-
-                            <TextView
-                                android:id="@+id/tv_percentageofram"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:text="0%" />
-                        </FrameLayout>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_vertical"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/tv_totalram"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingHorizontal="8dp"
-                                android:paddingVertical="4dp"
-                                android:text="@string/total_memory" />
-
-                            <TextView
-                                android:id="@+id/tv_usedram"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingHorizontal="8dp"
-                                android:paddingVertical="4dp"
-                                android:text="@string/used_memory" />
-
-                            <TextView
-                                android:id="@+id/tv_freeram"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingHorizontal="8dp"
-                                android:paddingVertical="4dp"
-                                android:text="@string/free_memory" />
-                        </LinearLayout>
-                    </LinearLayout>
+                        android:text="@string/stop"
+                        android:visibility="gone"
+                        tools:visibility="visible"/>
                 </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
 
-            <com.google.android.material.card.MaterialCardView
-                style="@style/Widget.Material3.CardView.Filled"
+                <TextView
+                    android:id="@+id/tv_vncport"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="8dp"
+                    android:text="@string/port_qemu" />
+
+                <TextView
+                    android:id="@+id/tv_vncstatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="8dp"
+                    android:text="@string/status_qemu" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="8dp"
-                app:cardBackgroundColor="?attr/colorSurfaceContainer">
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginBottom="8dp"
+                android:padding="16dp"
+                android:background="@drawable/object_shape_bottom">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <LinearLayout
+                    android:layout_height="wrap_content">
+                    <TextView
+                        style="@style/MaterialAlertDialog.Material3Expressive.Title.Text"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <TextView
-                            style="@style/MaterialAlertDialog.Material3Expressive.Title.Text"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/qemu" />
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/bt_stopqemu"
-                            style="@style/Widget.Material3Expressive.Button.OutlinedButton"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/stop"
-                            android:visibility="gone"
-                            tools:visibility="visible"/>
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/tv_qemuversion"
-                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingVertical="8dp"
-                        android:text="@string/version" />
-
-                    <TextView
-                        android:id="@+id/tv_qemuarch"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingVertical="8dp"
-                        android:text="@string/arch" />
-
-                    <TextView
-                        android:id="@+id/tv_qemustatus"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingVertical="8dp"
-                        android:text="@string/status_qemu" />
+                        android:text="@string/threedfx" />
                 </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
 
-            <com.google.android.material.card.MaterialCardView
-                style="@style/Widget.Material3.CardView.Filled"
+                <TextView
+                    android:id="@+id/tv_3dfx_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="8dp"
+                    android:text="@string/just_a_sec" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
                 android:layout_marginVertical="8dp"
-                app:cardBackgroundColor="?attr/colorSurfaceContainer">
+                android:padding="16dp"
+                android:background="@drawable/object_shape_single">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <TextView
-                            style="@style/MaterialAlertDialog.Material3Expressive.Title.Text"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/vnc_server" />
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/bt_stopvmvnc"
-                            style="@style/Widget.Material3Expressive.Button.OutlinedButton"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/stop"
-                            android:visibility="gone"
-                            tools:visibility="visible"/>
-                    </LinearLayout>
-
+                    android:layout_height="wrap_content">
                     <TextView
-                        android:id="@+id/tv_vncport"
-                        android:layout_width="wrap_content"
+                        style="@style/MaterialAlertDialog.Material3Expressive.Title.Text"
                         android:layout_height="wrap_content"
-                        android:paddingVertical="8dp"
-                        android:text="@string/port_qemu" />
-
-                    <TextView
-                        android:id="@+id/tv_vncstatus"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingVertical="8dp"
-                        android:text="@string/status_qemu" />
+                        android:text="@string/processes" />
                 </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
 
-            <com.google.android.material.card.MaterialCardView
-                style="@style/Widget.Material3.CardView.Filled"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="8dp"
-                app:cardBackgroundColor="?attr/colorSurfaceContainer">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <TextView
-                            style="@style/MaterialAlertDialog.Material3Expressive.Title.Text"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/threedfx" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/tv_3dfx_content"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingVertical="8dp"
-                        android:text="@string/just_a_sec" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                style="@style/Widget.Material3.CardView.Filled"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="8dp"
-                app:cardBackgroundColor="?attr/colorSurfaceContainer">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <TextView
-                            style="@style/MaterialAlertDialog.Material3Expressive.Title.Text"
-                            android:layout_height="wrap_content"
-                            android:text="@string/processes" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/tv_processes"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingVertical="8dp"
-                        android:text="@string/just_a_sec"
-                        android:textIsSelectable="true"
-                        app:fontFamily="@font/googlesansvodevariablefontwght" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+                <TextView
+                    android:id="@+id/tv_processes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="8dp"
+                    android:text="@string/just_a_sec"
+                    android:textIsSelectable="true"
+                    app:fontFamily="@font/googlesansvodevariablefontwght" />
+            </LinearLayout>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

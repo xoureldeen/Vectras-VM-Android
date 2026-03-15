@@ -1,6 +1,7 @@
 package com.vectras.vm.utils;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Build;
 import android.view.LayoutInflater;
 
@@ -12,7 +13,7 @@ import com.vectras.vm.databinding.DialogProgressStyleBinding;
 
 public class ProgressDialog {
 
-    private final Activity activity;
+    private final Context context;
     private AlertDialog dialog;
     private DialogProgressStyleBinding binding;
     private String text;
@@ -20,15 +21,15 @@ public class ProgressDialog {
     private Integer max;
     private Boolean isIndeterminate;
 
-    public ProgressDialog(Activity activity) {
-        this.activity = activity;
+    public ProgressDialog(Context context) {
+        this.context = context;
     }
 
     public void show() {
-        if (DialogUtils.isAllowShow(activity)) {
+        if (DialogUtils.isAllowShow(context)) {
             if (dialog != null && dialog.isShowing()) return;
 
-            binding = DialogProgressStyleBinding.inflate(LayoutInflater.from(activity));
+            binding = DialogProgressStyleBinding.inflate(LayoutInflater.from(context));
 
             if (text != null) binding.progressText.setText(text);
 
@@ -46,7 +47,7 @@ public class ProgressDialog {
 
             if (isIndeterminate != null) binding.progressBar.setIndeterminate(isIndeterminate);
 
-            dialog = new MaterialAlertDialogBuilder(activity, R.style.CenteredDialogTheme)
+            dialog = new MaterialAlertDialogBuilder(context, R.style.CenteredDialogTheme)
                     .setView(binding.getRoot())
                     .setCancelable(false)
                     .create();
@@ -87,7 +88,7 @@ public class ProgressDialog {
     }
 
     public void dismiss() {
-        DialogUtils.safeDismiss(activity, dialog);
+        DialogUtils.safeDismiss((Activity) context, dialog);
         binding = null;
         dialog = null;
     }

@@ -8,7 +8,7 @@ import com.vectras.vterm.Terminal;
 public class CommandUtils {
     public static String createForSelectedMirror(boolean _https, String _url, String _beforemain) {
         String version = "v3.19";
-        String command = "echo \"\" > /etc/apk/repositories && sed -i -e \"1ihttps://xssFjnj58Id/yttGkok69Je/edge/testing\" /etc/apk/repositories && sed -i -e \"1ihttps://xssFjnj58Id/yttGkok69Je/"
+        String command = "echo \"\" > /etc/apk/repositories && sed -i -e \"1ihttps://xssFjnj58Id/yttGkok69Je/"
                 + version + "/community\" /etc/apk/repositories && sed -i -e \"1ihttps://xssFjnj58Id/yttGkok69Je/" + version + "/main\" /etc/apk/repositories";
 
         command = command.replaceAll("/yttGkok69Je", _beforemain);

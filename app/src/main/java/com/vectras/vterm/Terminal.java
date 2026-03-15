@@ -30,6 +30,7 @@ import com.vectras.vm.logger.VectrasStatus;
 import com.vectras.vm.utils.ClipboardUltils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.NotificationUtils;
+import com.vectras.vm.utils.ProgressDialog;
 
 public class Terminal {
     private static final String TAG = "Vterm";
@@ -63,15 +64,10 @@ public class Terminal {
         VectrasStatus.logError("<font color='#4db6ac'>VTERM: >" + userCommand + "</font>");
 
         // Show ProgressDialog
-        AlertDialog progressDialog;
+        ProgressDialog progressDialog;
         if (dialogActivity != null) {
-            View progressView = LayoutInflater.from(dialogActivity).inflate(R.layout.dialog_progress_style, null);
-            TextView progress_text = progressView.findViewById(R.id.progress_text);
-            progress_text.setText(progressDialogMessage);
-            progressDialog = new MaterialAlertDialogBuilder(dialogActivity, R.style.CenteredDialogTheme)
-                    .setView(progressView)
-                    .setCancelable(false)
-                    .create();
+            progressDialog = new ProgressDialog(dialogActivity);
+            progressDialog.setText(progressDialogMessage);
 
             if (showProgressDialog) progressDialog.show();
         } else {
@@ -124,7 +120,7 @@ public class Terminal {
                 new Handler(Looper.getMainLooper()).post(() -> {
                     AppConfig.temporaryLastedTerminalOutput = output.toString();
                     if (dialogActivity != null) {
-                        progressDialog.dismiss(); // Dismiss ProgressDialog
+                        progressDialog.reset(); // Dismiss ProgressDialog
                         if (showResultDialog) {
                             String finalOutput = output.toString();
                             String finalErrors = errors.toString();
