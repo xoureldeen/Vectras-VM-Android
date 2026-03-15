@@ -577,6 +577,24 @@
     "id": ""
   },
   {
+    "rom_name": "macOS Mojave",
+    "rom_icon": "https://cdsassets.apple.com/live/SZLF0YNV/images/sp/111930_mojave-roundel-240.png",
+    "rom_url": "https://youtu.be/4ZACcqnYzkM",
+    "rom_path": "macOS Mojave.cvbi",
+    "rom_avail": true,
+    "rom_size": "10.14",
+    "rom_arch": "X86_64",
+    "rom_kernel": "apple",
+    "rom_extra": "",
+    "final_rom_file_name": "",
+    "desc": "This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nmacOS Mojave (/moʊˈhɑːvi, mə-/ mo-HAH-vee; version 10.14) is the fifteenth major release of macOS, Apple's desktop operating system for Macintosh computers. macOS Mojave was announced at Apple's Worldwide Developers Conference on June 4, 2018, and was released to the public on September 24. The operating system's name refers to the Mojave Desert, continuing the use of California-themed names that began with OS X Mavericks. It succeeded macOS High Sierra and was followed by macOS Catalina. macOS Mojave is the last version of macOS that features the iTunes and Dashboard apps.",
+    "file_size": "20 GB",
+    "creator": "Nguyen Bao An Bui",
+    "verified": true,
+    "vecid": "macosmojavecvbi",
+    "id": "99653"
+  },
+  {
     "rom_name": "Microsoft PixelSense",
     "rom_icon": "https://maythecodebewithu.wordpress.com/wp-content/uploads/2013/07/ctafullhero_278x298_pixelsense.jpg",
     "rom_url": "https://anbui.ovh/get/vec/community/win/nt6/7msps.html",
