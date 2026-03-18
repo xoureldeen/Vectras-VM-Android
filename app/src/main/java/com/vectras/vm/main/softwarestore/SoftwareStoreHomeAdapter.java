@@ -119,7 +119,12 @@ public class SoftwareStoreHomeAdapter extends RecyclerView.Adapter<RecyclerView.
         if (currentSize >= nextLimit) return;
 
         displayList.addAll(fullList.subList(currentSize, nextLimit));
-        notifyItemRangeInserted(Math.max(currentSize - 1, 0), nextLimit - currentSize);
+        if (currentSize == 0) {
+            notifyDataSetChanged();
+        } else {
+            notifyItemChanged(currentSize - 1);
+            notifyItemRangeInserted(currentSize, nextLimit - currentSize);
+        }
     }
 
     public void submitList(List<DataRoms> newData) {
@@ -127,7 +132,6 @@ public class SoftwareStoreHomeAdapter extends RecyclerView.Adapter<RecyclerView.
         fullList = new ArrayList<>(newData);
 
         displayList.clear();
-        notifyDataSetChanged();
 
         loadMore();
     }

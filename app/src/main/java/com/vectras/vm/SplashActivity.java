@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,45 +29,22 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Locale;
 
-public class SplashActivity extends AppCompatActivity implements Runnable {
+public class SplashActivity extends AppCompatActivity {
     private static final String TAG = "SplashActivity";
-    private String sessionId = VMManager.startRamdomVMID();
 
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        AppConfig.splashActivitySessionId = sessionId;
         UIUtils.edgeToEdge(this);
         setContentView(R.layout.activity_splash);
         UIUtils.setOnApplyWindowInsetsListener(findViewById(R.id.main));
 
-        setupFolders();
-
-        try {
-            new Handler().postDelayed(this, 1000);
-        } catch (Exception e) {
-            Log.e(TAG, "Handler().postDelayed: ", e);
-        }
-        MainSettingsManager.setOrientationSetting(this, 1);
-
-        setupFiles();
-
-        updateLocale();
-    }
-
-    private void updateLocale() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        String languageCode = sharedPreferences.getString("language", "");
-
-        if (!languageCode.isEmpty()) {
-            AppCompatDelegate.setApplicationLocales(
-                    LocaleListCompat.forLanguageTags(languageCode)
-            );
-        } else {
-            AppCompatDelegate.setApplicationLocales(
-                    LocaleListCompat.getEmptyLocaleList()
-            );
-        }
+        new Thread(() -> {
+            setupFolders();
+            MainSettingsManager.setOrientationSetting(this, 1);
+            setupFiles();
+            runOnUiThread(this::finishSplash);
+        }).start();
     }
 
     public void setupFiles() {
@@ -124,7 +102,7 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
                 Log.e(TAG, "Create roms-data.json file failed: ", e);
             }
 
-        new Thread(() -> FileInstaller.installFiles(getApplicationContext(), true)).start();
+        FileInstaller.installFiles(this, true);
     }
 
     private void setupFolders() {
@@ -135,27 +113,24 @@ public class SplashActivity extends AppCompatActivity implements Runnable {
         }
     }
 
-    @Override
-    public void run() {
-        if (sessionId.equals(AppConfig.splashActivitySessionId)) {
-            if (MainSettingsManager.getShowLastCrashLog(this)) {
-                startActivity(new Intent(this, LastCrashActivity.class));
-            } else if (SetupFeatureCore.isInstalledQemu(this)) {
-                if (MainSettingsManager.getStandardSetupVersion(this) != AppConfig.standardSetupVersion &&
-                        !MainSettingsManager.getsetUpWithManualSetupBefore(this)) {
-                    Intent intent = new Intent();
-                    intent.putExtra("action", SetupWizard2Activity.ACTION_SYSTEM_UPDATE);
-                    intent.setClass(this, SetupWizard2Activity.class);
-                    startActivity(intent);
-                } else {
-                    startActivity(new Intent(this, MainActivity.class));
-                }
+    private void finishSplash() {
+        if (MainSettingsManager.getShowLastCrashLog(this)) {
+            startActivity(new Intent(this, LastCrashActivity.class));
+        } else if (SetupFeatureCore.isInstalledQemu(this)) {
+            if (MainSettingsManager.getStandardSetupVersion(this) != AppConfig.standardSetupVersion &&
+                    !MainSettingsManager.getsetUpWithManualSetupBefore(this)) {
+                Intent intent = new Intent();
+                intent.putExtra("action", SetupWizard2Activity.ACTION_SYSTEM_UPDATE);
+                intent.setClass(this, SetupWizard2Activity.class);
+                startActivity(intent);
             } else {
-                startActivity(new Intent(this, SetupWizard2Activity.class));
-                //For Android 14+
-                if (!DeviceUtils.is64bit() || Build.VERSION.SDK_INT >= 34) {
-                    MainSettingsManager.setVmUi(this, "VNC");
-                }
+                startActivity(new Intent(this, MainActivity.class));
+            }
+        } else {
+            startActivity(new Intent(this, SetupWizard2Activity.class));
+            //For Android 14+
+            if (!DeviceUtils.is64bit() || Build.VERSION.SDK_INT >= 34) {
+                MainSettingsManager.setVmUi(this, "VNC");
             }
         }
         finish();

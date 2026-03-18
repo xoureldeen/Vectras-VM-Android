@@ -22,10 +22,10 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
+import com.anbui.elephant.retrofit2utils.Retrofit2Utils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.termux.app.TermuxActivity;
@@ -35,10 +35,7 @@ import com.vectras.vm.AppConfig;
 import com.vectras.vm.R;
 import com.vectras.vm.VMManager;
 import com.vectras.vm.creator.VMCreatorSelector;
-import com.vectras.vm.network.RequestNetwork;
-import com.vectras.vm.network.RequestNetworkController;
 import com.vectras.vm.databinding.ActivitySetupWizard2Binding;
-import com.vectras.vm.databinding.ListViewBinding;
 import com.vectras.vm.databinding.SetupQemuDoneBinding;
 import com.vectras.vm.databinding.SimpleLayoutListViewWithCheckBinding;
 import com.vectras.vm.main.MainActivity;
@@ -411,13 +408,11 @@ public class SetupWizard2Activity extends AppCompatActivity {
     private void getDataForStandardSetup() {
         uiController(STEP_GETTING_DATA);
 
-        RequestNetwork net = new RequestNetwork(this);
-        RequestNetwork.RequestListener _net_request_listener = new RequestNetwork.RequestListener() {
-            @Override
-            public void onResponse(String tag, String response, HashMap<String, Object> responseHeaders) {
-                if (JSONUtils.isValidFromString(response)) {
+        Retrofit2Utils.get(AppConfig.bootstrapfileslink, ((isSuccess, body, status, error) -> {
+            if (isSuccess) {
+                if (JSONUtils.isValidFromString(body)) {
                     HashMap<String, Object> mmap;
-                    mmap = new Gson().fromJson(response, new TypeToken<HashMap<String, Object>>() {
+                    mmap = new Gson().fromJson(body, new TypeToken<HashMap<String, Object>>() {
                     }.getType());
                     if (mmap != null && mmap.containsKey("aarch64") && mmap.containsKey("armhf") && mmap.containsKey("amd64") && mmap.containsKey("x86")) {
                         if (DeviceUtils.isArm()) {
@@ -435,15 +430,10 @@ public class SetupWizard2Activity extends AppCompatActivity {
                         uiController(STEP_SETUP_OPTIONS);
                     }
                 }, 1000);
-            }
-
-            @Override
-            public void onErrorResponse(String tag, String message) {
+            } else {
                 new Handler(Looper.getMainLooper()).postDelayed(() -> uiController(STEP_SETUP_OPTIONS), 1000);
             }
-        };
-
-        net.startRequestNetwork(RequestNetworkController.GET, AppConfig.bootstrapfileslink, "", _net_request_listener);
+        }));
     }
 
     private void startSetup() {

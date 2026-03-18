@@ -13,6 +13,8 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
 
+import androidx.core.os.LocaleListCompat;
+import androidx.fragment.app.FragmentManager;
 import androidx.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
@@ -247,18 +249,29 @@ public class MainSettingsManager extends AppCompatActivity
         }
 
         private void updateLocale(String languageCode) {
+//            if (!languageCode.isEmpty()) {
+//                Locale locale = new Locale(languageCode);
+//                Locale.setDefault(locale);
+//                Configuration config = new Configuration();
+//                config.setLocale(locale);
+//
+//                getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+//            }
+//            Intent intent = new Intent(requireActivity().getApplicationContext(), SplashActivity.class);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//            startActivity(intent);
+//            requireActivity().finishAffinity();
             if (!languageCode.isEmpty()) {
-                Locale locale = new Locale(languageCode);
-                Locale.setDefault(locale);
-                Configuration config = new Configuration();
-                config.setLocale(locale);
-
-                getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+                AppCompatDelegate.setApplicationLocales(
+                        LocaleListCompat.forLanguageTags(languageCode)
+                );
+            } else {
+                AppCompatDelegate.setApplicationLocales(
+                        LocaleListCompat.getEmptyLocaleList()
+                );
             }
-            Intent intent = new Intent(requireActivity().getApplicationContext(), SplashActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            requireActivity().finishAffinity();
+
+            requireActivity().getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
 
     }

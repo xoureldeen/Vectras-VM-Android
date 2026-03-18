@@ -28,9 +28,11 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.anbui.elephant.retrofit2utils.Retrofit2Utils;
 import com.google.android.material.behavior.HideViewOnScrollBehavior;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -47,13 +49,11 @@ import com.vectras.vm.R;
 import com.vectras.vm.WebViewActivity;
 import com.vectras.vm.databinding.ActivityMainBinding;
 import com.vectras.vm.databinding.ActivityMainContentBinding;
+import com.vectras.vm.databinding.UpdateBottomDialogLayoutBinding;
 import com.vectras.vm.main.romstore.RomStoreHomeAdpater;
 import com.vectras.vm.main.softwarestore.SoftwareStoreFragment;
 import com.vectras.vm.main.softwarestore.SoftwareStoreHomeAdapter;
-import com.vectras.vm.network.RequestNetwork;
-import com.vectras.vm.network.RequestNetworkController;
 import com.vectras.vm.databinding.BottomsheetdialogLoggerBinding;
-import com.vectras.vm.databinding.UpdateBottomDialogLayoutBinding;
 import com.vectras.vm.main.romstore.DataRoms;
 import com.vectras.vm.creator.SetArchActivity;
 import com.vectras.vm.VMManager;
@@ -84,7 +84,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -106,6 +105,9 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
     private SoftwareStoreHomeAdapter adapterSoftwareStore;
     private final List<DataRoms> listSearchData = new ArrayList<>();
     private LinearLayoutManager layoutManager;
+    private final VmsFragment vmsFragment = new VmsFragment();
+    private Fragment currentFragment;
+    private boolean isInVmsFragment = true;
 
     public static CallbackInterface.HomeCallToVmsListener homeCallToVmsListener;
 
@@ -131,9 +133,6 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
     @Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
 
         VmsFragment.vmsCallToHomeListener = this;
         RomStoreFragment.romStoreCallToHomeListener = this;
@@ -172,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(bindingContent.containerView.getId(), new VmsFragment())
+                    .replace(bindingContent.containerView.getId(), vmsFragment)
                     .commit();
         }
 
@@ -195,7 +194,8 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
         bindingContent.searchbar.setEnabled(false);
 
         bindingContent.bottomNavigation.setOnItemSelectedListener(item -> {
-            Fragment selectedFragment;
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
             int id = item.getItemId();
 
@@ -207,44 +207,61 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
             }
 
             if (id == R.id.item_home) {
-                selectedFragment = new VmsFragment();
+                if (!vmsFragment.isAdded()) {
+                    fragmentTransaction.add(bindingContent.containerView.getId(), vmsFragment);
+                }
+
+                fragmentTransaction.show(vmsFragment);
+                if (!isInVmsFragment && currentFragment != null) {
+                    fragmentTransaction.remove(currentFragment);
+                }
+
                 bindingContent.efabCreate.setVisibility(View.VISIBLE);
                 bindingContent.searchbar.setHint(getText(R.string.home));
-                bindingContent.searchbar.setEnabled(false);
-            } else if (id == R.id.item_romstore) {
-                selectedFragment = new RomStoreFragment();
-                bindingContent.efabCreate.setVisibility(View.GONE);
-                bindingContent.searchbar.setEnabled(true);
-                bindingContent.searchbar.setHint(getText(R.string.search));
-                currentSearchMode = SEARCH_ROM_STORE;
-                adapterRomStore = new RomStoreHomeAdpater(this, listSearchData, true);
-                binding.rvSearch.setAdapter(adapterRomStore);
-            } else if (id == R.id.item_softwarestore) {
-                selectedFragment = new SoftwareStoreFragment();
-                bindingContent.efabCreate.setVisibility(View.GONE);
-                bindingContent.searchbar.setEnabled(true);
-                bindingContent.searchbar.setHint(getText(R.string.search));
-                currentSearchMode = SEARCH_SOFTWARE_STORE;
-                adapterSoftwareStore = new SoftwareStoreHomeAdapter(this, listSearchData, true);
-                binding.rvSearch.setAdapter(adapterSoftwareStore);
-            } else if (id == R.id.item_monitor) {
-                selectedFragment = new SystemMonitorFragment();
-                bindingContent.efabCreate.setVisibility(View.GONE);
-                bindingContent.searchbar.setHint(getText(R.string.system_monitor));
                 bindingContent.searchbar.setEnabled(false);
             } else {
-                selectedFragment = new VmsFragment();
-                bindingContent.efabCreate.setVisibility(View.VISIBLE);
-                bindingContent.searchbar.setHint(getText(R.string.home));
-                bindingContent.searchbar.setEnabled(false);
+                fragmentTransaction.hide(vmsFragment);
+                Fragment selectedFragment;
+
+                if (id == R.id.item_romstore) {
+                    selectedFragment = new RomStoreFragment();
+                    bindingContent.efabCreate.setVisibility(View.GONE);
+                    bindingContent.searchbar.setEnabled(true);
+                    bindingContent.searchbar.setHint(getText(R.string.search));
+                    currentSearchMode = SEARCH_ROM_STORE;
+                    adapterRomStore = new RomStoreHomeAdpater(this, listSearchData, true);
+                    binding.rvSearch.setAdapter(adapterRomStore);
+                } else if (id == R.id.item_softwarestore) {
+                    selectedFragment = new SoftwareStoreFragment();
+                    bindingContent.efabCreate.setVisibility(View.GONE);
+                    bindingContent.searchbar.setEnabled(true);
+                    bindingContent.searchbar.setHint(getText(R.string.search));
+                    currentSearchMode = SEARCH_SOFTWARE_STORE;
+                    adapterSoftwareStore = new SoftwareStoreHomeAdapter(this, listSearchData, true);
+                    binding.rvSearch.setAdapter(adapterSoftwareStore);
+                } else if (id == R.id.item_monitor) {
+                    selectedFragment = new SystemMonitorFragment();
+                    bindingContent.efabCreate.setVisibility(View.GONE);
+                    bindingContent.searchbar.setHint(getText(R.string.system_monitor));
+                    bindingContent.searchbar.setEnabled(false);
+                } else {
+                    selectedFragment = new VmsFragment();
+                    bindingContent.efabCreate.setVisibility(View.VISIBLE);
+                    bindingContent.searchbar.setHint(getText(R.string.home));
+                    bindingContent.searchbar.setEnabled(false);
+                }
+
+                if (!isInVmsFragment) fragmentTransaction.remove(currentFragment);
+                fragmentTransaction.add(bindingContent.containerView.getId(), selectedFragment);
+
+                currentFragment = selectedFragment;
             }
 
-            FragmentManager fragmentManager = getSupportFragmentManager();
             if (!fragmentManager.isStateSaved()) {
-                fragmentManager.beginTransaction()
-                        .replace(bindingContent.containerView.getId(), selectedFragment)
-                        .commit();
+                fragmentTransaction.commit();
             }
+
+            isInVmsFragment = id == R.id.item_home;
             currentBottomBarSelectedItemId = id;
             return true;
         });
@@ -522,13 +539,11 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
         int versionCode = PackageUtils.getThisVersionCode(getApplicationContext());
 //        String versionName = PackageUtils.getThisVersionName(getApplicationContext());
 
-        RequestNetwork requestNetwork = new RequestNetwork(this);
-        RequestNetwork.RequestListener requestNetworkListener = new RequestNetwork.RequestListener() {
-            @Override
-            public void onResponse(String tag, String response, HashMap<String, Object> responseHeaders) {
-                if (!response.isEmpty()) {
+        Retrofit2Utils.get(AppConfig.updateJson, ((isSuccess, body, status, error) -> {
+            if (isSuccess) {
+                if (!body.isEmpty()) {
                     try {
-                        final JSONObject obj = new JSONObject(response);
+                        final JSONObject obj = new JSONObject(body);
                         String versionNameonUpdate;
                         int versionCodeonUpdate;
 //                        String message;
@@ -577,14 +592,7 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
                     }
                 }
             }
-
-            @Override
-            public void onErrorResponse(String tag, String message) {
-
-            }
-        };
-
-        requestNetwork.startRequestNetwork(RequestNetworkController.GET, AppConfig.updateJson, "maincheckupdate", requestNetworkListener);
+        }));
     }
 
     @SuppressLint("NotifyDataSetChanged")

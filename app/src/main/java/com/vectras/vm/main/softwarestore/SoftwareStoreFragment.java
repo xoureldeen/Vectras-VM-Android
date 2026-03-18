@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.anbui.elephant.retrofit2utils.Retrofit2Utils;
 import com.google.android.material.transition.MaterialFadeThrough;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
@@ -20,19 +21,14 @@ import com.vectras.vm.AppConfig;
 import com.vectras.vm.main.romstore.DataRoms;
 import com.vectras.vm.databinding.FragmentHomeSoftwareStoreBinding;
 import com.vectras.vm.main.core.SharedData;
-import com.vectras.vm.network.RequestNetwork;
-import com.vectras.vm.network.RequestNetworkController;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class SoftwareStoreFragment extends Fragment {
 
     FragmentHomeSoftwareStoreBinding binding;
-    private RequestNetwork net;
-    private RequestNetwork.RequestListener _net_request_listener;
     private String contentJSON = "[]";
     SoftwareStoreViewModel homeSoftwareStoreViewModel;
     SoftwareStoreHomeAdapter mAdapter;
@@ -92,34 +88,24 @@ public class SoftwareStoreFragment extends Fragment {
                 mAdapter.submitList(roms);
             }
         });
+
+        binding.buttontryagain.setOnClickListener(v -> loadFromServer());
     }
 
     private void loadFromServer() {
         softwareStoreCallToHomeListener.updateSearchStatus(false);
+        binding.linearload.setVisibility(View.VISIBLE);
 
-        net = new RequestNetwork(requireActivity());
-        _net_request_listener = new RequestNetwork.RequestListener() {
-            @Override
-            public void onResponse(String tag, String response, HashMap<String, Object> responseHeaders) {
-                if (!response.isEmpty())
-                    contentJSON = response;
+        Retrofit2Utils.get(AppConfig.vectrasRaw + "software-store.json", ((isSuccess, body, status, error) -> {
+            binding.linearload.setVisibility(View.GONE);
+            if (isSuccess) {
+                if (!body.isEmpty())
+                    contentJSON = body;
                 loadData();
-                binding.linearload.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onErrorResponse(String tag, String message) {
-                binding.linearload.setVisibility(View.GONE);
+            } else {
                 binding.linearnothinghere.setVisibility(View.VISIBLE);
             }
-        };
-
-        binding.buttontryagain.setOnClickListener(v -> {
-            binding.linearload.setVisibility(View.VISIBLE);
-            net.startRequestNetwork(RequestNetworkController.GET, AppConfig.vectrasRaw + "software-store.json","",_net_request_listener);
-        });
-
-        net.startRequestNetwork(RequestNetworkController.GET, AppConfig.vectrasRaw + "software-store.json","",_net_request_listener);
+        }));
     }
 
     private void loadData() {

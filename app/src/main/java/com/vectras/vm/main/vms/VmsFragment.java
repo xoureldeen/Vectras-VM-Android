@@ -96,7 +96,8 @@ public class VmsFragment extends Fragment implements CallbackInterface.HomeCallT
             binding.wrlRomlist.setRefreshing(false);
         });
 
-        checkAndLoad();
+        //Loaded in onResume
+        //checkAndLoad();
     }
 
     private void loadDataVbi() {
