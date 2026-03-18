@@ -103,7 +103,7 @@ dependencies {
     implementation 'com.airbnb.android:lottie:6.7.1'
     implementation 'org.apache.commons:commons-compress:1.28.0'
 //    implementation 'com.google.firebase:firebase-crashlytics-buildtools:3.0.6'
-    implementation 'androidx.activity:activity-ktx:1.12.4'
+    implementation 'androidx.activity:activity-ktx:1.13.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
     implementation 'androidx.preference:preference-ktx:1.2.1'
     implementation "androidx.documentfile:documentfile:1.1.0"
