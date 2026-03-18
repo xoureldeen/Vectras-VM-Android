@@ -12,8 +12,8 @@ android {
         applicationId "com.vectras.vm"
         minSdk minApi
         targetSdk targetApi
-        versionCode 90
-        versionName "3.8.6"
+        versionCode 91
+        versionName "3.8.7"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -81,7 +81,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'com.google.android.material:material:1.14.0-alpha10'
     implementation "androidx.annotation:annotation:1.9.1"
-    implementation "androidx.core:core-ktx:1.17.0"
+    implementation "androidx.core:core-ktx:1.18.0"
     implementation "androidx.drawerlayout:drawerlayout:1.2.0"
     implementation "androidx.preference:preference-ktx:1.2.1"
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.2.0"
@@ -97,7 +97,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:25.0.1'
     implementation 'com.google.guava:guava:33.5.0-jre'
     implementation 'com.google.code.gson:gson:2.13.2'
-    implementation 'com.squareup.okhttp3:okhttp:5.3.2'
     implementation "androidx.window:window:1.5.1"
     implementation "commons-io:commons-io:2.21.0"
     implementation 'com.airbnb.android:lottie:6.7.1'
@@ -107,7 +106,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
     implementation 'androidx.preference:preference-ktx:1.2.1'
     implementation "androidx.documentfile:documentfile:1.1.0"
-    implementation 'androidx.core:core-ktx:1.17.0'
+    implementation 'androidx.core:core-ktx:1.18.0'
     compileOnly project(':shell-loader:stub')
     implementation project(":terminal-view")
     

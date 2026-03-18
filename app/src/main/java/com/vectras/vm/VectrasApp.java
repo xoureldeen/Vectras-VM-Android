@@ -3,11 +3,15 @@ package com.vectras.vm;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.os.LocaleListCompat;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.material.color.DynamicColors;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -44,6 +48,7 @@ public class VectrasApp extends Application {
             // ignored
         }
         setupTheme();
+        setupLocale();
 
 //        Locale locale = Locale.getDefault();
 //        String language = locale.getLanguage();
@@ -101,6 +106,21 @@ public class VectrasApp extends Application {
 //            DynamicColors.applyToActivitiesIfAvailable(this);
 
 //        setTheme(R.style.AppTheme);
+    }
+
+    private void setupLocale() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String languageCode = sharedPreferences.getString("language", "");
+
+        if (!languageCode.isEmpty()) {
+            AppCompatDelegate.setApplicationLocales(
+                    LocaleListCompat.forLanguageTags(languageCode)
+            );
+        } else {
+            AppCompatDelegate.setApplicationLocales(
+                    LocaleListCompat.getEmptyLocaleList()
+            );
+        }
     }
 
     public static Context getApp() {

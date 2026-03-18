@@ -13,11 +13,10 @@ import android.view.View;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.anbui.elephant.retrofit2utils.Retrofit2Utils;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.AppConfig;
 import com.vectras.vm.R;
-import com.vectras.vm.network.RequestNetwork;
-import com.vectras.vm.network.RequestNetworkController;
 import com.vectras.vm.databinding.ActivityUpdaterBinding;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.PackageUtils;
@@ -25,7 +24,6 @@ import com.vectras.vm.utils.PackageUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
 import java.util.Objects;
 
 public class UpdaterActivity extends AppCompatActivity {
@@ -80,16 +78,14 @@ public class UpdaterActivity extends AppCompatActivity {
         int versionCode = PackageUtils.getThisVersionCode(getApplicationContext());
         String versionName = PackageUtils.getThisVersionName(getApplicationContext());
 
-        RequestNetwork requestNetwork = new RequestNetwork(this);
-        RequestNetwork.RequestListener requestNetworkListener = new RequestNetwork.RequestListener() {
-            @Override
-            public void onResponse(String tag, String response, HashMap<String, Object> responseHeaders) {
+        Retrofit2Utils.get(AppConfig.vectrasRaw + "software-store.json", ((isSuccess, body, status, error) -> {
+            if (isSuccess) {
                 binding.lpiProgressbar.setVisibility(View.GONE);
                 binding.lnBottombar.setVisibility(View.VISIBLE);
 
-                if (!response.isEmpty()) {
+                if (!body.isEmpty()) {
                     try {
-                        final JSONObject obj = new JSONObject(response);
+                        final JSONObject obj = new JSONObject(body);
 //                        String versionNameonUpdate;
                         int versionCodeonUpdate;
                         String whatsnew;
@@ -149,14 +145,9 @@ public class UpdaterActivity extends AppCompatActivity {
                 } else {
                     whenUpToDate();
                 }
-            }
-
-            @Override
-            public void onErrorResponse(String tag, String message) {
+            } else {
                 whenUpToDate();
             }
-        };
-
-        requestNetwork.startRequestNetwork(RequestNetworkController.GET,AppConfig.updateJson,"checkupdate",requestNetworkListener);
+        }));
     }
 }
