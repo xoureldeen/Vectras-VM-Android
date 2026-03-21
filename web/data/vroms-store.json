@@ -433,6 +433,24 @@
     "id": ""
   },
   {
+    "rom_name": "KolibriOS",
+    "rom_icon": "https://avatars.githubusercontent.com/u/19728236?s=280&v=4",
+    "rom_url": "https://anbui.ovh/get/vec/community/linux/kolibrios2026.html",
+    "rom_path": "KOLIBRI.OS.cvbi",
+    "rom_avail": true,
+    "rom_size": "Lightweight operating system",
+    "rom_arch": "X86_64",
+    "rom_kernel": "linux",
+    "rom_extra": "",
+    "final_rom_file_name": "",
+    "desc": "From @pkg123097-netizen on GitHub.\n\nKolibriOS is a tiny yet incredibly powerful and fast operating system. This power requires only a few megabyte disk space and 8MB of RAM to run. KolibriOS features a rich set of applications that include word processor, image viewer, graphical editor, web browser and well over 30 exciting games. Full FAT12/16/32 support is implemented, as well as read-only support for NTFS, exFAT, ISO9660 and Ext2/3/4. Drivers are written for popular sound, network and graphics cards.",
+    "file_size": "100 MB",
+    "creator": "pkg123097-netizen",
+    "verified": true,
+    "vecid": "kolibrioscvbi",
+    "id": ""
+  },
+  {
     "rom_name": "Linux Lite 1.0.6",
     "rom_icon": "https://upload.wikimedia.org/wikipedia/commons/3/35/Linux_lite_light_logo_sample_sample.png?20230411040548",
     "rom_url": "https://youtu.be/xRdtZXVjBN0",

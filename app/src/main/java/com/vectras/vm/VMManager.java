@@ -3,6 +3,8 @@ package com.vectras.vm;
 import static android.content.Intent.ACTION_OPEN_DOCUMENT;
 import static com.vectras.vm.utils.FileUtils.isFileExists;
 
+import static java.lang.Thread.sleep;
+
 import android.androidVNC.ConnectionBean;
 import android.androidVNC.VncCanvasActivity;
 import android.app.Activity;
@@ -28,12 +30,14 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.qemu.MainVNCActivity;
+import com.vectras.qemu.QMPClient;
 import com.vectras.qemu.VNCConfig;
 import com.vectras.qemu.utils.QmpClient;
 import com.vectras.vm.main.MainActivity;
@@ -846,6 +850,47 @@ public class VMManager {
         new Thread(() -> QmpClient.sendCommand("{ \"execute\": \"system_reset\" }")).start();
     }
 
+    public static void pauseCurrentVM() {
+        QmpClient.sendCommand("{ \"execute\": \"stop\" }");
+    }
+
+    public static void resumeCurrentVM() {
+        QmpClient.sendCommand("{ \"execute\": \"cont\" }");
+    }
+
+    public static String startMigrate() {
+        return sendQMPCommand("migrate \\\"exec:cat > " + AppConfig.vmFolder + Config.vmID + "/snapshot.bin\\\"");
+    }
+
+    public static Boolean[] getMigrateStatus() {
+        Boolean[] result = new Boolean[2];
+        String response = QmpClient.sendCommand("{\"execute\": \"query-migrate\"}");
+
+        result[0] = response != null && response.contains("\"status\": \"completed\"");
+        result[1] = response != null && response.contains("\"status\": \"failed\"");
+        return result;
+    }
+
+    public static String loadMigrate() {
+        return sendQMPCommand("migrate_incoming \\\"exec:cat " + AppConfig.vmFolder + Config.vmID + "/snapshot.bin\\\"");
+    }
+
+    public static boolean isNeedLoadMigrate() {
+        return isFileExists(AppConfig.vmFolder + Config.vmID + "/snapshot.bin");
+    }
+
+    public static boolean deleteMigrate() {
+        return FileUtils.delete(new File(AppConfig.vmFolder + Config.vmID + "/snapshot.bin"));
+    }
+
+    public static boolean hideMigrateFile() {
+        return FileUtils.move(AppConfig.vmFolder + Config.vmID + "/snapshot.bin", AppConfig.vmFolder + Config.vmID + "/snapshot.bin.bak");
+    }
+
+    public static boolean restoreMigrateFile() {
+        return FileUtils.move(AppConfig.vmFolder + Config.vmID + "/snapshot.bin.bak", AppConfig.vmFolder + Config.vmID + "/snapshot.bin");
+    }
+
     public static void showChangeRemovableDevicesDialog(Activity _activity, VncCanvasActivity vncCanvasActivity) {
         new Thread(() -> {
             String allDevice = getAllDevicesInQemu();
@@ -855,6 +900,56 @@ public class VMManager {
                 AlertDialog _dialog = new MaterialAlertDialogBuilder(_activity, R.style.CenteredDialogTheme)
                         .setView(_view)
                         .create();
+
+                _view.findViewById(R.id.ln_pause).setOnClickListener( v -> {
+                    DialogUtils.twoDialog(
+                            _activity,
+                            _activity.getString(R.string.pause),
+                            _activity.getString(R.string.pause_vm_note),
+                            _activity.getString(R.string.pause),
+                            _activity.getString(R.string.cancel),
+                            true,
+                            R.drawable.pause_24px,
+                            true,
+                            () -> {
+                                ProgressDialog progressDialog = new ProgressDialog(_activity);
+                                progressDialog.setText(_activity.getString(R.string.pausing_vm_note));
+                                progressDialog.setFixTextColor(true);
+                                progressDialog.show();
+                                new Thread(() -> {
+                                    pauseCurrentVM();
+                                    if (!startMigrate().contains("terminal does not allow synchronous migration, continuing detached")) {
+                                        resumeCurrentVM();
+                                        _activity.runOnUiThread(progressDialog::reset);
+                                        Log.e(TAG, "Pause VM failed.");
+                                        return;
+                                    }
+
+                                    Boolean[] result = getMigrateStatus();
+
+                                    while (!result[0] && !result[1]) {
+                                        try {
+                                            sleep(1000);
+                                        } catch (Exception ignored) {
+
+                                        }
+                                        result = getMigrateStatus();
+                                    }
+
+                                    if (result[1]) {
+                                        resumeCurrentVM();
+                                        _activity.runOnUiThread(() -> DialogUtils.oopsDialog(_activity, _activity.getString(R.string.vm_state_save_failed_note)));
+                                    } else {
+                                        shutdownCurrentVM();
+                                    }
+
+                                    _activity.runOnUiThread(progressDialog::reset);
+                                }).start();
+                            },
+                            null,
+                            null);
+                    _dialog.dismiss();
+                });
 
                 if (allDevice != null && (allDevice.contains("ide1-cd0")
                         || allDevice.contains("ide2-cd0")
@@ -1246,7 +1341,7 @@ public class VMManager {
         new Thread(() -> {
             try {
                 keyDown(key);
-                Thread.sleep(50);
+                sleep(50);
                 keyUp(key);
             } catch (InterruptedException e) {
                 Log.d(TAG, "pressAKey: " + e.getMessage());
@@ -1282,7 +1377,7 @@ public class VMManager {
     public static void setVNCPasswordWithDelay(String _password) {
         new Thread(() -> {
             try {
-                Thread.sleep(1000);
+                sleep(1000);
                 setVNCPassword(_password);
             } catch (InterruptedException e) {
                 Log.d(TAG, "setVNCPasswordWithDelay: " + e.getMessage());
@@ -1334,6 +1429,14 @@ public class VMManager {
         return _result.contains("\"return\": {}");
     }
 
+    public static String sendQMPCommand(String command) {
+        return QmpClient.sendCommand("{\n" +
+                "    \"execute\": \"human-monitor-command\",\n" +
+                "    \"arguments\": {\n" +
+                "        \"command-line\": \"" + command + "\"\n" +
+                "    }\n" +
+                "}");
+    }
 
     @Contract(pure = true)
     public static boolean isUsingQemuARM(@NonNull String _qemuCommand) {

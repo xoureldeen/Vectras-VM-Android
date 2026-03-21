@@ -519,6 +519,14 @@
     <string name="show_recycle_bin">Show recycle bin</string>
     <string name="an_error_occurred_while_deleting_the_vm">An error occurred while deleting the virtual machine.</string>
     <string name="the_vm_files_were_retained_because_they_are_still_being_used_elsewhere">The virtual machine\'s files were retained because they are still being used elsewhere.</string>
+    <string name="pause">Pause</string>
+    <string name="pause_vm_note">The virtual machine\'s state will be saved and shut down to conserve resources. It will remain in this state on the next boot. Note that if you haven\'t enabled custom memory allocation in your settings, you should set the memory allocation in the Qemu parameter specifically for this virtual machine. Do not modify this virtual machine or its Qemu settings within the Vectras VM settings, as this may affect the virtual machine until the next boot. Any changes may cause the virtual machine state to fail to load.</string>
+    <string name="pausing_vm_note">VM is pausing…\nDon\'t leave here.</string>
+    <string name="resuming">Resuming…</string>
+    <string name="vm_resume_error_note">An issue occurred while resuming loading of previously paused virtual machine state. If you modified this virtual machine or Qemu settings in the Vectras VM setup before booting, please check that you changed them to the same settings as the last time this virtual machine was powered on. Do you want to keep or remove the saved state?</string>
+    <string name="keep_and_continue">Keep and continue</string>
+    <string name="remove_and_continue">Remove and continue</string>
+    <string name="vm_state_save_failed_note">An error occurred and the virtual machine\'s state could not be saved. Please try again later.</string>
 
 
     <!--======================TERMUX STRINGS====================-->

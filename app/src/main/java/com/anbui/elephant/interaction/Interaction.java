@@ -72,7 +72,7 @@ public class Interaction {
 
     public void view(InteractionCallback callback) {
         if (isViewed()) {
-            callback.onResult(true, dataInteraction.views, dataInteraction.likes);
+            callback.onResult(true, dataInteraction != null ? dataInteraction.views : 1, dataInteraction != null ? dataInteraction.likes : 0);
             LogPrinter.print(TAG, "Viewed.");
             return;
         }

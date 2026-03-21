@@ -3,6 +3,7 @@ package com.vectras.vm.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.StrictMode;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -15,6 +16,9 @@ import java.util.Objects;
 
 public class NetworkUtils {
     public static boolean isPortOpen(String host, int port, int timeout) {
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        
         if (port > 65535) return false;
 
         Socket socket = new Socket();
