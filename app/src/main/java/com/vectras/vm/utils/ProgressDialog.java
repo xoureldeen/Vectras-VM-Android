@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.view.LayoutInflater;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -22,6 +24,9 @@ public class ProgressDialog {
     private Integer progress;
     private Integer max;
     private Boolean isIndeterminate;
+
+    private ProgressBar progressBar;
+    private TextView textview;
 
     public ProgressDialog(Context context) {
         this.context = context;
@@ -49,7 +54,10 @@ public class ProgressDialog {
 
             if (isIndeterminate != null) binding.progressBar.setIndeterminate(isIndeterminate);
 
-            if (isFixTextColor) binding.progressText.setTextColor(MaterialColors.getColor(binding.progressText, com.google.android.material.R.attr.colorOnSurface));
+            if (isFixTextColor != null && isFixTextColor) binding.progressText.setTextColor(MaterialColors.getColor(binding.progressText, com.google.android.material.R.attr.colorOnSurface));
+
+            progressBar = binding.progressBar;
+            textview = binding.progressText;
 
             dialog = new MaterialAlertDialogBuilder(context, R.style.CenteredDialogTheme)
                     .setView(binding.getRoot())
@@ -95,10 +103,20 @@ public class ProgressDialog {
         return dialog != null && dialog.isShowing();
     }
 
+    public ProgressBar getProgressBar() {
+        return progressBar;
+    }
+
+    public TextView getTextview() {
+        return textview;
+    }
+
     public void dismiss() {
         DialogUtils.safeDismiss((Activity) context, dialog);
         binding = null;
         dialog = null;
+        progressBar = null;
+        textview = null;
     }
 
     public void reset() {
@@ -107,5 +125,7 @@ public class ProgressDialog {
         progress = null;
         max = null;
         isIndeterminate = null;
+        progressBar = null;
+        textview = null;
     }
 }
