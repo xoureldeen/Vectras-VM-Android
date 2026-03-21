@@ -251,9 +251,13 @@ public class DialogUtils {
     }
 
     public static void safeDismiss(Activity activity, AlertDialog dialog) {
-        if (activity.isFinishing() || activity.isDestroyed()) return;
-        if (dialog == null || !dialog.isShowing() || dialog.getWindow() == null) return;
-        if (dialog.getWindow().getDecorView().getWindowToken() != null) dialog.dismiss();
+        if(isSafeDismiss(activity, dialog)) dialog.dismiss();
+    }
+
+    public static boolean isSafeDismiss(Activity activity, AlertDialog dialog) {
+        if (activity.isFinishing() || activity.isDestroyed()) return false;
+        if (dialog == null || !dialog.isShowing() || dialog.getWindow() == null) return false;
+        return dialog.getWindow().getDecorView().getWindowToken() != null;
     }
 
     public static void joinTelegram(Context _context) {

@@ -91,6 +91,10 @@ import java.util.stream.Collectors;
 
 public class MainActivity extends AppCompatActivity implements RomStoreFragment.RomStoreCallToHomeListener, VmsFragment.VmsCallToHomeListener, SoftwareStoreFragment.SoftwareStoreCallToHomeListener {
     private final String TAG = "HomeActivity";
+    private static final String TAG_VMS_FRAGMENT = "vms_fragment";
+    private static final String TAG_ROM_STORE_FRAGMENT = "rom_store_fragment";
+    private static final String TAG_SOFTWARE_STORE_FRAGMENT = "software_store_fragment";
+    private static final String TAG_MONITOR_FRAGMENT = "monitor_fragment";
     private final int SEARCH_ROM_STORE = 0;
     private final int SEARCH_SOFTWARE_STORE = 1;
     private int currentBottomBarSelectedItemId = 0;
@@ -171,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(bindingContent.containerView.getId(), vmsFragment)
+                    .replace(bindingContent.containerView.getId(), vmsFragment, TAG_VMS_FRAGMENT)
                     .commit();
         }
 
@@ -196,6 +200,7 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
         bindingContent.bottomNavigation.setOnItemSelectedListener(item -> {
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            String selectedTag;
 
             int id = item.getItemId();
 
@@ -208,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
 
             if (id == R.id.item_home) {
                 if (!vmsFragment.isAdded()) {
-                    fragmentTransaction.add(bindingContent.containerView.getId(), vmsFragment);
+                    fragmentTransaction.add(bindingContent.containerView.getId(), vmsFragment, TAG_VMS_FRAGMENT);
                 }
 
                 fragmentTransaction.show(vmsFragment);
@@ -225,6 +230,7 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
 
                 if (id == R.id.item_romstore) {
                     selectedFragment = new RomStoreFragment();
+                    selectedTag = TAG_ROM_STORE_FRAGMENT;
                     bindingContent.efabCreate.setVisibility(View.GONE);
                     bindingContent.searchbar.setEnabled(true);
                     bindingContent.searchbar.setHint(getText(R.string.search));
@@ -233,6 +239,7 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
                     binding.rvSearch.setAdapter(adapterRomStore);
                 } else if (id == R.id.item_softwarestore) {
                     selectedFragment = new SoftwareStoreFragment();
+                    selectedTag = TAG_SOFTWARE_STORE_FRAGMENT;
                     bindingContent.efabCreate.setVisibility(View.GONE);
                     bindingContent.searchbar.setEnabled(true);
                     bindingContent.searchbar.setHint(getText(R.string.search));
@@ -241,18 +248,20 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
                     binding.rvSearch.setAdapter(adapterSoftwareStore);
                 } else if (id == R.id.item_monitor) {
                     selectedFragment = new SystemMonitorFragment();
+                    selectedTag = TAG_MONITOR_FRAGMENT;
                     bindingContent.efabCreate.setVisibility(View.GONE);
                     bindingContent.searchbar.setHint(getText(R.string.system_monitor));
                     bindingContent.searchbar.setEnabled(false);
                 } else {
                     selectedFragment = new VmsFragment();
+                    selectedTag = TAG_VMS_FRAGMENT;
                     bindingContent.efabCreate.setVisibility(View.VISIBLE);
                     bindingContent.searchbar.setHint(getText(R.string.home));
                     bindingContent.searchbar.setEnabled(false);
                 }
 
-                if (!isInVmsFragment) fragmentTransaction.remove(currentFragment);
-                fragmentTransaction.add(bindingContent.containerView.getId(), selectedFragment);
+                if (!isInVmsFragment && currentFragment != null) fragmentTransaction.remove(currentFragment);
+                fragmentTransaction.add(bindingContent.containerView.getId(), selectedFragment, selectedTag);
 
                 currentFragment = selectedFragment;
             }
@@ -343,6 +352,15 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
             updateApp();
 
         NotificationUtils.requestPermission(this);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            restoreCurrentFragment();
+        }
     }
 
     @Override
@@ -450,6 +468,24 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
                     break;
             }
         }
+    }
+
+    private void restoreCurrentFragment() {
+        FragmentManager fm = getSupportFragmentManager();
+
+        currentBottomBarSelectedItemId = bindingContent.bottomNavigation.getSelectedItemId();
+
+        if (currentBottomBarSelectedItemId == R.id.item_romstore) {
+            currentFragment = fm.findFragmentByTag(TAG_ROM_STORE_FRAGMENT);
+        } else if (currentBottomBarSelectedItemId == R.id.item_softwarestore) {
+            currentFragment = fm.findFragmentByTag(TAG_SOFTWARE_STORE_FRAGMENT);
+        } else if (currentBottomBarSelectedItemId == R.id.item_monitor) {
+            currentFragment = fm.findFragmentByTag(TAG_MONITOR_FRAGMENT);
+        } else if (currentBottomBarSelectedItemId == R.id.item_home) {
+            currentFragment = fm.findFragmentByTag(TAG_VMS_FRAGMENT);
+        }
+
+        if (currentBottomBarSelectedItemId != R.id.item_home) isInVmsFragment = false;
     }
 
     private void setupDrawer() {

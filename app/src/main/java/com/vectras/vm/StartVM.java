@@ -294,7 +294,10 @@ public class StartVM {
             params.add(MainSettingsManager.getRunQemuWithXterm(activity) ? "stdio" : "vc");
         }
 
-        //params.add("-full-screen");
+        if (VMManager.isNeedLoadMigrate()) {
+            params.add("-incoming");
+            params.add("defer");
+        }
 
         return String.join(" ", params);
     }

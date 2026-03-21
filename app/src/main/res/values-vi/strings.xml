@@ -510,6 +510,14 @@
     <string name="show_recycle_bin">Xem thùng rác</string>
     <string name="an_error_occurred_while_deleting_the_vm">Đã xảy ra lỗi khi xoá máy ảo.</string>
     <string name="the_vm_files_were_retained_because_they_are_still_being_used_elsewhere">Các tệp của máy ảo đã được giữ lại vì chúng vẫn còn được sử dụng ở nơi khác.</string>
+    <string name="pause">Tạm dừng</string>
+    <string name="pause_vm_note">Trạng thái của máy ảo sẽ được lưu lại và tắt để tiết kiệm tài nguyên. Nó sẽ tiếp tục ở trạng thái này ở lần khởi động tiếp theo. Lưu ý rằng nếu bạn không bật đặt dung lượng bộ nhớ tuỳ chỉnh trong cài đặt bạn nên đặt dung lượng bộ nhớ ở tham số Qemu riêng cho máy ảo này, không được sửa máy ảo này hoặc các cài đặt Qemu ở trong cài đặt của Vectras VM có thể ảnh hưởng đến máy ảo này cho đến lần khởi động tiếp theo. Bất kỳ thay đổi nào cũng có thể khiến việc tải trạng thái máy ảo thất bại.</string>
+    <string name="pausing_vm_note">Đang tạm dừng máy ảo…\nĐừng rời khỏi đây.</string>
+    <string name="resuming">Đang tiếp tục…</string>
+    <string name="vm_resume_error_note">Đã xảy ra sự cố khi tải trạng thái máy ảo đã tạm dừng trước đó để tiếp tục dùng. Nếu bạn đã chỉnh sửa máy ảo này hoặc các cài đặt Qemu trong cài đặt của Vectras VM trước khi khởi động, hãy kiểm tra sửa chúng giống như lúc lần cuối cùng máy ảo này được bật trước đó. Bạn muốn giữ hay xoá bản lưu trạng thái?</string>
+    <string name="keep_and_continue">Giữ và tiếp tục</string>
+    <string name="remove_and_continue">Xoá và tiếp tục</string>
+    <string name="vm_state_save_failed_note">Đã xảy ra lỗi và không thể lưu lại trạng thái của máy ảo. Hãy thử lại sau.</string>
 
 
     <!--======================TERMUX STRINGS====================-->

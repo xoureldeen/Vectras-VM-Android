@@ -46,6 +46,7 @@ public class MainStartVM {
     public static final Handler handlerForLaunch = new Handler(Looper.getMainLooper());
     public static Runnable tickForLaunch = null;
 
+    public static boolean forceDisableMigrate = false;
     public static String lastVMName = "";
     public static String lastEnv = "";
     public static String lastVMID = "";
@@ -191,7 +192,7 @@ public class MainStartVM {
             return;
         }
 
-        showProgressDialog(context, vmName, thumbnailFile);
+        TextView vmBootNote = showProgressDialog(context, vmName, thumbnailFile);
 
         VMManager.isQemuStopedWithError = false;
 
@@ -230,34 +231,101 @@ public class MainStartVM {
                 if (isStopNow || VMManager.isQemuStopedWithError || FileUtils.isFileExists(Config.getLocalQMPSocketPath())) {
                     handlerForLaunch.removeCallbacks(this);
 
-                    if (context instanceof Activity activity) {
-                        if (!activity.isFinishing() && !activity.isDestroyed()) {
-                            if (progressDialog != null && progressDialog.isShowing()) {
-                                progressDialog.dismiss();
-                            }
-                        }
-                    }
+                    Activity activity = context instanceof Activity ? (Activity) context : null;
 
                     if (!isStopNow && !VMManager.isQemuStopedWithError) {
-                        if (MainSettingsManager.getVmUi(context).equals("VNC")) {
-                            if (MainSettingsManager.getVncExternal(context)) {
-                                Config.currentVNCServervmID = finalvmID;
-                                DialogUtils.oneDialog(context,
-                                        context.getString(R.string.vnc_server),
-                                        context.getString(R.string.running_vm_with_vnc_server_content) + " " + (Integer.parseInt(MainSettingsManager.getVncExternalDisplay(context)) + 5900) + ".",
-                                        R.drawable.cast_24px
-                                );
+                        new Thread(() -> {
+                            if (!forceDisableMigrate && VMManager.isNeedLoadMigrate()) {
+                                if (activity != null) {
+                                    activity.runOnUiThread(() -> {
+                                        if (vmBootNote != null ) vmBootNote.setText(activity.getString(R.string.resuming));
+                                    });
+                                }
+                                String loadMigrateResponse = VMManager.loadMigrate();
+                                Log.d(TAG, "loadMigrateResponse: " + loadMigrateResponse);
+
+                                Boolean[] result = VMManager.getMigrateStatus();
+
+                                while (!result[0] && !result[1]) {
+                                    try {
+                                        Thread.sleep(1000);
+                                    } catch (Exception ignored) {
+
+                                    }
+
+                                    result = VMManager.getMigrateStatus();
+                                }
+
+                                if (result[0]) {
+                                    VMManager.deleteMigrate();
+                                } else {
+                                    VMManager.shutdownCurrentVM();
+                                    assert activity != null;
+                                    activity.runOnUiThread(() -> {
+                                        if (DialogUtils.isSafeDismiss(activity, progressDialog)) progressDialog.dismiss();
+
+                                        DialogUtils.threeDialog(
+                                                activity,
+                                                activity.getString(R.string.oops),
+                                                activity.getString(R.string.vm_resume_error_note),
+                                                activity.getString(R.string.keep_and_continue),
+                                                activity.getString(R.string.remove_and_continue),
+                                                activity.getString(R.string.close),
+                                                true,
+                                                R.drawable.error_96px,
+                                                true,
+                                                () -> {
+                                                    forceDisableMigrate = true;
+                                                    startNow(context, vmName, env.replace("-incoming defer", ""), vmID, thumbnailFile);
+                                                },
+                                                () -> {
+                                                    VMManager.deleteMigrate();
+                                                    startNow(context, vmName, env.replace("-incoming defer", ""), vmID, thumbnailFile);
+                                                },
+                                                null,
+                                                null
+                                        );
+                                    });
+
+                                    return;
+                                }
                             } else {
-                                MainVNCActivity.started = true;
-                                context.startActivity(new Intent(context, MainVNCActivity.class));
+                                forceDisableMigrate = false;
                             }
+
+                            VMManager.resumeCurrentVM();
+
+                            if (MainSettingsManager.getVmUi(context).equals("VNC")) {
+                                if (MainSettingsManager.getVncExternal(context)) {
+                                    Config.currentVNCServervmID = finalvmID;
+                                    if (activity != null) {
+                                        activity.runOnUiThread(() -> DialogUtils.oneDialog(context,
+                                                context.getString(R.string.vnc_server),
+                                                context.getString(R.string.running_vm_with_vnc_server_content) + " " + (Integer.parseInt(MainSettingsManager.getVncExternalDisplay(context)) + 5900) + ".",
+                                                R.drawable.cast_24px
+                                        ));
+                                    }
+                                } else {
+                                    MainVNCActivity.started = true;
+                                    context.startActivity(new Intent(context, MainVNCActivity.class));
+                                }
 //                    } else if (MainSettingsManager.getVmUi(activity).equals("SPICE")) {
 //                        //This feature is not available yet.
-                        } else if (MainSettingsManager.getVmUi(context).equals("X11") && !DisplaySystem.isUseBuiltInX11()) {
-                            DisplaySystem.launch(context);
-                        }
+                            } else if (MainSettingsManager.getVmUi(context).equals("X11") && !DisplaySystem.isUseBuiltInX11()) {
+                                DisplaySystem.launch(context);
+                            }
 
-                        Log.i(TAG, "Virtual machine running.");
+                            Log.i(TAG, "Virtual machine running.");
+
+                            if (activity != null) {
+                                activity.runOnUiThread(() -> {
+                                    if (DialogUtils.isSafeDismiss(activity, progressDialog)) progressDialog.dismiss();
+                                });
+                            }
+                        }).start();
+                    } else {
+                        assert activity != null;
+                        if (DialogUtils.isSafeDismiss(activity, progressDialog)) progressDialog.dismiss();
                     }
 
                     skipIDEwithARM64DialogInStartVM = false;
@@ -292,9 +360,10 @@ public class MainStartVM {
         setDefault();
     }
 
-    public static void showProgressDialog(Context context, String _content, String thumbnailFile) {
+    public static TextView showProgressDialog(Context context, String _content, String thumbnailFile) {
         View progressView = LayoutInflater.from(context).inflate(R.layout.dialog_start_vm, null);
         TextView tvVMName = progressView.findViewById(R.id.vm_name);
+        TextView vmBootNote = progressView.findViewById(R.id.vm_boot_note);
         tvVMName.setText(_content);
 
         if (thumbnailFile != null) {
@@ -327,6 +396,8 @@ public class MainStartVM {
                 .create();
 
         progressDialog.show();
+
+        return vmBootNote;
     }
 
     public static void setDefault() {

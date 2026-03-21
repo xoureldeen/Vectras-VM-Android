@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 
 import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.material.color.MaterialColors;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.vectras.vm.R;
 import com.vectras.vm.databinding.DialogProgressStyleBinding;
@@ -17,6 +18,7 @@ public class ProgressDialog {
     private AlertDialog dialog;
     private DialogProgressStyleBinding binding;
     private String text;
+    private Boolean isFixTextColor;
     private Integer progress;
     private Integer max;
     private Boolean isIndeterminate;
@@ -47,6 +49,8 @@ public class ProgressDialog {
 
             if (isIndeterminate != null) binding.progressBar.setIndeterminate(isIndeterminate);
 
+            if (isFixTextColor) binding.progressText.setTextColor(MaterialColors.getColor(binding.progressText, com.google.android.material.R.attr.colorOnSurface));
+
             dialog = new MaterialAlertDialogBuilder(context, R.style.CenteredDialogTheme)
                     .setView(binding.getRoot())
                     .setCancelable(false)
@@ -58,6 +62,10 @@ public class ProgressDialog {
     public void setText(String text) {
         this.text = text;
         if (binding != null) binding.progressText.setText(text);
+    }
+
+    public void setFixTextColor(boolean isFix) {
+        isFixTextColor = isFix;
     }
 
     public void setProgress(int progress) {
