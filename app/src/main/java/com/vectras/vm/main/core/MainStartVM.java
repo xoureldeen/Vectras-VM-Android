@@ -312,7 +312,8 @@ public class MainStartVM {
 //                    } else if (MainSettingsManager.getVmUi(activity).equals("SPICE")) {
 //                        //This feature is not available yet.
                             } else if (MainSettingsManager.getVmUi(context).equals("X11") && !DisplaySystem.isUseBuiltInX11()) {
-                                DisplaySystem.launch(context);
+                                assert activity != null;
+                                activity.runOnUiThread(() -> DisplaySystem.launch(context));
                             }
 
                             Log.i(TAG, "Virtual machine running.");
