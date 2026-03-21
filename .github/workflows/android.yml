@@ -22,6 +22,9 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
+    - name: Create google-services.json
+      run: echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > app/google-services.json
+
     - name: Send notification to Telegram
       run: |
         if [[ -n "${{ secrets.TELEGRAM_BOT_TOKEN }}" ]]; then
