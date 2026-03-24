@@ -80,20 +80,25 @@ We publish a **new beta release after every commit** — so you can always test 
 QEMU 9.2.4 - 3dfx (only for Vectras VM 3.5.0):
 - [For Android ARM (64-bit)](https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/3.5.0/base-nosve-vectras-vm-arm64-v8a.tar.gz)
 - [For Android x86 (64-bit)](https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/3.5.0/base-vectras-vm-x86_64.tar.gz)
+- [See them at the Internet Archive](https://archive.org/details/qemu-9-2-4-3dfx-for-vectras-vm-nbab)
 
 QEMU 9.2.2 - 3dfx (recommended and for Vectras VM 3.5.1+):
 - [For Android ARM (64-bit)](https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/3.5.1/base-genegic-nosve-vectras-vm-arm64-v8a.tar.gz)
 - [For Android ARM (32-bit)](https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/3.5.4/base-vectras-vm-armeabi-v7a.tar.gz)
 - [For Android x86 (64-bit)](https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/3.5.1/base-generic-vectras-vm-x86_64.tar.gz)
 - [For Android x86 (32-bit)](https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/3.5.4/base-vectras-vm-x86.tar.gz)
+- [See them at the Internet Archive (64-bit)](https://archive.org/details/vectras-vm-x86_64.tar_202603nbab)
+- [See them at the Internet Archive (32-bit)](https://archive.org/details/qemu-9-2-2-for-vectras-vm-nbab)
 
 QEMU 9.2.2 - 3dfx (for Vectras VM 3.2.9 - 3.4.9):
 - [For Android ARM (64-bit)](https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/3.2.9/base-vectras-vm-arm64-v8a.tar.gz)
 - [For Android x86 (64-bit)](https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/3.2.9/base-vectras-vm-x86_64.tar.gz)
+- [See them at the Internet Archive](https://archive.org/details/qemu-9-2-2-3dfx-for-vectras-vm-nbab)
 
 QEMU 8.2.0 - 3dfx (only for Vectras VM 2.9.5):
 - [For Android ARM (64-bit)](https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/3.2.9/vectras-vm-arm64-v8a.tar.gz)
 - [For Android x86 (64-bit)](https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/3.2.9/vectras-vm-x86_64.tar.gz)
+- [See them at the Internet Archive](https://archive.org/details/vectras-vm-x86_64.tar_202603nbab)
 
 ### 💽 3Dfx Wrappers
 
