@@ -50,6 +50,7 @@ import com.vectras.vm.WebViewActivity;
 import com.vectras.vm.databinding.ActivityMainBinding;
 import com.vectras.vm.databinding.ActivityMainContentBinding;
 import com.vectras.vm.databinding.UpdateBottomDialogLayoutBinding;
+import com.vectras.vm.fcm.FCMManager;
 import com.vectras.vm.main.romstore.RomStoreHomeAdpater;
 import com.vectras.vm.main.softwarestore.SoftwareStoreFragment;
 import com.vectras.vm.main.softwarestore.SoftwareStoreHomeAdapter;
@@ -352,6 +353,8 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
             updateApp();
 
         NotificationUtils.requestPermission(this);
+
+        FCMManager.subscribe();
     }
 
     @Override

@@ -11,8 +11,6 @@ import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.utils.TextUtils;
 
 public class RamInfo {
-    public static Activity activity;
-
     public static int safeLongToInt(long l) {
         if (l < Integer.MIN_VALUE || l > Integer.MAX_VALUE) {
             throw new IllegalArgumentException(l + " cannot be cast to int without changing its value.");
@@ -31,6 +29,11 @@ public class RamInfo {
         int totalRamInt = safeLongToInt(totalMem);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
         if (prefs.getBoolean("customMemory", false) && TextUtils.isNumberOnly(prefs.getString("memory", String.valueOf(256)))) {
+            if (Long.parseLong(prefs.getString("memory", String.valueOf(256))) > totalMem) {
+                prefs.edit().putInt("memory", totalRamInt / 2).apply();
+                return totalRamInt / 2;
+            }
+
             return Integer.parseInt(prefs.getString("memory", String.valueOf(256)));
         } else {
             return freeRamInt - 100;

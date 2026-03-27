@@ -1,6 +1,8 @@
 package com.vectras.vm;
 
 import android.app.Activity;
+import android.content.Context;
+import android.util.Log;
 
 import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
@@ -8,6 +10,7 @@ import com.vectras.qemu.utils.RamInfo;
 import com.vectras.vm.creator.VMCreatorSelector;
 import com.vectras.vm.main.vms.DataMainRoms;
 import com.vectras.vm.utils.FileUtils;
+import com.vectras.vm.utils.TextUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -20,6 +23,21 @@ public class StartVM {
     public static String cdrompath;
 
     public static String env(Activity activity, DataMainRoms vmData) {
+        if (VMManager.isNeedLoadMigrate() && FileUtils.isFileExists(AppConfig.vmFolder + Config.vmID + "/snapshot.sh")) {
+            String snapshotParams = FileUtils.readAFile(AppConfig.vmFolder + Config.vmID + "/snapshot.sh").replace("\n", "");
+            if (VMManager.isthiscommandsafe(snapshotParams, activity)) {
+                snapshotParams = removeQemuSystem(snapshotParams);
+                snapshotParams = removeQmpParams(snapshotParams);
+                snapshotParams = removeDisplayParams(snapshotParams);
+                snapshotParams = getQmpParams() + " " + snapshotParams;
+                snapshotParams = getQemuSystem(activity) + " " + snapshotParams;
+                snapshotParams += " " + getDisplayParams(activity);
+                if (!snapshotParams.contains("-incoming defer")) snapshotParams += " -incoming defer";
+                Log.d("StartVM.env", snapshotParams);
+                return snapshotParams;
+            }
+        }
+
         String extraParams = vmData.itemExtra;
 
         String bootFromParams = Objects.requireNonNull(VMCreatorSelector.getBootFrom(activity, vmData.bootFrom).get("value")).toString();
@@ -56,8 +74,7 @@ public class StartVM {
             else if (MainSettingsManager.getArch(activity).equals("PPC"))
                 params.add("qemu-system-ppc");
 
-            params.add("-qmp");
-            params.add("unix:" + Config.getLocalQMPSocketPath() + ",server,nowait");
+            params.add(getQmpParams());
 
             String ifType;
             ifType= MainSettingsManager.getIfType(activity);
@@ -252,47 +269,10 @@ public class StartVM {
         params.add(finalextra);
 
         if (isQuickRun) {
-            params.add("-qmp");
-            params.add("unix:" + Config.getLocalQMPSocketPath() + ",server,nowait");
+            params.add(getQmpParams());
         }
 
-        if (MainSettingsManager.getVmUi(activity).equals("VNC")) {
-
-            if (!MainSettingsManager.getVncExternalPassword(activity).isEmpty()) {
-                params.add("-object ");
-                params.add("secret,id=vncpass,data=\"" + MainSettingsManager.getVncExternalPassword(activity) + "\"");
-            }
-
-            String vncStr = "-vnc ";
-            params.add(vncStr);
-            // Allow connections only from localhost using localsocket without a password
-            if (MainSettingsManager.getVncExternal(activity)) {
-
-                String vncParams = Config.defaultVNCHost + ":" + Config.defaultVNCPort;
-
-                if (!MainSettingsManager.getVncExternalPassword(activity).isEmpty()) vncParams += ",password-secret=vncpass";
-
-                params.add(vncParams);
-            } else {
-                String vncSocketParams = "unix:";
-                vncSocketParams += Config.getLocalVNCSocketPath();
-                params.add(vncSocketParams);
-            }
-
-            //if (!MainSettingsManager.getArch(activity).equals("PPC") || !MainSettingsManager.getArch(activity).equals("ARM64")) {
-            params.add("-monitor");
-            params.add("vc");
-            //}
-        } else if (MainSettingsManager.getVmUi(activity).equals("SPICE")) {
-            String spiceStr = "-spice ";
-            spiceStr += "port=6999,disable-ticketing=on";
-            params.add(spiceStr);
-        } else if (MainSettingsManager.getVmUi(activity).equals("X11")) {
-            params.add("-display");
-            params.add(MainSettingsManager.getUseSdl(activity) ? "sdl" : "gtk" + ",gl=on");
-            params.add("-monitor");
-            params.add(MainSettingsManager.getRunQemuWithXterm(activity) ? "stdio" : "vc");
-        }
+        params.add(getDisplayParams(activity));
 
         if (VMManager.isNeedLoadMigrate()) {
             params.add("-incoming");
@@ -300,6 +280,79 @@ public class StartVM {
         }
 
         return String.join(" ", params);
+    }
+
+    public static String getQemuSystem(Context context) {
+        if (MainSettingsManager.getArch(context).equals("I386"))
+            return "qemu-system-i386";
+        else if (MainSettingsManager.getArch(context).equals("X86_64"))
+            return "qemu-system-x86_64";
+        else if (MainSettingsManager.getArch(context).equals("ARM64"))
+            return "qemu-system-aarch64";
+        else if (MainSettingsManager.getArch(context).equals("PPC"))
+            return "qemu-system-ppc";
+
+        return "qemu-system-x86_64";
+    }
+
+    public static String removeQemuSystem(String params) {
+        return params.replaceAll("^qemu-system-\\S+\\s*", "");
+    }
+
+
+    public static String getQmpParams() {
+        return "-qmp unix:" + Config.getLocalQMPSocketPath() + ",server,nowait";
+    }
+    public static String removeQmpParams(String params) {
+        return params.replaceAll("(?<=\\s|^)-qmp\\s+(\"[^\"]+\"|\\S+)", "");
+    }
+
+
+    public static String getDisplayParams(Context context) {
+        String params = "";
+
+        if (MainSettingsManager.getVmUi(context).equals("VNC")) {
+            if (!MainSettingsManager.getVncExternalPassword(context).isEmpty()) {
+                params += "-object secret,id=vncpass,data=\"" + MainSettingsManager.getVncExternalPassword(context) + "\"";
+            }
+
+            params += (params.isEmpty() ? "" : " ") + "-vnc ";
+            // Allow connections only from localhost using localsocket without a password
+            if (MainSettingsManager.getVncExternal(context)) {
+                String vncParams = Config.defaultVNCHost + ":" + Config.defaultVNCPort;
+
+                if (!MainSettingsManager.getVncExternalPassword(context).isEmpty())
+                    vncParams += ",password-secret=vncpass";
+
+                params += vncParams;
+            } else {
+                params += "unix:" + Config.getLocalVNCSocketPath();
+            }
+
+            params += " -monitor vc";
+        } else if (MainSettingsManager.getVmUi(context).equals("SPICE")) {
+            params += "-spice port=6999,disable-ticketing=on";
+        } else if (MainSettingsManager.getVmUi(context).equals("X11")) {
+            params += "-display ";
+            params += MainSettingsManager.getUseSdl(context) ? "sdl" : "gtk" + ",gl=on";
+            params += " -monitor ";
+            params += MainSettingsManager.getRunQemuWithXterm(context) ? "stdio" : "vc";
+        }
+
+        return params;
+    }
+
+    public static String removeDisplayParams(String params) {
+        return params
+                .replaceAll("(?<=\\s|^)-object\\s+secret,id=vncpass[^\\s]*", "")
+                .replaceAll("(?<=\\s|^)-vnc\\b.*?(?=\\s+-monitor\\s+\\S+|$)", "")
+                .replaceAll("(?<=\\s|^)-vnc\\b[^\\s]*", "")
+                .replaceAll("(?<=\\s|^)-monitor\\s+\\S+", "")
+                .replaceAll("(?<=\\s|^)-display\\b.*?(?=\\s+-monitor\\s+\\S+|$)", "")
+                .replaceAll("(?<=\\s|^)-display\\s+\\S+", "")
+                .replaceAll("(?<=\\s|^)-spice\\s+\\S+", "")
+                .replaceAll("\\s{2,}", " ")
+                .trim();
     }
 
 }

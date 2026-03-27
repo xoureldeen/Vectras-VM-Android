@@ -39,6 +39,7 @@ import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.ImageUtils;
+import com.vectras.vm.utils.JSONUtils;
 import com.vectras.vm.utils.PackageUtils;
 import com.vectras.vm.utils.UIUtils;
 
@@ -989,6 +990,11 @@ public class VMCreatorActivity extends AppCompatActivity {
                     }
                 }
             } else {
+                if (!JSONUtils.isValidFromFile(AppConfig.vmFolder + vmID + "/rom-data.json")) {
+                    DialogUtils.oneDialog(this, getResources().getString(R.string.oops), getResources().getString(R.string.error_CR_CVBI4), getResources().getString(R.string.ok), true, R.drawable.warning_48px, true, null, null);
+                    return;
+                }
+
                 loadConfig(new Gson().fromJson(FileUtils.readFromFile(this, new File(AppConfig.vmFolder + vmID + "/rom-data.json")), DataMainRoms.class));
                 JSONObject jObj = new JSONObject(FileUtils.readFromFile(this, new File(AppConfig.vmFolder + vmID + "/rom-data.json")));
 
@@ -1028,7 +1034,11 @@ public class VMCreatorActivity extends AppCompatActivity {
         }
 
         if (FileUtils.isFileExists(AppConfig.vmFolder + vmID + "/cqcm.json")) {
-            FileUtils.writeToFile(AppConfig.vmFolder + vmID, "cqcm.json", FileUtils.readAFile(AppConfig.vmFolder + vmID + "/cqcm.json").replace("OhnoIjustrealizeditsmidnightandIstillhavetodothis", AppConfig.vmFolder + current.vmID + "/"));
+            FileUtils.writeToFile(AppConfig.vmFolder + vmID, "cqcm.json", FileUtils.readAFile(AppConfig.vmFolder + vmID + "/cqcm.json").replace("OhnoIjustrealizeditsmidnightandIstillhavetodothis", AppConfig.vmFolder + vmID + "/"));
+        }
+
+        if (FileUtils.isFileExists(AppConfig.vmFolder + vmID + "/snapshot.sh")) {
+            FileUtils.writeToFile(AppConfig.vmFolder + vmID, "snapshot.sh", FileUtils.readAFile(AppConfig.vmFolder + vmID + "/snapshot.sh").replace("OhnoIjustrealizeditsmidnightandIstillhavetodothis", AppConfig.vmFolder + vmID + "/"));
         }
     }
 

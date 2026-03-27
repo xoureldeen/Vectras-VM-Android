@@ -918,9 +918,15 @@ public class VMManager {
                                 progressDialog.show();
                                 new Thread(() -> {
                                     pauseCurrentVM();
-                                    if (!startMigrate().contains("terminal does not allow synchronous migration, continuing detached")) {
+
+                                    String migrateResult = startMigrate();
+
+                                    if (migrateResult == null || !migrateResult.contains("terminal does not allow synchronous migration, continuing detached")) {
                                         resumeCurrentVM();
-                                        _activity.runOnUiThread(progressDialog::reset);
+                                        _activity.runOnUiThread(() -> {
+                                            DialogUtils.oopsDialog(_activity, _activity.getString(R.string.vm_state_save_failed_note));
+                                            progressDialog.reset();
+                                        });
                                         Log.e(TAG, "Pause VM failed.");
                                         return;
                                     }

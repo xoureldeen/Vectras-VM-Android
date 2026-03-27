@@ -3,10 +3,10 @@ apply plugin: 'maven-publish'
 
 android {
     namespace "com.termux.view"
-    compileSdkVersion 34
+    compileSdkVersion 36
 
     dependencies {
-        implementation "androidx.annotation:annotation:1.9.1"
+        implementation libs.androidx.annotation
         api project(":terminal-emulator")
     }
 
@@ -36,7 +36,7 @@ android {
 }
 
 dependencies {
-    testImplementation 'junit:junit:4.13.2'
+    testImplementation libs.junit
 }
 
 publishing {

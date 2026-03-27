@@ -462,11 +462,10 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                 dialog.dismiss();
             });
 
-            if (!isFinishing()
-                    && !isDestroyed()
-                    && getWindow() != null
-                    && getWindow().getDecorView().isShown()) {
+            try {
                 dialog.show();
+            } catch (WindowManager.BadTokenException e) {
+                e.printStackTrace();
             }
         });
 

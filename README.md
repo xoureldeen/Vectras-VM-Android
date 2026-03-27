@@ -87,7 +87,7 @@ QEMU 9.2.2 - 3dfx (recommended and for Vectras VM 3.5.1+):
 - [For Android ARM (32-bit)](https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/3.5.4/base-vectras-vm-armeabi-v7a.tar.gz)
 - [For Android x86 (64-bit)](https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/3.5.1/base-generic-vectras-vm-x86_64.tar.gz)
 - [For Android x86 (32-bit)](https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/3.5.4/base-vectras-vm-x86.tar.gz)
-- [See them at the Internet Archive (64-bit)](https://archive.org/details/vectras-vm-x86_64.tar_202603nbab)
+- [See them at the Internet Archive (64-bit)](https://archive.org/details/qemu-9-2-2-3dfx-for-vectras-vm-nbab)
 - [See them at the Internet Archive (32-bit)](https://archive.org/details/qemu-9-2-2-for-vectras-vm-nbab)
 
 QEMU 9.2.2 - 3dfx (for Vectras VM 3.2.9 - 3.4.9):

@@ -7,6 +7,10 @@ public class TextUtils {
         return content.matches("\\d+");
     }
 
+    public static boolean isUnique(String content, String text) {
+        return content.contains(text) && (content.indexOf(text) == content.lastIndexOf(text));
+    }
+
     public static String randomALetter() {
         String addAdb;
         Random random = new Random();

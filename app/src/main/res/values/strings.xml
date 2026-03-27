@@ -206,6 +206,7 @@
     <string name="error_CR_CVBI2">An error has occurred. Extraction was successful but the cvbi file does not contain information about this ROM so some default settings will be used. Error code: CR_CVBI2.</string>
     <string name="from">From</string>
     <string name="error_CR_CVBI3">An error has occurred and cannot continue. The extraction was successful but the cvbi file does not contain information for this ROM and does not contain any ROM files. Error code: CR_CVBI3.</string>
+    <string name="error_CR_CVBI4">An error has occurred. The ROM information is corrupted and some default settings have been applied. Error code: CR_CVBI4.</string>
     <string name="clean_up">Clean up</string>
     <string name="clean_up_content">ROMs, files and folders that are no longer in use will be deleted.</string>
     <string name="go_to_rom_store">Go to ROM store</string>
@@ -520,13 +521,16 @@
     <string name="an_error_occurred_while_deleting_the_vm">An error occurred while deleting the virtual machine.</string>
     <string name="the_vm_files_were_retained_because_they_are_still_being_used_elsewhere">The virtual machine\'s files were retained because they are still being used elsewhere.</string>
     <string name="pause">Pause</string>
-    <string name="pause_vm_note">The virtual machine\'s state will be saved and shut down to conserve resources. It will remain in this state on the next boot. Note that if you haven\'t enabled custom memory allocation in your settings, you should set the memory allocation in the Qemu parameter specifically for this virtual machine. Do not modify this virtual machine or its Qemu settings within the Vectras VM settings, as this may affect the virtual machine until the next boot. Any changes may cause the virtual machine state to fail to load.</string>
+    <string name="pause_vm_note">The virtual machine\'s state will be saved and shut down to conserve resources. It will remain in this state on the next boot. Please do not change, move, or delete files used with this virtual machine.</string>
     <string name="pausing_vm_note">VM is pausing…\nDon\'t leave here.</string>
     <string name="resuming">Resuming…</string>
     <string name="vm_resume_error_note">An issue occurred while resuming loading of previously paused virtual machine state. If you modified this virtual machine or Qemu settings in the Vectras VM setup before booting, please check that you changed them to the same settings as the last time this virtual machine was powered on. Do you want to keep or remove the saved state?</string>
     <string name="keep_and_continue">Keep and continue</string>
     <string name="remove_and_continue">Remove and continue</string>
     <string name="vm_state_save_failed_note">An error occurred and the virtual machine\'s state could not be saved. Please try again later.</string>
+    <string name="this_folder_cannot_be_opened">This folder cannot be opened.</string>
+    <string name="new_notification">New notification</string>
+    <string name="tap_to_view">Tap to view.</string>
 
 
     <!--======================TERMUX STRINGS====================-->

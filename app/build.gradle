@@ -12,8 +12,8 @@ android {
         applicationId "com.vectras.vm"
         minSdk minApi
         targetSdk targetApi
-        versionCode 93
-        versionName "3.8.9"
+        versionCode 94
+        versionName "3.9.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -78,48 +78,41 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.appcompat:appcompat:1.7.1'
-    implementation 'com.google.android.material:material:1.14.0-alpha10'
-    implementation "androidx.annotation:annotation:1.9.1"
-    implementation "androidx.core:core-ktx:1.18.0"
-    implementation "androidx.drawerlayout:drawerlayout:1.2.0"
-    implementation "androidx.preference:preference-ktx:1.2.1"
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.2.0"
-    implementation "androidx.viewpager:viewpager:1.1.0"
-    implementation platform('com.google.firebase:firebase-bom:34.11.0')
-    implementation 'com.google.firebase:firebase-analytics'
-//    implementation("com.google.firebase:firebase-auth")
-//    implementation("com.google.firebase:firebase-database")
-//    implementation 'com.google.firebase:firebase-storage'
-//    implementation("com.google.android.gms:play-services-auth:21.4.0")
-    implementation("com.google.firebase:firebase-crashlytics")
-//    implementation 'com.google.android.gms:play-services-ads:24.6.0'
-    implementation 'com.google.firebase:firebase-messaging:25.0.1'
-    implementation 'com.google.guava:guava:33.5.0-jre'
-    implementation 'com.google.code.gson:gson:2.13.2'
-    implementation "androidx.window:window:1.5.1"
-    implementation "commons-io:commons-io:2.21.0"
-    implementation 'com.airbnb.android:lottie:6.7.1'
-    implementation 'org.apache.commons:commons-compress:1.28.0'
-//    implementation 'com.google.firebase:firebase-crashlytics-buildtools:3.0.6'
-    implementation 'androidx.activity:activity-ktx:1.13.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
-    implementation 'androidx.preference:preference-ktx:1.2.1'
-    implementation "androidx.documentfile:documentfile:1.1.0"
-    implementation 'androidx.core:core-ktx:1.18.0'
+    implementation libs.androidx.appcompat
+    implementation libs.material
+    implementation libs.androidx.annotation
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.drawerlayout
+    implementation libs.androidx.preference.ktx
+    implementation libs.androidx.swiperefreshlayout
+    implementation libs.androidx.viewpager
+    implementation platform(libs.firebase.bom)
+    implementation libs.firebase.analytics
+    implementation libs.firebase.messaging
+    implementation libs.guava
+    implementation libs.gson
+    implementation libs.androidx.window
+    implementation libs.commons.io
+    implementation libs.lottie
+    implementation libs.commons.compress
+    implementation libs.androidx.activity.ktx
+    implementation libs.androidx.constraintlayout
+    implementation libs.androidx.preference.ktx
+    implementation libs.androidx.documentfile
+    implementation libs.androidx.core.ktx
     compileOnly project(':shell-loader:stub')
     implementation project(":terminal-view")
     
     // Retrofit
-    implementation 'com.squareup.retrofit2:retrofit:3.0.0'
-    implementation 'com.squareup.retrofit2:converter-gson:3.0.0'
+    implementation libs.retrofit
+    implementation libs.converter.gson
 
     // Glide
-    implementation 'com.github.bumptech.glide:glide:5.0.5'
-    annotationProcessor 'com.github.bumptech.glide:compiler:5.0.5'
+    implementation libs.glide
+    annotationProcessor libs.compiler
     
     // Test dependencies
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.3.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.7.0'
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.junit
+    androidTestImplementation libs.androidx.espresso.core
 }

@@ -92,7 +92,7 @@ public class TarUtils {
         File canonicalDestDir = tarTestDir.getCanonicalFile();
 
         long MAX_FILE_SIZE = 200L * 1024 * 1024;   // 200 MB
-        long MAX_TOTAL_SIZE = 2000L * 1024 * 1024;   // 2000 MB
+        long MAX_TOTAL_SIZE = 4000L * 1024 * 1024;   // 4000 MB
         int  MAX_FILE_COUNT = 10_000;
 
         long totalSize = 0;

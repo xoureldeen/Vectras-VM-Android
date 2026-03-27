@@ -38,7 +38,7 @@
         android:gravity="center_vertical|end"
         android:padding="16dp">
         <com.google.android.material.button.MaterialButton
-            style="@style/Widget.Material3Expressive.Button.OutlinedButton"
+            style="@style/Widget.Material3Expressive.Button.TonalButton"
             android:id="@+id/btn_close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
