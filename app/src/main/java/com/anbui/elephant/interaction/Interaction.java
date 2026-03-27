@@ -2,6 +2,8 @@ package com.anbui.elephant.interaction;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.preference.PreferenceManager;
 
@@ -23,6 +25,9 @@ public class Interaction {
     private final String contentId;
     private DataInteraction dataInteraction;
     private final SharedPreferences sharedPreferences;
+    public boolean isRequesting;
+    public boolean isAllowAction;
+    private Runnable waitingAction;
 
     public interface InteractionCallback {
         void onResult(boolean isSuccess, int views, int likes);
@@ -44,19 +49,32 @@ public class Interaction {
             return;
         }
 
-        get(((isSuccess, views, likes) -> view(callback)));
+        get(((isSuccess, views, likes) -> {
+            view(callback);
+            isAllowAction = true;
+        }));
 
         LogPrinter.print(TAG, "Initialized.");
     }
 
     public void get(InteractionCallback callback) {
+        if (isRequesting) {
+            LogPrinter.print(TAG, "Busy, there's another connection in view.");
+            return;
+        }
+
         if (!isReady()) {
             callback.onResult(false, 1, 0);
             LogPrinter.print(TAG, "Not ready in get.");
             return;
         }
 
+        isRequesting = true;
+
         Retrofit2Utils.get(GET_URL, ((isSuccess, body, status, error) -> {
+            isRequesting = false;
+            isAllowAction = true;
+
             if (isSuccess && JSONUtils.isValidFromString(body)) {
                 dataInteraction = new Gson().fromJson(body, DataInteraction.class);
                 callback.onResult(true, dataInteraction.views, dataInteraction.likes);
@@ -71,6 +89,12 @@ public class Interaction {
     private boolean isTryingView;
 
     public void view(InteractionCallback callback) {
+        if (isRequesting || !isAllowAction) {
+            if (isAllowAction) waitingAction = () -> view(callback);
+            LogPrinter.print(TAG, "Busy, there's another connection, or the action was blocked due to the action being performed too quickly in view.");
+            return;
+        }
+
         if (isViewed()) {
             callback.onResult(true, dataInteraction != null ? dataInteraction.views : 1, dataInteraction != null ? dataInteraction.likes : 0);
             LogPrinter.print(TAG, "Viewed.");
@@ -95,7 +119,11 @@ public class Interaction {
                 + "\"token\":" + "\"" + dataInteraction.token + "\""
                 + "}";
 
+        isRequesting = true;
+
         Retrofit2Utils.post(VIEW_URL, jsonRaw, ((isSuccess, body, status, error) -> {
+            isRequesting = false;
+
             if (isNeedRetry(status) && !isTryingView) {
                 isTryingView = true;
                 get((success, views, likes) -> view(callback));
@@ -115,12 +143,26 @@ public class Interaction {
                 callback.onResult(false, 1, 0);
                 LogPrinter.print(TAG, "View unsucceed.");
             }
+
+            if (waitingAction != null) {
+                waitingAction.run();
+                waitingAction = null;
+            }
+
+            isAllowAction = false;
+            new Handler(Looper.getMainLooper()).postDelayed(() -> isAllowAction = true, 1000);
         }));
     }
 
     private boolean isTryingLike;
 
     public void like(InteractionCallback callback) {
+        if (isRequesting || !isAllowAction) {
+            if (isAllowAction) waitingAction = () -> like(callback);
+            LogPrinter.print(TAG, "Busy, there's another connection, or the action was blocked due to the action being performed too quickly in like.");
+            return;
+        }
+
         if (!isReadyToPost() && !isTryingLike) {
             isTryingLike = true;
             get((success, views, likes) -> like(callback));
@@ -140,7 +182,11 @@ public class Interaction {
                 + "\"token\":" + "\"" + dataInteraction.token + "\""
                 + "}";
 
+        isRequesting = true;
+
         Retrofit2Utils.post(LIKE_URL, jsonRaw, ((isSuccess, body, status, error) -> {
+            isRequesting = false;
+
             if (isNeedRetry(status) && !isTryingLike) {
                 isTryingLike = true;
                 get((success, views, likes) -> like(callback));
@@ -160,6 +206,14 @@ public class Interaction {
                 callback.onResult(false, 1, 0);
                 LogPrinter.print(TAG, "Like unsucceed.");
             }
+
+            if (waitingAction != null) {
+                waitingAction.run();
+                waitingAction = null;
+            }
+
+            isAllowAction = false;
+            new Handler(Looper.getMainLooper()).postDelayed(() -> isAllowAction = true, 1000);
         }));
     }
 
@@ -172,11 +226,11 @@ public class Interaction {
     }
 
     public int getViewCount() {
-        return dataInteraction.views;
+        return dataInteraction != null ? dataInteraction.views : 1;
     }
 
     public int getLikeCount() {
-        return dataInteraction.likes;
+        return dataInteraction != null ? dataInteraction.likes : (isLiked() ? 1 : 0);
     }
 
     private boolean isReady() {

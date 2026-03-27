@@ -197,6 +197,7 @@
     <string name="error_CR_CVBI2">Đã xảy ra sự cố. Rom này không chứa đầy đủ thông tin và một số cài đặt mặc định đã được áp dụng. Mã lỗi: CR_CVBI2.</string>
     <string name="from">Từ</string>
     <string name="error_CR_CVBI3">Đã xảy ra lỗi và không thể tiếp tục. Rom này không chứa đầy đủ thông tin và cũng không chứa các tệp ổ đĩa. Mã lỗi: CR_CVBI3.</string>
+    <string name="error_CR_CVBI4">Đã xảy ra sự cố. Thông tin của rom này đã bị hỏng và một số cài đặt mặc định đã được áp dụng. Mã lỗi: CR_CVBI4.</string>
     <string name="clean_up">Dọn dẹp</string>
     <string name="clean_up_content">Chà có chút bừa bộn nhỉ? Các rom, tệp và thư mục không còn được sử dụng sẽ bị xoá.</string>
     <string name="go_to_rom_store">Đến cửa hàng rom</string>
@@ -511,13 +512,16 @@
     <string name="an_error_occurred_while_deleting_the_vm">Đã xảy ra lỗi khi xoá máy ảo.</string>
     <string name="the_vm_files_were_retained_because_they_are_still_being_used_elsewhere">Các tệp của máy ảo đã được giữ lại vì chúng vẫn còn được sử dụng ở nơi khác.</string>
     <string name="pause">Tạm dừng</string>
-    <string name="pause_vm_note">Trạng thái của máy ảo sẽ được lưu lại và tắt để tiết kiệm tài nguyên. Nó sẽ tiếp tục ở trạng thái này ở lần khởi động tiếp theo. Lưu ý rằng nếu bạn không bật đặt dung lượng bộ nhớ tuỳ chỉnh trong cài đặt bạn nên đặt dung lượng bộ nhớ ở tham số Qemu riêng cho máy ảo này, không được sửa máy ảo này hoặc các cài đặt Qemu ở trong cài đặt của Vectras VM có thể ảnh hưởng đến máy ảo này cho đến lần khởi động tiếp theo. Bất kỳ thay đổi nào cũng có thể khiến việc tải trạng thái máy ảo thất bại.</string>
+    <string name="pause_vm_note">Trạng thái của máy ảo sẽ được lưu lại và tắt để tiết kiệm tài nguyên. Nó sẽ tiếp tục ở trạng thái này ở lần khởi động tiếp theo. Vui lòng không thay đổi, di chuyển hoặc xoá các tệp được dùng với máy ảo này cho đến lần khởi động tiếp theo.</string>
     <string name="pausing_vm_note">Đang tạm dừng máy ảo…\nĐừng rời khỏi đây.</string>
     <string name="resuming">Đang tiếp tục…</string>
     <string name="vm_resume_error_note">Đã xảy ra sự cố khi tải trạng thái máy ảo đã tạm dừng trước đó để tiếp tục dùng. Nếu bạn đã chỉnh sửa máy ảo này hoặc các cài đặt Qemu trong cài đặt của Vectras VM trước khi khởi động, hãy kiểm tra sửa chúng giống như lúc lần cuối cùng máy ảo này được bật trước đó. Bạn muốn giữ hay xoá bản lưu trạng thái?</string>
     <string name="keep_and_continue">Giữ và tiếp tục</string>
     <string name="remove_and_continue">Xoá và tiếp tục</string>
     <string name="vm_state_save_failed_note">Đã xảy ra lỗi và không thể lưu lại trạng thái của máy ảo. Hãy thử lại sau.</string>
+    <string name="this_folder_cannot_be_opened">Không thể mở thư mục này.</string>
+    <string name="new_notification">Thông báo mới</string>
+    <string name="tap_to_view">Chạm để xem.</string>
 
 
     <!--======================TERMUX STRINGS====================-->

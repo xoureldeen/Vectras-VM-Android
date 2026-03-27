@@ -141,7 +141,7 @@ public class ExportRomActivity extends AppCompatActivity {
 
         vmConfigMap.put("bootFrom", current.bootFrom);
         vmConfigMap.put("isShowBootMenu", current.isShowBootMenu);
-        vmConfigMap.put("qemu", current.itemExtra.replace(AppConfig.vmFolder + current.vmID + "/", "OhnoIjustrealizeditsmidnightandIstillhavetodothis"));
+        vmConfigMap.put("qemu", current.itemExtra.replace(getRomPath, "OhnoIjustrealizeditsmidnightandIstillhavetodothis"));
         vmConfigMap.put("arch", current.itemArch);
 
         if (Objects.requireNonNull(binding.edAuthor.getText()).toString().isEmpty()) {
@@ -173,8 +173,14 @@ public class ExportRomActivity extends AppCompatActivity {
 
                     if (_filelist.get(_repeat).endsWith("rom-data.json")) {
                         filePaths[filePaths.length - 1] = tempFolder + "rom-data.json";
+                    } else if (_filelist.get(_repeat).endsWith("snapshot.sh")) {
+                        String snapshotParams = FileUtils.readAFile(_filelist.get(_repeat));
+                        snapshotParams = StartVM.removeQmpParams(snapshotParams);
+                        snapshotParams = StartVM.removeDisplayParams(snapshotParams);
+                        FileUtils.writeToFile(tempFolder, "snapshot.sh", snapshotParams.replace(getRomPath, "OhnoIjustrealizeditsmidnightandIstillhavetodothis"));
+                        filePaths[filePaths.length - 1] = tempFolder + "snapshot.sh";
                     } else if (_filelist.get(_repeat).endsWith("cqcm.json")) {
-                        FileUtils.writeToFile(tempFolder, "cqcm.json", FileUtils.readAFile(_filelist.get(_repeat)).replace(AppConfig.vmFolder + current.vmID + "/", "OhnoIjustrealizeditsmidnightandIstillhavetodothis"));
+                        FileUtils.writeToFile(tempFolder, "cqcm.json", FileUtils.readAFile(_filelist.get(_repeat)).replace(getRomPath, "OhnoIjustrealizeditsmidnightandIstillhavetodothis"));
                         filePaths[filePaths.length - 1] = tempFolder + "cqcm.json";
                     } else {
                         filePaths[filePaths.length - 1] = _filelist.get(_repeat);

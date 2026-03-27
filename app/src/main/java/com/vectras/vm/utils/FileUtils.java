@@ -1000,11 +1000,29 @@ public class FileUtils {
             return;
         }
 
-        Uri uri = FileProvider.getUriForFile(
-                context,
-                context.getPackageName() + ".provider",
-                folder
-        );
+        Uri uri;
+
+        try {
+            uri = FileProvider.getUriForFile(
+                    context,
+                    context.getPackageName() + ".provider",
+                    folder
+            );
+        } catch (IllegalArgumentException e) {
+            DialogUtils.oneDialog(
+                    context,
+                    context.getString(R.string.oops),
+                    context.getString(R.string.this_folder_cannot_be_opened),
+                    context.getString(R.string.ok),
+                    true,
+                    R.drawable.error_96px,
+                    true,
+                    null,
+                    null
+            );
+            Log.e(TAG, "openFolder: Folder not found!");
+            return;
+        }
 
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setDataAndType(uri, "resource/folder");

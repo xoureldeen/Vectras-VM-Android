@@ -335,6 +335,8 @@ public class RomInfo extends AppCompatActivity {
     }
 
     private void sendLikeUpdate() {
+        if (interaction.isRequesting || !interaction.isAllowAction) return;
+
         binding.btnLike.setIcon(ContextCompat.getDrawable(RomInfo.this, !interaction.isLiked() ? R.drawable.thumb_up_filled_24px : R.drawable.thumb_up_24px));
         binding.btnLike.setText(!interaction.isLiked() ? getString(R.string.liked) : getString(R.string.like));
 

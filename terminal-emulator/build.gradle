@@ -3,7 +3,7 @@ apply plugin: 'maven-publish'
 
 android {
     namespace "com.termux.terminal"
-    compileSdkVersion 34
+    compileSdkVersion 36
 
     buildTypes {
         release {
@@ -33,14 +33,14 @@ android {
 
 }
 
-tasks.withType(Test) {
+tasks.withType(Test).configureEach {
     testLogging {
         events "started", "passed", "skipped", "failed"
     }
 }
 
 dependencies {
-    testImplementation 'junit:junit:4.13.2'
+    testImplementation libs.junit
 }
 
 

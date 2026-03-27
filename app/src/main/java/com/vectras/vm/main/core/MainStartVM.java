@@ -316,6 +316,8 @@ public class MainStartVM {
                                 activity.runOnUiThread(() -> DisplaySystem.launch(context));
                             }
 
+                            FileUtils.writeToFile(AppConfig.vmFolder + vmID, "snapshot.sh", env);
+
                             Log.i(TAG, "Virtual machine running.");
 
                             if (activity != null) {

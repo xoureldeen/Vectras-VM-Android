@@ -5,6 +5,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.color.MaterialColors;
 import com.vectras.vm.R;
 import com.vectras.vm.databinding.DialogListSelectorLayoutBinding;
 import com.vectras.vm.databinding.SimpleLayoutListViewWithCheckBinding;
@@ -96,9 +98,11 @@ public class VMCreatorSelector {
         public void onBindViewHolder(ViewHolder holder, final int position) {
             View view = holder.itemView;
             TextView title = view.findViewById(R.id.textview);
+            ImageView check = view.findViewById(R.id.iv_check);
             title.setText(Objects.requireNonNull(data.get(position).get("name")).toString());
+            title.setTextColor(MaterialColors.getColor(title, position == currentPosition ? androidx.appcompat.R.attr.colorPrimary : com.google.android.material.R.attr.colorOnSurface));
             view.setBackgroundResource(position == currentPosition ? R.drawable.dialog_shape_single_button : R.drawable.dialog_shape_click_effect_button);
-            view.findViewById(R.id.iv_check).setVisibility(position == currentPosition ? View.VISIBLE : View.INVISIBLE);
+            check.setVisibility(position == currentPosition ? View.VISIBLE : View.INVISIBLE);
             view.findViewById(R.id.main).setOnClickListener(v -> {
                 if (activity.isFinishing() || activity.isDestroyed()) return;
                 callback.onSelected(
