@@ -8,12 +8,19 @@ import com.vectras.vm.R;
 import com.vectras.vm.utils.NotificationUtils;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class FCMService
         extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(@NonNull RemoteMessage message) {
         Map<String, String> data = message.getData();
+
+        if (data.get("targetVersions") != null
+                && !Objects.requireNonNull(data.get("targetVersions")).isEmpty()
+                && !Objects.requireNonNull(data.get("targetVersions")).contains(getString(R.string.app_version))) {
+            return;
+        }
 
         NotificationUtils.pushNow(this,
                 1,

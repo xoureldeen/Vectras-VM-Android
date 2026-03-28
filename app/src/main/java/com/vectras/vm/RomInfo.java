@@ -25,8 +25,10 @@ import com.vectras.vm.databinding.ActivityRomInfoBinding;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.ImageUtils;
+import com.vectras.vm.utils.PackageUtils;
 
 import java.io.File;
+import java.net.URISyntaxException;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -35,6 +37,7 @@ public class RomInfo extends AppCompatActivity {
     ActivityRomInfoBinding binding;
     public static boolean isFinishNow = false;
     private String contentID = "";
+    private boolean isAnBuiContent;
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private Interaction interaction;
 
@@ -195,6 +198,7 @@ public class RomInfo extends AppCompatActivity {
         if (getIntent().hasExtra("id") &&
                 !Objects.requireNonNull(getIntent().getStringExtra("id")).isEmpty()) {
             contentID = getIntent().getStringExtra("id");
+            isAnBuiContent = true;
 
         } else if (getIntent().hasExtra("vecid") &&
                 !Objects.requireNonNull(getIntent().getStringExtra("vecid")).isEmpty()) {
@@ -310,6 +314,19 @@ public class RomInfo extends AppCompatActivity {
                 null)));
 
         binding.btnLike.setOnClickListener(v -> sendLikeUpdate());
+
+        if (isAnBuiContent && PackageUtils.isInstalled("com.anbui.app", this)) {
+            binding.viewinanbuiapp.setVisibility(View.VISIBLE);
+            binding.viewinanbuiapp.setOnClickListener(v -> {
+                Intent intent;
+                try {
+                    intent = Intent.parseUri("intent://content/" + contentID + "#Intent;scheme=anbui;package=com.anbui.app;S.browser_fallback_url=https%3A%2F%2Fanbui.ovh%2Fapps%2Fgetanbuiapp.html;end", Intent.URI_INTENT_SCHEME);
+                } catch (URISyntaxException e) {
+                    return;
+                }
+                startActivity(intent);
+            });
+        }
 
         if (!contentID.isEmpty()) {
             interaction = new Interaction(this, contentID);

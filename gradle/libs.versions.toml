@@ -56,6 +56,7 @@ firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.r
 firebase-crashlytics-gradle = { group = "com.google.firebase", name = "firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsGradle" }
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebaseMessaging" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
 google-services = { group = "com.google.gms", name = "google-services", version.ref = "googleServices" }
 gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "gradle" }

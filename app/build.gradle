@@ -12,8 +12,8 @@ android {
         applicationId "com.vectras.vm"
         minSdk minApi
         targetSdk targetApi
-        versionCode 94
-        versionName "3.9.0"
+        versionCode 95
+        versionName "3.9.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -88,6 +88,7 @@ dependencies {
     implementation libs.androidx.viewpager
     implementation platform(libs.firebase.bom)
     implementation libs.firebase.analytics
+    implementation libs.firebase.crashlytics
     implementation libs.firebase.messaging
     implementation libs.guava
     implementation libs.gson
