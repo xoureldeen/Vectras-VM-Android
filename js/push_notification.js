@@ -11,7 +11,9 @@ async function sendNotification() {
         title: "Vectras VM",
         message: "Welcome!",
         image: "https://github.com/xoureldeen/Vectras-VM-Android/blob/master/resources/vectrasvm.png",
-        url : "https://github.com/xoureldeen/Vectras-VM-Android"
+        url : "https://github.com/xoureldeen/Vectras-VM-Android",
+        //targetVersions: "3.9.0,3.9.1"
+        targetVersions: ""
       },
       topic: "vectrasvmandroidgithub"
     });

@@ -15,6 +15,7 @@ import androidx.preference.PreferenceManager;
 
 import com.google.android.material.color.DynamicColors;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.utils.FileUtils;
@@ -96,7 +97,8 @@ public class VectrasApp extends Application {
             }
         });
 
-        FirebaseAnalytics.getInstance(this);
+        FirebaseAnalytics.getInstance(this).logEvent(FirebaseAnalytics.Event.APP_OPEN, null);
+        FirebaseCrashlytics.getInstance().log("App started: " + AppConfig.vectrasVersion);
     }
 
     private void setupTheme() {

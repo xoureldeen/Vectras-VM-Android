@@ -531,6 +531,8 @@
     <string name="this_folder_cannot_be_opened">This folder cannot be opened.</string>
     <string name="new_notification">New notification</string>
     <string name="tap_to_view">Tap to view.</string>
+    <string name="view_in_an_bui_app">View in the An Bui app</string>
+    <string name="view_in_an_bui_app_note">You can view and get it here.</string>
 
 
     <!--======================TERMUX STRINGS====================-->

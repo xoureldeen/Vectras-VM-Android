@@ -522,6 +522,8 @@
     <string name="this_folder_cannot_be_opened">Không thể mở thư mục này.</string>
     <string name="new_notification">Thông báo mới</string>
     <string name="tap_to_view">Chạm để xem.</string>
+    <string name="view_in_an_bui_app">Xem trong ứng dụng An Bùi</string>
+    <string name="view_in_an_bui_app_note">Bạn có thể xem và lấy nó ở đây.</string>
 
 
     <!--======================TERMUX STRINGS====================-->
