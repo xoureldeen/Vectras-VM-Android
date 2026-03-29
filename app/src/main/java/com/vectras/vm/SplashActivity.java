@@ -102,7 +102,7 @@ public class SplashActivity extends AppCompatActivity {
                 Log.e(TAG, "Create roms-data.json file failed: ", e);
             }
 
-        FileInstaller.installFiles(this, true);
+        //FileInstaller.installFiles(this, true);
     }
 
     private void setupFolders() {

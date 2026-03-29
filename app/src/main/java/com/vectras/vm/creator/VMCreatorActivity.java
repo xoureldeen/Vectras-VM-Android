@@ -23,6 +23,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.AppConfig;
 import com.vectras.vm.Fragment.CreateImageDialogFragment;
@@ -73,6 +74,7 @@ public class VMCreatorActivity extends AppCompatActivity {
     private String thumbnailPath = "";
     private String vmID = VMManager.idGenerator();
     private boolean isShowBootMenu = false;
+    private boolean isUseUefi = false;
     private int bootFrom = 0;
 
     @Override
@@ -238,12 +240,14 @@ public class VMCreatorActivity extends AppCompatActivity {
 
         binding.lineardisclaimer.setOnClickListener(v -> DialogUtils.oneDialog(this, getResources().getString(R.string.dont_miss_out), getResources().getString(R.string.disclaimer_when_using_rom), getResources().getString(R.string.i_agree), true, R.drawable.verified_user_24px, true, null, null));
 
-        binding.lnShowbootmenu.setOnClickListener(v -> binding.cbShowbootmenu.toggle());
-        binding.cbShowbootmenu.setOnCheckedChangeListener((button, isChecked) -> isShowBootMenu = isChecked);
+        binding.cbvShowbootmenu.setOnCheckedChangeListener((v, isChecked) -> isShowBootMenu = isChecked);
 
-        binding.lnBootfrom.setOnClickListener(v -> VMCreatorSelector.bootFrom(this, bootFrom, ((position, name, value) -> {
+        binding.cbvUseuefi.setOnCheckedChangeListener((v, isChecked) -> isUseUefi = isChecked);
+        if (!MainSettingsManager.getArch(this).equals("X86_64")) binding.cbvUseuefi.setVisibility(View.GONE);
+
+        binding.sbvBootfrom.setOnClickListener(v -> VMCreatorSelector.bootFrom(this, bootFrom, ((position, name, value) -> {
             bootFrom = position;
-            binding.tvBootfrom.setText(name);
+            binding.sbvBootfrom.setSubtitle(name);
         })));
 
         modify = getIntent().getBooleanExtra("MODIFY", false);
@@ -564,9 +568,16 @@ public class VMCreatorActivity extends AppCompatActivity {
             }
 
             bootFrom = current.bootFrom;
-            binding.tvBootfrom.setText(Objects.requireNonNull(VMCreatorSelector.getBootFrom(this, current.bootFrom).get("name")).toString());
+            binding.sbvBootfrom.setSubtitle(Objects.requireNonNull(VMCreatorSelector.getBootFrom(this, current.bootFrom).get("name")).toString());
             isShowBootMenu = current.isShowBootMenu;
-            binding.cbShowbootmenu.setChecked(isShowBootMenu);
+            binding.cbvShowbootmenu.setChecked(isShowBootMenu);
+
+            if (MainSettingsManager.getArch(this).equals("X86_64")) {
+                isUseUefi = current.isUseUefi;
+                binding.cbvUseuefi.setChecked(isUseUefi);
+            } else {
+                binding.cbvUseuefi.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -698,6 +709,7 @@ public class VMCreatorActivity extends AppCompatActivity {
         vmConfigMap.put("imgArch", MainSettingsManager.getArch(this));
         vmConfigMap.put("bootFrom", bootFrom);
         vmConfigMap.put("isShowBootMenu", isShowBootMenu);
+        vmConfigMap.put("isUseUefi", isUseUefi);
         vmConfigMap.put("vmID", vmID);
         vmConfigMap.put("qmpPort", 8080);
         return vmConfigMap;
@@ -995,7 +1007,13 @@ public class VMCreatorActivity extends AppCompatActivity {
                     return;
                 }
 
-                loadConfig(new Gson().fromJson(FileUtils.readFromFile(this, new File(AppConfig.vmFolder + vmID + "/rom-data.json")), DataMainRoms.class));
+                try {
+                    loadConfig(new Gson().fromJson(FileUtils.readFromFile(this, new File(AppConfig.vmFolder + vmID + "/rom-data.json")), DataMainRoms.class));
+                } catch (JsonSyntaxException e) {
+                    DialogUtils.oneDialog(this, getResources().getString(R.string.oops), getResources().getString(R.string.error_CR_CVBI4), getResources().getString(R.string.ok), true, R.drawable.warning_48px, true, null, null);
+                    return;
+                }
+
                 JSONObject jObj = new JSONObject(FileUtils.readFromFile(this, new File(AppConfig.vmFolder + vmID + "/rom-data.json")));
 
                 if (jObj.has("vmID")) {

@@ -117,4 +117,7 @@ public class AppConfig {
 
     public static String patreonLink = "https://www.patreon.com/VectrasTeam";
 
+    public static String virtIOWinUrl = "https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.285-1/virtio-win.iso";
+    public static String virtIOWinUrlMd5 = "9e650d0e7c6e017a91ca299c8f7ed766";
+
 }

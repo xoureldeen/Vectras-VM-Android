@@ -533,6 +533,14 @@
     <string name="tap_to_view">Tap to view.</string>
     <string name="view_in_an_bui_app">View in the An Bui app</string>
     <string name="view_in_an_bui_app_note">You can view and get it here.</string>
+    <string name="tools">Tools</string>
+    <string name="threedfx_wrappers">3dfx wrappers</string>
+    <string name="virtio_tools_for_windows">VirtIO tools for Windows</string>
+    <string name="download_required">Download required</string>
+    <string name="this_tool_needs_to_be_downloaded_before_use">This tool needs to be downloaded before use. You will be notified when the download is complete.</string>
+    <string name="download_failed_note">Download failed. Please try again later.</string>
+    <string name="virtio_tools_for_windows_is_now_ready_to_use">VirtIO tools for Windows is now ready to use</string>
+    <string name="do_you_want_to_insert_it_into_the_optical_drive_right_now">Do you want to insert it into the optical drive right now?</string>
 
 
     <!--======================TERMUX STRINGS====================-->
