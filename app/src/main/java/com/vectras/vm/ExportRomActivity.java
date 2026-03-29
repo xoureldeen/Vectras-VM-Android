@@ -141,6 +141,7 @@ public class ExportRomActivity extends AppCompatActivity {
 
         vmConfigMap.put("bootFrom", current.bootFrom);
         vmConfigMap.put("isShowBootMenu", current.isShowBootMenu);
+        vmConfigMap.put("isUseUefi", current.isUseUefi);
         vmConfigMap.put("qemu", current.itemExtra.replace(getRomPath, "OhnoIjustrealizeditsmidnightandIstillhavetodothis"));
         vmConfigMap.put("arch", current.itemArch);
 

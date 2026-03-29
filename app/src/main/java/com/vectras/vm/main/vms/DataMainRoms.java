@@ -50,4 +50,6 @@ public class DataMainRoms {
     public int bootFrom = 0;
 
     public boolean isShowBootMenu = false;
+
+    public boolean isUseUefi = false;
 }

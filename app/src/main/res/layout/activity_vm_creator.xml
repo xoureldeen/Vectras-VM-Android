@@ -266,56 +266,24 @@
                         android:paddingBottom="8dp"
                         android:text="@string/boot" />
 
-                    <LinearLayout
-                        android:id="@+id/ln_bootfrom"
+                    <com.vectras.vm.view.SelectBoxView
+                        android:id="@+id/sbv_bootfrom"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingHorizontal="16dp"
-                        android:paddingVertical="8dp"
-                        android:gravity="center_vertical"
-                        android:background="?attr/selectableItemBackground">
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/boot_from"
-                                android:textSize="18sp" />
-                            <TextView
-                                android:id="@+id/tv_bootfrom"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/defaulttext" />
-                        </LinearLayout>
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/keyboard_arrow_right_24px" />
-                    </LinearLayout>
+                        app:title="@string/boot_from"
+                        app:subtitle="@string/defaulttext" />
 
-                    <LinearLayout
-                        android:id="@+id/ln_showbootmenu"
+                    <com.vectras.vm.view.CheckBoxView
+                        android:id="@+id/cbv_showbootmenu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingVertical="8dp"
-                        android:paddingStart="16dp"
-                        android:paddingEnd="8dp"
-                        android:gravity="center_vertical"
-                        android:background="?attr/selectableItemBackground">
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/show_boot_menu" />
-                        <CheckBox
-                            android:id="@+id/cb_showbootmenu"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:clickable="false"/>
-                    </LinearLayout>
+                        app:setText="@string/show_boot_menu"/>
+
+                    <com.vectras.vm.view.CheckBoxView
+                        android:id="@+id/cbv_useuefi"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:setText="@string/use_uefi_for_x64_only"/>
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

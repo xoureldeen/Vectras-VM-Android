@@ -9,6 +9,7 @@ import com.vectras.qemu.MainSettingsManager;
 import com.vectras.qemu.utils.RamInfo;
 import com.vectras.vm.creator.VMCreatorSelector;
 import com.vectras.vm.main.vms.DataMainRoms;
+import com.vectras.vm.setupwizard.SetupFeatureCore;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.TextUtils;
 
@@ -21,6 +22,7 @@ public class StartVM {
     public static String cache;
 
     public static String cdrompath;
+    private static boolean isUseUefi;
 
     public static String env(Activity activity, DataMainRoms vmData) {
         if (VMManager.isNeedLoadMigrate() && FileUtils.isFileExists(AppConfig.vmFolder + Config.vmID + "/snapshot.sh")) {
@@ -49,6 +51,7 @@ public class StartVM {
 
         extraParams = bootParams + extraParams;
         cdrompath = vmData.imgCdrom;
+        isUseUefi = vmData.isUseUefi;
         return env(activity, extraParams, vmData.itemPath, false);
     }
 
@@ -212,7 +215,7 @@ public class StartVM {
                     bios += "file=" + AppConfig.basefiledir + "QEMU_EFI.img,format=raw,readonly=on,if=pflash";
                     bios += " -drive ";
                     bios += "file=" + AppConfig.basefiledir + "QEMU_VARS.img,format=raw,if=pflash";
-                } else if (MainSettingsManager.getArch(activity).equals("X86_64") && MainSettingsManager.getuseUEFI(activity)) {
+                } else if (MainSettingsManager.getArch(activity).equals("X86_64") && (MainSettingsManager.getuseUEFI(activity) || isUseUefi)) {
                     bios = "-drive ";
                     bios += "file=" + AppConfig.basefiledir + "RELEASEX64_OVMF.fd,format=raw,readonly=on,if=pflash";
                     bios += " -drive ";
@@ -221,6 +224,8 @@ public class StartVM {
                     bios = "-bios ";
                     bios += AppConfig.basefiledir + "bios-vectras.bin";
                 }
+
+                extractFirmware(activity);
             }
 
             String machine = "-M ";
@@ -278,6 +283,8 @@ public class StartVM {
             params.add("-incoming");
             params.add("defer");
         }
+
+        isUseUefi = false;
 
         return String.join(" ", params);
     }
@@ -355,4 +362,28 @@ public class StartVM {
                 .trim();
     }
 
+    public static void extractFirmware(Context context) {
+        if (MainSettingsManager.useDefaultBios(context)) {
+            String arch = MainSettingsManager.getArch(context);
+
+            FileUtils.createDirectory(AppConfig.basefiledir);
+
+            if (arch.equals("ARM64")) {
+                if (!FileUtils.isFileExists(AppConfig.basefiledir + "QEMU_EFI.img"))
+                    SetupFeatureCore.copyAssetToFile(context, "roms/QEMU_EFI.img", AppConfig.basefiledir + "QEMU_EFI.img");
+
+                if (!FileUtils.isFileExists(AppConfig.basefiledir + "QEMU_VARS.img"))
+                    SetupFeatureCore.copyAssetToFile(context, "roms/QEMU_VARS.img", AppConfig.basefiledir + "QEMU_VARS.img");
+            } else if (arch.equals("X86_64") && (MainSettingsManager.getuseUEFI(context) || isUseUefi)) {
+                if (!FileUtils.isFileExists(AppConfig.basefiledir + "RELEASEX64_OVMF.fd"))
+                    SetupFeatureCore.copyAssetToFile(context, "roms/RELEASEX64_OVMF.fd", AppConfig.basefiledir + "RELEASEX64_OVMF.fd");
+
+                if (!FileUtils.isFileExists(AppConfig.basefiledir + "RELEASEX64_OVMF_VARS.fd"))
+                    SetupFeatureCore.copyAssetToFile(context, "roms/RELEASEX64_OVMF_VARS.fd", AppConfig.basefiledir + "RELEASEX64_OVMF_VARS.fd");
+            } else {
+                if (!FileUtils.isFileExists(AppConfig.basefiledir + "bios-vectras.bin"))
+                    SetupFeatureCore.copyAssetToFile(context, "roms/bios-vectras.bin", AppConfig.basefiledir + "bios-vectras.bin");
+            }
+        }
+    }
 }

@@ -524,6 +524,14 @@
     <string name="tap_to_view">Chạm để xem.</string>
     <string name="view_in_an_bui_app">Xem trong ứng dụng An Bùi</string>
     <string name="view_in_an_bui_app_note">Bạn có thể xem và lấy nó ở đây.</string>
+    <string name="tools">Công cụ</string>
+    <string name="threedfx_wrappers">Trình bao bọc 3dfx</string>
+    <string name="virtio_tools_for_windows">Công cụ VirtIO cho Windows</string>
+    <string name="download_required">Càn tải xuống</string>
+    <string name="this_tool_needs_to_be_downloaded_before_use">Công cụ này cần được tải xuống để sử dụng. Bạn sẽ được thông báo khi quá trình tải xuống hoàn thành.</string>
+    <string name="download_failed_note">Tải xuống thất bại. Hãy thử lại sau.</string>
+    <string name="virtio_tools_for_windows_is_now_ready_to_use">Công cụ VirtIO cho Windows đã sẵn sàng để sử dụng</string>
+    <string name="do_you_want_to_insert_it_into_the_optical_drive_right_now">Bạn có muốn gắn nó vào ổ đĩa quang ngay không?</string>
 
 
     <!--======================TERMUX STRINGS====================-->

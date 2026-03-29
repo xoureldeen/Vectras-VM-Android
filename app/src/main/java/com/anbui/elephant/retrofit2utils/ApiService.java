@@ -6,11 +6,16 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Streaming;
 import retrofit2.http.Url;
 
 public interface ApiService {
     @GET
     Call<ResponseBody> getRawJson(@Url String url);
+
+    @Streaming
+    @GET
+    Call<ResponseBody> downloadFile(@Url String url);
 
     @POST
     Call<ResponseBody> post(@Url String url, @Body RequestBody body);

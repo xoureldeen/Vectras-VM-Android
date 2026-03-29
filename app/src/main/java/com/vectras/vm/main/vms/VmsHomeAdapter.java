@@ -81,8 +81,11 @@ public class VmsHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 Config.QMPPort = current.qmpPort;
             }
             Config.vmID = current.vmID;
-            String env = StartVM.env(activity, current);
-            MainStartVM.startNow(activity, current.itemName, env, current.vmID, current.itemIcon);
+
+            new Thread(() -> {
+                String env = StartVM.env(activity, current);
+                activity.runOnUiThread(() -> MainStartVM.startNow(activity, current.itemName, env, current.vmID, current.itemIcon));
+            }).start();
         });
 
         myHolder.cdRoms.setOnLongClickListener(v -> {

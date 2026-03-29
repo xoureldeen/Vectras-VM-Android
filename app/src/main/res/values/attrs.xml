@@ -37,4 +37,14 @@
 
     </declare-styleable>
 
+    <declare-styleable name="SelectBoxView">
+        <attr name="title" format="string"/>
+        <attr name="subtitle" format="string"/>
+    </declare-styleable>
+
+    <declare-styleable name="CheckBoxView">
+        <attr name="setText" format="string"/>
+        <attr name="setChecked" format="boolean"/>
+    </declare-styleable>
+
 </resources>

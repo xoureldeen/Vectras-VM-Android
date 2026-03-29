@@ -2,6 +2,9 @@ package com.anbui.elephant.retrofit2utils;
 
 import androidx.annotation.NonNull;
 
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.SocketTimeoutException;
 import java.util.concurrent.TimeUnit;
 
@@ -82,6 +85,60 @@ public class Retrofit2Utils {
                 } else {
                     callback.onResult(false, "", NETWORK_ERROR, t);
                 }
+            }
+        });
+    }
+
+    public interface DownloadCallback {
+        void onProgress(int percent);
+        void onResult(boolean success, String path, Throwable error);
+    }
+
+    public static void download(String url, String outputPath, DownloadCallback callback) {
+        api.downloadFile(url).enqueue(new Callback<>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                if (!response.isSuccessful() || response.body() == null) {
+                    callback.onResult(false, null, new Exception("Response error"));
+                    return;
+                }
+
+                new Thread(() -> {
+                    try (InputStream in = response.body().byteStream();
+                         OutputStream out = new FileOutputStream(outputPath)) {
+
+                        byte[] buffer = new byte[8192];
+                        long total = response.body().contentLength();
+                        long downloaded = 0;
+
+                        int read;
+                        int lastPercent = 0;
+
+                        while ((read = in.read(buffer)) != -1) {
+                            out.write(buffer, 0, read);
+                            downloaded += read;
+
+                            if (total > 0) {
+                                int percent = (int) (downloaded * 100 / total);
+                                if (percent != lastPercent) {
+                                    lastPercent = percent;
+                                    callback.onProgress(percent);
+                                }
+                            }
+                        }
+
+                        out.flush();
+                        callback.onResult(true, outputPath, null);
+
+                    } catch (Exception e) {
+                        callback.onResult(false, null, e);
+                    }
+                }).start();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                callback.onResult(false, null, t);
             }
         });
     }

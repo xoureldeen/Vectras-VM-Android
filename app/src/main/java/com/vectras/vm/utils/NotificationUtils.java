@@ -37,10 +37,14 @@ public class NotificationUtils {
     public static final int NO_ICON = -1;
 
     public static String generalChannelId = "general";
+    public static String downloadChannelId = "download";
 
     public static void createAllChannel(Context context) {
         createChannel("General", "Receive new notifications.",
-                "general", NotificationManager.IMPORTANCE_DEFAULT, context);
+                generalChannelId, NotificationManager.IMPORTANCE_DEFAULT, context);
+
+        createChannel("Download", "View the file download process.",
+                downloadChannelId, NotificationManager.IMPORTANCE_DEFAULT, context);
     }
 
     @SuppressLint("MissingPermission")
@@ -155,6 +159,12 @@ public class NotificationUtils {
             Log.e(TAG, "Error: ", e);
         }
         }
+    }
+
+    public static void recall(Context context, int id) {
+        if (context == null) return;
+        NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+        notificationManager.cancel(id);
     }
 
     public static boolean isPermissionGranted(Context context) {
