@@ -351,7 +351,7 @@ public class LoriePreferences extends AppCompatActivity {
             Intent intent = new Intent(ACTION_PREFERENCES_CHANGED);
             intent.putExtra("key", key);
             intent.setPackage("com.vectras.vm");
-            requireContext().sendBroadcast(intent);
+            if (isAdded()) requireContext().sendBroadcast(intent);
 
             handler.postAtTime(this::updatePreferencesLayout, 100);
             return true;

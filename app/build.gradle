@@ -6,14 +6,14 @@ plugins {
 
 android {
     namespace 'com.vectras.vm'
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId "com.vectras.vm"
         minSdk minApi
         targetSdk targetApi
-        versionCode 96
-        versionName "3.9.2"
+        versionCode 97
+        versionName "3.9.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 

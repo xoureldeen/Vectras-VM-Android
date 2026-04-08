@@ -52,6 +52,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="numberSigned"
+                    android:maxLength="5"
                     android:digits="0123456789"/>
             </com.google.android.material.textfield.TextInputLayout>
 

@@ -71,7 +71,7 @@ public class FileUtils {
 
     @SuppressLint("NewApi")
     public static String getPath(Context context, final Uri uri) {
-        if (uri.toString().startsWith("content://ru.zdevs.zarchiver") && uri.getPath() != null && isFileExists(uri.getPath()))
+        if ((uri.toString().startsWith("content://ru.zdevs.zarchiver") || uri.toString().startsWith("content://bin.mt.plus")) && uri.getPath() != null && isFileExists(uri.getPath()))
             return uri.getPath();
 
         // check here to KITKAT or new version
@@ -356,11 +356,16 @@ public class FileUtils {
         try {
             InputStream inputStream = context.getContentResolver().openInputStream(uri);
             FileOutputStream outputStream = new FileOutputStream(output);
-            int read = 0;
-            int bufferSize = 1024;
-            final byte[] buffers = new byte[bufferSize];
-            while ((read = inputStream.read(buffers)) != -1) {
-                outputStream.write(buffers, 0, read);
+            int read;
+
+            byte[] buffer;
+            if (DeviceUtils.totalMemoryCapacity(context) < 4L * 1024 * 1024 * 1024)
+                buffer = new byte[64 * 1024];
+            else
+                buffer = new byte[128 * 1024];
+
+            while ((read = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, read);
             }
 
             inputStream.close();

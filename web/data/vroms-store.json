@@ -271,6 +271,24 @@
     "id": ""
   },
   {
+    "rom_name": "Debian 14 (unstable)",
+    "rom_icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRw2CcpHNKIioANF5MV4H-Zw2H3S7hPDMaqeA&s",
+    "rom_url": "https://anbui.ovh/get/vec/community/linux/debian14sid.html",
+    "rom_path": "debian linux 14 forky sid_0.cvbi",
+    "rom_avail": true,
+    "rom_size": "Forky",
+    "rom_arch": "X86_64",
+    "rom_kernel": "linux",
+    "rom_extra": "",
+    "final_rom_file_name": "",
+    "desc": "Debian (/ˈdɛbiən/), also known as Debian GNU/Linux, is a free and open source Linux distribution, developed by the Debian Project, which was established by Ian Murdock in August 1993. Debian is one of the oldest operating systems based on the Linux kernel, and is the basis for many other Linux distributions.",
+    "file_size": "2 GB",
+    "creator": "Stiven2016",
+    "verified": true,
+    "vecid": "debianlinux14forkysid0cvbi",
+    "id": ""
+  },
+  {
     "rom_name": "Debian 4.0",
     "rom_icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRw2CcpHNKIioANF5MV4H-Zw2H3S7hPDMaqeA&s",
     "rom_url": "https://youtu.be/WJGnGqKMAIg",
@@ -1081,6 +1099,24 @@
     "id": "99679"
   },
   {
+    "rom_name": "Windows 10 buid 10051",
+    "rom_icon": "https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/09/17/windows-logo_1_926ed76111646acbbe332bc5af0cf2ce.png",
+    "rom_url": "https://youtu.be/MkJVYVd9AME",
+    "rom_path": "Windows 10 buid 10051.cvbi",
+    "rom_avail": true,
+    "rom_size": "Insider Preview build",
+    "rom_arch": "X86_64",
+    "rom_kernel": "windows",
+    "rom_extra": "",
+    "final_rom_file_name": "",
+    "desc": "This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 10 is a major release of Microsoft's Windows NT operating system. The successor to Windows 8.1, it was released to manufacturing on July 15, 2015, and later to retail on July 29, 2015. Windows 10 was made available for download via MSDN and TechNet, as a free upgrade for retail copies of Windows 8 and Windows 8.1 users via the Microsoft Store, and to Windows 7 users via Windows Update. Unlike previous Windows NT releases, Windows 10 receives new builds on an ongoing basis, which are available at no additional cost to users; devices in enterprise environments can alternatively use long-term support milestones that only receive critical updates, such as security patches.",
+    "file_size": "9 GB",
+    "creator": "Nguyen Bao An Bui",
+    "verified": true,
+    "vecid": "windows10buid10051cvbi",
+    "id": "99648"
+  },
+  {
     "rom_name": "Windows 10 buid 10074",
     "rom_icon": "https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/09/17/windows-logo_1_926ed76111646acbbe332bc5af0cf2ce.png",
     "rom_url": "https://youtu.be/c71AE77gdBk",
@@ -1403,6 +1439,24 @@
     "verified": true,
     "vecid": "windows1126h1micro11cvbi",
     "id": ""
+  },
+  {
+    "rom_name": "Windows 11 build 21996.1",
+    "rom_icon": "https://www.getmyos.com/app_public/files/t/1/2021/06/windows_11_logo_by_getmyos.png",
+    "rom_url": "https://youtu.be/lHbw679OxTY",
+    "rom_path": "Windows 11 build 21996.1.cvbi",
+    "rom_avail": true,
+    "rom_size": "Leaked online on 15 June 2021",
+    "rom_arch": "X86_64",
+    "rom_kernel": "windows",
+    "rom_extra": "",
+    "final_rom_file_name": "",
+    "desc": "This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 11 is the latest major release of Microsoft's Windows NT operating system, released on October 5, 2021 as the successor to Windows 10 (2015). It is provided free for any Windows 10 devices that meet the new Windows 11 system requirements. A server version, Windows Server 2025, was released in 2024. Windows 11 is the first major version of Windows NT without a companion mobile version following the discontinuations of Windows Phone with Windows 10 Mobile.",
+    "file_size": "10 GB",
+    "creator": "Nguyen Bao An Bui",
+    "verified": true,
+    "vecid": "windows11build219961cvbi",
+    "id": "99647"
   },
   {
     "rom_name": "Windows 11 build 22000.65",

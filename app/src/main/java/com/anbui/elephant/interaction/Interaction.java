@@ -136,9 +136,9 @@ public class Interaction {
             if (isSuccess && JSONUtils.isValidFromString(body)) {
                 DataInteraction data = new Gson().fromJson(body, DataInteraction.class);
                 dataInteraction.views = data.count;
+                setViews();
                 callback.onResult(true, data.count, getLikeCount());
                 LogPrinter.print(TAG, "View succeed.");
-                setViews();
             } else {
                 callback.onResult(false, 1, 0);
                 LogPrinter.print(TAG, "View unsucceed.");
@@ -199,8 +199,8 @@ public class Interaction {
             if (isSuccess && JSONUtils.isValidFromString(body)) {
                 DataInteraction data = new Gson().fromJson(body, DataInteraction.class);
                 dataInteraction.likes = data.count;
-                callback.onResult(true, getViewCount(), data.count);
                 setLikes();
+                callback.onResult(true, getViewCount(), data.count);
                 LogPrinter.print(TAG, "Like succeed.");
             } else {
                 callback.onResult(false, 1, 0);
