@@ -321,10 +321,10 @@ public class RomInfo extends AppCompatActivity {
                 Intent intent;
                 try {
                     intent = Intent.parseUri("intent://content/" + contentID + "#Intent;scheme=anbui;package=com.anbui.app;S.browser_fallback_url=https%3A%2F%2Fanbui.ovh%2Fapps%2Fgetanbuiapp.html;end", Intent.URI_INTENT_SCHEME);
-                } catch (URISyntaxException e) {
-                    return;
+                    startActivity(intent);
+                } catch (Exception ignored) {
+                    binding.viewinanbuiapp.setVisibility(View.GONE);
                 }
-                startActivity(intent);
             });
         }
 
