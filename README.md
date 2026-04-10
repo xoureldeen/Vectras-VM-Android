@@ -105,6 +105,13 @@ QEMU 8.2.0 - 3dfx (only for Vectras VM 2.9.5):
 - [For QEMU 9.2.x - 3dfx](https://github.com/AnBui2004/Vectras-VM-Emu-Android/blob/master/3dfx/3dfx-wrappers-3.5.0.iso)
 - [For QEMU 8.2.0 - 3dfx](https://github.com/AnBui2004/Vectras-VM-Emu-Android/blob/master/3dfx/3dfx-wrappers-2.9.5.iso)
 
+# ▶️ We're now on the Play Store
+Vectras VM is on the Play Store with the new Qemu 10, it runs natively on Android instead of requiring proot like the version on GitHub. Try it now!
+
+<a hreft="https://play.google.com/store/apps/details?id=com.vectrasllc.vm">
+<img src="resources/GetItOnGooglePlay_Badge_Web_color_English.png" style="width: 20%;" />
+</a>
+
 # 💕 Donate
 Help support the project by contributing!
 
