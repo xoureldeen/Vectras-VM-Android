@@ -1025,7 +1025,8 @@ public class VMCreatorActivity extends AppCompatActivity {
                     }
                 }
 
-                FileUtils.move(AppConfig.vmFolder + _filename.replace(".cvbi", ""), AppConfig.vmFolder + vmID);
+                //It can be deleted because there are few users of the old version.
+                if (!_filename.replace(".cvbi", "").isEmpty()) FileUtils.move(AppConfig.vmFolder + _filename.replace(".cvbi", ""), AppConfig.vmFolder + vmID);
 
                 if (!jObj.has("drive") && !jObj.has("cdrom") && !jObj.has("qemu")) {
                     DialogUtils.oneDialog(this, getResources().getString(R.string.problem_has_been_detected), getResources().getString(R.string.this_rom_is_missing_too_much_information), R.drawable.warning_24px);

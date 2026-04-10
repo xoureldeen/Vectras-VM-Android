@@ -343,6 +343,24 @@
     "id": ""
   },
   {
+    "rom_name": "FreeBSD 14",
+    "rom_icon": "https://cdn.freebiesupply.com/logos/large/2x/freebsd-logo-png-transparent.png",
+    "rom_url": "https://anbui.ovh/get/vec/community/bsd/freebsd14cli.html",
+    "rom_path": "FreeBSD.14.CLI.cvbi",
+    "rom_avail": true,
+    "rom_size": "CLI",
+    "rom_arch": "ARM64",
+    "rom_kernel": "other",
+    "rom_extra": "",
+    "final_rom_file_name": "",
+    "desc": "From DESVIAN-MUHAMMAD-IRFAN on GitHub.\n\nUser: root\nPassword: desvian\n\nUser: desvian\nPassword: desvian\n\nFreeBSD is a free and open-source Unix-like operating system descended from the Berkeley Software Distribution (BSD). The first version was released in 1993 developed from 386BSD, one of the first fully functional and free Unix clones on affordable home-class hardware, and has since continuously been the most commonly used BSD-derived operating system.",
+    "file_size": "800 MB",
+    "creator": "DESVIAN-MUHAMMAD-IRFAN",
+    "verified": true,
+    "vecid": "freebsd14clicvbi",
+    "id": ""
+  },
+  {
     "rom_name": "Gentoo Linux",
     "rom_icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Gentoo_Linux_logo_matte.svg/1200px-Gentoo_Linux_logo_matte.svg.png",
     "rom_url": "https://anbui.ovh/get/vec/community/linux/gentoo.html",
