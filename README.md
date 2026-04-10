@@ -108,7 +108,7 @@ QEMU 8.2.0 - 3dfx (only for Vectras VM 2.9.5):
 # ▶️ We're now on the Play Store
 Vectras VM is on the Play Store with the new Qemu 10, it runs natively on Android instead of requiring proot like the version on GitHub. Try it now!
 
-<a hreft="https://play.google.com/store/apps/details?id=com.vectrasllc.vm">
+<a href="https://play.google.com/store/apps/details?id=com.vectrasllc.vm">
 <img src="resources/GetItOnGooglePlay_Badge_Web_color_English.png" style="width: 20%;" />
 </a>
 
