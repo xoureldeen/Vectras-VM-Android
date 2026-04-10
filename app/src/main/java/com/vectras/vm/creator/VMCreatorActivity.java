@@ -1019,13 +1019,13 @@ public class VMCreatorActivity extends AppCompatActivity {
                 if (jObj.has("vmID")) {
                     if (!jObj.isNull("vmID")) {
                         if (!jObj.getString("vmID").isEmpty()) {
-                            FileUtils.moveAFile(AppConfig.vmFolder + vmID, AppConfig.vmFolder + jObj.getString("vmID"));
+                            FileUtils.move(AppConfig.vmFolder + vmID, AppConfig.vmFolder + jObj.getString("vmID"));
                             vmID = jObj.getString("vmID");
                         }
                     }
                 }
 
-                FileUtils.moveAFile(AppConfig.vmFolder + _filename.replace(".cvbi", ""), AppConfig.vmFolder + vmID);
+                FileUtils.move(AppConfig.vmFolder + _filename.replace(".cvbi", ""), AppConfig.vmFolder + vmID);
 
                 if (!jObj.has("drive") && !jObj.has("cdrom") && !jObj.has("qemu")) {
                     DialogUtils.oneDialog(this, getResources().getString(R.string.problem_has_been_detected), getResources().getString(R.string.this_rom_is_missing_too_much_information), R.drawable.warning_24px);

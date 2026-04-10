@@ -21,7 +21,7 @@ public class TermuxX11 {
         if (xkbConfigRoot.exists()) {
             Os.setenv("XKB_CONFIG_ROOT", xkbConfigRoot.getAbsolutePath(), true);
             File tmpDir = new File(VectrasApp.getContext().getFilesDir().getAbsolutePath() + "/usr/tmp");
-            FileUtils.deleteDirectory(tmpDir.getAbsolutePath());
+            FileUtils.delete(tmpDir.getAbsolutePath());
             tmpDir.mkdirs();
             Os.setenv("TMPDIR", tmpDir.toString(), true);
             try {

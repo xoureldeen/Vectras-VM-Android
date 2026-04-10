@@ -233,9 +233,9 @@ public class SetupWizard2Activity extends AppCompatActivity {
             uiController(STEP_EXTRACTING_SYSTEM_FILES);
             new Thread(() -> {
                 VMManager.killallqemuprocesses(this);
-                FileUtils.deleteDirectory(getFilesDir().getAbsolutePath() + "/data");
-                FileUtils.deleteDirectory(getFilesDir().getAbsolutePath() + "/distro");
-                FileUtils.deleteDirectory(getFilesDir().getAbsolutePath() + "/usr");
+                FileUtils.delete(getFilesDir().getAbsolutePath() + "/data");
+                FileUtils.delete(getFilesDir().getAbsolutePath() + "/distro");
+                FileUtils.delete(getFilesDir().getAbsolutePath() + "/usr");
                 runOnUiThread(this::extractSystemFiles);
             }).start();
         });
@@ -475,7 +475,7 @@ public class SetupWizard2Activity extends AppCompatActivity {
                             " chmod 775 /usr/local/bin/*;";
                 } else {
                     if (FileUtils.isFileExists(getFilesDir().getAbsolutePath() + "/distro/root/setup.tar.gz"))
-                        FileUtils.deleteDirectory(getFilesDir().getAbsolutePath() + "/distro/root/setup.tar.gz");
+                        FileUtils.delete(getFilesDir().getAbsolutePath() + "/distro/root/setup.tar.gz");
 
                     cmd += downloadBootstrapsCommand + ";" +
                             " echo \"Installing Qemu...\";" +

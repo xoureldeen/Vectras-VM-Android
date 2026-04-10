@@ -45,10 +45,20 @@ public class SetupFeatureCore {
     }
 
     public static boolean startExtractSystemFiles(Context context) {
-        if (isInstalledSystemFiles(context)) return true;
+        String filesDir;
+
+        if (isInstalledSystemFiles(context)) {
+            return true;
+        } else {
+            filesDir = context.getFilesDir().getAbsolutePath();
+
+            FileUtils.delete(filesDir + "/data");
+            FileUtils.delete(filesDir + "/distro");
+            FileUtils.delete(filesDir + "/usr");
+        }
+
         lastErrorLog = "";
 
-        String filesDir = context.getFilesDir().getAbsolutePath();
         File distroDir = new File(filesDir + "/distro");
         File binDir = new File(distroDir + "/bin");
         if (!binDir.exists()) {

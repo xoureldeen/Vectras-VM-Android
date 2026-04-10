@@ -545,7 +545,10 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
                     intent.setData(Uri.parse("https://www.qemu.org/docs/master/"));
                 }
                 startActivity(intent);
+            } else if (id == R.id.navigation_item_try_play_store_version) {
+                IntentUtils.launchPlayStoreVersion(this);
             }
+
             return false;
         });
     }
