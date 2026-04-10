@@ -613,9 +613,9 @@ public class VMManager {
             DialogUtils.twoDialog(_activity, _activity.getResources().getString(R.string.problem_has_been_detected), _activity.getResources().getString(R.string.error_PROOT_IS_MISSING_0), _activity.getString(R.string.continuetext), _activity.getString(R.string.cancel), true, R.drawable.build_24px, true,
                     () -> {
                         MainActivity.isActivate = false;
-                        FileUtils.deleteDirectory(_activity.getFilesDir().getAbsolutePath() + "/data");
-                        FileUtils.deleteDirectory(_activity.getFilesDir().getAbsolutePath() + "/distro");
-                        FileUtils.deleteDirectory(_activity.getFilesDir().getAbsolutePath() + "/usr");
+                        FileUtils.delete(_activity.getFilesDir().getAbsolutePath() + "/data");
+                        FileUtils.delete(_activity.getFilesDir().getAbsolutePath() + "/distro");
+                        FileUtils.delete(_activity.getFilesDir().getAbsolutePath() + "/usr");
                         Intent intent = new Intent();
                         intent.setClass(_activity, SplashActivity.class);
                         _activity.startActivity(intent);
@@ -695,7 +695,7 @@ public class VMManager {
                 if (_needfix) {
                     DialogUtils.twoDialog(_context, _context.getString(R.string.problem_has_been_detected), _context.getString(R.string.need_fix_json_before_create), _context.getString(R.string.continuetext), _context.getString(R.string.cancel), true, R.drawable.build_24px, true,
                             () -> {
-                                FileUtils.moveAFile(AppConfig.maindirpath + "roms-data.json", AppConfig.maindirpath + "roms-data.old.json");
+                                FileUtils.move(AppConfig.maindirpath + "roms-data.json", AppConfig.maindirpath + "roms-data.old.json");
                                 FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", "[]");
                                 startFixRomsDataJson();
                                 fixRomsDataJsonResult(_context);

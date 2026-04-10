@@ -41,4 +41,18 @@ public class IntentUtils {
             return false;
         }
     }
+
+    public static void launchPlayStoreVersion(Context context) {
+        PackageManager pm = context.getPackageManager();
+        Intent intent = pm.getLaunchIntentForPackage("com.vectrasllc.vm");
+
+        if (intent != null) {
+            context.startActivity(intent);
+        } else {
+            Intent intenturl = new Intent();
+            intenturl.setAction(Intent.ACTION_VIEW);
+            intenturl.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.vectrasllc.vm"));
+            context.startActivity(intenturl);
+        }
+    }
 }

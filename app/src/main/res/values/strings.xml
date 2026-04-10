@@ -541,6 +541,7 @@
     <string name="download_failed_note">Download failed. Please try again later.</string>
     <string name="virtio_tools_for_windows_is_now_ready_to_use">VirtIO tools for Windows is now ready to use</string>
     <string name="do_you_want_to_insert_it_into_the_optical_drive_right_now">Do you want to insert it into the optical drive right now?</string>
+    <string name="try_play_store_version">Try Play Store version</string>
 
 
     <!--======================TERMUX STRINGS====================-->

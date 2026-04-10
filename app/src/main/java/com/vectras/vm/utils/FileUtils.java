@@ -21,6 +21,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -63,11 +65,9 @@ public class FileUtils {
     public static void chmod(File file, int mode) {
         try {
             Os.chmod(file.getAbsolutePath(), mode);
-        } catch (ErrnoException e) {
+        } catch (ErrnoException ignored) {
         }
     }
-
-    private static Uri contentUri = null;
 
     @SuppressLint("NewApi")
     public static String getPath(Context context, final Uri uri) {
@@ -75,165 +75,115 @@ public class FileUtils {
             return uri.getPath();
 
         // check here to KITKAT or new version
-        final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+        final boolean isKitKat = true;
         String selection = null;
         String[] selectionArgs = null;
         // DocumentProvider
-        if (isKitKat) {
-            // ExternalStorageProvider
+        // ExternalStorageProvider
 
-            if (isExternalStorageDocument(uri)) {
-                final String docId = DocumentsContract.getDocumentId(uri);
-                final String[] split = docId.split(":");
-                final String type = split[0];
+        if (isExternalStorageDocument(uri)) {
+            final String docId = DocumentsContract.getDocumentId(uri);
+            final String[] split = docId.split(":");
+            final String type = split[0];
 
-                String fullPath = getPathFromExtSD(split);
-                if (fullPath != "") {
-                    return fullPath;
-                } else {
-                    return null;
+            String fullPath = getPathFromExtSD(split);
+            if (!fullPath.isEmpty()) {
+                return fullPath;
+            } else {
+                return null;
+            }
+        }
+
+
+        // DownloadsProvider
+
+        if (isDownloadsDocument(uri)) {
+            final String id;
+            try (Cursor cursor = context.getContentResolver().query(uri, new String[]{MediaStore.MediaColumns.DISPLAY_NAME}, null, null, null)) {
+                if (cursor != null && cursor.moveToFirst()) {
+                    String fileName = cursor.getString(0);
+                    String path = Environment.getExternalStorageDirectory().toString() + "/Download/" + fileName;
+                    if (!TextUtils.isEmpty(path)) {
+                        return path;
+                    }
                 }
             }
-
-
-            // DownloadsProvider
-
-            if (isDownloadsDocument(uri)) {
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    final String id;
-                    Cursor cursor = null;
+            id = DocumentsContract.getDocumentId(uri);
+            if (!TextUtils.isEmpty(id)) {
+                if (id.startsWith("raw:")) {
+                    return id.replaceFirst("raw:", "");
+                }
+                String[] contentUriPrefixesToTry = new String[]{
+                        "content://downloads/public_downloads",
+                        "content://downloads/my_downloads"
+                };
+                for (String contentUriPrefix : contentUriPrefixesToTry) {
                     try {
-                        cursor = context.getContentResolver().query(uri, new String[]{MediaStore.MediaColumns.DISPLAY_NAME}, null, null, null);
-                        if (cursor != null && cursor.moveToFirst()) {
-                            String fileName = cursor.getString(0);
-                            String path = Environment.getExternalStorageDirectory().toString() + "/Download/" + fileName;
-                            if (!TextUtils.isEmpty(path)) {
-                                return path;
-                            }
-                        }
-                    } finally {
-                        if (cursor != null)
-                            cursor.close();
-                    }
-                    id = DocumentsContract.getDocumentId(uri);
-                    if (!TextUtils.isEmpty(id)) {
-                        if (id.startsWith("raw:")) {
-                            return id.replaceFirst("raw:", "");
-                        }
-                        String[] contentUriPrefixesToTry = new String[]{
-                                "content://downloads/public_downloads",
-                                "content://downloads/my_downloads"
-                        };
-                        for (String contentUriPrefix : contentUriPrefixesToTry) {
-                            try {
-                                final Uri contentUri = ContentUris.withAppendedId(Uri.parse(contentUriPrefix), Long.valueOf(id));
+                        final Uri contentUri = ContentUris.withAppendedId(Uri.parse(contentUriPrefix), Long.parseLong(id));
 
-
-                                return getDataColumn(context, contentUri, null, null);
-                            } catch (NumberFormatException e) {
-                                //In Android 8 and Android P the id is not a number
-                                return uri.getPath().replaceFirst("^/document/raw:", "").replaceFirst("^raw:", "");
-                            }
-                        }
-
-
-                    }
-                } else {
-                    final String id = DocumentsContract.getDocumentId(uri);
-
-                    if (id.startsWith("raw:")) {
-                        return id.replaceFirst("raw:", "");
-                    }
-                    try {
-                        contentUri = ContentUris.withAppendedId(
-                                Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
-                    } catch (NumberFormatException e) {
-                        e.printStackTrace();
-                    }
-                    if (contentUri != null) {
 
                         return getDataColumn(context, contentUri, null, null);
+                    } catch (NumberFormatException e) {
+                        //In Android 8 and Android P the id is not a number
+                        return Objects.requireNonNull(uri.getPath()).replaceFirst("^/document/raw:", "").replaceFirst("^raw:", "");
                     }
                 }
             }
+        }
 
 
-            // MediaProvider
-            if (isMediaDocument(uri)) {
-                final String docId = DocumentsContract.getDocumentId(uri);
-                final String[] split = docId.split(":");
-                final String type = split[0];
+        // MediaProvider
+        if (isMediaDocument(uri)) {
+            final String docId = DocumentsContract.getDocumentId(uri);
+            final String[] split = docId.split(":");
+            final String type = split[0];
 
-                Uri contentUri = null;
+            Uri contentUri = null;
 
-                if ("image".equals(type)) {
-                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                } else if ("video".equals(type)) {
-                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-                } else if ("audio".equals(type)) {
-                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-                }
-                selection = "_id=?";
-                selectionArgs = new String[]{split[1]};
-
-
-                return getDataColumn(context, contentUri, selection,
-                        selectionArgs);
+            if ("image".equals(type)) {
+                contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+            } else if ("video".equals(type)) {
+                contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+            } else if ("audio".equals(type)) {
+                contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
             }
+            selection = "_id=?";
+            selectionArgs = new String[]{split[1]};
 
+
+            return getDataColumn(context, contentUri, selection,
+                    selectionArgs);
+        }
+
+        if (isGoogleDriveUri(uri)) {
+            return getDriveFilePath(context, uri);
+        }
+
+        if (isWhatsAppFile(uri)) {
+            return getFilePathForWhatsApp(context, uri);
+        }
+
+
+        if ("content".equalsIgnoreCase(uri.getScheme())) {
+
+            if (isGooglePhotosUri(uri)) {
+                return uri.getLastPathSegment();
+            }
             if (isGoogleDriveUri(uri)) {
                 return getDriveFilePath(context, uri);
             }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 
-            if (isWhatsAppFile(uri)) {
-                return getFilePathForWhatsApp(context, uri);
+                // return getFilePathFromURI(context,uri);
+                return copyFileToInternalStorage(context, uri, "userfiles");
+                // return getRealPathFromURI(context,uri);
+            } else {
+                return getDataColumn(context, uri, null, null);
             }
 
-
-            if ("content".equalsIgnoreCase(uri.getScheme())) {
-
-                if (isGooglePhotosUri(uri)) {
-                    return uri.getLastPathSegment();
-                }
-                if (isGoogleDriveUri(uri)) {
-                    return getDriveFilePath(context, uri);
-                }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-
-                    // return getFilePathFromURI(context,uri);
-                    return copyFileToInternalStorage(context, uri, "userfiles");
-                    // return getRealPathFromURI(context,uri);
-                } else {
-                    return getDataColumn(context, uri, null, null);
-                }
-
-            }
-            if ("file".equalsIgnoreCase(uri.getScheme())) {
-                return uri.getPath();
-            }
-        } else {
-
-            if (isWhatsAppFile(uri)) {
-                return getFilePathForWhatsApp(context, uri);
-            }
-
-            if ("content".equalsIgnoreCase(uri.getScheme())) {
-                String[] projection = {
-                        MediaStore.Images.Media.DATA
-                };
-                Cursor cursor = null;
-                try {
-                    cursor = context.getContentResolver()
-                            .query(uri, projection, selection, selectionArgs, null);
-                    int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                    if (cursor.moveToFirst()) {
-                        return cursor.getString(column_index);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+        }
+        if ("file".equalsIgnoreCase(uri.getScheme())) {
+            return uri.getPath();
         }
         return null;
     }
@@ -272,21 +222,18 @@ public class FileUtils {
         }
 
         fullPath = System.getenv("EXTERNAL_STORAGE") + relativePath;
-        if (fileExists(fullPath)) {
-            return fullPath;
-        }
 
         return fullPath;
     }
 
     private static String getDriveFilePath(Context context, Uri uri) {
-        Uri returnUri = uri;
-        Cursor returnCursor = context.getContentResolver().query(returnUri, null, null, null, null);
+        Cursor returnCursor = context.getContentResolver().query(uri, null, null, null, null);
         /*
          * Get the column indexes of the data in the Cursor,
          *     * move to the first row in the Cursor, get the data,
          *     * and display it.
          * */
+        assert returnCursor != null;
         int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
         int sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE);
         returnCursor.moveToFirst();
@@ -297,7 +244,8 @@ public class FileUtils {
             InputStream inputStream = context.getContentResolver().openInputStream(uri);
             FileOutputStream outputStream = new FileOutputStream(file);
             int read = 0;
-            int maxBufferSize = 1 * 1024 * 1024;
+            int maxBufferSize = 1024 * 1024;
+            assert inputStream != null;
             int bytesAvailable = inputStream.available();
 
             //int bufferSize = 1024;
@@ -313,7 +261,7 @@ public class FileUtils {
             Log.e("File Path", "Path " + file.getPath());
             Log.e("File Size", "Size " + file.length());
         } catch (Exception e) {
-            Log.e("Exception", e.getMessage());
+            Log.e("Exception", Objects.requireNonNull(e.getMessage()));
         }
         return file.getPath();
     }
@@ -325,9 +273,7 @@ public class FileUtils {
      * @return
      */
     private static String copyFileToInternalStorage(Context context, Uri uri, String newDirName) {
-        Uri returnUri = uri;
-
-        Cursor returnCursor = context.getContentResolver().query(returnUri, new String[]{
+        Cursor returnCursor = context.getContentResolver().query(uri, new String[]{
                 OpenableColumns.DISPLAY_NAME, OpenableColumns.SIZE
         }, null, null, null);
 
@@ -337,6 +283,7 @@ public class FileUtils {
          *     * move to the first row in the Cursor, get the data,
          *     * and display it.
          * */
+        assert returnCursor != null;
         int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
         int sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE);
         returnCursor.moveToFirst();
@@ -373,7 +320,7 @@ public class FileUtils {
 
         } catch (Exception e) {
 
-            Log.e("Exception", e.getMessage());
+            Log.e("Exception", Objects.requireNonNull(e.getMessage()));
         }
 
         return output.getPath();
@@ -430,138 +377,6 @@ public class FileUtils {
         return "com.google.android.apps.docs.storage".equals(uri.getAuthority()) || "com.google.android.apps.docs.storage.legacy".equals(uri.getAuthority());
     }
 
-
-    public String LoadFile(Activity activity, String fileName, boolean loadFromRawFolder) throws IOException {
-        // Create a InputStream to read the file into
-        InputStream iS;
-        if (loadFromRawFolder) {
-            // get the resource id from the file name
-            int rID = activity.getResources().getIdentifier(getClass().getPackage().getName() + ":raw/" + fileName,
-                    null, null);
-            // get the file as a stream
-            iS = activity.getResources().openRawResource(rID);
-        } else {
-            // get the file as a stream
-            iS = activity.getResources().getAssets().open(fileName);
-        }
-
-        ByteArrayOutputStream oS = new ByteArrayOutputStream();
-        byte[] buffer = new byte[iS.available()];
-        int bytesRead = 0;
-        while ((bytesRead = iS.read(buffer)) > 0) {
-            oS.write(buffer);
-        }
-        oS.close();
-        iS.close();
-
-        // return the output stream as a String
-        return oS.toString();
-    }
-
-    public static void saveFileContents(String dBFile, String machinesToExport) {
-        // TODO Auto-generated method stub
-        byteArrayToFile(machinesToExport.getBytes(), new File(dBFile));
-    }
-
-    public static void byteArrayToFile(byte[] byteData, File filePath) {
-
-        try {
-            FileOutputStream fos = new FileOutputStream(filePath);
-            fos.write(byteData);
-            fos.close();
-
-        } catch (FileNotFoundException ex) {
-            System.out.println("FileNotFoundException : " + ex);
-        } catch (IOException ioe) {
-            System.out.println("IOException : " + ioe);
-        }
-
-    }
-
-    public static String getDataDir(Context context) {
-
-        String dataDir = context.getApplicationInfo().dataDir;
-        PackageManager m = context.getPackageManager();
-        String packageName = context.getPackageName();
-        Log.v("VMExecutor", "Found packageName: " + packageName);
-
-        if (dataDir == null) {
-            dataDir = "/data/data/" + packageName;
-        }
-        return dataDir;
-    }
-
-    public static boolean fileValid(Context context, String path) {
-
-        if (path == null || path.equals(""))
-            return true;
-        if (path.startsWith("content://") || path.startsWith("/content/")) {
-            int fd = get_fd(context, path);
-            if (fd <= 0)
-                return false;
-        } else {
-            File file = new File(path);
-            return file.exists();
-        }
-        return true;
-    }
-
-    public static HashMap<Integer, ParcelFileDescriptor> fds = new HashMap<Integer, ParcelFileDescriptor>();
-
-    public static int get_fd(final Context context, String path) {
-        int fd = 0;
-        if (path == null)
-            return 0;
-
-        if (path.startsWith("/content") || path.startsWith("content://")) {
-            path = path.replaceFirst("/content", "content:");
-
-            try {
-                ParcelFileDescriptor pfd = context.getContentResolver().openFileDescriptor(Uri.parse(path), "rw");
-                fd = pfd.getFd();
-                fds.put(fd, pfd);
-            } catch (final FileNotFoundException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(context, "Error: " + e, Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-        } else {
-            try {
-                File file = new File(path);
-                if (!file.exists())
-                    file.createNewFile();
-                ParcelFileDescriptor pfd = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_WRITE_ONLY);
-                fd = pfd.getFd();
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-
-        }
-        return fd;
-    }
-
-    public static int close_fd(int fd) {
-
-        if (FileUtils.fds.containsKey(fd)) {
-            ParcelFileDescriptor pfd = FileUtils.fds.get(fd);
-            try {
-                pfd.close();
-                FileUtils.fds.remove(fd);
-                return 0; // success for Native side
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
-        return -1;
-    }
-
     public static void writeToFile(String data, File file, Context context) {
         try {
             FileOutputStream fileOutStream = new FileOutputStream(file);
@@ -574,7 +389,7 @@ public class FileUtils {
     }
 
     public static String readFromFile(Context context, File file) {
-        String contents = null;
+        String contents;
         try {
             int length = (int) file.length();
 
@@ -595,71 +410,9 @@ public class FileUtils {
         return contents;
     }
 
-    public static boolean moveFile(String oldfilename, String newFolderPath, String newFilename) {
-        File folder = new File(newFolderPath);
-        if (!folder.exists())
-            folder.mkdirs();
-
-        File oldfile = new File(oldfilename);
-        File newFile = new File(newFolderPath, newFilename);
-
-        if (!newFile.exists()) {
-            try {
-                newFile.createNewFile();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-        return oldfile.renameTo(newFile);
-    }
-
     public static boolean isFileExists(String filePath) {
         File file = new File(filePath.replaceAll("\n", ""));
         return file.exists();
-    }
-
-    public static void moveAFile(String _from, String _to) {
-        File oldFile = new File(_from);
-        File newFile = new File(_to);
-
-        boolean success = oldFile.renameTo(newFile);
-        if (success) {
-            Log.d("File", "Done!");
-        } else {
-            Log.e("File", "Failed!");
-        }
-    }
-
-    public static boolean copyFile(String _sourceFile, String _destFile) {
-        File vDir = new File(_destFile.substring(0, _destFile.lastIndexOf("/")));
-        if (!vDir.exists() && vDir.mkdirs()) {
-            return false;
-        }
-        try {
-            File source = new File(_sourceFile);
-            File dest = new File(_destFile);
-
-            if (!source.exists()) {
-                return false;
-            }
-
-            FileInputStream inStream = new FileInputStream(source);
-            FileOutputStream outStream = new FileOutputStream(dest);
-
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((length = inStream.read(buffer))
-                    > 0) {
-                outStream.write(buffer, 0, length);
-            }
-
-            inStream.close();
-            outStream.close();
-        } catch (IOException e) {
-            return false;
-        }
-        return true;
     }
 
     public static void copyFileFromUri(Context context, Uri sourceUri, String destFile) throws IOException {
@@ -806,34 +559,70 @@ public class FileUtils {
             if (dst.getParentFile() != null && !dst.getParentFile().exists()) {
                 createDirectory(dst.getParent());
             }
-            FileInputStream inStream = new FileInputStream(src);
-            FileOutputStream outStream = new FileOutputStream(dst);
 
-            byte[] buffer = new byte[8192];
-            int length;
-            while ((length = inStream.read(buffer))
-                    > 0) {
-                outStream.write(buffer, 0, length);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                Files.copy(src.toPath(), dst.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            } else {
+                FileInputStream inStream = new FileInputStream(src);
+                FileOutputStream outStream = new FileOutputStream(dst);
+
+                byte[] buffer = new byte[8192];
+                int length;
+                while ((length = inStream.read(buffer))
+                        > 0) {
+                    outStream.write(buffer, 0, length);
+                }
+
+                inStream.close();
+                outStream.close();
             }
-
-            inStream.close();
-            outStream.close();
         }
     }
 
-    @Deprecated
-    public static void deleteDirectory(String _pathToDelete) {
-        delete(new File(_pathToDelete));
+    static boolean copyFile(String filePath, String destFolderPath) {
+        File file = new File(filePath);
+
+        if (!file.exists()) return false;
+
+        try {
+            copy(file, new File(destFolderPath, file.getName()));
+            return true;
+        } catch (Exception ignored) {
+
+        }
+
+        return false;
+    }
+
+    public static boolean delete(String path) {
+        try {
+            return delete(new File(path));
+        } catch (Exception ignored) {
+
+        }
+
+        return false;
     }
 
     public static boolean delete(File file) {
         if (!file.exists()) return true;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (Files.isSymbolicLink(file.toPath())) {
+                try {
+                    return Files.deleteIfExists(file.toPath());
+                } catch (IOException e) {
+                    return false;
+                }
+            }
+        }
+
         if (file.isDirectory()) {
             String[] children = file.list();
 
             if (children == null) {
-                Log.e(TAG, "delete: Failed:" + file);
-                return false;
+                Log.e(TAG, "delete: Try deleteFolderHard " + file);
+                return deleteFolderHard(file);
             }
 
             for (int i = 0; i < children.length; i++) {
@@ -843,10 +632,24 @@ public class FileUtils {
         }
         boolean success = file.delete();
         if (!success) {
-            Log.e(TAG, "delete: Failed: " + file);
+            Log.e(TAG, "delete: Try deleteFolderHard " + file);
+            success = deleteFolderHard(file);
         }
 
         return success;
+    }
+
+    public static boolean deleteFolderHard(File file) {
+        try {
+            String command = "rm -rf " + file.getAbsolutePath();
+            Process process = Runtime.getRuntime().exec(command);
+            process.waitFor();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
     public static boolean canRead(String filePath) {
@@ -918,9 +721,8 @@ public class FileUtils {
 
     public static long getFolderSize(String _path) {
         try {
-            File file;
-            file = new File(_path);
-            if (file == null || !file.exists()) {
+            File file = new File(_path);
+            if (!file.exists()) {
                 return 0;
             }
             if (!file.isDirectory()) {
@@ -1055,9 +857,7 @@ public class FileUtils {
     }
 
     public static String getMd5(String filePath) {
-        InputStream inputStream = null;
-        try {
-            inputStream = new FileInputStream(filePath);
+        try (InputStream inputStream = new FileInputStream(filePath)) {
             byte[] buffer = new byte[1024];
             MessageDigest digest = MessageDigest.getInstance("MD5");
             int numRead = 0;
@@ -1066,16 +866,10 @@ public class FileUtils {
                 if (numRead > 0)
                     digest.update(buffer, 0, numRead);
             }
-            byte [] md5Bytes = digest.digest();
+            byte[] md5Bytes = digest.digest();
             return convertHashToString(md5Bytes);
         } catch (Exception e) {
             return null;
-        } finally {
-            if (inputStream != null) {
-                try {
-                    inputStream.close();
-                } catch (Exception e) { }
-            }
         }
     }
 

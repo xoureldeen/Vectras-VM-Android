@@ -167,27 +167,32 @@ public class ExportRomActivity extends AppCompatActivity {
         ArrayList<String> _filelist = new ArrayList<>();
         FileUtils.getAListOfAllFilesAndFoldersInADirectory(AppConfig.vmFolder + current.vmID, _filelist);
         if (!_filelist.isEmpty()) {
+            ArrayList<String> pathList = new ArrayList<>();
+
             for (int _repeat = 0; _repeat < _filelist.size(); _repeat++) {
                 if (!_filelist.get(_repeat).endsWith("vmID.txt") &&
                         !_filelist.get(_repeat).endsWith("vmID.old.txt")) {
-                    filePaths = java.util.Arrays.copyOf(filePaths, filePaths.length + 1);
 
                     if (_filelist.get(_repeat).endsWith("rom-data.json")) {
-                        filePaths[filePaths.length - 1] = tempFolder + "rom-data.json";
+                        pathList.add(tempFolder + "rom-data.json");
                     } else if (_filelist.get(_repeat).endsWith("snapshot.sh")) {
-                        String snapshotParams = FileUtils.readAFile(_filelist.get(_repeat));
-                        snapshotParams = StartVM.removeQmpParams(snapshotParams);
-                        snapshotParams = StartVM.removeDisplayParams(snapshotParams);
-                        FileUtils.writeToFile(tempFolder, "snapshot.sh", snapshotParams.replace(getRomPath, "OhnoIjustrealizeditsmidnightandIstillhavetodothis"));
-                        filePaths[filePaths.length - 1] = tempFolder + "snapshot.sh";
+                        if (FileUtils.isFileExists(AppConfig.vmFolder + current.vmID + "/snapshot.bin")) {
+                            String snapshotParams = FileUtils.readAFile(_filelist.get(_repeat));
+                            snapshotParams = StartVM.removeQmpParams(snapshotParams);
+                            snapshotParams = StartVM.removeDisplayParams(snapshotParams);
+                            FileUtils.writeToFile(tempFolder, "snapshot.sh", snapshotParams.replace(getRomPath, "OhnoIjustrealizeditsmidnightandIstillhavetodothis"));
+                            pathList.add(tempFolder + "snapshot.sh");
+                        }
                     } else if (_filelist.get(_repeat).endsWith("cqcm.json")) {
                         FileUtils.writeToFile(tempFolder, "cqcm.json", FileUtils.readAFile(_filelist.get(_repeat)).replace(getRomPath, "OhnoIjustrealizeditsmidnightandIstillhavetodothis"));
-                        filePaths[filePaths.length - 1] = tempFolder + "cqcm.json";
+                        pathList.add(tempFolder + "cqcm.json");
                     } else {
-                        filePaths[filePaths.length - 1] = _filelist.get(_repeat);
+                        pathList.add(_filelist.get(_repeat));
                     }
                 }
             }
+
+            filePaths = pathList.toArray(new String[0]);
         }
 
         View progressView = LayoutInflater.from(this).inflate(R.layout.dialog_progress_style, null);
