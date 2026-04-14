@@ -1,6 +1,7 @@
 package com.vectras.vm.main.core;
 
 import android.app.Activity;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.vectras.qemu.Config;
@@ -12,10 +13,15 @@ import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vterm.Terminal;
 
 public class PendingCommand {
+    private static final String TAG = "PendingCommand";
+    public static String command = "";
+
     public static void runNow(Activity activity) {
-        if (!AppConfig.pendingCommand.isEmpty()) {
-            if (!VMManager.isthiscommandsafe(AppConfig.pendingCommand, activity)) {
-                AppConfig.pendingCommand = "";
+        Log.i(TAG, command);
+
+        if (!command.isEmpty()) {
+            if (!VMManager.isthiscommandsafe(command, activity)) {
+                command = "";
                 DialogUtils.oneDialog(
                         activity,
                         activity.getString(R.string.problem_has_been_detected),
@@ -28,8 +34,8 @@ public class PendingCommand {
                         null
                 );
             } else {
-                if (AppConfig.pendingCommand.startsWith("qemu-img")) {
-                    if (!VMManager.isthiscommandsafeimg(AppConfig.pendingCommand, activity)) {
+                if (command.startsWith("qemu-img")) {
+                    if (!VMManager.isthiscommandsafeimg(command, activity)) {
                         DialogUtils.oneDialog(activity,
                                 activity.getString(R.string.problem_has_been_detected),
                                 activity.getString(R.string.size_too_large_try_qcow2_format),
@@ -42,22 +48,26 @@ public class PendingCommand {
                         );
                     } else {
                         Terminal _vterm = new Terminal(activity);
-                        _vterm.executeShellCommand2(AppConfig.pendingCommand, false, activity);
+                        _vterm.executeShellCommand2(command, false, activity);
                         Toast.makeText(activity, activity.getResources().getString(R.string.done), Toast.LENGTH_LONG).show();
                     }
+
+                    command = "";
                 } else {
+                    Log.i(TAG, "Run VM...");
+
                     com.vectras.vm.StartVM.cdrompath = "";
                     Config.vmID = VMManager.idGenerator();
                     new Thread(() -> {
-                        String env = StartVM.env(activity, AppConfig.pendingCommand, "", true);
+                        String env = StartVM.env(activity, command, "", true);
                         activity.runOnUiThread(() -> {
                             MainStartVM.startNow(activity, "Quick run", env, Config.vmID, null);
-                            VMManager.lastQemuCommand = AppConfig.pendingCommand;
+                            VMManager.lastQemuCommand = command;
+                            command = "";
                         });
                     }).start();
                 }
             }
-            AppConfig.pendingCommand = "";
         }
     }
 }

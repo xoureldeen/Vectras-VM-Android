@@ -74,7 +74,6 @@ public class AppConfig {
     public static String vmFolder = maindirpath + "roms/";
     public static String importedDriveFolder = maindirpath + "drive/";
     public static String cvbiFolder = maindirpath + "cvbi/";
-    public static String pendingCommand = "";
     public static String lastCrashLogPath = internalDataDirPath + "logs/lastcrash.txt";
 
     public static String neededPkgs() {

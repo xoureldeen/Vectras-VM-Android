@@ -11,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.StrictMode;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -110,7 +109,12 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
     private SoftwareStoreHomeAdapter adapterSoftwareStore;
     private final List<DataRoms> listSearchData = new ArrayList<>();
     private LinearLayoutManager layoutManager;
-    private final VmsFragment vmsFragment = new VmsFragment();
+    private VmsFragment vmsFragment() {
+        VmsFragment fragment = (VmsFragment) getSupportFragmentManager()
+                .findFragmentByTag(TAG_VMS_FRAGMENT);
+        if (fragment == null) fragment = new VmsFragment();
+        return fragment;
+    }
     private Fragment currentFragment;
     private boolean isInVmsFragment = true;
 
@@ -176,7 +180,8 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(bindingContent.containerView.getId(), vmsFragment, TAG_VMS_FRAGMENT)
+                    .replace(bindingContent.containerView.getId(),
+                            new VmsFragment(), TAG_VMS_FRAGMENT)
                     .commit();
         }
 
@@ -201,6 +206,7 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
         bindingContent.bottomNavigation.setOnItemSelectedListener(item -> {
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            VmsFragment vms = vmsFragment();
             String selectedTag;
 
             int id = item.getItemId();
@@ -213,11 +219,11 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
             }
 
             if (id == R.id.item_home) {
-                if (!vmsFragment.isAdded()) {
-                    fragmentTransaction.add(bindingContent.containerView.getId(), vmsFragment, TAG_VMS_FRAGMENT);
+                if (!vms.isAdded()) {
+                    fragmentTransaction.add(bindingContent.containerView.getId(), vms, TAG_VMS_FRAGMENT);
                 }
 
-                fragmentTransaction.show(vmsFragment);
+                fragmentTransaction.show(vms);
                 if (!isInVmsFragment && currentFragment != null) {
                     fragmentTransaction.remove(currentFragment);
                 }
@@ -226,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
                 bindingContent.searchbar.setHint(getText(R.string.home));
                 bindingContent.searchbar.setEnabled(false);
             } else {
-                fragmentTransaction.hide(vmsFragment);
+                fragmentTransaction.hide(vms);
                 Fragment selectedFragment;
 
                 if (id == R.id.item_romstore) {

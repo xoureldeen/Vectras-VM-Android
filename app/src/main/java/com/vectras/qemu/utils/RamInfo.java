@@ -28,6 +28,13 @@ public class RamInfo {
         int freeRamInt = safeLongToInt(freeMem);
         int totalRamInt = safeLongToInt(totalMem);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+
+        try {
+            String temp = prefs.getString("memory", "256");
+        } catch (ClassCastException e) {
+            prefs.edit().putString("memory", String.valueOf(prefs.getInt("memory", 256))).apply();
+        }
+
         if (prefs.getBoolean("customMemory", false) && TextUtils.isNumberOnly(prefs.getString("memory", "256"))) {
             if (Long.parseLong(prefs.getString("memory", "256")) > totalMem) {
                 prefs.edit().putString("memory", String.valueOf(totalRamInt / 2)).apply();
