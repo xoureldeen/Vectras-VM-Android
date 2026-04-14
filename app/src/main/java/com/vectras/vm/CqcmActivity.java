@@ -15,6 +15,7 @@ import androidx.core.app.ActivityCompat;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.vectras.vm.main.MainActivity;
+import com.vectras.vm.main.core.PendingCommand;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.JSONUtils;
 import com.vectras.vm.utils.PermissionUtils;
@@ -24,6 +25,8 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class CqcmActivity extends AppCompatActivity {
+    private final String TAG = "CqcmActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -133,7 +136,9 @@ public class CqcmActivity extends AppCompatActivity {
     }
 
     private void runCommand(String _command) {
-        AppConfig.pendingCommand = _command;
+        Log.i(TAG, "runCommand: " + _command);
+
+        PendingCommand.command = _command;
 
         if (!MainActivity.isActivate) {
             startActivity(new Intent(this, SplashActivity.class));

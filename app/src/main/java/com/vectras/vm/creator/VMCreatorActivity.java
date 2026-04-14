@@ -243,7 +243,8 @@ public class VMCreatorActivity extends AppCompatActivity {
         binding.cbvShowbootmenu.setOnCheckedChangeListener((v, isChecked) -> isShowBootMenu = isChecked);
 
         binding.cbvUseuefi.setOnCheckedChangeListener((v, isChecked) -> isUseUefi = isChecked);
-        if (!MainSettingsManager.getArch(this).equals("X86_64")) binding.cbvUseuefi.setVisibility(View.GONE);
+        if (!MainSettingsManager.getArch(this).equals("X86_64"))
+            binding.cbvUseuefi.setVisibility(View.GONE);
 
         binding.sbvBootfrom.setOnClickListener(v -> VMCreatorSelector.bootFrom(this, bootFrom, ((position, name, value) -> {
             bootFrom = position;
@@ -363,7 +364,7 @@ public class VMCreatorActivity extends AppCompatActivity {
         if (isProcessingFile) return;
 
         if (!created && !modify) {
-            new Thread(() -> FileUtils.delete(new File (AppConfig.vmFolder + vmID))).start();
+            new Thread(() -> FileUtils.delete(new File(AppConfig.vmFolder + vmID))).start();
         }
         modify = false;
         finish();
@@ -431,32 +432,36 @@ public class VMCreatorActivity extends AppCompatActivity {
                         }
                     });
                 } else {
-                    if (!FileUtils.isValidFilePath(this, FileUtils.getPath(this, uri), false)) {
-                        DialogUtils.oneDialog(this,
-                                getString(R.string.problem_has_been_detected),
-                                getString(R.string.invalid_file_path_content),
-                                getString(R.string.ok),
-                                true,
-                                R.drawable.warning_48px,
-                                true,
-                                null,
-                                null);
-                        return;
-                    }
-                    File selectedFilePath = new File(getPath(uri));
-                    if (selectedFilePath.getName().endsWith(".iso")) {
-                        binding.cdrom.setText(selectedFilePath.getPath());
-                    } else {
-                        DialogUtils.oneDialog(this,
-                                getString(R.string.problem_has_been_detected),
-                                getString(R.string.invalid_iso_file_path_content),
-                                getString(R.string.ok),
-                                true,
-                                R.drawable.warning_48px,
-                                true,
-                                null,
-                                null);
-                    }
+                    executor.execute(() -> {
+                        if (!FileUtils.isValidFilePath(this, FileUtils.getPath(this, uri), false)) {
+                            runOnUiThread(() -> DialogUtils.oneDialog(this,
+                                    getString(R.string.problem_has_been_detected),
+                                    getString(R.string.invalid_file_path_content),
+                                    getString(R.string.ok),
+                                    true,
+                                    R.drawable.warning_48px,
+                                    true,
+                                    null,
+                                    null)
+                            );
+                            return;
+                        }
+                        File selectedFilePath = new File(getPath(uri));
+                        if (selectedFilePath.getName().endsWith(".iso")) {
+                            runOnUiThread(() -> binding.cdrom.setText(selectedFilePath.getPath()));
+                        } else {
+                            runOnUiThread(() -> DialogUtils.oneDialog(this,
+                                    getString(R.string.problem_has_been_detected),
+                                    getString(R.string.invalid_iso_file_path_content),
+                                    getString(R.string.ok),
+                                    true,
+                                    R.drawable.warning_48px,
+                                    true,
+                                    null,
+                                    null)
+                            );
+                        }
+                    });
                 }
             });
 
@@ -778,7 +783,7 @@ public class VMCreatorActivity extends AppCompatActivity {
                     }
                 });
             } else {
-                runOnUiThread(() ->startProcessingHardDriveFile(_content_describer, _addtodrive));
+                runOnUiThread(() -> startProcessingHardDriveFile(_content_describer, _addtodrive));
             }
         }).start();
     }
@@ -1026,7 +1031,8 @@ public class VMCreatorActivity extends AppCompatActivity {
                 }
 
                 //It can be deleted because there are few users of the old version.
-                if (!_filename.replace(".cvbi", "").isEmpty()) FileUtils.move(AppConfig.vmFolder + _filename.replace(".cvbi", ""), AppConfig.vmFolder + vmID);
+                if (!_filename.replace(".cvbi", "").isEmpty())
+                    FileUtils.move(AppConfig.vmFolder + _filename.replace(".cvbi", ""), AppConfig.vmFolder + vmID);
 
                 if (!jObj.has("drive") && !jObj.has("cdrom") && !jObj.has("qemu")) {
                     DialogUtils.oneDialog(this, getResources().getString(R.string.problem_has_been_detected), getResources().getString(R.string.this_rom_is_missing_too_much_information), R.drawable.warning_24px);
