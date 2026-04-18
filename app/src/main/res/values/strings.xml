@@ -10,6 +10,8 @@
     <string name="noproccesses">NO PROCCESSES!</string>
     <string name="unknownstate">UNKNOWN STATE!</string>
 
+    <string name="qemu_console_head" translatable="false">compat_monitor1 console\nQemu monitor - type \'help\' for more information\n(qemu)</string>
+
     <string name="desktopInstructions">To use External Mouse:\n\tDisable Mouse Acceleration inside the Guest OS.\n\t\tFor DSL use command: xset m 1\n"\t\tFor Other OSes disable \"Enhance pointer Precision\" or choose Mouse \"usb-tablet\" from Vectras main options.\n\tPlug in or Pair your USB/Bluetooth Mouse and press OK\n\tMove your mouse pointer to all desktop sides to calibrate.\n"</string>
 
     <string name="navigation_drawer_open">Drawer open</string>
@@ -542,6 +544,12 @@
     <string name="virtio_tools_for_windows_is_now_ready_to_use">VirtIO tools for Windows is now ready to use</string>
     <string name="do_you_want_to_insert_it_into_the_optical_drive_right_now">Do you want to insert it into the optical drive right now?</string>
     <string name="try_play_store_version">Try Play Store version</string>
+    <string name="enter_a_command">Enter a command</string>
+    <string name="console">Console</string>
+    <string name="take_screenshot">Take screenshot</string>
+    <string name="unable_to_take_a_screenshot">Unable to take a screenshot.</string>
+    <string name="saved_to_the_gallery">Saved to the gallery.</string>
+    <string name="taking_a_screenshot">Taking a screenshot…</string>
 
 
     <!--======================TERMUX STRINGS====================-->

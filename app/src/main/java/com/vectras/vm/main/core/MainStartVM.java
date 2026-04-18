@@ -27,6 +27,7 @@ import com.vectras.vm.MainService;
 import com.vectras.vm.R;
 import com.vectras.vm.VMManager;
 import com.vectras.vm.logger.VectrasStatus;
+import com.vectras.vm.manager.QmpSender;
 import com.vectras.vm.settings.ExternalVNCSettingsActivity;
 import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.DialogUtils;
@@ -259,7 +260,7 @@ public class MainStartVM {
                                 if (result[0]) {
                                     VMManager.deleteMigrate();
                                 } else {
-                                    VMManager.shutdownCurrentVM();
+                                    QmpSender.quickShutdown();
                                     assert activity != null;
                                     activity.runOnUiThread(() -> {
                                         if (DialogUtils.isSafeDismiss(activity, progressDialog)) progressDialog.dismiss();
@@ -293,7 +294,7 @@ public class MainStartVM {
                                 forceDisableMigrate = false;
                             }
 
-                            VMManager.resumeCurrentVM();
+                            QmpSender.resume();
 
                             if (MainSettingsManager.getVmUi(context).equals("VNC")) {
                                 if (MainSettingsManager.getVncExternal(context)) {
@@ -390,7 +391,7 @@ public class MainStartVM {
         ImageView ivStop = progressView.findViewById(R.id.ivStop);
         ivStop.setOnClickListener(v -> {
             isStopNow = true;
-            VMManager.shutdownCurrentVM();
+            QmpSender.quickShutdown();
         });
 
         progressDialog = new MaterialAlertDialogBuilder(context, R.style.CenteredDialogTheme)

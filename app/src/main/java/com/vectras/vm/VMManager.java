@@ -30,6 +30,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.fragment.app.FragmentActivity;
 
 import com.anbui.elephant.retrofit2utils.Retrofit2Utils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -49,6 +50,8 @@ import com.vectras.qemu.utils.QmpClient;
 import com.vectras.vm.main.MainActivity;
 import com.vectras.vm.main.core.MainStartVM;
 import com.vectras.vm.main.vms.DataMainRoms;
+import com.vectras.vm.manager.QemuConsoleDialog;
+import com.vectras.vm.manager.QmpSender;
 import com.vectras.vm.settings.VNCSettingsActivity;
 import com.vectras.vm.settings.X11DisplaySettingsActivity;
 import com.vectras.vm.setupwizard.SetupFeatureCore;
@@ -853,22 +856,6 @@ public class VMManager {
         vterm.executeShellCommand2("pkill -15 -f qemu-system-; sleep 1; pkill -9 -f qemu-system-", false, null);
     }
 
-    public static void shutdownCurrentVM() {
-        new Thread(() -> QmpClient.sendCommand("{ \"execute\": \"quit\" }")).start();
-    }
-
-    public static void resetCurrentVM() {
-        new Thread(() -> QmpClient.sendCommand("{ \"execute\": \"system_reset\" }")).start();
-    }
-
-    public static void pauseCurrentVM() {
-        QmpClient.sendCommand("{ \"execute\": \"stop\" }");
-    }
-
-    public static void resumeCurrentVM() {
-        QmpClient.sendCommand("{ \"execute\": \"cont\" }");
-    }
-
     public static String startMigrate() {
         return sendQMPCommand("migrate \\\"exec:cat > " + AppConfig.vmFolder + Config.vmID + "/snapshot.bin\\\"");
     }
@@ -902,566 +889,59 @@ public class VMManager {
         return FileUtils.move(AppConfig.vmFolder + Config.vmID + "/snapshot.bin.bak", AppConfig.vmFolder + Config.vmID + "/snapshot.bin");
     }
 
-    public static void showChangeRemovableDevicesDialog(Activity _activity, VncCanvasActivity vncCanvasActivity) {
-        new Thread(() -> {
-            if (FileUtils.isFileExists(AppConfig.vmFolder + Config.vmID + "/snapshot.sh")) {
-                String snapshotParams = FileUtils.readAFile(AppConfig.vmFolder + Config.vmID + "/snapshot.sh");
-                if (!snapshotParams.isEmpty()) lastQemuCommand = snapshotParams;
-            }
+    public static void showPauseDialog(Activity _activity) {
+        DialogUtils.twoDialog(
+                _activity,
+                _activity.getString(R.string.pause),
+                _activity.getString(R.string.pause_vm_note),
+                _activity.getString(R.string.pause),
+                _activity.getString(R.string.cancel),
+                true,
+                R.drawable.pause_24px,
+                true,
+                () -> {
+                    ProgressDialog progressDialog = new ProgressDialog(_activity);
+                    progressDialog.setText(_activity.getString(R.string.pausing_vm_note));
+                    progressDialog.setFixTextColor(true);
+                    progressDialog.show();
+                    new Thread(() -> {
+                        QmpSender.pause();
 
-            String allDevice = getAllDevicesInQemu();
+                        String migrateResult = startMigrate();
 
-            _activity.runOnUiThread(() -> {
-                View _view = LayoutInflater.from(_activity).inflate(R.layout.dialog_change_removable_devices, null);
-                AlertDialog _dialog = new MaterialAlertDialogBuilder(_activity, R.style.CenteredDialogTheme)
-                        .setView(_view)
-                        .create();
-
-                _view.findViewById(R.id.ln_pause).setOnClickListener(v -> {
-                    DialogUtils.twoDialog(
-                            _activity,
-                            _activity.getString(R.string.pause),
-                            _activity.getString(R.string.pause_vm_note),
-                            _activity.getString(R.string.pause),
-                            _activity.getString(R.string.cancel),
-                            true,
-                            R.drawable.pause_24px,
-                            true,
-                            () -> {
-                                ProgressDialog progressDialog = new ProgressDialog(_activity);
-                                progressDialog.setText(_activity.getString(R.string.pausing_vm_note));
-                                progressDialog.setFixTextColor(true);
-                                progressDialog.show();
-                                new Thread(() -> {
-                                    pauseCurrentVM();
-
-                                    String migrateResult = startMigrate();
-
-                                    if (migrateResult == null || !migrateResult.contains("terminal does not allow synchronous migration, continuing detached")) {
-                                        resumeCurrentVM();
-                                        _activity.runOnUiThread(() -> {
-                                            DialogUtils.oopsDialog(_activity, _activity.getString(R.string.vm_state_save_failed_note));
-                                            progressDialog.reset();
-                                        });
-                                        Log.e(TAG, "Pause VM failed.");
-                                        return;
-                                    }
-
-                                    Boolean[] result = getMigrateStatus();
-
-                                    while (!result[0] && !result[1]) {
-                                        try {
-                                            sleep(1000);
-                                        } catch (Exception ignored) {
-
-                                        }
-                                        result = getMigrateStatus();
-                                    }
-
-                                    if (result[1]) {
-                                        resumeCurrentVM();
-                                        _activity.runOnUiThread(() -> DialogUtils.oopsDialog(_activity, _activity.getString(R.string.vm_state_save_failed_note)));
-                                    } else {
-                                        shutdownCurrentVM();
-                                    }
-
-                                    _activity.runOnUiThread(progressDialog::reset);
-                                }).start();
-                            },
-                            null,
-                            null);
-                    _dialog.dismiss();
-                });
-
-                if (allDevice != null && (allDevice.contains("ide1-cd0")
-                        || allDevice.contains("ide2-cd0")
-                        || allDevice.contains("floppy0")
-                        || allDevice.contains("floppy1")
-                        || allDevice.contains("sd0"))) {
-
-                    if (allDevice.contains("ide1-cd0")
-                            || allDevice.contains("ide2-cd0")) {
-
-                        _view.findViewById(R.id.ln_cdrom).setOnClickListener(v -> {
-                            Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
-                            intent.addCategory(Intent.CATEGORY_OPENABLE);
-                            intent.setType("*/*");
-                            _activity.startActivityForResult(intent, 120);
-                            _dialog.dismiss();
-                        });
-
-                        _view.findViewById(R.id.iv_ejectcdrom).setOnClickListener(v -> {
-                            ejectCDROM(_activity);
-                            _dialog.dismiss();
-                        });
-
-                        if (!allDevice.contains(AppConfig.basefiledir + "3dfx-wrappers.iso")) _view.findViewById(R.id.iv_eject3dfx).setVisibility(View.GONE);
-
-                        _view.findViewById(R.id.ln_3dfx).setOnClickListener(v -> {
-                            if (allDevice.contains(AppConfig.basefiledir + "3dfx-wrappers.iso")) {
-                                ejectCDROM(_activity);
-                            } else {
-                                mount3dfxWrappersTool(_activity);
-                            }
-                            _dialog.dismiss();
-                        });
-
-                        if (!allDevice.contains(AppConfig.basefiledir + "virtio-win.iso")) _view.findViewById(R.id.iv_ejectvirtio).setVisibility(View.GONE);
-
-                        _view.findViewById(R.id.ln_virtio).setOnClickListener(v -> {
-                            if (allDevice.contains(AppConfig.basefiledir + "virtio-win.iso")) {
-                                ejectCDROM(_activity);
-                            } else {
-                                mountVirtIOWinTool(_activity);
-                            }
-                            _dialog.dismiss();
-                        });
-                    } else {
-                        _view.findViewById(R.id.ln_cdrom).setVisibility(View.GONE);
-                        _view.findViewById(R.id.ln_tools).setVisibility(View.GONE);
-                    }
-
-                    if (allDevice.contains("floppy0")) {
-                        _view.findViewById(R.id.ln_fda).setOnClickListener(v -> {
-                            Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
-                            intent.addCategory(Intent.CATEGORY_OPENABLE);
-                            intent.setType("*/*");
-                            _activity.startActivityForResult(intent, 889);
-                            _dialog.dismiss();
-                        });
-
-                        _view.findViewById(R.id.iv_ejectfda).setOnClickListener(v -> {
-                            ejectFloppyDriveA(_activity);
-                            _dialog.dismiss();
-                        });
-
-                        if (!allDevice.contains("floppy1")) {
-                            TextView tvFda = _view.findViewById(R.id.tv_fda);
-                            tvFda.setText(R.string.floppy_drive);
-                        }
-                    } else {
-                        _view.findViewById(R.id.ln_fda).setVisibility(View.GONE);
-                    }
-
-                    if (allDevice.contains("floppy1")) {
-                        _view.findViewById(R.id.ln_fdb).setOnClickListener(v -> {
-                            Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
-                            intent.addCategory(Intent.CATEGORY_OPENABLE);
-                            intent.setType("*/*");
-                            _activity.startActivityForResult(intent, 13335);
-                            _dialog.dismiss();
-                        });
-
-                        _view.findViewById(R.id.iv_ejectfdb).setOnClickListener(v -> {
-                            ejectFloppyDriveB(_activity);
-                            _dialog.dismiss();
-                        });
-
-                        if (!allDevice.contains("floppy0")) {
-                            TextView tvFdb = _view.findViewById(R.id.tv_fdb);
-                            tvFdb.setText(R.string.floppy_drive);
-                        }
-                    } else {
-                        _view.findViewById(R.id.ln_fdb).setVisibility(View.GONE);
-                    }
-
-                    if (allDevice.contains("sd0")) {
-                        _view.findViewById(R.id.ln_sd).setOnClickListener(v -> {
-                            Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
-                            intent.addCategory(Intent.CATEGORY_OPENABLE);
-                            intent.setType("*/*");
-                            _activity.startActivityForResult(intent, 32);
-                            _dialog.dismiss();
-                        });
-
-                        _view.findViewById(R.id.iv_ejectsd).setOnClickListener(v -> {
-                            ejectSDCard(_activity);
-                            _dialog.dismiss();
-                        });
-                    } else {
-                        _view.findViewById(R.id.ln_sd).setVisibility(View.GONE);
-                    }
-
-                    _view.findViewById(R.id.ln_otherdevice).setOnClickListener(v -> {
-                        showChangeRemovableDevicesWithIDDialog(_activity);
-                        _dialog.dismiss();
-                    });
-                } else {
-                    TextView tvFdb = _view.findViewById(R.id.tv_otherdevice);
-                    tvFdb.setText(R.string.change_or_eject_a_device);
-
-                    _view.findViewById(R.id.ln_cdrom).setVisibility(View.GONE);
-                    _view.findViewById(R.id.ln_fda).setVisibility(View.GONE);
-                    _view.findViewById(R.id.ln_fdb).setVisibility(View.GONE);
-                    _view.findViewById(R.id.ln_sd).setVisibility(View.GONE);
-                }
-
-                if (vncCanvasActivity != null) {
-                    _view.findViewById(R.id.ln_refresh).setOnClickListener(v -> {
-                        _activity.startActivity(new Intent(_activity, MainVNCActivity.class));
-                        _activity.overridePendingTransition(0, 0);
-                        _activity.finish();
-                        _dialog.dismiss();
-                    });
-
-                    if (ConnectionBean.useLocalCursor) {
-                        TextView tvvirtualmouse = _view.findViewById(R.id.tv_virtualmouse);
-                        tvvirtualmouse.setText(_activity.getString(R.string.hide_virtual_mouse));
-                    }
-
-                    _view.findViewById(R.id.ln_virtualmouse).setOnClickListener(v -> {
-                        MainSettingsManager.setShowVirtualMouse(_activity, !ConnectionBean.useLocalCursor);
-                        ConnectionBean.useLocalCursor = !ConnectionBean.useLocalCursor;
-                        _dialog.dismiss();
-                    });
-
-                    _view.findViewById(R.id.ln_mouse).setOnClickListener(v -> {
-                        MainVNCActivity.getContext.onMouseMode();
-                        _dialog.dismiss();
-                    });
-
-                    _view.findViewById(R.id.ln_settings).setOnClickListener(v -> {
-                        _activity.startActivity(new Intent(_activity, VNCSettingsActivity.class));
-                        _dialog.dismiss();
-                    });
-
-                    if (MainSettingsManager.getVNCScaleMode(_activity) == VNCConfig.oneToOne) {
-                        _view.findViewById(R.id.iv_screenOneToOne).setBackgroundResource(R.drawable.dialog_shape_single_button);
-                    } else {
-                        _view.findViewById(R.id.iv_screenFit).setBackgroundResource(R.drawable.dialog_shape_single_button);
-                    }
-
-                    _view.findViewById(R.id.iv_screenOneToOne).setOnClickListener(v -> {
-                        MainSettingsManager.setVNCScaleMode(_activity, VNCConfig.oneToOne);
-                        _activity.startActivity(new Intent(_activity, MainVNCActivity.class));
-                        _activity.overridePendingTransition(0, 0);
-                        _activity.finish();
-                        _dialog.dismiss();
-                    });
-
-                    _view.findViewById(R.id.iv_screenFit).setOnClickListener(v -> {
-                        MainSettingsManager.setVNCScaleMode(_activity, VNCConfig.fitToScreen);
-                        _activity.startActivity(new Intent(_activity, MainVNCActivity.class));
-                        _activity.overridePendingTransition(0, 0);
-                        _activity.finish();
-                        _dialog.dismiss();
-                    });
-                } else {
-                    _view.findViewById(R.id.ln_user_interface).setVisibility(View.GONE);
-                }
-
-                if (!DialogUtils.isAllowShow(_activity)) return;
-                _dialog.show();
-            });
-        }).start();
-    }
-
-    public static void showChangeRemovableDevicesWithIDDialog(Activity _activity) {
-        View _view = LayoutInflater.from(_activity).inflate(R.layout.widget_edittext_dialog, null);
-        AlertDialog _dialog = new MaterialAlertDialogBuilder(_activity, R.style.CenteredDialogTheme)
-                .setTitle(_activity.getString(R.string.change_a_removable_device))
-                .setView(_view)
-                .create();
-
-        EditText _edittext = _view.findViewById(R.id.editText);
-        TextInputLayout _textInputLayout = _view.findViewById(R.id.textInputLayout);
-        _textInputLayout.setHint(_activity.getString(R.string.enter_device_id));
-
-        _dialog.setButton(DialogInterface.BUTTON_POSITIVE, _activity.getString(R.string.change_disk_file), (dialog, which) -> {
-            if (!_edittext.getText().toString().isEmpty()) {
-                pendingDeviceID = _edittext.getText().toString();
-
-                Intent intent = new Intent(ACTION_OPEN_DOCUMENT);
-                intent.addCategory(Intent.CATEGORY_OPENABLE);
-                intent.setType("*/*");
-                _activity.startActivityForResult(intent, 1996);
-                _dialog.dismiss();
-            } else {
-                Toast.makeText(_activity, _activity.getString(R.string.you_need_to_enter_the_device_id), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        _dialog.setButton(DialogInterface.BUTTON_NEUTRAL, _activity.getString(R.string.eject), (dialog, which) -> {
-            if (!_edittext.getText().toString().isEmpty()) {
-                ejectRemovableDevice(_edittext.getText().toString(), _activity);
-                _dialog.dismiss();
-            } else {
-                Toast.makeText(_activity, _activity.getString(R.string.you_need_to_enter_the_device_id), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        _dialog.setButton(DialogInterface.BUTTON_NEGATIVE, _activity.getString(R.string.close), (dialog, which) -> _dialog.dismiss());
-
-        _dialog.show();
-
-        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-            _edittext.requestFocus();
-            _edittext.setSelection(_edittext.getText().length());
-            InputMethodManager imm = (InputMethodManager) _activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.showSoftInput(_edittext, InputMethodManager.SHOW_IMPLICIT);
-        }, 200);
-    }
-
-    public static void mount3dfxWrappersTool(Activity activity) {
-        new Thread(() -> {
-            if (!FileUtils.isFileExists(AppConfig.basefiledir + "3dfx-wrappers.iso"))
-                SetupFeatureCore.copyAssetToFile(activity, "roms/3dfx-wrappers.iso", AppConfig.basefiledir + "3dfx-wrappers.iso");
-
-            activity.runOnUiThread(() -> changeCDROM(AppConfig.basefiledir + "3dfx-wrappers.iso", activity));
-        }).start();
-    }
-
-    public static void mountVirtIOWinTool(Activity activity) {
-        new Thread(() -> {
-            if (!FileUtils.isFileExists(AppConfig.basefiledir + "virtio-win.iso")) {
-                FileUtils.delete(new File(AppConfig.basefiledir + "virtio-win.bin"));
-                activity.runOnUiThread(() -> DialogUtils.twoDialog(
-                        activity,
-                        activity.getString(R.string.download_required),
-                        activity.getString(R.string.this_tool_needs_to_be_downloaded_before_use),
-                        activity.getString(R.string.ok),
-                        activity.getString(R.string.cancel),
-                        true,
-                        R.drawable.arrow_downward_24px,
-                        true,
-                        () -> new Thread(() -> {
-
-                            int notificationId = 30;
-
-                            if (!NotificationUtils.isChannelExist(NotificationUtils.downloadChannelId, activity)) {
-                                NotificationUtils.createChannel("Download", "View the file download process.",
-                                        NotificationUtils.downloadChannelId, NotificationManager.IMPORTANCE_DEFAULT, activity);
-                            }
-
-                            NotificationManagerCompat manager = NotificationManagerCompat.from(VectrasApp.getContext());
-                            NotificationCompat.Builder builder = new NotificationCompat.Builder(VectrasApp.getContext(), NotificationUtils.downloadChannelId)
-                                    .setSmallIcon(R.drawable.arrow_cool_down_24px)
-                                    .setContentTitle(activity.getString(R.string.virtio_tools_for_windows))
-                                    .setContentText("0%")
-                                    .setPriority(NotificationCompat.PRIORITY_LOW)
-                                    .setOngoing(true)
-                                    .setOnlyAlertOnce(true);
-
-                            builder.setProgress(100, 0, false);
-                            manager.notify(notificationId, builder.build());
-
-                            Retrofit2Utils.download(AppConfig.virtIOWinUrl, AppConfig.basefiledir + "virtio-win.bin", new Retrofit2Utils.DownloadCallback() {
-                                @Override
-                                public void onProgress(int percent) {
-                                    builder.setProgress(100, percent, false)
-                                            .setContentText(percent + "%");
-                                    manager.notify(notificationId, builder.build());
-                                    Log.d("DL", percent + "%");
-                                }
-
-                                @Override
-                                public void onResult(boolean success, String path, Throwable error) {
-                                    if (success) {
-                                        FileUtils.move(AppConfig.basefiledir + "virtio-win.bin", AppConfig.basefiledir + "virtio-win.iso");
-
-                                        if (DialogUtils.isAllowShow(activity)) {
-                                            NotificationUtils.recall(activity, notificationId);
-
-                                            activity.runOnUiThread(() -> DialogUtils.twoDialog(
-                                                    activity,
-                                                    activity.getString(R.string.virtio_tools_for_windows_is_now_ready_to_use),
-                                                    activity.getString(R.string.do_you_want_to_insert_it_into_the_optical_drive_right_now),
-                                                    activity.getString(R.string.ok),
-                                                    activity.getString(R.string.cancel),
-                                                    true,
-                                                    R.drawable.check_24px,
-                                                    true,
-                                                    () -> changeCDROM(AppConfig.basefiledir + "virtio-win.iso", activity),
-                                                    null,
-                                                    null)
-                                            );
-                                        } else {
-                                            Context context = VectrasApp.getContext();
-
-                                            builder.setProgress(0, 0, false)
-                                                    .setSmallIcon(R.drawable.check_24px)
-                                                    .setContentText(context.getString(R.string.virtio_tools_for_windows_is_now_ready_to_use))
-                                                    .setOngoing(false);
-
-                                            manager.notify(notificationId, builder.build());
-                                        }
-                                    } else {
-                                        FileUtils.delete(new File(AppConfig.basefiledir + "virtio-win.bin"));
-
-                                        if (DialogUtils.isAllowShow(activity)) {
-                                            activity.runOnUiThread(() -> DialogUtils.oopsDialog(activity, activity.getString(R.string.download_failed_note)));
-                                        } else {
-                                            Context context = VectrasApp.getContext();
-
-                                            builder.setProgress(0, 0, false)
-                                                    .setSmallIcon(R.drawable.error_96px)
-                                                    .setContentText(context.getString(R.string.download_failed_note))
-                                                    .setOngoing(false);
-
-                                            manager.notify(notificationId, builder.build());
-                                        }
-                                    }
-                                }
+                        if (migrateResult == null || !migrateResult.contains("terminal does not allow synchronous migration, continuing detached")) {
+                            QmpSender.resume();
+                            _activity.runOnUiThread(() -> {
+                                DialogUtils.oopsDialog(_activity, _activity.getString(R.string.vm_state_save_failed_note));
+                                progressDialog.reset();
                             });
-                        }).start(),
-                        null,
-                        null));
-            } else {
-                changeCDROM(AppConfig.basefiledir + "virtio-win.iso", activity);
-            }
-        }).start();
-    }
+                            Log.e(TAG, "Pause VM failed.");
+                            return;
+                        }
 
-    public static void changeCDROM(String _path, Activity _activity) {
-        new Thread(() -> {
-            if (isUsingQ35(lastQemuCommand)) {
-                if (isQMPCommandSuccess(QmpClient.sendCommand(changeRemovableDevicesQMPCommand("ide2-cd0", _path)))) {
-                    if (_activity != null && !_activity.isFinishing())
-                        _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.changed), Toast.LENGTH_SHORT).show());
-                } else {
-                    if (_activity != null && !_activity.isFinishing())
-                        _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.change_failed), Toast.LENGTH_SHORT).show());
-                }
-            } else {
-                if (isQMPCommandSuccess(QmpClient.sendCommand(changeRemovableDevicesQMPCommand("ide1-cd0", _path)))) {
-                    if (_activity != null && !_activity.isFinishing())
-                        _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.changed), Toast.LENGTH_SHORT).show());
-                } else {
-                    if (_activity != null && !_activity.isFinishing())
-                        _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.change_failed), Toast.LENGTH_SHORT).show());
-                }
-            }
-        }).start();
-    }
+                        Boolean[] result = getMigrateStatus();
 
-    public static void changeFloppyDriveA(String _path, Activity _activity) {
-        new Thread(() -> {
-            if (isQMPCommandSuccess(QmpClient.sendCommand(changeRemovableDevicesQMPCommand("floppy0", _path)))) {
-                if (_activity != null && !_activity.isFinishing())
-                    _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.changed), Toast.LENGTH_SHORT).show());
-            } else {
-                if (_activity != null && !_activity.isFinishing())
-                    _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.change_failed), Toast.LENGTH_SHORT).show());
-            }
-        }).start();
-    }
+                        while (!result[0] && !result[1]) {
+                            try {
+                                sleep(1000);
+                            } catch (Exception ignored) {
 
-    public static void changeFloppyDriveB(String _path, Activity _activity) {
-        new Thread(() -> {
-            if (isQMPCommandSuccess(QmpClient.sendCommand(changeRemovableDevicesQMPCommand("floppy1", _path)))) {
-                if (_activity != null && !_activity.isFinishing())
-                    _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.changed), Toast.LENGTH_SHORT).show());
-            } else {
-                if (_activity != null && !_activity.isFinishing())
-                    _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.change_failed), Toast.LENGTH_SHORT).show());
-            }
-        }).start();
-    }
+                            }
+                            result = getMigrateStatus();
+                        }
 
-    public static void changeSDCard(String _path, Activity _activity) {
-        new Thread(() -> {
-            if (isQMPCommandSuccess(QmpClient.sendCommand(changeRemovableDevicesQMPCommand("sd0", _path)))) {
-                if (_activity != null && !_activity.isFinishing())
-                    _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.changed), Toast.LENGTH_SHORT).show());
-            } else {
-                if (_activity != null && !_activity.isFinishing())
-                    _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.change_failed), Toast.LENGTH_SHORT).show());
-            }
-        }).start();
-    }
+                        if (result[1]) {
+                            QmpSender.resume();
+                            _activity.runOnUiThread(() -> DialogUtils.oopsDialog(_activity, _activity.getString(R.string.vm_state_save_failed_note)));
+                        } else {
+                            QmpSender.quickShutdown();
+                        }
 
-    public static void ejectCDROM(Activity _activity) {
-        new Thread(() -> {
-            if (isUsingQ35(lastQemuCommand)) {
-                if (isQMPCommandSuccess(QmpClient.sendCommand(ejectRemovableDevicesQMPCommand("ide2-cd0")))) {
-                    if (_activity != null && !_activity.isFinishing())
-                        _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.ejected), Toast.LENGTH_SHORT).show());
-                } else {
-                    if (_activity != null && !_activity.isFinishing())
-                        _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.eject_failed), Toast.LENGTH_SHORT).show());
-                }
-            } else {
-                if (isQMPCommandSuccess(QmpClient.sendCommand(ejectRemovableDevicesQMPCommand("ide1-cd0")))) {
-                    if (_activity != null && !_activity.isFinishing())
-                        _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.ejected), Toast.LENGTH_SHORT).show());
-                } else {
-                    if (_activity != null && !_activity.isFinishing())
-                        _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.eject_failed), Toast.LENGTH_SHORT).show());
-                }
-            }
-        }).start();
-    }
-
-    public static void ejectFloppyDriveA(Activity _activity) {
-        new Thread(() -> {
-            if (isQMPCommandSuccess(QmpClient.sendCommand(ejectRemovableDevicesQMPCommand("floppy0")))) {
-                if (_activity != null && !_activity.isFinishing())
-                    _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.ejected), Toast.LENGTH_SHORT).show());
-            } else {
-                if (_activity != null && !_activity.isFinishing())
-                    _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.eject_failed), Toast.LENGTH_SHORT).show());
-            }
-        }).start();
-    }
-
-    public static void ejectFloppyDriveB(Activity _activity) {
-        new Thread(() -> {
-            if (isQMPCommandSuccess(QmpClient.sendCommand(ejectRemovableDevicesQMPCommand("floppy1")))) {
-                if (_activity != null && !_activity.isFinishing())
-                    _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.ejected), Toast.LENGTH_SHORT).show());
-            } else {
-                if (_activity != null && !_activity.isFinishing())
-                    _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.eject_failed), Toast.LENGTH_SHORT).show());
-            }
-        }).start();
-    }
-
-    public static void ejectSDCard(Activity _activity) {
-        new Thread(() -> {
-            if (isQMPCommandSuccess(QmpClient.sendCommand(ejectRemovableDevicesQMPCommand("sd0")))) {
-                if (_activity != null && !_activity.isFinishing())
-                    _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.ejected), Toast.LENGTH_SHORT).show());
-            } else {
-                if (_activity != null && !_activity.isFinishing())
-                    _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.eject_failed), Toast.LENGTH_SHORT).show());
-            }
-        }).start();
-    }
-
-    public static void changeRemovableDevice(String _deviceID, String _filepath, Activity _activity) {
-        new Thread(() -> {
-            String _result = QmpClient.sendCommand(changeRemovableDevicesQMPCommand(_deviceID, _filepath));
-            if (isQMPCommandSuccess(_result)) {
-                if (_activity != null && !_activity.isFinishing())
-                    _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.changed), Toast.LENGTH_SHORT).show());
-            } else {
-                if (_activity != null && !_activity.isFinishing()) {
-                    if (_result.contains("is not removable")) {
-                        _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.this_is_not_a_removable_device), Toast.LENGTH_SHORT).show());
-                    } else {
-                        _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.change_failed), Toast.LENGTH_SHORT).show());
-                    }
-                }
-            }
-        }).start();
-    }
-
-    public static void ejectRemovableDevice(String _deviceID, Activity _activity) {
-        new Thread(() -> {
-            String _result = QmpClient.sendCommand(ejectRemovableDevicesQMPCommand(_deviceID));
-            if (isQMPCommandSuccess(_result)) {
-                if (_activity != null && !_activity.isFinishing())
-                    _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.ejected), Toast.LENGTH_SHORT).show());
-            } else {
-                if (_activity != null && !_activity.isFinishing()) {
-                    if (_result.contains("is not removable")) {
-                        _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.this_is_not_a_removable_device), Toast.LENGTH_SHORT).show());
-                    } else {
-                        _activity.runOnUiThread(() -> Toast.makeText(_activity, _activity.getString(R.string.eject_failed), Toast.LENGTH_SHORT).show());
-                    }
-                }
-            }
-        }).start();
+                        _activity.runOnUiThread(progressDialog::reset);
+                    }).start();
+                },
+                null,
+                null);
     }
 
     public static void pressPowerButton() {

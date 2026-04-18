@@ -26,6 +26,7 @@ import com.vectras.vm.Fragment.LoggerDialogFragment;
 import com.vectras.vm.MainService;
 import com.vectras.vm.VMManager;
 import com.vectras.vm.main.core.MainStartVM;
+import com.vectras.vm.manager.QmpSender;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.UIUtils;
 import com.vectras.vm.widgets.JoystickView;
@@ -1478,7 +1479,7 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
     }
 
     private void shutdownthisvm() {
-        VMManager.shutdownCurrentVM();
+        QmpSender.quickShutdown();
         Config.setDefault();
         MainService.stopService();
         finish();

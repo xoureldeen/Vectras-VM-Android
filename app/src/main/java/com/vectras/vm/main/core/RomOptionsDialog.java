@@ -5,12 +5,16 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.vectras.vm.creator.VMCreatorActivity;
 import com.vectras.vm.ExportRomActivity;
 import com.vectras.vm.main.vms.DataMainRoms;
 import com.vectras.vm.R;
 import com.vectras.vm.VMManager;
+import com.vectras.vm.manager.VmControllerDialog;
 
 import java.util.List;
 
@@ -45,7 +49,8 @@ public class RomOptionsDialog {
             removeRomBtn.setVisibility(View.GONE);
             Button deviceManagerBtn = v.findViewById(R.id.deviceManagerBtn);
             deviceManagerBtn.setOnClickListener(v1 -> {
-                VMManager.showChangeRemovableDevicesDialog(activity, null);
+                VmControllerDialog vmControllerDialog = new VmControllerDialog();
+                vmControllerDialog.show(((FragmentActivity) activity).getSupportFragmentManager(), "VmControllerDialog");
                 bottomSheetDialog.cancel();
             });
             deviceManagerBtn.setVisibility(View.VISIBLE);
