@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="?attr/colorSurfaceContainer">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -26,6 +27,46 @@
                 android:text="@string/options"
                 android:textColor="?attr/colorControlNormal"
                 android:textSize="22sp"/>
+
+            <LinearLayout
+                android:id="@+id/ln_take_screenshot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingVertical="8dp"
+                android:paddingHorizontal="16dp"
+                android:background="?attr/selectableItemBackground">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/screenshot_monitor_24px"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:textColor="?attr/colorControlNormal"
+                    android:text="@string/take_screenshot"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ln_console"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingVertical="8dp"
+                android:paddingHorizontal="16dp"
+                android:background="?attr/selectableItemBackground">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/terminal_24px"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:textColor="?attr/colorControlNormal"
+                    android:text="@string/console"/>
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/ln_pause"

@@ -57,6 +57,8 @@ import com.vectras.vm.databinding.ControlsFragmentBinding;
 import com.vectras.vm.databinding.DesktopControlsBinding;
 import com.vectras.vm.databinding.GameControlsBinding;
 import com.vectras.vm.databinding.SendKeyDialogBinding;
+import com.vectras.vm.manager.QmpSender;
+import com.vectras.vm.manager.VmControllerDialog;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.ListUtils;
@@ -786,7 +788,7 @@ public class MainVNCActivity extends VncCanvasActivity {
     private void shutdownthisvm() {
         started = false;
         bindingSendKey.sendtextEdittext.setEnabled(false);
-        VMManager.shutdownCurrentVM();
+        QmpSender.quickShutdown();
         Config.setDefault();
         MainService.stopService();
         finish();
@@ -873,48 +875,6 @@ public class MainVNCActivity extends VncCanvasActivity {
         return super.onTouchEvent(event);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            Uri content_describer = data.getData();
-            File selectedFilePath;
-            try {
-                selectedFilePath = new File(Objects.requireNonNull(getPath(content_describer)));
-            } catch (Exception e) {
-                DialogUtils.oneDialog(this,
-                        getString(R.string.oops),
-                        getString(R.string.invalid_file_path_content),
-                        getString(R.string.ok),
-                        true,
-                        R.drawable.error_96px,
-                        true,
-                        null,
-                        null
-                );
-                return;
-            }
-
-            switch (requestCode) {
-                case 120:
-                    VMManager.changeCDROM(selectedFilePath.getAbsolutePath(), MainVNCActivity.this);
-                    break;
-                case 889:
-                    VMManager.changeFloppyDriveA(selectedFilePath.getAbsolutePath(), MainVNCActivity.this);
-                    break;
-                case 13335:
-                    VMManager.changeFloppyDriveB(selectedFilePath.getAbsolutePath(), MainVNCActivity.this);
-                    break;
-                case 32:
-                    VMManager.changeSDCard(selectedFilePath.getAbsolutePath(), MainVNCActivity.this);
-                    break;
-                case 1996:
-                    VMManager.changeRemovableDevice(VMManager.pendingDeviceID, selectedFilePath.getAbsolutePath(), MainVNCActivity.this);
-                    break;
-            }
-        }
-    }
-
     private void initializeControlFragment() {
         bindingControls.btnPrograms.setVisibility(View.GONE);
 
@@ -926,7 +886,7 @@ public class MainVNCActivity extends VncCanvasActivity {
         });
 
         bindingControls.shutdownBtn.setOnClickListener(v -> DialogUtils.threeDialog(this, getString(R.string.power), getString(R.string.shutdown_or_reset_content_vnc), getString(R.string.shutdown), getString(R.string.reset), getString(R.string.power), true, R.drawable.power_settings_new_24px, true,
-                this::shutdownthisvm, VMManager::resetCurrentVM, VMManager::pressPowerButton, null));
+                this::shutdownthisvm, QmpSender::quickReset, VMManager::pressPowerButton, null));
 
         bindingControls.shutdownBtn.setOnLongClickListener(view -> {
             DialogUtils.twoDialog(this, "Exit", "You will be left here but the virtual machine will continue to run.", "Exit", getString(R.string.cancel), true, R.drawable.exit_to_app_24px, true,
@@ -962,7 +922,10 @@ public class MainVNCActivity extends VncCanvasActivity {
             newFragment.show(ft, "Controllers");
         });
 
-        bindingControls.btnSettings.setOnClickListener(v -> VMManager.showChangeRemovableDevicesDialog(MainVNCActivity.this, this));
+        bindingControls.btnSettings.setOnClickListener(v -> {
+            VmControllerDialog vmControllerDialog = new VmControllerDialog();
+            vmControllerDialog.show(getSupportFragmentManager(), "VmControllerDialog");
+        });
     }
 
     private void initializeDesktopControl() {

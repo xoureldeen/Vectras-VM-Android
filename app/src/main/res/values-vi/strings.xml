@@ -533,6 +533,12 @@
     <string name="virtio_tools_for_windows_is_now_ready_to_use">Công cụ VirtIO cho Windows đã sẵn sàng để sử dụng</string>
     <string name="do_you_want_to_insert_it_into_the_optical_drive_right_now">Bạn có muốn gắn nó vào ổ đĩa quang ngay không?</string>
     <string name="try_play_store_version">Thử phiên bản Cửa hàng Play</string>
+    <string name="enter_a_command">Nhập một lệnh</string>
+    <string name="console">Bảng điều khiển</string>
+    <string name="take_screenshot">Chụp màn hình</string>
+    <string name="unable_to_take_a_screenshot">Không thể chụp màn hình.</string>
+    <string name="saved_to_the_gallery">Đã lưu vào bộ sưu tập.</string>
+    <string name="taking_a_screenshot">Đang chụp màn hình…</string>
 
 
     <!--======================TERMUX STRINGS====================-->

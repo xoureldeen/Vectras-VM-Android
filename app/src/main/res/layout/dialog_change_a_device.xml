@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorSurfaceContainer"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="16dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="30sp"
+                android:text="@string/change_a_removable_device"
+                android:textColor="?attr/colorControlNormal"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_close"
+                style="?attr/materialIconButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:icon="@drawable/close_24px"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_marginTop="2dp"
+            android:padding="8dp"
+            android:background="@drawable/object_shape_single_high">
+            <EditText
+                android:id="@+id/ed_device_id"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="8dp"
+                android:padding="8dp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:hint="@string/enter_device_id"
+                android:textColor="?attr/colorControlNormal"/>
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/circular_progress_indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:visibility="gone"
+                tools:visibility="visible"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center_vertical|end">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_eject"
+                style="?attr/materialButtonTonalStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="@string/eject"
+                android:enabled="false"
+                tools:enabled="true"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_change"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/change"
+                android:enabled="false"
+                tools:enabled="true"/>
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

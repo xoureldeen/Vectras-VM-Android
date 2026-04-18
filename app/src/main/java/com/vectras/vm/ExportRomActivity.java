@@ -186,6 +186,8 @@ public class ExportRomActivity extends AppCompatActivity {
                     } else if (_filelist.get(_repeat).endsWith("cqcm.json")) {
                         FileUtils.writeToFile(tempFolder, "cqcm.json", FileUtils.readAFile(_filelist.get(_repeat)).replace(getRomPath, "OhnoIjustrealizeditsmidnightandIstillhavetodothis"));
                         pathList.add(tempFolder + "cqcm.json");
+                    } else if (_filelist.get(_repeat).endsWith("screenshot.ppm")) {
+                        //ignore
                     } else {
                         pathList.add(_filelist.get(_repeat));
                     }

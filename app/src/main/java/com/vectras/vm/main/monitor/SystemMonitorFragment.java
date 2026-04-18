@@ -30,6 +30,7 @@ import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.R;
 import com.vectras.vm.VMManager;
 import com.vectras.vm.databinding.FragmentHomeSystemMonitorBinding;
+import com.vectras.vm.manager.QmpSender;
 import com.vectras.vm.utils.CommandUtils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vterm.Terminal;
@@ -123,14 +124,14 @@ public class SystemMonitorFragment extends Fragment {
                         true,
                         () -> {
                             Config.vmID = Config.currentVNCServervmID;
-                            VMManager.shutdownCurrentVM();
+                            QmpSender.quickShutdown();
                             Config.currentVNCServervmID = "";
                             binding.btStopvmvnc.setVisibility(View.GONE);
                             getQemuInfo();
                         },
                         () -> {
                             Config.vmID = Config.currentVNCServervmID;
-                            VMManager.resetCurrentVM();
+                            QmpSender.quickReset();
                         },
                         null,
                         null);
