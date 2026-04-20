@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.vectras.qemu.Config;
+import com.vectras.vm.AppConfig;
 import com.vectras.vm.R;
 import com.vectras.vm.StartVM;
 import com.vectras.vm.VMManager;
@@ -57,9 +58,7 @@ public class VmsHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         final DataMainRoms current = data.get(position);
         myHolder.textName.setText(current.itemName);
         myHolder.textArch.setText(current.itemArch);
-        if (current.itemIcon.isEmpty()){
-            VMManager.setIconWithName(myHolder.ivIcon, current.itemName);
-        } else if (FileUtils.isFileExists(current.itemIcon)){
+        if (!current.itemIcon.isEmpty() && FileUtils.isFileExists(current.itemIcon)){
             Glide.with(activity.getApplicationContext())
                     .load(new File(current.itemIcon))
                     .placeholder(R.drawable.ic_computer_180dp_with_padding)
@@ -67,14 +66,21 @@ public class VmsHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     .skipMemoryCache(true)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .into(myHolder.ivIcon);
+        } else if (FileUtils.isFileExists(AppConfig.vmFolder + current.vmID + "/screenshot.png")) {
+            Glide.with(activity.getApplicationContext())
+                    .load(new File(AppConfig.vmFolder + current.vmID + "/screenshot.png"))
+                    .placeholder(R.drawable.ic_computer_180dp_with_padding)
+                    .error(R.drawable.ic_computer_180dp_with_padding)
+                    .skipMemoryCache(true)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .into(myHolder.ivIcon);
         } else {
-            myHolder.ivIcon.setImageResource(R.drawable.ic_computer_180dp_with_padding);
+            VMManager.setIconWithName(myHolder.ivIcon, current.itemName);
         }
         myHolder.optionsBtn.setOnClickListener(view -> RomOptionsDialog.showNow(activity, position, current.vmID, current.itemName));
 
         myHolder.cdRoms.setOnClickListener(view -> {
             VMManager.setArch(current.itemArch, activity);
-            StartVM.cdrompath = current.imgCdrom;
             if (current.qmpPort == 0) {
                 Config.setDefault();
             } else {

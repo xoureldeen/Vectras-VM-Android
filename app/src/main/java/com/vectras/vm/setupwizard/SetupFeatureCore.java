@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Build;
 import android.util.Log;
 
-import com.vectras.vm.AppConfig;
 import com.vectras.vm.R;
 import com.vectras.vm.VMManager;
 import com.vectras.vm.utils.DeviceUtils;
@@ -60,13 +59,30 @@ public class SetupFeatureCore {
         lastErrorLog = "";
 
         File distroDir = new File(filesDir + "/distro");
+        if (!distroDir.exists()) {
+            if (!distroDir.mkdir()) {
+                lastErrorLog = "Failed to create directory: " + filesDir + "/distro";
+                return false;
+            }
+        }
+
         File binDir = new File(distroDir + "/bin");
         if (!binDir.exists()) {
             if (!isInstalledProot(context)) {
-                if (!extractSystemFiles(context, "bootstrap", "")) return false;
+                if (!extractSystemFiles(context, "bootstrap", "", false)) {
+                    if (!extractSystemFiles(context, "bootstrap", "", true)) return false;
+                }
+
+                /*if (!mkSymlinks(filesDir + "/usr/lib/")) {
+                    lastErrorLog = "Failed to create symlinks.";
+                    return false;
+                }*/
             }
 
-            if (isInstalledDistro(context)) return true;
+            if (isInstalledDistro(context)) {
+                lastErrorLog = "Installed proot.";
+                return true;
+            }
 
             File tmpDir = new File(context.getFilesDir(), "usr/tmp");
             if (!tmpDir.isDirectory()) {
@@ -77,12 +93,17 @@ public class SetupFeatureCore {
                 }
             }
 
-            return extractSystemFiles(context, "alpine19", "distro");
+            if (!extractSystemFiles(context, "alpine19", "distro", false)) {
+                return extractSystemFiles(context, "alpine19", "distro", true);
+            } else {
+                return true;
+            }
         }
+
         return false;
     }
 
-    public static boolean extractSystemFiles(Context context, String fromAsset, String extractTo) {
+    public static boolean extractSystemFiles(Context context, String fromAsset, String extractTo, boolean tryNoSameOwner) {
         String randomFileName = VMManager.startRamdomVMID();
         String filesDir = context.getFilesDir().getAbsolutePath();
         String abi = Build.SUPPORTED_ABIS[0];
@@ -99,9 +120,11 @@ public class SetupFeatureCore {
         // Step 2: Run tar extraction
         if (isCompleted) {
             String[] cmdline = {"tar", "xf", extractedFilePath, "-C", filesDir + "/" + extractTo};
+            String[] cmdline2 = {"tar", "xf", extractedFilePath, "-C", filesDir + "/" + extractTo, "--no-same-owner"};
+
             Process process = null;
             try {
-                process = Runtime.getRuntime().exec(cmdline);
+                process = Runtime.getRuntime().exec(tryNoSameOwner ? cmdline2 : cmdline);
 
                 // Capture standard error output (stderr)
                 BufferedReader errorReader =
@@ -121,17 +144,45 @@ public class SetupFeatureCore {
                 }
 
                 // If there was any output in stderr, treat it as an error
-                return exitCode == 0 && errorOutput.length() <= 0;
+                if (exitCode == 0 && errorOutput.length() <= 0) {
+                    return true;
+                } else {
+                    lastErrorLog = errorOutput.toString();
+                    return false;
+                }
             } catch (IOException | InterruptedException e) {
                 lastErrorLog = lastErrorLog.isEmpty() ? e.toString() : lastErrorLog + "\n" + e;
                 Log.e(TAG, "extractSystemFiles: ", e);
             } finally {
+                FileUtils.delete(extractedFilePath);
+
                 if (process != null) {
                     process.destroy();
                 }
             }
         }
         return false;
+    }
+
+    public static boolean mkSymlinks(String libPath) {
+        Log.d(TAG, "mkSymlinks: Creating...");
+        return FileUtils.symlink(libPath + "libtalloc.so.2.4.2", libPath + "libtalloc.so.2") &&
+                FileUtils.symlink(libPath + "libtalloc.so.2", libPath + "libtalloc.so");
+    }
+
+    public static void fixPermissions(String distroPath) {
+        File binDir = new File(distroPath + "/bin");
+        File usrBinDir = new File(distroPath + "/usr/bin");
+        File sbinDir = new File(distroPath + "/sbin");
+        File usrSbinDir = new File(distroPath + "/usr/sbin");
+
+        for (File dir : new File[]{binDir, usrBinDir, sbinDir, usrSbinDir}) {
+            if (dir.exists() && dir.listFiles() != null) {
+                for (File f : dir.listFiles()) {
+                    f.setExecutable(true, false);
+                }
+            }
+        }
     }
 
     public static boolean copyAssetToFile(Context context, String assetPath, String outputPath) {

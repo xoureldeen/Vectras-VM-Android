@@ -10,6 +10,7 @@ import com.vectras.vm.R;
 import com.vectras.vm.StartVM;
 import com.vectras.vm.VMManager;
 import com.vectras.vm.utils.DialogUtils;
+import com.vectras.vm.utils.FileUtils;
 import com.vectras.vterm.Terminal;
 
 public class PendingCommand {
@@ -56,10 +57,10 @@ public class PendingCommand {
                 } else {
                     Log.i(TAG, "Run VM...");
 
-                    com.vectras.vm.StartVM.cdrompath = "";
-                    Config.vmID = VMManager.idGenerator();
+                    Config.vmID = "QuickRun/" + VMManager.idGenerator();
                     new Thread(() -> {
                         String env = StartVM.env(activity, command, "", true);
+                        FileUtils.createDirectory(AppConfig.vmFolder + Config.vmID);
                         activity.runOnUiThread(() -> {
                             MainStartVM.startNow(activity, "Quick run", env, Config.vmID, null);
                             VMManager.lastQemuCommand = command;

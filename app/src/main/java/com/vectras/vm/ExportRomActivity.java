@@ -142,6 +142,7 @@ public class ExportRomActivity extends AppCompatActivity {
         vmConfigMap.put("bootFrom", current.bootFrom);
         vmConfigMap.put("isShowBootMenu", current.isShowBootMenu);
         vmConfigMap.put("isUseUefi", current.isUseUefi);
+        vmConfigMap.put("isUseLocalTime", current.isUseLocalTime);
         vmConfigMap.put("qemu", current.itemExtra.replace(getRomPath, "OhnoIjustrealizeditsmidnightandIstillhavetodothis"));
         vmConfigMap.put("arch", current.itemArch);
 
@@ -186,7 +187,7 @@ public class ExportRomActivity extends AppCompatActivity {
                     } else if (_filelist.get(_repeat).endsWith("cqcm.json")) {
                         FileUtils.writeToFile(tempFolder, "cqcm.json", FileUtils.readAFile(_filelist.get(_repeat)).replace(getRomPath, "OhnoIjustrealizeditsmidnightandIstillhavetodothis"));
                         pathList.add(tempFolder + "cqcm.json");
-                    } else if (_filelist.get(_repeat).endsWith("screenshot.ppm")) {
+                    } else if (_filelist.get(_repeat).endsWith("screenshot.ppm") || _filelist.get(_repeat).endsWith("screenshot.png") || _filelist.get(_repeat).endsWith("audio.raw")) {
                         //ignore
                     } else {
                         pathList.add(_filelist.get(_repeat));

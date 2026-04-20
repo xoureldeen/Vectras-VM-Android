@@ -153,6 +153,11 @@ public class Config {
         return Config.getCacheDir() + "/" + vmID + "/qmpsocket";
     }
 
+    public static String getLocalQMPSocketPath(String vmID) {
+        return Config.getCacheDir() + "/" + vmID + "/qmpsocket";
+    }
+
+
     public static String getLocalVNCSocketPath() {
         return Config.getCacheDir()+ "/" + vmID + "/vncsocket";
     }

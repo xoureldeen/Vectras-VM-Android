@@ -856,6 +856,26 @@ public class FileUtils {
         }
     }
 
+    public static boolean symlink(String targetPath, String linkPath) {
+        File target = new File(targetPath);
+        File linkFile = new File(linkPath);
+
+        if (target.exists()) {
+            if (linkFile.exists() && !linkFile.delete()) return false;
+            try {
+                Os.symlink(target.getAbsolutePath(), linkFile.getAbsolutePath());
+                Log.d(TAG, "Symlink: " + linkFile.getAbsolutePath() + " → " + target.getAbsolutePath());
+            } catch (ErrnoException e) {
+                Log.e(TAG, "Symlink failed: " + e.getMessage());
+                return false;
+            }
+        } else {
+            return false;
+        }
+
+        return true;
+    }
+
     public static String getMd5(String filePath) {
         try (InputStream inputStream = new FileInputStream(filePath)) {
             byte[] buffer = new byte[1024];

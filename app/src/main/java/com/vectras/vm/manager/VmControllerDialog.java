@@ -3,6 +3,7 @@ package com.vectras.vm.manager;
 import android.androidVNC.ConnectionBean;
 import android.app.Dialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -228,26 +229,12 @@ public class VmControllerDialog extends DialogFragment {
         progressDialog.show();
 
         new Thread(() -> {
-            boolean isSaved = QmpSender.takeScreenshot();
-            if (isSaved) {
-                try {
-                    ImageUtils.saveToGallery(
-                            requireActivity(),
-                            ImageUtils.ppmToBitmap(new File (AppConfig.vmFolder + Config.vmID + "/screenshot.ppm")),
-                            String.valueOf(System.currentTimeMillis())
-                    );
-                } catch (Exception e) {
-                    isSaved = false;
-                }
-            }
+            boolean isSaved = VmActions.takeScreenshot(requireActivity(), true);
 
-            FileUtils.delete(AppConfig.vmFolder + Config.vmID + "/screenshot.ppm");
-
-            boolean finalIsSaved = isSaved;
             new Handler(Looper.getMainLooper()).post(() -> {
                 if (!isAdded()) return;
                 progressDialog.reset();
-                Toast.makeText(requireActivity().getApplicationContext(), getString(finalIsSaved ? R.string.saved_to_the_gallery : R.string.unable_to_take_a_screenshot), Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireActivity().getApplicationContext(), getString(isSaved ? R.string.saved_to_the_gallery : R.string.unable_to_take_a_screenshot), Toast.LENGTH_SHORT).show();
                 dismiss();
             });
         }).start();

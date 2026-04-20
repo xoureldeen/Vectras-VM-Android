@@ -28,6 +28,7 @@ import com.vectras.vm.R;
 import com.vectras.vm.VMManager;
 import com.vectras.vm.logger.VectrasStatus;
 import com.vectras.vm.manager.QmpSender;
+import com.vectras.vm.manager.VmAudioManager;
 import com.vectras.vm.settings.ExternalVNCSettingsActivity;
 import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.DialogUtils;
@@ -154,6 +155,7 @@ public class MainStartVM {
         if (VMManager.isVMRunning(context, finalvmID)) {
             Toast.makeText(context, "This VM is already running.", Toast.LENGTH_LONG).show();
             DisplaySystem.launch(context);
+            VmAudioManager.stream(vmID);
             return;
         }
 
@@ -193,11 +195,13 @@ public class MainStartVM {
             return;
         }
 
-        TextView vmBootNote = showProgressDialog(context, vmName, thumbnailFile);
+        FileUtils.delete(AppConfig.vmFolder + vmID + "/audio.raw");
+
+        TextView vmBootNote = showProgressDialog(context, vmName, thumbnailFile, vmID);
 
         VMManager.isQemuStopedWithError = false;
 
-        String finalCommand = VMManager.addAudioDevSdl(String.format(runCommandFormat, env));
+        String finalCommand = VMManager.addAudioDevWav(vmID, String.format(runCommandFormat, env));
 
         if (MainSettingsManager.getVmUi(context).equals("X11")) {
             finalCommand = "export DISPLAY=:0 && " + finalCommand;
@@ -239,7 +243,8 @@ public class MainStartVM {
                             if (!forceDisableMigrate && VMManager.isNeedLoadMigrate()) {
                                 if (activity != null) {
                                     activity.runOnUiThread(() -> {
-                                        if (vmBootNote != null ) vmBootNote.setText(activity.getString(R.string.resuming));
+                                        if (vmBootNote != null)
+                                            vmBootNote.setText(activity.getString(R.string.resuming));
                                     });
                                 }
                                 String loadMigrateResponse = VMManager.loadMigrate();
@@ -263,7 +268,8 @@ public class MainStartVM {
                                     QmpSender.quickShutdown();
                                     assert activity != null;
                                     activity.runOnUiThread(() -> {
-                                        if (DialogUtils.isSafeDismiss(activity, progressDialog)) progressDialog.dismiss();
+                                        if (DialogUtils.isSafeDismiss(activity, progressDialog))
+                                            progressDialog.dismiss();
 
                                         DialogUtils.threeDialog(
                                                 activity,
@@ -314,7 +320,10 @@ public class MainStartVM {
 //                        //This feature is not available yet.
                             } else if (MainSettingsManager.getVmUi(context).equals("X11") && !DisplaySystem.isUseBuiltInX11()) {
                                 assert activity != null;
-                                activity.runOnUiThread(() -> DisplaySystem.launch(context));
+                                activity.runOnUiThread(() -> {
+                                    DisplaySystem.launch(context);
+                                    VmAudioManager.stream(vmID);
+                                });
                             }
 
                             FileUtils.writeToFile(AppConfig.vmFolder + vmID, "snapshot.sh", env);
@@ -323,13 +332,15 @@ public class MainStartVM {
 
                             if (activity != null) {
                                 activity.runOnUiThread(() -> {
-                                    if (DialogUtils.isSafeDismiss(activity, progressDialog)) progressDialog.dismiss();
+                                    if (DialogUtils.isSafeDismiss(activity, progressDialog))
+                                        progressDialog.dismiss();
                                 });
                             }
                         }).start();
                     } else {
                         assert activity != null;
-                        if (DialogUtils.isSafeDismiss(activity, progressDialog)) progressDialog.dismiss();
+                        if (DialogUtils.isSafeDismiss(activity, progressDialog))
+                            progressDialog.dismiss();
                     }
 
                     skipIDEwithARM64DialogInStartVM = false;
@@ -364,7 +375,7 @@ public class MainStartVM {
         setDefault();
     }
 
-    public static TextView showProgressDialog(Context context, String _content, String thumbnailFile) {
+    public static TextView showProgressDialog(Context context, String _content, String thumbnailFile, String vmID) {
         View progressView = LayoutInflater.from(context).inflate(R.layout.dialog_start_vm, null);
         TextView tvVMName = progressView.findViewById(R.id.vm_name);
         TextView vmBootNote = progressView.findViewById(R.id.vm_boot_note);
@@ -373,18 +384,20 @@ public class MainStartVM {
         if (thumbnailFile != null) {
             ImageView ivThumbnail = progressView.findViewById(R.id.iv_thumbnail);
 
-            if (thumbnailFile.isEmpty()) {
-                VMManager.setIconWithName(ivThumbnail, _content);
+            if (!thumbnailFile.isEmpty() && FileUtils.isFileExists(thumbnailFile)) {
+                Glide.with(context.getApplicationContext())
+                        .load(new File(thumbnailFile))
+                        .placeholder(R.drawable.ic_computer_180dp_with_padding)
+                        .error(R.drawable.ic_computer_180dp_with_padding)
+                        .into(ivThumbnail);
+            } else if (FileUtils.isFileExists(AppConfig.vmFolder + vmID + "/screenshot.png")) {
+                Glide.with(context.getApplicationContext())
+                        .load(new File(AppConfig.vmFolder + vmID + "/screenshot.png"))
+                        .placeholder(R.drawable.ic_computer_180dp_with_padding)
+                        .error(R.drawable.ic_computer_180dp_with_padding)
+                        .into(ivThumbnail);
             } else {
-                if (FileUtils.isFileExists(thumbnailFile)) {
-                    Glide.with(context.getApplicationContext())
-                            .load(new File(thumbnailFile))
-                            .placeholder(R.drawable.ic_computer_180dp_with_padding)
-                            .error(R.drawable.ic_computer_180dp_with_padding)
-                            .into(ivThumbnail);
-                } else {
-                    VMManager.setIconWithName(ivThumbnail, _content);
-                }
+                VMManager.setIconWithName(ivThumbnail, _content);
             }
         }
 

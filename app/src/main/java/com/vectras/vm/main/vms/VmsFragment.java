@@ -161,6 +161,11 @@ public class VmsFragment extends Fragment implements CallbackInterface.HomeCallT
                     } catch (JSONException ignored) {
                         romsMainData.isUseUefi = false;
                     }
+                    try {
+                        romsMainData.isUseLocalTime = json_data.getBoolean("isUseLocalTime");
+                    } catch (JSONException ignored) {
+                        romsMainData.isUseLocalTime = true;
+                    }
 
                     romsMainData.itemExtra = json_data.getString("imgExtra");
                     tempdata.add(romsMainData);
