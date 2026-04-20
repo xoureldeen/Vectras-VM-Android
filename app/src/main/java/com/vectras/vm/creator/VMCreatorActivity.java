@@ -75,6 +75,7 @@ public class VMCreatorActivity extends AppCompatActivity {
     private String vmID = VMManager.idGenerator();
     private boolean isShowBootMenu = false;
     private boolean isUseUefi = false;
+    private boolean isUseLocalTime = true;
     private int bootFrom = 0;
 
     @Override
@@ -243,6 +244,9 @@ public class VMCreatorActivity extends AppCompatActivity {
         binding.cbvShowbootmenu.setOnCheckedChangeListener((v, isChecked) -> isShowBootMenu = isChecked);
 
         binding.cbvUseuefi.setOnCheckedChangeListener((v, isChecked) -> isUseUefi = isChecked);
+
+        binding.cbvUselocaltime.setOnCheckedChangeListener((v, isChecked) -> isUseLocalTime = isChecked);
+
         if (!MainSettingsManager.getArch(this).equals("X86_64"))
             binding.cbvUseuefi.setVisibility(View.GONE);
 
@@ -583,6 +587,9 @@ public class VMCreatorActivity extends AppCompatActivity {
             } else {
                 binding.cbvUseuefi.setVisibility(View.GONE);
             }
+
+            isUseLocalTime = current.isUseLocalTime;
+            binding.cbvUselocaltime.setChecked(isUseLocalTime);
         }
     }
 
@@ -715,6 +722,7 @@ public class VMCreatorActivity extends AppCompatActivity {
         vmConfigMap.put("bootFrom", bootFrom);
         vmConfigMap.put("isShowBootMenu", isShowBootMenu);
         vmConfigMap.put("isUseUefi", isUseUefi);
+        vmConfigMap.put("isUseLocalTime", isUseLocalTime);
         vmConfigMap.put("vmID", vmID);
         vmConfigMap.put("qmpPort", 8080);
         return vmConfigMap;

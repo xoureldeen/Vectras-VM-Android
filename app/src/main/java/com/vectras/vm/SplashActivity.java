@@ -43,6 +43,7 @@ public class SplashActivity extends AppCompatActivity {
             setupFolders();
             MainSettingsManager.setOrientationSetting(this, 1);
             setupFiles();
+            cleanUp();
             runOnUiThread(this::finishSplash);
         }).start();
     }
@@ -111,6 +112,10 @@ public class SplashActivity extends AppCompatActivity {
         } catch (Exception e) {
             Log.e(TAG, getCacheDir().getAbsolutePath() + ": Directory creation failed!", e);
         }
+    }
+
+    private void cleanUp() {
+        FileUtils.delete(AppConfig.vmFolder + "QuickRun");
     }
 
     private void finishSplash() {

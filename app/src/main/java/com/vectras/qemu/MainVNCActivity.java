@@ -64,6 +64,7 @@ import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.ListUtils;
 import com.vectras.vm.utils.NetworkUtils;
 import com.vectras.vm.utils.SimulateKeyEvent;
+import com.vectras.vm.utils.StreamAudio;
 import com.vectras.vm.utils.UIUtils;
 
 import java.io.File;
@@ -104,6 +105,8 @@ public class MainVNCActivity extends VncCanvasActivity {
     public static LinearLayout gamepad;
     private final ArrayList<HashMap<String, Object>> listmapForSendKey = new ArrayList<>();
     private boolean isConnected = false;
+
+    private StreamAudio streamAudio;
 
     @Override
     public void onCreate(Bundle b) {
@@ -168,6 +171,9 @@ public class MainVNCActivity extends VncCanvasActivity {
         });
 
         ConnectionBean.useLocalCursor = MainSettingsManager.getShowVirtualMouse(this) || VMManager.isNeedUseVirtualMouse();
+
+        streamAudio = new StreamAudio(this);
+        streamAudio.setFile(AppConfig.vmFolder + Config.vmID + "/audio.raw");
     }
 
     private void setDefaulViewMode() {
@@ -773,6 +779,8 @@ public class MainVNCActivity extends VncCanvasActivity {
             binding.lnNosignal.setVisibility(View.GONE);
             this.vncCanvas.setFocusableInTouchMode(true);
 //            syncCursorViewWithBitmap();
+
+            streamAudio.play();
         });
     }
 
@@ -782,6 +790,8 @@ public class MainVNCActivity extends VncCanvasActivity {
             isConnected = false;
             binding.lnNosignal.setVisibility(View.VISIBLE);
             if (started) isQMPPortOpening(firstConnection);
+
+            if (streamAudio.isPlaying()) streamAudio.stop();
         });
     }
 

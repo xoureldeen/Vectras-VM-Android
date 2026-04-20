@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
@@ -24,9 +25,12 @@ import com.vectras.vm.utils.PackageUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Locale;
 import java.util.Objects;
 
 public class UpdaterActivity extends AppCompatActivity {
+
+    private final String TAG ="UpdaterActivity";
 
     ActivityUpdaterBinding binding;
     String downloadUrl = "";
@@ -78,7 +82,7 @@ public class UpdaterActivity extends AppCompatActivity {
         int versionCode = PackageUtils.getThisVersionCode(getApplicationContext());
         String versionName = PackageUtils.getThisVersionName(getApplicationContext());
 
-        Retrofit2Utils.get(AppConfig.vectrasRaw + "software-store.json", ((isSuccess, body, status, error) -> {
+        Retrofit2Utils.get(AppConfig.vectrasRaw + "UpdateConfig.json", ((isSuccess, body, status, error) -> {
             if (isSuccess) {
                 binding.lpiProgressbar.setVisibility(View.GONE);
                 binding.lnBottombar.setVisibility(View.VISIBLE);
@@ -140,12 +144,15 @@ public class UpdaterActivity extends AppCompatActivity {
                                     null);
                         }
                     } catch (JSONException e) {
+                        Log.d(TAG, "JSONException: ", e);
                         whenUpToDate();
                     }
                 } else {
+                    Log.d(TAG, "Empty body.");
                     whenUpToDate();
                 }
             } else {
+                Log.d(TAG, "Failed.");
                 whenUpToDate();
             }
         }));

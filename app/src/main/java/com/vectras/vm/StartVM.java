@@ -20,11 +20,11 @@ import java.util.Objects;
 
 public class StartVM {
     public static String cache;
-
-    public static String cdrompath;
-    private static boolean isUseUefi;
+    private static DataMainRoms vmConfigs;
 
     public static String env(Activity activity, DataMainRoms vmData) {
+        vmConfigs = vmData;
+
         if (VMManager.isNeedLoadMigrate() && FileUtils.isFileExists(AppConfig.vmFolder + Config.vmID + "/snapshot.sh")) {
             String snapshotParams = FileUtils.readAFile(AppConfig.vmFolder + Config.vmID + "/snapshot.sh").replace("\n", "");
             if (VMManager.isthiscommandsafe(snapshotParams, activity)) {
@@ -50,12 +50,14 @@ public class StartVM {
         }
 
         extraParams = bootParams + extraParams;
-        cdrompath = vmData.imgCdrom;
-        isUseUefi = vmData.isUseUefi;
         return env(activity, extraParams, vmData.itemPath, false);
     }
 
     public static String env(Activity activity, String extras, String img, boolean isQuickRun) {
+        if (isQuickRun) {
+            vmConfigs = new DataMainRoms();
+            vmConfigs.isUseLocalTime = false;
+        }
 
         String filesDir = activity.getFilesDir().getAbsolutePath();
 
@@ -107,7 +109,7 @@ public class StartVM {
                 params.add(hdd0);
             }
 
-            if (cdrompath.isEmpty()) {
+            if (vmConfigs.imgCdrom.isEmpty()) {
                 File cdromFile = new File(filesDir + "/data/Vectras/drive.iso");
 
                 if (cdromFile.exists()) {
@@ -143,16 +145,16 @@ public class StartVM {
                     cdrom += " -device";
                     cdrom += " usb-storage,bus=defaultxhci.0,drive=cdrom";
                     cdrom += " -drive";
-                    cdrom += " if=none,id=cdrom,format=raw,media=cdrom,file='" + cdrompath + "'";
+                    cdrom += " if=none,id=cdrom,format=raw,media=cdrom,file='" + vmConfigs.imgCdrom + "'";
                 } else {
                     if (ifType.isEmpty()) {
                         cdrom = "-cdrom";
-                        cdrom += " '" + cdrompath + "'";
+                        cdrom += " '" + vmConfigs.imgCdrom + "'";
                     } else {
                         cdrom = "-drive";
                         cdrom += " index=1";
                         cdrom += ",media=cdrom";
-                        cdrom += ",file='" + cdrompath + "'";
+                        cdrom += ",file='" + vmConfigs.imgCdrom + "'";
                     }
                 }
                 params.add(cdrom);
@@ -215,7 +217,7 @@ public class StartVM {
                     bios += "file=" + AppConfig.basefiledir + "QEMU_EFI.img,format=raw,readonly=on,if=pflash";
                     bios += " -drive ";
                     bios += "file=" + AppConfig.basefiledir + "QEMU_VARS.img,format=raw,if=pflash";
-                } else if (MainSettingsManager.getArch(activity).equals("X86_64") && (MainSettingsManager.getuseUEFI(activity) || isUseUefi)) {
+                } else if (MainSettingsManager.getArch(activity).equals("X86_64") && (vmConfigs.isUseUefi)) {
                     bios = "-drive ";
                     bios += "file=" + AppConfig.basefiledir + "RELEASEX64_OVMF.fd,format=raw,readonly=on,if=pflash";
                     bios += " -drive ";
@@ -243,7 +245,7 @@ public class StartVM {
             }
 
 
-            if (MainSettingsManager.useLocalTime(activity)) {
+            if (vmConfigs.isUseLocalTime) {
                 params.add("-rtc");
                 params.add("base=localtime");
             }
@@ -283,8 +285,6 @@ public class StartVM {
             params.add("-incoming");
             params.add("defer");
         }
-
-        isUseUefi = false;
 
         return String.join(" ", params);
     }
@@ -374,7 +374,7 @@ public class StartVM {
 
                 if (!FileUtils.isFileExists(AppConfig.basefiledir + "QEMU_VARS.img"))
                     SetupFeatureCore.copyAssetToFile(context, "roms/QEMU_VARS.img", AppConfig.basefiledir + "QEMU_VARS.img");
-            } else if (arch.equals("X86_64") && (MainSettingsManager.getuseUEFI(context) || isUseUefi)) {
+            } else if (arch.equals("X86_64") && (MainSettingsManager.getuseUEFI(context) || vmConfigs.isUseUefi)) {
                 if (!FileUtils.isFileExists(AppConfig.basefiledir + "RELEASEX64_OVMF.fd"))
                     SetupFeatureCore.copyAssetToFile(context, "roms/RELEASEX64_OVMF.fd", AppConfig.basefiledir + "RELEASEX64_OVMF.fd");
 

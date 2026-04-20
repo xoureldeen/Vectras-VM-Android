@@ -285,6 +285,13 @@
                         android:layout_height="wrap_content"
                         app:setText="@string/use_uefi_for_x64_only"/>
 
+                    <com.vectras.vm.view.CheckBoxView
+                        android:id="@+id/cbv_uselocaltime"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:setText="@string/use_local_time"
+                        app:setChecked="true"/>
+
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
