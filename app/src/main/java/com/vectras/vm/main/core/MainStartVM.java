@@ -28,15 +28,14 @@ import com.vectras.vm.R;
 import com.vectras.vm.VMManager;
 import com.vectras.vm.logger.VectrasStatus;
 import com.vectras.vm.manager.QmpSender;
+import com.vectras.vm.manager.VmFileManager;
 import com.vectras.vm.manager.VmAudioManager;
 import com.vectras.vm.settings.ExternalVNCSettingsActivity;
-import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.NetworkUtils;
 import com.vectras.vm.utils.PackageUtils;
 import com.vectras.vm.utils.ServiceUtils;
-import com.vectras.vterm.Terminal;
 
 import java.io.File;
 
@@ -155,7 +154,7 @@ public class MainStartVM {
         if (VMManager.isVMRunning(context, finalvmID)) {
             Toast.makeText(context, "This VM is already running.", Toast.LENGTH_LONG).show();
             DisplaySystem.launch(context);
-            VmAudioManager.stream(vmID);
+            if (!MainSettingsManager.getVmUi(context).equals("VNC")) VmAudioManager.stream(vmID);
             return;
         }
 
@@ -195,7 +194,7 @@ public class MainStartVM {
             return;
         }
 
-        FileUtils.delete(AppConfig.vmFolder + vmID + "/audio.raw");
+        VmFileManager.removeTemp(context, vmID);
 
         TextView vmBootNote = showProgressDialog(context, vmName, thumbnailFile, vmID);
 
@@ -326,7 +325,7 @@ public class MainStartVM {
                                 });
                             }
 
-                            FileUtils.writeToFile(AppConfig.vmFolder + vmID, "snapshot.sh", env);
+                            FileUtils.writeToFile(VmFileManager.getPath(vmID), VmFileManager.SNAPSHOT_SH_FILE_NAME, env);
 
                             Log.i(TAG, "Virtual machine running.");
 
@@ -390,9 +389,9 @@ public class MainStartVM {
                         .placeholder(R.drawable.ic_computer_180dp_with_padding)
                         .error(R.drawable.ic_computer_180dp_with_padding)
                         .into(ivThumbnail);
-            } else if (FileUtils.isFileExists(AppConfig.vmFolder + vmID + "/screenshot.png")) {
+            } else if (VmFileManager.isScreenshotPngExists(vmID)) {
                 Glide.with(context.getApplicationContext())
-                        .load(new File(AppConfig.vmFolder + vmID + "/screenshot.png"))
+                        .load(new File(VmFileManager.getScreenshotPng(vmID)))
                         .placeholder(R.drawable.ic_computer_180dp_with_padding)
                         .error(R.drawable.ic_computer_180dp_with_padding)
                         .into(ivThumbnail);

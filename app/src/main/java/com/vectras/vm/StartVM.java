@@ -9,9 +9,9 @@ import com.vectras.qemu.MainSettingsManager;
 import com.vectras.qemu.utils.RamInfo;
 import com.vectras.vm.creator.VMCreatorSelector;
 import com.vectras.vm.main.vms.DataMainRoms;
+import com.vectras.vm.manager.VmFileManager;
 import com.vectras.vm.setupwizard.SetupFeatureCore;
 import com.vectras.vm.utils.FileUtils;
-import com.vectras.vm.utils.TextUtils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -25,8 +25,8 @@ public class StartVM {
     public static String env(Activity activity, DataMainRoms vmData) {
         vmConfigs = vmData;
 
-        if (VMManager.isNeedLoadMigrate() && FileUtils.isFileExists(AppConfig.vmFolder + Config.vmID + "/snapshot.sh")) {
-            String snapshotParams = FileUtils.readAFile(AppConfig.vmFolder + Config.vmID + "/snapshot.sh").replace("\n", "");
+        if (VMManager.isNeedLoadMigrate() && FileUtils.isFileExists(VmFileManager.getSnapshotSh(Config.vmID))) {
+            String snapshotParams = FileUtils.readAFile(VmFileManager.getSnapshotSh(Config.vmID)).replace("\n", "");
             if (VMManager.isthiscommandsafe(snapshotParams, activity)) {
                 snapshotParams = removeQemuSystem(snapshotParams);
                 snapshotParams = removeQmpParams(snapshotParams);

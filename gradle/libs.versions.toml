@@ -1,6 +1,6 @@
 [versions]
 activityKtx = "1.13.0"
-agp = "9.1.1"
+agp = "9.2.0"
 annotation = "1.10.0"
 appcompat = "1.7.1"
 comGoogleFirebase = "firebase-crashlytics"

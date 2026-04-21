@@ -1,65 +1,38 @@
 package com.vectras.vm;
 
-import static android.content.Intent.ACTION_OPEN_DOCUMENT;
 import static com.vectras.vm.utils.FileUtils.isFileExists;
 
 import static java.lang.Thread.sleep;
 
-import android.androidVNC.ConnectionBean;
-import android.androidVNC.VncCanvasActivity;
 import android.app.Activity;
-import android.app.NotificationManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
-import androidx.fragment.app.FragmentActivity;
 
-import com.anbui.elephant.retrofit2utils.Retrofit2Utils;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
-import com.vectras.qemu.MainVNCActivity;
-import com.vectras.qemu.QMPClient;
-import com.vectras.qemu.VNCConfig;
 import com.vectras.qemu.utils.QmpClient;
 import com.vectras.vm.main.MainActivity;
 import com.vectras.vm.main.core.MainStartVM;
 import com.vectras.vm.main.vms.DataMainRoms;
-import com.vectras.vm.manager.QemuConsoleDialog;
 import com.vectras.vm.manager.QmpSender;
+import com.vectras.vm.manager.VmFileManager;
 import com.vectras.vm.manager.VmActions;
-import com.vectras.vm.settings.VNCSettingsActivity;
 import com.vectras.vm.settings.X11DisplaySettingsActivity;
-import com.vectras.vm.setupwizard.SetupFeatureCore;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.JSONUtils;
-import com.vectras.vm.utils.NotificationUtils;
 import com.vectras.vm.utils.ProgressDialog;
 import com.vectras.vm.utils.TextUtils;
 import com.vectras.vterm.Terminal;
@@ -237,7 +210,7 @@ public class VMManager {
     }
 
     public static boolean hideVM(String vmId) {
-        return FileUtils.rename(AppConfig.vmFolder + vmId, "_" + vmId);
+        return FileUtils.rename(VmFileManager.getPath(vmId), "_" + vmId);
     }
 
     public static boolean unHideVM(String vmPath) {
@@ -344,16 +317,16 @@ public class VMManager {
         if (isKeepFiles) {
             isCompleted = hideVM(vmId);
             if (isCompleted && isVmFilesInUse(vmId, vmList)) {
-                vmList = vmList.replace(AppConfig.vmFolder + vmId, AppConfig.vmFolder + "_" + vmId);
+                vmList = VmFileManager.replaceToHide(vmId, vmList);
             }
         } else {
             if (isVmFilesInUse(vmId, vmList)) {
                 isKeptSomeFiles = true;
                 isCompleted = hideVM(vmId);
                 if (isCompleted)
-                    vmList = vmList.replace(AppConfig.vmFolder + vmId, AppConfig.vmFolder + "_" + vmId);
+                    vmList = VmFileManager.replaceToHide(vmId, vmList);
             } else {
-                isCompleted = FileUtils.delete(new File(AppConfig.vmFolder + vmId));
+                isCompleted = VmFileManager.delete(vmId);
             }
         }
 
@@ -383,8 +356,8 @@ public class VMManager {
         String finalvmList = new Gson().toJson(arr);
 
         for (int i = 0; i < restoredVms.size(); i++) {
-            if (finalvmList.contains(AppConfig.vmFolder + "_" + restoredVms.get(i))) {
-                finalvmList = finalvmList.replace(AppConfig.vmFolder + "_" + restoredVms.get(i), AppConfig.vmFolder + restoredVms.get(i));
+            if (finalvmList.contains(VmFileManager.getPathHide(restoredVms.get(i)))) {
+                finalvmList = VmFileManager.replaceToShow(restoredVms.get(i), finalvmList);
             }
         }
 
@@ -416,7 +389,7 @@ public class VMManager {
     }
 
     public static boolean isVmFilesInUse(String vmId, String vmList) {
-        File[] files = new File(AppConfig.vmFolder + vmId).listFiles();
+        File[] files = new File(VmFileManager.quickGetPath(vmId)).listFiles();
         if (files == null) return false;
         for (File f : files) {
             if (vmList.contains(f.getAbsolutePath())) {
@@ -858,7 +831,7 @@ public class VMManager {
     }
 
     public static String startMigrate() {
-        return sendQMPCommand("migrate \\\"exec:cat > " + AppConfig.vmFolder + Config.vmID + "/snapshot.bin\\\"");
+        return sendQMPCommand("migrate \\\"exec:cat > " + VmFileManager.getSnapshotBin(Config.vmID) + "\\\"");
     }
 
     public static Boolean[] getMigrateStatus() {
@@ -871,15 +844,15 @@ public class VMManager {
     }
 
     public static String loadMigrate() {
-        return sendQMPCommand("migrate_incoming \\\"exec:cat " + AppConfig.vmFolder + Config.vmID + "/snapshot.bin\\\"");
+        return sendQMPCommand("migrate_incoming \\\"exec:cat " + VmFileManager.getSnapshotBin(Config.vmID) + "\\\"");
     }
 
     public static boolean isNeedLoadMigrate() {
-        return isFileExists(AppConfig.vmFolder + Config.vmID + "/snapshot.bin");
+        return isFileExists(VmFileManager.getSnapshotBin(Config.vmID));
     }
 
     public static boolean deleteMigrate() {
-        return FileUtils.delete(new File(AppConfig.vmFolder + Config.vmID + "/snapshot.bin"));
+        return FileUtils.delete(new File(VmFileManager.getSnapshotBin(Config.vmID)));
     }
 
     public static boolean hideMigrateFile() {
@@ -1120,7 +1093,7 @@ public class VMManager {
     }
 
     public static String addAudioDevWav(String vmID, String env) {
-        final String audioDevParam = ",audiodev=snd0 -audiodev wav,id=snd0,path=" + AppConfig.vmFolder + vmID + "/audio.raw ";
+        final String audioDevParam = ",audiodev=snd0 -audiodev wav,id=snd0,out.frequency=48000,path=" + VmFileManager.getAudioRaw(VectrasApp.getContext(), vmID);
         String result = env;
         if (env.startsWith("-device hda-duplex ") || env.contains(" -device hda-duplex ") || env.endsWith(" -device hda-duplex")) {
             result = result.replaceFirst(" -device hda-duplex", " -device hda-duplex" + audioDevParam);

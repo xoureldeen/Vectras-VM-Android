@@ -194,7 +194,7 @@ public class Terminal {
                 new Handler(Looper.getMainLooper()).post(() -> {
                     AppConfig.temporaryLastedTerminalOutput = output.toString();
                     // If showResultDialog is enabled, show the dialog with the result or errors
-                    if (showResultDialog) {
+                    if (showResultDialog && dialogActivity != null) {
                         String finalOutput = output.toString();
                         String finalErrors = errors.toString();
                         // bcuz there is dumb users bruh
@@ -208,7 +208,6 @@ public class Terminal {
     public static String executeShellCommandWithResult(String userCommand, Context context) {
         StringBuilder output = new StringBuilder();
         StringBuilder errors = new StringBuilder();
-        Log.d(TAG, userCommand);
         VectrasStatus.logError("<font color='#4db6ac'>VTERM: >" + userCommand + "</font>");
 
         try {
@@ -253,6 +252,8 @@ public class Terminal {
             output.append(e.getMessage());
             errors.append(Log.getStackTraceString(e));
         }
+
+        Log.d(TAG, "executeShellCommandWithResult: " + userCommand + "\n" + output);
         return output.toString();
     }
 

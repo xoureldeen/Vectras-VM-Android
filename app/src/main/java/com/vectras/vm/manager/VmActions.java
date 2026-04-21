@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.Uri;
 
 import com.vectras.qemu.Config;
-import com.vectras.vm.AppConfig;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.ImageUtils;
 
@@ -18,15 +17,15 @@ public class VmActions {
                 if (isSaveToGallery) {
                     Uri imageFile = ImageUtils.saveToGallery(
                             context,
-                            ImageUtils.ppmToBitmap(new File(AppConfig.vmFolder + Config.vmID + "/screenshot.ppm")),
+                            ImageUtils.ppmToBitmap(new File(VmFileManager.getScreenshotPpm(context, Config.vmID))),
                             String.valueOf(System.currentTimeMillis())
                     );
 
-                    FileUtils.copyFileFromUri(context, imageFile, AppConfig.vmFolder + Config.vmID + "/screenshot.png");
+                    FileUtils.copyFileFromUri(context, imageFile, VmFileManager.getScreenshotPng(Config.vmID));
                 } else {
                     ImageUtils.saveBitmapToPNGFile(
-                            ImageUtils.ppmToBitmap(new File(AppConfig.vmFolder + Config.vmID + "/screenshot.ppm")),
-                            AppConfig.vmFolder + Config.vmID,
+                            ImageUtils.ppmToBitmap(new File(VmFileManager.getScreenshotPpm(context, Config.vmID))),
+                            VmFileManager.getPath(Config.vmID),
                             "screenshot.png"
                     );
                 }
@@ -35,7 +34,7 @@ public class VmActions {
             }
         }
 
-        FileUtils.delete(AppConfig.vmFolder + Config.vmID + "/screenshot.ppm");
+        VmFileManager.removeScreenshotPpm(context, Config.vmID);
 
         return isSaved;
     }

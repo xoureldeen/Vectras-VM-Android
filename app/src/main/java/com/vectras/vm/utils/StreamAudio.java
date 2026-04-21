@@ -14,6 +14,7 @@ public class StreamAudio {
     private Context context;
     private boolean isPlay;
     private String filePath = "";
+    private int sampleRate = 48000;
 
     public StreamAudio(Context context) {
         this.context = context;
@@ -35,7 +36,18 @@ public class StreamAudio {
         filePath = path;
     }
 
+    public void setMinimumSampleRate() {
+        sampleRate = 44100;
+    }
+
+    public void setHighSampleRate() {
+        sampleRate = 48000;
+    }
+
+
     public void streamFromFile() {
+        if (isPlay) return;
+
         isPlay = true;
 
         new Thread(() -> {
@@ -55,7 +67,7 @@ public class StreamAudio {
 
             Log.d(TAG, "Preparing to play: " + filePath);
 
-            int minBuf = AudioTrack.getMinBufferSize(44100,
+            int minBuf = AudioTrack.getMinBufferSize(sampleRate,
                     AudioFormat.CHANNEL_OUT_STEREO,
                     AudioFormat.ENCODING_PCM_16BIT);
 
@@ -64,7 +76,7 @@ public class StreamAudio {
                             .setUsage(AudioAttributes.USAGE_MEDIA)
                             .build())
                     .setAudioFormat(new AudioFormat.Builder()
-                            .setSampleRate(44100)
+                            .setSampleRate(sampleRate)
                             .setChannelMask(AudioFormat.CHANNEL_OUT_STEREO)
                             .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
                             .build())

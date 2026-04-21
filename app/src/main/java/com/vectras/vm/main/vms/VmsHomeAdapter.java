@@ -22,6 +22,7 @@ import com.vectras.vm.StartVM;
 import com.vectras.vm.VMManager;
 import com.vectras.vm.main.core.MainStartVM;
 import com.vectras.vm.main.core.RomOptionsDialog;
+import com.vectras.vm.manager.VmFileManager;
 import com.vectras.vm.utils.FileUtils;
 
 import java.io.File;
@@ -66,9 +67,9 @@ public class VmsHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     .skipMemoryCache(true)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .into(myHolder.ivIcon);
-        } else if (FileUtils.isFileExists(AppConfig.vmFolder + current.vmID + "/screenshot.png")) {
+        } else if (VmFileManager.isScreenshotPngExists(current.vmID)) {
             Glide.with(activity.getApplicationContext())
-                    .load(new File(AppConfig.vmFolder + current.vmID + "/screenshot.png"))
+                    .load(new File(VmFileManager.getScreenshotPng(current.vmID )))
                     .placeholder(R.drawable.ic_computer_180dp_with_padding)
                     .error(R.drawable.ic_computer_180dp_with_padding)
                     .skipMemoryCache(true)

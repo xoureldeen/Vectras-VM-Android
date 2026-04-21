@@ -35,6 +35,7 @@ import com.vectras.vm.main.vms.DataMainRoms;
 import com.vectras.vm.databinding.ActivityVmCreatorBinding;
 import com.vectras.vm.databinding.DialogProgressStyleBinding;
 import com.vectras.vm.main.MainActivity;
+import com.vectras.vm.manager.VmFileManager;
 import com.vectras.vm.utils.ClipboardUltils;
 import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.DialogUtils;
@@ -88,8 +89,7 @@ public class VMCreatorActivity extends AppCompatActivity {
             filePicker.launch("*/*");
             return true;
         } else if (id == R.id.show_in_folder) {
-            FileUtils.createDirectory(AppConfig.vmFolder + vmID);
-            FileUtils.openFolder(this, AppConfig.vmFolder + vmID);
+            FileUtils.openFolder(this, VmFileManager.getPath(vmID));
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -131,7 +131,7 @@ public class VMCreatorActivity extends AppCompatActivity {
         binding.driveField.setEndIconOnClickListener(v -> {
             if (Objects.requireNonNull(binding.drive.getText()).toString().isEmpty()) {
                 CreateImageDialogFragment dialogFragment = new CreateImageDialogFragment();
-                dialogFragment.folder = AppConfig.vmFolder + vmID + "/";
+                dialogFragment.folder = VmFileManager.getPath(vmID);
                 dialogFragment.customRom = true;
                 dialogFragment.filename = Objects.requireNonNull(binding.title.getText()).toString();
                 dialogFragment.drive = binding.drive;
@@ -148,7 +148,7 @@ public class VMCreatorActivity extends AppCompatActivity {
                         true,
                         () -> diskPicker.launch("*/*"),
                         () -> {
-                            if (binding.drive.getText().toString().contains(AppConfig.vmFolder + vmID)) {
+                            if (binding.drive.getText().toString().contains(VmFileManager.quickGetPath(vmID))) {
                                 FileUtils.delete(new File(Objects.requireNonNull(binding.drive.getText()).toString()));
                             }
                             binding.drive.setText("");
@@ -275,7 +275,7 @@ public class VMCreatorActivity extends AppCompatActivity {
                 if (Objects.requireNonNull(getIntent().getStringExtra("romextra")).isEmpty()) {
                     setDefault();
                 } else {
-                    binding.qemu.setText(Objects.requireNonNull(getIntent().getStringExtra("romextra")).replaceAll("OhnoIjustrealizeditsmidnightandIstillhavetodothis", AppConfig.vmFolder + vmID + "/"));
+                    binding.qemu.setText(VmFileManager.textMarkToPath(vmID, Objects.requireNonNull(getIntent().getStringExtra("romextra"))));
                 }
 
                 binding.title.setText(getIntent().getStringExtra("romname"));
@@ -296,7 +296,7 @@ public class VMCreatorActivity extends AppCompatActivity {
                         selectedDiskFile(Uri.fromFile(new File((Objects.requireNonNull(getIntent().getStringExtra("rompath"))))), false);
                     }
                     if (!Objects.requireNonNull(getIntent().getStringExtra("addtodrive")).isEmpty()) {
-                        binding.drive.setText(AppConfig.vmFolder + vmID + "/" + getIntent().getStringExtra("romfilename"));
+                        binding.drive.setText(VmFileManager.getPath(vmID, getIntent().getStringExtra("romfilename")));
                         if (Objects.requireNonNull(binding.drive.getText()).toString().isEmpty()) {
                             binding.driveField.setEndIconDrawable(R.drawable.add_24px);
                         } else {
@@ -315,8 +315,8 @@ public class VMCreatorActivity extends AppCompatActivity {
                 if (MainSettingsManager.autoCreateDisk(this)) {
                     if (createVMFolder(true)) {
                         Terminal vterm = new Terminal(this);
-                        vterm.executeShellCommand2("qemu-img create -f qcow2 " + AppConfig.vmFolder + vmID + "/disk.qcow2 128G", false, this);
-                        binding.drive.setText(AppConfig.vmFolder + vmID + "/disk.qcow2");
+                        vterm.executeShellCommand2("qemu-img create -f qcow2 " + VmFileManager.getPath(vmID, "disk.qcow2") + " 128G", false, this);
+                        binding.drive.setText(VmFileManager.getPath(vmID, "disk.qcow2"));
                     }
                 } else {
                     binding.driveField.setEndIconDrawable(R.drawable.add_24px);
@@ -325,7 +325,7 @@ public class VMCreatorActivity extends AppCompatActivity {
             }
         }
 
-        if (PackageUtils.getVersionCode("com.anbui.cqcm.app", this) < 735 || !FileUtils.isFileExists(AppConfig.vmFolder + vmID + "/cqcm.json")) {
+        if (PackageUtils.getVersionCode("com.anbui.cqcm.app", this) < 735 || !FileUtils.isFileExists(VmFileManager.getCreateCommandConfigFile(vmID))) {
             binding.opencqcm.setVisibility(View.GONE);
         } else {
             binding.opencqcm.setOnClickListener(v -> {
@@ -333,7 +333,7 @@ public class VMCreatorActivity extends AppCompatActivity {
                     Intent intentcqcm = new Intent();
                     intentcqcm.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intentcqcm.setComponent(new ComponentName("com.anbui.cqcm.app", "com.anbui.cqcm.app.DownloadActivity"));
-                    intentcqcm.putExtra("content", FileUtils.readAFile(AppConfig.vmFolder + vmID + "/cqcm.json"));
+                    intentcqcm.putExtra("content", FileUtils.readAFile(VmFileManager.getCreateCommandConfigFile(vmID)));
                     intentcqcm.putExtra("vectrasVMId", vmID);
                     startActivity(intentcqcm);
                     finish();
@@ -368,7 +368,7 @@ public class VMCreatorActivity extends AppCompatActivity {
         if (isProcessingFile) return;
 
         if (!created && !modify) {
-            new Thread(() -> FileUtils.delete(new File(AppConfig.vmFolder + vmID))).start();
+            new Thread(() -> VmFileManager.delete(vmID)).start();
         }
         modify = false;
         finish();
@@ -376,7 +376,7 @@ public class VMCreatorActivity extends AppCompatActivity {
 
     public void onDestroy() {
         if (!created && !modify) {
-            new Thread(() -> FileUtils.delete(new File(AppConfig.vmFolder + vmID))).start();
+            new Thread(() -> VmFileManager.delete(vmID)).start();
         }
         modify = false;
         super.onDestroy();
@@ -410,11 +410,11 @@ public class VMCreatorActivity extends AppCompatActivity {
                                 _filename = String.valueOf(System.currentTimeMillis());
                             }
 
-                            FileUtils.copyFileFromUri(this, uri, AppConfig.vmFolder + vmID + "/" + _filename);
+                            FileUtils.copyFileFromUri(this, uri, VmFileManager.getPath(vmID, _filename));
 
                             String final_filename = _filename;
                             runOnUiThread(() -> {
-                                binding.cdrom.setText(AppConfig.vmFolder + vmID + "/" + final_filename);
+                                binding.cdrom.setText(VmFileManager.getPath(vmID, final_filename));
                                 binding.cdromField.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
                                 binding.cdromField.setEndIconDrawable(R.drawable.close_24px);
                                 changeOnClickCdrom();
@@ -502,7 +502,7 @@ public class VMCreatorActivity extends AppCompatActivity {
                             _filename = String.valueOf(System.currentTimeMillis());
                         }
 
-                        String filePath = AppConfig.vmFolder + vmID + "/" + _filename;
+                        String filePath = VmFileManager.getPath(vmID, _filename);
 
                         FileUtils.copyFileFromUri(this, uri, filePath);
 
@@ -548,7 +548,7 @@ public class VMCreatorActivity extends AppCompatActivity {
             }
 
             if (current.itemPath != null && !current.itemPath.isEmpty()) {
-                binding.drive.setText((current.itemPath.contains("/") ? "" : AppConfig.vmFolder + vmID + "/").concat(current.itemPath));
+                binding.drive.setText((current.itemPath.contains("/") ? "" : VmFileManager.getPath(vmID)).concat(current.itemPath));
             }
 
             if (Objects.requireNonNull(binding.drive.getText()).toString().isEmpty()) {
@@ -558,7 +558,7 @@ public class VMCreatorActivity extends AppCompatActivity {
             }
 
             if (current.imgCdrom != null && !current.imgCdrom.isEmpty()) {
-                binding.cdrom.setText((current.imgCdrom.contains("/") ? "" : AppConfig.vmFolder + vmID + "/").concat(current.imgCdrom));
+                binding.cdrom.setText((current.imgCdrom.contains("/") ? "" : VmFileManager.getPath(vmID)).concat(current.imgCdrom));
             }
 
             if (!Objects.requireNonNull(binding.cdrom.getText()).toString().isEmpty()) {
@@ -568,12 +568,12 @@ public class VMCreatorActivity extends AppCompatActivity {
             }
 
             if (current.itemIcon != null && !current.itemIcon.isEmpty()) {
-                thumbnailPath = (current.itemIcon.contains("/") ? "" : AppConfig.vmFolder + vmID + "/") + current.itemIcon;
+                thumbnailPath = (current.itemIcon.contains("/") ? "" : VmFileManager.getPath(vmID)) + current.itemIcon;
                 thumbnailProcessing();
             }
 
             if (current.itemExtra != null) {
-                binding.qemu.setText(current.itemExtra.replaceAll("OhnoIjustrealizeditsmidnightandIstillhavetodothis", AppConfig.vmFolder + vmID + "/"));
+                binding.qemu.setText(VmFileManager.textMarkToPath(vmID, current.itemExtra));
             }
 
             bootFrom = current.bootFrom;
@@ -627,7 +627,7 @@ public class VMCreatorActivity extends AppCompatActivity {
     }
 
     private boolean createVMFolder(boolean isShowDialog) {
-        File romDir = new File(AppConfig.vmFolder + vmID);
+        File romDir = new File(VmFileManager.getPath(vmID));
         if (!romDir.exists()) {
             if (!romDir.mkdirs()) {
                 if (isShowDialog) DialogUtils.oneDialog(this,
@@ -734,9 +734,9 @@ public class VMCreatorActivity extends AppCompatActivity {
         executor.execute(() -> {
             try {
                 isProcessingFile = true;
-                ImageUtils.convertToPng(this, uri, AppConfig.vmFolder + vmID + "/thumbnail.png");
+                ImageUtils.convertToPng(this, uri, VmFileManager.getThumbnail(vmID));
 
-                thumbnailPath = AppConfig.vmFolder + vmID + "/thumbnail.png";
+                thumbnailPath = VmFileManager.getThumbnail(vmID);
                 runOnUiThread(this::thumbnailProcessing);
             } catch (Exception e) {
                 runOnUiThread(() -> DialogUtils.oneDialog(this,
@@ -810,17 +810,17 @@ public class VMCreatorActivity extends AppCompatActivity {
                         _filename = String.valueOf(System.currentTimeMillis());
                     }
 
-                    FileUtils.copyFileFromUri(this, _content_describer, AppConfig.vmFolder + vmID + "/" + _filename);
+                    FileUtils.copyFileFromUri(this, _content_describer, VmFileManager.getPath(vmID, _filename));
 
                     String final_filename = _filename;
                     runOnUiThread(() -> {
                         if ((isFinishing() || isDestroyed())) {
                             if (!vmID.isEmpty())
-                                FileUtils.delete(new File(AppConfig.vmFolder + vmID + "/" + final_filename));
+                                FileUtils.delete(new File(VmFileManager.getPath(vmID, final_filename)));
                             return;
                         }
                         if (_addtodrive) {
-                            binding.drive.setText(AppConfig.vmFolder + vmID + "/" + final_filename);
+                            binding.drive.setText(VmFileManager.getPath(vmID, final_filename));
                             binding.driveField.setEndIconDrawable(R.drawable.more_vert_24px);
                         }
                     });
@@ -923,19 +923,19 @@ public class VMCreatorActivity extends AppCompatActivity {
 
         showProgressDialog(getString(R.string.importing) + "\n" + getString(R.string.please_stay_here));
 
-        Log.i(TAG, "importRom: Extracting with " + (isUseUri ? "uri" : "path") + " from " + filePath + " to " + AppConfig.vmFolder + vmID);
+        Log.i(TAG, "importRom: Extracting with " + (isUseUri ? "uri" : "path") + " from " + filePath + " to " + VmFileManager.getPath(vmID));
 
         new Thread(() -> {
             boolean result = isUseUri ? ZipUtils.extract(
                     this,
                     fileUri,
-                    AppConfig.vmFolder + vmID,
+                    VmFileManager.getPath(vmID),
                     dialogProgressStyleBinding.progressText,
                     dialogProgressStyleBinding.progressBar
             ) : ZipUtils.extract(
                     this,
                     filePath,
-                    AppConfig.vmFolder + vmID,
+                    VmFileManager.getPath(vmID),
                     dialogProgressStyleBinding.progressText,
                     dialogProgressStyleBinding.progressBar
             );
@@ -944,7 +944,7 @@ public class VMCreatorActivity extends AppCompatActivity {
                 DialogUtils.safeDismiss(this, progressDialog);
 
                 if (isFinishing() || isDestroyed()) {
-                    new Thread(() -> FileUtils.delete(new File(AppConfig.vmFolder + vmID))).start();
+                    new Thread(() -> VmFileManager.delete(vmID)).start();
                     return;
                 }
 
@@ -970,8 +970,8 @@ public class VMCreatorActivity extends AppCompatActivity {
         isProcessingFile = false;
         binding.ivIcon.setEnabled(true);
         try {
-            if (!FileUtils.isFileExists(AppConfig.vmFolder + vmID + "/rom-data.json")) {
-                String _getDiskFile = VMManager.quickScanDiskFileInFolder(AppConfig.vmFolder + vmID);
+            if (!VmFileManager.isConfigFileExists(vmID)) {
+                String _getDiskFile = VMManager.quickScanDiskFileInFolder(VmFileManager.getPath(vmID));
                 if (!_getDiskFile.isEmpty()) {
                     //Error code: CR_CVBI2
                     if (getIntent().hasExtra("addromnow") && !addromnowdone) {
@@ -984,7 +984,7 @@ public class VMCreatorActivity extends AppCompatActivity {
                                 binding.qemu.setText(Objects.requireNonNull(getIntent().getStringExtra("romextra")).replaceAll(Objects.requireNonNull(getIntent().getStringExtra("finalromfilename")), "\"" + _getDiskFile + "\""));
                             } else {
                                 binding.drive.setText(_getDiskFile);
-                                binding.qemu.setText(Objects.requireNonNull(getIntent().getStringExtra("romextra")).replaceAll("OhnoIjustrealizeditsmidnightandIstillhavetodothis", AppConfig.vmFolder + vmID + "/"));
+                                binding.qemu.setText(VmFileManager.textMarkToPath(vmID, Objects.requireNonNull(getIntent().getStringExtra("romextra"))));
                             }
                         }
 
@@ -1015,24 +1015,24 @@ public class VMCreatorActivity extends AppCompatActivity {
                     }
                 }
             } else {
-                if (!JSONUtils.isValidFromFile(AppConfig.vmFolder + vmID + "/rom-data.json")) {
+                if (!JSONUtils.isValidFromFile(VmFileManager.getConfigFile(vmID))) {
                     DialogUtils.oneDialog(this, getResources().getString(R.string.oops), getResources().getString(R.string.error_CR_CVBI4), getResources().getString(R.string.ok), true, R.drawable.warning_48px, true, null, null);
                     return;
                 }
 
                 try {
-                    loadConfig(new Gson().fromJson(FileUtils.readFromFile(this, new File(AppConfig.vmFolder + vmID + "/rom-data.json")), DataMainRoms.class));
+                    loadConfig(new Gson().fromJson(FileUtils.readFromFile(this, new File(VmFileManager.getConfigFile(vmID))), DataMainRoms.class));
                 } catch (JsonSyntaxException e) {
                     DialogUtils.oneDialog(this, getResources().getString(R.string.oops), getResources().getString(R.string.error_CR_CVBI4), getResources().getString(R.string.ok), true, R.drawable.warning_48px, true, null, null);
                     return;
                 }
 
-                JSONObject jObj = new JSONObject(FileUtils.readFromFile(this, new File(AppConfig.vmFolder + vmID + "/rom-data.json")));
+                JSONObject jObj = new JSONObject(FileUtils.readFromFile(this, new File(VmFileManager.getConfigFile(vmID))));
 
                 if (jObj.has("vmID")) {
                     if (!jObj.isNull("vmID")) {
                         if (!jObj.getString("vmID").isEmpty()) {
-                            FileUtils.move(AppConfig.vmFolder + vmID, AppConfig.vmFolder + jObj.getString("vmID"));
+                            FileUtils.move(VmFileManager.getConfigFile(vmID), VmFileManager.getConfigFile( jObj.getString("vmID")));
                             vmID = jObj.getString("vmID");
                         }
                     }
@@ -1040,7 +1040,7 @@ public class VMCreatorActivity extends AppCompatActivity {
 
                 //It can be deleted because there are few users of the old version.
                 if (!_filename.replace(".cvbi", "").isEmpty())
-                    FileUtils.move(AppConfig.vmFolder + _filename.replace(".cvbi", ""), AppConfig.vmFolder + vmID);
+                    FileUtils.move(AppConfig.vmFolder + _filename.replace(".cvbi", ""), VmFileManager.getPath(vmID));
 
                 if (!jObj.has("drive") && !jObj.has("cdrom") && !jObj.has("qemu")) {
                     DialogUtils.oneDialog(this, getResources().getString(R.string.problem_has_been_detected), getResources().getString(R.string.this_rom_is_missing_too_much_information), R.drawable.warning_24px);
@@ -1066,12 +1066,12 @@ public class VMCreatorActivity extends AppCompatActivity {
             Log.e(TAG, "afterExtractCVBIFile: " + e.getMessage());
         }
 
-        if (FileUtils.isFileExists(AppConfig.vmFolder + vmID + "/cqcm.json")) {
-            FileUtils.writeToFile(AppConfig.vmFolder + vmID, "cqcm.json", FileUtils.readAFile(AppConfig.vmFolder + vmID + "/cqcm.json").replace("OhnoIjustrealizeditsmidnightandIstillhavetodothis", AppConfig.vmFolder + vmID + "/"));
+        if (VmFileManager.isCreateCommandConfigFileExists(vmID)) {
+            FileUtils.writeToFile(VmFileManager.getPath(vmID), VmFileManager.CREATE_COMMAND_CONFIG_FILE_NAME, VmFileManager.textMarkToPath(vmID, FileUtils.readAFile(VmFileManager.getCreateCommandConfigFile(vmID))));
         }
 
-        if (FileUtils.isFileExists(AppConfig.vmFolder + vmID + "/snapshot.sh")) {
-            FileUtils.writeToFile(AppConfig.vmFolder + vmID, "snapshot.sh", FileUtils.readAFile(AppConfig.vmFolder + vmID + "/snapshot.sh").replace("OhnoIjustrealizeditsmidnightandIstillhavetodothis", AppConfig.vmFolder + vmID + "/"));
+        if (VmFileManager.isSnapshotShExists(vmID)) {
+            FileUtils.writeToFile(VmFileManager.getPath(vmID), VmFileManager.SNAPSHOT_SH_FILE_NAME, VmFileManager.textMarkToPath(vmID, FileUtils.readAFile(VmFileManager.getSnapshotSh(vmID))));
         }
     }
 
