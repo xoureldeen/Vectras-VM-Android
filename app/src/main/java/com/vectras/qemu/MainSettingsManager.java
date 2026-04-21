@@ -361,13 +361,13 @@ public class MainSettingsManager extends AppCompatActivity
                 });
             }
 
-//            if (Objects.equals(getArch(activity), "I386")) { // I386 DOES NOT SUPPORT SHARED FOLDER
-//                SwitchPreferenceCompat sharedPref = findPreference("sharedFolder");
-//                sharedPref.setEnabled(false);
-//                sharedPref.setChecked(false);
-//                setSharedFolder(activity, false);
-//
-//            }
+            /*if (Objects.equals(getArch(activity), "I386")) { // I386 DOES NOT SUPPORT SHARED FOLDER
+                SwitchPreferenceCompat sharedPref = findPreference("sharedFolder");
+                sharedPref.setEnabled(false);
+                sharedPref.setChecked(false);
+                setSharedFolder(activity, false);
+
+            }
 
             if (!getuseDefaultBios(getActivity())) {
                 SwitchPreferenceCompat useUEFIPref = findPreference("useUEFI");
@@ -398,7 +398,7 @@ public class MainSettingsManager extends AppCompatActivity
                     }
                 }
                 return true;
-            });
+            });*/
         }
 
         private void onMemory() {

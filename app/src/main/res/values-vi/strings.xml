@@ -539,6 +539,13 @@
     <string name="unable_to_take_a_screenshot">Không thể chụp màn hình.</string>
     <string name="saved_to_the_gallery">Đã lưu vào bộ sưu tập.</string>
     <string name="taking_a_screenshot">Đang chụp màn hình…</string>
+    <string name="this_vm_is_already_running">Máy ảo này đang chạy.</string>
+    <string name="the_server_is_running">Máy chủ đã chạy</string>
+    <string name="host_shared_folder_format_content">Hãy truy cập vào liên kết này ở máy ảo để truy cập vào thư mục Download trên thiết bị của bạn:\n\n%s\n\nBạn cũng có thể gửi tệp từ trong máy ảo ra thư mục Download trên thiết bị của bạn, dưới đây là ví dụ về cách làm với curl:\n\n%s</string>
+    <string name="host_shared_folder_error_content">Đã xảy ra lỗi khi khởi động máy chủ. Hãy thử lại sau.</string>
+    <string name="copy_link">Sao chép liên kết</string>
+    <string name="copy_upload_command">Sao chép lệnh tải lên</string>
+    <string name="folder_sharing_server">Máy chủ chia sẻ thư mục</string>
 
 
     <!--======================TERMUX STRINGS====================-->

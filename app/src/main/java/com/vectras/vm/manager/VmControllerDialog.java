@@ -64,6 +64,11 @@ public class VmControllerDialog extends DialogFragment {
                     dismiss();
                 });
 
+                binding.lnFolderSharingServer.setOnClickListener(v -> {
+                    HostSharedFolder.start(requireActivity());
+                    dismiss();
+                });
+
                 if (infoBlock != null && (infoBlock.contains(QmpSender.DEFAULT_OPTICAL_DISC_1_ID)
                         || infoBlock.contains(QmpSender.DEFAULT_OPTICAL_DISC_2_ID)
                         || infoBlock.contains(QmpSender.DEFAULT_FLOPPY_DISK_0_ID)
@@ -164,7 +169,7 @@ public class VmControllerDialog extends DialogFragment {
                 });
 
 
-                if (requireActivity() instanceof MainVNCActivity) {
+                if (isAdded() && requireActivity() instanceof MainVNCActivity) {
                     binding.lnRefresh.setOnClickListener(v -> {
                         requireActivity().startActivity(new Intent(requireActivity(), MainVNCActivity.class));
                         requireActivity().overridePendingTransition(0, 0);

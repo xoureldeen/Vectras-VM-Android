@@ -21,6 +21,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
 import com.vectras.vm.databinding.ActivityExportRomBinding;
 import com.vectras.vm.main.vms.DataMainRoms;
+import com.vectras.vm.manager.VmFileManager;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.PackageUtils;
@@ -114,7 +115,7 @@ public class ExportRomActivity extends AppCompatActivity {
             }
         }
 
-        String getRomPath = AppConfig.vmFolder + current.vmID + "/";
+        String getRomPath = VmFileManager.getPath(current.vmID);
         HashMap<String, Object> vmConfigMap = new HashMap<>();
 
         vmConfigMap.put("title", current.itemName);
@@ -143,7 +144,7 @@ public class ExportRomActivity extends AppCompatActivity {
         vmConfigMap.put("isShowBootMenu", current.isShowBootMenu);
         vmConfigMap.put("isUseUefi", current.isUseUefi);
         vmConfigMap.put("isUseLocalTime", current.isUseLocalTime);
-        vmConfigMap.put("qemu", current.itemExtra.replace(getRomPath, "OhnoIjustrealizeditsmidnightandIstillhavetodothis"));
+        vmConfigMap.put("qemu", VmFileManager.pathToTextMark(current.vmID, current.itemExtra));
         vmConfigMap.put("arch", current.itemArch);
 
         if (Objects.requireNonNull(binding.edAuthor.getText()).toString().isEmpty()) {
@@ -166,7 +167,7 @@ public class ExportRomActivity extends AppCompatActivity {
         String[] filePaths = new String[0];
 
         ArrayList<String> _filelist = new ArrayList<>();
-        FileUtils.getAListOfAllFilesAndFoldersInADirectory(AppConfig.vmFolder + current.vmID, _filelist);
+        FileUtils.getAListOfAllFilesAndFoldersInADirectory(VmFileManager.getPath(current.vmID), _filelist);
         if (!_filelist.isEmpty()) {
             ArrayList<String> pathList = new ArrayList<>();
 
@@ -176,18 +177,18 @@ public class ExportRomActivity extends AppCompatActivity {
 
                     if (_filelist.get(_repeat).endsWith("rom-data.json")) {
                         pathList.add(tempFolder + "rom-data.json");
-                    } else if (_filelist.get(_repeat).endsWith("snapshot.sh")) {
-                        if (FileUtils.isFileExists(AppConfig.vmFolder + current.vmID + "/snapshot.bin")) {
+                    } else if (_filelist.get(_repeat).endsWith(VmFileManager.SNAPSHOT_SH_FILE_NAME)) {
+                        if (VmFileManager.isSnapshotBinExists(current.vmID)) {
                             String snapshotParams = FileUtils.readAFile(_filelist.get(_repeat));
                             snapshotParams = StartVM.removeQmpParams(snapshotParams);
                             snapshotParams = StartVM.removeDisplayParams(snapshotParams);
-                            FileUtils.writeToFile(tempFolder, "snapshot.sh", snapshotParams.replace(getRomPath, "OhnoIjustrealizeditsmidnightandIstillhavetodothis"));
-                            pathList.add(tempFolder + "snapshot.sh");
+                            FileUtils.writeToFile(tempFolder, VmFileManager.SNAPSHOT_SH_FILE_NAME, snapshotParams.replace(getRomPath, VmFileManager.TEXT_MARK_VM_PATH));
+                            pathList.add(tempFolder + VmFileManager.SNAPSHOT_SH_FILE_NAME);
                         }
-                    } else if (_filelist.get(_repeat).endsWith("cqcm.json")) {
-                        FileUtils.writeToFile(tempFolder, "cqcm.json", FileUtils.readAFile(_filelist.get(_repeat)).replace(getRomPath, "OhnoIjustrealizeditsmidnightandIstillhavetodothis"));
-                        pathList.add(tempFolder + "cqcm.json");
-                    } else if (_filelist.get(_repeat).endsWith("screenshot.ppm") || _filelist.get(_repeat).endsWith("screenshot.png") || _filelist.get(_repeat).endsWith("audio.raw")) {
+                    } else if (_filelist.get(_repeat).endsWith(VmFileManager.CREATE_COMMAND_CONFIG_FILE_NAME)) {
+                        FileUtils.writeToFile(tempFolder, VmFileManager.CREATE_COMMAND_CONFIG_FILE_NAME, FileUtils.readAFile(_filelist.get(_repeat)).replace(getRomPath, VmFileManager.TEXT_MARK_VM_PATH));
+                        pathList.add(tempFolder + VmFileManager.CREATE_COMMAND_CONFIG_FILE_NAME);
+                    } else if (_filelist.get(_repeat).endsWith(VmFileManager.SCREENSHOT_PNG_FILE_NAME) || _filelist.get(_repeat).endsWith(VmFileManager.AUDIO_STREAM_FILE_NAME)) {
                         //ignore
                     } else {
                         pathList.add(_filelist.get(_repeat));

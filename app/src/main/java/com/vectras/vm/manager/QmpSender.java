@@ -16,6 +16,7 @@ import com.vectras.qemu.Config;
 import com.vectras.qemu.utils.QmpClient;
 import com.vectras.vm.AppConfig;
 import com.vectras.vm.R;
+import com.vectras.vm.VectrasApp;
 
 import java.io.StringReader;
 
@@ -113,11 +114,11 @@ public class QmpSender {
     }
 
     public static String migrate() {
-        return send("migrate \"exec:cat > " + AppConfig.vmFolder + Config.vmID + "/snapshot.bin\"");
+        return send("migrate \"exec:cat > " + VmFileManager.getSnapshotBin(Config.vmID) + "\"");
     }
 
     public static boolean takeScreenshot() {
-        return isSuccess(send("screendump " + AppConfig.vmFolder + Config.vmID + "/screenshot.ppm"));
+        return isSuccess(send("screendump " + VmFileManager.getScreenshotPpm(VectrasApp.getContext(), Config.vmID)));
     }
 
     public static String getAllDevice() {

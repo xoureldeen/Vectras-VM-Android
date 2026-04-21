@@ -87,6 +87,26 @@
                     android:textColor="?attr/colorControlNormal"
                     android:text="@string/pause"/>
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ln_folder_sharing_server"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingVertical="8dp"
+                android:paddingHorizontal="16dp"
+                android:background="?attr/selectableItemBackground">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/folder_24px"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:textColor="?attr/colorControlNormal"
+                    android:text="@string/folder_sharing_server"/>
+            </LinearLayout>
         </LinearLayout>
 
             <LinearLayout

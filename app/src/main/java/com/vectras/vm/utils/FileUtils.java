@@ -71,8 +71,20 @@ public class FileUtils {
 
     @SuppressLint("NewApi")
     public static String getPath(Context context, final Uri uri) {
-        if ((uri.toString().startsWith("content://ru.zdevs.zarchiver") || uri.toString().startsWith("content://bin.mt.plus")) && uri.getPath() != null && isFileExists(uri.getPath()))
-            return uri.getPath();
+        if ((uri.toString().startsWith("content://ru.zdevs.zarchiver") ||
+                uri.toString().startsWith("content://bin.mt.plus") ||
+                uri.toString().startsWith("content://com.android.fileexplorer.myprovider") ||
+                uri.toString().startsWith("content://com.estrongs.files")) &&
+                uri.getPath() != null &&
+                isFileExists(uri.getPath())) {
+            String path = uri.getPath();
+
+            if (uri.toString().startsWith("content://com.android.fileexplorer.myprovider/external_files")) {
+                path = new File(Environment.getExternalStorageDirectory(), path.substring("/external_files".length())).getAbsolutePath();
+            }
+
+            return path;
+        }
 
         // check here to KITKAT or new version
         final boolean isKitKat = true;

@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.vectras.vm.main.MainActivity;
 import com.vectras.vm.main.core.PendingCommand;
+import com.vectras.vm.manager.VmFileManager;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.JSONUtils;
 import com.vectras.vm.utils.PermissionUtils;
@@ -98,7 +99,7 @@ public class CqcmActivity extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(), getString(R.string.an_error_occurred_and_vm_was_not_created), Toast.LENGTH_LONG).show();
                             }
                         }
-                        FileUtils.writeToFile(AppConfig.vmFolder + vmId, "cqcm.json", getIntent().getStringExtra("cqcmcontent"));
+                        FileUtils.writeToFile(VmFileManager.getPath(vmID), "cqcm.json", getIntent().getStringExtra("cqcmcontent"));
                     } else {
                         Toast.makeText(getApplicationContext(), "An error occurred and it was not possible to create or edit a virtual machine.", Toast.LENGTH_LONG).show();
                     }

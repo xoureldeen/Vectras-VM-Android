@@ -58,16 +58,15 @@ import com.vectras.vm.databinding.DesktopControlsBinding;
 import com.vectras.vm.databinding.GameControlsBinding;
 import com.vectras.vm.databinding.SendKeyDialogBinding;
 import com.vectras.vm.manager.QmpSender;
+import com.vectras.vm.manager.VmFileManager;
 import com.vectras.vm.manager.VmControllerDialog;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.ListUtils;
-import com.vectras.vm.utils.NetworkUtils;
 import com.vectras.vm.utils.SimulateKeyEvent;
 import com.vectras.vm.utils.StreamAudio;
 import com.vectras.vm.utils.UIUtils;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -173,7 +172,7 @@ public class MainVNCActivity extends VncCanvasActivity {
         ConnectionBean.useLocalCursor = MainSettingsManager.getShowVirtualMouse(this) || VMManager.isNeedUseVirtualMouse();
 
         streamAudio = new StreamAudio(this);
-        streamAudio.setFile(AppConfig.vmFolder + Config.vmID + "/audio.raw");
+        streamAudio.setFile(VmFileManager.getAudioRaw(this, Config.vmID));
     }
 
     private void setDefaulViewMode() {
@@ -730,20 +729,6 @@ public class MainVNCActivity extends VncCanvasActivity {
         showPanningState();
     }
 
-    public void promptPause(final Activity activity) {
-        final AlertDialog alertDialog;
-        alertDialog = new AlertDialog.Builder(activity, R.style.MainDialogTheme).create();
-        alertDialog.setTitle("Pause VM");
-        TextView stateView = new TextView(activity);
-        stateView.setText("This make take a while depending on the RAM size used");
-        stateView.setPadding(20, 20, 20, 20);
-        alertDialog.setView(stateView);
-
-        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Pause", (dialog, which) -> onPauseVM());
-        alertDialog.show();
-
-    }
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -780,7 +765,7 @@ public class MainVNCActivity extends VncCanvasActivity {
             this.vncCanvas.setFocusableInTouchMode(true);
 //            syncCursorViewWithBitmap();
 
-            streamAudio.play();
+            if (!streamAudio.isPlaying()) streamAudio.play();
         });
     }
 
