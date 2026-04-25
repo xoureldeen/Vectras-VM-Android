@@ -25,7 +25,7 @@ public class ToolsManager {
             if (!FileUtils.isFileExists(AppConfig.basefiledir + "3dfx-wrappers.iso"))
                 SetupFeatureCore.copyAssetToFile(activity, "roms/3dfx-wrappers.iso", AppConfig.basefiledir + "3dfx-wrappers.iso");
 
-            activity.runOnUiThread(() -> QmpSender.changeOpticalDisc(activity, AppConfig.basefiledir + "3dfx-wrappers.iso", ""));
+            activity.runOnUiThread(() -> QmpSender.changeDynamicSecondaryOpticalDisc(activity, AppConfig.basefiledir + "3dfx-wrappers.iso", ""));
         }).start();
     }
 
@@ -89,7 +89,7 @@ public class ToolsManager {
                                                     true,
                                                     R.drawable.check_24px,
                                                     true,
-                                                    () -> QmpSender.changeOpticalDisc(activity, AppConfig.basefiledir + "virtio-win.iso", ""),
+                                                    () -> QmpSender.changeDynamicSecondaryOpticalDisc(activity, AppConfig.basefiledir + "virtio-win.iso", ""),
                                                     null,
                                                     null)
                                             );
@@ -125,7 +125,7 @@ public class ToolsManager {
                         null,
                         null));
             } else {
-                QmpSender.changeOpticalDisc(activity, AppConfig.basefiledir + "virtio-win.iso", "");
+                QmpSender.changeDynamicSecondaryOpticalDisc(activity, AppConfig.basefiledir + "virtio-win.iso", "");
             }
         }).start();
     }

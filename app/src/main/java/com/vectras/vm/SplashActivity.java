@@ -18,6 +18,7 @@ import com.vectras.qemu.MainSettingsManager;
 import com.vectras.qemu.utils.FileInstaller;
 import com.vectras.vm.crashtracker.LastCrashActivity;
 import com.vectras.vm.main.MainActivity;
+import com.vectras.vm.manager.VmFileManager;
 import com.vectras.vm.setupwizard.SetupFeatureCore;
 import com.vectras.vm.setupwizard.SetupWizard2Activity;
 import com.vectras.vm.utils.DeviceUtils;
@@ -116,6 +117,9 @@ public class SplashActivity extends AppCompatActivity {
 
     private void cleanUp() {
         FileUtils.delete(AppConfig.vmFolder + "QuickRun");
+        VmFileManager.removeTemp(this, "");
+        FileUtils.delete(new File(getExternalCacheDir(), "logs"));
+        FileUtils.delete(new File(getExternalCacheDir(), "cvbi"));
     }
 
     private void finishSplash() {

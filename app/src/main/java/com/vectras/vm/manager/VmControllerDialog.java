@@ -3,7 +3,6 @@ package com.vectras.vm.manager;
 import android.androidVNC.ConnectionBean;
 import android.app.Dialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -23,12 +22,15 @@ import com.vectras.qemu.VNCConfig;
 import com.vectras.vm.AppConfig;
 import com.vectras.vm.R;
 import com.vectras.vm.VMManager;
+import com.vectras.vm.creator.VMCreatorActivity;
 import com.vectras.vm.databinding.DialogChangeRemovableDevicesBinding;
+import com.vectras.vm.main.core.DisplaySystem;
+import com.vectras.vm.main.vms.DataMainRoms;
 import com.vectras.vm.settings.VNCSettingsActivity;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
-import com.vectras.vm.utils.ImageUtils;
 import com.vectras.vm.utils.ProgressDialog;
+import com.vectras.vm.utils.StreamAudio;
 
 import java.io.File;
 import java.util.Objects;
@@ -37,6 +39,8 @@ public class VmControllerDialog extends DialogFragment {
 
     private DialogChangeRemovableDevicesBinding binding;
     private String infoBlock = "";
+    public int position = -1;
+    public StreamAudio streamAudio;
 
     @NonNull
     @Override
@@ -50,6 +54,40 @@ public class VmControllerDialog extends DialogFragment {
             infoBlock = QmpSender.getAllDevice();
 
             new Handler(Looper.getMainLooper()).post(() -> {
+                if (position > -1) {
+                    binding.lnConnect.setOnClickListener(v -> {
+                        if (isAdded()) DisplaySystem.launch(requireActivity());
+                        dismiss();
+                    });
+
+                    binding.lnEdit.setOnClickListener(v -> {
+                        if (isAdded()) {
+                            DataMainRoms vmConfig = VMManager.getVMConfig(position);
+                            startActivity(new Intent(requireActivity(), VMCreatorActivity.class).putExtra("POS", position).putExtra("MODIFY", true).putExtra("VMID", vmConfig.vmID));
+                        }
+                        dismiss();
+                    });
+
+                    binding.lnRemove.setOnClickListener(v -> {
+                        if (isAdded()) {
+                            DataMainRoms vmConfig = VMManager.getVMConfig(position);
+                            VMManager.deleteVMDialog(vmConfig.itemName, position, requireActivity());
+                        }
+                        dismiss();
+                    });
+                } else {
+                    binding.lnManage.setVisibility(View.GONE);
+                }
+
+                if (isAdded() && requireActivity() instanceof MainVNCActivity) {
+                    binding.lnPower.setVisibility(View.GONE);
+                } else {
+                    binding.lnPower.setOnClickListener(v -> {
+                        if (isAdded()) VMManager.showPowerDialogOptions(requireActivity());
+                        dismiss();
+                    });
+                }
+
                 binding.lnTakeScreenshot.setOnClickListener(v -> takeScreenshot());
 
                 binding.lnConsole.setOnClickListener(v -> {
@@ -69,28 +107,66 @@ public class VmControllerDialog extends DialogFragment {
                     dismiss();
                 });
 
+                if (isAdded() && (!(requireActivity() instanceof MainVNCActivity))) {
+                    if (!streamAudio.isPlaying()) VmAudioManager.set(Config.vmID);
+                }
+
+                if (streamAudio == null ||
+                        FileUtils.getFileSize(VmFileManager.findAudioRaw(requireContext(), Config.vmID)) == 0 ||
+                        (isAdded() && (!(requireActivity() instanceof MainVNCActivity)) && !VmAudioManager.currentVmId.equals(Config.vmID))
+                ) {
+                    binding.lnMute.setVisibility(View.GONE);
+                } else {
+                    if (!streamAudio.isPlaying()) {
+                        binding.ivMute.setImageResource(R.drawable.volume_up_24px);
+                        binding.tvMute.setText(R.string.unmute);
+                    }
+
+                    binding.lnMute.setOnClickListener(v -> mute());
+                }
+
                 if (infoBlock != null && (infoBlock.contains(QmpSender.DEFAULT_OPTICAL_DISC_1_ID)
                         || infoBlock.contains(QmpSender.DEFAULT_OPTICAL_DISC_2_ID)
+                        || infoBlock.contains(QmpSender.DEFAULT_SECONDARY_OPTICAL_DISC_1_ID)
+                        || infoBlock.contains(QmpSender.DEFAULT_SECONDARY_OPTICAL_DISC_2_ID)
                         || infoBlock.contains(QmpSender.DEFAULT_FLOPPY_DISK_0_ID)
                         || infoBlock.contains(QmpSender.DEFAULT_FLOPPY_DISK_1_ID)
                         || infoBlock.contains(QmpSender.DEFAULT_MEMORY_CARD_ID))) {
 
-                    if (infoBlock.contains(QmpSender.DEFAULT_OPTICAL_DISC_1_ID)
-                            || infoBlock.contains(QmpSender.DEFAULT_OPTICAL_DISC_2_ID)) {
+                    if (isHavingOpticalDisc() || isHavingSecondaryOpticalDisc()) {
 
-                        binding.lnCdrom.setOnClickListener(v -> isoPicker.launch("*/*"));
+                        if (isHavingOpticalDisc()) {
+                            binding.lnCdrom.setOnClickListener(v -> isoPicker.launch("*/*"));
 
-                        binding.ivEjectcdrom.setOnClickListener(v -> {
-                            QmpSender.ejectOpticalDisc(requireActivity(), infoBlock);
-                            dismiss();
-                        });
+                            binding.ivEjectcdrom.setOnClickListener(v -> {
+                                QmpSender.ejectOpticalDisc(requireActivity(), infoBlock);
+                                dismiss();
+                            });
+
+                            if (!isHavingSecondaryOpticalDisc()) binding.tvCdrom.setText(R.string.cdrom);
+                        } else {
+                            binding.lnCdrom.setVisibility(View.GONE);
+                        }
+
+                        if (isHavingSecondaryOpticalDisc()) {
+                            binding.lnSecondaryCdrom.setOnClickListener(v -> isoPickerSecondary.launch("*/*"));
+
+                            binding.ivSecondaryEjectcdrom.setOnClickListener(v -> {
+                                QmpSender.ejectSecondaryOpticalDisc(requireActivity(), infoBlock);
+                                dismiss();
+                            });
+
+                            if (!isHavingOpticalDisc()) binding.tvSecondaryCdrom.setText(R.string.cdrom);
+                        } else {
+                            binding.lnSecondaryCdrom.setVisibility(View.GONE);
+                        }
 
                         if (!infoBlock.contains(AppConfig.basefiledir + "3dfx-wrappers.iso"))
                             binding.ivEject3dfx.setVisibility(View.GONE);
 
                         binding.ln3dfx.setOnClickListener(v -> {
                             if (infoBlock.contains(AppConfig.basefiledir + "3dfx-wrappers.iso")) {
-                                QmpSender.ejectOpticalDisc(requireActivity(), infoBlock);
+                                QmpSender.ejectDynamicSecondaryOpticalDisc(requireActivity(), infoBlock);
                             } else {
                                 ToolsManager.mount3dfxWrappers(requireActivity());
                             }
@@ -102,7 +178,7 @@ public class VmControllerDialog extends DialogFragment {
 
                         binding.lnVirtio.setOnClickListener(v -> {
                             if (infoBlock.contains(AppConfig.basefiledir + "virtio-win.iso")) {
-                                QmpSender.ejectOpticalDisc(requireActivity(), infoBlock);
+                                QmpSender.ejectDynamicSecondaryOpticalDisc(requireActivity(), infoBlock);
                             } else {
                                 ToolsManager.mountVirtIOWin(requireActivity());
                             }
@@ -245,12 +321,52 @@ public class VmControllerDialog extends DialogFragment {
         }).start();
     }
 
+    private void mute() {
+        if (streamAudio.isPlaying()) {
+            streamAudio.stop();
+            binding.ivMute.setImageResource(R.drawable.volume_up_24px);
+            binding.tvMute.setText(R.string.unmute);
+        } else {
+            if (isAdded() && requireActivity() instanceof MainVNCActivity) {
+                streamAudio.play();
+            } else {
+                VmAudioManager.stream(Config.vmID);
+            }
+            binding.ivMute.setImageResource(R.drawable.volume_off_24px);
+            binding.tvMute.setText(R.string.mute);
+        }
+    }
+
+    private boolean isHavingOpticalDisc() {
+        return infoBlock.contains(QmpSender.DEFAULT_OPTICAL_DISC_1_ID) ||
+                infoBlock.contains(QmpSender.DEFAULT_OPTICAL_DISC_2_ID);
+    }
+
+    private boolean isHavingSecondaryOpticalDisc() {
+        return infoBlock.contains(QmpSender.DEFAULT_SECONDARY_OPTICAL_DISC_1_ID) ||
+                (infoBlock.contains(QmpSender.DEFAULT_OPTICAL_DISC_2_ID) && infoBlock.contains(QmpSender.DEFAULT_SECONDARY_OPTICAL_DISC_2_ID));
+    }
+
     private final ActivityResultLauncher<String> isoPicker =
             registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
                 if (uri != null) {
                     try {
                         File selectedFilePath = new File(Objects.requireNonNull(FileUtils.getPath(requireActivity(), uri)));
                         QmpSender.changeOpticalDisc(requireActivity(), selectedFilePath.getAbsolutePath(), infoBlock);
+                    } catch (Exception e) {
+                        showErrorSelectedFileDialog();
+                    }
+
+                    dismiss();
+                }
+            });
+
+    private final ActivityResultLauncher<String> isoPickerSecondary =
+            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
+                if (uri != null) {
+                    try {
+                        File selectedFilePath = new File(Objects.requireNonNull(FileUtils.getPath(requireActivity(), uri)));
+                        QmpSender.changeSecondaryOpticalDisc(requireActivity(), selectedFilePath.getAbsolutePath(), infoBlock);
                     } catch (Exception e) {
                         showErrorSelectedFileDialog();
                     }

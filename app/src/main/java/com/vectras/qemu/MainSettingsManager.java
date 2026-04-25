@@ -42,6 +42,11 @@ public class MainSettingsManager extends AppCompatActivity
 
     public static final String TAG = "MainSettingsManager";
 
+    public static final String I386_ARCH = "I386";
+    public static final String X86_64_ARCH = "X86_64";
+    public static final String ARM64_ARCH = "ARM64";
+    public static final String PPC_ARCH = "PPC";
+
     public static final int THEME_DEFAULT = 0;
     public static final int THEME_LIGHT = 1;
     public static final int THEME_DARK = 2;
@@ -847,6 +852,22 @@ public class MainSettingsManager extends AppCompatActivity
     public static boolean getSharedFolder(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean("sharedFolder", false);
+    }
+
+    public static void setArchI386(Context context) {
+        setArch(context, I386_ARCH);
+    }
+
+    public static void setArchX86_64(Context context) {
+        setArch(context, X86_64_ARCH);
+    }
+
+    public static void setArchArm64(Context context) {
+        setArch(context, ARM64_ARCH);
+    }
+
+    public static void setArchPpc(Context context) {
+        setArch(context, PPC_ARCH);
     }
 
     public static void setArch(Context context, String vmArch) {

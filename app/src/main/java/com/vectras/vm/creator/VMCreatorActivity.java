@@ -41,6 +41,7 @@ import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.ImageUtils;
+import com.vectras.vm.utils.IntentUtils;
 import com.vectras.vm.utils.JSONUtils;
 import com.vectras.vm.utils.PackageUtils;
 import com.vectras.vm.utils.UIUtils;
@@ -338,10 +339,7 @@ public class VMCreatorActivity extends AppCompatActivity {
                     startActivity(intentcqcm);
                     finish();
                 } else {
-                    Intent intenturl = new Intent();
-                    intenturl.setAction(Intent.ACTION_VIEW);
-                    intenturl.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.anbui.cqcm.app"));
-                    startActivity(intenturl);
+                    IntentUtils.openUrl(this, "https://play.google.com/store/apps/details?id=com.anbui.cqcm.app", true);
                 }
             });
         }
@@ -368,7 +366,7 @@ public class VMCreatorActivity extends AppCompatActivity {
         if (isProcessingFile) return;
 
         if (!created && !modify) {
-            new Thread(() -> VmFileManager.delete(vmID)).start();
+            new Thread(() -> VmFileManager.delete(this, vmID)).start();
         }
         modify = false;
         finish();
@@ -376,7 +374,7 @@ public class VMCreatorActivity extends AppCompatActivity {
 
     public void onDestroy() {
         if (!created && !modify) {
-            new Thread(() -> VmFileManager.delete(vmID)).start();
+            new Thread(() -> VmFileManager.delete(this, vmID)).start();
         }
         modify = false;
         super.onDestroy();
@@ -539,7 +537,7 @@ public class VMCreatorActivity extends AppCompatActivity {
         if (vmConfig != null) current = vmConfig;
         if (binding != null && current != null) {
             if (current.itemArch != null) {
-                MainSettingsManager.setArch(this, current.itemArch);
+                VMManager.setArch(current.itemArch, this);
                 binding.collapsingToolbarLayout.setSubtitle(MainSettingsManager.getArch(this));
             }
 
@@ -944,7 +942,7 @@ public class VMCreatorActivity extends AppCompatActivity {
                 DialogUtils.safeDismiss(this, progressDialog);
 
                 if (isFinishing() || isDestroyed()) {
-                    new Thread(() -> VmFileManager.delete(vmID)).start();
+                    new Thread(() -> VmFileManager.delete(this, vmID)).start();
                     return;
                 }
 
@@ -1001,7 +999,7 @@ public class VMCreatorActivity extends AppCompatActivity {
                             binding.title.setText(_filename.replace(".cvbi", ""));
                         }
                         binding.drive.setText(_getDiskFile);
-                        VMManager.setArch("X86_64", this);
+                        VMManager.setArch("", this);
                     }
 
                     DialogUtils.oneDialog(this, getResources().getString(R.string.oops), getResources().getString(R.string.error_CR_CVBI2), getResources().getString(R.string.ok), true, R.drawable.warning_48px, true, null, null);

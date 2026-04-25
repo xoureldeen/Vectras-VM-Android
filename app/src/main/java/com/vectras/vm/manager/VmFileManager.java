@@ -66,7 +66,8 @@ public class VmFileManager {
         return new File(AppConfig.vmFolder, HIDE_VM_SUFFIX + vmId).getAbsolutePath();
     }
 
-    public static boolean delete(String vmId) {
+    public static boolean delete(Context context, String vmId) {
+        VmFileManager.removeTemp(context, vmId);
         return FileUtils.delete(getPath(vmId));
     }
 
@@ -75,13 +76,27 @@ public class VmFileManager {
     }
 
     public static String getTempPath(Context context, String vmId) {
-        String path = new File(Objects.requireNonNull(context.getExternalCacheDir()).getAbsolutePath(), "temp/" + vmId).getAbsolutePath();
+        File externalCacheDir = context.getExternalCacheDir();
+        String cachePath = externalCacheDir != null ? externalCacheDir.getAbsolutePath() : context.getCacheDir().getAbsolutePath();
+
+        String path = new File(cachePath, "temp/" + vmId).getAbsolutePath();
+        FileUtils.createDirectory(path);
+        return path + "/";
+    }
+
+    public static String getInternalTempPath(Context context, String vmId, String childFilePath) {
+        return new File(getInternalTempPath(context, vmId), childFilePath).getAbsolutePath();
+    }
+
+    public static String getInternalTempPath(Context context, String vmId) {
+        String path = new File(context.getCacheDir().getAbsolutePath(), "temp/" + vmId).getAbsolutePath();
         FileUtils.createDirectory(path);
         return path + "/";
     }
 
     public static boolean removeTemp(Context context, String vmId, String childFilePath) {
-        return FileUtils.delete(new File(getTempPath(context, vmId, childFilePath)));
+        return FileUtils.delete(new File(getTempPath(context, vmId, childFilePath))) ||
+                FileUtils.delete(new File(getInternalTempPath(context, vmId, childFilePath)));
     }
 
     public static boolean removeTemp(Context context, String vmId) {
@@ -105,6 +120,13 @@ public class VmFileManager {
         return VmFileManager.getTempPath(context, vmId, SCREENSHOT_PPM_FILE_NAME);
     }
 
+    // Find the location of the ppm file if getExternalCacheDir() is null.
+    public static String findScreenshotPpm(Context context, String vmId) {
+        String ppmFilePath = VmFileManager.getInternalTempPath(context, vmId, SCREENSHOT_PPM_FILE_NAME);
+        if (FileUtils.isFileExists(ppmFilePath)) return ppmFilePath;
+        return VmFileManager.getScreenshotPpm(context, vmId);
+    }
+
     public static boolean removeScreenshotPpm(Context context, String vmId) {
         return VmFileManager.removeTemp(context, vmId, SCREENSHOT_PPM_FILE_NAME);
     }
@@ -119,6 +141,13 @@ public class VmFileManager {
 
     public static String getAudioRaw(Context context, String vmId) {
         return VmFileManager.getTempPath(context, vmId, AUDIO_STREAM_FILE_NAME);
+    }
+
+    // Find the location of the audio file if getExternalCacheDir() is null.
+    public static String findAudioRaw(Context context, String vmId) {
+        String audioFilePath = VmFileManager.getInternalTempPath(context, vmId, AUDIO_STREAM_FILE_NAME);
+        if (FileUtils.isFileExists(audioFilePath)) return audioFilePath;
+        return VmFileManager.getAudioRaw(context, vmId);
     }
 
     public static boolean removeAudioRaw(Context context, String vmId) {

@@ -58,6 +58,7 @@ import com.vectras.vm.databinding.DesktopControlsBinding;
 import com.vectras.vm.databinding.GameControlsBinding;
 import com.vectras.vm.databinding.SendKeyDialogBinding;
 import com.vectras.vm.manager.QmpSender;
+import com.vectras.vm.manager.VmAudioManager;
 import com.vectras.vm.manager.VmFileManager;
 import com.vectras.vm.manager.VmControllerDialog;
 import com.vectras.vm.utils.DialogUtils;
@@ -172,7 +173,7 @@ public class MainVNCActivity extends VncCanvasActivity {
         ConnectionBean.useLocalCursor = MainSettingsManager.getShowVirtualMouse(this) || VMManager.isNeedUseVirtualMouse();
 
         streamAudio = new StreamAudio(this);
-        streamAudio.setFile(VmFileManager.getAudioRaw(this, Config.vmID));
+        streamAudio.setFile(VmFileManager.findAudioRaw(this, Config.vmID));
     }
 
     private void setDefaulViewMode() {
@@ -743,6 +744,8 @@ public class MainVNCActivity extends VncCanvasActivity {
                     l.setVisibility(View.VISIBLE);
             }
             started = false;
+
+            if (!VmAudioManager.currentVmId.equals(Config.vmID)) streamAudio.setCross(null);
             finish();
         }
     }
@@ -765,6 +768,7 @@ public class MainVNCActivity extends VncCanvasActivity {
             this.vncCanvas.setFocusableInTouchMode(true);
 //            syncCursorViewWithBitmap();
 
+            if (VmAudioManager.currentVmId.equals(Config.vmID) && VmAudioManager.streamAudio.isPlaying()) streamAudio.setCross(VmAudioManager.streamAudio);
             if (!streamAudio.isPlaying()) streamAudio.play();
         });
     }
@@ -776,6 +780,7 @@ public class MainVNCActivity extends VncCanvasActivity {
             binding.lnNosignal.setVisibility(View.VISIBLE);
             if (started) isQMPPortOpening(firstConnection);
 
+            if (!VmAudioManager.currentVmId.equals(Config.vmID)) streamAudio.setCross(null);
             if (streamAudio.isPlaying()) streamAudio.stop();
         });
     }
@@ -887,6 +892,7 @@ public class MainVNCActivity extends VncCanvasActivity {
             DialogUtils.twoDialog(this, "Exit", "You will be left here but the virtual machine will continue to run.", "Exit", getString(R.string.cancel), true, R.drawable.exit_to_app_24px, true,
                     () -> {
                         started = false;
+                        if (!VmAudioManager.currentVmId.equals(Config.vmID)) streamAudio.setCross(null);
                         finish();
                     }, null, null);
             return false;
@@ -919,6 +925,7 @@ public class MainVNCActivity extends VncCanvasActivity {
 
         bindingControls.btnSettings.setOnClickListener(v -> {
             VmControllerDialog vmControllerDialog = new VmControllerDialog();
+            vmControllerDialog.streamAudio = streamAudio;
             vmControllerDialog.show(getSupportFragmentManager(), "VmControllerDialog");
         });
     }

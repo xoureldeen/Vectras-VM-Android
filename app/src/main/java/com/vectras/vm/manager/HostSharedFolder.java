@@ -64,6 +64,6 @@ public class HostSharedFolder {
 
     public static void startCommand(Context _context) {
         Terminal vterm = new Terminal(_context);
-        vterm.executeShellCommand2("python3 -m http.server 19000 --directory " + SHARED_DIR, false, null);
+        vterm.executeShellCommand2("python3 -m http.server 19000 --bind 127.0.0.1 --directory " + SHARED_DIR, false, null);
     }
 }
