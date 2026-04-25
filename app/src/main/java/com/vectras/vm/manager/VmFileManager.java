@@ -7,7 +7,6 @@ import com.vectras.vm.AppConfig;
 import com.vectras.vm.utils.FileUtils;
 
 import java.io.File;
-import java.util.Objects;
 
 public class VmFileManager {
     private static final String TAG = "VmFileManager";
@@ -19,6 +18,7 @@ public class VmFileManager {
     public static final String SNAPSHOT_SH_FILE_NAME = "snapshot.sh";
     public static final String SNAPSHOT_BIN_FILE_NAME = "snapshot.bin";
     public static final String CREATE_COMMAND_CONFIG_FILE_NAME = "cqcm.json";
+    public static final String LOG_FILE_NAME = "vm.log";
     public static final String TEXT_MARK_VM_PATH = "OhnoIjustrealizeditsmidnightandIstillhavetodothis";
     public static final String HIDE_VM_SUFFIX = "_";
 
@@ -168,6 +168,10 @@ public class VmFileManager {
 
     public static String getSnapshotBin(String vmId) {
         return VmFileManager.getPath(vmId, SNAPSHOT_BIN_FILE_NAME);
+    }
+
+    public static String getLog(Context context, String vmId) {
+        return VmFileManager.getTempPath(context, vmId, LOG_FILE_NAME);
     }
 
     public static boolean isCreateCommandConfigFileExists(String vmId) {

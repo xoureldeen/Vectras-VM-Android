@@ -118,8 +118,6 @@ public class SplashActivity extends AppCompatActivity {
     private void cleanUp() {
         FileUtils.delete(AppConfig.vmFolder + "QuickRun");
         VmFileManager.removeTemp(this, "");
-        FileUtils.delete(new File(getExternalCacheDir(), "logs"));
-        FileUtils.delete(new File(getExternalCacheDir(), "cvbi"));
     }
 
     private void finishSplash() {

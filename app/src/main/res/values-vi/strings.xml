@@ -554,6 +554,7 @@
     <string name="locked_and_cannot_be_changed_content">Thiết bị đã bị khoá và không thể thay đổi ngay bây giờ. Hãy thử lại sau. Bạn có thể thử rút nó và thử thay đổi lại.</string>
     <string name="manage">Quản lý</string>
     <string name="connect">Kết nối</string>
+    <string name="shutting_down">Đang tắt…</string>
 
     <!--======================TERMUX STRINGS====================-->
     <string name="application_name" translatable="false">Vterm</string>

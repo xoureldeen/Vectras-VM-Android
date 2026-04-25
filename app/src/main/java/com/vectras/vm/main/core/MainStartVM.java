@@ -72,6 +72,13 @@ public class MainStartVM {
             if (pendingVMID.isEmpty()) return;
             pendingVMID = "";
         } else {
+            if (MainSettingsManager.getVmUi(context).equals("X11") && !DisplaySystem.isUseBuiltInX11()) {
+                if (!PackageUtils.isInstalled("com.termux.x11", context)) {
+                    DialogUtils.needInstallTermuxX11(context);
+                    return;
+                }
+            }
+            
             lastVMName = vmName;
             lastEnv = env;
             lastVMID = vmID;
@@ -79,8 +86,8 @@ public class MainStartVM {
 
             if (MainSettingsManager.getVmUi(context).equals("X11") && !VMManager.isVMRunning(context, vmID)) {
                 if (MainSettingsManager.getRunQemuWithXterm(context)) {
-                    String logFilePath = VMManager.getVMLogFilePath(context, vmID);
-                    runCommandFormat = String.format(runCommandFormat, "xterm -e bash -c \"%s 2>&1 | tee " + logFilePath + "\"; cat " + logFilePath + "; rm " + logFilePath);
+                    String logFilePath = VmFileManager.getLog(context, vmID);
+                    runCommandFormat = String.format(runCommandFormat, "mkdir -p \"" + new File(logFilePath).getParent() + "\"; xterm -e bash -c \"%s 2>&1 | tee " + logFilePath + "\"; cat " + logFilePath + "; rm " + logFilePath);
                 } else {
                     runCommandFormat = String.format(runCommandFormat, "bash -c \"%s\"");
                 }
@@ -219,13 +226,6 @@ public class MainStartVM {
                 context.startForegroundService(serviceIntent);
             } else {
                 context.startService(serviceIntent);
-            }
-        }
-
-        if (MainSettingsManager.getVmUi(context).equals("X11") && !DisplaySystem.isUseBuiltInX11()) {
-            if (!PackageUtils.isInstalled("com.termux.x11", context)) {
-                DialogUtils.needInstallTermuxX11(context);
-                return;
             }
         }
 
@@ -403,7 +403,12 @@ public class MainStartVM {
         ImageView ivStop = progressView.findViewById(R.id.ivStop);
         ivStop.setOnClickListener(v -> {
             isStopNow = true;
-            QmpSender.quickShutdown();
+            ivStop.setVisibility(View.GONE);
+            vmBootNote.setText(R.string.shutting_down);
+            new Thread(() -> {
+                QmpSender.shutdown();
+                new Handler(Looper.getMainLooper()).post(() -> progressDialog.dismiss());
+            }).start();
         });
 
         progressDialog = new MaterialAlertDialogBuilder(context, R.style.CenteredDialogTheme)
