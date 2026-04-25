@@ -45,6 +45,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import androidx.appcompat.widget.Toolbar;
 
 import com.vectras.vm.*;
@@ -167,7 +168,7 @@ public class MainVNCActivity extends VncCanvasActivity {
         binding.lnNosignal.setOnClickListener(v -> {
             // In VNCCanvasActivity.
             // Do not attempt to reconnect while connected.
-            reconnect();
+            tryReconnect();
         });
 
         ConnectionBean.useLocalCursor = MainSettingsManager.getShowVirtualMouse(this) || VMManager.isNeedUseVirtualMouse();
@@ -768,7 +769,8 @@ public class MainVNCActivity extends VncCanvasActivity {
             this.vncCanvas.setFocusableInTouchMode(true);
 //            syncCursorViewWithBitmap();
 
-            if (VmAudioManager.currentVmId.equals(Config.vmID) && VmAudioManager.streamAudio.isPlaying()) streamAudio.setCross(VmAudioManager.streamAudio);
+            if (VmAudioManager.currentVmId.equals(Config.vmID) && VmAudioManager.streamAudio.isPlaying())
+                streamAudio.setCross(VmAudioManager.streamAudio);
             if (!streamAudio.isPlaying()) streamAudio.play();
         });
     }
@@ -819,7 +821,12 @@ public class MainVNCActivity extends VncCanvasActivity {
         }
     }
 
+    private boolean isTrying;
+
     private void tryReconnect() {
+        if (isTrying) return;
+        isTrying = true;
+
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             int count = 0;
 
@@ -827,18 +834,29 @@ public class MainVNCActivity extends VncCanvasActivity {
             public void run() {
                 count++;
 
-                if (!isFinishing() && !isDestroyed() && !isConnected && count < retryLimit) {
-                    // Do not attempt to reconnect while connected.
-                    if (Config.forceRefeshVNCDisplay) {
-                        runOnUiThread(() -> {
-                            startActivity(new Intent(MainVNCActivity.this, MainVNCActivity.class));
-                            overridePendingTransition(0, 0);
-                            finish();
-                        });
-                    } else {
+                if (!isFinishing() && !isDestroyed()) {
+                    if (!isConnected && count < retryLimit) {
+                        // Do not attempt to reconnect while connected.
+                        binding.lnNosignal.setVisibility(View.GONE);
+                        binding.lnConnecting.setVisibility(View.VISIBLE);
                         reconnect();
+                        new Handler(Looper.getMainLooper()).postDelayed(this, 1000);
+                    } else if (!isConnected) {
+                        isTrying = false;
+
+                        binding.lnNosignal.setVisibility(View.VISIBLE);
+                        binding.lnConnecting.setVisibility(View.GONE);
+                    } else {
+                        isTrying = false;
+
+                        if (Config.forceRefeshVNCDisplay) {
+                            runOnUiThread(() -> {
+                                startActivity(new Intent(MainVNCActivity.this, MainVNCActivity.class));
+                                overridePendingTransition(0, 0);
+                                finish();
+                            });
+                        }
                     }
-                    new Handler(Looper.getMainLooper()).postDelayed(this, 1000);
                 }
             }
         }, 0);
@@ -892,7 +910,8 @@ public class MainVNCActivity extends VncCanvasActivity {
             DialogUtils.twoDialog(this, "Exit", "You will be left here but the virtual machine will continue to run.", "Exit", getString(R.string.cancel), true, R.drawable.exit_to_app_24px, true,
                     () -> {
                         started = false;
-                        if (!VmAudioManager.currentVmId.equals(Config.vmID)) streamAudio.setCross(null);
+                        if (!VmAudioManager.currentVmId.equals(Config.vmID))
+                            streamAudio.setCross(null);
                         finish();
                     }, null, null);
             return false;

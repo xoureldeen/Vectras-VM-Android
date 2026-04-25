@@ -565,6 +565,7 @@
     <string name="locked_and_cannot_be_changed_content">The device is locked and cannot be changed right now. Please try again later. You can try eject it and then trying to change it again.</string>
     <string name="manage">Manage</string>
     <string name="connect">Connect</string>
+    <string name="shutting_down">Shutting down…</string>
 
 
     <!--======================TERMUX STRINGS====================-->

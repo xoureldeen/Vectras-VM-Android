@@ -98,7 +98,7 @@ public class ExportRomActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private void startCreate(Uri uri) {
-        String cvbiFolder = Objects.requireNonNull(getExternalCacheDir()).getAbsolutePath() + "/cvbi/";
+        /*String cvbiFolder = Objects.requireNonNull(getExternalCacheDir()).getAbsolutePath() + "/cvbi/";
         File vDir = new File(cvbiFolder);
         if (!vDir.exists()) {
             if (!vDir.mkdirs()) {
@@ -113,7 +113,7 @@ public class ExportRomActivity extends AppCompatActivity {
                         this::finish
                 );
             }
-        }
+        }*/
 
         String getRomPath = VmFileManager.getPath(current.vmID);
         HashMap<String, Object> vmConfigMap = new HashMap<>();
@@ -160,7 +160,7 @@ public class ExportRomActivity extends AppCompatActivity {
 
         vmConfigMap.put("versioncode", PackageUtils.getThisVersionCode(getApplicationContext()));
 
-        String tempFolder = Objects.requireNonNull(getExternalCacheDir()).getAbsolutePath() + "/temp/";
+        String tempFolder = VmFileManager.getTempPath(this, current.vmID + "/export");
 
         FileUtils.writeToFile(tempFolder, "rom-data.json", new Gson().toJson(vmConfigMap));
 
@@ -214,7 +214,7 @@ public class ExportRomActivity extends AppCompatActivity {
         new Thread(() -> {
             isExporting = true;
 
-            String outputPath;
+            /*String outputPath;
             String outputFileName = current.itemName + ".cvbi";
             if (!FileUtils.isFileExists(cvbiFolder + current.itemName + ".cvbi")) {
                 outputPath = cvbiFolder + outputFileName;
@@ -229,7 +229,7 @@ public class ExportRomActivity extends AppCompatActivity {
                         prefix++;
                     }
                 }
-            }
+            }*/
 
             final boolean[] result = {ZipUtils.compress(
                     this,
@@ -244,36 +244,37 @@ public class ExportRomActivity extends AppCompatActivity {
 
                 String finalOutputPath = "";
                 try {
-                    FileUtils.delete(new File(outputPath));
-                    FileUtils.delete(new File(tempFolder));
+                    //FileUtils.delete(new File(outputPath));
+                    VmFileManager.removeTemp(this, current.vmID);
                     finalOutputPath = FileUtils.getPath(this, uri);
                 } catch (Exception e) {
                     Log.e(TAG, "startCreate: ", e);
                 }
 
-                String finalOutputPath1 = finalOutputPath;
+                String finalOutputPath1 = finalOutputPath != null ? finalOutputPath : "";
                 String title;
                 String content;
                 if (result[0]) {
                     title = getString(R.string.done);
-                    content = finalOutputPath1 == null || finalOutputPath1.isEmpty() ? getString(R.string.rom_successfully_exported) : getString(R.string.saved_in) + ": " + finalOutputPath1 + ".";
+                    content = finalOutputPath1.isEmpty() ? getString(R.string.rom_successfully_exported) : getString(R.string.saved_in) + ": " + finalOutputPath1 + ".";
                 } else {
                     title = getString(R.string.oops);
                     content = getString(R.string.something_went_wrong) + ":\n\n" + ZipUtils.lastErrorContent;
                 }
 
+                File file = new File(finalOutputPath1);
+                boolean isShowInFolder = !finalOutputPath1.isEmpty() && result[0] && file.getParent() != null && FileUtils.isFileExists(file.getParent());
+
                 DialogUtils.twoDialog(this,
                         title,
                         content,
-                        getString(result[0] ? R.string.show_in_folder : R.string.ok),
-                        getString(result[0] ? R.string.close : R.string.exit),
+                        getString(isShowInFolder ? R.string.show_in_folder : R.string.ok),
+                        getString(isShowInFolder ? R.string.close : R.string.exit),
                         true,
                         result[0] ? R.drawable.check_24px : R.drawable.error_96px,
                         true,
                         () -> {
-                            if (result[0]) {
-                                assert finalOutputPath1 != null;
-                                File file = new File(finalOutputPath1.isEmpty() ? outputPath : finalOutputPath1);
+                            if (isShowInFolder) {
                                 FileUtils.openFolder(this, file.getParent());
                             }
                         },

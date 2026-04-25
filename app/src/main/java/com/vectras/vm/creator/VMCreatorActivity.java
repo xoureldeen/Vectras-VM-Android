@@ -449,7 +449,7 @@ public class VMCreatorActivity extends AppCompatActivity {
                             return;
                         }
                         File selectedFilePath = new File(getPath(uri));
-                        if (selectedFilePath.getName().endsWith(".iso")) {
+                        if (selectedFilePath.getName().toLowerCase().endsWith(".iso")) {
                             runOnUiThread(() -> binding.cdrom.setText(selectedFilePath.getPath()));
                         } else {
                             runOnUiThread(() -> DialogUtils.oneDialog(this,
