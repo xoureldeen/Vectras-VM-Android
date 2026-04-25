@@ -333,7 +333,7 @@
     <string name="you_need_to_enter_the_device_id">Bạn cần nhập ID của thiết bị.</string>
     <string name="this_is_not_a_removable_device">Cứng ngắt! Đây không phải thiết bị tháo rời.</string>
     <string name="power">Nguồn</string>
-    <string name="shutdown_or_reset_content">Bạn có muốn tắt máy hay khởi động lại không? Thao tác này có thể gây ra một số sự cố không mong muốn cho máy ảo.</string>
+    <string name="shutdown_or_reset_content">Bạn có muốn tắt máy hay khởi động lại không? Thao tác này có thể gây ra một số sự cố không mong muốn cho máy ảo. Chọn Nguồn để nhấn nút nguồn.</string>
     <string name="shutdown_or_reset_content_vnc">Bạn có muốn tắt máy hay khởi động lại không? Thao tác này có thể gây ra một số sự cố không mong muốn cho máy ảo. Chọn Nguồn để nhấn nút nguồn. Bạn có thể thoát mà không cần tắt máy bằng cách nhấn và giữ nút thoát hoặc nhấn phím quay lại.</string>
     <string name="external">Ngoài</string>
     <string name="use_external_vnc_server">Dùng máy chủ VNC ngoài</string>
@@ -546,7 +546,14 @@
     <string name="copy_link">Sao chép liên kết</string>
     <string name="copy_upload_command">Sao chép lệnh tải lên</string>
     <string name="folder_sharing_server">Máy chủ chia sẻ thư mục</string>
-
+    <string name="mute">Tắt tiếng</string>
+    <string name="unmute">Bỏ tắt tiếng</string>
+    <string name="cdrom_1">Đĩa quang 1</string>
+    <string name="cdrom_2">Đĩa quang 2</string>
+    <string name="locked_and_cannot_be_ejected_content">Thiết bị đã bị khoá và không thể rút ra ngay bây giờ. Hãy thử lại sau. Bạn có thể thử mở trình quản lý thiết bị hoặc quản lý tệp ở hệ điều hành đang chạy trong máy ảo này và yêu cầu rút.</string>
+    <string name="locked_and_cannot_be_changed_content">Thiết bị đã bị khoá và không thể thay đổi ngay bây giờ. Hãy thử lại sau. Bạn có thể thử rút nó và thử thay đổi lại.</string>
+    <string name="manage">Quản lý</string>
+    <string name="connect">Kết nối</string>
 
     <!--======================TERMUX STRINGS====================-->
     <string name="application_name" translatable="false">Vterm</string>

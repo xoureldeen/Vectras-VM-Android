@@ -15,6 +15,8 @@ public class StreamAudio {
     private boolean isPlay;
     private String filePath = "";
     private int sampleRate = 48000;
+    public boolean isDestroyed;
+    private StreamAudio cross;
 
     public StreamAudio(Context context) {
         this.context = context;
@@ -34,6 +36,10 @@ public class StreamAudio {
 
     public void setFile(String path) {
         filePath = path;
+    }
+
+    public void setCross(StreamAudio streamAudio) {
+        cross = streamAudio;
     }
 
     public void setMinimumSampleRate() {
@@ -86,6 +92,8 @@ public class StreamAudio {
 
             audioTrack.play();
 
+            if (cross != null && !cross.isDestroyed && cross.isPlaying()) cross.stop();
+
             try (RandomAccessFile raf = new RandomAccessFile(filePath, "r")) {
                 byte[] buffer = new byte[minBuf];
                 long lastPos = raf.length();
@@ -110,11 +118,14 @@ public class StreamAudio {
                 isPlay = false;
                 Log.e(TAG, e.getMessage());
             }
+
+            if (cross != null && !cross.isDestroyed && !cross.isPlaying()) cross.play();
         }).start();
     }
 
     private boolean isContextDestroyed(Context context) {
         if (context instanceof Activity activity) {
+            isDestroyed = true;
             return activity.isDestroyed() || activity.isFinishing();
         }
         return false;

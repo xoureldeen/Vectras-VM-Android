@@ -18,6 +18,7 @@ import com.vectras.vm.R;
 import com.vectras.vm.databinding.ActivitySetArchBinding;
 import com.vectras.vm.main.MainActivity;
 import com.vectras.vm.utils.FileUtils;
+import com.vectras.vm.utils.IntentUtils;
 import com.vectras.vm.utils.UIUtils;
 
 import java.io.File;
@@ -99,43 +100,29 @@ public class SetArchActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.archi386) {
-            MainSettingsManager.setArch(this, "I386");
+            MainSettingsManager.setArchI386(this);
 
             startActivity(new Intent(activity, VMCreatorActivity.class));
             finish();
         } else if (id == R.id.archx86_64) {
-            MainSettingsManager.setArch(this, "X86_64");
+            MainSettingsManager.setArchX86_64(this);
 
             startActivity(new Intent(activity, VMCreatorActivity.class));
             finish();
         } else if (id == R.id.archarm64) {
-            MainSettingsManager.setArch(this, "ARM64");
+            MainSettingsManager.setArchArm64(this);
 
             startActivity(new Intent(activity, VMCreatorActivity.class));
             finish();
         } else if (id == R.id.archppc) {
-            MainSettingsManager.setArch(this, "PPC");
+            MainSettingsManager.setArchPpc(this);
 
             startActivity(new Intent(activity, VMCreatorActivity.class));
             finish();
         } else if (id == R.id.webBtn) {
-            String qe = "https://www.qemu.org/";
-            Intent q = new Intent(Intent.ACTION_VIEW);
-            q.addCategory(Intent.CATEGORY_BROWSABLE);
-            q.setData(Uri.parse(qe));
-            startActivity(q);
+            IntentUtils.openUrl(this, "https://www.qemu.org/");
         } else if (id == R.id.buttongetcm) {
-            PackageManager pm = getPackageManager();
-            Intent intent = pm.getLaunchIntentForPackage("com.anbui.cqcm.app");
-
-            if (intent != null) {
-                startActivity(intent);
-            } else {
-                Intent intenturl = new Intent();
-                intenturl.setAction(Intent.ACTION_VIEW);
-                intenturl.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.anbui.cqcm.app"));
-                startActivity(intenturl);
-            }
+            IntentUtils.openApp(this, "com.anbui.cqcm.app");
         } else if (id == R.id.bntimport) {
             Intent intent = new Intent();
             intent.setClass(getApplicationContext(), VMCreatorActivity.class);

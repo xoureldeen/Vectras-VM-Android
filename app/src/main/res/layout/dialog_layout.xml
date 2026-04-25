@@ -48,7 +48,7 @@
         android:background="@drawable/dialog_shape_top_button"
         android:gravity="center"
         android:padding="16dp"
-        android:textColor="?attr/colorControlNormal" />
+        android:textColor="?attr/colorPrimary" />
 
     <TextView
         android:id="@+id/negativeButton"
@@ -58,7 +58,7 @@
         android:background="@drawable/dialog_shape_middle_button"
         android:gravity="center"
         android:padding="16dp"
-        android:textColor="?attr/colorControlNormal" />
+        android:textColor="?attr/colorPrimary" />
 
     <TextView
         android:id="@+id/neutralButton"
@@ -68,5 +68,5 @@
         android:background="@drawable/dialog_shape_bottom_button"
         android:gravity="center"
         android:padding="16dp"
-        android:textColor="?attr/colorControlNormal" />
+        android:textColor="?attr/colorPrimary" />
 </LinearLayout>

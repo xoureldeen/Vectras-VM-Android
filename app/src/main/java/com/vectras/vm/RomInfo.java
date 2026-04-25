@@ -132,20 +132,9 @@ public class RomInfo extends AppCompatActivity {
                                 intent.putExtra("addtodrive", "1");
                                 intent.putExtra("romextra", getIntent().getStringExtra("extra"));
                             }
-                            switch (Objects.requireNonNull(getIntent().getStringExtra("arch"))) {
-                                case "X86_64":
-                                    MainSettingsManager.setArch(this, "X86_64");
-                                    break;
-                                case "i386":
-                                    MainSettingsManager.setArch(this, "I386");
-                                    break;
-                                case "ARM64":
-                                    MainSettingsManager.setArch(this, "ARM64");
-                                    break;
-                                case "PowerPC":
-                                    MainSettingsManager.setArch(this, "PPC");
-                                    break;
-                            }
+
+                            VMManager.setArch(getIntent().hasExtra("arch") && getIntent().getStringExtra("arch") != null ? Objects.requireNonNull(getIntent().getStringExtra("arch")) : "", this);
+
                             startActivity(intent);
                         } else {
                             DialogUtils.oneDialog(RomInfo.this,

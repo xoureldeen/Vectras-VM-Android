@@ -18,12 +18,7 @@ public class IntentUtils {
     public static boolean openUrl(Context context, String url, boolean isShowErrorDialog) {
         boolean result = openUrl(context, url);
         if (isShowErrorDialog && !result) {
-            DialogUtils.oneDialog(
-                    context,
-                    context.getString(R.string.oops),
-                    context.getString(R.string.there_is_no_app_to_perform_this_action),
-                    R.drawable.error_96px
-            );
+            showErrorDialog(context);
         }
         return result;
     }
@@ -43,16 +38,36 @@ public class IntentUtils {
     }
 
     public static void launchPlayStoreVersion(Context context) {
+        openApp(context, "com.vectrasllc.vm");
+    }
+
+    public static void openApp(Context context, String packageName) {
+        openApp(context, packageName, true, true);
+    }
+
+    public static boolean openApp(Context context, String packageName, boolean isOpenAsNewTask, boolean isOpenPlayStore) {
         PackageManager pm = context.getPackageManager();
-        Intent intent = pm.getLaunchIntentForPackage("com.vectrasllc.vm");
+        Intent intent = pm.getLaunchIntentForPackage(packageName);
 
         if (intent != null) {
+            if (isOpenAsNewTask) intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
+        } else if (isOpenPlayStore) {
+            if (!openUrl(context, "https://play.google.com/store/apps/details?id=" + packageName)) showErrorDialog(context);
         } else {
-            Intent intenturl = new Intent();
-            intenturl.setAction(Intent.ACTION_VIEW);
-            intenturl.setData(Uri.parse("https://play.google.com/store/apps/details?id=com.vectrasllc.vm"));
-            context.startActivity(intenturl);
+            showErrorDialog(context);
+            return false;
         }
+
+        return true;
+    }
+
+    public static void showErrorDialog(Context context) {
+        if (!DialogUtils.isAllowShow(context)) return;
+
+        DialogUtils.oopsDialog(
+                context,
+                context.getString(R.string.there_is_no_app_to_perform_this_action)
+        );
     }
 }

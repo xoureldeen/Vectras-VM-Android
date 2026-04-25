@@ -14,9 +14,9 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.vectras.qemu.Config;
 import com.vectras.qemu.utils.QmpClient;
-import com.vectras.vm.AppConfig;
 import com.vectras.vm.R;
 import com.vectras.vm.VectrasApp;
+import com.vectras.vm.utils.DialogUtils;
 
 import java.io.StringReader;
 
@@ -27,9 +27,13 @@ public class QmpSender {
 
     public static final String DEFAULT_OPTICAL_DISC_1_ID = "ide1-cd0";
     public static final String DEFAULT_OPTICAL_DISC_2_ID = "ide2-cd0";
+    public static final String DEFAULT_SECONDARY_OPTICAL_DISC_1_ID = "ide0-cd1";
+    public static final String DEFAULT_SECONDARY_OPTICAL_DISC_2_ID = "ide1-cd0";
     public static final String DEFAULT_FLOPPY_DISK_0_ID = "floppy0";
     public static final String DEFAULT_FLOPPY_DISK_1_ID = "floppy1";
     public static final String DEFAULT_MEMORY_CARD_ID = "sd0";
+
+    public static boolean isShowErrorDialog = true;
 
     public static String send(String command) {
         JsonObject arguments = new JsonObject();
@@ -75,6 +79,10 @@ public class QmpSender {
 
     public static boolean isSuccess(String response) {
         return response.trim().isEmpty();
+    }
+
+    public static boolean isDeviceNotFound(String response) {
+        return response.trim().startsWith("Error: Device '") && response.trim().endsWith("not found");
     }
 
     public static void quickShutdown() {
@@ -185,6 +193,95 @@ public class QmpSender {
         return "";
     }
 
+    public static boolean isHavingSecondaryOpticalDisc(String infoBlock) {
+        String device = infoBlock.trim().isEmpty() ? getAllDevice() : infoBlock;
+        return device.contains(DEFAULT_SECONDARY_OPTICAL_DISC_1_ID) || (device.contains(DEFAULT_OPTICAL_DISC_2_ID) && device.contains(DEFAULT_SECONDARY_OPTICAL_DISC_2_ID));
+    }
+
+    public static String changeDynamicSecondaryOpticalDisc(Context context, String filePath, String infoBlock) {
+        String device = infoBlock.trim().isEmpty() ? getAllDevice() : infoBlock;
+
+        if (isHavingSecondaryOpticalDisc(device)) {
+            changeSecondaryOpticalDisc(context, filePath, device);
+        } else {
+            changeOpticalDisc(context, filePath, device);
+        }
+
+        return "";
+    }
+
+    public static String changeSecondaryOpticalDisc(Context context, String filePath, String infoBlock) {
+        String device = infoBlock.trim().isEmpty() ? getAllDevice() : infoBlock;
+
+        if (device.contains(DEFAULT_SECONDARY_OPTICAL_DISC_1_ID)) {
+            return changeSecondaryOpticalDisc1(context, filePath);
+        } else if (device.contains(DEFAULT_OPTICAL_DISC_2_ID) && device.contains(DEFAULT_SECONDARY_OPTICAL_DISC_2_ID)) {
+            return changeSecondaryOpticalDisc2(context, filePath);
+        }
+
+        return "";
+    }
+
+    public static String ejectDynamicSecondaryOpticalDisc(Context context, String infoBlock) {
+        String device = infoBlock.trim().isEmpty() ? getAllDevice() : infoBlock;
+
+        if (isHavingSecondaryOpticalDisc(device)) {
+            ejectSecondaryOpticalDisc(context, device);
+        } else {
+            ejectOpticalDisc(context, device);
+        }
+
+        return "";
+    }
+
+    public static String ejectSecondaryOpticalDisc(Context context, String infoBlock) {
+        String device = infoBlock.trim().isEmpty() ? getAllDevice() : infoBlock;
+
+        if (device.contains(DEFAULT_SECONDARY_OPTICAL_DISC_1_ID)) {
+            return ejectSecondaryOpticalDisc1(context);
+        } else if (device.contains(DEFAULT_OPTICAL_DISC_2_ID) && device.contains(DEFAULT_SECONDARY_OPTICAL_DISC_2_ID)) {
+            return ejectSecondaryOpticalDisc2(context);
+        }
+
+        return "";
+    }
+
+    public static String changeSecondaryOpticalDisc1(Context context, String filePath) {
+        if (context == null) {
+            return changeDevice(DEFAULT_SECONDARY_OPTICAL_DISC_1_ID, filePath);
+        } else {
+            quickChangeDevice(context, DEFAULT_SECONDARY_OPTICAL_DISC_1_ID, filePath);
+        }
+        return "";
+    }
+
+    public static String ejectSecondaryOpticalDisc1(Context context) {
+        if (context == null) {
+            return ejectDevice(DEFAULT_SECONDARY_OPTICAL_DISC_1_ID);
+        } else {
+            quickEjectDevice(context, DEFAULT_SECONDARY_OPTICAL_DISC_1_ID);
+        }
+        return "";
+    }
+
+    public static String changeSecondaryOpticalDisc2(Context context, String filePath) {
+        if (context == null) {
+            return changeDevice(DEFAULT_SECONDARY_OPTICAL_DISC_2_ID, filePath);
+        } else {
+            quickChangeDevice(context, DEFAULT_SECONDARY_OPTICAL_DISC_2_ID, filePath);
+        }
+        return "";
+    }
+
+    public static String ejectSecondaryOpticalDisc2(Context context) {
+        if (context == null) {
+            return ejectDevice(DEFAULT_SECONDARY_OPTICAL_DISC_2_ID);
+        } else {
+            quickEjectDevice(context, DEFAULT_SECONDARY_OPTICAL_DISC_2_ID);
+        }
+        return "";
+    }
+
     public static String changeFloppyDiskA(Context context, String filePath) {
         if (context == null) {
             return changeDevice(DEFAULT_FLOPPY_DISK_0_ID, filePath);
@@ -249,12 +346,15 @@ public class QmpSender {
                 if (isSuccess(response)) {
                     Toast.makeText(context.getApplicationContext(), context.getString(R.string.changed), Toast.LENGTH_SHORT).show();
                 } else {
-                    if (response.contains("is not removable")) {
-                        Toast.makeText(context.getApplicationContext(), context.getString(R.string.this_is_not_a_removable_device), Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(context.getApplicationContext(), context.getString(R.string.change_failed), Toast.LENGTH_SHORT).show();
-                    }
+                    if (!isShowErrorDialog) return;
 
+                    String message = context.getString(R.string.change_failed);
+                    if (response.contains("is not removable")) {
+                        message = context.getString(R.string.this_is_not_a_removable_device);
+                    } else if (response.contains("is locked")) {
+                        message = context.getString(R.string.locked_and_cannot_be_ejected_content);
+                    }
+                    DialogUtils.oopsDialog(context, message);
                 }
             });
         }).start();
@@ -276,12 +376,15 @@ public class QmpSender {
                 if (isSuccess(response)) {
                     Toast.makeText(context.getApplicationContext(), context.getString(R.string.ejected), Toast.LENGTH_SHORT).show();
                 } else {
-                    if (response.contains("is not removable")) {
-                        Toast.makeText(context.getApplicationContext(), context.getString(R.string.this_is_not_a_removable_device), Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(context.getApplicationContext(), context.getString(R.string.eject_failed), Toast.LENGTH_SHORT).show();
-                    }
+                    if (!isShowErrorDialog) return;
 
+                    String message = context.getString(R.string.eject_failed);
+                    if (response.contains("is not removable")) {
+                        message = context.getString(R.string.this_is_not_a_removable_device);
+                    } else if (response.contains("is locked")) {
+                        message = context.getString(R.string.locked_and_cannot_be_ejected_content);
+                    }
+                    DialogUtils.oopsDialog(context, message);
                 }
             });
         }).start();

@@ -74,13 +74,16 @@ public class FileUtils {
         if ((uri.toString().startsWith("content://ru.zdevs.zarchiver") ||
                 uri.toString().startsWith("content://bin.mt.plus") ||
                 uri.toString().startsWith("content://com.android.fileexplorer.myprovider") ||
-                uri.toString().startsWith("content://com.estrongs.files")) &&
+                uri.toString().startsWith("content://com.estrongs.files") ||
+                uri.toString().startsWith("content://me.zhanghai.android")) &&
                 uri.getPath() != null &&
                 isFileExists(uri.getPath())) {
             String path = uri.getPath();
 
             if (uri.toString().startsWith("content://com.android.fileexplorer.myprovider/external_files")) {
                 path = new File(Environment.getExternalStorageDirectory(), path.substring("/external_files".length())).getAbsolutePath();
+            } else if (uri.toString().startsWith("content://me.zhanghai.android.files.file_provider/file")) {
+                path = new File(Uri.decode(path).substring("file://".length())).getAbsolutePath();
             }
 
             return path;

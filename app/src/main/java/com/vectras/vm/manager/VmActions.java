@@ -17,14 +17,14 @@ public class VmActions {
                 if (isSaveToGallery) {
                     Uri imageFile = ImageUtils.saveToGallery(
                             context,
-                            ImageUtils.ppmToBitmap(new File(VmFileManager.getScreenshotPpm(context, Config.vmID))),
+                            ImageUtils.ppmToBitmap(new File(VmFileManager.findScreenshotPpm(context, Config.vmID))),
                             String.valueOf(System.currentTimeMillis())
                     );
 
                     FileUtils.copyFileFromUri(context, imageFile, VmFileManager.getScreenshotPng(Config.vmID));
                 } else {
                     ImageUtils.saveBitmapToPNGFile(
-                            ImageUtils.ppmToBitmap(new File(VmFileManager.getScreenshotPpm(context, Config.vmID))),
+                            ImageUtils.ppmToBitmap(new File(VmFileManager.findScreenshotPpm(context, Config.vmID))),
                             VmFileManager.getPath(Config.vmID),
                             "screenshot.png"
                     );

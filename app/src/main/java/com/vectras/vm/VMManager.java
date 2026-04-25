@@ -60,6 +60,7 @@ public class VMManager {
 
     public static DataMainRoms getVMConfig(int position) {
         JsonArray arr = JsonParser.parseString(FileUtils.readAFile(AppConfig.romsdatajson)).getAsJsonArray();
+        if (arr.isEmpty()) return new DataMainRoms();
         return new Gson().fromJson(arr.get(position), DataMainRoms.class);
     }
 
@@ -313,6 +314,17 @@ public class VMManager {
 
         if (vmId == null || vmId.isEmpty()) return false;
 
+        String oldVmId = Config.vmID;
+        Config.vmID = vmId;
+
+        QmpSender.shutdown();
+
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException ignored) {
+
+        }
+
         boolean isCompleted;
         if (isKeepFiles) {
             isCompleted = hideVM(vmId);
@@ -326,11 +338,13 @@ public class VMManager {
                 if (isCompleted)
                     vmList = VmFileManager.replaceToHide(vmId, vmList);
             } else {
-                isCompleted = VmFileManager.delete(vmId);
+                isCompleted = VmFileManager.delete(context, vmId);
             }
         }
 
         if (isCompleted) FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", vmList);
+
+        Config.vmID = oldVmId;
 
         return isCompleted;
     }
@@ -562,17 +576,19 @@ public class VMManager {
 
     public static void setArch(@NonNull String _arch, Activity _activity) {
         switch (_arch) {
-            case "I386":
-                MainSettingsManager.setArch(_activity, "I386");
+            // Rom store use "i386"
+            case MainSettingsManager.I386_ARCH, "i386":
+                MainSettingsManager.setArchI386(_activity);
                 break;
-            case "ARM64":
-                MainSettingsManager.setArch(_activity, "ARM64");
+            case MainSettingsManager.ARM64_ARCH:
+                MainSettingsManager.setArchArm64(_activity);
                 break;
-            case "PPC":
-                MainSettingsManager.setArch(_activity, "PPC");
+            // Rom store use "PowerPC"
+            case MainSettingsManager.PPC_ARCH, "PowerPC":
+                MainSettingsManager.setArchPpc(_activity);
                 break;
             default:
-                MainSettingsManager.setArch(_activity, "X86_64");
+                MainSettingsManager.setArchX86_64(_activity);
                 break;
         }
     }
@@ -804,6 +820,11 @@ public class VMManager {
         } else {
             imageview.setImageResource(R.drawable.ic_computer_180dp_with_padding);
         }
+    }
+
+    public static void showPowerDialogOptions(Activity activity) {
+        DialogUtils.threeDialog(activity, activity.getString(R.string.power), activity.getString(R.string.shutdown_or_reset_content), activity.getString(R.string.shutdown), activity.getString(R.string.reset), activity.getString(R.string.power), true, R.drawable.power_settings_new_24px, true,
+                QmpSender::quickShutdown, QmpSender::quickReset, VMManager::pressPowerButton, null);
     }
 
     public static void requestKillAllQemuProcess(Activity activity, Runnable runnable) {

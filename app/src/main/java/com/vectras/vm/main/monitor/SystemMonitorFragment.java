@@ -118,7 +118,7 @@ public class SystemMonitorFragment extends Fragment {
                         getString(R.string.shutdown_or_reset_content),
                         getString(R.string.shutdown),
                         getString(R.string.reset),
-                        getString(R.string.close),
+                        getString(R.string.power),
                         true,
                         R.drawable.power_settings_new_24px,
                         true,
@@ -133,7 +133,7 @@ public class SystemMonitorFragment extends Fragment {
                             Config.vmID = Config.currentVNCServervmID;
                             QmpSender.quickReset();
                         },
-                        null,
+                        VMManager::pressPowerButton,
                         null);
             }
         });
@@ -230,14 +230,20 @@ public class SystemMonitorFragment extends Fragment {
 
         executor.execute(() -> {
             String qemuVersionName = CommandUtils.getQemuVersionName();
+
             if (!isAdded()) return;
             String result = Terminal.executeShellCommandWithResult("ps -e command && echo \"psendhere\" && cat /proc/cpuinfo", requireActivity());
+
             if (!isAdded()) return;
             requireActivity().runOnUiThread(() -> {
+                if (!isAdded()) return;
                 binding.tvProcesses.setText(!result.contains("\npsendhere") ? getString(R.string.nothing_here) : result.substring(0, result.indexOf("\npsendhere")));
+
+                if (!isAdded()) return;
                 binding.tvQemuversion.setText(getString(R.string.version) + " " + (qemuVersionName.isEmpty() ? getString(R.string.unknow) : qemuVersionName) + ".");
 
                 if (!result.isEmpty()) {
+                    if (!isAdded()) return;
                     switch (currentArch) {
                         case "X86_64" ->
                                 binding.tvQemustatus.setText(getString(R.string.status_qemu) + " " + (result.contains("qemu-system-x86_64 -qmp") ? getString(R.string.running) : getString(R.string.stopped)) + ".");
@@ -250,17 +256,20 @@ public class SystemMonitorFragment extends Fragment {
                         default -> binding.tvQemustatus.setText(getString(R.string.status_qemu) + " " + getString(R.string.stopped) + ".");
                     }
 
+                    if (!isAdded()) return;
                     if (result.contains("qemu-system") && result.contains("-qmp")) {
                         binding.btStopqemu.setVisibility(View.VISIBLE);
                     } else {
                         binding.btStopqemu.setVisibility(View.GONE);
                     }
                 } else {
+                    if (!isAdded()) return;
                     binding.tvQemustatus.setText(getString(R.string.status_qemu) + " " + getString(R.string.stopped) + ".");
                     binding.btStopqemu.setVisibility(View.GONE);
                     Log.i(TAG, "Errors: " + result);
                 }
 
+                if (!isAdded()) return;
                 getVNCServerStatus(result);
                 get3dfxStatus(qemuVersionName, result);
             });
