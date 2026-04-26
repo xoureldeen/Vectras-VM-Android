@@ -25,6 +25,7 @@ import com.vectras.vm.databinding.ActivityRomInfoBinding;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.ImageUtils;
+import com.vectras.vm.utils.IntentUtils;
 import com.vectras.vm.utils.PackageUtils;
 
 import java.io.File;
@@ -165,7 +166,13 @@ public class RomInfo extends AppCompatActivity {
         });
 
         if (getIntent().hasExtra("isRomInfo") && getIntent().getBooleanExtra("isRomInfo", false)) {
-            binding.btnPick.setOnClickListener(v -> romPicker.launch("*/*"));
+            binding.btnPick.setOnClickListener(v -> {
+                try {
+                    romPicker.launch("*/*");
+                } catch (Exception e) {
+                    IntentUtils.showErrorDialog(this);
+                }
+            });
         } else {
             binding.btnPick.setVisibility(View.GONE);
         }
@@ -326,7 +333,8 @@ public class RomInfo extends AppCompatActivity {
                     String likeContent = getString(R.string.like);
                     boolean isLiked = interaction.isLiked();
                     likeContent = (likes == 0) ? getString(R.string.like) : interaction.getFormatedLikeCount();
-                    if (isLiked) binding.btnLike.setIcon(ContextCompat.getDrawable(RomInfo.this, R.drawable.thumb_up_filled_24px));
+                    if (isLiked)
+                        binding.btnLike.setIcon(ContextCompat.getDrawable(RomInfo.this, R.drawable.thumb_up_filled_24px));
                     binding.btnLike.setText(likeContent);
 
                     binding.lnAllViews.setVisibility(View.VISIBLE);

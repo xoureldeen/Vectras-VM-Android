@@ -303,22 +303,8 @@ public class VncCanvas extends AppCompatImageView {
 		Log.i(TAG, "Desktop name is " + rfb.desktopName);
 		Log.i(TAG, "Desktop size is " + rfb.framebufferWidth + " x " + rfb.framebufferHeight);
 
-		boolean useFull = false;
-		int capacity = BCFactory.getInstance().getBCActivityManager()
-				.getMemoryClass(Utils.getActivityManager(getContext()));
-		if (connection.getForceFull() == BitmapImplHint.AUTO) {
-			if (rfb.framebufferWidth * rfb.framebufferHeight * FullBufferBitmapData.CAPACITY_MULTIPLIER <= capacity
-					* 1024 * 1024) {
-				useFull = true;
-			}
-		} else {
-			useFull = (connection.getForceFull() == BitmapImplHint.FULL);
-		}
-		if (!useFull) {
-			bitmapData = new LargeBitmapData(rfb, this, dx, dy, capacity);
-		} else {
-			bitmapData = new FullBufferBitmapData(rfb, this, capacity);
-		}
+		initBitmapData(dx, dy);
+
 		mouseX = rfb.framebufferWidth / 2;
 		mouseY = rfb.framebufferHeight / 2;
 
@@ -331,6 +317,29 @@ public class VncCanvas extends AppCompatImageView {
 		colorPalette = pendingColorModel.palette();
 		colorModel = pendingColorModel;
 		pendingColorModel = null;
+	}
+
+	void initBitmapData(int dx, int dy) {
+		int capacity = BCFactory.getInstance().getBCActivityManager()
+				.getMemoryClass(Utils.getActivityManager(getContext()));
+
+		boolean useFull = false;
+		if (connection.getForceFull() == BitmapImplHint.AUTO) {
+			if (rfb.framebufferWidth * rfb.framebufferHeight * FullBufferBitmapData.CAPACITY_MULTIPLIER
+					<= capacity * 1024 * 1024) {
+				useFull = true;
+			}
+		} else {
+			useFull = (connection.getForceFull() == BitmapImplHint.FULL);
+		}
+
+		if (bitmapData != null) bitmapData.dispose();
+
+		if (!useFull) {
+			bitmapData = new LargeBitmapData(rfb, this, dx, dy, capacity);
+		} else {
+			bitmapData = new FullBufferBitmapData(rfb, this, capacity);
+		}
 	}
 
 	public void setColorModel(COLORMODEL cm) {
@@ -395,6 +404,11 @@ public class VncCanvas extends AppCompatImageView {
 							rfb.setFramebufferSize(rw, rh);
 							// - updateFramebufferSize();
 							Log.v(TAG, "rfb.EncodingNewFBSize");
+
+							Point size = new Point();
+							VncCanvasActivity.display.getSize(size);
+							initBitmapData(size.x, size.y);
+
 							reload();
 							break;
 						}
