@@ -44,6 +44,7 @@ import com.vectras.vm.utils.ImageUtils;
 import com.vectras.vm.utils.IntentUtils;
 import com.vectras.vm.utils.JSONUtils;
 import com.vectras.vm.utils.PackageUtils;
+import com.vectras.vm.utils.ProgressDialog;
 import com.vectras.vm.utils.UIUtils;
 
 import org.json.JSONException;
@@ -87,7 +88,11 @@ public class VMCreatorActivity extends AppCompatActivity {
             finish();
             return true;
         } else if (id == R.id.add_file) {
+            try {
             filePicker.launch("*/*");
+            } catch (Exception e) {
+                IntentUtils.showErrorDialog(this);
+            }
             return true;
         } else if (id == R.id.show_in_folder) {
             FileUtils.openFolder(this, VmFileManager.getPath(vmID));
@@ -126,8 +131,20 @@ public class VMCreatorActivity extends AppCompatActivity {
 
         binding.btnCreate.setOnClickListener(v -> startCreateVM());
 
-        binding.drive.setOnClickListener(v -> diskPicker.launch("*/*"));
-        binding.driveField.setOnClickListener(v -> diskPicker.launch("*/*"));
+        binding.drive.setOnClickListener(v -> {
+            try {
+            diskPicker.launch("*/*");
+            } catch (Exception e) {
+                IntentUtils.showErrorDialog(this);
+            }
+        });
+        binding.driveField.setOnClickListener(v -> {
+            try {
+            diskPicker.launch("*/*");
+            } catch (Exception e) {
+                IntentUtils.showErrorDialog(this);
+            }
+        });
 
         binding.driveField.setEndIconOnClickListener(v -> {
             if (Objects.requireNonNull(binding.drive.getText()).toString().isEmpty()) {
@@ -147,10 +164,21 @@ public class VMCreatorActivity extends AppCompatActivity {
                         true,
                         R.drawable.hard_drive_24px,
                         true,
-                        () -> diskPicker.launch("*/*"),
+                        () -> {
+                            try {
+                                diskPicker.launch("*/*");
+                            } catch (Exception e) {
+                                IntentUtils.showErrorDialog(this);
+                            }
+                        },
                         () -> {
                             if (binding.drive.getText().toString().contains(VmFileManager.quickGetPath(vmID))) {
-                                FileUtils.delete(new File(Objects.requireNonNull(binding.drive.getText()).toString()));
+                                ProgressDialog progressDialog1 = new ProgressDialog(this);
+                                progressDialog1.show();
+                                new Thread(() -> {
+                                    FileUtils.delete(new File(Objects.requireNonNull(binding.drive.getText()).toString()));
+                                    runOnUiThread(progressDialog1::reset);
+                                }).start();
                             }
                             binding.drive.setText("");
                             binding.driveField.setEndIconDrawable(R.drawable.add_24px);
@@ -168,7 +196,13 @@ public class VMCreatorActivity extends AppCompatActivity {
             }
         });
 
-        View.OnClickListener cdromClickListener = v -> isoPicker.launch("*/*");
+        View.OnClickListener cdromClickListener = v -> {
+            try {
+                isoPicker.launch("*/*");
+            } catch (Exception e) {
+                IntentUtils.showErrorDialog(this);
+            }
+        };
 
         binding.cdrom.setOnClickListener(cdromClickListener);
         binding.cdromField.setOnClickListener(cdromClickListener);
@@ -310,7 +344,11 @@ public class VMCreatorActivity extends AppCompatActivity {
 
             } else if (getIntent().hasExtra("importcvbinow")) {
                 setDefault();
-                cvbiPicker.launch("*/*");
+                try {
+                    cvbiPicker.launch("*/*");
+                } catch (Exception e) {
+                    IntentUtils.showErrorDialog(this);
+                }
             } else {
                 setDefault();
                 if (MainSettingsManager.autoCreateDisk(this)) {
@@ -777,10 +815,14 @@ public class VMCreatorActivity extends AppCompatActivity {
     }
 
     private void selectedDiskFile(Uri _content_describer, boolean _addtodrive) {
+        ProgressDialog progressDialog1 = new ProgressDialog(this);
+        progressDialog1.show();
         new Thread(() -> {
             if (FileUtils.isValidFilePath(this, FileUtils.getPath(this, _content_describer), false)) {
                 File selectedFilePath = new File(getPath(_content_describer));
                 runOnUiThread(() -> {
+                    progressDialog1.reset();
+
                     if (VMManager.isADiskFile(selectedFilePath.getPath())) {
                         startProcessingHardDriveFile(_content_describer, _addtodrive);
                     } else {
@@ -849,9 +891,17 @@ public class VMCreatorActivity extends AppCompatActivity {
                         null);
                 return;
             }
-            File selectedFilePath = new File(getPath(_content_describer));
-            binding.drive.setText(selectedFilePath.getPath());
-            binding.driveField.setEndIconDrawable(R.drawable.more_vert_24px);
+
+            ProgressDialog progressDialog1 = new ProgressDialog(this);
+            progressDialog1.show();
+            new Thread(() -> {
+                File selectedFilePath = new File(getPath(_content_describer));
+                runOnUiThread(() -> {
+                    progressDialog1.reset();
+                    binding.drive.setText(selectedFilePath.getPath());
+                    binding.driveField.setEndIconDrawable(R.drawable.more_vert_24px);
+                });
+            }).start();
         }
     }
 
@@ -1030,7 +1080,7 @@ public class VMCreatorActivity extends AppCompatActivity {
                 if (jObj.has("vmID")) {
                     if (!jObj.isNull("vmID")) {
                         if (!jObj.getString("vmID").isEmpty()) {
-                            FileUtils.move(VmFileManager.getConfigFile(vmID), VmFileManager.getConfigFile( jObj.getString("vmID")));
+                            FileUtils.move(VmFileManager.getConfigFile(vmID), VmFileManager.getConfigFile(jObj.getString("vmID")));
                             vmID = jObj.getString("vmID");
                         }
                     }

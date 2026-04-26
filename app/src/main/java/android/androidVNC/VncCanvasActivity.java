@@ -1821,6 +1821,12 @@ public abstract class VncCanvasActivity extends AppCompatActivity {
 
         // Remove old canvas
         ViewGroup parent = findViewById(R.id.vnc_canvas_layout);
+
+        if (vncCanvas != null) {
+            vncCanvas.closeConnection();
+            vncCanvas.onDestroy();
+        }
+
         parent.removeView(vncCanvas);
 
         // Create new canvas

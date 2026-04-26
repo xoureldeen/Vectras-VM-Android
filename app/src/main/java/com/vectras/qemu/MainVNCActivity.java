@@ -114,6 +114,8 @@ public class MainVNCActivity extends VncCanvasActivity {
         super.onCreate(b);
 
         getContext = this;
+        UIUtils.edgeToEdge(this);
+        UIUtils.setOnApplyWindowInsetsListener(binding.vncMainLayout);
         initializeControlFragment();
         initializeDesktopControl();
         initializeGameControl();
@@ -175,6 +177,8 @@ public class MainVNCActivity extends VncCanvasActivity {
 
         streamAudio = new StreamAudio(this);
         streamAudio.setFile(VmFileManager.findAudioRaw(this, Config.vmID));
+
+        if (!isConnected) tryReconnect();
     }
 
     private void setDefaulViewMode() {
@@ -187,7 +191,7 @@ public class MainVNCActivity extends VncCanvasActivity {
 //        screenMode = VNCScreenMode.FitToScreen;
         setLayout(getResources().getConfiguration());
 
-        UIUtils.setOrientation(this);
+        //UIUtils.setOrientation(this);
     }
 
     @Override
@@ -766,12 +770,14 @@ public class MainVNCActivity extends VncCanvasActivity {
                 setUIModeMobile(screenMode == VNCScreenMode.FitToScreen);
 
             binding.lnNosignal.setVisibility(View.GONE);
+            binding.lnConnecting.setVisibility(View.GONE);
             this.vncCanvas.setFocusableInTouchMode(true);
 //            syncCursorViewWithBitmap();
 
             if (VmAudioManager.currentVmId.equals(Config.vmID) && VmAudioManager.streamAudio.isPlaying())
                 streamAudio.setCross(VmAudioManager.streamAudio);
             if (!streamAudio.isPlaying()) streamAudio.play();
+
         });
     }
 
@@ -847,14 +853,16 @@ public class MainVNCActivity extends VncCanvasActivity {
                         binding.lnNosignal.setVisibility(View.VISIBLE);
                         binding.lnConnecting.setVisibility(View.GONE);
                     } else {
-                        isTrying = false;
-
                         if (Config.forceRefeshVNCDisplay) {
                             runOnUiThread(() -> {
                                 startActivity(new Intent(MainVNCActivity.this, MainVNCActivity.class));
                                 overridePendingTransition(0, 0);
                                 finish();
                             });
+                        } else {
+                            isTrying = false;
+                            binding.lnNosignal.setVisibility(View.GONE);
+                            binding.lnConnecting.setVisibility(View.GONE);
                         }
                     }
                 }

@@ -18,6 +18,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
@@ -388,12 +389,16 @@ public class MainStartVM {
                         .load(new File(thumbnailFile))
                         .placeholder(R.drawable.ic_computer_180dp_with_padding)
                         .error(R.drawable.ic_computer_180dp_with_padding)
+                        .skipMemoryCache(true)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(ivThumbnail);
             } else if (VmFileManager.isScreenshotPngExists(vmID)) {
                 Glide.with(context.getApplicationContext())
                         .load(new File(VmFileManager.getScreenshotPng(vmID)))
                         .placeholder(R.drawable.ic_computer_180dp_with_padding)
                         .error(R.drawable.ic_computer_180dp_with_padding)
+                        .skipMemoryCache(true)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
                         .into(ivThumbnail);
             } else {
                 VMManager.setIconWithName(ivThumbnail, _content);

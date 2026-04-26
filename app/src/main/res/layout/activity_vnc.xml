@@ -30,70 +30,103 @@
                 android:keepScreenOn="true" />
         </RelativeLayout>
 
-<!--        <LinearLayout-->
-<!--            android:id="@+id/cursorViewContianer"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:gravity="center">-->
-<!--            <android.androidVNC.VncCursorView-->
-<!--                android:id="@+id/cursorView"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"/>-->
-<!--        </LinearLayout>-->
+        <RelativeLayout
+            android:id="@+id/vnc_main_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <include
-            android:id="@+id/controlsfragment"
-            layout="@layout/controls_fragment" />
+            <include
+                android:id="@+id/controlsfragment"
+                layout="@layout/controls_fragment" />
 
-        <include
-            android:id="@+id/sendkeysdialog"
-            layout="@layout/send_key_dialog" />
+            <include
+                android:id="@+id/sendkeysdialog"
+                layout="@layout/send_key_dialog" />
+        </RelativeLayout>
+
+
+        <!--        <LinearLayout-->
+        <!--            android:id="@+id/cursorViewContianer"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="match_parent"-->
+        <!--            android:gravity="center">-->
+        <!--            <android.androidVNC.VncCursorView-->
+        <!--                android:id="@+id/cursorView"-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"/>-->
+        <!--        </LinearLayout>-->
 
         <LinearLayout
-            android:id="@+id/ln_nosignal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#E6000000"
-            android:gravity="center"
+            android:animateLayoutChanges="true"
             android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:src="@drawable/cast_warning_24px"
-                app:tint="@android:color/white" />
+            <FrameLayout
+                android:id="@+id/ln_nosignal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:text="@string/no_signal"
-                android:textColor="@android:color/white"
-                android:textSize="20sp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:alpha="0.8"
+                    android:background="?attr/colorSurfaceContainer" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/tap_to_try_again"
-                android:textColor="@android:color/white" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@drawable/cast_warning_24px"
+                        app:tint="?attr/colorOnSurface" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="@string/no_signal"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tap_to_try_again"
+                        android:textColor="?attr/colorOnSurface" />
+                </LinearLayout>
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/ln_connecting"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:alpha="0.8"
+                    android:background="?attr/colorSurfaceContainer" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.progressindicator.CircularProgressIndicator
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:indeterminate="true" />
+                </LinearLayout>
+            </FrameLayout>
         </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ln_connecting"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#E6000000"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="gone"
-            tools:visibility="visible">
-
-            <com.google.android.material.progressindicator.CircularProgressIndicator
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:indeterminate="true" />
-        </LinearLayout>
-
     </RelativeLayout>
 
     <RelativeLayout

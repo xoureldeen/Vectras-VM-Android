@@ -22,6 +22,7 @@ import com.vectras.qemu.VNCConfig;
 import com.vectras.vm.AppConfig;
 import com.vectras.vm.R;
 import com.vectras.vm.VMManager;
+import com.vectras.vm.VectrasApp;
 import com.vectras.vm.creator.VMCreatorActivity;
 import com.vectras.vm.databinding.DialogChangeRemovableDevicesBinding;
 import com.vectras.vm.main.core.DisplaySystem;
@@ -108,6 +109,7 @@ public class VmControllerDialog extends DialogFragment {
                 });
 
                 if (isAdded() && (!(requireActivity() instanceof MainVNCActivity))) {
+                    if (streamAudio == null) streamAudio = new StreamAudio(requireActivity().getApplicationContext());
                     if (!streamAudio.isPlaying()) VmAudioManager.set(Config.vmID);
                 }
 
@@ -143,7 +145,8 @@ public class VmControllerDialog extends DialogFragment {
                                 dismiss();
                             });
 
-                            if (!isHavingSecondaryOpticalDisc()) binding.tvCdrom.setText(R.string.cdrom);
+                            if (!isHavingSecondaryOpticalDisc())
+                                binding.tvCdrom.setText(R.string.cdrom);
                         } else {
                             binding.lnCdrom.setVisibility(View.GONE);
                         }
@@ -156,7 +159,8 @@ public class VmControllerDialog extends DialogFragment {
                                 dismiss();
                             });
 
-                            if (!isHavingOpticalDisc()) binding.tvSecondaryCdrom.setText(R.string.cdrom);
+                            if (!isHavingOpticalDisc())
+                                binding.tvSecondaryCdrom.setText(R.string.cdrom);
                         } else {
                             binding.lnSecondaryCdrom.setVisibility(View.GONE);
                         }
@@ -351,13 +355,20 @@ public class VmControllerDialog extends DialogFragment {
             registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
                 if (uri != null) {
                     try {
-                        File selectedFilePath = new File(Objects.requireNonNull(FileUtils.getPath(requireActivity(), uri)));
-                        QmpSender.changeOpticalDisc(requireActivity(), selectedFilePath.getAbsolutePath(), infoBlock);
+                        new Thread(() -> {
+                            File selectedFilePath = new File(Objects.requireNonNull(FileUtils.getPath(getContext(), uri)));
+
+                            if (isAdded()) {
+                                requireActivity().runOnUiThread(() -> {
+                                    QmpSender.changeOpticalDisc(requireActivity(), selectedFilePath.getAbsolutePath(), infoBlock);
+                                    dismiss();
+                                });
+                            }
+                        }).start();
                     } catch (Exception e) {
                         showErrorSelectedFileDialog();
+                        dismiss();
                     }
-
-                    dismiss();
                 }
             });
 
@@ -365,13 +376,20 @@ public class VmControllerDialog extends DialogFragment {
             registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
                 if (uri != null) {
                     try {
-                        File selectedFilePath = new File(Objects.requireNonNull(FileUtils.getPath(requireActivity(), uri)));
-                        QmpSender.changeSecondaryOpticalDisc(requireActivity(), selectedFilePath.getAbsolutePath(), infoBlock);
+                        new Thread(() -> {
+                            File selectedFilePath = new File(Objects.requireNonNull(FileUtils.getPath(getContext(), uri)));
+
+                            if (isAdded()) {
+                                requireActivity().runOnUiThread(() -> {
+                                    QmpSender.changeSecondaryOpticalDisc(requireActivity(), selectedFilePath.getAbsolutePath(), infoBlock);
+                                    dismiss();
+                                });
+                            }
+                        }).start();
                     } catch (Exception e) {
                         showErrorSelectedFileDialog();
+                        dismiss();
                     }
-
-                    dismiss();
                 }
             });
 
@@ -379,13 +397,20 @@ public class VmControllerDialog extends DialogFragment {
             registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
                 if (uri != null) {
                     try {
-                        File selectedFilePath = new File(Objects.requireNonNull(FileUtils.getPath(requireActivity(), uri)));
-                        QmpSender.changeFloppyDiskA(requireActivity(), selectedFilePath.getAbsolutePath());
+                        new Thread(() -> {
+                            File selectedFilePath = new File(Objects.requireNonNull(FileUtils.getPath(getContext(), uri)));
+
+                            if (isAdded()) {
+                                requireActivity().runOnUiThread(() -> {
+                                    QmpSender.changeFloppyDiskA(requireActivity(), selectedFilePath.getAbsolutePath());
+                                    dismiss();
+                                });
+                            }
+                        }).start();
                     } catch (Exception e) {
                         showErrorSelectedFileDialog();
+                        dismiss();
                     }
-
-                    dismiss();
                 }
             });
 
@@ -393,13 +418,20 @@ public class VmControllerDialog extends DialogFragment {
             registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
                 if (uri != null) {
                     try {
-                        File selectedFilePath = new File(Objects.requireNonNull(FileUtils.getPath(requireActivity(), uri)));
-                        QmpSender.changeFloppyDiskB(requireActivity(), selectedFilePath.getAbsolutePath());
+                        new Thread(() -> {
+                            File selectedFilePath = new File(Objects.requireNonNull(FileUtils.getPath(getContext(), uri)));
+
+                            if (isAdded()) {
+                                requireActivity().runOnUiThread(() -> {
+                                    QmpSender.changeFloppyDiskB(requireActivity(), selectedFilePath.getAbsolutePath());
+                                    dismiss();
+                                });
+                            }
+                        }).start();
                     } catch (Exception e) {
                         showErrorSelectedFileDialog();
+                        dismiss();
                     }
-
-                    dismiss();
                 }
             });
 
@@ -407,13 +439,20 @@ public class VmControllerDialog extends DialogFragment {
             registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
                 if (uri != null) {
                     try {
-                        File selectedFilePath = new File(Objects.requireNonNull(FileUtils.getPath(requireActivity(), uri)));
-                        QmpSender.changeMemoryCard(requireActivity(), selectedFilePath.getAbsolutePath());
+                        new Thread(() -> {
+                            File selectedFilePath = new File(Objects.requireNonNull(FileUtils.getPath(getContext(), uri)));
+
+                            if (isAdded()) {
+                                requireActivity().runOnUiThread(() -> {
+                                    QmpSender.changeMemoryCard(requireActivity(), selectedFilePath.getAbsolutePath());
+                                    dismiss();
+                                });
+                            }
+                        }).start();
                     } catch (Exception e) {
                         showErrorSelectedFileDialog();
+                        dismiss();
                     }
-
-                    dismiss();
                 }
             });
 
