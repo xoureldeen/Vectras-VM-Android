@@ -5,11 +5,11 @@
     "url": "https://github.com/xoureldeen/Vectras-VM-Android/releases",
     "Message": "<h2>4.0.0</h2>\nBugs fixed.",
     "cancellable": true,
-    "versionCodeBeta":"108",
-    "versionNameBeta":"4.0.4",
-    "versionNameBetas":"4.0.0,4.0.1,4.0.2,4.0.3,4.0.4",
+    "versionCodeBeta":"109",
+    "versionNameBeta":"4.0.5",
+    "versionNameBetas":"4.0.0,4.0.1,4.0.2,4.0.3,4.0.4,4.0.5",
     "sizeBeta": "45 MB",
     "urlBeta": "https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases",
-    "MessageBeta": "<h2>4.0.4</h2>Bugs fixed.",
+    "MessageBeta": "<h2>4.0.5</h2>Bugs fixed.",
     "cancellableBeta": true
 }

@@ -3,6 +3,7 @@ package com.vectras.vm.manager;
 import android.androidVNC.ConnectionBean;
 import android.androidVNC.VncCanvas;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,7 +18,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
-import com.google.android.material.color.MaterialColors;
 import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.qemu.MainVNCActivity;
@@ -117,6 +117,7 @@ public class VmControllerDialog extends DialogFragment {
                 }
 
                 if (streamAudio == null ||
+                        !isAdded() ||
                         FileUtils.getFileSize(VmFileManager.findAudioRaw(requireContext(), Config.vmID)) == 0 ||
                         (isAdded() && (!(requireActivity() instanceof MainVNCActivity)) && !VmAudioManager.currentVmId.equals(Config.vmID))
                 ) {
@@ -299,9 +300,7 @@ public class VmControllerDialog extends DialogFragment {
                         if (MainSettingsManager.getVNCScaleMode(requireActivity()) == VNCConfig.oneToOne) return;
 
                         MainSettingsManager.setVNCScaleMode(requireActivity(), VNCConfig.oneToOne);
-                        requireActivity().startActivity(new Intent(requireActivity(), MainVNCActivity.class));
-                        requireActivity().overridePendingTransition(0, 0);
-                        requireActivity().finish();
+                        requireActivity().recreate();
                         dismiss();
                     });
 
@@ -309,9 +308,7 @@ public class VmControllerDialog extends DialogFragment {
                         if (MainSettingsManager.getVNCScaleMode(requireActivity()) == VNCConfig.fitToScreen) return;
 
                         MainSettingsManager.setVNCScaleMode(requireActivity(), VNCConfig.fitToScreen);
-                        requireActivity().startActivity(new Intent(requireActivity(), MainVNCActivity.class));
-                        requireActivity().overridePendingTransition(0, 0);
-                        requireActivity().finish();
+                        requireActivity().recreate();
                         dismiss();
                     });
 
@@ -319,9 +316,7 @@ public class VmControllerDialog extends DialogFragment {
                         if (MainSettingsManager.getVNCScaleMode(requireActivity()) == VNCConfig.scaleToFitScreen) return;
 
                         MainSettingsManager.setVNCScaleMode(requireActivity(), VNCConfig.scaleToFitScreen);
-                        requireActivity().startActivity(new Intent(requireActivity(), MainVNCActivity.class));
-                        requireActivity().overridePendingTransition(0, 0);
-                        requireActivity().finish();
+                        requireActivity().recreate();
                         dismiss();
                     });
                 } else {
@@ -331,6 +326,20 @@ public class VmControllerDialog extends DialogFragment {
         }).start();
 
         return dialog;
+    }
+
+    private Runnable onDismissCallback;
+
+    public void setOnDismissCallback(Runnable callback) {
+        this.onDismissCallback = callback;
+    }
+
+    @Override
+    public void onDismiss(@NonNull DialogInterface dialog) {
+        super.onDismiss(dialog);
+        if (onDismissCallback != null) {
+            onDismissCallback.run();
+        }
     }
 
     private void takeScreenshot() {

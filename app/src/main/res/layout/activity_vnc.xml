@@ -9,6 +9,7 @@
     android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/vnc_main_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -31,7 +32,7 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/vnc_main_layout"
+            android:id="@+id/vnc_control_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -71,7 +72,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:alpha="0.8"
-                    android:background="?attr/colorSurfaceContainer" />
+                    android:background="#E6000000" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -83,21 +84,21 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:src="@drawable/cast_warning_24px"
-                        app:tint="?attr/colorOnSurface" />
+                        app:tint="@android:color/white" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="16dp"
                         android:text="@string/no_signal"
-                        android:textColor="?attr/colorOnSurface"
+                        android:textColor="@android:color/white"
                         android:textSize="20sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/tap_to_try_again"
-                        android:textColor="?attr/colorOnSurface" />
+                        android:textColor="@android:color/white" />
                 </LinearLayout>
             </FrameLayout>
 
@@ -112,7 +113,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:alpha="0.8"
-                    android:background="?attr/colorSurfaceContainer" />
+                    android:background="#E6000000" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

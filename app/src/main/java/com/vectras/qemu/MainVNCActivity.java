@@ -21,7 +21,10 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Point;
+import android.graphics.RenderEffect;
+import android.graphics.Shader;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -115,7 +118,7 @@ public class MainVNCActivity extends VncCanvasActivity {
 
         getContext = this;
         UIUtils.edgeToEdge(this);
-        UIUtils.setOnApplyWindowInsetsListener(binding.vncMainLayout);
+        UIUtils.setOnApplyWindowInsetsListener(binding.vncControlLayout);
         initializeControlFragment();
         initializeDesktopControl();
         initializeGameControl();
@@ -170,7 +173,11 @@ public class MainVNCActivity extends VncCanvasActivity {
         binding.lnNosignal.setOnClickListener(v -> {
             // In VNCCanvasActivity.
             // Do not attempt to reconnect while connected.
-            tryReconnect();
+            tryReconnect(false);
+        });
+
+        binding.lnConnecting.setOnClickListener(v -> {
+
         });
 
         ConnectionBean.useLocalCursor = MainSettingsManager.getShowVirtualMouse(this) || VMManager.isNeedUseVirtualMouse();
@@ -178,7 +185,7 @@ public class MainVNCActivity extends VncCanvasActivity {
         streamAudio = new StreamAudio(this);
         streamAudio.setFile(VmFileManager.findAudioRaw(this, Config.vmID));
 
-        if (!isConnected) tryReconnect();
+        if (!isConnected) tryReconnect(false);
     }
 
     private void setDefaulViewMode() {
@@ -448,12 +455,11 @@ public class MainVNCActivity extends VncCanvasActivity {
 
         //Apply settings when connection is successful.
         try {
+            vncCanvas.setupScaleMode(binding.main);
             if (MainSettingsManager.getVNCScaleMode(this) == VNCConfig.oneToOne) {
-                AbstractScaling.getById(R.id.itemOneToOne)
-                        .setScaleTypeForActivity(this);
+                vncCanvas.setScaleMode(vncCanvas.ONE_TO_ONE_MODE);
             } else if (MainSettingsManager.getVNCScaleMode(this) == VNCConfig.scaleToFitScreen) {
-                vncCanvas.setScaleType(ImageView.ScaleType.FIT_XY);
-                vncCanvas.setupScaleMode(binding.main);
+                vncCanvas.setScaleMode(vncCanvas.STRETCH_TO_FIT_MODE);
             }
         } catch (Exception e) {
             MainSettingsManager.setVNCScaleMode(this, VNCConfig.fitToScreen);
@@ -780,6 +786,8 @@ public class MainVNCActivity extends VncCanvasActivity {
             if (VmAudioManager.currentVmId.equals(Config.vmID) && VmAudioManager.streamAudio.isPlaying())
                 streamAudio.setCross(VmAudioManager.streamAudio);
             if (!streamAudio.isPlaying()) streamAudio.play();
+
+            unBlurLayout();
         });
     }
 
@@ -792,6 +800,8 @@ public class MainVNCActivity extends VncCanvasActivity {
 
             if (!VmAudioManager.currentVmId.equals(Config.vmID)) streamAudio.setCross(null);
             if (streamAudio.isPlaying()) streamAudio.stop();
+
+            blurLayout();
         });
     }
 
@@ -819,19 +829,13 @@ public class MainVNCActivity extends VncCanvasActivity {
 //            }
         } else {
             // Try reconnect.
-            if (Config.forceRefeshVNCDisplay) {
-                startActivity(new Intent(this, MainVNCActivity.class));
-                overridePendingTransition(0, 0);
-                finish();
-            } else {
-                tryReconnect();
-            }
+            tryReconnect(true);
         }
     }
 
     private boolean isTrying;
 
-    private void tryReconnect() {
+    private void tryReconnect(boolean forceRefeshVNCDisplay) {
         if (isTrying) return;
         isTrying = true;
 
@@ -855,7 +859,7 @@ public class MainVNCActivity extends VncCanvasActivity {
                         binding.lnNosignal.setVisibility(View.VISIBLE);
                         binding.lnConnecting.setVisibility(View.GONE);
                     } else {
-                        if (Config.forceRefeshVNCDisplay) {
+                        if (forceRefeshVNCDisplay && Config.forceRefeshVNCDisplay) {
                             runOnUiThread(() -> {
                                 startActivity(new Intent(MainVNCActivity.this, MainVNCActivity.class));
                                 overridePendingTransition(0, 0);
@@ -866,6 +870,12 @@ public class MainVNCActivity extends VncCanvasActivity {
                             binding.lnNosignal.setVisibility(View.GONE);
                             binding.lnConnecting.setVisibility(View.GONE);
                         }
+                    }
+
+                    if (!isConnected) {
+                        blurLayout();
+                    } else {
+                        unBlurLayout();
                     }
                 }
             }
@@ -911,19 +921,32 @@ public class MainVNCActivity extends VncCanvasActivity {
             // Create and show the dialog.
             LoggerDialogFragment newFragment = new LoggerDialogFragment();
             newFragment.show(ft, "Logger");
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                getSupportFragmentManager().executePendingTransactions();
+                if (newFragment.getDialog() == null) return;
+                blurLayout();
+                newFragment.getDialog().setOnDismissListener(d -> unBlurLayout());
+            }
         });
 
-        bindingControls.shutdownBtn.setOnClickListener(v -> DialogUtils.threeDialog(this, getString(R.string.power), getString(R.string.shutdown_or_reset_content_vnc), getString(R.string.shutdown), getString(R.string.reset), getString(R.string.power), true, R.drawable.power_settings_new_24px, true,
-                this::shutdownthisvm, QmpSender::quickReset, VMManager::pressPowerButton, null));
+        bindingControls.shutdownBtn.setOnClickListener(v -> {
+            blurLayout();
+
+            DialogUtils.threeDialog(this, getString(R.string.power), getString(R.string.shutdown_or_reset_content_vnc), getString(R.string.shutdown), getString(R.string.reset), getString(R.string.power), true, R.drawable.power_settings_new_24px, true,
+                    this::shutdownthisvm, QmpSender::quickReset, VMManager::pressPowerButton, this::unBlurLayout);
+        });
 
         bindingControls.shutdownBtn.setOnLongClickListener(view -> {
+            blurLayout();
+
             DialogUtils.twoDialog(this, "Exit", "You will be left here but the virtual machine will continue to run.", "Exit", getString(R.string.cancel), true, R.drawable.exit_to_app_24px, true,
                     () -> {
                         started = false;
                         if (!VmAudioManager.currentVmId.equals(Config.vmID))
                             streamAudio.setCross(null);
                         finish();
-                    }, null, null);
+                    }, null, this::unBlurLayout);
             return false;
         });
 
@@ -957,7 +980,39 @@ public class MainVNCActivity extends VncCanvasActivity {
             vmControllerDialog.vncCanvas = vncCanvas;
             vmControllerDialog.streamAudio = streamAudio;
             vmControllerDialog.show(getSupportFragmentManager(), "VmControllerDialog");
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                getSupportFragmentManager().executePendingTransactions();
+                blurLayout();
+                vmControllerDialog.setOnDismissCallback(this::unBlurLayout);
+            }
         });
+    }
+
+    boolean isBlurring;
+
+    private void blurLayout() {
+        if (isBlurring) return;
+        isBlurring = true;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            RenderEffect blurEffect = RenderEffect.createBlurEffect(
+                    25f, 25f,
+                    Shader.TileMode.CLAMP
+            );
+            binding.vncCanvasLayout.setRenderEffect(blurEffect);
+            binding.vncControlLayout.setRenderEffect(blurEffect);
+        }
+    }
+
+    private void unBlurLayout() {
+        if (!isBlurring) return;
+        isBlurring = false;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            binding.vncCanvasLayout.setRenderEffect(null);
+            binding.vncControlLayout.setRenderEffect(null);
+        }
     }
 
     private void initializeDesktopControl() {
