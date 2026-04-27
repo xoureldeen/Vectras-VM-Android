@@ -2193,6 +2193,9 @@ public class VncCanvas extends AppCompatImageView {
 				setScaleX((float) getWidth() / getImageWidth());
 				setScaleY((float) getHeight() / getImageHeight());
 			});
+		} else if (getScaleType() == ScaleType.FIT_CENTER || getScaleType() == ScaleType.FIT_START) {
+			setScaleX(1);
+			setScaleY(1);
 		}
 	}
 
@@ -2208,6 +2211,18 @@ public class VncCanvas extends AppCompatImageView {
 				setScaleX((float) parent.getWidth() / getImageWidth());
 				setScaleY((float) parent.getHeight() / getImageHeight());
 			});
+		} else if (getScaleType() == ScaleType.FIT_CENTER || getScaleType() == ScaleType.FIT_START) {
+			setScaleX(1);
+			setScaleY(1);
 		}
+	}
+
+	public final ScaleType FULL_SCREEN_MODE = ScaleType.FIT_CENTER;
+	public final ScaleType STRETCH_TO_FIT_MODE = ScaleType.FIT_XY;
+	public final ScaleType ONE_TO_ONE_MODE = ScaleType.CENTER;
+
+	public void setScaleMode(ScaleType mode) {
+		setScaleType(mode);
+		setupScaleMode();
 	}
 }
