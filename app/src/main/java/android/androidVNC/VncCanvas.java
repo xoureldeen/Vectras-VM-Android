@@ -234,6 +234,8 @@ public class VncCanvas extends AppCompatImageView {
 			}
 		};
 		t.start();
+
+		setupScaleMode();
 	}
 
 	public void reload() {
@@ -408,7 +410,7 @@ public class VncCanvas extends AppCompatImageView {
 							Point size = new Point();
 							VncCanvasActivity.display.getSize(size);
 							initBitmapData(size.x, size.y);
-
+							setupScaleMode();
 							reload();
 							break;
 						}
@@ -2177,4 +2179,35 @@ public class VncCanvas extends AppCompatImageView {
         }
 
     }
+
+	public void setupScaleMode() {
+		if (parentView != null) {
+			setupScaleMode(parentView);
+			return;
+		}
+
+		if (getScaleType() == ScaleType.FIT_XY) {
+			post(() -> {
+				if (getWidth() == 0 || getHeight() == 0 || getImageWidth() == 0 || getImageHeight() == 0) return;
+
+				setScaleX((float) getWidth() / getImageWidth());
+				setScaleY((float) getHeight() / getImageHeight());
+			});
+		}
+	}
+
+	View parentView;
+
+	public void setupScaleMode(View parent) {
+		parentView = parent;
+
+		if (getScaleType() == ScaleType.FIT_XY) {
+			post(() -> {
+				if (parent.getWidth() == 0 || parent.getHeight() == 0 || getImageWidth() == 0 || getImageHeight() == 0) return;
+
+				setScaleX((float) parent.getWidth() / getImageWidth());
+				setScaleY((float) parent.getHeight() / getImageHeight());
+			});
+		}
+	}
 }

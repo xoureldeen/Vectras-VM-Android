@@ -1,11 +1,13 @@
 package com.vectras.vm.manager;
 
 import android.androidVNC.ConnectionBean;
+import android.androidVNC.VncCanvas;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.Toast;
 
@@ -15,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
+import com.google.android.material.color.MaterialColors;
 import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.qemu.MainVNCActivity;
@@ -22,7 +25,6 @@ import com.vectras.qemu.VNCConfig;
 import com.vectras.vm.AppConfig;
 import com.vectras.vm.R;
 import com.vectras.vm.VMManager;
-import com.vectras.vm.VectrasApp;
 import com.vectras.vm.creator.VMCreatorActivity;
 import com.vectras.vm.databinding.DialogChangeRemovableDevicesBinding;
 import com.vectras.vm.main.core.DisplaySystem;
@@ -42,6 +44,7 @@ public class VmControllerDialog extends DialogFragment {
     private String infoBlock = "";
     public int position = -1;
     public StreamAudio streamAudio;
+    public VncCanvas vncCanvas;
 
     @NonNull
     @Override
@@ -277,13 +280,24 @@ public class VmControllerDialog extends DialogFragment {
                         dismiss();
                     });
 
+                    TypedValue typedValue = new TypedValue();
+                    requireActivity().getTheme().resolveAttribute(androidx.appcompat.R.attr.colorPrimary, typedValue, true);
+                    int colorPrimary = typedValue.data;
+
                     if (MainSettingsManager.getVNCScaleMode(requireActivity()) == VNCConfig.oneToOne) {
                         binding.ivScreenOneToOne.setBackgroundResource(R.drawable.dialog_shape_single_button);
+                        binding.ivScreenOneToOne.setColorFilter(colorPrimary);
+                    } else if (MainSettingsManager.getVNCScaleMode(requireActivity()) == VNCConfig.scaleToFitScreen) {
+                        binding.ivScreenScale.setBackgroundResource(R.drawable.dialog_shape_single_button);
+                        binding.ivScreenScale.setColorFilter(colorPrimary);
                     } else {
                         binding.ivScreenFit.setBackgroundResource(R.drawable.dialog_shape_single_button);
+                        binding.ivScreenFit.setColorFilter(colorPrimary);
                     }
 
                     binding.ivScreenOneToOne.setOnClickListener(v -> {
+                        if (MainSettingsManager.getVNCScaleMode(requireActivity()) == VNCConfig.oneToOne) return;
+
                         MainSettingsManager.setVNCScaleMode(requireActivity(), VNCConfig.oneToOne);
                         requireActivity().startActivity(new Intent(requireActivity(), MainVNCActivity.class));
                         requireActivity().overridePendingTransition(0, 0);
@@ -292,7 +306,19 @@ public class VmControllerDialog extends DialogFragment {
                     });
 
                     binding.ivScreenFit.setOnClickListener(v -> {
+                        if (MainSettingsManager.getVNCScaleMode(requireActivity()) == VNCConfig.fitToScreen) return;
+
                         MainSettingsManager.setVNCScaleMode(requireActivity(), VNCConfig.fitToScreen);
+                        requireActivity().startActivity(new Intent(requireActivity(), MainVNCActivity.class));
+                        requireActivity().overridePendingTransition(0, 0);
+                        requireActivity().finish();
+                        dismiss();
+                    });
+
+                    binding.ivScreenScale.setOnClickListener(v -> {
+                        if (MainSettingsManager.getVNCScaleMode(requireActivity()) == VNCConfig.scaleToFitScreen) return;
+
+                        MainSettingsManager.setVNCScaleMode(requireActivity(), VNCConfig.scaleToFitScreen);
                         requireActivity().startActivity(new Intent(requireActivity(), MainVNCActivity.class));
                         requireActivity().overridePendingTransition(0, 0);
                         requireActivity().finish();

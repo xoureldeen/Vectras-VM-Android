@@ -451,6 +451,9 @@ public class MainVNCActivity extends VncCanvasActivity {
             if (MainSettingsManager.getVNCScaleMode(this) == VNCConfig.oneToOne) {
                 AbstractScaling.getById(R.id.itemOneToOne)
                         .setScaleTypeForActivity(this);
+            } else if (MainSettingsManager.getVNCScaleMode(this) == VNCConfig.scaleToFitScreen) {
+                vncCanvas.setScaleType(ImageView.ScaleType.FIT_XY);
+                vncCanvas.setupScaleMode(binding.main);
             }
         } catch (Exception e) {
             MainSettingsManager.setVNCScaleMode(this, VNCConfig.fitToScreen);
@@ -777,7 +780,6 @@ public class MainVNCActivity extends VncCanvasActivity {
             if (VmAudioManager.currentVmId.equals(Config.vmID) && VmAudioManager.streamAudio.isPlaying())
                 streamAudio.setCross(VmAudioManager.streamAudio);
             if (!streamAudio.isPlaying()) streamAudio.play();
-
         });
     }
 
@@ -952,6 +954,7 @@ public class MainVNCActivity extends VncCanvasActivity {
 
         bindingControls.btnSettings.setOnClickListener(v -> {
             VmControllerDialog vmControllerDialog = new VmControllerDialog();
+            vmControllerDialog.vncCanvas = vncCanvas;
             vmControllerDialog.streamAudio = streamAudio;
             vmControllerDialog.show(getSupportFragmentManager(), "VmControllerDialog");
         });

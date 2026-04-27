@@ -46,7 +46,7 @@ class FullBufferBitmapData extends AbstractBitmapData {
 				return;
 			}
 
-			if (vncCanvas.getScaleType() == ImageView.ScaleType.FIT_CENTER)
+			if (vncCanvas.getScaleType() == ImageView.ScaleType.FIT_CENTER || vncCanvas.getScaleType() == ImageView.ScaleType.FIT_XY)
 			{
 				//canvas.drawBitmap(data.bitmapPixels, 0, data.framebufferwidth, xoffset, yoffset, framebufferwidth, framebufferheight, false, null);
 
@@ -54,7 +54,13 @@ class FullBufferBitmapData extends AbstractBitmapData {
                 // this fixes the issue with Nougat Devices displaying black screen for 24bit color mode C24bit
                 Bitmap bitmapTmp = Bitmap.createBitmap(framebufferwidth, framebufferheight, Config.bitmapConfig);
                 bitmapTmp.setPixels(bitmapPixels, 0, data.framebufferwidth, 0, 0, framebufferwidth, framebufferheight);
-                canvas.drawBitmap(bitmapTmp, xoffset, yoffset, null);
+
+				if (vncCanvas.getScaleType() == ImageView.ScaleType.FIT_XY) {
+					canvas.drawBitmap(bitmapTmp, (float) vncCanvas.getWidth() / 2 + (float) framebufferwidth / -2, (float) vncCanvas.getHeight() / 2 - (float) framebufferheight / 2, null);
+				} else {
+					canvas.drawBitmap(bitmapTmp, xoffset, yoffset, null);
+				}
+
 
 			}
 			else
@@ -98,8 +104,18 @@ class FullBufferBitmapData extends AbstractBitmapData {
 			}
 			if(data.vncCanvas.connection.getUseLocalCursor())
 			{
-                int locationX = vncCanvas.getScaleType() == ImageView.ScaleType.FIT_CENTER ? data.vncCanvas.mouseX : vncCanvas.getWidth() / -2 + framebufferwidth / 2 + data.vncCanvas.mouseX;
-                int locationY = vncCanvas.getScaleType() == ImageView.ScaleType.FIT_CENTER ? data.vncCanvas.mouseY : vncCanvas.getHeight() / 2 - framebufferheight / 2 + data.vncCanvas.mouseY;
+				// OneToOne
+                int locationX = vncCanvas.getWidth() / -2 + framebufferwidth / 2 + data.vncCanvas.mouseX;
+                int locationY = vncCanvas.getHeight() / 2 - framebufferheight / 2 + data.vncCanvas.mouseY;
+
+				if (vncCanvas.getScaleType() == ImageView.ScaleType.FIT_CENTER) {
+					// Full screen
+					locationX = data.vncCanvas.mouseX;
+					locationY = data.vncCanvas.mouseY;
+				} else if (vncCanvas.getScaleType() == ImageView.ScaleType.FIT_XY){
+					// Scale to fit screen
+					locationX = vncCanvas.getWidth() / 2 + framebufferwidth / -2 + data.vncCanvas.mouseX;
+				}
 
 				setCursorRect(locationX, locationY);
 				clipRect.set(cursorRect);
