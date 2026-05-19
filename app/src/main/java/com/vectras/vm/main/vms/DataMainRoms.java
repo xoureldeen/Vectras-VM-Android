@@ -47,6 +47,8 @@ public class DataMainRoms {
 
     public String fda = "";
 
+    public String fdb = "";
+
     public boolean sharedFolder = false;
 
     public String vmID = "";
