@@ -4,6 +4,7 @@ import static android.content.Intent.ACTION_VIEW;
 import static com.vectras.vm.VectrasApp.getApp;
 
 import android.annotation.SuppressLint;
+import android.app.admin.PreferentialNetworkServiceConfig;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -17,6 +18,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
@@ -32,6 +34,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.anbui.elephant.retrofit2utils.Retrofit2Utils;
+import com.anbui.elephant.vm.VmEditor;
 import com.google.android.material.behavior.HideViewOnScrollBehavior;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -424,6 +427,22 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
 
         DisplaySystem.reLaunchVNC(this);
         PendingCommand.runNow(this);
+
+        if (
+                PendingCommand.vmId != null &&
+                        PendingCommand.vmConfig != null &&
+                        PendingCommand.paramsNotebookConfig != null
+        ) {
+            if (VmEditor.handle()) {
+                Toast.makeText(this, getString(PendingCommand.forceCreate ? R.string.vm_has_been_created : R.string.vm_has_been_edited), Toast.LENGTH_LONG).show();
+            } else {
+                DialogUtils.oopsDialog(this, getString(PendingCommand.forceCreate ?  R.string.an_error_occurred_and_vm_was_not_created : R.string.an_error_occurred_and_vm_was_not_modified));
+            }
+
+            PendingCommand.vmId = null;
+            PendingCommand.vmConfig = null;
+            PendingCommand.paramsNotebookConfig = null;
+        }
 
         if (isOpenRomStore) {
             isOpenRomStore = false;

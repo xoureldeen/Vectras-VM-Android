@@ -226,6 +226,24 @@ public class StartVM {
                 }
             }
 
+            if (!vmConfigs.fdb.isEmpty() && !MainSettingsManager.getArch(activity).equals("ARM64")) {
+                if (vmConfigs.fda.isEmpty()) {
+                    if (extras.contains("-fda ")) {
+                        params.add("-drive if=floppy,file='" + vmConfigs.fdb + "'");
+                    } else {
+                        params.add("-fda");
+                        params.add("'" + vmConfigs.fdb + "'");
+                    }
+                } else {
+                    if (extras.contains("-fdb ")) {
+                        params.add("-drive if=floppy,file='" + vmConfigs.fdb + "'");
+                    } else {
+                        params.add("-fdb");
+                        params.add("'" + vmConfigs.fdb + "'");
+                    }
+                }
+            }
+
             if (vmConfigs.sharedFolder) {
                 String driveParams = "-drive ";
                 driveParams += "file=fat:rw:'"; //Disk Drives are always Read/Write

@@ -299,7 +299,7 @@
     <string name="note_for_selecting_ppc">Bạn có thể chạy các phiên bản Mac OS cũ hơn và các hệ điều hành khác được thiết kế cho kiến trúc PowerPC.</string>
     <string name="note_for_selecting_import">Bạn có thể nhập ngay bằng cách chọn tệp ở định dạng cvbi.</string>
     <string name="note_for_selecting_qemu">Tìm hiểu thêm về trình giả lập mã nguồn mở này.</string>
-    <string name="create_command">Create command</string>
+    <string name="create_command">Param Notebook</string>
     <string name="note_for_selecting_create_command">Tạo máy ảo mới cho Vectras VM với khả năng tùy chỉnh dễ dàng hơn.</string>
     <string name="import_or_choose_an_architecture_to_start_creating">Nhập hoặc chọn một kiến trúc để bắt đầu tạo.</string>
     <string name="set_arch_universal_note">Bạn nghĩ ở đây có kéo thả? Thử kéo và thả tệp cvbi vào thẻ Nhập thử đi.</string>
@@ -579,6 +579,7 @@
     <string name="hard_drive_0">Ổ cứng 0</string>
     <string name="hard_drive_1">Ổ cứng 1</string>
     <string name="optical_drive">Ổ quang</string>
+    <string name="vm_creator_this_file_is_already_in_use_content">Tệp này đã được đùng ở một nơi khác của máy ảo. Bạn cần tìm và loại bỏ hoặc đổi tên nó và chọn lại.</string>
 
     <!--======================TERMUX STRINGS====================-->
     <string name="application_name" translatable="false">Vterm</string>

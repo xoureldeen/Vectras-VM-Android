@@ -538,6 +538,10 @@ public class VMCreatorActivity extends AppCompatActivity {
                 if (current.fda!= null && !current.fda.isEmpty()) {
                     setDrive(SELECT_FLOPPY_A_FILE_MODE, (current.fda.contains("/") ? "" : VmFileManager.getPath(vmID)).concat(current.fda));
                 }
+
+                if (current.fdb!= null && !current.fdb.isEmpty()) {
+                    setDrive(SELECT_FLOPPY_B_FILE_MODE, (current.fdb.contains("/") ? "" : VmFileManager.getPath(vmID)).concat(current.fdb));
+                }
             }
 
             if (current.imgCdrom != null && !current.imgCdrom.isEmpty()) {
@@ -660,7 +664,7 @@ public class VMCreatorActivity extends AppCompatActivity {
                 _contentDialog = getResources().getString(R.string.qemu_params_is_empty);
             }
 
-            if ((Objects.requireNonNull(binding.drive.getText()).toString().isEmpty()) && (Objects.requireNonNull(binding.tieHd1.getText()).toString().isEmpty()) && (Objects.requireNonNull(binding.cdrom.getText()).toString().isEmpty())) {
+            if (isAllDriveEmpty()) {
                 if (!VMManager.isHaveADisk(Objects.requireNonNull(binding.qemu.getText()).toString())) {
                     if (!_contentDialog.isEmpty()) {
                         _contentDialog += "\n\n";
@@ -729,24 +733,40 @@ public class VMCreatorActivity extends AppCompatActivity {
     }
 
     private DataMainRoms finalVmConfig() {
+        current.vmID = vmID;
+        current.itemArch = MainSettingsManager.getArch(this);
+
         current.itemName = Objects.requireNonNull(binding.title.getText()).toString();
         current.itemIcon = thumbnailPath;
+
+
         current.cpu = cpu;
         current.cores = cores;
         current.threads = threads;
+
+
         current.itemPath = Objects.requireNonNull(binding.drive.getText()).toString();
         current.hd1 = Objects.requireNonNull(binding.tieHd1.getText()).toString();
+
         current.fda = Objects.requireNonNull(binding.tieFda.getText()).toString();
+        current.fdb = Objects.requireNonNull(binding.tieFdb.getText()).toString();
+
         current.imgCdrom = Objects.requireNonNull(binding.cdrom.getText()).toString();
+
         current.sharedFolder = sharedFolder;
-        current.itemExtra = Objects.requireNonNull(binding.qemu.getText()).toString();
-        current.itemArch = MainSettingsManager.getArch(this);
+
+
         current.bootFrom = bootFrom;
         current.isShowBootMenu = isShowBootMenu;
+        current.isUseLocalTime = isUseLocalTime;
+
         current.isUseUefi = isUseUefi;
         current.isUseDefaultBios = isUseDefaultBios;
-        current.isUseLocalTime = isUseLocalTime;
-        current.vmID = vmID;
+
+
+        current.itemExtra = Objects.requireNonNull(binding.qemu.getText()).toString();
+
+
         current.qmpPort = 8080;
 
         return current;
@@ -1139,7 +1159,11 @@ public class VMCreatorActivity extends AppCompatActivity {
 
     private void markDelete(String path) {
         VmFileManager.markPendingDelete(path);
-        VmFileManager.removeTemp(this, vmID, peddingTempFolder + new File(path).getName());
+        deleteTemp(new File(path).getName());
+    }
+
+    private void deleteTemp(String fileName) {
+        VmFileManager.removeTemp(this, vmID, peddingTempFolder + fileName);
     }
 
     public void moveAllFromTemp() {
@@ -1191,6 +1215,9 @@ public class VMCreatorActivity extends AppCompatActivity {
         binding.tilFda.setOnClickListener(v -> pickStorageFile(SELECT_FLOPPY_A_FILE_MODE));
         binding.tilFda.setEndIconOnClickListener(v -> setDrive(SELECT_FLOPPY_A_FILE_MODE, null));
 
+        binding.tieFdb.setOnClickListener(v -> pickStorageFile(SELECT_FLOPPY_B_FILE_MODE));
+        binding.tilFdb.setOnClickListener(v -> pickStorageFile(SELECT_FLOPPY_B_FILE_MODE));
+        binding.tilFdb.setEndIconOnClickListener(v -> setDrive(SELECT_FLOPPY_B_FILE_MODE, null));
 
 
         binding.cdrom.setOnClickListener(v -> pickStorageFile(SELECT_CDROM_0_FILE_MODE));
@@ -1207,6 +1234,7 @@ public class VMCreatorActivity extends AppCompatActivity {
     private final int SELECT_DISK_1_FILE_MODE = 1;
     public final int SELECT_CDROM_0_FILE_MODE = 2;
     public final int SELECT_FLOPPY_A_FILE_MODE = 3;
+    public final int SELECT_FLOPPY_B_FILE_MODE = 4;
     private int PENDING_SELECT_FILE_MODE = 0;
     private String PENDING_OLD_FILE_AFTER_SELECTED_NEW_FILE = "";
 
@@ -1217,7 +1245,7 @@ public class VMCreatorActivity extends AppCompatActivity {
         try {
             if (PENDING_SELECT_FILE_MODE == SELECT_CDROM_0_FILE_MODE) {
                 isoPicker.launch("*/*");
-            } else if (PENDING_SELECT_FILE_MODE == SELECT_FLOPPY_A_FILE_MODE) {
+            } else if (PENDING_SELECT_FILE_MODE == SELECT_FLOPPY_A_FILE_MODE || PENDING_SELECT_FILE_MODE == SELECT_FLOPPY_B_FILE_MODE) {
                     floppyPicker.launch("*/*");
             } else {
                 diskPicker.launch("*/*");
@@ -1287,6 +1315,12 @@ public class VMCreatorActivity extends AppCompatActivity {
     }
 
     private void setDrive(Integer mode, String path) {
+        if (isFileReadyinUse(path)) {
+            DialogUtils.oopsDialog(this, getString(R.string.vm_creator_this_file_is_already_in_use_content));
+            deleteTemp(new File(path).getName());
+            return;
+        }
+
         if (mode != null) PENDING_SELECT_FILE_MODE = mode;
 
         TextInputLayout peddingTextInputLayout = getPeddingStorageInputLayout();
@@ -1295,13 +1329,13 @@ public class VMCreatorActivity extends AppCompatActivity {
         peddingTextInputEditText.setText(path != null ? path : "");
 
         if (path == null || path.isEmpty()) {
-            if (PENDING_SELECT_FILE_MODE == SELECT_CDROM_0_FILE_MODE || PENDING_SELECT_FILE_MODE == SELECT_FLOPPY_A_FILE_MODE) {
+            if (PENDING_SELECT_FILE_MODE == SELECT_CDROM_0_FILE_MODE || PENDING_SELECT_FILE_MODE == SELECT_FLOPPY_A_FILE_MODE || PENDING_SELECT_FILE_MODE == SELECT_FLOPPY_B_FILE_MODE) {
                 peddingTextInputLayout.setEndIconMode(TextInputLayout.END_ICON_NONE);
             } else {
                 peddingTextInputLayout.setEndIconDrawable(R.drawable.add_24px);
             }
         } else {
-            if (PENDING_SELECT_FILE_MODE == SELECT_CDROM_0_FILE_MODE || PENDING_SELECT_FILE_MODE == SELECT_FLOPPY_A_FILE_MODE) {
+            if (PENDING_SELECT_FILE_MODE == SELECT_CDROM_0_FILE_MODE || PENDING_SELECT_FILE_MODE == SELECT_FLOPPY_A_FILE_MODE || PENDING_SELECT_FILE_MODE == SELECT_FLOPPY_B_FILE_MODE) {
                 peddingTextInputLayout.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
                 peddingTextInputLayout.setEndIconDrawable(R.drawable.close_24px);
                 setRemovableDriveEndIconOnClickListener(PENDING_SELECT_FILE_MODE, peddingTextInputLayout);
@@ -1323,6 +1357,8 @@ public class VMCreatorActivity extends AppCompatActivity {
             return binding.cdromField;
         } else if (PENDING_SELECT_FILE_MODE == SELECT_FLOPPY_A_FILE_MODE) {
             return binding.tilFda;
+        } else if (PENDING_SELECT_FILE_MODE == SELECT_FLOPPY_B_FILE_MODE) {
+            return binding.tilFdb;
         } else {
             return binding.driveField;
         }
@@ -1335,9 +1371,32 @@ public class VMCreatorActivity extends AppCompatActivity {
             return binding.cdrom;
         } else if (PENDING_SELECT_FILE_MODE == SELECT_FLOPPY_A_FILE_MODE) {
             return binding.tieFda;
+        } else if (PENDING_SELECT_FILE_MODE == SELECT_FLOPPY_B_FILE_MODE) {
+            return binding.tieFdb;
         } else {
             return binding.drive;
         }
+    }
+
+    private boolean isAllDriveEmpty() {
+        return (Objects.requireNonNull(binding.drive.getText()).toString().isEmpty()) &&
+                (Objects.requireNonNull(binding.tieHd1.getText()).toString().isEmpty()) &&
+                (Objects.requireNonNull(binding.cdrom.getText()).toString().isEmpty()) &&
+                (Objects.requireNonNull(binding.tieFda.getText()).toString().isEmpty()) &&
+                (Objects.requireNonNull(binding.tieFdb.getText()).toString().isEmpty());
+    }
+
+    private boolean isFileReadyinUse(String path) {
+        if (path == null || path.trim().isEmpty()) return false;
+
+        String paramCollection = Objects.requireNonNull(binding.drive.getText()).toString();
+        paramCollection += "\n" + Objects.requireNonNull(binding.tieHd1.getText());
+        paramCollection += "\n" + Objects.requireNonNull(binding.cdrom.getText());
+        paramCollection += "\n" + Objects.requireNonNull(binding.tieFda.getText());
+        paramCollection += "\n" + Objects.requireNonNull(binding.tieFdb.getText());
+        paramCollection += "\n" + Objects.requireNonNull(binding.qemu.getText());
+
+        return paramCollection.contains(path);
     }
 
     private void checkCreateCommandConfig() {

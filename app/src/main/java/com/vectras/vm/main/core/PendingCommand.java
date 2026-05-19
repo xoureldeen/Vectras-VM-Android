@@ -71,4 +71,9 @@ public class PendingCommand {
             }
         }
     }
+
+    public static String vmId;
+    public static String vmConfig;
+    public static String paramsNotebookConfig;
+    public static boolean forceCreate;
 }

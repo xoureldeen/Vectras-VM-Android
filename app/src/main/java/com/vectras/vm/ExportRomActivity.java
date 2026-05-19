@@ -154,6 +154,12 @@ public class ExportRomActivity extends AppCompatActivity {
             vmConfigMap.put("fda", "");
         }
 
+        if (FileUtils.isFileExists(current.fdb)) {
+            vmConfigMap.put("fdb", new File(Objects.requireNonNull(Uri.parse(current.fdb).getPath())).getName());
+        } else {
+            vmConfigMap.put("fdb", "");
+        }
+
         vmConfigMap.put("sharedFolder", current.sharedFolder);
         vmConfigMap.put("bootFrom", current.bootFrom);
         vmConfigMap.put("isShowBootMenu", current.isShowBootMenu);
