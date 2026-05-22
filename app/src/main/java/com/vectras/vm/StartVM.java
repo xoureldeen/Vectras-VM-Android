@@ -9,6 +9,7 @@ import com.vectras.qemu.MainSettingsManager;
 import com.vectras.qemu.utils.RamInfo;
 import com.vectras.vm.creator.VMCreatorSelector;
 import com.vectras.vm.main.vms.DataMainRoms;
+import com.vectras.vm.manager.BatteryEmulatorManager;
 import com.vectras.vm.manager.QemuManager;
 import com.vectras.vm.manager.VmFileManager;
 import com.vectras.vm.settings.ItemSettingsSelector;
@@ -152,53 +153,49 @@ public class StartVM {
                 params.add(hdd0);
             }
 
-            if (vmConfigs.imgCdrom.isEmpty()) {
-                File cdromFile = new File(filesDir + "/data/Vectras/drive.iso");
-
-                if (cdromFile.exists()) {
-                    if (MainSettingsManager.getArch(activity).equals("ARM64")) {
-                        cdrom = " -drive";
-                        cdrom += " if=none,id=cdrom,format=raw,media=cdrom,file='" + cdromFile.getPath() + "'";
-                        cdrom += "-device";
-                        cdrom += " usb-storage,drive=cdrom";
-                        if (!extras.contains("-device nec-usb-xhci")) {
-                            cdrom += " -device";
-                            cdrom += " qemu-xhci";
-                            cdrom += " -device";
-                            cdrom += " nec-usb-xhci";
-                        }
-                    } else {
-                        if (ifType.isEmpty()) {
-                            cdrom = "-cdrom";
-                            cdrom += " '" + cdromFile.getPath() + "'";
-                        } else {
-                            cdrom = "-drive";
-                            cdrom += " media=cdrom";
-                            cdrom += ",file='" + cdromFile.getPath() + "'";
-                        }
-                    }
-
-                    params.add(cdrom);
-                }
-            } else {
+            if (!vmConfigs.imgCdrom.isEmpty()) {
                 if (MainSettingsManager.getArch(activity).equals("ARM64")) {
                     cdrom += " -device";
-                    cdrom += " nec-usb-xhci,id=defaultxhci";
+                    cdrom += " nec-usb-xhci,id=usbopticaldiscreader0";
                     cdrom += " -device";
-                    cdrom += " usb-storage,bus=defaultxhci.0,drive=cdrom";
+                    cdrom += " usb-storage,bus=usbopticaldiscreader0.0,drive=cdromdrive0";
                     cdrom += " -drive";
-                    cdrom += " if=none,id=cdrom,format=raw,media=cdrom,file='" + vmConfigs.imgCdrom + "'";
+                    cdrom += " if=none,id=cdromdrive0,format=raw,media=cdrom,file='" + vmConfigs.imgCdrom + "'";
                 } else {
-                    if (ifType.isEmpty()) {
+                    if (!extras.contains("-cdrom ")) {
                         cdrom = "-cdrom";
                         cdrom += " '" + vmConfigs.imgCdrom + "'";
                     } else {
                         cdrom = "-drive";
-                        cdrom += " media=cdrom";
+                        cdrom += " media=cdromdrive1";
                         cdrom += ",file='" + vmConfigs.imgCdrom + "'";
                     }
                 }
                 params.add(cdrom);
+            }
+
+            if (!vmConfigs.cdrom1.isEmpty()) {
+                String cdromParams;
+                String controllerId = vmConfigs.imgCdrom.isEmpty() ? "usbopticaldiscreader0" : "usbopticaldiscreader1";
+
+                if (MainSettingsManager.getArch(activity).equals("ARM64")) {
+                    cdromParams = " -device";
+                    cdromParams += " nec-usb-xhci,id=" + controllerId;
+                    cdromParams += " -device";
+                    cdromParams += " usb-storage,bus=" + controllerId + ".0,drive=cdromdrive1";
+                    cdromParams += " -drive";
+                    cdromParams += " if=none,id=cdromdrive1,format=raw,media=cdrom,file='" + vmConfigs.cdrom1 + "'";
+                } else {
+                    if (vmConfigs.imgCdrom.isEmpty() && !extras.contains("-cdrom ")) {
+                        cdromParams = "-cdrom";
+                        cdromParams += " '" + vmConfigs.cdrom1 + "'";
+                    } else {
+                        cdromParams = "-drive";
+                        cdromParams += " media=cdromdrive1";
+                        cdromParams += ",file='" + vmConfigs.cdrom1 + "'";
+                    }
+                }
+                params.add(cdromParams);
             }
 
             File hdd1File = new File(filesDir + "/data/Vectras/hdd1.qcow2");
@@ -348,6 +345,11 @@ public class StartVM {
             params.add("defer");
         }
 
+        if (vmConfigs.battery) {
+            if (BatteryEmulatorManager.setup(activity, vmConfigs.vmID))
+                params.add("-acpitable file=" + VmFileManager.getCompiledBatteryAcpi(activity, vmConfigs.vmID));
+        }
+
         return String.join(" ", params);
     }
 
@@ -383,7 +385,7 @@ public class StartVM {
 
                 params += vncParams;
             } else {
-                params += "unix:" + Config.getLocalVNCSocketPath() + ",lossy=off";
+                params += "unix:" + Config.getLocalVNCSocketPath() + (MainSettingsManager.getVncLosslessQuality(context) ? ",lossy=off" : "");
 
                 if (QemuManager.isSupportSetRefreshRate(context))
                     params += ",refresh-rate=" + ((context instanceof Activity activity) ? QemuManager.getAppropriateRefreshRate(activity, mainParams, DeviceUtils.getMaxRefreshRate(activity)) : Integer.parseInt(ItemSettingsSelector.getVncRefreshRateValue(MainSettingsManager.getVncRefreshRate(context))));

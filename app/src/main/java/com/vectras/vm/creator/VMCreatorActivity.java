@@ -83,6 +83,7 @@ public class VMCreatorActivity extends AppCompatActivity {
     private int cpu = 0;
     private int cores = 0;
     private int threads = 0;
+    private boolean isUseBattery = false;
     private boolean isShowBootMenu = false;
     private boolean isUseLocalTime = true;
     private boolean isUseUefi = false;
@@ -206,19 +207,6 @@ public class VMCreatorActivity extends AppCompatActivity {
 
         binding.lineardisclaimer.setOnClickListener(v -> DialogUtils.oneDialog(this, getResources().getString(R.string.dont_miss_out), getResources().getString(R.string.disclaimer_when_using_rom), getResources().getString(R.string.i_agree), true, R.drawable.verified_user_24px, true, null, null));
 
-        binding.cbvShowbootmenu.setOnCheckedChangeListener((v, isChecked) -> isShowBootMenu = isChecked);
-
-        binding.cbvUselocaltime.setOnCheckedChangeListener((v, isChecked) -> isUseLocalTime = isChecked);
-
-        binding.cbvUseuefi.setOnCheckedChangeListener((v, isChecked) -> isUseUefi = isChecked);
-
-        binding.cbvUseDefaultBios.setOnCheckedChangeListener((v, isChecked) -> {
-            isUseDefaultBios = isChecked;
-            binding.cbvUseuefi.setEnabled(isChecked);
-        });
-
-        if (!MainSettingsManager.getArch(this).equals("X86_64"))
-            binding.cbvUseuefi.setVisibility(View.GONE);
 
         binding.sbvCpu.setOnClickListener(v -> VMCreatorSelector.cpu(this, MainSettingsManager.getArch(this), cpu, ((position, name, value) -> {
             cpu = position;
@@ -235,10 +223,31 @@ public class VMCreatorActivity extends AppCompatActivity {
             binding.sbvThread.setSubtitle(name);
         })));
 
+        binding.cbvBattery.setOnCheckedChangeListener((v, isChecked) -> isUseBattery = isChecked);
+
+
+
         binding.sbvBootfrom.setOnClickListener(v -> VMCreatorSelector.bootFrom(this, bootFrom, ((position, name, value) -> {
             bootFrom = position;
             binding.sbvBootfrom.setSubtitle(name);
         })));
+
+        binding.cbvShowbootmenu.setOnCheckedChangeListener((v, isChecked) -> isShowBootMenu = isChecked);
+
+        binding.cbvUselocaltime.setOnCheckedChangeListener((v, isChecked) -> isUseLocalTime = isChecked);
+
+        if (!MainSettingsManager.getArch(this).equals("X86_64")) {
+            binding.cbvUseuefi.setVisibility(View.GONE);
+        } else {
+            binding.cbvUseuefi.setOnCheckedChangeListener((v, isChecked) -> isUseUefi = isChecked);
+        }
+
+        binding.cbvUseDefaultBios.setOnCheckedChangeListener((v, isChecked) -> {
+            isUseDefaultBios = isChecked;
+            binding.cbvUseuefi.setEnabled(isChecked);
+        });
+
+
 
         VmFileManager.removeTemp(this, vmID, peddingTempFolder);
 
@@ -548,6 +557,10 @@ public class VMCreatorActivity extends AppCompatActivity {
                 setDrive(SELECT_CDROM_0_FILE_MODE, (current.imgCdrom.contains("/") ? "" : VmFileManager.getPath(vmID)).concat(current.imgCdrom));
             }
 
+            if (current.cdrom1 != null && !current.cdrom1.isEmpty()) {
+                setDrive(SELECT_CDROM_1_FILE_MODE, (current.cdrom1.contains("/") ? "" : VmFileManager.getPath(vmID)).concat(current.cdrom1));
+            }
+
             if (current.itemIcon != null && !current.itemIcon.isEmpty()) {
                 thumbnailPath = (current.itemIcon.contains("/") ? current.itemIcon : VmFileManager.getPath(vmID, current.itemIcon));
                 updateThumbnailViewer("");
@@ -565,6 +578,9 @@ public class VMCreatorActivity extends AppCompatActivity {
 
             threads = current.threads;
             binding.sbvThread.setSubtitle(String.valueOf(threads + 1));
+
+            isUseBattery = current.battery;
+            binding.cbvBattery.setChecked(isUseBattery);
 
             bootFrom = current.bootFrom;
             binding.sbvBootfrom.setSubtitle(Objects.requireNonNull(VMCreatorSelector.getBootFrom(this, current.bootFrom).get("name")).toString());
@@ -743,6 +759,7 @@ public class VMCreatorActivity extends AppCompatActivity {
         current.cpu = cpu;
         current.cores = cores;
         current.threads = threads;
+        current.battery = isUseBattery;
 
 
         current.itemPath = Objects.requireNonNull(binding.drive.getText()).toString();
@@ -752,6 +769,7 @@ public class VMCreatorActivity extends AppCompatActivity {
         current.fdb = Objects.requireNonNull(binding.tieFdb.getText()).toString();
 
         current.imgCdrom = Objects.requireNonNull(binding.cdrom.getText()).toString();
+        current.cdrom1 = Objects.requireNonNull(binding.tieCdrom1.getText()).toString();
 
         current.sharedFolder = sharedFolder;
 
@@ -1224,6 +1242,10 @@ public class VMCreatorActivity extends AppCompatActivity {
         binding.cdromField.setOnClickListener(v -> pickStorageFile(SELECT_CDROM_0_FILE_MODE));
         binding.cdromField.setEndIconOnClickListener(v -> setDrive(SELECT_CDROM_0_FILE_MODE, null));
 
+        binding.tieCdrom1.setOnClickListener(v -> pickStorageFile(SELECT_CDROM_1_FILE_MODE));
+        binding.tilCdrom1.setOnClickListener(v -> pickStorageFile(SELECT_CDROM_1_FILE_MODE));
+        binding.tilCdrom1.setEndIconOnClickListener(v -> setDrive(SELECT_CDROM_1_FILE_MODE, null));
+
 
 
         binding.svSharedFolder.setSubTitle(AppConfig.sharedFolder);
@@ -1233,8 +1255,9 @@ public class VMCreatorActivity extends AppCompatActivity {
     private final int SELECT_DISK_0_FILE_MODE = 0;
     private final int SELECT_DISK_1_FILE_MODE = 1;
     public final int SELECT_CDROM_0_FILE_MODE = 2;
-    public final int SELECT_FLOPPY_A_FILE_MODE = 3;
-    public final int SELECT_FLOPPY_B_FILE_MODE = 4;
+    public final int SELECT_CDROM_1_FILE_MODE = 3;
+    public final int SELECT_FLOPPY_A_FILE_MODE = 4;
+    public final int SELECT_FLOPPY_B_FILE_MODE = 5;
     private int PENDING_SELECT_FILE_MODE = 0;
     private String PENDING_OLD_FILE_AFTER_SELECTED_NEW_FILE = "";
 
@@ -1243,7 +1266,7 @@ public class VMCreatorActivity extends AppCompatActivity {
         PENDING_OLD_FILE_AFTER_SELECTED_NEW_FILE = Objects.requireNonNull(getPeddingStorageEditText().getText()).toString();
 
         try {
-            if (PENDING_SELECT_FILE_MODE == SELECT_CDROM_0_FILE_MODE) {
+            if (PENDING_SELECT_FILE_MODE == SELECT_CDROM_0_FILE_MODE || PENDING_SELECT_FILE_MODE == SELECT_CDROM_1_FILE_MODE) {
                 isoPicker.launch("*/*");
             } else if (PENDING_SELECT_FILE_MODE == SELECT_FLOPPY_A_FILE_MODE || PENDING_SELECT_FILE_MODE == SELECT_FLOPPY_B_FILE_MODE) {
                     floppyPicker.launch("*/*");
@@ -1329,13 +1352,13 @@ public class VMCreatorActivity extends AppCompatActivity {
         peddingTextInputEditText.setText(path != null ? path : "");
 
         if (path == null || path.isEmpty()) {
-            if (PENDING_SELECT_FILE_MODE == SELECT_CDROM_0_FILE_MODE || PENDING_SELECT_FILE_MODE == SELECT_FLOPPY_A_FILE_MODE || PENDING_SELECT_FILE_MODE == SELECT_FLOPPY_B_FILE_MODE) {
+            if (PENDING_SELECT_FILE_MODE == SELECT_CDROM_0_FILE_MODE || PENDING_SELECT_FILE_MODE == SELECT_CDROM_1_FILE_MODE || PENDING_SELECT_FILE_MODE == SELECT_FLOPPY_A_FILE_MODE || PENDING_SELECT_FILE_MODE == SELECT_FLOPPY_B_FILE_MODE) {
                 peddingTextInputLayout.setEndIconMode(TextInputLayout.END_ICON_NONE);
             } else {
                 peddingTextInputLayout.setEndIconDrawable(R.drawable.add_24px);
             }
         } else {
-            if (PENDING_SELECT_FILE_MODE == SELECT_CDROM_0_FILE_MODE || PENDING_SELECT_FILE_MODE == SELECT_FLOPPY_A_FILE_MODE || PENDING_SELECT_FILE_MODE == SELECT_FLOPPY_B_FILE_MODE) {
+            if (PENDING_SELECT_FILE_MODE == SELECT_CDROM_0_FILE_MODE || PENDING_SELECT_FILE_MODE == SELECT_CDROM_1_FILE_MODE || PENDING_SELECT_FILE_MODE == SELECT_FLOPPY_A_FILE_MODE || PENDING_SELECT_FILE_MODE == SELECT_FLOPPY_B_FILE_MODE) {
                 peddingTextInputLayout.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
                 peddingTextInputLayout.setEndIconDrawable(R.drawable.close_24px);
                 setRemovableDriveEndIconOnClickListener(PENDING_SELECT_FILE_MODE, peddingTextInputLayout);
@@ -1355,6 +1378,8 @@ public class VMCreatorActivity extends AppCompatActivity {
             return binding.tilHd1;
         } else if (PENDING_SELECT_FILE_MODE == SELECT_CDROM_0_FILE_MODE) {
             return binding.cdromField;
+        } else if (PENDING_SELECT_FILE_MODE == SELECT_CDROM_1_FILE_MODE) {
+            return binding.tilCdrom1;
         } else if (PENDING_SELECT_FILE_MODE == SELECT_FLOPPY_A_FILE_MODE) {
             return binding.tilFda;
         } else if (PENDING_SELECT_FILE_MODE == SELECT_FLOPPY_B_FILE_MODE) {
@@ -1369,6 +1394,8 @@ public class VMCreatorActivity extends AppCompatActivity {
             return binding.tieHd1;
         } else if (PENDING_SELECT_FILE_MODE == SELECT_CDROM_0_FILE_MODE) {
             return binding.cdrom;
+        } else if (PENDING_SELECT_FILE_MODE == SELECT_CDROM_1_FILE_MODE) {
+            return binding.tieCdrom1;
         } else if (PENDING_SELECT_FILE_MODE == SELECT_FLOPPY_A_FILE_MODE) {
             return binding.tieFda;
         } else if (PENDING_SELECT_FILE_MODE == SELECT_FLOPPY_B_FILE_MODE) {
@@ -1382,6 +1409,7 @@ public class VMCreatorActivity extends AppCompatActivity {
         return (Objects.requireNonNull(binding.drive.getText()).toString().isEmpty()) &&
                 (Objects.requireNonNull(binding.tieHd1.getText()).toString().isEmpty()) &&
                 (Objects.requireNonNull(binding.cdrom.getText()).toString().isEmpty()) &&
+                (Objects.requireNonNull(binding.tieCdrom1.getText()).toString().isEmpty()) &&
                 (Objects.requireNonNull(binding.tieFda.getText()).toString().isEmpty()) &&
                 (Objects.requireNonNull(binding.tieFdb.getText()).toString().isEmpty());
     }
@@ -1392,6 +1420,7 @@ public class VMCreatorActivity extends AppCompatActivity {
         String paramCollection = Objects.requireNonNull(binding.drive.getText()).toString();
         paramCollection += "\n" + Objects.requireNonNull(binding.tieHd1.getText());
         paramCollection += "\n" + Objects.requireNonNull(binding.cdrom.getText());
+        paramCollection += "\n" + Objects.requireNonNull(binding.tieCdrom1.getText());
         paramCollection += "\n" + Objects.requireNonNull(binding.tieFda.getText());
         paramCollection += "\n" + Objects.requireNonNull(binding.tieFdb.getText());
         paramCollection += "\n" + Objects.requireNonNull(binding.qemu.getText());

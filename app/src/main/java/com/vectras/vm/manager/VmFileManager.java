@@ -19,6 +19,7 @@ public class VmFileManager {
     public static final String SNAPSHOT_SH_FILE_NAME = "snapshot.sh";
     public static final String SNAPSHOT_BIN_FILE_NAME = "snapshot.bin";
     public static final String CREATE_COMMAND_CONFIG_FILE_NAME = "cqcm.json";
+    public static final String COMPILED_BATERRY_ACPI_FILE_NAME = "battery.aml";
     public static final String LOG_FILE_NAME = "vm.log";
     public static final String TEXT_MARK_VM_PATH = "OhnoIjustrealizeditsmidnightandIstillhavetodothis";
     public static final String TEXT_MARK_EXTERNAL_DATA_PATH = "%external_data%";
@@ -230,6 +231,17 @@ public class VmFileManager {
     // Find the location of the audio file if getExternalCacheDir() is null.
     public static String findAudioRaw(Context context, String vmId) {
         String audioFilePath = VmFileManager.getInternalTempPath(context, vmId, AUDIO_STREAM_FILE_NAME);
+        if (FileUtils.isFileExists(audioFilePath)) return audioFilePath;
+        return VmFileManager.getAudioRaw(context, vmId);
+    }
+
+    public static String getCompiledBatteryAcpi(Context context, String vmId) {
+        return VmFileManager.getTempPath(context, vmId, COMPILED_BATERRY_ACPI_FILE_NAME);
+    }
+
+    // Find the location of the aml file if getExternalCacheDir() is null.
+    public static String findCompiledBatteryAcpi(Context context, String vmId) {
+        String audioFilePath = VmFileManager.getInternalTempPath(context, vmId, COMPILED_BATERRY_ACPI_FILE_NAME);
         if (FileUtils.isFileExists(audioFilePath)) return audioFilePath;
         return VmFileManager.getAudioRaw(context, vmId);
     }

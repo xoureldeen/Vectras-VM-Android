@@ -12,9 +12,11 @@ import android.view.Window;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.qemu.MainVNCActivity;
 import com.vectras.vm.R;
+import com.vectras.vm.databinding.ControlsFragmentBinding;
 import com.vectras.vm.x11.X11Activity;
 
 public class ControlersOptionsFragment extends DialogFragment {
+    public ControlsFragmentBinding binding;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -22,48 +24,48 @@ public class ControlersOptionsFragment extends DialogFragment {
         alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         alertDialog.setContentView(R.layout.fragment_controlers_options);
-        alertDialog.findViewById(R.id.gamepadBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainSettingsManager.setControlMode(getActivity(), "G");
-                if (MainSettingsManager.getVmUi(getActivity()).equals("X11")) {
-                    if (X11Activity.desktop != null ) X11Activity.desktop.setVisibility(View.GONE);
-                    if (X11Activity.gamepad != null ) X11Activity.gamepad.setVisibility(View.VISIBLE);
-                } else if (MainSettingsManager.getVmUi(getActivity()).equals("VNC")) {
-                    MainVNCActivity.desktop.setVisibility(View.GONE);
-                    MainVNCActivity.gamepad.setVisibility(View.VISIBLE);
-                }
-                alertDialog.cancel();
+        alertDialog.findViewById(R.id.gamepadBtn).setOnClickListener(v -> {
+            MainSettingsManager.setControlMode(getActivity(), "G");
+            if (MainSettingsManager.getVmUi(getActivity()).equals("X11")) {
+                if (X11Activity.desktop != null ) X11Activity.desktop.setVisibility(View.GONE);
+                if (X11Activity.gamepad != null ) X11Activity.gamepad.setVisibility(View.VISIBLE);
+            } else if (MainSettingsManager.getVmUi(getActivity()).equals("VNC")) {
+                binding.desktop.setVisibility(View.GONE);
+                binding.gamepad.setVisibility(View.VISIBLE);
             }
+            alertDialog.cancel();
         });
-        alertDialog.findViewById(R.id.desktopBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainSettingsManager.setControlMode(getActivity(), "D");
-                if (MainSettingsManager.getVmUi(getActivity()).equals("X11")) {
-                    if (X11Activity.desktop != null ) X11Activity.desktop.setVisibility(View.VISIBLE);
-                    if (X11Activity.gamepad != null ) X11Activity.gamepad.setVisibility(View.GONE);
-                } else if (MainSettingsManager.getVmUi(getActivity()).equals("VNC")) {
-                    MainVNCActivity.desktop.setVisibility(View.VISIBLE);
-                    MainVNCActivity.gamepad.setVisibility(View.GONE);
-                }
-                alertDialog.cancel();
+        alertDialog.findViewById(R.id.desktopBtn).setOnClickListener(v -> {
+            MainSettingsManager.setControlMode(getActivity(), "D");
+            if (MainSettingsManager.getVmUi(getActivity()).equals("X11")) {
+                if (X11Activity.desktop != null ) X11Activity.desktop.setVisibility(View.VISIBLE);
+                if (X11Activity.gamepad != null ) X11Activity.gamepad.setVisibility(View.GONE);
+            } else if (MainSettingsManager.getVmUi(getActivity()).equals("VNC")) {
+                binding.desktop.setVisibility(View.VISIBLE);
+                binding.gamepad.setVisibility(View.GONE);
             }
+            alertDialog.cancel();
         });
-        alertDialog.findViewById(R.id.hideBtn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainSettingsManager.setControlMode(getActivity(), "H");
-                if (MainSettingsManager.getVmUi(getActivity()).equals("X11")) {
-                    if (X11Activity.desktop != null) X11Activity.desktop.setVisibility(View.GONE);
-                    if (X11Activity.gamepad != null) X11Activity.gamepad.setVisibility(View.GONE);
-                } else if (MainSettingsManager.getVmUi(getActivity()).equals("VNC")) {
-                    if (MainVNCActivity.desktop != null) MainVNCActivity.desktop.setVisibility(View.GONE);
-                    if (MainVNCActivity.gamepad != null) MainVNCActivity.gamepad.setVisibility(View.GONE);
-                }
-                alertDialog.cancel();
+        alertDialog.findViewById(R.id.hideBtn).setOnClickListener(v -> {
+            MainSettingsManager.setControlMode(getActivity(), "H");
+            if (MainSettingsManager.getVmUi(getActivity()).equals("X11")) {
+                if (X11Activity.desktop != null) X11Activity.desktop.setVisibility(View.GONE);
+                if (X11Activity.gamepad != null) X11Activity.gamepad.setVisibility(View.GONE);
+            } else if (MainSettingsManager.getVmUi(getActivity()).equals("VNC")) {
+                binding.desktop.setVisibility(View.GONE);
+                binding.gamepad.setVisibility(View.GONE);
             }
+            alertDialog.cancel();
         });
+
+        if (binding != null) {
+            alertDialog.findViewById(R.id.hide_all).setVisibility(View.VISIBLE);
+
+            alertDialog.findViewById(R.id.hide_all).setOnClickListener(v -> {
+                binding.mainControl.setVisibility(View.GONE);
+                alertDialog.cancel();
+            });
+        }
         alertDialog.show();
         return alertDialog;
     }

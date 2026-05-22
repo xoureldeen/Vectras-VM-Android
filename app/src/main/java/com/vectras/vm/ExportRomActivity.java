@@ -130,6 +130,8 @@ public class ExportRomActivity extends AppCompatActivity {
         vmConfigMap.put("cores", current.cores);
         vmConfigMap.put("threads", current.threads);
 
+        vmConfigMap.put("battery", current.battery);
+
         boolean isUsingDiskInQemuExtraParams = VMManager.isHaveADisk(current.itemExtra);
 
         if (FileUtils.isFileExists(current.itemPath)) {
@@ -146,6 +148,12 @@ public class ExportRomActivity extends AppCompatActivity {
             vmConfigMap.put("cdrom", new File(Objects.requireNonNull(Uri.parse(current.imgCdrom).getPath())).getName());
         } else {
             vmConfigMap.put("cdrom", isUsingDiskInQemuExtraParams || FileUtils.isFileExists(Objects.requireNonNull(vmConfigMap.get("drive")).toString()) ? "" : VMManager.quickScanISOFileInFolder(getRomPath));
+        }
+
+        if (FileUtils.isFileExists(current.cdrom1)) {
+            vmConfigMap.put("cdrom1", new File(Objects.requireNonNull(Uri.parse(current.cdrom1).getPath())).getName());
+        } else {
+            vmConfigMap.put("cdrom1", isUsingDiskInQemuExtraParams || FileUtils.isFileExists(Objects.requireNonNull(vmConfigMap.get("drive")).toString()) ? "" : VMManager.quickScanISOFileInFolder(getRomPath));
         }
 
         if (FileUtils.isFileExists(current.fda)) {

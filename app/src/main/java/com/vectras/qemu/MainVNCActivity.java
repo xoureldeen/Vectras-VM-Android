@@ -28,7 +28,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.StrictMode;
 import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -76,6 +75,11 @@ import com.vectras.vm.utils.UIUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import org.json.JSONObject;
 
@@ -106,8 +110,6 @@ public class MainVNCActivity extends VncCanvasActivity {
 
     public boolean ctrlClicked = false;
     public boolean altClicked = false;
-    public static LinearLayout desktop;
-    public static LinearLayout gamepad;
     private final ArrayList<HashMap<String, Object>> listmapForSendKey = new ArrayList<>();
     private boolean isConnected = false;
 
@@ -165,18 +167,15 @@ public class MainVNCActivity extends VncCanvasActivity {
 
         onFitToScreen();
 
-        desktop = findViewById(R.id.desktop);
-        gamepad = findViewById(R.id.gamepad);
-
         if (Objects.equals(MainSettingsManager.getControlMode(this), "D")) {
-            desktop.setVisibility(View.VISIBLE);
-            gamepad.setVisibility(View.GONE);
+            bindingControls.desktop.setVisibility(View.VISIBLE);
+            bindingControls.gamepad.setVisibility(View.GONE);
         } else if (Objects.equals(MainSettingsManager.getControlMode(this), "G")) {
-            desktop.setVisibility(View.GONE);
-            gamepad.setVisibility(View.VISIBLE);
+            bindingControls.desktop.setVisibility(View.GONE);
+            bindingControls.gamepad.setVisibility(View.VISIBLE);
         } else if (Objects.equals(MainSettingsManager.getControlMode(this), "H")) {
-            desktop.setVisibility(View.GONE);
-            gamepad.setVisibility(View.GONE);
+            bindingControls.desktop.setVisibility(View.GONE);
+            bindingControls.gamepad.setVisibility(View.GONE);
         }
 
         binding.lnNosignal.setOnClickListener(v -> {
@@ -791,9 +790,10 @@ public class MainVNCActivity extends VncCanvasActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         if (bindingSendKey.sendkeylayout.getVisibility() == View.VISIBLE) {
             bindingSendKey.sendkeylayout.setVisibility(View.GONE);
+        } else if (bindingControls.mainControl.getVisibility() == View.GONE) {
+            bindingControls.mainControl.setVisibility(View.VISIBLE);
         } else {
             FrameLayout l = findViewById(R.id.mainControl);
             if (l != null) {
@@ -805,7 +805,7 @@ public class MainVNCActivity extends VncCanvasActivity {
             started = false;
 
             if (streamAudio != null && !VmAudioManager.currentVmId.equals(Config.vmID)) streamAudio.setCross(null);
-            finish();
+            super.onBackPressed();
         }
     }
 
@@ -872,13 +872,28 @@ public class MainVNCActivity extends VncCanvasActivity {
         binding.lnNosignal.setVisibility(View.GONE);
         binding.lnConnecting.setVisibility(View.VISIBLE);
 
-        new Thread(() -> {
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Future<Boolean> future = executor.submit(() ->
+                FileUtils.isFileExists(Config.getLocalQMPSocketPath())
+        );
 
-            boolean isVMRunning = FileUtils.isFileExists(Config.getLocalQMPSocketPath());
+        new Thread(() -> {
+            boolean isVMRunning = false;
+            try {
+                isVMRunning = future.get(3, TimeUnit.SECONDS);
+            } catch (TimeoutException e) {
+                future.cancel(true);
+            } catch (Exception e) {
+                Log.e(TAG, "isQMPPortOpening: ", e);
+            } finally {
+                executor.shutdown();
+            }
+
+            if (isDestroyed() || isFinishing()) return;
+
+            boolean finalIsVMRunning = isVMRunning;
             runOnUiThread(() -> {
-                if (isVMRunning) {
+                if (finalIsVMRunning) {
                     // Try reconnect.
                     tryReconnect(true);
                 } else if (isFinish) {
@@ -1028,12 +1043,7 @@ public class MainVNCActivity extends VncCanvasActivity {
             return false;
         });
 
-        bindingControls.btnMode.setOnClickListener(v -> {
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            // Create and show the dialog.
-            ControlersOptionsFragment newFragment = new ControlersOptionsFragment();
-            newFragment.show(ft, "Controllers");
-        });
+        bindingControls.btnMode.setOnClickListener(v -> showSwitchControlLayoutDialog());
 
         bindingControls.btnSettings.setOnClickListener(v -> {
             VmControllerDialog vmControllerDialog = new VmControllerDialog();
@@ -1566,5 +1576,13 @@ public class MainVNCActivity extends VncCanvasActivity {
 
     public String getPath(Uri uri) {
         return FileUtils.getPath(this, uri);
+    }
+
+    private void showSwitchControlLayoutDialog() {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        // Create and show the dialog.
+        ControlersOptionsFragment newFragment = new ControlersOptionsFragment();
+        newFragment.binding = binding.controlsfragment;
+        newFragment.show(ft, "Controllers");
     }
 }

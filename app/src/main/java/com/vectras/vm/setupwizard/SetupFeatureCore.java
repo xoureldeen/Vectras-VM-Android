@@ -203,6 +203,20 @@ public class SetupFeatureCore {
         }
     }
 
+    public static String readTextFromAssets(Context context, String fileName) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        BufferedReader reader = new BufferedReader(
+                new InputStreamReader(context.getAssets().open(fileName))
+        );
+
+        String line;
+        while ((line = reader.readLine()) != null) {
+            sb.append(line).append("\n");
+        }
+        reader.close();
+        return sb.toString();
+    }
+
     public static void setDNS(Context context) {
         String filesDir = context.getFilesDir().getAbsolutePath();
         File rootDir = new File(filesDir + "/distro/root");

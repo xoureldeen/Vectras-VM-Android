@@ -14,6 +14,12 @@ public class QemuManager {
         return Terminal.executeShellCommandWithResult(getQemuExecutableFile(context) + " -vnc help", context).contains("refresh-rate");
     }
 
+    public static boolean isSupportAcpiTable(Context context) {
+        String currentArch = MainSettingsManager.getArch(context);
+
+        return currentArch.equals(MainSettingsManager.X86_64_ARCH) || currentArch.equals(MainSettingsManager.I386_ARCH);
+    }
+
     public static int getAppropriateRefreshRate(Context context, String params, int max) {
         int result = DEFAULT_REFRESH_RATE;
 

@@ -52,6 +52,9 @@ public class VNCSettingsActivity extends AppCompatActivity {
         binding.swForcerefesh.setOnCheckedChangeListener((buttonView, isChecked) -> MainSettingsManager.setForceRefeshVNCDisplay(this, isChecked));
         binding.lnForcerefesh.setOnClickListener(v -> binding.swForcerefesh.toggle());
 
+        binding.swLossless.setOnCheckedChangeListener((buttonView, isChecked) -> MainSettingsManager.setVncLosslessQuality(this, isChecked));
+        binding.lnForceLossless.setOnClickListener(v -> binding.swLossless.toggle());
+
         binding.sbvRefreshRate.setOnClickListener(v -> ItemSettingsSelector.vncRefreshRate(this, MainSettingsManager.getVncRefreshRate(this), ((position, name, value) -> {
             MainSettingsManager.setVncRefreshRate(this, position);
             binding.sbvRefreshRate.setSubtitle(name);
@@ -61,6 +64,7 @@ public class VNCSettingsActivity extends AppCompatActivity {
         binding.lnExternal.setOnClickListener( v -> startActivity(new Intent(this, ExternalVNCSettingsActivity.class)));
 
         binding.swForcerefesh.setChecked(MainSettingsManager.getForceRefeshVNCDisplay(this));
+        binding.swLossless.setChecked(MainSettingsManager.getVncLosslessQuality(this));
         binding.sbvRefreshRate.setSubtitle(ItemSettingsSelector.getVncRefreshRateValue(MainSettingsManager.getVncRefreshRate(this)));
         binding.swExternal.setChecked(MainSettingsManager.getVncExternal(this));
 
@@ -72,6 +76,7 @@ public class VNCSettingsActivity extends AppCompatActivity {
     private void uiController(boolean isEnabled) {
         binding.lnAllOptions.setAlpha(isEnabled ? 1f : 0.5f);
         binding.lnForcerefesh.setEnabled(isEnabled);
+        binding.lnForceLossless.setEnabled(isEnabled);
         binding.sbvRefreshRate.setEnabled(isEnabled);
         binding.lnExternal.setEnabled(isEnabled);
         binding.swExternal.setEnabled(isEnabled);
