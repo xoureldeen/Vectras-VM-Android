@@ -9,6 +9,7 @@ import com.vectras.vm.AppConfig;
 import com.vectras.vm.R;
 import com.vectras.vm.StartVM;
 import com.vectras.vm.VMManager;
+import com.vectras.vm.manager.VmFileManager;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vterm.Terminal;
@@ -59,10 +60,12 @@ public class PendingCommand {
 
                     Config.vmID = "quick_run_" + VMManager.idGenerator();
                     new Thread(() -> {
+                        VmFileManager.removeTemp(activity, Config.vmID);
+
                         String env = StartVM.env(activity, command, "", true);
                         FileUtils.createDirectory(AppConfig.vmFolder + Config.vmID);
                         activity.runOnUiThread(() -> {
-                            MainStartVM.startNow(activity, "Quick run", env, Config.vmID, null);
+                            MainStartVM.startNow(activity, "Quick run", env, Config.vmID, null, null);
                             VMManager.lastQemuCommand = command;
                             command = "";
                         });

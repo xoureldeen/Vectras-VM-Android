@@ -1,10 +1,15 @@
 package com.vectras.vm.utils;
 
+import static androidx.core.content.ContextCompat.registerReceiver;
+
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.usage.StorageStatsManager;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
@@ -110,5 +115,25 @@ public class DeviceUtils {
             }
         }
         return Math.round(maxHz);
+    }
+
+    public static int getBatteryPropertyCapacity(Context context) {
+        BatteryManager bm= (BatteryManager) context.getSystemService(Context.BATTERY_SERVICE);
+        return bm.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
+    }
+
+    public static int getBatteryCycleCount(Context context) {
+        IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        Intent batteryStatus = context.registerReceiver(null, filter);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            if (batteryStatus == null) return -1;
+
+            return  batteryStatus.getIntExtra(
+                    BatteryManager.EXTRA_CYCLE_COUNT, -1
+            );
+        }
+
+        return -1;
     }
 }

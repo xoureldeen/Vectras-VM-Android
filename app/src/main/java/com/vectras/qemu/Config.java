@@ -165,6 +165,10 @@ public class Config {
         return Config.getCacheDir()+ "/" + vmID + "/";
     }
 
+    public static String getCacheVMPath(String vmId) {
+        return Config.getCacheDir()+ "/" + vmId + "/";
+    }
+
     public static enum MouseMode {
         Trackpad, External
     }

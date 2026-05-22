@@ -45,6 +45,8 @@ public class DataMainRoms {
     )
     public String imgCdrom = "";
 
+    public String cdrom1 = "";
+
     public String fda = "";
 
     public String fdb = "";
@@ -64,4 +66,6 @@ public class DataMainRoms {
     public boolean isUseUefi = false;
 
     public boolean isUseDefaultBios = true;
+
+    public boolean battery = false;
 }

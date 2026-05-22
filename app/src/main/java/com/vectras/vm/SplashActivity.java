@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.os.LocaleListCompat;
 import androidx.preference.PreferenceManager;
 
+import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.qemu.utils.FileInstaller;
 import com.vectras.vm.crashtracker.LastCrashActivity;
@@ -117,6 +118,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private void cleanUp() {
         FileUtils.delete(AppConfig.vmFolder + "QuickRun");
+        FileUtils.delete(Config.getCacheDir());
         VmFileManager.quickCleanUp(this);
     }
 

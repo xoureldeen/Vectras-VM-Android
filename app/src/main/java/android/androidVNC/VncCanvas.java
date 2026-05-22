@@ -545,6 +545,11 @@ public class VncCanvas extends AppCompatImageView {
 
 	public void onDestroy() {
 		Log.v(TAG, "Cleaning up resources");
+
+		if (rfb != null) {
+			rfb.close();
+		}
+
 		if (bitmapData != null) {
 			bitmapData.dispose();
 		}
