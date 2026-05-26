@@ -2053,6 +2053,24 @@
     "id": ""
   },
   {
+    "rom_name": "Windows 98 SE",
+    "rom_icon": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/f4c4498f-f0a5-4c50-aed5-5ac63c62a584/dfh0l57-c8831536-3a32-4afa-991e-7d53b23c6e7d.png/v1/fill/w_970,h_824/windows_98_logo_by_itzzezzo_dfh0l57-pre.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTI4MiIsInBhdGgiOiIvZi9mNGM0NDk4Zi1mMGE1LTRjNTAtYWVkNS01YWM2M2M2MmE1ODQvZGZoMGw1Ny1jODgzMTUzNi0zYTMyLTRhZmEtOTkxZS03ZDUzYjIzYzZlN2QucG5nIiwid2lkdGgiOiI8PTE1MTAifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.W6fmE2AyFTMXuc7rFBDGAuQEi36q7NlgoNPvu8aH0D0",
+    "rom_url": "https://youtu.be/L6ADe5aVp0Y",
+    "rom_path": "Windows 98.cvbi",
+    "rom_avail": true,
+    "rom_size": "Lightweight operating system",
+    "rom_arch": "X86_64",
+    "rom_kernel": "windows",
+    "rom_extra": "",
+    "final_rom_file_name": "",
+    "desc": "This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 98 is a consumer-oriented operating system developed by Microsoft as part of its Windows 9x family of Microsoft Windows operating systems. It was the second operating system in the 9x line, as the successor to Windows 95. It was released to manufacturing on May 15, 1998, and generally to retail on June 25, 1998. Like its predecessor, it is a hybrid 16-bit and 32-bit monolithic product with the boot stage based on MS-DOS.",
+    "file_size": "90 MB",
+    "creator": "Nguyen Bao An Bui",
+    "verified": true,
+    "vecid": "windows98qcow2",
+    "id": "99637"
+  },
+  {
     "rom_name": "Windows 98 Plus!",
     "rom_icon": "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/f4c4498f-f0a5-4c50-aed5-5ac63c62a584/dfh0l57-c8831536-3a32-4afa-991e-7d53b23c6e7d.png/v1/fill/w_970,h_824/windows_98_logo_by_itzzezzo_dfh0l57-pre.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTI4MiIsInBhdGgiOiIvZi9mNGM0NDk4Zi1mMGE1LTRjNTAtYWVkNS01YWM2M2M2MmE1ODQvZGZoMGw1Ny1jODgzMTUzNi0zYTMyLTRhZmEtOTkxZS03ZDUzYjIzYzZlN2QucG5nIiwid2lkdGgiOiI8PTE1MTAifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.W6fmE2AyFTMXuc7rFBDGAuQEi36q7NlgoNPvu8aH0D0",
     "rom_url": "https://www.mediafire.com/file/8cndpbaaallbqws/98PLUS%2521.qcow2/file",
