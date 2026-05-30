@@ -586,6 +586,11 @@
     <string name="vnc_higher_quality_note">Chất lượng hình ảnh sẽ được cải thiện nhưng độ trễ sẽ cao hơn nếu dùng ngoài.</string>
     <string name="battery">Pin</string>
     <string name="preparing">Đang chuẩn bị…</string>
+    <string name="notification">Thông báo</string>
+    <string name="notification_system_description">Quản lý các loại thông báo và chủ đề.</string>
+    <string name="suggestions_and_tips">Các gợi ý và mẹo</string>
+    <string name="suggestions_and_tips_settings_description">Nhận các gợi ý và mẹo từ chúng tôi.</string>
+    <string name="in_system_settings">Ở cài đặt hệ thống.</string>
 
     <!--======================TERMUX STRINGS====================-->
     <string name="application_name" translatable="false">Vterm</string>
