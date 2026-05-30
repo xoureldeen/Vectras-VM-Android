@@ -94,7 +94,7 @@ public class ThemeActivity extends AppCompatActivity {
     }
 
     private void onBack() {
-        startActivity(new Intent(this, MainSettingsManager.class));
+        //startActivity(new Intent(this, MainSettingsManager.class));
         finish();
     }
 

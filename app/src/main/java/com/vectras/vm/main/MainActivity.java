@@ -69,6 +69,7 @@ import com.vectras.vm.main.monitor.SystemMonitorFragment;
 import com.vectras.vm.main.romstore.RomStoreFragment;
 import com.vectras.vm.main.vms.VmsFragment;
 import com.vectras.vm.logger.VectrasStatus;
+import com.vectras.vm.settings.Settings2Activity;
 import com.vectras.vm.settings.UpdaterActivity;
 import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.DialogUtils;
@@ -363,7 +364,8 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
 
         NotificationUtils.requestPermission(this);
 
-        FCMManager.subscribe();
+        if (MainSettingsManager.getSuggestionsAndTipsNotification(this))
+            FCMManager.subscribe();
     }
 
     @Override
@@ -506,7 +508,7 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
             } else if (id == R.id.navigation_item_view_logs) {
                 showLogsDialog();
             } else if (id == R.id.navigation_item_settings) {
-                startActivity(new Intent(this, MainSettingsManager.class));
+                startActivity(new Intent(this, Settings2Activity.class));
             } else if (id == R.id.navigation_data_explorer) {
 //                startActivity(new Intent(this, DataExplorerActivity.class));
                 FileUtils.openFolder(this, AppConfig.maindirpath);

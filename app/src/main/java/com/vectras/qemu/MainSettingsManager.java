@@ -770,6 +770,13 @@ public class MainSettingsManager extends AppCompatActivity
         return prefs.getBoolean("copyFile", true);
     }
 
+    public static void setcopyFile(Context context, boolean value) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putBoolean("copyFile", value);
+        edit.apply();
+    }
+
     public static void setIfType(Context context, String type) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();
@@ -1251,5 +1258,17 @@ public class MainSettingsManager extends AppCompatActivity
     public static Boolean getVncLosslessQuality(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean("vncLosslessQuality", true);
+    }
+
+    public static void setSuggestionsAndTipsNotification(Context context, Boolean _boolean) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putBoolean("suggestionsAndTipsNotification", _boolean);
+        edit.apply();
+    }
+
+    public static Boolean getSuggestionsAndTipsNotification(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean("suggestionsAndTipsNotification", true);
     }
 }

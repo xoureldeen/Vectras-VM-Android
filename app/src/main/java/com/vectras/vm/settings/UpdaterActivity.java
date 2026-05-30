@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
@@ -19,7 +21,10 @@ import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.AppConfig;
 import com.vectras.vm.R;
 import com.vectras.vm.databinding.ActivityUpdaterBinding;
+import com.vectras.vm.manager.VmFileManager;
 import com.vectras.vm.utils.DialogUtils;
+import com.vectras.vm.utils.FileUtils;
+import com.vectras.vm.utils.IntentUtils;
 import com.vectras.vm.utils.PackageUtils;
 
 import org.json.JSONException;
@@ -34,6 +39,26 @@ public class UpdaterActivity extends AppCompatActivity {
 
     ActivityUpdaterBinding binding;
     String downloadUrl = "";
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            finish();
+            return true;
+        } else if (id == R.id.options) {
+            startActivity(new Intent(this, UpdateSettingsActivity.class));
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.updater_menu, menu);
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
