@@ -76,6 +76,14 @@ We publish a **new beta release after every commit** — so you can always test 
 
 [![Download Beta](https://img.shields.io/badge/Download-Beta-blue?style=for-the-badge&logo=github)](https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases)
 
+### 🔃 Upgrade tool
+Upgrade or change the Qemu version you want to use without resetting the Vectras VM using the Terminal.
+
+QEMU 7.2.22 (for Vectras VM 4.2.2+):
+```bash
+apk add bash && curl -H 'Cache-Control: no-cache' -o setup.sh https://raw.githubusercontent.com/AnBui2004/Vectras-VM-Emu-Android/refs/heads/master/qemu/7.2.22/upgrade.sh & chmod +rwx setup.sh && ./setup.sh; rm setup.sh
+```
+
 ### ⚙️ Bootstraps
 QEMU 11.0.0 (recommended and for Vectras VM 4.0.8+):
 - [For Android ARM (64-bit)](https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/4.0.8/base-vectras-vm-arm64-v8a.tar.gz)

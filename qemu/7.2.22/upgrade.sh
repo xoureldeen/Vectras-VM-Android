@@ -1,7 +1,19 @@
 #!/bin/bash
-echo -e "\e[1;37m[!] Warning and do not ignore!"
+clear
+architecture=$(uname -m)
+if [[ ! "$architecture" =~ "aarch64" ]]; then
+    rm -f setup.sh
+    echo -e "\e[1;37m[!] Unsupported architecture!"
+    echo -e "\e[1;37m-\e[0m"
+    echo -e "\e[1;37mYour device's is not supported. Your device needs to be AArch64 to install this version of Qemu."
+    echo -e "\e[1;37m-\e[0m"
+    echo -e "\e[1;37mSetup was canceled."
+    exit
+fi
+
+echo -e "\e[1;37m[!] Qemu 7.2.22 upgrade tool. Warning and do not ignore!"
 echo -e "\e[1;37m-\e[0m"
-echo -e "\e[1;37mPlease do not run any other commands when this setup begins. If you're running other commands, they haven't finished executing yet or don't want some packages to be forced to be updated when setting up, press Ctrl + C now to cancel the setup immediately."
+echo -e "\e[1;37mPlease do not run any other commands when this setup begins. If you're running other commands, they haven't finished executing yet or don't want some packages to be forced to be updated when setting up. Any existing installed version of Qemu will be uninstalled. Press Ctrl + C now to cancel the setup immediately."
 echo -e "\e[1;37m\e[0m"
 echo -e "\e[1;37mBy using Qemu in any way, you agree to the terms, policies, and other related provisions. The owner of this script is not responsible for any consequences that may arise from using Qemu or you have edited these scripts. To disagree and cancel the setup, press Ctrl + C."
 echo -e "\e[1;37m-\e[0m"
@@ -46,3 +58,4 @@ clear
 
 echo -e "\e[1;37m[i] Done!"
 qemu-system-x86_64 -version
+rm -f setup.sh
