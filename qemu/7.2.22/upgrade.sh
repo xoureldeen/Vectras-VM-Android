@@ -12,25 +12,37 @@ else
     echo "60 seconds elapsed, auto continue."
 fi
 clear
+
 echo -e "\e[1;37m[i] Installing packages..."
 apk update
 apk add perl aria2
 clear
+
+echo -e "\e[1;37m[i] Killing process..."
+pkill -15 -f qemu-system- || true
+sleep 1
+pkill -9 -f qemu-system- || true
+clear
+
 echo -e "\e[1;37m[i] Uninstalling current Qemu..."
 rm -f /usr/local/bin/qemu-*
 rm -f /usr/share/applications/qemu.desktop
 rm -f /usr/share/icons/hicolor/*/qemu.png
 rm -rf /usr/share/qemu
 clear
+
 echo -e "\e[1;37m[i] Downloading..."
 aria2c -x 4 --async-dns=false --disable-ipv6 --check-certificate=false -o setup.tar.gz https://archive.org/download/qemu-7-2-22-for-vectras-vm-nbab/base-vectras-vm-arm64-v8a.tar.gz
 clear
+
 echo -e "\e[1;37m[i] Installing..."
 tar -xzvf setup.tar.gz -C /
 clear
+
 echo -e "\e[1;37m[i] Just a sec..."
 rm -f setup.tar.gz
 chmod 775 /usr/local/bin/qemu*
 clear
+
 echo -e "\e[1;37m[i] Done!"
 qemu-system-x86_64 -version
