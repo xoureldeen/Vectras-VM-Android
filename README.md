@@ -81,7 +81,7 @@ Upgrade or change the Qemu version you want to use without resetting the Vectras
 
 QEMU 7.2.22 (for Vectras VM 4.2.2+):
 ```bash
-apk add bash && curl -H 'Cache-Control: no-cache' -o setup.sh https://raw.githubusercontent.com/AnBui2004/Vectras-VM-Emu-Android/refs/heads/master/qemu/7.2.22/upgrade.sh & chmod +rwx setup.sh && ./setup.sh; rm setup.sh
+apk add bash && curl -H 'Cache-Control: no-cache' -o setup.sh https://raw.githubusercontent.com/AnBui2004/Vectras-VM-Emu-Android/refs/heads/master/qemu/7.2.22/upgrade.sh && chmod +rwx setup.sh && ./setup.sh; rm setup.sh
 ```
 
 ### ⚙️ Bootstraps
