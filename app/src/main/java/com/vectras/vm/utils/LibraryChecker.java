@@ -54,17 +54,23 @@ public class LibraryChecker {
 
     // Method to show the missing libraries dialog
     private void showMissingLibrariesDialog(Activity activity, String missingLibraries) {
-        new AlertDialog.Builder(activity, R.style.MainDialogTheme)
-                .setTitle("Missing Libraries")
-                .setMessage("The following libraries are missing:\n\n" + missingLibraries)
-                .setCancelable(false)
-                .setPositiveButton("Install", (dialog, which) -> {
+        DialogUtils.twoDialog(
+                activity,
+                activity.getString(R.string.missing_packages),
+                activity.getString(R.string.missing_packages_content) + "\n\n" + missingLibraries,
+                activity.getString(R.string.install),
+                activity.getString(R.string.cancel),
+                true,
+                R.drawable.warning_48px,
+                true,
+                () -> {
                     // Create the installation command
                     String installCommand = "apk add " + missingLibraries.replace("\n", " ");
                     new Terminal(context).executeShellCommand(installCommand, true, true, activity);
-                })
-                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
-                .show();
+                },
+                null,
+                null
+        );
     }
 
     // Method to show the "All Libraries Installed" dialog
