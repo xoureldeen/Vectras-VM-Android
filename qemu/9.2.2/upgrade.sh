@@ -38,11 +38,6 @@ else
 fi
 clear
 
-echo -e "\e[1;37m[i] Installing packages..."
-apk update
-apk add perl aria2
-clear
-
 echo -e "\e[1;37m[i] Killing process..."
 pkill -15 -f qemu-system- || true
 sleep 1
