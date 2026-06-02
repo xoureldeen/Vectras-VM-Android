@@ -79,6 +79,11 @@ We publish a **new beta release after every commit** — so you can always test 
 ### 🔃 Upgrade tool
 Upgrade or change the Qemu version you want to use without resetting the Vectras VM using the Terminal.
 
+QEMU 11.0.0 (for Vectras VM 4.0.8+):
+```bash
+apk add bash && curl -H 'Cache-Control: no-cache' -o setup.sh https://raw.githubusercontent.com/AnBui2004/Vectras-VM-Emu-Android/refs/heads/master/qemu/11.0.0/upgrade.sh && chmod +rwx setup.sh && ./setup.sh; rm setup.sh
+```
+
 QEMU 9.2.2 - 3dfx (recommended and for Vectras VM 4.1.1+):
 ```bash
 apk add bash && curl -H 'Cache-Control: no-cache' -o setup.sh https://raw.githubusercontent.com/AnBui2004/Vectras-VM-Emu-Android/refs/heads/master/qemu/9.2.2/upgrade.sh && chmod +rwx setup.sh && ./setup.sh; rm setup.sh
@@ -90,7 +95,7 @@ apk add bash && curl -H 'Cache-Control: no-cache' -o setup.sh https://raw.github
 ```
 
 ### ⚙️ Bootstraps
-QEMU 11.0.0 (recommended and for Vectras VM 4.0.8+):
+QEMU 11.0.0 (for Vectras VM 4.0.8+):
 - [For Android ARM (64-bit)](https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/4.0.8/base-vectras-vm-arm64-v8a.tar.gz)
 - [See more at the Internet Archive](https://archive.org/details/qemu-11-0-0-for-vectras-vm-nbab)
 

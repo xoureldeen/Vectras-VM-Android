@@ -1,30 +1,17 @@
 #!/bin/bash
 clear
-unset qemuurl
 architecture=$(uname -m)
-if [[ "$architecture" =~ "aarch64" ]]; then
-    qemuurl="https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/4.1.1/base-may-2026-vectras-vm-arm64-v8a.tar.gz"
-elif [[ "$architecture" =~ "x86_64" ]]; then
-    qemuurl="https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/3.5.1/base-generic-vectras-vm-x86_64.tar.gz"
-elif [[ "$architecture" =~ "arm" ]]; then
-    qemuurl="https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/3.5.4/base-vectras-vm-armeabi-v7a.tar.gz"
-elif [[ "$architecture" =~ "x86" ]]; then
-    qemuurl="https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/3.5.4/base-vectras-vm-x86.tar.gz"
-elif [[ "$architecture" =~ "i386" || "$architecture" =~ "i686" ]]; then
-    qemuurl="https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/3.5.4/base-vectras-vm-x86.tar.gz"
-fi
-
-if [[ -z "$qemuurl" ]]; then
+if [[ ! "$architecture" =~ "aarch64" ]]; then
+    rm -f setup.sh
     echo -e "\e[1;37m[!] Unsupported architecture!"
     echo -e "\e[1;37m-\e[0m"
-    echo -e "\e[1;37mYour device's is not supported."
+    echo -e "\e[1;37mYour device's is not supported. Your device needs to be AArch64 to install this version of Qemu."
     echo -e "\e[1;37m-\e[0m"
     echo -e "\e[1;37mSetup was canceled."
-    rm -f setup.sh
     exit
 fi
 
-echo -e "\e[1;37m[!] Qemu 9.2.2 upgrade tool. Warning and do not ignore!"
+echo -e "\e[1;37m[!] Qemu 11.0.0 upgrade tool. Warning and do not ignore!"
 echo -e "\e[1;37m-\e[0m"
 echo -e "\e[1;37mPlease do not run any other commands when this setup begins. If you're running other commands, they haven't finished executing yet or don't want some packages to be forced to be updated when setting up. Any existing installed version of Qemu will be uninstalled. Press Ctrl + C now to cancel the setup immediately."
 echo -e "\e[1;37m\e[0m"
@@ -57,7 +44,7 @@ rm -rf /usr/share/qemu
 clear
 
 echo -e "\e[1;37m[i] Downloading..."
-aria2c -x 4 --async-dns=false --disable-ipv6 --check-certificate=false -o setup.tar.gz "$qemuurl"
+aria2c -x 4 --async-dns=false --disable-ipv6 --check-certificate=false -o setup.tar.gz https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/4.0.8/base-vectras-vm-arm64-v8a.tar.gz
 clear
 
 echo -e "\e[1;37m[i] Installing..."
