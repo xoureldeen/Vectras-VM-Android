@@ -64,7 +64,7 @@ public class MainStartVM {
         }
 
         new Thread(() -> {
-            VmFileManager.removeTemp(activity, vmConfig.vmID);
+            if (!VMManager.isVMRunning(activity, vmConfig.vmID)) VmFileManager.removeTemp(activity, vmConfig.vmID);
 
             String env = StartVM.env(activity, vmConfig);
             activity.runOnUiThread(() -> startNow(activity, vmConfig.itemName, env, vmConfig.vmID, vmConfig.itemIcon, dialog));
@@ -163,9 +163,7 @@ public class MainStartVM {
             return;
         }
 
-        if (MainSettingsManager.getSharedFolder(context)
-                && !MainSettingsManager.getArch(context).equals("I386")
-                && FileUtils.getFolderSize(FileUtils.getExternalFilesDirectory(context).getPath() + "/SharedFolder") * Math.pow(10, -6) > 516) {
+        if (env.contains(FileUtils.getExternalFilesDirectory(context).getPath() + "/SharedFolder") && FileUtils.getFolderSize(FileUtils.getExternalFilesDirectory(context).getPath() + "/SharedFolder") * Math.pow(10, -6) > 516) {
             DialogUtils.twoDialog(
                     context,
                     context.getString(R.string.problem_has_been_detected),
@@ -204,24 +202,6 @@ public class MainStartVM {
                 dismissDialog();
                 return;
             }
-        }
-
-        if (MainSettingsManager.getArch(context).equals("ARM64") && MainSettingsManager.getIfType(context).equals("ide") && skipIDEwithARM64DialogInStartVM) {
-            StartVmDialog finalDialog = dialog;
-            DialogUtils.twoDialog(context, context.getString(R.string.problem_has_been_detected), context.getString(R.string.you_cannot_use_IDE_hard_drive_type_with_ARM64), context.getString(R.string.continuetext), context.getString(R.string.cancel), true, R.drawable.warning_48px, true,
-                    () -> {
-                        skipIDEwithARM64DialogInStartVM = true;
-                        startNow(context, vmName, env, finalvmID, thumbnailFile, finalDialog);
-                    }, null, null);
-
-            dismissDialog();
-            return;
-        } else if (skipIDEwithARM64DialogInStartVM) {
-            skipIDEwithARM64DialogInStartVM = false;
-        }
-
-        if (MainSettingsManager.getSharedFolder(context) && MainSettingsManager.getArch(context).equals("I386")) {
-            Toast.makeText(context, R.string.shared_folder_is_not_used_because_i386_does_not_support_it, Toast.LENGTH_LONG).show();
         }
 
         if (MainSettingsManager.getVncExternal(context) &&

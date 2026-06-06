@@ -205,7 +205,6 @@
     <string name="file_format_is_not_supported_hard_drive">Có thể sẽ không hoạt động được vì định dạng tệp không được hỗ trợ. Các định dạng phổ biến được hỗ trợ là qcow2, img, vhd, vhdx, vdi, qcow, vmdk và vpc. Bạn có muốn tiếp tục không?</string>
     <string name="file_format_is_not_supported_optical_drive">Có thể sẽ không hoạt động được vì định dạng tệp không được hỗ trợ. Các định dạng phổ biến được hỗ trợ là iso, img, cdr, và toast. Bạn có muốn tiếp tục không?</string>
     <string name="file_format_is_not_supported_floppy_drive">Có thể sẽ không hoạt động được vì định dạng tệp không được hỗ trợ. Các định dạng phổ biến được hỗ trợ là img, flp và ima. Bạn có muốn tiếp tục không?</string>
-    <string name="you_cannot_use_IDE_hard_drive_type_with_ARM64">Nè bạn không thể sử dụng ổ cứng giao tiếp IDE trong khi dùng kiến trúc ARM64. Nếu bạn tiếp tục, loại giao tiếp ổ cứng mặc định sẽ được sử dụng.</string>
     <string name="error_PROOT_IS_MISSING_0">Hệ thống không hoạt động, các tập tin cần thiết đã biến đi đâu mất rồi. Vấn đề này có thể do cài đặt không chính xác. Bạn có muốn thử cài đặt lại không? Mã lỗi: PROOT_IS_MISSING_0.</string>
     <string name="error_DRIVE_INDEX_0_EXISTS">Đã xảy ra lỗi và máy ảo không thể khởi động. Nhiều ổ đĩa không thể cắm vào cùng một khe cắm. Vui lòng kiểm tra cài đặt máy ảo của bạn và đảm bảo rằng không có ổ đĩa nào được cắm vào cùng một khe cắm. Mã lỗi: DRIVE_INDEX_0_EXISTS.</string>
     <string name="error_X11_NOT_AVAILABLE">Đã xảy ra lỗi và máy ảo không hoạt động. Màn hình X11 tạm thời không khả dụng, vui lòng đóng Vectras VM và thử lại. Bạn có thể thử chuyển sang VNC, nó ổn định hơn. Mã lỗi: X11_NOT_AVAILABLE.</string>
@@ -586,6 +585,13 @@
     <string name="vnc_higher_quality_note">Chất lượng hình ảnh sẽ được cải thiện nhưng độ trễ sẽ cao hơn nếu dùng ngoài.</string>
     <string name="battery">Pin</string>
     <string name="preparing">Đang chuẩn bị…</string>
+    <string name="notification">Thông báo</string>
+    <string name="notification_system_description">Quản lý các loại thông báo và chủ đề.</string>
+    <string name="suggestions_and_tips">Các gợi ý và mẹo</string>
+    <string name="suggestions_and_tips_settings_description">Nhận các gợi ý và mẹo từ chúng tôi.</string>
+    <string name="in_system_settings">Ở cài đặt hệ thống.</string>
+    <string name="missing_packages">Một số gói đang bị thiếu</string>
+    <string name="missing_packages_content">Đây là những gói đang bị thiếu và bạn nên cài đặt chúng:</string>
 
     <!--======================TERMUX STRINGS====================-->
     <string name="application_name" translatable="false">Vterm</string>

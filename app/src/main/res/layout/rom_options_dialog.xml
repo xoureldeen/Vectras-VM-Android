@@ -32,7 +32,7 @@
             style="@style/MaterialAlertDialog.NeutralButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/modify"
+            android:text="@string/edit"
             app:icon="@drawable/edit_24px"
             app:iconTint="?attr/colorSurfaceInverse"
             android:textColor="?attr/colorSurfaceInverse"

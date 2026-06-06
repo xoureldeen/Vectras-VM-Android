@@ -216,7 +216,6 @@
     <string name="file_format_is_not_supported_hard_drive">Things may not work because the file format is not supported. Commonly supported formats include qcow2, img, vhd, vhdx, vdi, qcow, vmdk and vpc. Do you want to continue?</string>
     <string name="file_format_is_not_supported_optical_drive">Things may not work because the file format is not supported. Commonly supported formats include iso, img, cdr, and toast. Do you want to continue?</string>
     <string name="file_format_is_not_supported_floppy_drive">Things may not work because the file format is not supported. Commonly supported formats include img, flp and ima. Do you want to continue?</string>
-    <string name="you_cannot_use_IDE_hard_drive_type_with_ARM64">You cannot use IDE hard drive type with ARM64. If you continue, the default hard drive type will be used.</string>
     <string name="error_PROOT_IS_MISSING_0">The system is not working, necessary files are missing. This problem may be caused by incorrect setup. Do you want to try the setup again? Error code: PROOT_IS_MISSING_0.</string>
     <string name="error_DRIVE_INDEX_0_EXISTS">An error occurred and the virtual machine cannot start. There are two or more drives that cannot be plugged into the same slot. Please check your virtual machine settings and make sure all drives are not plugged into the same slot. Error code: DRIVE_INDEX_0_EXISTS.</string>
     <string name="error_X11_NOT_AVAILABLE">An error occurred and the virtual machine is not running. The X11 display is temporarily unavailable, please exit the Vectras VM and come back to try again. You can try switching to VNC which is more stable. Error code: X11_NOT_AVAILABLE.</string>
@@ -597,6 +596,13 @@
     <string name="vnc_higher_quality_note">Image quality will improve, but the latency will be greater if using external.</string>
     <string name="battery">Battery</string>
     <string name="preparing">Preparing…</string>
+    <string name="notification">Notification</string>
+    <string name="notification_system_description">Manage notification types and topics.</string>
+    <string name="suggestions_and_tips">Suggestions and tips</string>
+    <string name="suggestions_and_tips_settings_description">Receive notifications about our tips and suggestions.</string>
+    <string name="in_system_settings">In system settings.</string>
+    <string name="missing_packages">Missing packages</string>
+    <string name="missing_packages_content">These are the missing packages that you should install:</string>
 
 
     <!--======================TERMUX STRINGS====================-->

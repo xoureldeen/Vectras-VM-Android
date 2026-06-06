@@ -2,7 +2,6 @@ package com.vectras.vm.manager;
 
 import android.androidVNC.ConnectionBean;
 import android.androidVNC.VncCanvas;
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,7 +25,6 @@ import com.vectras.qemu.VNCConfig;
 import com.vectras.vm.AppConfig;
 import com.vectras.vm.R;
 import com.vectras.vm.VMManager;
-import com.vectras.vm.creator.VMCreatorActivity;
 import com.vectras.vm.databinding.DialogChangeRemovableDevicesBinding;
 import com.vectras.vm.main.core.DisplaySystem;
 import com.vectras.vm.main.vms.DataMainRoms;
@@ -97,13 +95,13 @@ public class VmControllerDialog extends DialogFragment {
                         dismiss();
                     });
 
-                    binding.lnEdit.setOnClickListener(v -> {
-                        if (isAdded()) {
-                            DataMainRoms vmConfig = VMManager.getVMConfig(position);
-                            startActivity(new Intent(requireActivity(), VMCreatorActivity.class).putExtra("POS", position).putExtra("MODIFY", true).putExtra("VMID", vmConfig.vmID));
-                        }
-                        dismiss();
-                    });
+//                    binding.lnEdit.setOnClickListener(v -> {
+//                        if (isAdded()) {
+//                            DataMainRoms vmConfig = VMManager.getVMConfig(position);
+//                            startActivity(new Intent(requireActivity(), VMCreatorActivity.class).putExtra("POS", position).putExtra("MODIFY", true).putExtra("VMID", vmConfig.vmID));
+//                        }
+//                        dismiss();
+//                    });
 
                     binding.lnRemove.setOnClickListener(v -> {
                         if (isAdded()) {
@@ -144,7 +142,7 @@ public class VmControllerDialog extends DialogFragment {
                         });
 
                         binding.lnConnect.setVisibility(View.GONE);
-                        binding.lnEdit.setVisibility(View.GONE);
+//                        binding.lnEdit.setVisibility(View.GONE);
                         binding.lnRemove.setVisibility(View.GONE);
                     }
                 } else {
