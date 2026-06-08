@@ -2,7 +2,9 @@ package com.vectras.vm.settings;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
@@ -90,6 +92,14 @@ public class ThemeActivity extends AppCompatActivity {
         } else {
             binding.lnDynamiccolor.setEnabled(false);
             binding.lnDynamiccolor.setAlpha(0.5f);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            binding.swBlurEffect.setChecked(MainSettingsManager.getBlurEffect(this));
+            binding.lnBlurEffect.setOnClickListener(v -> binding.swBlurEffect.toggle());
+            binding.swBlurEffect.setOnCheckedChangeListener((buttonView, isChecked) -> MainSettingsManager.setBlurEffect(this, isChecked));
+        } else {
+            binding.lnBlurEffect.setVisibility(View.GONE);
         }
     }
 

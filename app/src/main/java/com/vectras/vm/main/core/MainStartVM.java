@@ -25,6 +25,7 @@ import com.vectras.vm.manager.QmpSender;
 import com.vectras.vm.manager.VmFileManager;
 import com.vectras.vm.manager.VmAudioManager;
 import com.vectras.vm.settings.ExternalVNCSettingsActivity;
+import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.NetworkUtils;
@@ -58,6 +59,8 @@ public class MainStartVM {
         breakNow = false;
 
         Config.vmID = vmConfig.vmID;
+
+        VMManager.setArch(vmConfig.itemArch, activity);
 
         if (!(MainSettingsManager.getVmUi(activity).equals("X11") && DisplaySystem.isUseBuiltInX11())) {
             showDialog(activity, vmConfig.vmID, vmConfig.itemName, vmConfig.itemIcon, activity.getString(R.string.preparing));
@@ -136,6 +139,15 @@ public class MainStartVM {
 
         Config.vmID = finalvmID;
 
+        if (VMManager.isVMRunning(context, finalvmID)) {
+            Toast.makeText(context, "This VM is already running.", Toast.LENGTH_LONG).show();
+            DisplaySystem.launch(context);
+            if (!MainSettingsManager.getVmUi(context).equals("VNC")) VmAudioManager.stream(vmID);
+
+            dismissDialog();
+            return;
+        }
+
         File romDir = new File(Config.getCacheDir() + "/" + finalvmID);
         if (!romDir.exists()) {
             if (!romDir.mkdirs()) {
@@ -163,37 +175,7 @@ public class MainStartVM {
             return;
         }
 
-        if (env.contains(FileUtils.getExternalFilesDirectory(context).getPath() + "/SharedFolder") && FileUtils.getFolderSize(FileUtils.getExternalFilesDirectory(context).getPath() + "/SharedFolder") * Math.pow(10, -6) > 516) {
-            DialogUtils.twoDialog(
-                    context,
-                    context.getString(R.string.problem_has_been_detected),
-                    context.getString(R.string.shared_folder_is_too_large_content),
-                    context.getString(R.string.open_shared_folder),
-                    context.getString(R.string.close),
-                    true,
-                    R.drawable.warning_48px,
-                    true,
-                    () -> FileUtils.openFolder(context, FileUtils.getExternalFilesDirectory(context).getPath() + "/SharedFolder"),
-                    null,
-                    null
-            );
-
-            dismissDialog();
-            return;
-        }
-
-        VMManager.lastQemuCommand = env;
-
-        if (VMManager.isVMRunning(context, finalvmID)) {
-            Toast.makeText(context, "This VM is already running.", Toast.LENGTH_LONG).show();
-            DisplaySystem.launch(context);
-            if (!MainSettingsManager.getVmUi(context).equals("VNC")) VmAudioManager.stream(vmID);
-
-            dismissDialog();
-            return;
-        }
-
-        if (AppConfig.getSetupFiles().contains("arm") && !AppConfig.getSetupFiles().contains("arm64")) {
+        if (!DeviceUtils.is64bit()) {
             if (env.contains("tcg,thread=multi")) {
                 StartVmDialog finalDialog1 = dialog;
                 DialogUtils.twoDialog(context, context.getResources().getString(R.string.problem_has_been_detected), context.getResources().getString(R.string.can_not_use_mttcg), context.getString(R.string.ok), context.getString(R.string.cancel), true, R.drawable.warning_48px, true,
@@ -219,12 +201,39 @@ public class MainStartVM {
             return;
         }
 
-        if (breakNow) {
-            dismissDialog();
-            return;
-        }
+        new Thread(() -> {
+            boolean isExceeded = env.contains(FileUtils.getExternalFilesDirectory(context).getPath() + "/SharedFolder") && FileUtils.getFolderSize(FileUtils.getExternalFilesDirectory(context).getPath() + "/SharedFolder") * Math.pow(10, -6) > 516;
 
-        startVm(context, vmName, env, finalvmID, thumbnailFile);
+            new Handler(Looper.getMainLooper()).post(() -> {
+                if (isExceeded) {
+                    DialogUtils.twoDialog(
+                            context,
+                            context.getString(R.string.problem_has_been_detected),
+                            context.getString(R.string.shared_folder_is_too_large_content),
+                            context.getString(R.string.open_shared_folder),
+                            context.getString(R.string.close),
+                            true,
+                            R.drawable.warning_48px,
+                            true,
+                            () -> FileUtils.openFolder(context, FileUtils.getExternalFilesDirectory(context).getPath() + "/SharedFolder"),
+                            null,
+                            null
+                    );
+
+                    dismissDialog();
+                    return;
+                }
+
+                VMManager.lastQemuCommand = env;
+
+                if (breakNow) {
+                    dismissDialog();
+                    return;
+                }
+
+                startVm(context, vmName, env, finalvmID, thumbnailFile);
+            });
+        }).start();
     }
 
     public static void startVm(
@@ -410,7 +419,7 @@ public class MainStartVM {
         if (status != null) dialog.setStatus(status);
     }
 
-    private static void dismissDialog() {
+    public static void dismissDialog() {
         if (dialog != null) dialog.dismiss();
         if (breakNow) {
             new Thread(QmpSender::shutdown).start();

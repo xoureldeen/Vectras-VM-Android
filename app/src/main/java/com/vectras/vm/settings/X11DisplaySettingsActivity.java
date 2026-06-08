@@ -40,6 +40,7 @@ public class X11DisplaySettingsActivity extends AppCompatActivity {
         binding.swEnabled.setChecked(MainSettingsManager.getVmUi(this).equals("X11"));
         binding.swRunQemuWithXterm.setChecked(MainSettingsManager.getRunQemuWithXterm(this));
         binding.swUseSdl.setChecked(MainSettingsManager.getUseSdl(this));
+        binding.swUseExternal.setChecked(MainSettingsManager.getExternalX11(this));
 
         binding.swEnabled.setOnCheckedChangeListener((buttonView, isChecked) -> {
             MainSettingsManager.setVmUi(this, isChecked ? "X11" : "VNC");
@@ -70,6 +71,9 @@ public class X11DisplaySettingsActivity extends AppCompatActivity {
 
         binding.swUseSdl.setOnCheckedChangeListener((buttonView, isChecked) -> MainSettingsManager.setUseSdl(this, isChecked));
         binding.lnUseSdl.setOnClickListener(v -> binding.swUseSdl.toggle());
+
+        binding.swUseExternal.setOnCheckedChangeListener((buttonView, isChecked) -> MainSettingsManager.setExternalX11(this, isChecked));
+        binding.lnUseExternal.setOnClickListener(v -> binding.swUseExternal.toggle());
 
         isInitialized = true;
 

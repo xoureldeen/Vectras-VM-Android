@@ -396,10 +396,7 @@ public class RomInfo extends AppCompatActivity {
                 openAnBuiContentUrl(anbuiContentUrls);
             }
         } else {
-            Intent openurl = new Intent();
-            openurl.setAction(Intent.ACTION_VIEW);
-            openurl.setData(Uri.parse(getIntent().getStringExtra("getrom")));
-            startActivity(openurl);
+            IntentUtils.openUrl(this, getIntent().getStringExtra("getrom"));
         }
     }
 

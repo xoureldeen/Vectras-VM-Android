@@ -382,7 +382,7 @@
     <string name="tap_to_try_again">Chạm để thử lại.</string>
     <string name="force_refresh">Buộc làm mới</string>
     <string name="force_refresh_vnc_description">Màn hình VNC sẽ khởi động lại mỗi khi có thay đổi, điều này giúp khắc phục một số sự cố.</string>
-    <string name="settings_for_vnc">Các cài đặt cho VNC.</string>
+    <string name="settings_for_vnc">Chất lượng, tần số làm mới và ngoài.</string>
     <string name="imported">Đã nhập</string>
     <string name="file_imported_successfully">Tệp đã được nhập.</string>
     <string name="file_import_failed">Nhập tệp thất bại.</string>
@@ -747,6 +747,9 @@
     <string name="settings_tag_keyboard">Bàn phím</string>
     <string name="settings_tag_other">Khác</string>
     <string name="executing_command_please_wait">Đang thực thi, vui lòng đợi…</string>
+    <string name="use_external_x11_note">Dùng ứng dụng Termux:X11 thay vì màn hình có sẵn.</string>
+    <string name="blur_effect">Hiệu ứng mờ</string>
+    <string name="blur_effect_note">Làm mờ xung quanh để tăng khả năng tập trung vào một vùng cần được chú ý.</string>
 
     <!-- CPUs -->
 

@@ -85,9 +85,7 @@ public class StartVmDialog {
             vmBootNote.setText(R.string.shutting_down);
             new Thread(() -> {
                 QmpSender.shutdown();
-                new Handler(Looper.getMainLooper()).post(() -> {
-                    callBack.onStop();
-                });
+                new Handler(Looper.getMainLooper()).post(callBack::onStop);
 
                 boolean isVmRuning = VMManager.isVMRunning(activity, vmId);
 
@@ -98,7 +96,7 @@ public class StartVmDialog {
 
                     QmpSender.shutdown();
 
-                    if (!isVmRuning) {
+                    if (!isVmRuning || VMManager.isQemuStopedWithError) {
                         new Handler(Looper.getMainLooper()).post(() -> {
                             isShuttingDown = false;
                             dismiss();

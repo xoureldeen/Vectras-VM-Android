@@ -1,7 +1,7 @@
 package com.vectras.vm.x11;
 
 import static android.Manifest.permission.WRITE_SECURE_SETTINGS;
-import android.app.Activity;
+
 import android.app.Dialog;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static android.os.Build.VERSION.SDK_INT;
@@ -13,7 +13,6 @@ import static android.view.KeyEvent.*;
 import static android.view.WindowManager.LayoutParams.*;
 
 import android.view.WindowManager;
-import android.widget.TextView;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.content.res.AppCompatResources;
@@ -23,13 +22,14 @@ import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.Fragment.ControlersOptionsFragment;
 import com.vectras.vm.Fragment.LoggerDialogFragment;
-import com.vectras.vm.MainService;
-import com.vectras.vm.VMManager;
+import com.vectras.vm.databinding.ActivityX11Binding;
+import com.vectras.vm.databinding.ControlsFragmentBinding;
+import com.vectras.vm.databinding.DesktopControlsBinding;
+import com.vectras.vm.databinding.GameControlsBinding;
 import com.vectras.vm.main.core.MainStartVM;
 import com.vectras.vm.manager.QmpSender;
-import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.UIUtils;
-import com.vectras.vm.widgets.JoystickView;
+
 import static com.vectras.vm.x11.CmdEntryPoint.ACTION_START;
 import static com.vectras.vm.x11.LoriePreferences.ACTION_PREFERENCES_CHANGED;
 
@@ -69,7 +69,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowInsets;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -97,10 +96,10 @@ import java.util.Objects;
 @SuppressLint("ApplySharedPref")
 @SuppressWarnings({"deprecation", "unused"})
 public class X11Activity extends AppCompatActivity implements View.OnApplyWindowInsetsListener {
+    private final String TAG = "X11Activity";
     static final String ACTION_STOP = "com.vectras.vm.x11.ACTION_STOP";
 
     public static Handler handler = new Handler();
-    FrameLayout frm;
     private TouchInputHandler mInputHandler;
     private ICmdEntryInterface service = null;
     public TermuxX11ExtraKeys mExtraKeys;
@@ -112,22 +111,18 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
     private boolean hideEKOnVolDown = false;
     private boolean toggleIMEUsingBackKey = false;
     private boolean useTermuxEKBarBehaviour = false;
-    private static final int KEY_BACK = 158;
+    private final int KEY_BACK = 158;
 
-    public LinearLayout menuLayout;
+    private boolean oldFullscreen = false;
+    private boolean oldHideCutout = false;
 
-    private static boolean oldFullscreen = false;
-    private static boolean oldHideCutout = false;
-
-    public TextView keyEventStatusTextView;
-    
-    public static LinearLayout desktop;
-    public static LinearLayout gamepad;
     public boolean ctrlClicked = false;
     public boolean altClicked = false;
-    private ImageButton qmpBtn;
-    
-    public static Activity activity;
+
+    ActivityX11Binding binding;
+    ControlsFragmentBinding bindingControls;
+    DesktopControlsBinding bindingDesktopControls;
+    GameControlsBinding bindingGameControls;
 
     private final BroadcastReceiver receiver =
             new BroadcastReceiver() {
@@ -215,12 +210,14 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                                 | FLAG_TRANSLUCENT_STATUS,
                         0);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_x11);
-        
-        activity = this;
 
-        frm = findViewById(R.id.frame);
-        findViewById(R.id.preferences_button)
+        binding = ActivityX11Binding.inflate(getLayoutInflater());
+        bindingControls = binding.controlsfragment;
+        bindingDesktopControls = binding.controlsfragment.desktopcontrols;
+        bindingGameControls = binding.controlsfragment.gamecontrols;
+        setContentView(binding.getRoot());
+
+        binding.preferencesButton
                 .setOnClickListener(
                         (l) ->
                                 startActivity(
@@ -229,7 +226,7 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                                                 setAction(Intent.ACTION_MAIN);
                                             }
                                         }));
-        findViewById(R.id.help_button)
+        binding.helpButton
                 .setOnClickListener(
                         (l) ->
                                 startActivity(
@@ -238,8 +235,7 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                                                 Uri.parse(
                                                         "https://github.com/termux/termux-x11/blob/master/README.md#running-graphical-applications"))));
 
-        LorieView lorieView = findViewById(R.id.lorieView);
-        View lorieParent = (View) lorieView.getParent();
+        View lorieParent = (View) binding.lorieView.getParent();
 
         mInputHandler =
                 new TouchInputHandler(
@@ -250,7 +246,7 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                                 toggleExtraKeys();
                             }
                         },
-                        new InputEventSender(lorieView));
+                        new InputEventSender(binding.lorieView));
 
         mLorieKeyListener =
                 (v, k, e) -> {
@@ -268,16 +264,19 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                     if (k == KEYCODE_BACK) {
                         if (e.isFromSource(InputDevice.SOURCE_MOUSE)
                                 || e.isFromSource(InputDevice.SOURCE_MOUSE_RELATIVE)) {
-                            if (e.getRepeatCount() != 0) // ignore auto-repeat
+                            if (e.getRepeatCount() != 0) { // ignore auto-repeat
+                                Log.d(TAG, "KEYCODE_BACK: auto-repeat");
                                 return true;
+                            }
                             if (e.getAction() == ACTION_UP
                                     || e.getAction() == ACTION_DOWN)
-                                lorieView.sendMouseEvent(
+                                binding.lorieView.sendMouseEvent(
                                         -1,
                                         -1,
                                         InputStub.BUTTON_RIGHT,
                                         e.getAction() == ACTION_DOWN,
                                         true);
+                            Log.d(TAG, "KEYCODE_BACK: sendMouseEvent");
                             return true;
                         }
 
@@ -286,8 +285,14 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                                                 != KEYBOARD_TYPE_ALPHABETIC
                                 || e.getScanCode() == 0) {
                             if (toggleIMEUsingBackKey && e.getAction() == ACTION_UP) {
-                                activity.finish();
+                                Log.d(TAG, "KEYCODE_BACK: toggleIMEUsingBackKey");
                             }
+
+                            if (e.getAction() == ACTION_UP) {
+                                onBack();
+                            }
+
+                            Log.d(TAG, "KEYCODE_BACK: toggleIMEUsingBackKey");
                             return true;
                         }
                     }
@@ -303,39 +308,39 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                 };
 
         lorieParent.setOnTouchListener(
-                (v, e) -> mInputHandler.handleTouchEvent(lorieParent, lorieView, e));
+                (v, e) -> mInputHandler.handleTouchEvent(lorieParent, binding.lorieView, e));
         lorieParent.setOnHoverListener(
-                (v, e) -> mInputHandler.handleTouchEvent(lorieParent, lorieView, e));
+                (v, e) -> mInputHandler.handleTouchEvent(lorieParent, binding.lorieView, e));
         lorieParent.setOnGenericMotionListener(
-                (v, e) -> mInputHandler.handleTouchEvent(lorieParent, lorieView, e));
+                (v, e) -> mInputHandler.handleTouchEvent(lorieParent, binding.lorieView, e));
         if (SDK_INT >= VERSION_CODES.O) {
-            lorieView.setOnCapturedPointerListener(
-                    (v, e) -> mInputHandler.handleTouchEvent(lorieView, lorieView, e));
+            binding.lorieView.setOnCapturedPointerListener(
+                    (v, e) -> mInputHandler.handleTouchEvent(binding.lorieView, binding.lorieView, e));
         }
         if (SDK_INT >= VERSION_CODES.O) {
             lorieParent.setOnCapturedPointerListener(
-                    (v, e) -> mInputHandler.handleTouchEvent(lorieView, lorieView, e));
+                    (v, e) -> mInputHandler.handleTouchEvent(binding.lorieView, binding.lorieView, e));
         }
-        lorieView.setOnKeyListener(mLorieKeyListener);
+        binding.lorieView.setOnKeyListener(mLorieKeyListener);
 
-        lorieView.setCallback(
+        binding.lorieView.setCallback(
                 (sfc, surfaceWidth, surfaceHeight, screenWidth, screenHeight) -> {
                     int framerate =
                             (int)
-                                    ((lorieView.getDisplay() != null)
-                                            ? lorieView.getDisplay().getRefreshRate()
+                                    ((binding.lorieView.getDisplay() != null)
+                                            ? binding.lorieView.getDisplay().getRefreshRate()
                                             : 30);
 
                     mInputHandler.handleHostSizeChanged(surfaceWidth, surfaceHeight);
                     mInputHandler.handleClientSizeChanged(screenWidth, screenHeight);
-                    LorieView.sendWindowChange(screenWidth, screenHeight, framerate);
+                    binding.lorieView.sendWindowChange(screenWidth, screenHeight, framerate);
 
                     if (service != null) {
                         try {
                             service.windowChanged(
                                     sfc,
-                                    lorieView.getDisplay() != null
-                                            ? lorieView.getDisplay().getName()
+                                    binding.lorieView.getDisplay() != null
+                                            ? binding.lorieView.getDisplay().getName()
                                             : "screen");
                         } catch (RemoteException e) {
                             Log.e("X11Activity", "failed to send windowChanged request", e);
@@ -370,54 +375,19 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
         initStylusAuxButtons();
         initMouseAuxButtons();
 
-        desktop = findViewById(R.id.desktop);
-        gamepad = findViewById(R.id.gamepad);
-
-        if (Objects.equals(MainSettingsManager.getControlMode(activity), "D")) {
-            desktop.setVisibility(View.VISIBLE);
-            gamepad.setVisibility(View.GONE);
-        } else if (Objects.equals(MainSettingsManager.getControlMode(activity), "G")) {
-            desktop.setVisibility(View.GONE);
-            gamepad.setVisibility(View.VISIBLE);
-        } else if (Objects.equals(MainSettingsManager.getControlMode(activity), "H")) {
-            desktop.setVisibility(View.GONE);
-            gamepad.setVisibility(View.GONE);
+        if (Objects.equals(MainSettingsManager.getControlMode(this), "D")) {
+            bindingControls.desktop.setVisibility(View.VISIBLE);
+            bindingControls.gamepad.setVisibility(View.GONE);
+        } else if (Objects.equals(MainSettingsManager.getControlMode(this), "G")) {
+            bindingControls.desktop.setVisibility(View.GONE);
+            bindingControls.gamepad.setVisibility(View.VISIBLE);
+        } else if (Objects.equals(MainSettingsManager.getControlMode(this), "H")) {
+            bindingControls.desktop.setVisibility(View.GONE);
+            bindingControls.gamepad.setVisibility(View.GONE);
         }
 
-        ImageButton shutdownBtn = findViewById(R.id.shutdownBtn);
-        ImageButton settingBtn = findViewById(R.id.btnSettings);
-        ImageButton btnFit = findViewById(R.id.btnFit);
-        ImageButton keyboardBtn = findViewById(R.id.kbdBtn);
-        ImageButton controllersBtn = findViewById(R.id.btnMode);
-        ImageButton upBtn = findViewById(R.id.upBtn);
-        ImageButton leftBtn = findViewById(R.id.leftBtn);
-        ImageButton downBtn = findViewById(R.id.downBtn);
-        ImageButton rightBtn = findViewById(R.id.rightBtn);
-        ImageButton enterBtn = findViewById(R.id.enterBtn);
-        ImageButton escBtn = findViewById(R.id.escBtn);
-        ImageButton ctrlBtn = findViewById(R.id.ctrlBtn);
-        ImageButton altBtn = findViewById(R.id.altBtn);
-        ImageButton delBtn = findViewById(R.id.delBtn);
-        ImageButton btnVterm = findViewById(R.id.btnVterm);
-        Button eBtn = findViewById(R.id.eBtn);
-        Button rBtn = findViewById(R.id.rBtn);
-        Button qBtn = findViewById(R.id.qBtn);
-        Button xBtn = findViewById(R.id.xBtn);
-        ImageButton ctrlGameBtn = findViewById(R.id.ctrlGameBtn);
-        Button spaceBtn = findViewById(R.id.spaceBtn);
-        Button tabGameBtn = findViewById(R.id.tabGameBtn);
-        Button tabBtn = findViewById(R.id.tabBtn);
-        ImageButton upGameBtn = findViewById(R.id.upGameBtn);
-        ImageButton downGameBtn = findViewById(R.id.downGameBtn);
-        ImageButton leftGameBtn = findViewById(R.id.leftGameBtn);
-        ImageButton rightGameBtn = findViewById(R.id.rightGameBtn);
-        ImageButton enterGameBtn = findViewById(R.id.enterGameBtn);
-        ImageButton appsBtn = findViewById(R.id.btnPrograms);
-
-        qmpBtn = findViewById(R.id.btnQmp);
-
         final boolean[] isFullScreen = {false};
-        btnFit.setOnClickListener(view -> {
+        bindingControls.btnFit.setOnClickListener(view -> {
             sendKey(KEYCODE_CTRL_LEFT, false);
             sendKey(KEYCODE_ALT_LEFT, false);
             sendKey(KEYCODE_F, false);
@@ -426,16 +396,16 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
             sendKey(KEYCODE_F, true);
 
             if (isFullScreen[0]) {
-                btnFit.setImageDrawable(AppCompatResources.getDrawable(X11Activity.this, R.drawable.close_fullscreen_24px));
+                bindingControls.btnFit.setImageDrawable(AppCompatResources.getDrawable(X11Activity.this, R.drawable.close_fullscreen_24px));
                 isFullScreen[0] = false;
             } else {
-                btnFit.setImageDrawable(AppCompatResources.getDrawable(X11Activity.this, R.drawable.open_in_full_24px));
+                bindingControls.btnFit.setImageDrawable(AppCompatResources.getDrawable(X11Activity.this, R.drawable.open_in_full_24px));
                 isFullScreen[0] = true;
             }
         });
 
-        appsBtn.setOnClickListener(v -> {
-            Dialog dialog = new Dialog(activity);
+        bindingControls.btnPrograms.setOnClickListener(v -> {
+            Dialog dialog = new Dialog(this);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.dialog_programs);
             Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
@@ -449,28 +419,28 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
             ImageButton glxGearsBtn = dialog.findViewById(R.id.btnGlxGears);
 
             termBtn.setOnClickListener(v1 -> {
-                new Terminal(activity).executeShellCommand2("xfce4-terminal", false, activity);
+                new Terminal(this).executeShellCommand2("xfce4-terminal", false, this);
                 dialog.dismiss();
             });
 
             glxGearsBtn.setOnClickListener(v1 -> {
-                new Terminal(activity).executeShellCommand2("glxgears", false, activity);
+                new Terminal(this).executeShellCommand2("glxgears", false, this);
                 dialog.dismiss();
             });
 
             vkCubeBtn.setOnClickListener(v1 -> {
-                new Terminal(activity).executeShellCommand2("vkcube", false, activity);
+                new Terminal(this).executeShellCommand2("vkcube", false, this);
                 dialog.dismiss();
             });
 
             try {
                 dialog.show();
             } catch (WindowManager.BadTokenException e) {
-                e.printStackTrace();
+                Log.e(TAG, "Failed to show dialog", e);
             }
         });
 
-        upGameBtn.setOnTouchListener((v, event) -> {
+        bindingGameControls.upGameBtn.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 sendKey(KEYCODE_DPAD_UP, false);
                 v.animate().scaleXBy(-0.2f).setDuration(200).start();
@@ -485,7 +455,7 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
             }
             return false;
         });
-        leftGameBtn.setOnTouchListener((v, event) -> {
+        bindingGameControls.leftGameBtn.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 sendKey(KEYCODE_DPAD_LEFT, false);
                 v.animate().scaleXBy(-0.2f).setDuration(200).start();
@@ -500,7 +470,7 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
             }
             return false;
         });
-        downGameBtn.setOnTouchListener((v, event) -> {
+        bindingGameControls.downGameBtn.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 sendKey(KEYCODE_DPAD_DOWN, false);
                 v.animate().scaleXBy(-0.2f).setDuration(200).start();
@@ -515,7 +485,7 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
             }
             return false;
         });
-        rightGameBtn.setOnTouchListener((v, event) -> {
+        bindingGameControls.rightGameBtn.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 sendKey(KEYCODE_DPAD_RIGHT, false);
                 v.animate().scaleXBy(-0.2f).setDuration(200).start();
@@ -530,33 +500,34 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
             }
             return false;
         });
-        JoystickView joystick = findViewById(R.id.joyStick);
-        joystick.setVisibility(View.GONE);
-        tabBtn.setOnClickListener(v -> keyDownUp(KEYCODE_TAB));
-        tabGameBtn.setOnClickListener(v -> keyDownUp(KEYCODE_TAB));
-        enterGameBtn.setOnClickListener(v -> keyDownUp(KEYCODE_ENTER));
-        eBtn.setOnClickListener(v -> keyDownUp(KEYCODE_E));
-        rBtn.setOnClickListener(v -> keyDownUp(KEYCODE_R));
-        qBtn.setOnClickListener(v -> keyDownUp(KEYCODE_Q));
-        xBtn.setOnClickListener(v -> keyDownUp(KEYCODE_X));
-        ctrlGameBtn.setOnClickListener(v -> keyDownUp(KEYCODE_CTRL_LEFT));
-        spaceBtn.setOnClickListener(v -> keyDownUp(KEYCODE_SPACE));
-        btnVterm.setOnClickListener(v -> {
+
+        bindingGameControls.joyStick.setVisibility(View.GONE);
+        bindingDesktopControls.tabBtn.setOnClickListener(v -> keyDownUp(KEYCODE_TAB));
+        bindingGameControls.tabGameBtn.setOnClickListener(v -> keyDownUp(KEYCODE_TAB));
+        bindingGameControls.enterGameBtn.setOnClickListener(v -> keyDownUp(KEYCODE_ENTER));
+        bindingGameControls.eBtn.setOnClickListener(v -> keyDownUp(KEYCODE_E));
+        bindingGameControls.rBtn.setOnClickListener(v -> keyDownUp(KEYCODE_R));
+        bindingGameControls.qBtn.setOnClickListener(v -> keyDownUp(KEYCODE_Q));
+        bindingGameControls.xBtn.setOnClickListener(v -> keyDownUp(KEYCODE_X));
+        bindingGameControls.ctrlGameBtn.setOnClickListener(v -> keyDownUp(KEYCODE_CTRL_LEFT));
+        bindingGameControls.spaceBtn.setOnClickListener(v -> keyDownUp(KEYCODE_SPACE));
+        bindingControls.btnVterm.setOnClickListener(v -> {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             // Create and show the dialog.
             LoggerDialogFragment newFragment = new LoggerDialogFragment();
             newFragment.show(ft, "Logger");
         });
-        shutdownBtn.setOnClickListener(v -> finish());
+        bindingControls.shutdownBtn.setOnClickListener(v -> finish());
 
-        keyboardBtn.setOnClickListener(v -> new Handler(Looper.getMainLooper()).postDelayed(() -> toggleKeyboardVisibility(X11Activity.this), 200));
-        controllersBtn.setOnClickListener(v -> {
+        bindingControls.kbdBtn.setOnClickListener(v -> new Handler(Looper.getMainLooper()).postDelayed(() -> toggleKeyboardVisibility(X11Activity.this), 200));
+        bindingControls.btnMode.setOnClickListener(v -> {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             // Create and show the dialog.
             ControlersOptionsFragment newFragment = new ControlersOptionsFragment();
+            newFragment.binding = binding.controlsfragment;
             newFragment.show(ft, "Controllers");
         });
-        findViewById(R.id.btnSettings)
+        bindingControls.btnSettings
                 .setOnClickListener(
                         (l) ->
                                 startActivity(
@@ -565,7 +536,7 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                                                 setAction(Intent.ACTION_MAIN);
                                             }
                                         }));
-        upBtn.setOnTouchListener((v, event) -> {
+        bindingDesktopControls.upBtn.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 sendKey(KEYCODE_DPAD_UP, false);
                 v.animate().scaleXBy(-0.2f).setDuration(200).start();
@@ -580,7 +551,7 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
             }
             return false;
         });
-        leftBtn.setOnTouchListener((v, event) -> {
+        bindingDesktopControls.leftBtn.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 sendKey(KEYCODE_DPAD_LEFT, false);
                 v.animate().scaleXBy(-0.2f).setDuration(200).start();
@@ -595,7 +566,7 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
             }
             return false;
         });
-        downBtn.setOnTouchListener((v, event) -> {
+        bindingDesktopControls.downBtn.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 sendKey(KEYCODE_DPAD_DOWN, false);
                 v.animate().scaleXBy(-0.2f).setDuration(200).start();
@@ -610,7 +581,7 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
             }
             return false;
         });
-        rightBtn.setOnTouchListener((v, event) -> {
+        bindingDesktopControls.rightBtn.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 sendKey(KEYCODE_DPAD_RIGHT, false);
                 v.animate().scaleXBy(-0.2f).setDuration(200).start();
@@ -626,44 +597,45 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
             return false;
         });
 
-        escBtn.setOnClickListener(v -> keyDownUp(KEYCODE_ESCAPE));
+        bindingDesktopControls.escBtn.setOnClickListener(v -> keyDownUp(KEYCODE_ESCAPE));
 
-        enterBtn.setOnClickListener(v -> keyDownUp(KEYCODE_ENTER));
+        bindingDesktopControls.enterBtn.setOnClickListener(v -> keyDownUp(KEYCODE_ENTER));
 
-        ctrlBtn.setOnClickListener(new View.OnClickListener() {
+        bindingDesktopControls.ctrlBtn.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("UseCompatLoadingForDrawables")
             @Override
             public void onClick(View v) {
                 if (!ctrlClicked) {
                     sendKey(KEYCODE_CTRL_LEFT, false);
-                    ctrlBtn.setBackground(getResources().getDrawable(R.drawable.controls_button2));
+                    bindingDesktopControls.ctrlBtn.setBackground(getResources().getDrawable(R.drawable.controls_button2));
                     ctrlClicked = true;
                 } else {
                     sendKey(KEYCODE_CTRL_LEFT, true);
-                    ctrlBtn.setBackground(getResources().getDrawable(R.drawable.controls_button1));
+                    bindingDesktopControls.ctrlBtn.setBackground(getResources().getDrawable(R.drawable.controls_button1));
                     ctrlClicked = false;
                 }
             }
         });
-        altBtn.setOnClickListener(new View.OnClickListener() {
+        bindingDesktopControls.altBtn.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("UseCompatLoadingForDrawables")
             @Override
             public void onClick(View v) {
                 if (!altClicked) {
                     sendKey(KEYCODE_ALT_LEFT, false);
-                    altBtn.setBackground(getResources().getDrawable(R.drawable.controls_button2));
+                    bindingDesktopControls.altBtn.setBackground(getResources().getDrawable(R.drawable.controls_button2));
                     altClicked = true;
                 } else {
                     sendKey(KEYCODE_ALT_LEFT, true);
-                    altBtn.setBackground(getResources().getDrawable(R.drawable.controls_button1));
+                    bindingDesktopControls.altBtn.setBackground(getResources().getDrawable(R.drawable.controls_button1));
                     altClicked = false;
                 }
             }
         });
-        delBtn.setOnClickListener(v -> keyDownUp(KEYCODE_DEL));
 
-        qmpBtn.setVisibility(View.GONE);
-        qmpBtn.setOnClickListener(v -> {
+        bindingDesktopControls.delBtn.setOnClickListener(v -> keyDownUp(KEYCODE_DEL));
+
+        bindingControls.btnQmp.setVisibility(View.GONE);
+        bindingControls.btnQmp.setOnClickListener(v -> {
 //                if (monitorMode) {
 //                    onVNC();
 //                    qmpBtn.setImageDrawable(getResources().getDrawable(R.drawable.round_terminal_24));
@@ -673,18 +645,13 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
 //                }
         });
 
-        Button rightClickBtn = findViewById(R.id.rightClickBtn);
-        Button middleClickBtn = findViewById(R.id.middleBtn);
-        Button leftClickBtn = findViewById(R.id.leftClickBtn);
-        ImageButton winBtn = findViewById(R.id.winBtn);
-
         if (SDK_INT >= VERSION_CODES.N) {
             Map.of(
-                            leftClickBtn,
+                            bindingDesktopControls.leftClickBtn,
                             InputStub.BUTTON_LEFT,
-                            middleClickBtn,
+                            bindingDesktopControls.middleBtn,
                             InputStub.BUTTON_MIDDLE,
-                            rightClickBtn,
+                            bindingDesktopControls.rightClickBtn,
                             InputStub.BUTTON_RIGHT)
                     .forEach(
                             (v, b) ->
@@ -707,30 +674,29 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                                                 return true;
                                             }));
         } else {
-            leftClickBtn.setVisibility(View.GONE);
-            middleClickBtn.setVisibility(View.GONE);
-            rightClickBtn.setVisibility(View.GONE);
+            bindingDesktopControls.leftClickBtn.setVisibility(View.GONE);
+            bindingDesktopControls.middleBtn.setVisibility(View.GONE);
+            bindingDesktopControls.rightClickBtn.setVisibility(View.GONE);
         }
 
-        winBtn.setOnClickListener(v -> {
+        bindingDesktopControls.winBtn.setOnClickListener(v -> {
             sendKey(KEYCODE_CTRL_LEFT, false);
             sendKey(KEYCODE_ESCAPE, false);
             sendKey(KEYCODE_CTRL_LEFT, false);
             sendKey(KEYCODE_ESCAPE, false);
         });
 
-        getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                if (findViewById(R.id.mainControl).getVisibility() == View.GONE) {
-                    findViewById(R.id.mainControl).setVisibility(View.VISIBLE);
-                } else if (findViewById(R.id.mainControl).getVisibility() == View.VISIBLE) {
-                    findViewById(R.id.mainControl).setVisibility(View.GONE);
-                }
-            }
-        });
+        bindingDesktopControls.ctrlaltdelBtn.setVisibility(View.GONE);
 
         MainStartVM.startPending(this);
+    }
+
+    private void onBack() {
+        if (bindingControls.mainControl.getVisibility() == View.GONE) {
+            bindingControls.mainControl.setVisibility(View.VISIBLE);
+        } else {
+            finish();
+        }
     }
     
     private void keyDownUp(int keyEventCode) {
@@ -757,105 +723,99 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
         boolean stylusMenuEnabled = p.getBoolean("showStylusClickOverride", false);
         final float menuUnselectedTrasparency = 0.66f;
         final float menuSelectedTrasparency = 1.0f;
-        Button left = findViewById(R.id.button_left_click);
-        Button right = findViewById(R.id.button_right_click);
-        Button middle = findViewById(R.id.button_middle_click);
-        Button visibility = findViewById(R.id.button_visibility);
-        LinearLayout overlay = findViewById(R.id.mouse_helper_visibility);
-        LinearLayout buttons = findViewById(R.id.mouse_helper_secondary_layer);
-        overlay.setOnTouchListener((v, e) -> true);
-        overlay.setOnHoverListener((v, e) -> true);
-        overlay.setOnGenericMotionListener((v, e) -> true);
+        binding.mouseHelperVisibility.setOnTouchListener((v, e) -> true);
+        binding.mouseHelperVisibility.setOnHoverListener((v, e) -> true);
+        binding.mouseHelperVisibility.setOnGenericMotionListener((v, e) -> true);
         if (SDK_INT >= VERSION_CODES.O) {
-            overlay.setOnCapturedPointerListener((v, e) -> true);
+            binding.mouseHelperVisibility.setOnCapturedPointerListener((v, e) -> true);
         }
-        overlay.setVisibility(stylusMenuEnabled ? View.VISIBLE : View.GONE);
+        binding.mouseHelperVisibility.setVisibility(stylusMenuEnabled ? View.VISIBLE : View.GONE);
         View.OnClickListener listener =
                 view -> {
                     TouchInputHandler.STYLUS_INPUT_HELPER_MODE =
-                            (view.equals(left)
+                            (view.equals(binding.buttonLeftClick)
                                     ? 1
-                                    : (view.equals(middle) ? 2 : (view.equals(right) ? 3 : 0)));
-                    left.setAlpha(
+                                    : (view.equals(binding.buttonMiddleClick) ? 2 : (view.equals(binding.buttonRightClick) ? 3 : 0)));
+                    binding.buttonLeftClick.setAlpha(
                             (TouchInputHandler.STYLUS_INPUT_HELPER_MODE == 1)
                                     ? menuSelectedTrasparency
                                     : menuUnselectedTrasparency);
-                    middle.setAlpha(
+                    binding.buttonMiddleClick.setAlpha(
                             (TouchInputHandler.STYLUS_INPUT_HELPER_MODE == 2)
                                     ? menuSelectedTrasparency
                                     : menuUnselectedTrasparency);
-                    right.setAlpha(
+                    binding.buttonRightClick.setAlpha(
                             (TouchInputHandler.STYLUS_INPUT_HELPER_MODE == 3)
                                     ? menuSelectedTrasparency
                                     : menuUnselectedTrasparency);
-                    visibility.setAlpha(menuUnselectedTrasparency);
+                    binding.buttonVisibility.setAlpha(menuUnselectedTrasparency);
                 };
 
-        left.setOnClickListener(listener);
-        middle.setOnClickListener(listener);
-        right.setOnClickListener(listener);
+        binding.buttonLeftClick.setOnClickListener(listener);
+        binding.buttonMiddleClick.setOnClickListener(listener);
+        binding.buttonRightClick.setOnClickListener(listener);
 
-        visibility.setOnClickListener(
+        binding.buttonVisibility.setOnClickListener(
                 view -> {
-                    if (buttons.getVisibility() == View.VISIBLE) {
-                        buttons.setVisibility(View.GONE);
-                        visibility.setAlpha(menuUnselectedTrasparency);
+                    if (binding.mouseButtonsSecondaryLayer.getVisibility() == View.VISIBLE) {
+                        binding.mouseButtonsSecondaryLayer.setVisibility(View.GONE);
+                        binding.buttonVisibility.setAlpha(menuUnselectedTrasparency);
                         int m = TouchInputHandler.STYLUS_INPUT_HELPER_MODE;
-                        visibility.setText(m == 1 ? "L" : (m == 2 ? "M" : (m == 3 ? "R" : "U")));
+                        binding.buttonVisibility.setText(m == 1 ? "L" : (m == 2 ? "M" : (m == 3 ? "R" : "U")));
                     } else {
-                        buttons.setVisibility(View.VISIBLE);
-                        visibility.setAlpha(menuUnselectedTrasparency);
-                        visibility.setText("X");
+                        binding.mouseButtonsSecondaryLayer.setVisibility(View.VISIBLE);
+                        binding.buttonVisibility.setAlpha(menuUnselectedTrasparency);
+                        binding.buttonVisibility.setText("X");
 
                         // Calculate screen border making sure btn is fully inside the view
-                        float maxX = frm.getWidth() - 4 * left.getWidth();
-                        float maxY = frm.getHeight() - 4 * left.getHeight();
+                        float maxX = binding.frame.getWidth() - 4 * binding.buttonLeftClick.getWidth();
+                        float maxY = binding.frame.getHeight() - 4 * binding.buttonLeftClick.getHeight();
 
                         // Make sure the Stylus menu is fully inside the screen
-                        overlay.setX(MathUtils.clamp(overlay.getX(), 0, maxX));
-                        overlay.setY(MathUtils.clamp(overlay.getY(), 0, maxY));
+                        binding.mouseHelperVisibility.setX(MathUtils.clamp(binding.mouseHelperVisibility.getX(), 0, maxX));
+                        binding.mouseHelperVisibility.setY(MathUtils.clamp(binding.mouseHelperVisibility.getY(), 0, maxY));
 
                         int m = TouchInputHandler.STYLUS_INPUT_HELPER_MODE;
                         listener.onClick(
-                                m == 1 ? left : (m == 2 ? middle : (m == 3 ? right : left)));
+                                m == 1 ? binding.buttonLeftClick : (m == 2 ? binding.buttonMiddleClick : (m == 3 ? binding.buttonRightClick : binding.buttonLeftClick)));
                     }
                 });
         // Simulated mouse click 1 = left , 2 = middle , 3 = right
         TouchInputHandler.STYLUS_INPUT_HELPER_MODE = 1;
-        listener.onClick(left);
+        listener.onClick(binding.buttonLeftClick);
 
-        visibility.setOnLongClickListener(
+        binding.buttonVisibility.setOnLongClickListener(
                 v -> {
                     if (SDK_INT >= VERSION_CODES.N) {
                         v.startDragAndDrop(
                                 ClipData.newPlainText("", ""),
-                                new View.DragShadowBuilder(visibility) {
+                                new View.DragShadowBuilder(binding.buttonVisibility) {
                                     public void onDrawShadow(@NonNull Canvas canvas) {}
                                 },
                                 null,
                                 View.DRAG_FLAG_GLOBAL);
                     }
 
-                    frm.setOnDragListener(
+                    binding.frame.setOnDragListener(
                             (v2, event) -> {
                                 // Calculate screen border making sure btn is fully inside the view
-                                float maxX = frm.getWidth() - visibility.getWidth();
-                                float maxY = frm.getHeight() - visibility.getHeight();
+                                float maxX = binding.frame.getWidth() - binding.buttonVisibility.getWidth();
+                                float maxY = binding.frame.getHeight() - binding.buttonVisibility.getHeight();
 
                                 switch (event.getAction()) {
                                     case DragEvent.ACTION_DRAG_LOCATION:
                                         // Center touch location with btn icon
-                                        float dX = event.getX() - visibility.getWidth() / 2.0f;
-                                        float dY = event.getY() - visibility.getHeight() / 2.0f;
+                                        float dX = event.getX() - binding.buttonVisibility.getWidth() / 2.0f;
+                                        float dY = event.getY() - binding.buttonVisibility.getHeight() / 2.0f;
 
                                         // Make sure the dragged btn is inside the view with clamp
-                                        overlay.setX(MathUtils.clamp(dX, 0, maxX));
-                                        overlay.setY(MathUtils.clamp(dY, 0, maxY));
+                                        binding.mouseHelperVisibility.setX(MathUtils.clamp(dX, 0, maxX));
+                                        binding.mouseHelperVisibility.setY(MathUtils.clamp(dY, 0, maxY));
                                         break;
                                     case DragEvent.ACTION_DRAG_ENDED:
                                         // Make sure the dragged btn is inside the view
-                                        overlay.setX(MathUtils.clamp(overlay.getX(), 0, maxX));
-                                        overlay.setY(MathUtils.clamp(overlay.getY(), 0, maxY));
+                                        binding.mouseHelperVisibility.setX(MathUtils.clamp(binding.mouseHelperVisibility.getX(), 0, maxX));
+                                        binding.mouseHelperVisibility.setY(MathUtils.clamp(binding.mouseHelperVisibility.getY(), 0, maxY));
                                         break;
                                 }
                                 return true;
@@ -876,58 +836,51 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
 
     @SuppressLint("ClickableViewAccessibility")
     void initMouseAuxButtons() {
-        Button left = findViewById(R.id.mouse_button_left_click);
-        Button right = findViewById(R.id.mouse_button_right_click);
-        Button middle = findViewById(R.id.mouse_button_middle_click);
-        ImageButton pos = findViewById(R.id.mouse_buttons_position);
-        LinearLayout primaryLayer = findViewById(R.id.mouse_buttons);
-        LinearLayout secondaryLayer = findViewById(R.id.mouse_buttons_secondary_layer);
-
         SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(this);
         boolean mouseHelperEnabled =
                 p.getBoolean("showMouseHelper", false) && "1".equals(p.getString("touchMode", "1"));
-        primaryLayer.setVisibility(mouseHelperEnabled ? View.VISIBLE : View.GONE);
+        binding.mouseButtons.setVisibility(mouseHelperEnabled ? View.VISIBLE : View.GONE);
 
-        pos.setOnClickListener(
+        binding.mouseButtonsPosition.setOnClickListener(
                 (v) -> {
-                    if (secondaryLayer.getOrientation() == LinearLayout.HORIZONTAL) {
-                        setSize(left, 48, 96);
-                        setSize(right, 48, 96);
-                        secondaryLayer.setOrientation(LinearLayout.VERTICAL);
+                    if (binding.mouseButtonsSecondaryLayer.getOrientation() == LinearLayout.HORIZONTAL) {
+                        setSize(binding.mouseButtonLeftClick, 48, 96);
+                        setSize(binding.mouseButtonRightClick, 48, 96);
+                        binding.mouseButtonsSecondaryLayer.setOrientation(LinearLayout.VERTICAL);
                     } else {
-                        setSize(left, 96, 48);
-                        setSize(right, 96, 48);
-                        secondaryLayer.setOrientation(LinearLayout.HORIZONTAL);
+                        setSize(binding.mouseButtonLeftClick, 96, 48);
+                        setSize(binding.mouseButtonRightClick, 96, 48);
+                        binding.mouseButtonsSecondaryLayer.setOrientation(LinearLayout.HORIZONTAL);
                     }
                     handler.postDelayed(
                             () -> {
                                 int[] offset = new int[2];
-                                frm.getLocationOnScreen(offset);
-                                primaryLayer.setX(
+                                binding.frame.getLocationOnScreen(offset);
+                                binding.mouseButtons.setX(
                                         MathUtils.clamp(
-                                                primaryLayer.getX(),
+                                                binding.mouseButtons.getX(),
                                                 offset[0],
                                                 offset[0]
-                                                        + frm.getWidth()
-                                                        - primaryLayer.getWidth()));
-                                primaryLayer.setY(
+                                                        + binding.frame.getWidth()
+                                                        - binding.mouseButtons.getWidth()));
+                                binding.mouseButtons.setY(
                                         MathUtils.clamp(
-                                                primaryLayer.getY(),
+                                                binding.mouseButtons.getY(),
                                                 offset[1],
                                                 offset[1]
-                                                        + frm.getHeight()
-                                                        - primaryLayer.getHeight()));
+                                                        + binding.frame.getHeight()
+                                                        - binding.mouseButtons.getHeight()));
                             },
                             10);
                 });
 
         if (SDK_INT >= VERSION_CODES.N) {
             Map.of(
-                            left,
+                            binding.mouseButtonLeftClick,
                             InputStub.BUTTON_LEFT,
-                            middle,
+                            binding.mouseButtonMiddleClick,
                             InputStub.BUTTON_MIDDLE,
-                            right,
+                            binding.mouseButtonRightClick,
                             InputStub.BUTTON_RIGHT)
                     .forEach(
                             (v, b) ->
@@ -951,7 +904,7 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                                             }));
         }
 
-        pos.setOnTouchListener(
+        binding.mouseButtonsPosition.setOnTouchListener(
                 new View.OnTouchListener() {
                     final int touchSlop =
                             (int)
@@ -968,45 +921,45 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                     public boolean onTouch(View v, MotionEvent e) {
                         switch (e.getAction()) {
                             case MotionEvent.ACTION_DOWN:
-                                primaryLayer.getLocationOnScreen(startPosition);
+                                binding.mouseButtons.getLocationOnScreen(startPosition);
                                 startOffset[0] = e.getX();
                                 startOffset[1] = e.getY();
                                 startTime = SystemClock.uptimeMillis();
-                                pos.setPressed(true);
+                                binding.mouseButtonsPosition.setPressed(true);
                                 break;
                             case MotionEvent.ACTION_MOVE:
                                 {
                                     int[] offset = new int[2];
                                     int[] offset2 = new int[2];
-                                    primaryLayer.getLocationOnScreen(offset);
-                                    frm.getLocationOnScreen(offset2);
-                                    primaryLayer.setX(
+                                    binding.mouseButtons.getLocationOnScreen(offset);
+                                    binding.frame.getLocationOnScreen(offset2);
+                                    binding.mouseButtons.setX(
                                             MathUtils.clamp(
                                                     offset[0] - startOffset[0] + e.getX(),
                                                     offset2[0],
                                                     offset2[0]
-                                                            + frm.getWidth()
-                                                            - primaryLayer.getWidth()));
-                                    primaryLayer.setY(
+                                                            + binding.frame.getWidth()
+                                                            - binding.mouseButtons.getWidth()));
+                                    binding.mouseButtons.setY(
                                             MathUtils.clamp(
                                                     offset[1] - startOffset[1] + e.getY(),
                                                     offset2[1],
                                                     offset2[1]
-                                                            + frm.getHeight()
-                                                            - primaryLayer.getHeight()));
+                                                            + binding.frame.getHeight()
+                                                            - binding.mouseButtons.getHeight()));
                                     break;
                                 }
                             case MotionEvent.ACTION_UP:
                                 {
                                     final int[] _pos = new int[2];
-                                    primaryLayer.getLocationOnScreen(_pos);
+                                    binding.mouseButtons.getLocationOnScreen(_pos);
                                     int deltaX =
                                             (int) (startOffset[0] - e.getX())
                                                     + (startPosition[0] - _pos[0]);
                                     int deltaY =
                                             (int) (startOffset[1] - e.getY())
                                                     + (startPosition[1] - _pos[1]);
-                                    pos.setPressed(false);
+                                    binding.mouseButtonsPosition.setPressed(false);
 
                                     if (deltaX * deltaX + deltaY * deltaY < touchSlop
                                             && SystemClock.uptimeMillis() - startTime
@@ -1111,26 +1064,26 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
         if (getRequestedOrientation() != requestedOrientation)
             setRequestedOrientation(requestedOrientation);
 
-        findViewById(R.id.mouse_buttons)
+        binding.mouseButtons
                 .setVisibility(
                         p.getBoolean("showMouseHelper", false)
                                         && "1".equals(p.getString("touchMode", "1"))
                                         && mClientConnected
                                 ? View.VISIBLE
                                 : View.GONE);
-        LinearLayout buttons = findViewById(R.id.mouse_helper_visibility);
+
         if (p.getBoolean("showStylusClickOverride", false)) {
-            buttons.setVisibility(View.VISIBLE);
+            binding.mouseHelperVisibility.setVisibility(View.VISIBLE);
         } else {
             // Reset default input back to normal
             TouchInputHandler.STYLUS_INPUT_HELPER_MODE = 1;
             final float menuUnselectedTrasparency = 0.66f;
             final float menuSelectedTrasparency = 1.0f;
-            findViewById(R.id.button_left_click).setAlpha(menuSelectedTrasparency);
-            findViewById(R.id.button_right_click).setAlpha(menuUnselectedTrasparency);
-            findViewById(R.id.button_middle_click).setAlpha(menuUnselectedTrasparency);
-            findViewById(R.id.button_visibility).setAlpha(menuUnselectedTrasparency);
-            buttons.setVisibility(View.GONE);
+            binding.buttonLeftClick.setAlpha(menuSelectedTrasparency);
+            binding.buttonRightClick.setAlpha(menuUnselectedTrasparency);
+            binding.buttonMiddleClick.setAlpha(menuUnselectedTrasparency);
+            binding.buttonVisibility.setAlpha(menuUnselectedTrasparency);
+            binding.mouseHelperVisibility.setVisibility(View.GONE);
         }
 
         getTerminalToolbarViewPager().setAlpha(((float) p.getInt("opacityEKBar", 100)) / 100);
@@ -1160,11 +1113,11 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
     }
 
     public LorieView getLorieView() {
-        return findViewById(R.id.lorieView);
+        return binding.lorieView;
     }
 
     public ViewPager getTerminalToolbarViewPager() {
-        return findViewById(R.id.terminal_toolbar_view_pager);
+        return binding.terminalToolbarViewPager;
     }
 
     private void setTerminalToolbarView() {
@@ -1181,7 +1134,7 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
         boolean showNow = enabled && preferences.getBoolean("additionalKbdVisible", true);
 
         terminalToolbarViewPager.setVisibility(showNow ? View.VISIBLE : View.GONE);
-        findViewById(R.id.terminal_toolbar_view_pager).requestFocus();
+        terminalToolbarViewPager.requestFocus();
 
         handler.postDelayed(
                 () -> {
@@ -1200,7 +1153,7 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                                                                 .length));
                         terminalToolbarViewPager.setLayoutParams(layoutParams);
                     }
-                    frm.setPadding(
+                    binding.frame.setPadding(
                             0,
                             0,
                             0,
@@ -1231,7 +1184,7 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                         parent.addView(pager, 0);
                         if (mExtraKeys != null) mExtraKeys.unsetSpecialKeys();
                     }
-                    frm.setPadding(
+                    binding.frame.setPadding(
                             0,
                             0,
                             0,
@@ -1370,12 +1323,14 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                             android.os.Process.myUid(),
                             context.getPackageName())
                     == AppOpsManager.MODE_ALLOWED;
-        else
+        else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             return appOpsManager.checkOpNoThrow(
                             AppOpsManager.OPSTR_PICTURE_IN_PICTURE,
                             android.os.Process.myUid(),
                             context.getPackageName())
                     == AppOpsManager.MODE_ALLOWED;
+        else
+            return false;
     }
 
     @Override
@@ -1426,14 +1381,14 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                     SharedPreferences p = PreferenceManager.getDefaultSharedPreferences(this);
                     mClientConnected = connected;
                     toggleExtraKeys(connected && p.getBoolean("additionalKbdVisible", true), true);
-                    findViewById(R.id.mouse_buttons)
+                    binding.mouseButtons
                             .setVisibility(
                                     p.getBoolean("showMouseHelper", false)
                                                     && "1".equals(p.getString("touchMode", "1"))
                                                     && mClientConnected
                                             ? View.VISIBLE
                                             : View.GONE);
-                    findViewById(R.id.stub)
+                    binding.stub
                             .setVisibility(connected ? View.INVISIBLE : View.VISIBLE);
                     getLorieView().setVisibility(connected ? View.VISIBLE : View.INVISIBLE);
                     getLorieView().regenerate();

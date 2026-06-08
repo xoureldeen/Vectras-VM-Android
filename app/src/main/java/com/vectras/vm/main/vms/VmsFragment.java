@@ -134,7 +134,7 @@ public class VmsFragment extends Fragment implements CallbackInterface.HomeCallT
             List<DataMainRoms> finalTempdata = tempdata;
             requireActivity().runOnUiThread(() -> {
                 binding.lnLoad.setVisibility(View.GONE);
-                if (finalTempdata.isEmpty()) {
+                if (finalTempdata == null || finalTempdata.isEmpty()) {
                     binding.rvRomlist.setVisibility(View.GONE);
                     binding.lnNothinghere.setVisibility(View.VISIBLE);
                 } else {

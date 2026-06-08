@@ -678,12 +678,10 @@ public class VMManager {
                     },
                     null, null);
             isQemuStopedWithError = true;
-            return true;
         } else if (_result.contains(") exists") && _result.contains("drive with bus")) {
             //Error code: DRIVE_INDEX_0_EXISTS
             DialogUtils.oneDialog(_activity, _activity.getString(R.string.problem_has_been_detected), _activity.getString(R.string.error_DRIVE_INDEX_0_EXISTS) + "\n\n" + _result, R.drawable.hard_drive_24px);
             isQemuStopedWithError = true;
-            return true;
         } else if (_result.contains("gtk initialization failed") || _result.contains("x11 not available")) {
             //Error code: X11_NOT_AVAILABLE
             DialogUtils.twoDialog(_activity, _activity.getString(R.string.problem_has_been_detected), _activity.getString(R.string.error_X11_NOT_AVAILABLE), _activity.getString(R.string.switch_to_vnc), _activity.getString(R.string.cancel), true, R.drawable.cast_24px, true,
@@ -693,7 +691,6 @@ public class VMManager {
                     },
                     null, null);
             isQemuStopedWithError = true;
-            return true;
         } else if (_result.contains("Couldn't connect to XServer")) {
             if (isTryAgain) {
                 DialogUtils.oneDialog(_activity, _activity.getString(R.string.problem_has_been_detected), _activity.getString(R.string.x11_display_cannot_be_used_at_this_time_content) + "\n\n" + _result, R.drawable.cast_warning_24px);
@@ -704,19 +701,16 @@ public class VMManager {
                 MainStartVM.startTryAgain(_activity);
                 isTryAgain = true;
             }
-            return true;
         } else if (_result.contains("No such file or directory")) {
             //Error code: NO_SUCH_FILE_OR_DIRECTORY
             DialogUtils.oneDialog(_activity, _activity.getString(R.string.problem_has_been_detected), _activity.getString(R.string.error_NO_SUCH_FILE_OR_DIRECTORY) + "\n\n" + _result, R.drawable.file_copy_24px);
             _activity.stopService(new Intent(_activity, MainService.class));
             isQemuStopedWithError = true;
-            return true;
         } else if (_result.contains("another process using")) {
             //Error code: ANOTHER_PROCESS_USING_IMAGE
             DialogUtils.oneDialog(_activity, _activity.getString(R.string.problem_has_been_detected), _activity.getString(R.string.error_ANOTHER_PROCESS_USING_IMAGE) + "\n\n" + _result, R.drawable.file_copy_24px);
             _activity.stopService(new Intent(_activity, MainService.class));
             isQemuStopedWithError = true;
-            return true;
         } else if (_result.contains("mesapt: invalid sdl display")) {
             DialogUtils.twoDialog(_activity,
                     _activity.getResources().getString(R.string.problem_has_been_detected),
@@ -738,11 +732,15 @@ public class VMManager {
             DialogUtils.oneDialog(_activity, _activity.getString(R.string.problem_has_been_detected), _activity.getString(R.string.vm_could_not_be_run_content) + "\n\n" + _result, R.drawable.error_96px);
             _activity.stopService(new Intent(_activity, MainService.class));
             isQemuStopedWithError = true;
-            return true;
         } else {
             isQemuStopedWithError = false;
-            return false;
         }
+
+        if (isQemuStopedWithError) {
+            MainStartVM.dismissDialog();
+        }
+
+        return isQemuStopedWithError;
     }
 
     public static boolean isRomsDataJsonValid(Boolean _needfix, Activity _context) {
@@ -807,37 +805,38 @@ public class VMManager {
     }
 
     public static boolean isthiscommandsafeimg(@NonNull String _command, Context _context) {
-        if (!_command.contains("qcow2")) {
-            String _getsize = _command.substring(_command.lastIndexOf(" ") + 1);
-            if (_getsize.toLowerCase().endsWith("t") || _getsize.toLowerCase().endsWith("p") || _getsize.toLowerCase().endsWith("e")) {
-                latestUnsafeCommandReason = _context.getString(R.string.size_too_large_try_qcow2_format);
-                return false;
-            }
-            if (_getsize.toLowerCase().endsWith("g")) {
-                if (_getsize.length() <= 2) {
-                    return true;
-                } else {
-                    latestUnsafeCommandReason = _context.getString(R.string.size_too_large_try_qcow2_format);
-                    return false;
-                }
-            }
-            if (_getsize.toLowerCase().endsWith("m")) {
-                if (_getsize.length() <= 4) {
-                    return true;
-                } else {
-                    latestUnsafeCommandReason = _context.getString(R.string.size_too_large_try_qcow2_format);
-                    return false;
-                }
-            }
-            if (_getsize.toLowerCase().endsWith("k")) {
-                if (_getsize.length() <= 8) {
-                    return true;
-                } else {
-                    latestUnsafeCommandReason = _context.getString(R.string.size_too_large_try_qcow2_format);
-                    return false;
-                }
-            }
-        }
+        // This is unnecessary because the Android filesystem only counts the space used within the .img file.
+//        if (!_command.contains("qcow2")) {
+//            String _getsize = _command.trim().substring(_command.lastIndexOf(" ") + 1);
+//            if (_getsize.toLowerCase().endsWith("t") || _getsize.toLowerCase().endsWith("p") || _getsize.toLowerCase().endsWith("e")) {
+//                latestUnsafeCommandReason = _context.getString(R.string.size_too_large_try_qcow2_format);
+//                return false;
+//            }
+//            if (_getsize.toLowerCase().endsWith("g")) {
+//                if (_getsize.length() <= 2) {
+//                    return true;
+//                } else {
+//                    latestUnsafeCommandReason = _context.getString(R.string.size_too_large_try_qcow2_format);
+//                    return false;
+//                }
+//            }
+//            if (_getsize.toLowerCase().endsWith("m")) {
+//                if (_getsize.length() <= 4) {
+//                    return true;
+//                } else {
+//                    latestUnsafeCommandReason = _context.getString(R.string.size_too_large_try_qcow2_format);
+//                    return false;
+//                }
+//            }
+//            if (_getsize.toLowerCase().endsWith("k")) {
+//                if (_getsize.length() <= 8) {
+//                    return true;
+//                } else {
+//                    latestUnsafeCommandReason = _context.getString(R.string.size_too_large_try_qcow2_format);
+//                    return false;
+//                }
+//            }
+//        }
         return true;
     }
 

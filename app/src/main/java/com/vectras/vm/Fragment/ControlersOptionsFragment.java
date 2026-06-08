@@ -26,35 +26,20 @@ public class ControlersOptionsFragment extends DialogFragment {
         alertDialog.setContentView(R.layout.fragment_controlers_options);
         alertDialog.findViewById(R.id.gamepadBtn).setOnClickListener(v -> {
             MainSettingsManager.setControlMode(getActivity(), "G");
-            if (MainSettingsManager.getVmUi(getActivity()).equals("X11")) {
-                if (X11Activity.desktop != null ) X11Activity.desktop.setVisibility(View.GONE);
-                if (X11Activity.gamepad != null ) X11Activity.gamepad.setVisibility(View.VISIBLE);
-            } else if (MainSettingsManager.getVmUi(getActivity()).equals("VNC")) {
-                binding.desktop.setVisibility(View.GONE);
-                binding.gamepad.setVisibility(View.VISIBLE);
-            }
+            binding.desktop.setVisibility(View.GONE);
+            binding.gamepad.setVisibility(View.VISIBLE);
             alertDialog.cancel();
         });
         alertDialog.findViewById(R.id.desktopBtn).setOnClickListener(v -> {
             MainSettingsManager.setControlMode(getActivity(), "D");
-            if (MainSettingsManager.getVmUi(getActivity()).equals("X11")) {
-                if (X11Activity.desktop != null ) X11Activity.desktop.setVisibility(View.VISIBLE);
-                if (X11Activity.gamepad != null ) X11Activity.gamepad.setVisibility(View.GONE);
-            } else if (MainSettingsManager.getVmUi(getActivity()).equals("VNC")) {
-                binding.desktop.setVisibility(View.VISIBLE);
-                binding.gamepad.setVisibility(View.GONE);
-            }
+            binding.desktop.setVisibility(View.VISIBLE);
+            binding.gamepad.setVisibility(View.GONE);
             alertDialog.cancel();
         });
         alertDialog.findViewById(R.id.hideBtn).setOnClickListener(v -> {
             MainSettingsManager.setControlMode(getActivity(), "H");
-            if (MainSettingsManager.getVmUi(getActivity()).equals("X11")) {
-                if (X11Activity.desktop != null) X11Activity.desktop.setVisibility(View.GONE);
-                if (X11Activity.gamepad != null) X11Activity.gamepad.setVisibility(View.GONE);
-            } else if (MainSettingsManager.getVmUi(getActivity()).equals("VNC")) {
-                binding.desktop.setVisibility(View.GONE);
-                binding.gamepad.setVisibility(View.GONE);
-            }
+            binding.desktop.setVisibility(View.GONE);
+            binding.gamepad.setVisibility(View.GONE);
             alertDialog.cancel();
         });
 
