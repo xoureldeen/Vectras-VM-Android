@@ -26,7 +26,9 @@
             android:visibility="visible"
             android:layout_gravity="center" />
 
-        <include layout="@layout/controls_fragment" />
+        <include
+            android:id="@+id/controlsfragment"
+            layout="@layout/controls_fragment" />
         
         <TextView
             android:id="@+id/keyEventStatusTextView"

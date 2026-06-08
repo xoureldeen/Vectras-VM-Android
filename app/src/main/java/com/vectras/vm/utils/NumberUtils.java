@@ -18,5 +18,4 @@ public class NumberUtils {
             return String.format(Locale.US, "%.2f GB", gb);
         }
     }
-
 }

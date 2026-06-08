@@ -6,7 +6,6 @@ import static com.vectras.vm.utils.LibraryChecker.isPackageInstalled2;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.util.Log;
 
 import com.termux.app.TermuxService;
@@ -14,15 +13,16 @@ import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.qemu.MainVNCActivity;
 import com.vectras.vm.R;
+import com.vectras.vm.VectrasApp;
 import com.vectras.vm.core.ShellExecutor;
 import com.vectras.vm.core.TermuxX11;
-import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.PackageUtils;
 import com.vectras.vm.x11.X11Activity;
 import com.vectras.vterm.Terminal;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,7 +31,8 @@ public class DisplaySystem {
     private static boolean isTermuxClassLoaded = false;
 
     public static boolean isUseBuiltInX11() {
-        return SDK_INT < 34 && DeviceUtils.isArm();
+        //return SDK_INT < 34 && DeviceUtils.isArm();
+        return !MainSettingsManager.getExternalX11(VectrasApp.getContext());
     }
 
     public static void launch(Context context) {
@@ -124,6 +125,11 @@ public class DisplaySystem {
 
         Log.d(TAG, "startTermuxX11...");
         if (isUseBuiltInX11()) {
+            if (SDK_INT >= 34) {
+                File loaderApk = new File(TermuxService.PREFIX_PATH + "/libexec/termux-x11/loader.apk");
+                loaderApk.setWritable(false, false);
+            }
+
             ShellExecutor shellExec = new ShellExecutor();
             shellExec.exec(TermuxService.PREFIX_PATH + "/bin/termux-x11 :0");
         } else {

@@ -17,7 +17,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.vectras.qemu.Config;
 import com.vectras.vm.R;
-import com.vectras.vm.StartVM;
 import com.vectras.vm.VMManager;
 import com.vectras.vm.main.core.MainStartVM;
 import com.vectras.vm.main.core.RomOptionsDialog;
@@ -78,18 +77,10 @@ public class VmsHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             VMManager.setIconWithName(myHolder.ivIcon, current.itemName);
         }
 
-        myHolder.cdRoms.setOnClickListener(view -> {
-            VMManager.setArch(current.itemArch, activity);
-            if (current.qmpPort == 0) {
-                Config.setDefault();
-            } else {
-                Config.QMPPort = current.qmpPort;
-            }
-            MainStartVM.startNow(activity, current);
-        });
+        myHolder.cdRoms.setOnClickListener(view -> MainStartVM.startNow(activity, current));
 
         myHolder.cdRoms.setOnLongClickListener(v -> {
-            RomOptionsDialog.show(activity, position, current.vmID, current.itemName);
+            RomOptionsDialog.show(activity, position, current);
             return true;
         });
     }

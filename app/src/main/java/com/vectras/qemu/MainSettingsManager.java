@@ -1271,4 +1271,28 @@ public class MainSettingsManager extends AppCompatActivity
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean("suggestionsAndTipsNotification", true);
     }
+
+    public static void setExternalX11(Context context, Boolean _boolean) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putBoolean("externalX11", _boolean);
+        edit.apply();
+    }
+
+    public static Boolean getExternalX11(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean("externalX11", false);
+    }
+
+    public static void setBlurEffect(Context context, Boolean _boolean) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putBoolean("blurEffect", _boolean);
+        edit.apply();
+    }
+
+    public static Boolean getBlurEffect(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean("blurEffect", true);
+    }
 }

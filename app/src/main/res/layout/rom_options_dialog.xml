@@ -3,86 +3,175 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    android:paddingTop="0dp"
-    android:paddingLeft="20dp"
-    android:paddingRight="20dp"
-    android:paddingBottom="20dp">
+    android:orientation="vertical">
 
     <com.google.android.material.bottomsheet.BottomSheetDragHandleView
         android:id="@+id/drag_handle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-<!--    <TextView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="@string/options"-->
-<!--        android:textSize="22sp"/>-->
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/linear4"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="0dp"
-        android:orientation="horizontal">
-        <Button
-            android:id="@+id/modifyRomBtn"
-            style="@style/MaterialAlertDialog.NeutralButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/edit"
-            app:icon="@drawable/edit_24px"
-            app:iconTint="?attr/colorSurfaceInverse"
-            android:textColor="?attr/colorSurfaceInverse"
-            app:iconGravity="top"
-            app:iconPadding="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/exportRomBtn"/>
+        android:requiresFadingEdge="vertical"
+        android:fadingEdgeLength="48dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/exportRomBtn"
-            style="@style/MaterialAlertDialog.NegativeButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/export"
-            app:icon="@drawable/arrow_upward_24px"
-            app:iconTint="?attr/colorSurfaceInverse"
-            android:textColor="?attr/colorSurfaceInverse"
-            app:iconGravity="top"
-            app:iconPadding="8dp"
-            app:layout_constraintStart_toEndOf="@id/modifyRomBtn"
-            app:layout_constraintEnd_toStartOf="@id/deviceManagerBtn"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="16dp">
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    style="?attr/materialCardViewFilledStyle"
+                    app:cardBackgroundColor="?attr/colorSurface">
+                    <ImageView
+                        android:id="@+id/ivIcon"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_computer_180dp_with_padding"/>
+                </com.google.android.material.card.MaterialCardView>
 
-        <Button
-            android:id="@+id/deviceManagerBtn"
-            style="@style/MaterialAlertDialog.NegativeButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/device_manager"
-            app:icon="@drawable/devices_other_24px"
-            app:iconTint="?attr/colorSurfaceInverse"
-            android:textColor="?attr/colorSurfaceInverse"
-            app:iconGravity="top"
-            app:iconPadding="8dp"
-            app:layout_constraintStart_toEndOf="@id/exportRomBtn"
-            app:layout_constraintEnd_toStartOf="@id/removeRomBtn"
-            android:visibility="gone"
-            tools:visibility="visible"/>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="16dp">
 
-        <Button
-            android:id="@+id/removeRomBtn"
-            style="@style/MaterialAlertDialog.NegativeButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/remove"
-            app:icon="@drawable/delete_24px"
-            app:iconTint="@color/red_error"
-            android:textColor="@color/red_error"
-            app:iconGravity="top"
-            app:iconPadding="8dp"
-            app:layout_constraintStart_toEndOf="@id/deviceManagerBtn"
-            app:layout_constraintEnd_toEndOf="parent"/>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                    <TextView
+                        android:id="@+id/textName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLines="2"
+                        android:text="@string/new_vm"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/textArch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:text="@string/x86_64"
+                        android:textSize="12sp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"/>
+                </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_start"
+                    style="?attr/materialIconButtonFilledTonalStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:icon="@drawable/play_arrow_24px"/>
+
+            </LinearLayout>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="16dp"/>
+
+            <LinearLayout
+                android:id="@+id/ln_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingVertical="8dp"
+                android:paddingHorizontal="16dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/object_shape_top_high">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/edit_24px"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:padding="8dp"
+                    android:textColor="?attr/colorControlNormal"
+                    android:text="@string/edit"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ln_export"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingVertical="8dp"
+                android:paddingHorizontal="16dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/object_shape_middle_high">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/arrow_upward_24px"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:padding="8dp"
+                    android:textColor="?attr/colorControlNormal"
+                    android:text="@string/export"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ln_cleanup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingVertical="8dp"
+                android:paddingHorizontal="16dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="2dp"
+                android:background="@drawable/object_shape_middle_high">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/cleaning_services_24px"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:padding="8dp"
+                    android:textColor="?attr/colorControlNormal"
+                    android:text="@string/clean_up"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ln_remove"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingVertical="8dp"
+                android:paddingHorizontal="16dp"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/object_shape_bottom_high">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/delete_24px"
+                    app:tint="?attr/colorError"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:padding="8dp"
+                    android:textColor="?attr/colorError"
+                    android:text="@string/remove"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 </LinearLayout>
