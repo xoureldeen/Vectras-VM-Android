@@ -44,7 +44,7 @@ rm -rf /usr/share/qemu
 clear
 
 echo -e "\e[1;37m[i] Downloading..."
-aria2c -x 4 --async-dns=false --disable-ipv6 --check-certificate=false -o setup.tar.gz https://archive.org/download/qemu-7-2-22-for-vectras-vm-nbab/base-vectras-vm-arm64-v8a.tar.gz
+aria2c -x 4 --async-dns=false --disable-ipv6 --check-certificate=false -o setup.tar.gz https://archive.org/download/qemu-7-2-22-for-vectras-vm-nbab/base-june-2026-vectras-vm-arm64-v8a.tar.gz
 clear
 
 echo -e "\e[1;37m[i] Installing..."

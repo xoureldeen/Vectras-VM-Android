@@ -14,7 +14,6 @@ import android.widget.Toast;
 import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.qemu.MainVNCActivity;
-import com.vectras.vm.AppConfig;
 import com.vectras.vm.MainService;
 import com.vectras.vm.R;
 import com.vectras.vm.StartVM;
@@ -55,6 +54,26 @@ public class MainStartVM {
 
     private static StartVmDialog dialog;
 
+    public static final int PENDDING_EMPTY = -1;
+
+    public static final int STARTED_VM = 0;
+    public static final int STARTED_VM_READY_RUNNING = 1;
+
+    public static final int ERROR_VM = 10;
+    public static final int ERROR_BREAK = 11;
+    public static final int ERROR_INVALID_VM_ID = 12;
+    public static final int ERROR_MAKE_TEMP_FOLDER = 13;
+    public static final int ERROR_UNSAFE_COMMAND = 14;
+    public static final int ERROR_ACCEL = 15;
+    public static final int ERROR_VNC_TCP_PORT = 16;
+    public static final int ERROR_SHARED_FOLDER = 17;
+    public static final int ERROR_RESUME = 18;
+
+    public interface MainStartVMCallback {
+        void onStarted(int statusCode, String message);
+        void onError(int errorCode, String message);
+    }
+
     public static void startNow(Activity activity, DataMainRoms vmConfig) {
         breakNow = false;
 
@@ -62,7 +81,10 @@ public class MainStartVM {
 
         VMManager.setArch(vmConfig.itemArch, activity);
 
-        if (!(MainSettingsManager.getVmUi(activity).equals("X11") && DisplaySystem.isUseBuiltInX11())) {
+        if (
+                MainSettingsManager.getVmUi(activity).equals("VNC") ||
+                        (MainSettingsManager.getVmUi(activity).equals("X11") && !DisplaySystem.isUseBuiltInX11())
+        ) {
             showDialog(activity, vmConfig.vmID, vmConfig.itemName, vmConfig.itemIcon, activity.getString(R.string.preparing));
         }
 
@@ -82,9 +104,22 @@ public class MainStartVM {
             String thumbnailFile,
             StartVmDialog dialog
     ) {
+        startNow(context, vmName, env, vmID, thumbnailFile, dialog, null);
+    }
+
+    public static void startNow(
+            Context context,
+            String vmName,
+            String env,
+            String vmID,
+            String thumbnailFile,
+            StartVmDialog dialog,
+            MainStartVMCallback callback
+    ) {
 
         if (breakNow) {
             breakNow = false;
+            if (callback != null) callback.onError(PENDDING_EMPTY, "");
             return;
         }
 
@@ -92,7 +127,10 @@ public class MainStartVM {
 
         if (isLaunchFromPending) {
             isLaunchFromPending = false;
-            if (pendingVMID.isEmpty()) return;
+            if (pendingVMID.isEmpty()) {
+                if (callback != null) callback.onError(ERROR_INVALID_VM_ID, "");
+                return;
+            }
             pendingVMID = "";
         } else {
             if (MainSettingsManager.getVmUi(context).equals("X11") && !DisplaySystem.isUseBuiltInX11()) {
@@ -128,8 +166,6 @@ public class MainStartVM {
 
         breakNow = false;
 
-        if (dialog == null || !dialog.isShowing()) showDialog((Activity) context, vmID, vmName, thumbnailFile, null);
-
         String finalvmID;
         if (vmID == null || vmID.isEmpty()) {
             finalvmID = VMManager.startRamdomVMID();
@@ -140,13 +176,22 @@ public class MainStartVM {
         Config.vmID = finalvmID;
 
         if (VMManager.isVMRunning(context, finalvmID)) {
-            Toast.makeText(context, "This VM is already running.", Toast.LENGTH_LONG).show();
-            DisplaySystem.launch(context);
-            if (!MainSettingsManager.getVmUi(context).equals("VNC")) VmAudioManager.stream(vmID);
-
             dismissDialog();
+
+            Toast.makeText(context, context.getString(R.string.this_vm_is_already_running), Toast.LENGTH_LONG).show();
+            DisplaySystem.launch(context);
+            if (
+                    !MainSettingsManager.getVmUi(context).equals("VNC") &&
+                            !DisplaySystem.isUseBuiltInX11()
+            )
+                VmAudioManager.stream(vmID);
+
+            if (callback != null) callback.onStarted(STARTED_VM_READY_RUNNING, "");
             return;
         }
+
+        // Place it here to avoid freezing when the dialog box appears upon returning to the virtual machine.
+        if (dialog == null || !dialog.isShowing()) showDialog((Activity) context, vmID, vmName, thumbnailFile, null);
 
         File romDir = new File(Config.getCacheDir() + "/" + finalvmID);
         if (!romDir.exists()) {
@@ -159,6 +204,7 @@ public class MainStartVM {
                 );
 
                 dismissDialog();
+                if (callback != null) callback.onError(ERROR_MAKE_TEMP_FOLDER, "");
                 return;
             }
         }
@@ -172,6 +218,7 @@ public class MainStartVM {
             );
 
             dismissDialog();
+            if (callback != null) callback.onError(ERROR_UNSAFE_COMMAND, "");
             return;
         }
 
@@ -182,6 +229,7 @@ public class MainStartVM {
                         () -> startNow(context, vmName, env.replace("tcg,thread=multi", "tcg,thread=single"), finalvmID, thumbnailFile, finalDialog1), null, null);
 
                 dismissDialog();
+                if (callback != null) callback.onError(ERROR_ACCEL, "");
                 return;
             }
         }
@@ -198,6 +246,7 @@ public class MainStartVM {
                     null);
 
             dismissDialog();
+            if (callback != null) callback.onError(ERROR_VNC_TCP_PORT, "");
             return;
         }
 
@@ -221,6 +270,7 @@ public class MainStartVM {
                     );
 
                     dismissDialog();
+                    if (callback != null) callback.onError(ERROR_SHARED_FOLDER, "");
                     return;
                 }
 
@@ -228,10 +278,11 @@ public class MainStartVM {
 
                 if (breakNow) {
                     dismissDialog();
+                    if (callback != null) callback.onError(ERROR_BREAK, "");
                     return;
                 }
 
-                startVm(context, vmName, env, finalvmID, thumbnailFile);
+                startVm(context, vmName, env, finalvmID, thumbnailFile, callback);
             });
         }).start();
     }
@@ -241,7 +292,8 @@ public class MainStartVM {
             String vmName,
             String env,
             String vmID,
-            String thumbnailFile
+            String thumbnailFile,
+            MainStartVMCallback callback
     ) {
         VMManager.isQemuStopedWithError = false;
 
@@ -257,6 +309,7 @@ public class MainStartVM {
 
         if (breakNow) {
             dismissDialog();
+            if (callback != null) callback.onError(ERROR_BREAK, "");
             return;
         }
 
@@ -332,6 +385,8 @@ public class MainStartVM {
                                                 null,
                                                 null
                                         );
+
+                                        if (callback != null) callback.onError(ERROR_RESUME, "");
                                     });
 
                                     return;
@@ -372,12 +427,18 @@ public class MainStartVM {
                             Log.i(TAG, "Virtual machine running.");
 
                             if (activity != null) {
-                                activity.runOnUiThread(MainStartVM::dismissDialog);
+                                activity.runOnUiThread(() -> {
+                                    MainStartVM.dismissDialog();
+                                    if (callback != null) callback.onStarted(STARTED_VM, "");
+                                });
                             }
                         }).start();
                     } else {
                         assert activity != null;
-                        activity.runOnUiThread(MainStartVM::dismissDialog);
+                        activity.runOnUiThread(() -> {
+                            MainStartVM.dismissDialog();
+                            if (callback != null) callback.onError(ERROR_VM, "");
+                        });
                     }
 
                     skipIDEwithARM64DialogInStartVM = false;
@@ -404,9 +465,9 @@ public class MainStartVM {
         VMManager.isTryAgain = false;
     }
 
-    public static void startPending(Context context) {
+    public static void startPending(Context context, MainStartVMCallback callback) {
         isLaunchFromPending = true;
-        startNow(context, pendingVMName, pendingEnv, pendingVMID, pendingThumbnailFile, null);
+        startNow(context, pendingVMName, pendingEnv, pendingVMID, pendingThumbnailFile, null, callback);
     }
 
     private static void showDialog(Activity activity, String vmId, String vmName, String thumbnailPath, String status) {

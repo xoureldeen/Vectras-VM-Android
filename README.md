@@ -127,7 +127,7 @@ QEMU 8.2.0 - 3dfx (only for Vectras VM 2.9.5):
 - [See them at the Internet Archive](https://archive.org/details/vectras-vm-x86_64.tar_202603nbab)
 
 QEMU 7.2.22 - 3dfx (for Vectras VM 4.2.2+):
-- [For Android ARM (64-bit)](https://archive.org/download/qemu-7-2-22-for-vectras-vm-nbab/base-vectras-vm-arm64-v8a.tar.gz)
+- [For Android ARM (64-bit)](https://archive.org/download/qemu-7-2-22-for-vectras-vm-nbab/base-june-2026-vectras-vm-arm64-v8a.tar.gz)
 - [See more at the Internet Archive](https://archive.org/details/qemu-7-2-22-for-vectras-vm-nbab)
 
 ### 💽 3Dfx Wrappers

@@ -750,6 +750,7 @@
     <string name="use_external_x11_note">Dùng ứng dụng Termux:X11 thay vì màn hình có sẵn.</string>
     <string name="blur_effect">Hiệu ứng mờ</string>
     <string name="blur_effect_note">Làm mờ xung quanh để tăng khả năng tập trung vào một vùng cần được chú ý.</string>
+    <string name="x11_general_setting_note">Bạn cần khởi động lại ứng dụng khi chuyển đổi giữa tích hợp sẵn và ngoài.</string>
 
     <!-- CPUs -->
 
