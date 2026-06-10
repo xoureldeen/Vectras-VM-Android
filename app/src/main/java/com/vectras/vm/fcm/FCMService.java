@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.vectras.vm.R;
+import com.vectras.vm.settings.UpdaterActivity;
 import com.vectras.vm.utils.NotificationUtils;
 
 import java.util.Map;
@@ -21,6 +22,12 @@ public class FCMService
                 && !Objects.requireNonNull(data.get("targetVersions")).contains(getString(R.string.app_version))) {
             return;
         }
+        
+        Class<?> activityClass = null;
+        
+        if (data.get("activityClass") != null) {
+            if (Objects.equals(data.get("activityClass"), "update")) activityClass = UpdaterActivity.class;
+        }
 
         NotificationUtils.pushNow(this,
                 1,
@@ -31,7 +38,7 @@ public class FCMService
                 data.get("image") != null ? data.get("image") : null,
                 -1,
                 data.get("url") != null ? data.get("url") : null,
-                null);
+                activityClass);
     }
 
     @Override

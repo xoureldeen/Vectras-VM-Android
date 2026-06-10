@@ -3,18 +3,19 @@ package com.vectras.vm.x11;
 import static android.Manifest.permission.WRITE_SECURE_SETTINGS;
 
 import android.app.Dialog;
+
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static android.os.Build.VERSION.SDK_INT;
 
 import android.content.pm.PackageManager;
 import android.os.Looper;
+
 import static android.view.InputDevice.KEYBOARD_TYPE_ALPHABETIC;
 import static android.view.KeyEvent.*;
 import static android.view.WindowManager.LayoutParams.*;
 
 import android.view.WindowManager;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -28,6 +29,9 @@ import com.vectras.vm.databinding.DesktopControlsBinding;
 import com.vectras.vm.databinding.GameControlsBinding;
 import com.vectras.vm.main.core.MainStartVM;
 import com.vectras.vm.manager.QmpSender;
+import com.vectras.vm.manager.VmAudioManager;
+import com.vectras.vm.manager.VmFileManager;
+import com.vectras.vm.utils.StreamAudio;
 import com.vectras.vm.utils.UIUtils;
 
 import static com.vectras.vm.x11.CmdEntryPoint.ACTION_START;
@@ -119,6 +123,8 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
     public boolean ctrlClicked = false;
     public boolean altClicked = false;
 
+    private StreamAudio streamAudio;
+
     ActivityX11Binding binding;
     ControlsFragmentBinding bindingControls;
     DesktopControlsBinding bindingDesktopControls;
@@ -178,11 +184,11 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
 
     @Override
     @SuppressLint({
-        "AppCompatMethod",
-        "ObsoleteSdkInt",
-        "ClickableViewAccessibility",
-        "WrongConstant",
-        "UnspecifiedRegisterReceiverFlag"
+            "AppCompatMethod",
+            "ObsoleteSdkInt",
+            "ClickableViewAccessibility",
+            "WrongConstant",
+            "UnspecifiedRegisterReceiverFlag"
     })
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -281,8 +287,8 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                         }
 
                         if (e.getScanCode() == KEY_BACK
-                                        && e.getDevice().getKeyboardType()
-                                                != KEYBOARD_TYPE_ALPHABETIC
+                                && e.getDevice().getKeyboardType()
+                                != KEYBOARD_TYPE_ALPHABETIC
                                 || e.getScanCode() == 0) {
                             if (toggleIMEUsingBackKey && e.getAction() == ACTION_UP) {
                                 Log.d(TAG, "KEYCODE_BACK: toggleIMEUsingBackKey");
@@ -688,31 +694,49 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
 
         bindingDesktopControls.ctrlaltdelBtn.setVisibility(View.GONE);
 
-        MainStartVM.startPending(this);
+        MainStartVM.startPending(this, new MainStartVM.MainStartVMCallback() {
+                    @Override
+                    public void onStarted(int statusCode, String message) {
+                        MainStartVM.dismissDialog();
+                        setupSound();
+                    }
+
+                    @Override
+                    public void onError(int errorCode, String message) {
+                        MainStartVM.dismissDialog();
+                        if (errorCode == MainStartVM.PENDDING_EMPTY) setupSound();
+                    }
+                }
+        );
     }
 
     private void onBack() {
         if (bindingControls.mainControl.getVisibility() == View.GONE) {
             bindingControls.mainControl.setVisibility(View.VISIBLE);
         } else {
+            if (streamAudio != null) {
+                if (!VmAudioManager.currentVmId.equals(Config.vmID)) streamAudio.setCross(null);
+                if (streamAudio.isPlaying()) streamAudio.stop();
+            }
             finish();
         }
     }
-    
+
     private void keyDownUp(int keyEventCode) {
         dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, keyEventCode));
         dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, keyEventCode));
     }
-    
+
     private void sendKey(int keyEventCode, boolean up) {
         if (up)
             dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_UP, keyEventCode));
         else dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, keyEventCode));
     }
-    
+
     @Override
     protected void onDestroy() {
         unregisterReceiver(receiver);
+        if (streamAudio != null) streamAudio.stop();
         super.onDestroy();
     }
 
@@ -790,7 +814,8 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                         v.startDragAndDrop(
                                 ClipData.newPlainText("", ""),
                                 new View.DragShadowBuilder(binding.buttonVisibility) {
-                                    public void onDrawShadow(@NonNull Canvas canvas) {}
+                                    public void onDrawShadow(@NonNull Canvas canvas) {
+                                    }
                                 },
                                 null,
                                 View.DRAG_FLAG_GLOBAL);
@@ -927,48 +952,46 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                                 startTime = SystemClock.uptimeMillis();
                                 binding.mouseButtonsPosition.setPressed(true);
                                 break;
-                            case MotionEvent.ACTION_MOVE:
-                                {
-                                    int[] offset = new int[2];
-                                    int[] offset2 = new int[2];
-                                    binding.mouseButtons.getLocationOnScreen(offset);
-                                    binding.frame.getLocationOnScreen(offset2);
-                                    binding.mouseButtons.setX(
-                                            MathUtils.clamp(
-                                                    offset[0] - startOffset[0] + e.getX(),
-                                                    offset2[0],
-                                                    offset2[0]
-                                                            + binding.frame.getWidth()
-                                                            - binding.mouseButtons.getWidth()));
-                                    binding.mouseButtons.setY(
-                                            MathUtils.clamp(
-                                                    offset[1] - startOffset[1] + e.getY(),
-                                                    offset2[1],
-                                                    offset2[1]
-                                                            + binding.frame.getHeight()
-                                                            - binding.mouseButtons.getHeight()));
-                                    break;
-                                }
-                            case MotionEvent.ACTION_UP:
-                                {
-                                    final int[] _pos = new int[2];
-                                    binding.mouseButtons.getLocationOnScreen(_pos);
-                                    int deltaX =
-                                            (int) (startOffset[0] - e.getX())
-                                                    + (startPosition[0] - _pos[0]);
-                                    int deltaY =
-                                            (int) (startOffset[1] - e.getY())
-                                                    + (startPosition[1] - _pos[1]);
-                                    binding.mouseButtonsPosition.setPressed(false);
+                            case MotionEvent.ACTION_MOVE: {
+                                int[] offset = new int[2];
+                                int[] offset2 = new int[2];
+                                binding.mouseButtons.getLocationOnScreen(offset);
+                                binding.frame.getLocationOnScreen(offset2);
+                                binding.mouseButtons.setX(
+                                        MathUtils.clamp(
+                                                offset[0] - startOffset[0] + e.getX(),
+                                                offset2[0],
+                                                offset2[0]
+                                                        + binding.frame.getWidth()
+                                                        - binding.mouseButtons.getWidth()));
+                                binding.mouseButtons.setY(
+                                        MathUtils.clamp(
+                                                offset[1] - startOffset[1] + e.getY(),
+                                                offset2[1],
+                                                offset2[1]
+                                                        + binding.frame.getHeight()
+                                                        - binding.mouseButtons.getHeight()));
+                                break;
+                            }
+                            case MotionEvent.ACTION_UP: {
+                                final int[] _pos = new int[2];
+                                binding.mouseButtons.getLocationOnScreen(_pos);
+                                int deltaX =
+                                        (int) (startOffset[0] - e.getX())
+                                                + (startPosition[0] - _pos[0]);
+                                int deltaY =
+                                        (int) (startOffset[1] - e.getY())
+                                                + (startPosition[1] - _pos[1]);
+                                binding.mouseButtonsPosition.setPressed(false);
 
-                                    if (deltaX * deltaX + deltaY * deltaY < touchSlop
-                                            && SystemClock.uptimeMillis() - startTime
-                                                    <= tapTimeout) {
-                                        v.performClick();
-                                        return true;
-                                    }
-                                    break;
+                                if (deltaX * deltaX + deltaY * deltaY < touchSlop
+                                        && SystemClock.uptimeMillis() - startTime
+                                        <= tapTimeout) {
+                                    v.performClick();
+                                    return true;
                                 }
+                                break;
+                            }
                         }
                         return true;
                     }
@@ -1067,8 +1090,8 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
         binding.mouseButtons
                 .setVisibility(
                         p.getBoolean("showMouseHelper", false)
-                                        && "1".equals(p.getString("touchMode", "1"))
-                                        && mClientConnected
+                                && "1".equals(p.getString("touchMode", "1"))
+                                && mClientConnected
                                 ? View.VISIBLE
                                 : View.GONE);
 
@@ -1146,11 +1169,11 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                                         37.5f
                                                 * getResources().getDisplayMetrics().density
                                                 * (mExtraKeys.getExtraKeysInfo() == null
-                                                        ? 0
-                                                        : mExtraKeys
-                                                                .getExtraKeysInfo()
-                                                                .getMatrix()
-                                                                .length));
+                                                ? 0
+                                                : mExtraKeys
+                                                .getExtraKeysInfo()
+                                                .getMatrix()
+                                                  .length));
                         terminalToolbarViewPager.setLayoutParams(layoutParams);
                     }
                     binding.frame.setPadding(
@@ -1158,8 +1181,8 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                             0,
                             0,
                             preferences.getBoolean("adjustHeightForEK", false)
-                                            && terminalToolbarViewPager.getVisibility()
-                                                    == View.VISIBLE
+                                    && terminalToolbarViewPager.getVisibility()
+                                    == View.VISIBLE
                                     ? terminalToolbarViewPager.getHeight()
                                     : 0);
                 },
@@ -1213,8 +1236,8 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
     public boolean handleKey(KeyEvent e) {
         if (filterOutWinKey
                 && (e.getKeyCode() == KEYCODE_META_LEFT
-                        || e.getKeyCode() == KEYCODE_META_RIGHT
-                        || e.isMetaPressed())) return false;
+                || e.getKeyCode() == KEYCODE_META_RIGHT
+                || e.isMetaPressed())) return false;
         return mLorieKeyListener.onKey(getLorieView(), e.getKeyCode(), e);
     }
 
@@ -1319,15 +1342,15 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
         if (appOpsManager == null) return false;
         else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
             return appOpsManager.unsafeCheckOpNoThrow(
-                            AppOpsManager.OPSTR_PICTURE_IN_PICTURE,
-                            android.os.Process.myUid(),
-                            context.getPackageName())
+                    AppOpsManager.OPSTR_PICTURE_IN_PICTURE,
+                    android.os.Process.myUid(),
+                    context.getPackageName())
                     == AppOpsManager.MODE_ALLOWED;
         else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             return appOpsManager.checkOpNoThrow(
-                            AppOpsManager.OPSTR_PICTURE_IN_PICTURE,
-                            android.os.Process.myUid(),
-                            context.getPackageName())
+                    AppOpsManager.OPSTR_PICTURE_IN_PICTURE,
+                    android.os.Process.myUid(),
+                    context.getPackageName())
                     == AppOpsManager.MODE_ALLOWED;
         else
             return false;
@@ -1384,8 +1407,8 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                     binding.mouseButtons
                             .setVisibility(
                                     p.getBoolean("showMouseHelper", false)
-                                                    && "1".equals(p.getString("touchMode", "1"))
-                                                    && mClientConnected
+                                            && "1".equals(p.getString("touchMode", "1"))
+                                            && mClientConnected
                                             ? View.VISIBLE
                                             : View.GONE);
                     binding.stub
@@ -1431,6 +1454,31 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                 || (textInput != null && textInput.isFocused())) return false;
 
         return mInputHandler.shouldInterceptKeys();
+    }
+
+    private void setupSound() {
+        if (streamAudio == null) {
+            streamAudio = new StreamAudio(X11Activity.this);
+            streamAudio.setFile(VmFileManager.findAudioRaw(X11Activity.this, Config.vmID));
+
+            if (VmAudioManager.currentVmId.equals(Config.vmID) && VmAudioManager.streamAudio.isPlaying())
+                streamAudio.setCross(VmAudioManager.streamAudio);
+
+            playSound();
+        }
+    }
+
+    int playSoundRequests;
+
+    private void playSound() {
+        if (streamAudio == null || streamAudio.isPlaying() || playSoundRequests > 0) return;
+        playSoundRequests++;
+
+        streamAudio.stop();
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            if (!streamAudio.isPlaying()) streamAudio.play();
+            playSoundRequests--;
+        }, 100);
     }
 
     private void shutdownthisvm() {

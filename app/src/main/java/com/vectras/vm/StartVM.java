@@ -28,6 +28,8 @@ public class StartVM {
     private static DataMainRoms vmConfigs;
 
     public static String env(Activity activity, DataMainRoms vmData) {
+        if (VMManager.isVMRunning(activity, vmData.vmID)) return "";
+
         vmConfigs = vmData;
 
         if (VMManager.isNeedLoadMigrate() && FileUtils.isFileExists(VmFileManager.getSnapshotSh(Config.vmID))) {
