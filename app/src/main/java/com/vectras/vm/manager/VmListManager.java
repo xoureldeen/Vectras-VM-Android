@@ -18,8 +18,21 @@ import java.util.List;
 import java.util.Objects;
 
 public class VmListManager {
+    public static ArrayList<HashMap<String, Object>> getAllVmForPickRunningNoVncSocketOnly(Context context) {
+        ArrayList<HashMap<String, Object>> listVm = getAllVmForPickRunningOnly(context);
+        ArrayList<HashMap<String, Object>> list = new ArrayList<>();
+
+        for (int i = 0; i < listVm.size(); i++) {
+            if (!FileUtils.isFileExists(Config.getLocalVNCSocketPath(Objects.requireNonNull(listVm.get(i).get("value")).toString()))) {
+                list.add(listVm.get(i));
+            }
+        }
+
+        return list;
+    }
+
     public static ArrayList<HashMap<String, Object>> getAllVmForPickRunningVncSocketOnly(Context context) {
-        ArrayList<HashMap<String, Object>> listVm = getAllVmForPick(context);
+        ArrayList<HashMap<String, Object>> listVm = getAllVmForPickRunningOnly(context);
         ArrayList<HashMap<String, Object>> list = new ArrayList<>();
 
         for (int i = 0; i < listVm.size(); i++) {

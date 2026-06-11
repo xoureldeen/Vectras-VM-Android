@@ -592,6 +592,7 @@
     <string name="in_system_settings">Ở cài đặt hệ thống.</string>
     <string name="missing_packages">Một số gói đang bị thiếu</string>
     <string name="missing_packages_content">Đây là những gói đang bị thiếu và bạn nên cài đặt chúng:</string>
+    <string name="contains_ads">Có chứa quảng cáo</string>
 
     <!--======================TERMUX STRINGS====================-->
     <string name="application_name" translatable="false">Vterm</string>

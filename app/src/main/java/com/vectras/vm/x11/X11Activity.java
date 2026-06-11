@@ -8,6 +8,8 @@ import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static android.os.Build.VERSION.SDK_INT;
 
 import android.content.pm.PackageManager;
+import android.graphics.RenderEffect;
+import android.graphics.Shader;
 import android.os.Looper;
 
 import static android.view.InputDevice.KEYBOARD_TYPE_ALPHABETIC;
@@ -30,7 +32,11 @@ import com.vectras.vm.databinding.GameControlsBinding;
 import com.vectras.vm.main.core.MainStartVM;
 import com.vectras.vm.manager.QmpSender;
 import com.vectras.vm.manager.VmAudioManager;
+import com.vectras.vm.manager.VmControllerDialog;
 import com.vectras.vm.manager.VmFileManager;
+import com.vectras.vm.manager.VmListManager;
+import com.vectras.vm.manager.VmPicker;
+import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.StreamAudio;
 import com.vectras.vm.utils.UIUtils;
 
@@ -94,6 +100,8 @@ import com.vectras.vm.x11.utils.X11ToolbarViewPager;
 import com.vectras.vm.R;
 import com.vectras.vterm.Terminal;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -410,41 +418,41 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
             }
         });
 
-        bindingControls.btnPrograms.setOnClickListener(v -> {
-            Dialog dialog = new Dialog(this);
-            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            dialog.setContentView(R.layout.dialog_programs);
-            Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
-
-            WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
-            layoutParams.alpha = 1f;
-            dialog.getWindow().setAttributes(layoutParams);
-
-            ImageButton termBtn = dialog.findViewById(R.id.btnTerminal);
-            ImageButton vkCubeBtn = dialog.findViewById(R.id.btnVkCube);
-            ImageButton glxGearsBtn = dialog.findViewById(R.id.btnGlxGears);
-
-            termBtn.setOnClickListener(v1 -> {
-                new Terminal(this).executeShellCommand2("xfce4-terminal", false, this);
-                dialog.dismiss();
-            });
-
-            glxGearsBtn.setOnClickListener(v1 -> {
-                new Terminal(this).executeShellCommand2("glxgears", false, this);
-                dialog.dismiss();
-            });
-
-            vkCubeBtn.setOnClickListener(v1 -> {
-                new Terminal(this).executeShellCommand2("vkcube", false, this);
-                dialog.dismiss();
-            });
-
-            try {
-                dialog.show();
-            } catch (WindowManager.BadTokenException e) {
-                Log.e(TAG, "Failed to show dialog", e);
-            }
-        });
+//        bindingControls.btnPrograms.setOnClickListener(v -> {
+//            Dialog dialog = new Dialog(this);
+//            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//            dialog.setContentView(R.layout.dialog_programs);
+//            Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
+//
+//            WindowManager.LayoutParams layoutParams = dialog.getWindow().getAttributes();
+//            layoutParams.alpha = 1f;
+//            dialog.getWindow().setAttributes(layoutParams);
+//
+//            ImageButton termBtn = dialog.findViewById(R.id.btnTerminal);
+//            ImageButton vkCubeBtn = dialog.findViewById(R.id.btnVkCube);
+//            ImageButton glxGearsBtn = dialog.findViewById(R.id.btnGlxGears);
+//
+//            termBtn.setOnClickListener(v1 -> {
+//                new Terminal(this).executeShellCommand2("xfce4-terminal", false, this);
+//                dialog.dismiss();
+//            });
+//
+//            glxGearsBtn.setOnClickListener(v1 -> {
+//                new Terminal(this).executeShellCommand2("glxgears", false, this);
+//                dialog.dismiss();
+//            });
+//
+//            vkCubeBtn.setOnClickListener(v1 -> {
+//                new Terminal(this).executeShellCommand2("vkcube", false, this);
+//                dialog.dismiss();
+//            });
+//
+//            try {
+//                dialog.show();
+//            } catch (WindowManager.BadTokenException e) {
+//                Log.e(TAG, "Failed to show dialog", e);
+//            }
+//        });
 
         bindingGameControls.upGameBtn.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -517,12 +525,21 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
         bindingGameControls.xBtn.setOnClickListener(v -> keyDownUp(KEYCODE_X));
         bindingGameControls.ctrlGameBtn.setOnClickListener(v -> keyDownUp(KEYCODE_CTRL_LEFT));
         bindingGameControls.spaceBtn.setOnClickListener(v -> keyDownUp(KEYCODE_SPACE));
+
         bindingControls.btnVterm.setOnClickListener(v -> {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             // Create and show the dialog.
             LoggerDialogFragment newFragment = new LoggerDialogFragment();
             newFragment.show(ft, "Logger");
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                getSupportFragmentManager().executePendingTransactions();
+                if (newFragment.getDialog() == null) return;
+                blurLayout();
+                newFragment.getDialog().setOnDismissListener(d -> unBlurLayout());
+            }
         });
+
         bindingControls.shutdownBtn.setOnClickListener(v -> finish());
 
         bindingControls.kbdBtn.setOnClickListener(v -> new Handler(Looper.getMainLooper()).postDelayed(() -> toggleKeyboardVisibility(X11Activity.this), 200));
@@ -533,6 +550,8 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
             newFragment.binding = binding.controlsfragment;
             newFragment.show(ft, "Controllers");
         });
+
+
         bindingControls.btnSettings
                 .setOnClickListener(
                         (l) ->
@@ -542,6 +561,9 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
                                                 setAction(Intent.ACTION_MAIN);
                                             }
                                         }));
+
+        bindingControls.btnVmManager.setOnClickListener(v -> vmController());
+
         bindingDesktopControls.upBtn.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 sendKey(KEYCODE_DPAD_UP, false);
@@ -1485,5 +1507,73 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
         QmpSender.quickShutdown();
         Config.setDefault();
         finish();
+    }
+
+    private void vmController() {
+        ArrayList<HashMap<String, Object>> list = VmListManager.getAllVmForPickRunningNoVncSocketOnly(this);
+
+        if (list.isEmpty()) {
+            DialogUtils.oopsDialog(this, getString(R.string.no_vms_are_available));
+        } else if (list.size() == 1) {
+            Config.vmID = Objects.requireNonNull(list.get(0).get("value")).toString();
+
+            VmControllerDialog vmControllerDialog = new VmControllerDialog();
+            vmControllerDialog.streamAudio = streamAudio;
+            vmControllerDialog.show(getSupportFragmentManager(), "VmControllerDialog");
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                getSupportFragmentManager().executePendingTransactions();
+                blurLayout();
+                vmControllerDialog.setOnDismissCallback(this::unBlurLayout);
+            }
+        } else {
+            VmPicker vmPicker = new VmPicker(this);
+            vmPicker.currentVmId = "";
+            vmPicker.listVm = list;
+            vmPicker.pick((position, name, value) -> {
+                if (position < 0) {
+                    DialogUtils.oopsDialog(this, getString(R.string.no_vms_are_available));
+                    return;
+                }
+
+                Config.vmID = value;
+
+                VmControllerDialog vmControllerDialog = new VmControllerDialog();
+                vmControllerDialog.streamAudio = streamAudio;
+                vmControllerDialog.show(getSupportFragmentManager(), "VmControllerDialog");
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    getSupportFragmentManager().executePendingTransactions();
+                    blurLayout();
+                    vmControllerDialog.setOnDismissCallback(this::unBlurLayout);
+                }
+            });
+        }
+    }
+
+    boolean isBlurring;
+
+    private void blurLayout() {
+        if (isBlurring || !MainSettingsManager.getBlurEffect(this)) return;
+        isBlurring = true;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            RenderEffect blurEffect = RenderEffect.createBlurEffect(
+                    25f, 25f,
+                    Shader.TileMode.CLAMP
+            );
+            binding.main.setRenderEffect(blurEffect);
+            binding.lorieView.setRenderEffect(blurEffect);
+        }
+    }
+
+    private void unBlurLayout() {
+        if (!isBlurring) return;
+        isBlurring = false;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            binding.main.setRenderEffect(null);
+            binding.lorieView.setRenderEffect(null);
+        }
     }
 }

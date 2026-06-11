@@ -29,7 +29,7 @@ import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.AppConfig;
 import com.vectras.vm.Fragment.CreateImageDialogFragment;
 import com.vectras.vm.R;
-import com.vectras.vm.RomInfo;
+import com.vectras.vm.store.RomInfo;
 import com.vectras.vm.SplashActivity;
 import com.vectras.vm.VMManager;
 import com.vectras.vm.main.vms.DataMainRoms;

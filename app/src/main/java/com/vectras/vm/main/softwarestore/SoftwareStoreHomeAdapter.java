@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.vectras.vm.R;
-import com.vectras.vm.RomInfo;
+import com.vectras.vm.store.RomInfo;
 import com.vectras.vm.main.romstore.DataRoms;
 import com.vectras.vm.utils.UIUtils;
 
@@ -77,10 +77,12 @@ public class SoftwareStoreHomeAdapter extends RecyclerView.Adapter<RecyclerView.
                 intent.putExtra("id", current.id);
                 intent.putExtra("vecid", current.vecid);
                 intent.putExtra("isRomInfo", false);
+                intent.putExtra("containsAds", current.containsAds);
                 context.startActivity(intent);
             });
+            myHolder.textAvail.setText(context.getString(R.string.available) + (current.containsAds ? " • " + context.getString(R.string.contains_ads) : ""));
         } else {
-            myHolder.textAvail.setText(context.getString(R.string.unavailable));
+            myHolder.textAvail.setText(context.getString(R.string.unavailable) + (current.containsAds ? " • " + context.getString(R.string.contains_ads) : ""));
             myHolder.textAvail.setTextColor(Color.RED);
         }
 

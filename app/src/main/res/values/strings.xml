@@ -604,6 +604,7 @@
     <string name="missing_packages">Missing packages</string>
     <string name="missing_packages_content">These are the missing packages that you should install:</string>
     <string name="x11_general_setting_note">You need to restart the app when switching between built-in and external.</string>
+    <string name="contains_ads">Contains ads</string>
 
 
     <!--======================TERMUX STRINGS====================-->

@@ -189,8 +189,8 @@ public class RfbProto {
 	class VectrasOutputStream {
 
       OutputStream os;
-      HandlerThread rfbQueueThread = null;
-      Handler handler = null;
+      HandlerThread rfbQueueThread;
+      Handler handler;
 
       public VectrasOutputStream(OutputStream sos) {
 			os = sos;
@@ -203,14 +203,11 @@ public class RfbProto {
 		public void write(final int data) throws IOException {
             final int data0 = data;
 
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        sos.write(data0);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+            handler.post(() -> {
+                try {
+                    sos.write(data0);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             });
 		}
@@ -218,16 +215,13 @@ public class RfbProto {
 		public void write(final byte[] bytes) throws IOException {
             final byte [] buffer0 = java.util.Arrays.copyOf(bytes, bytes.length);
 
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        sos.write(buffer0);
-                    } catch (IOException e) {
-                        Log.w(TAG, "Error while sending VNC data");
-                        if(Config.debug)
-                            e.printStackTrace();
-                    }
+            handler.post(() -> {
+                try {
+                    sos.write(buffer0);
+                } catch (IOException e) {
+                    Log.w(TAG, "Error while sending VNC data");
+                    if(Config.debug)
+                        e.printStackTrace();
                 }
             });
 		}
@@ -237,14 +231,11 @@ public class RfbProto {
             final int offset0 = offset;
             final int count0 = count;
 
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        sos.write(buffer0, offset0, count0);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+            handler.post(() -> {
+                try {
+                    sos.write(buffer0, offset0, count0);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             });
 		}
@@ -370,8 +361,19 @@ public class RfbProto {
     try {
       os.close();
     } catch (Exception ex) {
-      ex.printStackTrace();
+      Log.e(TAG, "Error while closing VectrasOutputStream", ex);
     }
+
+    if (localSocket != null) {
+      try {
+        localSocket.close();
+        closed = true;
+        Log.v(TAG, "RFB local socket closed");
+      } catch (Exception e) {
+        Log.e(TAG, "Error while closing RFB local socket", e);
+      }
+    }
+
     if (sock != null) {
       try {
         sock.close();
@@ -385,7 +387,7 @@ public class RfbProto {
 
       } */
       } catch (Exception e) {
-        e.printStackTrace();
+        Log.e(TAG, "Error while closing RFB socket", e);
       }
     }
 

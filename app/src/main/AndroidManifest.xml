@@ -136,7 +136,7 @@
             android:exported="false"
             android:label="@string/mini_tools" />
         <activity
-            android:name=".RomInfo"
+            android:name=".store.RomInfo"
             android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
             android:exported="false" />
         <activity

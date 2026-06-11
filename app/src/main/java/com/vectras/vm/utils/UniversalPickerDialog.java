@@ -69,7 +69,7 @@ public class UniversalPickerDialog {
         public RecyclerviewAdapter(Activity activity, AlertDialog alertDialog, ArrayList<HashMap<String, Object>> arr, int position, UniversalPickerDialogCallback callback) {
             this.activity = activity;
             data = arr;
-            currentPosition = position > -1 ? position : 0;
+            currentPosition = position;
             dialog = alertDialog;
             this.callback = callback;
         }

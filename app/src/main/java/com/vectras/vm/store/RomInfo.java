@@ -1,4 +1,4 @@
-package com.vectras.vm;
+package com.vectras.vm.store;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -22,6 +22,9 @@ import com.anbui.elephant.interaction.Interaction;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.vectras.vm.ImagePrvActivity;
+import com.vectras.vm.R;
+import com.vectras.vm.VMManager;
 import com.vectras.vm.creator.VMCreatorActivity;
 import com.vectras.vm.databinding.ActivityRomInfoBinding;
 import com.vectras.vm.utils.DialogUtils;
@@ -177,9 +180,15 @@ public class RomInfo extends AppCompatActivity {
         if (getIntent().hasExtra("title")) {
             binding.textName.setText(getIntent().getStringExtra("title"));
         }
+
         if (getIntent().hasExtra("shortdesc")) {
             binding.textSize.setText(getIntent().getStringExtra("shortdesc"));
         }
+
+        if (getIntent().hasExtra("containsAds")) {
+            binding.tvContainsAds.setVisibility(getIntent().getBooleanExtra("containsAds", false) ? View.VISIBLE : View.GONE);
+        }
+
         if (getIntent().hasExtra("desc")) {
             binding.descTxt.setText(getIntent().getStringExtra("desc"));
         }
