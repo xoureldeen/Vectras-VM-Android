@@ -33,6 +33,7 @@ import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.ProgressDialog;
 import com.vectras.vm.utils.StreamAudio;
+import com.vectras.vm.x11.X11Activity;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -121,7 +122,8 @@ public class VmControllerDialog extends DialogFragment {
                         binding.lnSwitch.setOnClickListener(v -> {
                             if (isAdded()) {
                                 VmPicker vmPicker = new VmPicker(requireActivity());
-                                vmPicker.currentVmId= Config.vmID;
+                                vmPicker.currentVmId = Config.vmID;
+                                vmPicker.title = getString(R.string.switch_to);
                                 vmPicker.listVm = list;
                                 vmPicker.pick((position, name, value) -> {
                                     if (Config.vmID.equals(value)) return;
@@ -182,7 +184,7 @@ public class VmControllerDialog extends DialogFragment {
                     dismiss();
                 });
 
-                if (isAdded() && (!(requireActivity() instanceof MainVNCActivity))) {
+                if (isAdded() && (!(requireActivity() instanceof MainVNCActivity)) && (!(requireActivity() instanceof X11Activity))) {
                     if (streamAudio == null)
                         streamAudio = new StreamAudio(requireActivity().getApplicationContext());
                     if (!streamAudio.isPlaying()) VmAudioManager.set(Config.vmID);
@@ -191,11 +193,16 @@ public class VmControllerDialog extends DialogFragment {
                 if (streamAudio == null ||
                         !isAdded() ||
                         audioFileSize == 0 ||
-                        (isAdded() && (!(requireActivity() instanceof MainVNCActivity)) && !VmAudioManager.currentVmId.equals(Config.vmID))
+                        (isAdded() && (!(requireActivity() instanceof MainVNCActivity)) && !(requireActivity() instanceof X11Activity) && !VmAudioManager.currentVmId.equals(Config.vmID))
                 ) {
                     binding.lnMute.setVisibility(View.GONE);
                 } else {
-                    if (!streamAudio.isPlaying()) {
+                    if (isAdded() && requireActivity() instanceof X11Activity) {
+                        if (!streamAudio.getFile().equals(VmFileManager.findAudioRaw(getContext(), Config.vmID)) || !streamAudio.isPlaying()) {
+                            binding.ivMute.setImageResource(R.drawable.volume_up_24px);
+                            binding.tvMute.setText(R.string.unmute);
+                        }
+                    } else if (!streamAudio.isPlaying()) {
                         binding.ivMute.setImageResource(R.drawable.volume_up_24px);
                         binding.tvMute.setText(R.string.unmute);
                     }
@@ -491,7 +498,21 @@ public class VmControllerDialog extends DialogFragment {
     }
 
     private void mute() {
-        if (streamAudio.isPlaying()) {
+        if (isAdded() && requireActivity() instanceof X11Activity) {
+            if (streamAudio.isPlaying() && streamAudio.getFile().equals(VmFileManager.findAudioRaw(getContext(), Config.vmID))) {
+                streamAudio.stop();
+                binding.ivMute.setImageResource(R.drawable.volume_up_24px);
+                binding.tvMute.setText(R.string.unmute);
+            } else {
+                if (!streamAudio.getFile().equals(VmFileManager.findAudioRaw(getContext(), Config.vmID))) {
+                    streamAudio.stop();
+                    streamAudio.setFile(VmFileManager.findAudioRaw(getContext(), Config.vmID));
+                }
+                streamAudio.play();
+                binding.ivMute.setImageResource(R.drawable.volume_off_24px);
+                binding.tvMute.setText(R.string.mute);
+            }
+        } else if (streamAudio.isPlaying()) {
             streamAudio.stop();
             binding.ivMute.setImageResource(R.drawable.volume_up_24px);
             binding.tvMute.setText(R.string.unmute);

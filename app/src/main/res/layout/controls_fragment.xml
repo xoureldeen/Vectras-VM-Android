@@ -84,7 +84,17 @@
                         android:layout_marginRight="8dp"
                         android:background="@drawable/controls_button"
                         android:backgroundTint="?attr/colorPrimary"
-                        android:src="@drawable/round_settings_24"
+                        android:src="@drawable/settings_24px"
+                        app:tint="?attr/colorPrimary" />
+
+                    <ImageButton
+                        android:id="@+id/btn_vm_manager"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="8dp"
+                        android:background="@drawable/controls_button"
+                        android:backgroundTint="?attr/colorPrimary"
+                        android:src="@drawable/stack_24px"
                         app:tint="?attr/colorPrimary" />
 
                     <ImageButton
@@ -95,7 +105,9 @@
                         android:background="@drawable/controls_button"
                         android:backgroundTint="?attr/colorPrimary"
                         android:src="@drawable/apps_24px"
-                        app:tint="?attr/colorPrimary" />
+                        app:tint="?attr/colorPrimary"
+                        android:visibility="gone"
+                        tools:visibility="visible"/>
 
                     <ImageButton
                         android:id="@+id/btnQmp"
@@ -104,7 +116,7 @@
                         android:layout_marginRight="8dp"
                         android:background="@drawable/controls_button"
                         android:backgroundTint="?attr/colorPrimary"
-                        android:src="@drawable/round_terminal_24"
+                        android:src="@drawable/terminal_24px"
                         app:tint="?attr/colorPrimary" />
 
                     <ImageButton
@@ -124,7 +136,7 @@
                         android:layout_marginRight="8dp"
                         android:background="@drawable/controls_button"
                         android:backgroundTint="?attr/colorPrimary"
-                        android:src="@drawable/round_games_24"
+                        android:src="@drawable/gamepad_24px"
                         app:tint="?attr/colorPrimary" />
 
                     <ImageButton
@@ -134,7 +146,7 @@
                         android:layout_marginLeft="0dp"
                         android:background="@drawable/controls_button"
                         android:backgroundTint="?attr/colorPrimary"
-                        android:src="@drawable/round_keyboard_24"
+                        android:src="@drawable/keyboard_24px"
                         app:tint="?attr/colorPrimary" />
 
                     <ImageButton

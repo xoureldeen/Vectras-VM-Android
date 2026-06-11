@@ -1202,6 +1202,8 @@ public class MainVNCActivity extends VncCanvasActivity {
             }
         });
 
+        bindingControls.btnVmManager.setVisibility(View.GONE);
+
         bindingDesktopControls.rightClickBtn.setOnClickListener(v -> {
             try {
                 MotionEvent e = MotionEvent.obtain(1000, 1000, MotionEvent.ACTION_DOWN, vncCanvas.mouseX, vncCanvas.mouseY,

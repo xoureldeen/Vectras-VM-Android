@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.vectras.vm.R;
 import com.vectras.vm.creator.VMCreatorSelector;
+import com.vectras.vm.utils.UniversalPickerDialog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,8 +13,9 @@ import java.util.Objects;
 public class VmPicker {
     public boolean isRunningOnly;
     public String currentVmId = "";
+    public String title;
     private Activity activity;
-    ArrayList<HashMap<String, Object>> listVm;
+    public ArrayList<HashMap<String, Object>> listVm;
 
     public interface VMPickerCallback {
         void onSelected(int position, String name, String vmId);
@@ -39,11 +41,11 @@ public class VmPicker {
             }
         }
 
-        VMCreatorSelector.showDialog(
+        UniversalPickerDialog.show(
                 activity,
                 list,
                 position,
                 (callback::onSelected),
-                activity.getString(R.string.switch_to));
+                title == null || title.isEmpty() ? activity.getString(R.string.vm_picker) : title);
     }
 }

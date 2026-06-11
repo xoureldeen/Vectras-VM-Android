@@ -38,6 +38,10 @@ public class StreamAudio {
         filePath = path;
     }
 
+    public String getFile() {
+        return filePath;
+    }
+
     public void setCross(StreamAudio streamAudio) {
         cross = streamAudio;
     }

@@ -35,4 +35,5 @@ public class DataRoms {
     public String id;
     @SerializedName("vecid")
     public String vecid;
+    public boolean containsAds;
 }

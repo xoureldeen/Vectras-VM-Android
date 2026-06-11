@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.vectras.vm.RomInfo">
+    tools:context="com.vectras.vm.store.RomInfo">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
@@ -95,6 +95,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="size"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/tv_contains_ads"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/contains_ads"
                         android:textSize="14sp" />
                 </LinearLayout>
 

@@ -842,13 +842,20 @@ public class VMManager {
 
     public static boolean isVMRunning(Context context, String vmID) {
         String result = Terminal.executeShellCommandWithResult("ps -e", context);
-        if (result.contains(Config.getCacheDir() + "/" + vmID + "/qmpsocket")) {
-            Log.d("VMManager.isThisVMRunning", "Yes");
+        if (result.contains(" -qmp unix:" + Config.getLocalQMPSocketPath(vmID))) {
+            Log.d("VMManager.isThisVMRunning", "Yes.\n\n" + result);
             return true;
         } else {
-            Log.d("VMManager.isThisVMRunning", "No");
+            Log.d("VMManager.isThisVMRunning", "No.\n\n" + result);
             return false;
         }
+    }
+
+    public static boolean isVMRunning(String vmID) {
+        File qmpSocket = new File(Config.getLocalQMPSocketPath(vmID));
+        boolean exists = qmpSocket.exists();
+        Log.d("VMManager.isThisVMRunning", exists ? "Yes" : "No");
+        return exists;
     }
 
     public static boolean isQemuRunning(Activity activity) {

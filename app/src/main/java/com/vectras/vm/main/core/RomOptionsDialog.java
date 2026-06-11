@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.vectras.qemu.Config;
 import com.vectras.vm.creator.VMCreatorActivity;
 import com.vectras.vm.ExportRomActivity;
 import com.vectras.vm.R;
@@ -30,6 +31,8 @@ import java.io.File;
 public class RomOptionsDialog {
     public static void show(Activity activity, int position, DataMainRoms vmConfig) {
         if (VMManager.isVMRunning(activity, vmConfig.vmID)) {
+            Config.vmID = vmConfig.vmID;
+
             VmControllerDialog vmControllerDialog = new VmControllerDialog();
             vmControllerDialog.streamAudio = VmAudioManager.streamAudio;
             vmControllerDialog.position = position;

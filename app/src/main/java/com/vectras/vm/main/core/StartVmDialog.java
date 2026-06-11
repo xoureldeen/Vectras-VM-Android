@@ -87,6 +87,9 @@ public class StartVmDialog {
                 QmpSender.shutdown();
                 new Handler(Looper.getMainLooper()).post(callBack::onStop);
 
+                final int MAX_TRY = 10;
+                int triedCount = 0;
+
                 boolean isVmRuning = VMManager.isVMRunning(activity, vmId);
 
                 while (isVmRuning) {
@@ -96,7 +99,9 @@ public class StartVmDialog {
 
                     QmpSender.shutdown();
 
-                    if (!isVmRuning || VMManager.isQemuStopedWithError) {
+                    if (!isVmRuning || VMManager.isQemuStopedWithError || triedCount == MAX_TRY) {
+                        if (triedCount < MAX_TRY) FileUtils.delete(Config.getLocalQMPSocketPath(vmId));
+
                         new Handler(Looper.getMainLooper()).post(() -> {
                             isShuttingDown = false;
                             dismiss();
@@ -110,6 +115,8 @@ public class StartVmDialog {
                     } catch (InterruptedException ignored) {
 
                     }
+
+                    triedCount++;
                 }
             }).start();
         });
