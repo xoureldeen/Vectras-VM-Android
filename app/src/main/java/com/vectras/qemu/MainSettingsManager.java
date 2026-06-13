@@ -1295,4 +1295,28 @@ public class MainSettingsManager extends AppCompatActivity
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean("blurEffect", true);
     }
+
+    public static void setSearchRandomSuggestion(Context context, Boolean _boolean) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putBoolean("searchRandomSuggestion", _boolean);
+        edit.apply();
+    }
+
+    public static Boolean getSearchRandomSuggestion(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean("searchRandomSuggestion", true);
+    }
+
+    public static void setSearchFilters(Context context, Boolean _boolean) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putBoolean("searchFilters", _boolean);
+        edit.apply();
+    }
+
+    public static Boolean getSearchFilters(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean("searchFilters", true);
+    }
 }

@@ -78,7 +78,7 @@ public class Config {
 
     //we need to define the configuration for the VNC client since we replaced some deprecated
     //  functions
-    public static Bitmap.Config bitmapConfig = Bitmap.Config.RGB_565;
+    public static Bitmap.Config bitmapConfig = Bitmap.Config.ARGB_8888;
 
     //XXX set scaling to linear it's a tad slower but it's worth it
     public static int SDLHintScale=1;

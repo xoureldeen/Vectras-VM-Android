@@ -316,6 +316,7 @@
     <string name="copy">Copy</string>
     <string name="search">Search</string>
     <string name="no_matching_results_found">No matching results found.</string>
+    <string name="no_matching_results_found_search_content">No matching results found.\nTry adding or removing the filters below.</string>
     <string name="unknow">Unknow</string>
     <string name="verified">Verified</string>
     <string name="verified_content">It has been tested to work and is not harmful to the device. But it may not work on your device.</string>
@@ -605,6 +606,22 @@
     <string name="missing_packages_content">These are the missing packages that you should install:</string>
     <string name="x11_general_setting_note">You need to restart the app when switching between built-in and external.</string>
     <string name="contains_ads">Contains ads</string>
+    <string name="linux" translatable="false">Linux</string>
+    <string name="windows" translatable="false">Windows</string>
+    <string name="macos" translatable="false">macOS</string>
+    <string name="android" translatable="false">Android</string>
+    <string name="bsd" translatable="false">BSD</string>
+    <string name="other">Other</string>
+    <string name="operating_system">Operating system</string>
+    <string name="free_community">Free/Community</string>
+    <string name="high_quality_contains_ads">High quality/Contains ads</string>
+    <string name="gui" translatable="false">GUI</string>
+    <string name="no_gui">No GUI</string>
+    <string name="random_suggestion">Random suggestion</string>
+    <string name="search_settings_note">Search in store and suggestions.</string>
+    <string name="random_suggestion_settings_note">Guess what will appear?</string>
+    <string name="filters">Filters</string>
+    <string name="filters_settings_note">Search with more control and browse faster.</string>
 
 
     <!--======================TERMUX STRINGS====================-->

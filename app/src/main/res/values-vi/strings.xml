@@ -305,6 +305,7 @@
     <string name="copy" tools:override="true">Sao chép</string>
     <string name="search">Tìm kiếm</string>
     <string name="no_matching_results_found">Ái chà! Sương mù đã tan hết nhưng không có kết quả phù hợp.</string>
+    <string name="no_matching_results_found_search_content">Ái chà! Sương mù đã tan hết nhưng không có kết quả phù hợp.\nHãy thử bỏ hoặc thêm các bộ lọc ở dưới.</string>
     <string name="unknow">Không xác định</string>
     <string name="verified">Đã xác minh</string>
     <string name="verified_content">Đã được kiểm tra và xác minh là hoạt động tốt, không gây hại cho thiết bị. Tuy nhiên, nó có thể không hoạt động trên thiết bị của bạn.</string>
@@ -593,6 +594,16 @@
     <string name="missing_packages">Một số gói đang bị thiếu</string>
     <string name="missing_packages_content">Đây là những gói đang bị thiếu và bạn nên cài đặt chúng:</string>
     <string name="contains_ads">Có chứa quảng cáo</string>
+    <string name="other">Khác</string>
+    <string name="operating_system">Hệ điều hành</string>
+    <string name="free_community">Miễn phí/Cộng đồng</string>
+    <string name="high_quality_contains_ads">Chất lượng cao/Chứa quảng cáo</string>
+    <string name="no_gui">Không GUI</string>
+    <string name="random_suggestion">Gợi ý ngẫu nhiên</string>
+    <string name="search_settings_note">Search in store and suggestions.</string>
+    <string name="random_suggestion_settings_note">Đoán xem điều gì sẽ xuất hiện?</string>
+    <string name="filters">Các bộ lọc</string>
+    <string name="filters_settings_note">Tìm kiếm với nhiều sự kiểm soát hơn và duyệt nhanh hơn.</string>
 
     <!--======================TERMUX STRINGS====================-->
     <string name="application_name" translatable="false">Vterm</string>

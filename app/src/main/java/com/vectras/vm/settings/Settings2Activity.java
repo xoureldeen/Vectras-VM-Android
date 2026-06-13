@@ -30,6 +30,7 @@ public class Settings2Activity extends AppCompatActivity {
     private void initialize() {
         binding.lnTheme.setOnClickListener(v -> startActivity(new Intent(this, ThemeActivity.class)));
         binding.lnNotification.setOnClickListener(v -> startActivity(new Intent(this, NotificationSettingsActivity.class)));
+        binding.lnSearch.setOnClickListener(v -> startActivity(new Intent(this, SearchSettingsActivity.class)));
         binding.lnSystem.setOnClickListener(v -> startActivity(new Intent(this, SystemSettingsActivity.class)));
 
         binding.lnQemu.setOnClickListener(v -> {
