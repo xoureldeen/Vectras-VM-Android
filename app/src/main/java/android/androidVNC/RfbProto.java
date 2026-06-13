@@ -337,12 +337,14 @@ public class RfbProto {
           String localVNCSocketPath = Config.getLocalVNCSocketPath();
           LocalSocketAddress localSocketAddr = new LocalSocketAddress(localVNCSocketPath, LocalSocketAddress.Namespace.FILESYSTEM);
           localSocket.connect(localSocketAddr);
+          //localSocket.setSoTimeout(10_000);
           is = new DataInputStream(new BufferedInputStream(localSocket.getInputStream(),
                   32768));
           sos = localSocket.getOutputStream();
 
       } else {
           sock = new Socket(host, port);
+          //sock.setSoTimeout(10_000);
           is = new DataInputStream(new BufferedInputStream(sock.getInputStream(),
                   16384));
           sos = sock.getOutputStream();

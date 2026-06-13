@@ -146,6 +146,7 @@ class FullBufferBitmapData extends AbstractBitmapData {
 		bitmapheight=framebufferheight;
 		android.util.Log.i("FBBM", "bitmapsize = ("+bitmapwidth+","+bitmapheight+")");
 		bitmapPixels = new int[framebufferwidth * framebufferheight];
+		Arrays.fill(bitmapPixels, 0xFF000000);
 	}
 
 	/* (non-Javadoc)
@@ -170,7 +171,7 @@ class FullBufferBitmapData extends AbstractBitmapData {
 	 */
 	@Override
 	void drawRect(int x, int y, int w, int h, Paint paint) {
-		int color = paint.getColor();
+		int color = 0xFF000000 | paint.getColor();
 		int offset = offset(x,y);
 		if (w > 10)
 		{

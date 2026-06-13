@@ -182,8 +182,8 @@ public class VncCanvas extends AppCompatImageView {
 
 			public void run() {
 				try {
-					int width = 0;
-					int height = 0;
+					int width;
+					int height;
 					Point size = new Point();
 					display.getSize(size);
 					width = size.x;
@@ -191,12 +191,10 @@ public class VncCanvas extends AppCompatImageView {
 					
 					connectAndAuthenticate(connection.getUserName(), connection.getPassword());
 					doProtocolInitialisation(width, height);
-					handler.post(new Runnable() {
-						public void run() {
-							// pd.setMessage("Downloading first frame.\nPlease
-							// wait...");
-						}
-					});
+					handler.post(() -> {
+                        // pd.setMessage("Downloading first frame.\nPlease
+                        // wait...");
+                    });
 					processNormalProtocol(getContext(), pd, setModes);
 				} catch (Throwable e) {
 					if (maintainConnection) {
@@ -223,11 +221,7 @@ public class VncCanvas extends AppCompatImageView {
 								error = "VNC authentication failed!";
 							}
 							final String error_ = error + "<br>" + e.getLocalizedMessage();
-							handler.post(new Runnable() {
-								public void run() {
-									Utils.showFatalErrorMessage(getContext(), error_);
-								}
-							});
+							handler.post(() -> Utils.showFatalErrorMessage(getContext(), error_));
 						}
 					}
 				}
@@ -771,7 +765,8 @@ public class VncCanvas extends AppCompatImageView {
 				for (i = 0; i < w; i++) {
 					final int idx = i * 4;
 					pixels[offset + i] = // 0xFF << 24 |
-							(handleRawRectBuffer[idx + 2] & 0xff) << 16 | (handleRawRectBuffer[idx + 1] & 0xff) << 8
+							0xFF000000
+									|(handleRawRectBuffer[idx + 2] & 0xff) << 16 | (handleRawRectBuffer[idx + 1] & 0xff) << 8
 									| (handleRawRectBuffer[idx] & 0xff);
 				}
 			}
@@ -1917,7 +1912,8 @@ public class VncCanvas extends AppCompatImageView {
 				offset = bitmapData.offset(x, dy);
 				for (i = 0; i < w; i++) {
 					final int idx = i * 4;
-					pixels[offset + i] = (handleZlibRectBuffer[idx + 2] & 0xFF) << 16
+					pixels[offset + i] = 0xFF000000
+							|(handleZlibRectBuffer[idx + 2] & 0xFF) << 16
 							| (handleZlibRectBuffer[idx + 1] & 0xFF) << 8 | (handleZlibRectBuffer[idx] & 0xFF);
 				}
 			}
@@ -1938,7 +1934,7 @@ public class VncCanvas extends AppCompatImageView {
 			int p1 = is.readU8();
 			int p2 = is.readU8();
 			int p3 = is.readU8();
-			pix = (p3 & 0xFF) << 16 | (p2 & 0xFF) << 8 | (p1 & 0xFF);
+			pix = 0xFF000000 | (p3 & 0xFF) << 16 | (p2 & 0xFF) << 8 | (p1 & 0xFF);
 		}
 		return pix;
 	}
@@ -1962,7 +1958,8 @@ public class VncCanvas extends AppCompatImageView {
 			is.readBytes(readPixelsBuffer, 0, l);
 			for (int i = 0; i < count; i++) {
 				final int idx = i * 3;
-				dst[i] = ((readPixelsBuffer[idx + 2] & 0xFF) << 16 | (readPixelsBuffer[idx + 1] & 0xFF) << 8
+				dst[i] = 0xFF000000
+						| ((readPixelsBuffer[idx + 2] & 0xFF) << 16 | (readPixelsBuffer[idx + 1] & 0xFF) << 8
 						| (readPixelsBuffer[idx] & 0xFF));
 			}
 		}

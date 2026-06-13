@@ -40,6 +40,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.color.MaterialColors;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.search.SearchView;
 import com.termux.app.TermuxActivity;
 import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
@@ -79,6 +80,7 @@ import com.vectras.vm.utils.LibraryChecker;
 import com.vectras.vm.utils.NotificationUtils;
 import com.vectras.vm.utils.PackageUtils;
 import com.vectras.vm.utils.UIUtils;
+import com.vectras.vterm.TerminalBottomSheetDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -88,8 +90,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
@@ -161,6 +166,7 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
         UIUtils.setOnApplyWindowInsetsListenerBottomOnly(bindingContent.containerView);
         UIUtils.setOnApplyWindowInsetsListenerNavigationView(binding.navView);
         UIUtils.setOnApplyWindowInsetsListenerBottom(binding.rvSearch);
+        UIUtils.setOnApplyWindowInsetsListenerBottom(binding.lnSearchSuggestionsContent);
         UIUtils.setOnApplyWindowInsetsListenerBottom(binding.lnSearchempty);
 
         initialize(bundle);
@@ -248,6 +254,8 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
                     currentSearchMode = SEARCH_ROM_STORE;
                     adapterRomStore = new RomStoreHomeAdpater(this, listSearchData, true);
                     binding.rvSearch.setAdapter(adapterRomStore);
+                    adapterRomStoreSearchSuggestions = new RomStoreHomeAdpater(this, getSearchSuggestionList(), true);
+                    binding.rvSearchSuggestion.setAdapter(adapterRomStoreSearchSuggestions);
                 } else if (id == R.id.item_softwarestore) {
                     selectedFragment = new SoftwareStoreFragment();
                     selectedTag = TAG_SOFTWARE_STORE_FRAGMENT;
@@ -257,6 +265,8 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
                     currentSearchMode = SEARCH_SOFTWARE_STORE;
                     adapterSoftwareStore = new SoftwareStoreHomeAdapter(this, listSearchData, true);
                     binding.rvSearch.setAdapter(adapterSoftwareStore);
+                    adapterSoftwareStoreSearchSuggestions = new SoftwareStoreHomeAdapter(this, getSearchSuggestionList(), true);
+                    binding.rvSearchSuggestion.setAdapter(adapterSoftwareStoreSearchSuggestions);
                 } else if (id == R.id.item_monitor) {
                     selectedFragment = new SystemMonitorFragment();
                     selectedTag = TAG_MONITOR_FRAGMENT;
@@ -366,6 +376,8 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
 
         if (MainSettingsManager.getSuggestionsAndTipsNotification(this))
             FCMManager.subscribe();
+
+        setupSearch();
     }
 
     @Override
@@ -446,6 +458,8 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
             PendingCommand.paramsNotebookConfig = null;
         }
 
+        binding.lnSearchFilters.setVisibility(MainSettingsManager.getSearchFilters(this) ? View.VISIBLE : View.GONE);
+
         if (isOpenRomStore) {
             isOpenRomStore = false;
             bindingContent.bottomNavigation.setSelectedItemId(R.id.item_romstore);
@@ -502,7 +516,7 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
                 if (DeviceUtils.is64bit() && DeviceUtils.isArm()) {
                     startActivity(new Intent(this, TermuxActivity.class));
                 } else {
-                    com.vectras.vterm.TerminalBottomSheetDialog VTERM = new com.vectras.vterm.TerminalBottomSheetDialog(this);
+                    TerminalBottomSheetDialog VTERM = new TerminalBottomSheetDialog(this);
                     VTERM.showVterm();
                 }
             } else if (id == R.id.navigation_item_view_logs) {
@@ -635,15 +649,15 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
                             String romName = (rom.romName != null) ? rom.romName : "";
                             String romKernel = (rom.romKernel != null) ? rom.romKernel : "";
 
-                            return romName.toLowerCase().contains(keyword.toLowerCase())
-                                    || romKernel.toLowerCase().contains(keyword.toLowerCase());
+                            return (romName.toLowerCase().contains(keyword.toLowerCase())
+                                    || romKernel.toLowerCase().contains(keyword.toLowerCase())) && filterSearch(rom.romArch, rom.romKernel,  rom.gui, rom.containsAds);
                         })
                         .collect(Collectors.toList());
             } else {
                 for (DataRoms rom : (currentSearchMode == SEARCH_ROM_STORE ? SharedData.dataRomStore : SharedData.dataSoftwareStore)) {
                     if (rom.romName.toLowerCase().contains(keyword.toLowerCase()) ||
                             rom.romKernel.toLowerCase().contains(keyword.toLowerCase())) {
-                        filteredData.add(rom);
+                        if (filterSearch(rom.romArch, rom.romKernel, rom.gui, rom.containsAds)) filteredData.add(rom);
                     }
                 }
             }
@@ -654,10 +668,48 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
             Log.e("RomManagerActivity", "Json parsing error: " + e.getMessage());
         }
 
-        if (listSearchData.isEmpty())
+        if (listSearchData.isEmpty()) {
+            if (
+                    (MainSettingsManager.getSearchFilters(this) ||
+                    MainSettingsManager.getSearchRandomSuggestion(this)) &&
+                    searchArchTags.isEmpty() &&
+                            searchOsTags.isEmpty() &&
+                            searchIsContainsAds == null
+                            && searchIsGui == null
+            ) {
+                binding.lnSearchempty.setVisibility(View.VISIBLE);
+                binding.lnSearchSuggestions.setVisibility(View.GONE);
+            } else {
+                binding.lnSearchempty.setVisibility(View.GONE);
+                binding.lnSearchSuggestions.setVisibility(View.VISIBLE);
+                binding.lnSearchSuggestionsSearchEmpty.setVisibility(View.VISIBLE);
+
+                if (currentSearchMode == SEARCH_ROM_STORE) {
+                    if (adapterRomStoreSearchSuggestions != null)
+                        adapterRomStoreSearchSuggestions.submitList(getSearchSuggestionList());
+                } else {
+                    if (adapterSoftwareStoreSearchSuggestions != null)
+                        adapterSoftwareStoreSearchSuggestions.submitList(getSearchSuggestionList());
+                }
+            }
             binding.rvSearch.setVisibility(View.GONE);
-        else
+        } else if (binding.searchview.getEditText().getText().toString().isEmpty()) {
+            binding.lnSearchempty.setVisibility(View.GONE);
+            binding.lnSearchSuggestions.setVisibility(View.VISIBLE);
+            binding.lnSearchSuggestionsSearchEmpty.setVisibility(View.GONE);
+            binding.rvSearch.setVisibility(View.GONE);
+
+            if (currentSearchMode == SEARCH_ROM_STORE) {
+                if (adapterRomStoreSearchSuggestions != null)
+                    adapterRomStoreSearchSuggestions.submitList(getSearchSuggestionList());
+            } else {
+                if (adapterSoftwareStoreSearchSuggestions != null)
+                    adapterSoftwareStoreSearchSuggestions.submitList(getSearchSuggestionList());
+            }
+        } else {
+            binding.lnSearchSuggestions.setVisibility(View.GONE);
             binding.rvSearch.setVisibility(View.VISIBLE);
+        }
 
         if (currentSearchMode == SEARCH_ROM_STORE ) {
             if (adapterRomStore != null) {
@@ -668,6 +720,195 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
                 adapterSoftwareStore.submitList(listSearchData);
             }
         }
+    }
+
+    private final String SEARCH_ARCH_X86_64_TAG = "X86_64";
+    private final String SEARCH_ARCH_ARM64_TAG = "ARM64";
+    private final String SEARCH_ARCH_I386_TAG = "I386";
+    private final String SEARCH_ARCH_PPC_TAG = "PPC";
+
+    private String searchArchTags = "";
+
+    private final String SEARCH_OS_LINUX_TAG = "linux";
+    private final String SEARCH_OS_WINDOWS_TAG = "windows";
+    private final String SEARCH_OS_MACOS_TAG = "apple";
+    private final String SEARCH_OS_ANDROID_TAG = "android";
+    private final String SEARCH_OS_BSD_TAG = "bsd";
+    private final String SEARCH_OS_OTHER_TAG = "other";
+
+    private String searchOsTags = "";
+
+    private Boolean searchIsContainsAds;
+    private Boolean searchIsGui;
+
+    private RomStoreHomeAdpater adapterRomStoreSearchSuggestions;
+    private SoftwareStoreHomeAdapter adapterSoftwareStoreSearchSuggestions;
+
+    private void setupSearch() {
+        binding.searchview.addTransitionListener((searchView, previousState, newState) -> {
+            if (newState == SearchView.TransitionState.HIDDEN) {
+                binding.chipGroupSearchFilterArch.clearCheck();
+                binding.chipGroupSearchFilterOs.clearCheck();
+                binding.chipGroupSearchFilterUi.clearCheck();
+                binding.chipGroupSearchFilterOther.clearCheck();
+            }
+        });
+
+        binding.rvSearchSuggestion.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+
+        binding.chipGroupSearchFilterArch.setOnCheckedStateChangeListener((group, checkedIds) -> {
+            searchArchTags = "";
+
+            for (int id : checkedIds) {
+                String checkedtag = "";
+
+                if (id == R.id.chip_search_filter_arch_x86_64) {
+                    checkedtag = SEARCH_ARCH_X86_64_TAG + ",";
+                }
+
+                if (id == R.id.chip_search_filter_arch_arm64) {
+                    checkedtag = SEARCH_ARCH_ARM64_TAG + ",";
+                }
+
+                if (id == R.id.chip_search_filter_arch_i386) {
+                    checkedtag = SEARCH_ARCH_I386_TAG + ",";
+                }
+
+                if (id == R.id.chip_search_filter_arch_ppc) {
+                    checkedtag = SEARCH_ARCH_PPC_TAG + ",";
+                }
+
+                searchArchTags += checkedtag;
+            }
+
+            if (!binding.searchview.getEditText().getText().toString().isEmpty()) {
+                search(binding.searchview.getEditText().getText().toString());
+            }
+        });
+
+        binding.chipGroupSearchFilterOs.setOnCheckedStateChangeListener((group, checkedIds) -> {
+            searchOsTags = "";
+
+            for (int id : checkedIds) {
+                String checkedtag = "";
+
+                if (id == R.id.chip_search_filter_os_linux) {
+                    checkedtag = SEARCH_OS_LINUX_TAG + ",";
+                }
+
+                if (id == R.id.chip_search_filter_os_windows) {
+                    checkedtag = SEARCH_OS_WINDOWS_TAG + ",";
+                }
+
+                if (id == R.id.chip_search_filter_os_mac) {
+                    checkedtag = SEARCH_OS_MACOS_TAG + ",";
+                }
+
+                if (id == R.id.chip_search_filter_os_android) {
+                    checkedtag = SEARCH_OS_ANDROID_TAG + ",";
+                }
+
+                if (id == R.id.chip_search_filter_os_bsd) {
+                    checkedtag = SEARCH_OS_BSD_TAG + ",";
+                }
+
+                if (id == R.id.chip_search_filter_os_other) {
+                    checkedtag = SEARCH_OS_OTHER_TAG + ",";
+                }
+
+                searchOsTags += checkedtag;
+            }
+
+            if (!binding.searchview.getEditText().getText().toString().isEmpty()) {
+                search(binding.searchview.getEditText().getText().toString());
+            }
+        });
+
+        binding.chipGroupSearchFilterUi.setOnCheckedStateChangeListener((group, checkedIds) -> {
+            searchIsContainsAds = null;
+            for (int id : checkedIds) {
+                Boolean isGui = null;
+
+                if (id == R.id.chip_search_filter_ui_gui) {
+                    isGui = true;
+                }
+
+                if (id == R.id.chip_search_filter_ui_no_gui) {
+                    isGui = false;
+                }
+
+                searchIsGui = isGui;
+            }
+
+            if (!binding.searchview.getEditText().getText().toString().isEmpty()) {
+                search(binding.searchview.getEditText().getText().toString());
+            }
+        });
+
+        binding.chipGroupSearchFilterOther.setOnCheckedStateChangeListener((group, checkedIds) -> {
+            searchIsContainsAds = null;
+            for (int id : checkedIds) {
+                Boolean isContainsAds = null;
+
+                if (id == R.id.chip_search_filter_other_free_community) {
+                    isContainsAds = false;
+                }
+
+                if (id == R.id.chip_search_filter_other_high_quality_contains_ads) {
+                    isContainsAds = true;
+                }
+
+                searchIsContainsAds = isContainsAds;
+            }
+
+            if (!binding.searchview.getEditText().getText().toString().isEmpty()) {
+                search(binding.searchview.getEditText().getText().toString());
+            }
+        });
+    }
+
+    private boolean filterSearch(String arch, String os, boolean gui, boolean isContainsAds) {
+        return (searchArchTags.isEmpty() || searchArchTags.contains(arch)) &&
+                (searchOsTags.isEmpty() || searchOsTags.contains(os)) &&
+                (searchIsContainsAds == null || searchIsContainsAds == isContainsAds) &&
+                (searchIsGui == null || searchIsGui == gui);
+    }
+
+    private List<DataRoms> getSearchSuggestionList() {
+        if (!MainSettingsManager.getSearchRandomSuggestion(this)) {
+            binding.lnSearchSuggestionList.setVisibility(View.GONE);
+            return new ArrayList<>();
+        }
+
+        List<DataRoms> list = currentSearchMode == SEARCH_ROM_STORE ? SharedData.dataRomStore : SharedData.dataSoftwareStore;
+
+        if (list.isEmpty()) {
+            binding.lnSearchSuggestionList.setVisibility(View.GONE);
+            return new ArrayList<>();
+        } else {
+            binding.lnSearchSuggestionList.setVisibility(View.VISIBLE);
+        }
+
+        List<DataRoms> suggestionList = new ArrayList<>();
+
+        int addedCount = 0;
+        Set<String> added = new HashSet<>();
+
+        if (list.size() > 3) {
+            while (addedCount < 3) {
+                int position = new Random().nextInt(list.size());
+
+                if (!added.contains(list.get(position).id.isEmpty() ? list.get(position).vecid : list.get(position).id)) {
+                    suggestionList.add(list.get(position));
+                    added.add(list.get(position).id.isEmpty() ? list.get(position).vecid : list.get(position).id);
+                    addedCount++;
+                }
+            }
+        } else {
+            suggestionList.addAll(list);
+        }
+
+        return suggestionList;
     }
 
     private void showLogsDialog() {

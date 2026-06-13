@@ -81,6 +81,12 @@ public class StreamAudio {
                     AudioFormat.CHANNEL_OUT_STEREO,
                     AudioFormat.ENCODING_PCM_16BIT);
 
+            if (minBuf <= 0) {
+                isPlay = false;
+                Log.d(TAG, "Failed to get min buffer size");
+                return;
+            }
+
             AudioTrack audioTrack = new AudioTrack.Builder()
                     .setAudioAttributes(new AudioAttributes.Builder()
                             .setUsage(AudioAttributes.USAGE_MEDIA)
