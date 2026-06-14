@@ -7,6 +7,7 @@
         <item>中文</item>
         <item>русский</item>
         <item>Tiếng Việt</item>
+        <item>한국어</item>
     </string-array>
 
     <string-array name="languageValues">
@@ -16,6 +17,7 @@
         <item>zh</item>
         <item>ru</item>
         <item>vi</item>
+        <item>ko</item>
     </string-array>
 
     <string-array name="vmUiLabels">
