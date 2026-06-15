@@ -542,14 +542,14 @@ public abstract class VncCanvasActivity extends AppCompatActivity {
                     remoteMouseStayPut(e);
                     // One
                     // Log.v("Double Click", "One");
-                    vncCanvas.processPointerEvent(e, true, true);
+                    vncCanvas.processPointerEvent(e, true, false);
                     try {
                         Thread.sleep(100);
                     } catch (InterruptedException ex) {
                         Logger.getLogger(VncCanvasActivity.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     e.setAction(MotionEvent.ACTION_UP);
-                    vncCanvas.processPointerEvent(e, false, true);
+                    vncCanvas.processPointerEvent(e, false, false);
                 }
             });
             // t.setPriority(Thread.MAX_PRIORITY);

@@ -1208,7 +1208,7 @@ public class MainVNCActivity extends VncCanvasActivity {
             try {
                 MotionEvent e = MotionEvent.obtain(1000, 1000, MotionEvent.ACTION_DOWN, vncCanvas.mouseX, vncCanvas.mouseY,
                         0);
-                ((TouchpadInputHandler) VncCanvasActivity.inputHandler).rightClick(e);
+                ((TouchpadInputHandler) inputHandler).rightClick(e);
             } catch (Exception e) {
                 VMManager.sendRightMouseKey();
             }
@@ -1218,7 +1218,7 @@ public class MainVNCActivity extends VncCanvasActivity {
             try {
                 MotionEvent e = MotionEvent.obtain(1000, 1000, MotionEvent.ACTION_DOWN, vncCanvas.mouseX, vncCanvas.mouseY,
                         0);
-                ((TouchpadInputHandler) VncCanvasActivity.inputHandler).middleClick(e);
+                ((TouchpadInputHandler) inputHandler).middleClick(e);
             } catch (Exception e) {
                 VMManager.sendMiddleMouseKey();
                 VMManager.sendMiddleMouseKey();
@@ -1229,7 +1229,7 @@ public class MainVNCActivity extends VncCanvasActivity {
             try {
                 MotionEvent e = MotionEvent.obtain(1000, 1000, MotionEvent.ACTION_DOWN, vncCanvas.mouseX, vncCanvas.mouseY,
                         0);
-                ((TouchpadInputHandler) VncCanvasActivity.inputHandler).leftClick(e);
+                ((TouchpadInputHandler) inputHandler).leftClick(e);
             } catch (Exception e) {
                 VMManager.sendLeftMouseKey();
             }
