@@ -684,13 +684,13 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
                 binding.lnSearchSuggestions.setVisibility(View.VISIBLE);
                 binding.lnSearchSuggestionsSearchEmpty.setVisibility(View.VISIBLE);
 
-                if (currentSearchMode == SEARCH_ROM_STORE) {
-                    if (adapterRomStoreSearchSuggestions != null)
-                        adapterRomStoreSearchSuggestions.submitList(getSearchSuggestionList());
-                } else {
-                    if (adapterSoftwareStoreSearchSuggestions != null)
-                        adapterSoftwareStoreSearchSuggestions.submitList(getSearchSuggestionList());
-                }
+//                if (currentSearchMode == SEARCH_ROM_STORE) {
+//                    if (adapterRomStoreSearchSuggestions != null)
+//                        adapterRomStoreSearchSuggestions.submitList(getSearchSuggestionList());
+//                } else {
+//                    if (adapterSoftwareStoreSearchSuggestions != null)
+//                        adapterSoftwareStoreSearchSuggestions.submitList(getSearchSuggestionList());
+//                }
             }
             binding.rvSearch.setVisibility(View.GONE);
         } else if (binding.searchview.getEditText().getText().toString().isEmpty()) {

@@ -42,7 +42,8 @@ class FullBufferBitmapData extends AbstractBitmapData {
 		 */
 		@Override
 		public void draw(Canvas canvas) {
-			if (bitmapPixels == null) {
+			int[] pixels = bitmapPixels;
+			if (pixels == null) {
 				return;
 			}
 
@@ -53,7 +54,7 @@ class FullBufferBitmapData extends AbstractBitmapData {
                 //XXX; Vectras: for Hardware accelerated surfaces we have to stop using the above deprecated method and use a bitmap-backed method
                 // this fixes the issue with Nougat Devices displaying black screen for 24bit color mode C24bit
                 Bitmap bitmapTmp = Bitmap.createBitmap(framebufferwidth, framebufferheight, Config.bitmapConfig);
-                bitmapTmp.setPixels(bitmapPixels, 0, data.framebufferwidth, 0, 0, framebufferwidth, framebufferheight);
+                bitmapTmp.setPixels(pixels, 0, data.framebufferwidth, 0, 0, framebufferwidth, framebufferheight);
 
 				if (vncCanvas.getScaleType() == ImageView.ScaleType.FIT_XY) {
 					canvas.drawBitmap(bitmapTmp, (float) vncCanvas.getWidth() / 2 + (float) framebufferwidth / -2, (float) vncCanvas.getHeight() / 2 - (float) framebufferheight / 2, null);
@@ -85,7 +86,7 @@ class FullBufferBitmapData extends AbstractBitmapData {
                     //XXX; for Hardware accelerated surfaces we have to stop using the above deprecated method and use a bitmap-backed method
                     // this fixes the issue with Nougat Devices displaying black screen for 24bit color mode C24bit
                     Bitmap bitmapTmp = Bitmap.createBitmap(framebufferwidth, framebufferheight, Config.bitmapConfig);
-                    bitmapTmp.setPixels(bitmapPixels, offset(xo, yo), data.framebufferwidth, 0, 0, drawWidth, drawHeight);
+                    bitmapTmp.setPixels(pixels, offset(xo, yo), data.framebufferwidth, 0, 0, drawWidth, drawHeight);
                     canvas.drawBitmap(bitmapTmp, 0, 0, null);
 
 				/*

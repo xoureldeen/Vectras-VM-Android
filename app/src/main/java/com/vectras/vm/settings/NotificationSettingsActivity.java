@@ -3,6 +3,7 @@ package com.vectras.vm.settings;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -57,7 +58,12 @@ public class NotificationSettingsActivity extends AppCompatActivity {
             } else {
                 intent.putExtra("android.provider.extra.APP_PACKAGE", getPackageName());
             }
-            startActivity(intent);
+
+            try {
+                startActivity(intent);
+            } catch (Exception e) {
+                Toast.makeText(getApplicationContext(), getString(R.string.unavailable), Toast.LENGTH_SHORT).show();
+            }
         });
 
         binding.swSuggestionsAndTips.setChecked(MainSettingsManager.getSuggestionsAndTipsNotification(this));

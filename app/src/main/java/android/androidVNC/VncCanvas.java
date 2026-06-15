@@ -1237,6 +1237,9 @@ public class VncCanvas extends AppCompatImageView {
 
 	public void closeConnection() {
 		maintainConnection = false;
+		if (rfb != null) {
+			rfb.close();
+		}
 	}
 
 	public void sendMetaKey1(int key, int flags) {
