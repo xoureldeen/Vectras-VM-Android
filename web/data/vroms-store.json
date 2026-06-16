@@ -1701,6 +1701,26 @@
     "id": ""
   },
   {
+    "rom_name": "Windows 11 ARM64 build 21262.1000",
+    "rom_icon": "https://www.getmyos.com/app_public/files/t/1/2021/06/windows_11_logo_by_getmyos.png",
+    "rom_url": "https://youtu.be/K8_RTiMFwMY",
+    "rom_path": "Windows 11 2004 ARM64 build 21262.1000.cvbi",
+    "rom_avail": true,
+    "gui": true,
+    "rom_size": "Cobalt",
+    "rom_arch": "ARM64",
+    "rom_kernel": "windows",
+    "rom_extra": "",
+    "final_rom_file_name": "",
+    "desc": "This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 11 build 21262 is the earliest available build from the Cobalt semester of Windows 11. Two photographs of the build running on a Qualcomm Snapdragon 8cx Gen 3 (SC8280X) Mobile Test Platform were first shared onto the DuoWOA Telegram group on 4 August 2023 - additional photographs later appeared within the same group several days later. A modified copy that replaces several components with variants sourced from private builds compiled by Microsoft developers was later shared online on 21 August 2023.",
+    "file_size": "14 GB",
+    "containsAds": true,
+    "creator": "Nguyen Bao An Bui",
+    "verified": true,
+    "vecid": "windows112004arm64build212611000cvbi",
+    "id": "99631"
+  },
+  {
     "rom_name": "Windows 11 build 21370",
     "rom_icon": "https://www.getmyos.com/app_public/files/t/1/2021/06/windows_11_logo_by_getmyos.png",
     "rom_url": "https://youtu.be/QIH1zR7WrO8",
