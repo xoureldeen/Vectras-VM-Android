@@ -622,6 +622,11 @@
     <string name="random_suggestion_settings_note">Guess what will appear?</string>
     <string name="filters">Filters</string>
     <string name="filters_settings_note">Search with more control and browse faster.</string>
+    <string name="reset_uefi_bios">Reset UEFI/BIOS</string>
+    <string name="reset_uefi_bios_note">All default UEFI/BIOS settings will be reset. Do you want to continue?</string>
+    <string name="need_to_shut_down_all_running_vm_note">You need to shut down all running virtual machines to perform this action.</string>
+    <string name="auto_switch_to_external_mouse">Auto switch to external mouse</string>
+    <string name="auto_switch_to_external_mouse_note">Automatically switches when the mouse is connected and disconnected.</string>
 
 
     <!--======================TERMUX STRINGS====================-->

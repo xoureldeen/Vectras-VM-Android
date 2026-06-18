@@ -1,4 +1,4 @@
-package com.vectras.vm;
+package com.vectras.vm.settings;
 
 import static android.content.Intent.ACTION_VIEW;
 import static android.view.View.GONE;
@@ -22,15 +22,21 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.vectras.qemu.MainSettingsManager;
+import com.vectras.vm.AppConfig;
+import com.vectras.vm.R;
+import com.vectras.vm.VMManager;
 import com.vectras.vm.creator.VMCreatorSelector;
 import com.vectras.vm.databinding.ActivityMinitoolsBinding;
 import com.vectras.vm.main.MainActivity;
+import com.vectras.vm.manager.FirmwareManager;
+import com.vectras.vm.manager.ProcessManager;
 import com.vectras.vm.setupwizard.SetupWizard2Activity;
 import com.vectras.vm.utils.CommandUtils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.ListUtils;
 import com.vectras.vm.utils.PackageUtils;
+import com.vectras.vm.utils.ProgressDialog;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -106,6 +112,52 @@ public class Minitools extends AppCompatActivity {
 
         binding.reinstallsystem.setOnClickListener(v -> DialogUtils.twoDialog(Minitools.this, getResources().getString(R.string.reinstall_system), getResources().getString(R.string.reinstall_system_content), getResources().getString(R.string.continuetext), getResources().getString(R.string.cancel), true, R.drawable.system_update_24px, true,
                 this::eraserSystem, null, null));
+
+        if (FirmwareManager.isExistOne()) {
+            binding.lnResetUefiBios.setOnClickListener(v -> {
+                ProgressDialog progressDialog = new ProgressDialog(this);
+                progressDialog.setText(getString(R.string.just_a_sec));
+                progressDialog.show();
+
+                new Thread(() -> {
+                    boolean isQemuRunning = ProcessManager.isQemuRunning(this);
+                    runOnUiThread(() -> {
+                        progressDialog.dismiss();
+
+                        if (isQemuRunning) {
+                            DialogUtils.oopsDialog(Minitools.this, getString(R.string.need_to_shut_down_all_running_vm_note));
+                        } else {
+                            DialogUtils.twoDialog(
+                                    Minitools.this,
+                                    getString(R.string.reset_uefi_bios),
+                                    getString(R.string.reset_uefi_bios_note),
+                                    getString(R.string.reset),
+                                    getString(R.string.cancel),
+                                    true,
+                                    R.drawable.restore_page_24px,
+                                    true,
+                                    () -> {
+                                        progressDialog.show();
+
+                                        new Thread(() -> {
+                                            FirmwareManager.deleteAll();
+                                            runOnUiThread(() -> {
+                                                progressDialog.dismiss();
+
+                                                binding.lnResetUefiBios.setVisibility(GONE);
+                                                Toast.makeText(Minitools.this, getString(R.string.done), Toast.LENGTH_LONG).show();
+                                            });
+                                        }).start();
+                                    },
+                                    null,
+                                    null);
+                        }
+                    });
+                }).start();
+            });
+        } else {
+            binding.lnResetUefiBios.setVisibility(GONE);
+        }
 
         ListUtils.setupMirrorListForListmap(mirrorlist);
     }

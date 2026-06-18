@@ -351,6 +351,7 @@ public class VmControllerDialog extends DialogFragment {
 
                     binding.lnMouse.setOnClickListener(v -> {
                         MainVNCActivity.getContext.onMouseMode();
+                        dismiss();
                     });
 
                     binding.lnSettings.setOnClickListener(v -> {

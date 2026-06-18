@@ -85,5 +85,6 @@ public class X11DisplaySettingsActivity extends AppCompatActivity {
         binding.lnPreferences.setEnabled(isEnabled);
         binding.lnRunQemuWithXterm.setEnabled(isEnabled);
         binding.lnUseSdl.setEnabled(isEnabled);
+        binding.lnUseExternal.setEnabled(isEnabled);
     }
 }

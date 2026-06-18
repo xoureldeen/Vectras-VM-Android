@@ -604,6 +604,11 @@
     <string name="random_suggestion_settings_note">Đoán xem điều gì sẽ xuất hiện?</string>
     <string name="filters">Các bộ lọc</string>
     <string name="filters_settings_note">Tìm kiếm với nhiều sự kiểm soát hơn và duyệt nhanh hơn.</string>
+    <string name="reset_uefi_bios">Đặt lại UEFI/BIOS</string>
+    <string name="reset_uefi_bios_note">Tất cả các cài đặt của UEFI/BIOS mặc định sẽ được đặt lại. Bạn có muốn tiếp tục?</string>
+    <string name="need_to_shut_down_all_running_vm_note">Bạn cần tắt tất cả máy ảo đang chạy để thực hiện hành động này.</string>
+    <string name="auto_switch_to_external_mouse">Tự động chuyển sang chuột ngoài</string>
+    <string name="auto_switch_to_external_mouse_note">Tự động chuyển đổi khi kết nối và ngắt chuột rời.</string>
 
     <!--======================TERMUX STRINGS====================-->
     <string name="application_name" translatable="false">Vterm</string>

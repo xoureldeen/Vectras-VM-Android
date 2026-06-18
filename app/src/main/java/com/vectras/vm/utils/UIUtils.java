@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.net.Uri;
@@ -34,6 +35,7 @@ import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
+import android.view.PointerIcon;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -202,7 +204,7 @@ public class UIUtils {
         } catch (PackageManager.NameNotFoundException e) {
             Log.e(TAG, "onChangeLog: ", e);
         }
-        com.vectras.qemu.utils.FileUtils fileutils = new FileUtils();
+        FileUtils fileutils = new FileUtils();
         try {
             UIUtils.UIAlert(activity,"CHANGELOG", fileutils.LoadFile(activity, "CHANGELOG", false),
                     0, false, "OK", null, null, null, null, null);
@@ -587,5 +589,19 @@ public class UIUtils {
         } else {
             view.setBackgroundResource(isBrighter ? R.drawable.object_shape_middle_high : R.drawable.object_shape_middle);
         }
+    }
+
+    public static void setMouseVisible(View view) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return;
+
+        view.setPointerIcon(PointerIcon.getSystemIcon(view.getContext(), PointerIcon.TYPE_ARROW));
+    }
+
+    public static void setMouseInvisible(View view) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) return;
+
+        Bitmap bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
+        PointerIcon invisiblePointerIcon = PointerIcon.create(bitmap, 0, 0);
+        view.setPointerIcon(invisiblePointerIcon);
     }
 }

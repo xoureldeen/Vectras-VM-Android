@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.hardware.input.InputManager;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Environment;
@@ -17,6 +18,7 @@ import android.os.storage.StorageManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+import android.view.InputDevice;
 
 import com.vectras.vm.VectrasApp;
 
@@ -135,5 +137,26 @@ public class DeviceUtils {
         }
 
         return -1;
+    }
+
+    public static boolean isMouseConnected(Context context) {
+        InputManager inputManager = (InputManager) context.getSystemService(Context.INPUT_SERVICE);
+        int[] deviceIds = inputManager.getInputDeviceIds();
+        for (int id : deviceIds) {
+            InputDevice device = inputManager.getInputDevice(id);
+            if (device != null) {
+                int sources = device.getSources();
+                if ((sources & InputDevice.SOURCE_MOUSE) == InputDevice.SOURCE_MOUSE
+                        || (sources & InputDevice.SOURCE_MOUSE_RELATIVE) == InputDevice.SOURCE_MOUSE_RELATIVE) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean isMouseSource(int sources) {
+        return (sources & InputDevice.SOURCE_MOUSE) == InputDevice.SOURCE_MOUSE
+                || (sources & InputDevice.SOURCE_MOUSE_RELATIVE) == InputDevice.SOURCE_MOUSE_RELATIVE;
     }
 }

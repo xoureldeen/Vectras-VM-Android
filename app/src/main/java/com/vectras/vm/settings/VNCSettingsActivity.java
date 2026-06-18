@@ -1,6 +1,7 @@
 package com.vectras.vm.settings;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
@@ -68,6 +69,15 @@ public class VNCSettingsActivity extends AppCompatActivity {
         binding.sbvRefreshRate.setSubtitle(ItemSettingsSelector.getVncRefreshRateValue(MainSettingsManager.getVncRefreshRate(this)));
         binding.swExternal.setChecked(MainSettingsManager.getVncExternal(this));
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            binding.swAutoSwitchToExternalMouse.setOnCheckedChangeListener((buttonView, isChecked) -> MainSettingsManager.setAutoSwitchToExternalMouse(this, isChecked));
+            binding.lnAutoSwitchToExternalMouse.setOnClickListener(v -> binding.swAutoSwitchToExternalMouse.toggle());
+
+            binding.swAutoSwitchToExternalMouse.setChecked(MainSettingsManager.getAutoSwitchToExternalMouse(this));
+        } else {
+            binding.lnAutoSwitchToExternalMouse.setVisibility(View.GONE);
+        }
+
         isInitialized = true;
 
         uiController(binding.swEnabled.isChecked());
@@ -78,6 +88,7 @@ public class VNCSettingsActivity extends AppCompatActivity {
         binding.lnForcerefesh.setEnabled(isEnabled);
         binding.lnForceLossless.setEnabled(isEnabled);
         binding.sbvRefreshRate.setEnabled(isEnabled);
+        binding.lnAutoSwitchToExternalMouse.setEnabled(isEnabled);
         binding.lnExternal.setEnabled(isEnabled);
         binding.swExternal.setEnabled(isEnabled);
     }
