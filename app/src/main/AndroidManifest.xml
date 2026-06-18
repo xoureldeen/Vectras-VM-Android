@@ -135,7 +135,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Minitools"
+            android:name=".settings.Minitools"
             android:configChanges="orientation|screenSize|keyboardHidden|smallestScreenSize|screenLayout"
             android:exported="false"
             android:label="@string/mini_tools" />

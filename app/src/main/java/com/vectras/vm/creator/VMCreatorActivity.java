@@ -449,7 +449,12 @@ public class VMCreatorActivity extends AppCompatActivity {
                             null)
                     );
                 } else {
-                    runOnUiThread(() -> setDrive(this.PENDING_SELECT_FILE_MODE, new File(getPath(uri)).getAbsolutePath()));
+                    runOnUiThread(() -> showProgressDialog(getString(R.string.just_a_moment)));
+                    String path = getPath(uri);
+                    runOnUiThread(() -> {
+                        setDrive(this.PENDING_SELECT_FILE_MODE, new File(path).getAbsolutePath());
+                        DialogUtils.safeDismiss(this, progressDialog);
+                    });
                 }
             });
         }

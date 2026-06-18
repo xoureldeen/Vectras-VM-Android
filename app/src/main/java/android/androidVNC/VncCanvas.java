@@ -405,7 +405,7 @@ public class VncCanvas extends AppCompatImageView {
 							VncCanvasActivity.display.getSize(size);
 							initBitmapData(size.x, size.y);
 							setupScaleMode();
-							reload();
+							handler.post(this::reload);
 							break;
 						}
 
@@ -481,11 +481,7 @@ public class VncCanvas extends AppCompatImageView {
 					throw new Exception("Can't handle SetColourMapEntries message");
 
 				case RfbProto.Bell:
-					handler.post(new Runnable() {
-						public void run() {
-                            UIUtils.toastShort(context, "VNC Beep");
-						}
-					});
+					handler.post(() -> UIUtils.toastShort(context, "VNC Beep"));
 					break;
 
 				case RfbProto.ServerCutText:

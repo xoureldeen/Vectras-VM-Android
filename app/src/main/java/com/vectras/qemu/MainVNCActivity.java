@@ -23,6 +23,7 @@ import android.content.res.Configuration;
 import android.graphics.Point;
 import android.graphics.RenderEffect;
 import android.graphics.Shader;
+import android.hardware.input.InputManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -33,6 +34,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Display;
+import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -65,6 +67,7 @@ import com.vectras.vm.manager.QmpSender;
 import com.vectras.vm.manager.VmAudioManager;
 import com.vectras.vm.manager.VmFileManager;
 import com.vectras.vm.manager.VmControllerDialog;
+import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.ListUtils;
@@ -118,6 +121,35 @@ public class MainVNCActivity extends VncCanvasActivity {
     private ScaleGestureDetector scaleDetector;
     private boolean isScaling = false;
     private boolean isPinchToZoom;
+
+    private InputManager inputManager;
+
+    private final InputManager.InputDeviceListener inputDeviceListener =
+            new InputManager.InputDeviceListener() {
+                @Override
+                public void onInputDeviceAdded(int deviceId) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        InputDevice device = inputManager.getInputDevice(deviceId);
+                        if (device != null && DeviceUtils.isMouseSource(device.getSources()) && Config.mouseMode == Config.MouseMode.Trackpad) {
+                            setUIModeDesktop();
+                        }
+                    }
+                }
+
+                @Override
+                public void onInputDeviceRemoved(int deviceId) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        if (!DeviceUtils.isMouseConnected(MainVNCActivity.this) && Config.mouseMode == Config.MouseMode.External) {
+                            setUIModeMobile(false);
+                        }
+                    }
+                }
+
+                @Override
+                public void onInputDeviceChanged(int deviceId) {
+
+                }
+            };
 
     @Override
     public void onCreate(Bundle b) {
@@ -361,9 +393,22 @@ public class MainVNCActivity extends VncCanvasActivity {
         //Terminal.killQemuProcess();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && MainSettingsManager.getAutoSwitchToExternalMouse(this)) {
+            inputManager = (InputManager) getSystemService(Context.INPUT_SERVICE);
+            inputManager.registerInputDeviceListener(inputDeviceListener, null);
+        }
+    }
+
     public void onPause() {
         //MainService.updateServiceNotification("Vectras VM Running in Background");
         super.onPause();
+
+        if (inputManager != null) {
+            inputManager.unregisterInputDeviceListener(inputDeviceListener);
+        }
     }
 /*
 
@@ -424,7 +469,8 @@ public class MainVNCActivity extends VncCanvasActivity {
                     setUIModeMobile(true);
                     break;
                 case 1:
-                    promptSetUIModeDesktop(MainVNCActivity.this, false);
+                    //promptSetUIModeDesktop(MainVNCActivity.this, false);
+                    setUIModeDesktop();
                     break;
                 default:
                     break;
@@ -484,31 +530,33 @@ public class MainVNCActivity extends VncCanvasActivity {
 
             Config.mouseMode = Config.MouseMode.Trackpad;
             MainSettingsManager.setDesktopMode(this, false);
-            if (fitToScreen)
-                onFitToScreen();
-            else
-                onNormalScreen();
+//            if (fitToScreen)
+//                onFitToScreen();
+//            else
+//                onNormalScreen();
             onMouse();
 
             //UIUtils.toastShort(MainVNCActivity.this, "Trackpad Calibrating");
             invalidateOptionsMenu();
+
+            UIUtils.setMouseVisible(binding.main);
         } catch (Exception ex) {
             if (Config.debug)
                 Log.e(TAG, "setUIModeMobile: ", ex);
         }
 
         //Apply settings when connection is successful.
-        try {
-            vncCanvas.setupScaleMode(binding.main);
-            if (MainSettingsManager.getVNCScaleMode(this) == VNCConfig.oneToOne) {
-                vncCanvas.setScaleMode(vncCanvas.ONE_TO_ONE_MODE);
-            } else if (MainSettingsManager.getVNCScaleMode(this) == VNCConfig.scaleToFitScreen) {
-                vncCanvas.setScaleMode(vncCanvas.STRETCH_TO_FIT_MODE);
-            }
-        } catch (Exception e) {
-            MainSettingsManager.setVNCScaleMode(this, VNCConfig.fitToScreen);
-            Log.e(TAG, "oneToOne: ", e);
-        }
+//        try {
+//            vncCanvas.setupScaleMode(binding.main);
+//            if (MainSettingsManager.getVNCScaleMode(this) == VNCConfig.oneToOne) {
+//                vncCanvas.setScaleMode(vncCanvas.ONE_TO_ONE_MODE);
+//            } else if (MainSettingsManager.getVNCScaleMode(this) == VNCConfig.scaleToFitScreen) {
+//                vncCanvas.setScaleMode(vncCanvas.STRETCH_TO_FIT_MODE);
+//            }
+//        } catch (Exception e) {
+//            MainSettingsManager.setVNCScaleMode(this, VNCConfig.fitToScreen);
+//            Log.e(TAG, "oneToOne: ", e);
+//        }
     }
 
     private void promptSetUIModeDesktop(final Activity activity, final boolean mouseMethodAlt) {
@@ -545,11 +593,12 @@ public class MainVNCActivity extends VncCanvasActivity {
             MainSettingsManager.setDesktopMode(this, true);
             if (Config.showToast)
                 UIUtils.toastShort(MainVNCActivity.this, "External Mouse Enabled");
-            onNormalScreen();
-            AbstractScaling.getById(R.id.itemOneToOne).setScaleTypeForActivity(MainVNCActivity.this);
+            //onNormalScreen();
+            //AbstractScaling.getById(R.id.itemOneToOne).setScaleTypeForActivity(MainVNCActivity.this);
             showPanningState();
 
             onMouse();
+            UIUtils.setMouseInvisible(binding.main);
         } catch (Exception e) {
             if (Config.debug)
                 Log.e(TAG, "setUIModeDesktop: ", e);
@@ -839,6 +888,14 @@ public class MainVNCActivity extends VncCanvasActivity {
             playSound();
 
             unBlurLayout();
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && MainSettingsManager.getAutoSwitchToExternalMouse(this)) {
+                if (DeviceUtils.isMouseConnected(this) && Config.mouseMode == Config.MouseMode.Trackpad) {
+                    setUIModeDesktop();
+                } else if (Config.mouseMode == Config.MouseMode.External) {
+                    setUIModeMobile(false);
+                }
+            }
         });
     }
 
@@ -856,6 +913,11 @@ public class MainVNCActivity extends VncCanvasActivity {
             }
 
             blurLayout();
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N &&
+                    MainSettingsManager.getAutoSwitchToExternalMouse(this) &&
+                    Config.mouseMode == Config.MouseMode.External)
+                setUIModeMobile(false);
         });
     }
 

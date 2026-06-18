@@ -122,8 +122,8 @@
     <string name="no_internet_connection">인터넷 연결 없음</string>
     <string name="check_your_internet_connection">인터넷 연결을 확인하세요.</string>
     <string name="downloading_file">파일 다운로드 중…</string>
-    <string name="lenght_of_file">"파일 크기: "</string>
-    <string name="downloaded_to_path">"다운로드 경로: "</string>
+    <string name="lenght_of_file">파일 크기: </string>
+    <string name="downloaded_to_path">다운로드 경로: </string>
     <string name="downloaded_successfully">다운로드가 완료되었습니다!</string>
     <string name="user_interface">사용자 인터페이스</string>
     <string name="custom_memory">사용자 지정 메모리</string>

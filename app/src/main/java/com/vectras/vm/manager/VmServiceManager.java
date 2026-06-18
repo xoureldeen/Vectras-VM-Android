@@ -10,7 +10,7 @@ import com.vectras.vterm.Terminal;
 public class VmServiceManager {
     public static void stopService(Context context) {
         new Thread(() -> {
-            if (!Terminal.executeShellCommandWithResult("ps -e", context).contains("qemu-system-")) {
+            if (!ProcessManager.isQemuRunning(context)) {
                 new Handler(Looper.getMainLooper()).post(MainService::stopService);
             }
         }).start();
