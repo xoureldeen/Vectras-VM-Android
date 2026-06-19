@@ -43,6 +43,21 @@
             <include
                 android:id="@+id/sendkeysdialog"
                 layout="@layout/send_key_dialog" />
+
+            <LinearLayout
+                android:id="@+id/ln_bubble_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                tools:visibility="visible">
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_bubble"
+                    style="?attr/materialIconButtonFilledTonalStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:icon="@drawable/radio_button_unchecked_24px"/>
+            </LinearLayout>
+
         </RelativeLayout>
 
         <LinearLayout
