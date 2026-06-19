@@ -465,15 +465,21 @@ public class VncCanvas extends AppCompatImageView {
 						}
 					}
 
-					boolean fullUpdateNeeded = false;
-
-					if (pendingColorModel != null) {
-						setPixelFormat();
-						fullUpdateNeeded = true;
-					}
-
 					setEncodings(true);
-					bitmapData.writeFullUpdateRequest(!fullUpdateNeeded);
+
+					if (isNeedWriteFullUpdateRequest) {
+						bitmapData.writeFullUpdateRequest(false);
+						isNeedWriteFullUpdateRequest = false;
+					} else {
+						boolean fullUpdateNeeded = false;
+
+						if (pendingColorModel != null) {
+							setPixelFormat();
+							fullUpdateNeeded = true;
+						}
+
+						bitmapData.writeFullUpdateRequest(!fullUpdateNeeded);
+					}
 
 					break;
 
@@ -2092,10 +2098,14 @@ public class VncCanvas extends AppCompatImageView {
 		bitmapData.updateBitmap(x, y, w, h);
 	}
 
+	boolean isNeedWriteFullUpdateRequest = true;
+
 	public void connected() {
+		// Request initial framebuffer update
+		isNeedWriteFullUpdateRequest = true;
+
         VncCanvasActivity activity = (VncCanvasActivity) VncCanvas.this.getContext();
         activity.onConnected();
-
     }
 
 	public void disconnected() {

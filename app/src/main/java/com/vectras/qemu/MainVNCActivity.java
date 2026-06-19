@@ -6,6 +6,7 @@ import android.androidVNC.VncCanvasActivity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.annotation.SuppressLint;
@@ -74,6 +75,7 @@ import com.vectras.vm.utils.ListUtils;
 import com.vectras.vm.utils.SimulateKeyEvent;
 import com.vectras.vm.utils.StreamAudio;
 import com.vectras.vm.utils.UIUtils;
+import com.vectras.vm.view.DynamicBubble;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -128,7 +130,7 @@ public class MainVNCActivity extends VncCanvasActivity {
             new InputManager.InputDeviceListener() {
                 @Override
                 public void onInputDeviceAdded(int deviceId) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    if (isConnected && Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         InputDevice device = inputManager.getInputDevice(deviceId);
                         if (device != null && DeviceUtils.isMouseSource(device.getSources()) && Config.mouseMode == Config.MouseMode.Trackpad) {
                             setUIModeDesktop();
@@ -261,6 +263,12 @@ public class MainVNCActivity extends VncCanvasActivity {
         });
 
         if (!isConnected) tryReconnect(false);
+
+        DynamicBubble dynamicBubble = new DynamicBubble(binding.lnBubbleContainer, binding.btnBubble);
+        dynamicBubble.onClicked(() -> {
+            bindingControls.mainControl.setVisibility(bindingControls.mainControl.getVisibility() == View.GONE ? View.VISIBLE : View.GONE);
+            binding.btnBubble.setIcon(AppCompatResources.getDrawable(this, bindingControls.mainControl.getVisibility() == View.GONE ? R.drawable.radio_button_unchecked_24px : R.drawable.hide_source_24px));
+        });
     }
 
     private void setDefaulViewMode() {
@@ -540,23 +548,16 @@ public class MainVNCActivity extends VncCanvasActivity {
             invalidateOptionsMenu();
 
             UIUtils.setMouseVisible(binding.main);
+
+            if (firstConnection) bindingControls.mainControl.setVisibility(View.VISIBLE);
+            binding.lnBubbleContainer.setVisibility(View.GONE);
         } catch (Exception ex) {
             if (Config.debug)
                 Log.e(TAG, "setUIModeMobile: ", ex);
         }
 
         //Apply settings when connection is successful.
-//        try {
-//            vncCanvas.setupScaleMode(binding.main);
-//            if (MainSettingsManager.getVNCScaleMode(this) == VNCConfig.oneToOne) {
-//                vncCanvas.setScaleMode(vncCanvas.ONE_TO_ONE_MODE);
-//            } else if (MainSettingsManager.getVNCScaleMode(this) == VNCConfig.scaleToFitScreen) {
-//                vncCanvas.setScaleMode(vncCanvas.STRETCH_TO_FIT_MODE);
-//            }
-//        } catch (Exception e) {
-//            MainSettingsManager.setVNCScaleMode(this, VNCConfig.fitToScreen);
-//            Log.e(TAG, "oneToOne: ", e);
-//        }
+        applyScaleMode();
     }
 
     private void promptSetUIModeDesktop(final Activity activity, final boolean mouseMethodAlt) {
@@ -595,16 +596,37 @@ public class MainVNCActivity extends VncCanvasActivity {
                 UIUtils.toastShort(MainVNCActivity.this, "External Mouse Enabled");
             //onNormalScreen();
             //AbstractScaling.getById(R.id.itemOneToOne).setScaleTypeForActivity(MainVNCActivity.this);
+
+            applyScaleMode();
+
             showPanningState();
 
             onMouse();
             UIUtils.setMouseInvisible(binding.main);
+
+            if (firstConnection) bindingControls.mainControl.setVisibility(View.GONE);
+            binding.lnBubbleContainer.setVisibility(View.VISIBLE);
+            binding.btnBubble.setIcon(AppCompatResources.getDrawable(this, bindingControls.mainControl.getVisibility() == View.GONE ? R.drawable.radio_button_unchecked_24px : R.drawable.hide_source_24px));
         } catch (Exception e) {
             if (Config.debug)
                 Log.e(TAG, "setUIModeDesktop: ", e);
         }
         //vncCanvas.reSize(false);
         invalidateOptionsMenu();
+    }
+
+    private void applyScaleMode() {
+        try {
+            vncCanvas.setupScaleMode(binding.main);
+            if (MainSettingsManager.getVNCScaleMode(this) == VNCConfig.oneToOne) {
+                vncCanvas.setScaleMode(vncCanvas.ONE_TO_ONE_MODE);
+            } else if (MainSettingsManager.getVNCScaleMode(this) == VNCConfig.scaleToFitScreen) {
+                vncCanvas.setScaleMode(vncCanvas.STRETCH_TO_FIT_MODE);
+            }
+        } catch (Exception e) {
+            MainSettingsManager.setVNCScaleMode(this, VNCConfig.fitToScreen);
+            Log.e(TAG, "oneToOne: ", e);
+        }
     }
 
     private boolean toggleFullScreen() {
@@ -841,7 +863,7 @@ public class MainVNCActivity extends VncCanvasActivity {
     public void onBackPressed() {
         if (bindingSendKey.sendkeylayout.getVisibility() == View.VISIBLE) {
             bindingSendKey.sendkeylayout.setVisibility(View.GONE);
-        } else if (bindingControls.mainControl.getVisibility() == View.GONE) {
+        } else if (binding.lnBubbleContainer.getVisibility() == View.GONE && bindingControls.mainControl.getVisibility() == View.GONE) {
             bindingControls.mainControl.setVisibility(View.VISIBLE);
         } else {
             FrameLayout l = findViewById(R.id.mainControl);
@@ -863,14 +885,13 @@ public class MainVNCActivity extends VncCanvasActivity {
         runOnUiThread(() -> {
             isConnected = true;
             this.resumeVM();
-            if (!firstConnection)
-                UIUtils.showHints(this);
-            firstConnection = true;
+//            if (!firstConnection)
+//                UIUtils.showHints(this);
 
-            if (Config.mouseMode == Config.MouseMode.External)
-                setUIModeDesktop();
-            else
-                setUIModeMobile(screenMode == VNCScreenMode.FitToScreen);
+//            if (Config.mouseMode == Config.MouseMode.External)
+//                setUIModeDesktop();
+//            else
+//                setUIModeMobile(screenMode == VNCScreenMode.FitToScreen);
 
             binding.lnNosignal.setVisibility(View.GONE);
             binding.lnConnecting.setVisibility(View.GONE);
@@ -896,6 +917,8 @@ public class MainVNCActivity extends VncCanvasActivity {
                     setUIModeMobile(false);
                 }
             }
+
+            firstConnection = true;
         });
     }
 

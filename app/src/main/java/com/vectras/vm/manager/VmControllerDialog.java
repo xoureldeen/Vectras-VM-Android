@@ -543,7 +543,15 @@ public class VmControllerDialog extends DialogFragment {
                 if (uri != null) {
                     try {
                         new Thread(() -> {
-                            File selectedFilePath = new File(Objects.requireNonNull(FileUtils.getPath(getContext(), uri)));
+                            String path = FileUtils.getPath(getContext(), uri);
+
+                            if (path == null) {
+                                showErrorSelectedFileDialog();
+                                dismiss();
+                                return;
+                            }
+
+                            File selectedFilePath = new File(path);
 
                             if (isAdded()) {
                                 requireActivity().runOnUiThread(() -> {
