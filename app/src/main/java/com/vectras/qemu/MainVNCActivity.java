@@ -531,7 +531,7 @@ public class MainVNCActivity extends VncCanvasActivity {
 
     }
 
-    private void setUIModeMobile(boolean fitToScreen) {
+    public void setUIModeMobile(boolean fitToScreen) {
 
         try {
             MotionEvent a = MotionEvent.obtain(0, 0, MotionEvent.ACTION_DOWN, 0, 0, 0);
@@ -586,7 +586,7 @@ public class MainVNCActivity extends VncCanvasActivity {
 
     }
 
-    private void setUIModeDesktop() {
+    public void setUIModeDesktop() {
 
         try {
             MotionEvent a = MotionEvent.obtain(0, 0, MotionEvent.ACTION_DOWN, 0, 0, 0);
