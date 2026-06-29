@@ -50,10 +50,15 @@ import android.view.View;
 import com.antlersoft.android.bc.BCFactory;
 import com.vectras.qemu.Config;
 import com.vectras.vm.R;
+import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.UIUtils;
 
 import java.io.IOException;
 import java.util.Objects;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.zip.Inflater;
 
 import androidx.appcompat.widget.AppCompatImageView;
@@ -1955,6 +1960,8 @@ public class VncCanvas extends AppCompatImageView {
 			for (int i = 0; i < count; i++) {
 				dst[i] = (int) readPixelsBuffer[i] & 0xFF;
 			}
+
+			totalBytesReceived.addAndGet(count);
 		} else {
 			final int l = count * 3;
 			if (l > readPixelsBuffer.length) {
@@ -1967,6 +1974,8 @@ public class VncCanvas extends AppCompatImageView {
 						| ((readPixelsBuffer[idx + 2] & 0xFF) << 16 | (readPixelsBuffer[idx + 1] & 0xFF) << 8
 						| (readPixelsBuffer[idx] & 0xFF));
 			}
+
+			totalBytesReceived.addAndGet(l);
 		}
 	}
 
@@ -2104,13 +2113,51 @@ public class VncCanvas extends AppCompatImageView {
 		// Request initial framebuffer update
 		isNeedWriteFullUpdateRequest = true;
 
+		startDeadCheck();
+
         VncCanvasActivity activity = (VncCanvasActivity) VncCanvas.this.getContext();
         activity.onConnected();
     }
 
 	public void disconnected() {
+		stopDeadCheck();
+
 		VncCanvasActivity activity = (VncCanvasActivity) VncCanvas.this.getContext();
 		activity.onDisconnected();
+	}
+
+	private final AtomicLong totalBytesReceived = new AtomicLong(0);
+	private long lastCheckedBytes = 0;
+	ScheduledExecutorService deadCheckScheduler;
+
+	boolean isNeedDeadCheck = DeviceUtils.isColorOS(getContext());
+
+	private void startDeadCheck() {
+		if (!isNeedDeadCheck) return;
+
+		totalBytesReceived.set(0);
+		lastCheckedBytes = totalBytesReceived.get();
+		deadCheckScheduler = Executors.newSingleThreadScheduledExecutor();
+
+		deadCheckScheduler.scheduleWithFixedDelay(() -> {
+			long currentBytes = totalBytesReceived.get();
+
+			if (currentBytes == lastCheckedBytes) {
+				isNeedWriteFullUpdateRequest = true;
+				Log.d(TAG, "No response was detected and a WriteFullUpdateRequest was sent.");
+			} else {
+				lastCheckedBytes = currentBytes;
+			}
+		}, 5000, 5000, TimeUnit.SECONDS);
+	}
+
+	private void stopDeadCheck() {
+		if (!isNeedDeadCheck) return;
+
+		if (deadCheckScheduler != null) {
+			deadCheckScheduler.shutdownNow();
+			deadCheckScheduler = null;
+		}
 	}
 
     public float getFramebufferWidth() {

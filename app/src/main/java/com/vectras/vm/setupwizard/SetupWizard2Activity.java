@@ -214,8 +214,7 @@ public class SetupWizard2Activity extends AppCompatActivity {
                 edit.apply();
             } else if (currentStep == STEP_PATERON) {
                 uiControllerFinalSteps(currentStep + 1);
-                Intent intent = new Intent(ACTION_VIEW, Uri.parse(AppConfig.patreonLink));
-                startActivity(intent);
+                IntentUtils.openUrl(this, AppConfig.patreonLink);
             } else {
                 startActivity(new Intent(this, MainActivity.class));
                 finish();

@@ -2,6 +2,7 @@ package com.vectras.vm.utils;
 
 import static android.content.Intent.ACTION_VIEW;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -30,8 +31,21 @@ public class IntentUtils {
 
         PackageManager packagemanager = context.getPackageManager();
         if (intent.resolveActivity(packagemanager) != null) {
-            context.startActivity(intent);
-            return true;
+            try {
+                context.startActivity(intent);
+                return true;
+            } catch (SecurityException e) {
+                try {
+                    Intent chooserIntent = Intent.createChooser(intent, null);
+                    if (!(context instanceof Activity)) {
+                        chooserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    }
+                    context.startActivity(chooserIntent);
+                    return true;
+                } catch (Exception ex) {
+                    return false;
+                }
+            }
         } else {
             return false;
         }

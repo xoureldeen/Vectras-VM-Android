@@ -84,6 +84,11 @@ public class VmControllerDialog extends DialogFragment {
                 infoBlock = "";
             }
 
+            if (!isAdded()) {
+                progressDialog.reset();
+                return;
+            }
+
             long audioFileSize = FileUtils.getFileSize(VmFileManager.findAudioRaw(requireContext(), Config.vmID));
 
             isGotInfo.set(true);
@@ -332,7 +337,7 @@ public class VmControllerDialog extends DialogFragment {
                 });
 
 
-                if (isAdded() && requireActivity() instanceof MainVNCActivity) {
+                if (isAdded() && requireActivity() instanceof MainVNCActivity mainVNCActivity) {
                     binding.lnRefresh.setOnClickListener(v -> {
                         requireActivity().startActivity(new Intent(requireActivity(), MainVNCActivity.class));
                         requireActivity().overridePendingTransition(0, 0);
@@ -349,10 +354,10 @@ public class VmControllerDialog extends DialogFragment {
 
                     binding.lnVirtualmouse.setOnClickListener(v -> binding.swVirtualmouse.toggle());
 
-                    binding.lnMouse.setOnClickListener(v -> {
-                        MainVNCActivity.getContext.onMouseMode();
-                        dismiss();
-                    });
+//                    binding.lnMouse.setOnClickListener(v -> {
+//                        MainVNCActivity.getContext.onMouseMode();
+//                        dismiss();
+//                    });
 
                     binding.lnSettings.setOnClickListener(v -> {
                         requireActivity().startActivity(new Intent(requireActivity(), VNCSettingsActivity.class));
@@ -362,6 +367,7 @@ public class VmControllerDialog extends DialogFragment {
                     TypedValue typedValue = new TypedValue();
                     requireActivity().getTheme().resolveAttribute(androidx.appcompat.R.attr.colorPrimary, typedValue, true);
                     int colorPrimary = typedValue.data;
+                    int colorControlNormal = binding.tvMute.getCurrentTextColor();
 
                     if (MainSettingsManager.getVNCScaleMode(requireActivity()) == VNCConfig.oneToOne) {
                         binding.ivScreenOneToOne.setBackgroundResource(R.drawable.dialog_shape_single_button);
@@ -434,6 +440,32 @@ public class VmControllerDialog extends DialogFragment {
                     });
 
                     binding.lnPinchToZoom.setOnClickListener(v -> binding.swPinchToZoom.toggle());
+
+                    if (Config.mouseMode == Config.MouseMode.Trackpad) {
+                        binding.ivTrackpadMode.setBackgroundResource(R.drawable.dialog_shape_single_button);
+                        binding.ivTrackpadMode.setColorFilter(colorPrimary);
+                    } else {
+                        binding.ivExternalMouseMode.setBackgroundResource(R.drawable.dialog_shape_single_button);
+                        binding.ivExternalMouseMode.setColorFilter(colorPrimary);
+                    }
+
+                    binding.ivTrackpadMode.setOnClickListener(v -> {
+                        if (Config.mouseMode == Config.MouseMode.Trackpad) return;
+                        mainVNCActivity.setUIModeMobile(false);
+                        binding.ivTrackpadMode.setBackgroundResource(R.drawable.dialog_shape_single_button);
+                        binding.ivTrackpadMode.setColorFilter(colorPrimary);
+                        binding.ivExternalMouseMode.setBackgroundResource(R.drawable.dialog_shape_click_effect_button);
+                        binding.ivExternalMouseMode.setColorFilter(colorControlNormal);
+                    });
+
+                    binding.ivExternalMouseMode.setOnClickListener(v -> {
+                        if (Config.mouseMode == Config.MouseMode.External) return;
+                        mainVNCActivity.setUIModeDesktop();
+                        binding.ivTrackpadMode.setBackgroundResource(R.drawable.dialog_shape_click_effect_button);
+                        binding.ivTrackpadMode.setColorFilter(colorControlNormal);
+                        binding.ivExternalMouseMode.setBackgroundResource(R.drawable.dialog_shape_single_button);
+                        binding.ivExternalMouseMode.setColorFilter(colorPrimary);
+                    });
                 } else {
                     binding.lnUserInterface.setVisibility(View.GONE);
                 }

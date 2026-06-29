@@ -1,7 +1,5 @@
 package com.vectras.vm.utils;
 
-import static androidx.core.content.ContextCompat.registerReceiver;
-
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.usage.StorageStatsManager;
@@ -20,12 +18,8 @@ import android.util.Log;
 import android.view.Display;
 import android.view.InputDevice;
 
-import com.vectras.vm.VectrasApp;
-
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.UUID;
@@ -158,5 +152,9 @@ public class DeviceUtils {
     public static boolean isMouseSource(int sources) {
         return (sources & InputDevice.SOURCE_MOUSE) == InputDevice.SOURCE_MOUSE
                 || (sources & InputDevice.SOURCE_MOUSE_RELATIVE) == InputDevice.SOURCE_MOUSE_RELATIVE;
+    }
+
+    public static boolean isColorOS(Context context) {
+        return PackageUtils.isInstalled("com.nearme.themespace", context);
     }
 }

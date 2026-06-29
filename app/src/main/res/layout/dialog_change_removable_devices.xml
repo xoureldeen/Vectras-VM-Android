@@ -554,6 +554,33 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/ln_mouse_mode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:paddingVertical="8dp"
+                    android:paddingHorizontal="16dp">
+                    <ImageView
+                        android:id="@+id/iv_trackpad_mode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/trackpad_input_24px"
+                        android:background="@drawable/dialog_shape_click_effect_button"/>
+                    <ImageView
+                        android:id="@+id/iv_external_mouse_mode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginEnd="4dp"
+                        android:padding="8dp"
+                        android:layout_weight="1"
+                        android:src="@drawable/mouse_24px"
+                        android:background="@drawable/dialog_shape_click_effect_button"/>
+                </LinearLayout>
+
+                <LinearLayout
                     android:id="@+id/ln_virtualmouse"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -657,25 +684,25 @@
                         android:text="@string/refresh"/>
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/ln_mouse"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:paddingVertical="8dp"
-                    android:paddingHorizontal="16dp"
-                    android:background="?attr/selectableItemBackground">
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/touchpad_mouse_24px"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="8dp"
-                        android:textColor="?attr/colorControlNormal"
-                        android:text="@string/mouse_mode"/>
-                </LinearLayout>
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/ln_mouse"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:gravity="center_vertical"-->
+<!--                    android:paddingVertical="8dp"-->
+<!--                    android:paddingHorizontal="16dp"-->
+<!--                    android:background="?attr/selectableItemBackground">-->
+<!--                    <ImageView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:src="@drawable/touchpad_mouse_24px"/>-->
+<!--                    <TextView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:padding="8dp"-->
+<!--                        android:textColor="?attr/colorControlNormal"-->
+<!--                        android:text="@string/mouse_mode"/>-->
+<!--                </LinearLayout>-->
 
                 <LinearLayout
                     android:id="@+id/ln_settings"

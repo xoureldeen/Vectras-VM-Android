@@ -339,14 +339,14 @@ public class RfbProto {
           localSocket.connect(localSocketAddr);
           //localSocket.setSoTimeout(10_000);
           is = new DataInputStream(new BufferedInputStream(localSocket.getInputStream(),
-                  32768));
+                  65536));
           sos = localSocket.getOutputStream();
 
       } else {
           sock = new Socket(host, port);
           //sock.setSoTimeout(10_000);
           is = new DataInputStream(new BufferedInputStream(sock.getInputStream(),
-                  16384));
+                  32768));
           sos = sock.getOutputStream();
       }
 
