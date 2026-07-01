@@ -1542,6 +1542,26 @@
     "id": "99672"
   },
   {
+    "rom_name": "Windows 10 S 1709 ARM64 build 16299",
+    "rom_icon": "https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/09/17/windows-logo_1_926ed76111646acbbe332bc5af0cf2ce.png",
+    "rom_url": "https://youtu.be/2csyaU2w8dk",
+    "rom_path": "Windows 10 S ARM64 build 16299.cvbi",
+    "rom_avail": true,
+    "gui": true,
+    "rom_size": "Fall Creators Update",
+    "rom_arch": "ARM64",
+    "rom_kernel": "windows",
+    "rom_extra": "",
+    "final_rom_file_name": "",
+    "desc": "This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 10 is a major release of the Windows NT operating system developed by Microsoft. The successor to Windows 8.1, it was released to manufacturing on July 15, 2015, became generally available on July 29, 2015, and was a free upgrade to users of Windows 7, 8, and 8.1. Its server counterparts are Windows Server 2016, 2019, and 2022. It was succeeded by Windows 11 in October 2021.",
+    "file_size": "16 GB",
+    "containsAds": true,
+    "creator": "Nguyen Bao An Bui",
+    "verified": true,
+    "vecid": "windows10sarm64build16299cvbi",
+    "id": "99627"
+  },
+  {
     "rom_name": "Windows 11 21H2",
     "rom_icon": "https://www.getmyos.com/app_public/files/t/1/2021/06/windows_11_logo_by_getmyos.png",
     "rom_url": "https://youtu.be/5Vyo5NoO294",
