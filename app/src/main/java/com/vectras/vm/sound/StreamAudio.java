@@ -1,4 +1,4 @@
-package com.vectras.vm.utils;
+package com.vectras.vm.sound;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,6 +6,8 @@ import android.media.AudioAttributes;
 import android.media.AudioFormat;
 import android.media.AudioTrack;
 import android.util.Log;
+
+import com.vectras.vm.utils.FileUtils;
 
 import java.io.RandomAccessFile;
 

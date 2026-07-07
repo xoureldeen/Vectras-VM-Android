@@ -3,6 +3,7 @@ package com.vectras.vm.main.core;
 import android.app.Activity;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -92,31 +93,38 @@ public class StartVmDialog {
 
                 boolean isVmRuning = VMManager.isVMRunning(activity, vmId);
 
-                while (isVmRuning) {
-                    Config.vmID = vmId;
+                if (!isVmRuning) {
+                    new Handler(Looper.getMainLooper()).post(() -> {
+                        isShuttingDown = false;
+                        dismiss();
+                    });
+                } else {
+                    while (true) {
+                        Config.vmID = vmId;
 
-                    isVmRuning = VMManager.isVMRunning(activity, vmId);
+                        isVmRuning = VMManager.isVMRunning(activity, vmId);
 
-                    QmpSender.shutdown();
+                        QmpSender.shutdown();
 
-                    if (!isVmRuning || VMManager.isQemuStopedWithError || triedCount == MAX_TRY) {
-                        if (triedCount < MAX_TRY) FileUtils.delete(Config.getLocalQMPSocketPath(vmId));
+                        if (!isVmRuning || VMManager.isQemuStopedWithError || triedCount >= MAX_TRY) {
+                            if (triedCount < MAX_TRY) FileUtils.delete(Config.getLocalQMPSocketPath(vmId));
 
-                        new Handler(Looper.getMainLooper()).post(() -> {
-                            isShuttingDown = false;
-                            dismiss();
-                        });
+                            new Handler(Looper.getMainLooper()).post(() -> {
+                                isShuttingDown = false;
+                                dismiss();
+                            });
 
-                        break;
+                            break;
+                        }
+
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException ignored) {
+
+                        }
+
+                        triedCount++;
                     }
-
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException ignored) {
-
-                    }
-
-                    triedCount++;
                 }
             }).start();
         });
@@ -126,7 +134,7 @@ public class StartVmDialog {
                 .setCancelable(false)
                 .create();
 
-        progressDialog.show();
+        if (!activity.isFinishing() && !activity.isDestroyed()) progressDialog.show();
     }
 
     public void setStatus(String status) {

@@ -1,1 +1,0 @@
-It's a Virtual Machine App for Android Which is Based on QEMU

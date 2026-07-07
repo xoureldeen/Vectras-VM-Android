@@ -5,12 +5,15 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -63,6 +66,7 @@ import java.util.concurrent.Executors;
 import com.vectras.vm.utils.ZipUtils;
 import com.vectras.vterm.Terminal;
 import com.vectras.vm.utils.PermissionUtils;
+import com.vectras.vterm.Terminal2;
 
 public class VMCreatorActivity extends AppCompatActivity {
 
@@ -309,9 +313,28 @@ public class VMCreatorActivity extends AppCompatActivity {
                 setDefault();
                 if (MainSettingsManager.autoCreateDisk(this)) {
                     if (createVMFolder(true)) {
-                        Terminal vterm = new Terminal(this);
-                        vterm.executeShellCommand2("qemu-img create -f qcow2 " + VmFileManager.getPath(vmID, "disk.qcow2") + " 128G", false, this);
-                        binding.drive.setText(VmFileManager.getPath(vmID, "disk.qcow2"));
+                        Terminal2 terminal2 = new Terminal2(this);
+                        terminal2.setShowProgressDialog(true);
+                        terminal2.execute("qemu-img create -f qcow2 " + VmFileManager.getPath(vmID, "disk.qcow2") + " 128G", new Terminal2.Terminal2Callback() {
+                            @Override
+                            public void onRunning(String command, String newLine) {
+                                // Nothing to do.
+                            }
+
+                            @Override
+                            public void onFinished(String command, String log, int status) {
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    if (status == terminal2.SUCCESS)
+                                        binding.drive.setText(VmFileManager.getPath(vmID, "disk.qcow2"));
+                                });
+                            }
+
+                            @Override
+                            public void onError(String command, Exception exception) {
+                                new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(getApplicationContext(), getString(R.string.an_error_occurred_while_creating_the_virtual_drive), Toast.LENGTH_SHORT).show());
+
+                            }
+                        });
                     }
                 } else {
                     setDrive(SELECT_DISK_0_FILE_MODE, null);
@@ -1156,7 +1179,7 @@ public class VMCreatorActivity extends AppCompatActivity {
     private void showProgressDialog(String message) {
         dialogProgressStyleBinding.progressText.setText(message);
         dialogProgressStyleBinding.progressBar.setIndeterminate(true);
-        progressDialog.show();
+        if (!isFinishing() && !isDestroyed()) progressDialog.show();
     }
 
     private String copyToTemp(Uri uri) throws IOException {

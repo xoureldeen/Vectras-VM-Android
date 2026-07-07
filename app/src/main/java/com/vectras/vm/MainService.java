@@ -1,5 +1,6 @@
 package com.vectras.vm;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -8,12 +9,17 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
+import com.vectras.vm.utils.ClipboardUltils;
+import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vterm.Terminal;
+import com.vectras.vterm.Terminal2;
 
 import java.util.Objects;
 
@@ -22,7 +28,7 @@ public class MainService extends Service {
     private final int NOTIFICATION_ID = 1;
     private final String MACHINE_NAME = "Vectras VM";
     public static String env = null;
-    private String TAG = "MainService";
+    private static String TAG = "MainService";
     public static MainService service;
     public static Context activityContext;
 
@@ -51,8 +57,7 @@ public class MainService extends Service {
 
         if (env != null) {
             if (service != null) {
-                Terminal vterm = new Terminal(activityContext);
-                vterm.executeShellCommand2(env, true, activityContext);
+                startCommand(env, activityContext);
             }
         } else {
             Log.e(TAG, "env is null");
@@ -97,8 +102,50 @@ public class MainService extends Service {
         }
     }
 
-    public static void startCommand(String _env, Context _context) {
-        Terminal vterm = new Terminal(_context);
-        vterm.executeShellCommand2(_env, true, _context);
+    public static void startCommand(String env, Context context) {
+        Terminal2 terminal2 = new Terminal2(activityContext);
+        terminal2.setDefaultShellBash();
+        terminal2.setStartup("export XDG_RUNTIME_DIR=/tmp && unset PULSE_SERVER");
+        terminal2.execute(env, new Terminal2.Terminal2Callback() {
+            @Override
+            public void onRunning(String command, String newLine) {
+                // Nothing to do.
+            }
+
+            @Override
+            public void onFinished(String command, String log, int status) {
+                if (context instanceof Activity activity) {
+                    if (activity.isFinishing() || activity.isDestroyed()) {
+                        return;
+                    }
+                } else {
+                    Log.e(TAG, "context is not an Activity");
+                    return;
+                }
+
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    if (VMManager.isExecutedCommandError(command, log, context))
+                        return;
+
+                    DialogUtils.twoDialog(context, "Execution Result", log, context.getString(R.string.copy), context.getString(R.string.close), true, R.drawable.round_terminal_24, true,
+                            () -> ClipboardUltils.copyToClipboard(context, log), null, null);
+                });
+            }
+
+            @Override
+            public void onError(String command, Exception exception) {
+                if (context instanceof Activity activity) {
+                    if (activity.isFinishing() || activity.isDestroyed()) {
+                        return;
+                    }
+                } else {
+                    Log.e(TAG, "context is not an Activity");
+                    return;
+                }
+
+                new Handler(Looper.getMainLooper()).post(() -> DialogUtils.twoDialog(context, "Execution Result", exception.getMessage(), context.getString(R.string.copy), context.getString(R.string.close), true, R.drawable.round_terminal_24, true,
+                        () -> ClipboardUltils.copyToClipboard(context, exception.getMessage()), null, null));
+            }
+        });
     }
 }

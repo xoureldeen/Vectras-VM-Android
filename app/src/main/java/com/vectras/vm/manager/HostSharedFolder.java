@@ -10,6 +10,7 @@ import com.vectras.vm.utils.ClipboardUltils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.ProgressDialog;
 import com.vectras.vterm.Terminal;
+import com.vectras.vterm.Terminal2;
 
 public class HostSharedFolder {
     public static final String TAG = "HostSharedFolder";
@@ -25,13 +26,16 @@ public class HostSharedFolder {
 
         new Thread(() -> {
             boolean isRuning;
-            if (Terminal.executeShellCommandWithResult("pgrep -f 'http.server 19000'", context).isEmpty()) {
-                if (!Terminal.executeShellCommandWithResult("which python3", context).contains("python3"))
-                    Terminal.executeShellCommandWithResult("apk add python3", context);
 
-                startCommand(context);
+            Terminal2 terminal2 = new Terminal2(context);
 
-                isRuning = !Terminal.executeShellCommandWithResult("sleep 1; pgrep -f 'http.server 19000'", context).isEmpty();
+            if (terminal2.executeOnThisThread("pgrep -f 'http.server 19000'").isEmpty()) {
+                if (!terminal2.executeOnThisThread("which python3").contains("python3"))
+                    terminal2.executeOnThisThread("apk add python3");
+
+                new Terminal2(context).execute("python3 -m http.server 19000 --bind 127.0.0.1 --directory " + SHARED_DIR);
+
+                isRuning = !terminal2.executeOnThisThread("sleep 1; pgrep -f 'http.server 19000'").isEmpty();
             } else {
                 isRuning = true;
             }
@@ -60,10 +64,5 @@ public class HostSharedFolder {
                 }
             });
         }).start();
-    }
-
-    public static void startCommand(Context _context) {
-        Terminal vterm = new Terminal(_context);
-        vterm.executeShellCommand2("python3 -m http.server 19000 --bind 127.0.0.1 --directory " + SHARED_DIR, false, null);
     }
 }

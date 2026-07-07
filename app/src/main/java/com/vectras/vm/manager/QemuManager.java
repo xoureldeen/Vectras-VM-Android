@@ -4,14 +4,14 @@ import android.content.Context;
 
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.settings.ItemSettingsSelector;
-import com.vectras.vterm.Terminal;
+import com.vectras.vterm.Terminal2;
 
 public class QemuManager {
     public static final int DEFAULT_REFRESH_RATE = 60;
     public static final int DEFAULT_LOW_REFRESH_RATE = 30;
 
     public static boolean isSupportSetRefreshRate(Context context) {
-        return Terminal.executeShellCommandWithResult(getQemuExecutableFile(context) + " -vnc help", context).contains("refresh-rate");
+        return new Terminal2(context).executeOnThisThread(getQemuExecutableFile(context) + " -vnc help").contains("refresh-rate");
     }
 
     public static boolean isSupportAcpiTable(Context context) {

@@ -23,7 +23,7 @@ import com.vectras.vm.R;
 import com.vectras.vm.manager.VmFileManager;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.ProgressDialog;
-import com.vectras.vterm.Terminal;
+import com.vectras.vterm.Terminal2;
 
 import java.io.File;
 import java.util.Objects;
@@ -99,8 +99,8 @@ public class CreateImageDialogFragment extends DialogFragment {
             progressDialog.show();
 
             new Thread(() -> {
-                String result = Terminal.executeShellCommandWithResult("qemu-img create -f qcow2 \"" + folder + Objects.requireNonNull(imageName.getText()) + ".qcow2\" " +
-                        Objects.requireNonNull(imageSize.getText()) + "G", requireActivity()).trim();
+                String result = new Terminal2(requireContext()).executeOnThisThread("qemu-img create -f qcow2 \"" + folder + Objects.requireNonNull(imageName.getText()) + ".qcow2\" " +
+                        Objects.requireNonNull(imageSize.getText()) + "G").trim();
 
                 if (isMarkPendingAdd) VmFileManager.markPendingAdd(folder + Objects.requireNonNull(imageName.getText()) + ".qcow2");
                 requireActivity().runOnUiThread(() -> {

@@ -50,7 +50,7 @@ public class MainStartVM {
     public static String pendingVMID = "";
     public static String pendingThumbnailFile = "";
     public static boolean isLaunchFromPending = false;
-    public static String runCommandFormat = "export TMPDIR=/tmp && mkdir -p $TMPDIR/pulse && export XDG_RUNTIME_DIR=/tmp && chmod -R 775 $TMPDIR/pulse && pulseaudio --start --exit-idle-time=-1 > /dev/null 2>&1 && %s";
+    public static String runCommandFormat = "%s";
 
     private static StartVmDialog dialog;
 
@@ -488,6 +488,6 @@ public class MainStartVM {
     }
 
     public static void setDefault() {
-        runCommandFormat = "export TMPDIR=/tmp && mkdir -p $TMPDIR/pulse && export XDG_RUNTIME_DIR=/tmp && chmod -R 775 $TMPDIR/pulse && pulseaudio --start --exit-idle-time=-1 > /dev/null 2>&1 && %s";
+        runCommandFormat = "%s";
     }
 }

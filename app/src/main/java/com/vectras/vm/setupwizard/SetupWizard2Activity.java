@@ -1,9 +1,6 @@
 package com.vectras.vm.setupwizard;
 
-import static android.content.Intent.ACTION_VIEW;
-
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -13,10 +10,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.transition.TransitionManager;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -29,7 +24,6 @@ import com.anbui.elephant.retrofit2utils.Retrofit2Utils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.termux.app.TermuxActivity;
-import com.termux.app.TermuxService;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.AppConfig;
 import com.vectras.vm.R;
@@ -37,7 +31,6 @@ import com.vectras.vm.VMManager;
 import com.vectras.vm.creator.VMCreatorSelector;
 import com.vectras.vm.databinding.ActivitySetupWizard2Binding;
 import com.vectras.vm.databinding.SetupQemuDoneBinding;
-import com.vectras.vm.databinding.SimpleLayoutListViewWithCheckBinding;
 import com.vectras.vm.main.MainActivity;
 import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.DialogUtils;
@@ -48,14 +41,9 @@ import com.vectras.vm.utils.ListUtils;
 import com.vectras.vm.utils.PermissionUtils;
 import com.vectras.vm.utils.TarUtils;
 import com.vectras.vm.utils.UIUtils;
+import com.vectras.vterm.Terminal2;
 import com.vectras.vterm.TerminalBottomSheetDialog;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
@@ -66,6 +54,8 @@ public class SetupWizard2Activity extends AppCompatActivity {
     ActivitySetupWizard2Binding binding;
     SetupQemuDoneBinding bindingFinalSteps;
     public static final int ACTION_SYSTEM_UPDATE = 1;
+    public static final int ACTION_CORE_SYSTEM_UPDATE = 2;
+    int ACTION;
     final int STEP_REQUEST_PERMISSION = 1;
     final int STEP_EXTRACTING_SYSTEM_FILES = 2;
     final int STEP_GETTING_DATA = 3;
@@ -84,7 +74,6 @@ public class SetupWizard2Activity extends AppCompatActivity {
     String downloadBootstrapsCommand = "";
     String tarPath = "";
     String progressText ="0%";
-    boolean isSystemUpdateMode = false;
     boolean isExecutingCommand = false;
     boolean isLibProotError = false;
     boolean aria2Error = false;
@@ -188,7 +177,7 @@ public class SetupWizard2Activity extends AppCompatActivity {
         });
 
         binding.btnTryAgain.setOnClickListener(v -> {
-            if (isSystemUpdateMode) {
+            if (ACTION == ACTION_SYSTEM_UPDATE) {
                 uiController(STEP_SYSTEM_UPDATE);
                 binding.btnSkipSystemUpdate.setVisibility(View.GONE);
             } else if (isLibProotError) {
@@ -232,16 +221,22 @@ public class SetupWizard2Activity extends AppCompatActivity {
             uiController(STEP_EXTRACTING_SYSTEM_FILES);
             new Thread(() -> {
                 VMManager.killallqemuprocesses(this);
-                FileUtils.delete(getFilesDir().getAbsolutePath() + "/data");
-                FileUtils.delete(getFilesDir().getAbsolutePath() + "/distro");
-                FileUtils.delete(getFilesDir().getAbsolutePath() + "/usr");
+                if (ACTION == ACTION_CORE_SYSTEM_UPDATE) {
+                    FileUtils.delete(getFilesDir().getAbsolutePath() + "/data");
+                    FileUtils.delete(getFilesDir().getAbsolutePath() + "/distro");
+                    FileUtils.delete(getFilesDir().getAbsolutePath() + "/usr");
+                }
                 runOnUiThread(this::extractSystemFiles);
             }).start();
         });
 
         if (getIntent().hasExtra("action")) {
-            if (getIntent().getIntExtra("action", -1) == ACTION_SYSTEM_UPDATE) {
-                isSystemUpdateMode = true;
+            ACTION = getIntent().getIntExtra("action", -1);
+
+            if (ACTION == ACTION_CORE_SYSTEM_UPDATE) {
+                uiController(STEP_SYSTEM_UPDATE);
+                binding.btnSkipSystemUpdate.setVisibility(View.GONE);
+            } else if (ACTION == ACTION_SYSTEM_UPDATE) {
                 uiController(STEP_SYSTEM_UPDATE);
             }
         }
@@ -379,6 +374,11 @@ public class SetupWizard2Activity extends AppCompatActivity {
     }
 
     private void extractSystemFiles() {
+        if (ACTION == ACTION_SYSTEM_UPDATE) {
+            getDataForStandardSetup();
+            return;
+        }
+
         uiController(STEP_EXTRACTING_SYSTEM_FILES);
 
         executor.execute(() -> {
@@ -423,7 +423,7 @@ public class SetupWizard2Activity extends AppCompatActivity {
                     }
                 }
                 new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                    if (isSystemUpdateMode) {
+                    if (ACTION == ACTION_SYSTEM_UPDATE) {
                         startSetup();
                     } else {
                         uiController(STEP_SETUP_OPTIONS);
@@ -431,6 +431,7 @@ public class SetupWizard2Activity extends AppCompatActivity {
                 }, 1000);
             } else {
                 new Handler(Looper.getMainLooper()).postDelayed(() -> uiController(STEP_SETUP_OPTIONS), 1000);
+                Log.e("SetupWizard2Activity", "getDataForStandardSetup: " + error);
             }
         }));
     }
@@ -465,32 +466,46 @@ public class SetupWizard2Activity extends AppCompatActivity {
                         " apk update;" +
                         " echo \"Installing packages...\";" +
                         " apk add " + (DeviceUtils.is64bit() ? AppConfig.neededPkgs()
-                        : AppConfig.neededPkgs32bit()) + ";" +
-                        " echo \"Downloading Qemu...\";";
+                        : AppConfig.neededPkgs32bit()) + ";";
 
-                if (isCustomSetupMode) {
-                    cmd += " tar -xzvf " + tarPath + " -C /;" +
-                            " rm " + tarPath + ";" +
-                            " chmod 775 /usr/local/bin/*;";
-                } else {
-                    if (FileUtils.isFileExists(getFilesDir().getAbsolutePath() + "/distro/root/setup.tar.gz"))
-                        FileUtils.delete(getFilesDir().getAbsolutePath() + "/distro/root/setup.tar.gz");
-
-                    cmd += downloadBootstrapsCommand + ";" +
+                if (ACTION == ACTION_SYSTEM_UPDATE) {
+                    cmd += "echo \"Uninstalling...\";" +
+                            " rm -f /usr/local/bin/qemu-*;" +
+                            " rm -f /usr/share/applications/qemu.desktop;" +
+                            " rm -f /usr/share/icons/hicolor/*/qemu.png;" +
+                            " rm -rf /usr/share/qemu;" +
+                            downloadBootstrapsCommand + ";" +
                             " echo \"Installing Qemu...\";" +
                             " tar -xzvf setup.tar.gz -C /;" +
                             " rm setup.tar.gz;" +
                             " chmod 775 /usr/local/bin/*;";
+                } else {
+                    if (isCustomSetupMode) {
+                        cmd += " echo \"Installing Qemu...\";" +
+                                " tar -xzvf " + tarPath + " -C /;" +
+                                " rm " + tarPath + ";" +
+                                " chmod 775 /usr/local/bin/*;" +
+                                " echo \"Just a sec...\";" +
+                                " mkdir -p ~/.vnc && echo -e \"555555\\n555555\" | vncpasswd -f > ~/.vnc/passwd && chmod 0600 ~/.vnc/passwd;";
+                    } else {
+                        if (FileUtils.isFileExists(getFilesDir().getAbsolutePath() + "/distro/root/setup.tar.gz"))
+                            FileUtils.delete(getFilesDir().getAbsolutePath() + "/distro/root/setup.tar.gz");
+
+                        cmd +=  " echo \"Downloading Qemu...\";" +
+                                downloadBootstrapsCommand + ";" +
+                                " echo \"Installing Qemu...\";" +
+                                " tar -xzvf setup.tar.gz -C /;" +
+                                " rm setup.tar.gz;" +
+                                " chmod 775 /usr/local/bin/*;" +
+                                " echo \"Just a sec...\";" +
+                                " mkdir -p ~/.vnc && echo -e \"555555\\n555555\" | vncpasswd -f > ~/.vnc/passwd && chmod 0600 ~/.vnc/passwd;";
+
+                    }
                 }
 
-                cmd += " echo \"Just a sec...\";" +
-                        " echo export TMPDIR=/tmp >> /etc/profile;" +
-                        " mkdir -p $TMPDIR/pulse;" +
-                        " echo export PULSE_SERVER=127.0.0.1 >> /etc/profile;" +
-                        " mkdir -p ~/.vnc && echo -e \"555555\\n555555\" | vncpasswd -f > ~/.vnc/passwd && chmod 0600 ~/.vnc/passwd;" +
-                        " echo \"Installation successful! xssFjnj58Id\"";
+                cmd += " echo \"Installation successful! xssFjnj58Id\"";
 
-                executeShellCommand(cmd);
+                execute(cmd);
             });
         }).start();
     }
@@ -526,83 +541,17 @@ public class SetupWizard2Activity extends AppCompatActivity {
                 }
             });
 
-    public void executeShellCommand(String userCommand) {
-        isExecutingCommand = true;
-        new Thread(() -> {
-            try {
-                // Set up the process builder to start PRoot with environmental variables and commands
-                ProcessBuilder processBuilder = new ProcessBuilder();
+    private void execute(String command) {
+        Terminal2 terminal2 = new Terminal2(this);
+        terminal2.execute(command, new Terminal2.Terminal2Callback() {
+            @Override
+            public void onRunning(String command, String newLine) {
+                runOnUiThread(() -> appendTextAndScroll(newLine + "\n"));
+            }
 
-                // Adjust these environment variables as necessary for your app
-                String filesDir = getFilesDir().getAbsolutePath();
-
-                File tmpDir = new File(getFilesDir(), "usr/tmp");
-
-                // Setup environment for the PRoot process
-                processBuilder.environment().put("PROOT_TMP_DIR", tmpDir.getAbsolutePath());
-
-                processBuilder.environment().put("HOME", "/root");
-                processBuilder.environment().put("USER", "root");
-                processBuilder.environment().put("PATH", "/bin:/usr/bin:/sbin:/usr/sbin");
-                processBuilder.environment().put("TERM", "xterm-256color");
-                processBuilder.environment().put("TMPDIR", tmpDir.getAbsolutePath());
-                processBuilder.environment().put("SHELL", "/bin/sh");
-
-                String[] prootCommand = {
-                        TermuxService.PREFIX_PATH + "/bin/proot", // PRoot binary path
-                        "--kill-on-exit",
-                        "--link2symlink",
-                        "-0",
-                        "-r", filesDir + "/distro", // Path to the rootfs
-                        "-b", "/dev",
-                        "-b", "/proc",
-                        "-b", "/sys",
-                        "-b", "/sdcard",
-                        "-b", "/storage",
-                        "-b", "/data",
-                        "-w", "/root",
-                        "/bin/sh",
-                        "--login"// The shell to execute inside PRoot
-                };
-
-                processBuilder.command(prootCommand);
-                Process process = processBuilder.start();
-                // Get the input and output streams of the process
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()));
-                BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-
-                // Send user command to PRoot
-                writer.write(userCommand);
-                writer.newLine();
-                writer.flush();
-                writer.close();
-
-                // Read the input stream for the output of the command
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    final String outputLine = line;
-                    runOnUiThread(() -> appendTextAndScroll(outputLine + "\n"));
-                }
-
-                // Read any errors from the error stream
-                while ((line = errorReader.readLine()) != null) {
-                    final String errorLine = line;
-                    runOnUiThread(() -> appendTextAndScroll(errorLine + "\n"));
-                }
-
-                // Clean up
-                reader.close();
-                errorReader.close();
-
-                // Wait for the process to finish
-                process.waitFor();
-
-                // Wait for the process to finish
-                int exitValue = process.waitFor();
-
-                // Check if the exit value indicates an error
-                if (exitValue != 0) {
+            @Override
+            public void onFinished(String command, String log, int status) {
+                if (status != terminal2.SUCCESS) {
                     isExecutingCommand = false;
                     if (aria2Error && downloadBootstrapsCommand.contains("aria2c")) {
                         runOnUiThread(() -> {
@@ -611,22 +560,22 @@ public class SetupWizard2Activity extends AppCompatActivity {
                         });
                     } else {
                         runOnUiThread(() -> {
-                            String toastMessage = "Command failed with exit code: " + exitValue;
+                            String toastMessage = "Command failed with exit code: " + status;
                             appendTextAndScroll("Error: " + toastMessage + "\n");
                             uiController(STEP_ERROR, logs);
                         });
                     }
                 }
-            } catch (IOException | InterruptedException e) {
-                isExecutingCommand = false;
-                // Handle exceptions by printing the stack trace in the terminal output
-                final String errorMessage = e.getMessage();
+            }
+
+            @Override
+            public void onError(String command, Exception exception) {
                 runOnUiThread(() -> {
-                    appendTextAndScroll("Error: " + errorMessage + "\n");
+                    appendTextAndScroll("Error: " + exception.getMessage() + "\n");
                     uiController(STEP_ERROR, logs);
                 });
             }
-        }).start(); // Execute the command in a separate thread to prevent blocking the UI thread
+        });
     }
 
     @SuppressLint("SetTextI18n")
@@ -636,9 +585,10 @@ public class SetupWizard2Activity extends AppCompatActivity {
         if (newLog.contains("xssFjnj58Id")) {
             isExecutingCommand = false;
             MainSettingsManager.setStandardSetupVersion(this, AppConfig.standardSetupVersion);
+            MainSettingsManager.setCoreSetupVersion(this, AppConfig.coreSetupVersion);
             MainSettingsManager.setsetUpWithManualSetupBefore(this, isCustomSetupMode);
             uiController(STEP_JOIN_COMMUNITY);
-            if (isSystemUpdateMode) {
+            if (ACTION == ACTION_SYSTEM_UPDATE) {
                 uiControllerFinalSteps(STEP_FINISH);
             }
         } else if (newLog.contains("libproot.so --help") || newLog.contains("/bin/sh: can't fork:")) {
@@ -692,65 +642,6 @@ public class SetupWizard2Activity extends AppCompatActivity {
             selectedMirrorLocation = name;
             MainSettingsManager.setSelectedMirror(SetupWizard2Activity.this, position);
         }), getString(R.string.mirrors));
-    }
-
-    public static class SpinnerSelectMirrorAdapter extends BaseAdapter {
-
-        private final ArrayList<HashMap<String, String>> data;
-        private final LayoutInflater inflater;
-        private final int selectedPosition;
-
-        public SpinnerSelectMirrorAdapter(Context context, ArrayList<HashMap<String, String>> arr) {
-            this.data = arr;
-            this.inflater = LayoutInflater.from(context);
-            this.selectedPosition = MainSettingsManager.getSelectedMirror(context);
-        }
-
-        @Override
-        public int getCount() {
-            return data.size();
-        }
-
-        @Override
-        public HashMap<String, String> getItem(int position) {
-            return data.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            SetupWizard2Activity.SpinnerSelectMirrorAdapter.ViewHolder holder;
-
-            if (convertView == null) {
-                // Inflate binding only once for each new item
-                SimpleLayoutListViewWithCheckBinding simpleLayoutListViewWithCheckBinding =
-                        SimpleLayoutListViewWithCheckBinding.inflate(inflater, parent, false);
-
-                // Create ViewHolder to hold binding
-                holder = new SetupWizard2Activity.SpinnerSelectMirrorAdapter.ViewHolder(simpleLayoutListViewWithCheckBinding);
-                convertView = simpleLayoutListViewWithCheckBinding.getRoot();
-                convertView.setTag(holder);
-            } else {
-                // Get back the saved ViewHolder
-                holder = (SetupWizard2Activity.SpinnerSelectMirrorAdapter.ViewHolder) convertView.getTag();
-            }
-
-            // Assign data
-            HashMap<String, String> item = data.get(position);
-            holder.simpleLayoutListViewWithCheckBinding.textview.setText(item.get("location"));
-            holder.simpleLayoutListViewWithCheckBinding.ivCheck.setVisibility(position == selectedPosition ? View.VISIBLE : View.INVISIBLE);
-
-
-            return convertView;
-        }
-
-        // ViewHolder holds binding for reuse
-        private record ViewHolder(SimpleLayoutListViewWithCheckBinding simpleLayoutListViewWithCheckBinding) {
-        }
     }
 
     public String getPath(Uri uri) {

@@ -94,7 +94,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 
         TextView qemuVersion = findViewById(R.id.qemuVersion);
         executor.execute(() -> {
-            String qemuVersionName = CommandUtils.getQemuVersionName();
+            String qemuVersionName = CommandUtils.getQemuVersionName(this);
             runOnUiThread(() -> {
                 if (!qemuVersionName.isEmpty()) qemuVersion.setText(qemuVersionName); else getString(R.string.unknow);
             });

@@ -73,7 +73,7 @@ import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.ListUtils;
 import com.vectras.vm.utils.SimulateKeyEvent;
-import com.vectras.vm.utils.StreamAudio;
+import com.vectras.vm.sound.StreamAudio;
 import com.vectras.vm.utils.UIUtils;
 import com.vectras.vm.view.DynamicBubble;
 
@@ -774,8 +774,14 @@ public class MainVNCActivity extends VncCanvasActivity {
             } catch (InterruptedException e) {
                 Log.e(TAG, "onMonitor: ", e);
             }
-            monitorMode = true;
-            vncCanvas.sendMetaKey1(50, 6);
+
+            try {
+                vncCanvas.sendMetaKey1(50, 6);
+                monitorMode = true;
+            } catch (NullPointerException e) {
+                monitorMode = false;
+                Log.e(TAG, "onMonitor: ", e);
+            }
 
         });
         t.start();

@@ -19,6 +19,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
@@ -37,6 +38,7 @@ import com.vectras.vm.utils.JSONUtils;
 import com.vectras.vm.utils.ProgressDialog;
 import com.vectras.vm.utils.TextUtils;
 import com.vectras.vterm.Terminal;
+import com.vectras.vterm.Terminal2;
 
 import org.jetbrains.annotations.Contract;
 
@@ -70,8 +72,14 @@ public class VMManager {
 
         if (!JSONUtils.isValidFromString(vmJsonListContent) || vmId.isEmpty()) return false;
 
-        ArrayList<HashMap<String, Object>> vmList = new Gson().fromJson(vmJsonListContent, new TypeToken<ArrayList<HashMap<String, Object>>>() {
-        }.getType());
+        ArrayList<HashMap<String, Object>> vmList;
+
+        try {
+            vmList = new Gson().fromJson(vmJsonListContent, new TypeToken<ArrayList<HashMap<String, Object>>>() {
+            }.getType());
+        } catch (JsonSyntaxException e) {
+            return JSONUtils.isValidFromFile(VmFileManager.getConfigFile(vmId));
+        }
 
         if (vmList == null) return false;
 
@@ -841,7 +849,7 @@ public class VMManager {
     }
 
     public static boolean isVMRunning(Context context, String vmID) {
-        String result = Terminal.executeShellCommandWithResult("ps -e", context);
+        String result = new Terminal2(context).executeOnThisThread("ps -e");
         if (result.contains(" -qmp unix:" + Config.getLocalQMPSocketPath(vmID))) {
             Log.d("VMManager.isThisVMRunning", "Yes.\n\n" + result);
             return true;
@@ -856,18 +864,6 @@ public class VMManager {
         boolean exists = qmpSocket.exists();
         Log.d("VMManager.isThisVMRunning", exists ? "Yes" : "No");
         return exists;
-    }
-
-    public static boolean isQemuRunning(Activity activity) {
-        Terminal vterm = new Terminal(activity);
-        vterm.executeShellCommand2("ps -e", false, activity);
-        if (AppConfig.temporaryLastedTerminalOutput.contains("qemu-system")) {
-            Log.d("VMManager.isQemuRunning", "Yes");
-            return true;
-        } else {
-            Log.d("VMManager.isQemuRunning", "No");
-            return false;
-        }
     }
 
     public static boolean isHaveADisk(String env) {
@@ -902,20 +898,8 @@ public class VMManager {
                 }, null, null);
     }
 
-    public static void killcurrentqemuprocess(Activity activity) {
-        Terminal vterm = new Terminal(activity);
-        String qemuProcess = switch (MainSettingsManager.getArch(activity)) {
-            case "ARM64" -> "qemu-system-aarch64";
-            case "PPC" -> "qemu-system-ppc";
-            case "I386" -> "qemu-system-i386";
-            default -> "qemu-system-x86_64";
-        };
-        vterm.executeShellCommand2("killall -15 " + qemuProcess + "; sleep 1; killall -9 " + qemuProcess, false, null);
-    }
-
     public static void killallqemuprocesses(Context context) {
-        Terminal vterm = new Terminal(context);
-        vterm.executeShellCommand2("pkill -15 -f qemu-system-; sleep 1; pkill -9 -f qemu-system-", false, null);
+        new Terminal2(context).executeOnThisThread("pkill -15 -f qemu-system-; sleep 1; pkill -9 -f qemu-system-");
     }
 
     public static String startMigrate() {
