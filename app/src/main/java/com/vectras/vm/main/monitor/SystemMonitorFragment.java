@@ -34,6 +34,7 @@ import com.vectras.vm.manager.QmpSender;
 import com.vectras.vm.utils.CommandUtils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vterm.Terminal;
+import com.vectras.vterm.Terminal2;
 
 import java.io.File;
 import java.util.Locale;
@@ -229,10 +230,10 @@ public class SystemMonitorFragment extends Fragment {
         binding.tvQemuarch.setText(getString(R.string.arch) + " " + currentArch + ".");
 
         executor.execute(() -> {
-            String qemuVersionName = CommandUtils.getQemuVersionName();
+            String qemuVersionName = CommandUtils.getQemuVersionName(requireContext());
 
             if (!isAdded()) return;
-            String result = Terminal.executeShellCommandWithResult("ps -e command && echo \"psendhere\" && cat /proc/cpuinfo", requireActivity());
+            String result = new Terminal2(requireContext()).executeOnThisThread("ps -e command && echo \"psendhere\" && cat /proc/cpuinfo");
 
             if (!isAdded()) return;
             requireActivity().runOnUiThread(() -> {

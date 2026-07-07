@@ -19,11 +19,11 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.utils.FileUtils;
+import com.vectras.vm.utils.GmsChecker;
 import com.vectras.vm.utils.PackageUtils;
 import com.vectras.vm.utils.UIUtils;
 
 import java.lang.ref.WeakReference;
-import java.util.Locale;
 
 public class VectrasApp extends Application {
     public static VectrasApp vectrasapp;
@@ -97,8 +97,14 @@ public class VectrasApp extends Application {
             }
         });
 
-        FirebaseAnalytics.getInstance(this).logEvent(FirebaseAnalytics.Event.APP_OPEN, null);
         FirebaseCrashlytics.getInstance().log("App started: " + AppConfig.vectrasVersion);
+
+        if (GmsChecker.isAvailable(this)) {
+            AppConfig.isGmsAvailable = true;
+            FirebaseAnalytics.getInstance(this).logEvent(FirebaseAnalytics.Event.APP_OPEN, null);
+        } else {
+            FirebaseCrashlytics.getInstance().log("Device does not support GMS.");
+        }
     }
 
     private void setupTheme() {

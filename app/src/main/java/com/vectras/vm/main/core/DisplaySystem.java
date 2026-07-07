@@ -6,6 +6,8 @@ import static com.vectras.vm.utils.LibraryChecker.isPackageInstalled2;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import com.termux.app.TermuxService;
@@ -21,6 +23,7 @@ import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.PackageUtils;
 import com.vectras.vm.x11.X11Activity;
 import com.vectras.vterm.Terminal;
+import com.vectras.vterm.Terminal2;
 
 import java.io.File;
 import java.util.HashSet;
@@ -86,8 +89,32 @@ public class DisplaySystem {
                         R.drawable.desktop_24px,
                         true,
                         () -> {
-                            String installCommand = "apk add " + necessaryPackage;
-                            new Terminal(context).executeShellCommand(installCommand, true, true, context.getString(R.string.just_a_moment), context);
+                            String installCommand = "apk add " + necessaryPackage + " && echo \"Installed: " + necessaryPackage + "\"";
+
+                            Terminal2 terminal2 = new Terminal2(context);
+                            terminal2.setShowProgressDialog(true);
+                            terminal2.execute(installCommand, new Terminal2.Terminal2Callback() {
+                                @Override
+                                public void onRunning(String command, String newLine) {
+                                    // Nothing to do.
+                                }
+
+                                @Override
+                                public void onFinished(String command, String log, int status) {
+                                    new Handler(Looper.getMainLooper()).post(() -> {
+                                        if (status == terminal2.SUCCESS) {
+                                            launchX11(context, isKill);
+                                        } else {
+                                            DialogUtils.oopsDialog(context, log);
+                                        }
+                                    });
+                                }
+
+                                @Override
+                                public void onError(String command, Exception exception) {
+                                    new Handler(Looper.getMainLooper()).post(() -> DialogUtils.oopsDialog(context, exception.getMessage()));
+                                }
+                            });
                         },
                         null,
                         null
@@ -116,7 +143,9 @@ public class DisplaySystem {
     }
 
     public static void startDesktop(Context context) {
-        new Terminal(context).executeShellCommand2("export DISPLAY=:0 && fluxbox > /dev/null", false, context);
+        Terminal2 terminal2 = new Terminal2(context);
+        terminal2.setDefaultShellBash();
+        terminal2.execute("export DISPLAY=:0 && fluxbox > /dev/null");
     }
 
     public static void startTermuxX11(Context context) {

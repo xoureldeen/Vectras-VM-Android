@@ -609,6 +609,8 @@
     <string name="need_to_shut_down_all_running_vm_note">Bạn cần tắt tất cả máy ảo đang chạy để thực hiện hành động này.</string>
     <string name="auto_switch_to_external_mouse">Tự động chuyển sang chuột ngoài</string>
     <string name="auto_switch_to_external_mouse_note">Tự động chuyển đổi khi kết nối và ngắt chuột rời.</string>
+    <string name="the_necessary_packages_have_been_installed">Các gói cần thiết đã được cài đặt.</string>
+    <string name="an_error_occurred_while_creating_the_virtual_drive">Đã xảy ra lỗi khi tạo ổ đĩa ảo.</string>
 
     <!--======================TERMUX STRINGS====================-->
     <string name="application_name" translatable="false">Vterm</string>

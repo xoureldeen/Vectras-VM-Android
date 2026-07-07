@@ -1,6 +1,8 @@
 package com.vectras.vm.main.core;
 
 import android.app.Activity;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -13,6 +15,7 @@ import com.vectras.vm.manager.VmFileManager;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vterm.Terminal;
+import com.vectras.vterm.Terminal2;
 
 public class PendingCommand {
     private static final String TAG = "PendingCommand";
@@ -49,9 +52,30 @@ public class PendingCommand {
                                 null
                         );
                     } else {
-                        Terminal _vterm = new Terminal(activity);
-                        _vterm.executeShellCommand2(command, false, activity);
-                        Toast.makeText(activity, activity.getResources().getString(R.string.done), Toast.LENGTH_LONG).show();
+                        Terminal2 terminal2 = new Terminal2(activity);
+                        terminal2.setShowProgressDialog(true);
+                        terminal2.execute(command, new Terminal2.Terminal2Callback() {
+                            @Override
+                            public void onRunning(String command, String newLine) {
+                                // Nothing to do.
+                            }
+
+                            @Override
+                            public void onFinished(String command, String log, int status) {
+                                new Handler(Looper.getMainLooper()).post(() -> {
+                                    if (status == terminal2.SUCCESS) {
+                                        Toast.makeText(activity, activity.getResources().getString(R.string.done), Toast.LENGTH_LONG).show();
+                                    } else {
+                                        Toast.makeText(activity, activity.getResources().getString(R.string.an_error_occurred_while_creating_the_virtual_drive), Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onError(String command, Exception exception) {
+                                new Handler(Looper.getMainLooper()).post(() -> Toast.makeText(activity, activity.getResources().getString(R.string.an_error_occurred_while_creating_the_virtual_drive), Toast.LENGTH_LONG).show());
+                            }
+                        });
                     }
 
                     command = "";

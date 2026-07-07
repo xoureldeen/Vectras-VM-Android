@@ -5,7 +5,7 @@ import android.util.Log;
 import com.vectras.qemu.Config;
 import com.vectras.vm.VectrasApp;
 import com.vectras.vm.utils.FileUtils;
-import com.vectras.vm.utils.StreamAudio;
+import com.vectras.vm.sound.StreamAudio;
 
 public class VmAudioManager {
     private static final String TAG = "VmAudioManager";

@@ -1,5 +1,7 @@
 package com.vectras.vm.utils;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -14,11 +16,14 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class JSONUtils {
+    private static final String TAG = "JSONUtils";
+
     public static boolean isValidFromString(String _content) {
         try {
             JsonElement element = JsonParser.parseString(_content);
             return element != null;
         } catch (Exception e) {
+            Log.e(TAG, "isValidFromString: " + e.getMessage());
             return false;
         }
     }

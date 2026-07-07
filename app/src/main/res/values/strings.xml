@@ -627,6 +627,8 @@
     <string name="need_to_shut_down_all_running_vm_note">You need to shut down all running virtual machines to perform this action.</string>
     <string name="auto_switch_to_external_mouse">Auto switch to external mouse</string>
     <string name="auto_switch_to_external_mouse_note">Automatically switches when the mouse is connected and disconnected.</string>
+    <string name="the_necessary_packages_have_been_installed">The necessary packages have been installed.</string>
+    <string name="an_error_occurred_while_creating_the_virtual_drive">An error occurred while creating the virtual drive.</string>
 
 
     <!--======================TERMUX STRINGS====================-->

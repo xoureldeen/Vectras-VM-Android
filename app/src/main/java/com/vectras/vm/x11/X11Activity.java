@@ -2,8 +2,6 @@ package com.vectras.vm.x11;
 
 import static android.Manifest.permission.WRITE_SECURE_SETTINGS;
 
-import android.app.Dialog;
-
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static android.os.Build.VERSION.SDK_INT;
 
@@ -15,8 +13,6 @@ import android.os.Looper;
 import static android.view.InputDevice.KEYBOARD_TYPE_ALPHABETIC;
 import static android.view.KeyEvent.*;
 import static android.view.WindowManager.LayoutParams.*;
-
-import android.view.WindowManager;
 
 import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.FragmentTransaction;
@@ -37,7 +33,7 @@ import com.vectras.vm.manager.VmFileManager;
 import com.vectras.vm.manager.VmListManager;
 import com.vectras.vm.manager.VmPicker;
 import com.vectras.vm.utils.DialogUtils;
-import com.vectras.vm.utils.StreamAudio;
+import com.vectras.vm.sound.StreamAudio;
 import com.vectras.vm.utils.UIUtils;
 
 import static com.vectras.vm.x11.CmdEntryPoint.ACTION_START;
@@ -80,7 +76,6 @@ import android.view.Window;
 import android.view.WindowInsets;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
@@ -98,7 +93,6 @@ import com.vectras.vm.x11.utils.KeyInterceptor;
 import com.vectras.vm.x11.utils.TermuxX11ExtraKeys;
 import com.vectras.vm.x11.utils.X11ToolbarViewPager;
 import com.vectras.vm.R;
-import com.vectras.vterm.Terminal;
 
 import java.util.ArrayList;
 import java.util.HashMap;

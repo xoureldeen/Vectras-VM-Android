@@ -126,7 +126,12 @@ public class SplashActivity extends AppCompatActivity {
         if (MainSettingsManager.getShowLastCrashLog(this)) {
             startActivity(new Intent(this, LastCrashActivity.class));
         } else if (SetupFeatureCore.isInstalledQemu(this)) {
-            if (MainSettingsManager.getStandardSetupVersion(this) != AppConfig.standardSetupVersion &&
+            if (MainSettingsManager.getCoreSetupVersion(this) != AppConfig.coreSetupVersion) {
+                Intent intent = new Intent();
+                intent.putExtra("action", SetupWizard2Activity.ACTION_CORE_SYSTEM_UPDATE);
+                intent.setClass(this, SetupWizard2Activity.class);
+                startActivity(intent);
+            } else if (MainSettingsManager.getStandardSetupVersion(this) != AppConfig.standardSetupVersion &&
                     !MainSettingsManager.getsetUpWithManualSetupBefore(this)) {
                 Intent intent = new Intent();
                 intent.putExtra("action", SetupWizard2Activity.ACTION_SYSTEM_UPDATE);

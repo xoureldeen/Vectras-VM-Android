@@ -32,7 +32,7 @@ import com.vectras.vm.settings.VNCSettingsActivity;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.ProgressDialog;
-import com.vectras.vm.utils.StreamAudio;
+import com.vectras.vm.sound.StreamAudio;
 import com.vectras.vm.x11.X11Activity;
 
 import java.io.File;
@@ -667,7 +667,14 @@ public class VmControllerDialog extends DialogFragment {
                 if (uri != null) {
                     try {
                         new Thread(() -> {
-                            File selectedFilePath = new File(Objects.requireNonNull(FileUtils.getPath(getContext(), uri)));
+                            String filePath = FileUtils.getPath(getContext(), uri);
+
+                            if (filePath == null) {
+                                showErrorSelectedFileDialog();
+                                return;
+                            }
+
+                            File selectedFilePath = new File(filePath);
 
                             if (isAdded()) {
                                 requireActivity().runOnUiThread(() -> {

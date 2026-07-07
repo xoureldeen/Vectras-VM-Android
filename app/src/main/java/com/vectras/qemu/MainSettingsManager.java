@@ -1188,6 +1188,18 @@ public class MainSettingsManager extends AppCompatActivity
         return prefs.getInt("standardSetupVersion", 0);
     }
 
+    public static void setCoreSetupVersion(Context context, int value) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putInt("coreSetupVersion", value);
+        edit.apply();
+    }
+
+    public static int getCoreSetupVersion(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getInt("coreSetupVersion", 0);
+    }
+
     public static void setShowLastCrashLog(Context context, Boolean _boolean) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor edit = prefs.edit();

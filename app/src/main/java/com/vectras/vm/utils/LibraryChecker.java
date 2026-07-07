@@ -2,14 +2,16 @@ package com.vectras.vm.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.appcompat.app.AlertDialog;
 
 import com.vectras.vm.AppConfig;
 import com.vectras.vm.R;
 import com.vectras.vterm.Terminal;
+import com.vectras.vterm.Terminal2;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -66,30 +68,69 @@ public class LibraryChecker {
                 () -> {
                     // Create the installation command
                     String installCommand = "apk add " + missingLibraries.replace("\n", " ");
-                    new Terminal(context).executeShellCommand(installCommand, true, true, activity);
+
+                    Terminal2 terminal2 = new Terminal2(context);
+                    terminal2.setShowProgressDialog(true);
+                    terminal2.execute(installCommand, new Terminal2.Terminal2Callback() {
+                        @Override
+                        public void onRunning(String command, String newLine) {
+                            // Nothing to do.
+                        }
+
+                        @Override
+                        public void onFinished(String command, String log, int status) {
+                            new Handler(Looper.getMainLooper()).post(() -> {
+                                if (status == terminal2.SUCCESS) {
+                                    DialogUtils.oneDialog(
+                                            activity,
+                                            activity.getString(R.string.done),
+                                            activity.getString(R.string.the_necessary_packages_have_been_installed),
+                                            R.drawable.check_24px
+                                    );
+                                } else {
+                                    DialogUtils.oopsDialog(context, log);
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onError(String command, Exception exception) {
+                            new Handler(Looper.getMainLooper()).post(() -> DialogUtils.oopsDialog(context, exception.getMessage()));
+                        }
+                    });
                 },
                 null,
                 null
         );
     }
 
-    // Method to show the "All Libraries Installed" dialog
-    private void showAllLibrariesInstalledDialog(Activity activity) {
-        new AlertDialog.Builder(activity, R.style.MainDialogTheme)
-                .setTitle("All Libraries Installed")
-                .setMessage("All required libraries are already installed.")
-                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
-                .show();
-    }
-
     // Method to check if the package is installed
     public void isPackageInstalled(String packageName, Terminal.CommandCallback callback) {
         String command = "apk info";
 
-        Terminal terminal = new Terminal(context);
-        terminal.executeShellCommand(command, (Activity) context, false, (output, errors) -> {
-            if (callback != null) {
-                callback.onCommandCompleted(output, errors);
+        Terminal2 terminal2 = new Terminal2(context);
+        terminal2.execute(command, new Terminal2.Terminal2Callback() {
+            @Override
+            public void onRunning(String command, String newLine) {
+                // Nothing to do.
+            }
+
+            @Override
+            public void onFinished(String command, String log, int status) {
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    if (callback != null) {
+                        if (status == terminal2.SUCCESS) {
+                            callback.onCommandCompleted(log, "");
+                        } else {
+                            callback.onCommandCompleted(log, log);
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onError(String command, Exception exception) {
+                new Handler(Looper.getMainLooper()).post(() -> callback.onCommandCompleted("", exception.getMessage()));
             }
         });
     }
@@ -98,59 +139,30 @@ public class LibraryChecker {
     public static void isPackageInstalled2(Context context, String packageName, Terminal.CommandCallback callback) {
         String command = "apk info";
 
-        Terminal terminal = new Terminal(context);
-        terminal.executeShellCommand(command, context, false, (output, errors) -> {
-            if (callback != null) {
-                callback.onCommandCompleted(output, errors);
+        Terminal2 terminal2 = new Terminal2(context);
+        terminal2.execute(command, new Terminal2.Terminal2Callback() {
+            @Override
+            public void onRunning(String command, String newLine) {
+                // Nothing to do.
+            }
+
+            @Override
+            public void onFinished(String command, String log, int status) {
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    if (callback != null) {
+                        if (status == terminal2.SUCCESS) {
+                            callback.onCommandCompleted(log, "");
+                        } else {
+                            callback.onCommandCompleted(log, log);
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onError(String command, Exception exception) {
+                new Handler(Looper.getMainLooper()).post(() -> callback.onCommandCompleted("", exception.getMessage()));
             }
         });
-    }
-
-    public void checkAndInstallXFCE4(Activity activity) {
-        // XFCE4 meta-package
-        String xfce4Package = "xfce4";
-
-        // Check if XFCE4 is installed
-        isPackageInstalled(xfce4Package, (output, errors) -> {
-            boolean isInstalled = false;
-
-            // Check if the package exists in the installed packages output
-            if (output != null) {
-                Set<String> installedPackages = new HashSet<>();
-                for (String installedPackage : output.split("\n")) {
-                    installedPackages.add(installedPackage.trim());
-                }
-
-                isInstalled = installedPackages.contains(xfce4Package.trim());
-            }
-
-            // If not installed, show a dialog to install it
-            if (!isInstalled) {
-                showInstallDialog(activity, xfce4Package);
-            } else {
-                showAlreadyInstalledDialog(activity);
-            }
-        });
-    }
-
-    private void showInstallDialog(Activity activity, String packageName) {
-        new AlertDialog.Builder(activity, R.style.MainDialogTheme)
-                .setTitle("Install XFCE4")
-                .setMessage("XFCE4 is not installed. Would you like to install it?")
-                .setCancelable(false)
-                .setPositiveButton("Install", (dialog, which) -> {
-                    String installCommand = "apk add " + packageName;
-                    new Terminal(context).executeShellCommand(installCommand, true, true, activity);
-                })
-                .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
-                .show();
-    }
-
-    private void showAlreadyInstalledDialog(Activity activity) {
-        new AlertDialog.Builder(activity, R.style.MainDialogTheme)
-                .setTitle("XFCE4 Installed")
-                .setMessage("XFCE4 is already installed on this system.")
-                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
-                .show();
     }
 }
