@@ -107,6 +107,7 @@ public class Terminal2 {
 
             try {
                 ProcessBuilder processBuilder = new ProcessBuilder();
+                processBuilder.redirectErrorStream(true);
 
 
                 String filesDir = Objects.requireNonNull(context.getFilesDir().getAbsolutePath());

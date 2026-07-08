@@ -666,8 +666,6 @@ public class VMManager {
             return false;
         }
 
-        VmServiceManager.stopService(_activity);
-
         if (_command.contains("qemu-system") && _result.contains("Killed")) {
             isQemuStopedWithError = true;
             return true;
@@ -735,7 +733,7 @@ public class VMManager {
                     },
                     null, null);
             return false;
-        } else if (_command.contains("qemu-system") && _result.contains("qemu-system") && !_result.contains("warning:")) {
+        } else if (!_result.contains(MainStartVM.TAG_FINISHED_WITHOUT_ERROR)) {
             //Error code: UNKNOW_ERROR
             DialogUtils.oneDialog(_activity, _activity.getString(R.string.problem_has_been_detected), _activity.getString(R.string.vm_could_not_be_run_content) + "\n\n" + _result, R.drawable.error_96px);
             _activity.stopService(new Intent(_activity, MainService.class));
