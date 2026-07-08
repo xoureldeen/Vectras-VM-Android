@@ -16,6 +16,8 @@ import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
+import com.vectras.vm.main.core.MainStartVM;
+import com.vectras.vm.manager.VmServiceManager;
 import com.vectras.vm.utils.ClipboardUltils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vterm.Terminal;
@@ -26,7 +28,7 @@ import java.util.Objects;
 public class MainService extends Service {
     public static String CHANNEL_ID = "Vectras VM Service";
     private final int NOTIFICATION_ID = 1;
-    private final String MACHINE_NAME = "Vectras VM";
+    public static String vmName = "Vectras VM";
     public static String env = null;
     private static String TAG = "MainService";
     public static MainService service;
@@ -48,7 +50,7 @@ public class MainService extends Service {
 
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle(getString(R.string.app_name))
-                .setContentText(MACHINE_NAME + " running in background.")
+                .setContentText("The virtual machines are running...")
                 .setSmallIcon(R.drawable.ic_vectras_vm_48)
                 .addAction(R.drawable.close_24px, getString(R.string.stop), pStopSelf)
                 .build();
@@ -57,7 +59,7 @@ public class MainService extends Service {
 
         if (env != null) {
             if (service != null) {
-                startCommand(env, activityContext);
+                startCommand(vmName, env, activityContext);
             }
         } else {
             Log.e(TAG, "env is null");
@@ -77,10 +79,13 @@ public class MainService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null && Objects.equals(intent.getAction(), STOP_ACTION)) {
-            VMManager.killallqemuprocesses(this);
-            stopForeground(true);
-            stopSelf();
-            return START_NOT_STICKY;
+            new Thread(() -> {
+                VMManager.killallqemuprocesses(this);
+                new Handler(Looper.getMainLooper()).post(() -> {
+                    stopForeground(true);
+                    stopSelf();
+                });
+            }).start();
         }
         return START_NOT_STICKY;
     }
@@ -102,7 +107,7 @@ public class MainService extends Service {
         }
     }
 
-    public static void startCommand(String env, Context context) {
+    public static void startCommand(String vmName, String env, Context context) {
         Terminal2 terminal2 = new Terminal2(activityContext);
         terminal2.setDefaultShellBash();
         terminal2.setStartup("export XDG_RUNTIME_DIR=/tmp && unset PULSE_SERVER");
@@ -123,13 +128,18 @@ public class MainService extends Service {
                     return;
                 }
 
-                new Handler(Looper.getMainLooper()).post(() -> {
-                    if (VMManager.isExecutedCommandError(command, log, context))
-                        return;
+                if (!(log.trim().isEmpty() || log.trim().equals(MainStartVM.TAG_FINISHED_WITHOUT_ERROR))) {
+                    new Handler(Looper.getMainLooper()).post(() -> {
+                        if (!VMManager.isExecutedCommandError(command, log, context)) {
+                            String finalLog = log.contains(MainStartVM.TAG_FINISHED_WITHOUT_ERROR) ? log.substring(0, log.lastIndexOf(MainStartVM.TAG_FINISHED_WITHOUT_ERROR) - 1) : log;
 
-                    DialogUtils.twoDialog(context, "Execution Result", log, context.getString(R.string.copy), context.getString(R.string.close), true, R.drawable.round_terminal_24, true,
-                            () -> ClipboardUltils.copyToClipboard(context, log), null, null);
-                });
+                            DialogUtils.twoDialog(context, vmName, finalLog, context.getString(R.string.copy), context.getString(R.string.close), true, R.drawable.stack_24px, true,
+                                    () -> ClipboardUltils.copyToClipboard(context, log), null, null);
+                        }
+                    });
+                }
+
+                VmServiceManager.stopService(context);
             }
 
             @Override

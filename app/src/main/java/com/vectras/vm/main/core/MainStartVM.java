@@ -35,6 +35,7 @@ import java.io.File;
 
 public class MainStartVM {
     public static final String TAG = "HomeStartVM";
+    public static final String TAG_FINISHED_WITHOUT_ERROR = "This VM has shut down.";
     public static boolean skipIDEwithARM64DialogInStartVM = false;
     public static boolean breakNow = false;
     public static final Handler handlerForLaunch = new Handler(Looper.getMainLooper());
@@ -297,7 +298,7 @@ public class MainStartVM {
     ) {
         VMManager.isQemuStopedWithError = false;
 
-        String cleanUpCommand = "; rm -r " + Config.getCacheVMPath(vmID);
+        String cleanUpCommand = " && echo \"" + TAG_FINISHED_WITHOUT_ERROR + "\"\nrm -r " + Config.getCacheVMPath(vmID);
 
         String finalCommand = VMManager.addAudioDevWav(vmID, String.format(runCommandFormat, env + cleanUpCommand));
 
@@ -314,11 +315,12 @@ public class MainStartVM {
         }
 
         if (ServiceUtils.isServiceRunning(context, MainService.class)) {
-            MainService.startCommand(finalCommand, context);
+            MainService.startCommand(vmName, finalCommand, context);
         } else {
             Intent serviceIntent = new Intent(context, MainService.class);
             MainService.activityContext = context;
             MainService.env = finalCommand;
+            MainService.vmName = vmName;
             MainService.CHANNEL_ID = vmName;
             if (SDK_INT >= Build.VERSION_CODES.O) {
                 context.startForegroundService(serviceIntent);
