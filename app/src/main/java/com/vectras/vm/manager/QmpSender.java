@@ -363,7 +363,7 @@ public class QmpSender {
     public static String changeDevice(String deviceId, String filePath) {
         if (filePath.trim().isEmpty()) return ejectDevice(deviceId);
 
-        return send("change " + deviceId + " " + filePath);
+        return send("change " + deviceId + " \"" + filePath + "\"");
     }
 
     public static void quickEjectDevice(Context context, String deviceId) {

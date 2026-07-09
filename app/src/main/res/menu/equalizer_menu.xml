@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/undo"
+        android:icon="@drawable/undo_24px"
+        android:title="@string/undo"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/reset"
+        android:icon="@drawable/refresh_24px"
+        android:title="@string/reset"
+        app:showAsAction="always"/>
+</menu>

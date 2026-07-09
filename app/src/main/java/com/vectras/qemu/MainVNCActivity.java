@@ -397,7 +397,7 @@ public class MainVNCActivity extends VncCanvasActivity {
     public void onDestroy() {
         super.onDestroy();
         this.stopTimeListener();
-        if (streamAudio != null) streamAudio.stop();
+        if (streamAudio != null) streamAudio.release();
         //Terminal.killQemuProcess();
     }
 

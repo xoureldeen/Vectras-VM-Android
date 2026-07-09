@@ -42,5 +42,7 @@ public class Settings2Activity extends AppCompatActivity {
 
         binding.lnVnc.setOnClickListener(v -> startActivity(new Intent(this, VNCSettingsActivity.class)));
         binding.lnX11.setOnClickListener(v -> startActivity(new Intent(this, X11DisplaySettingsActivity.class)));
+
+        binding.lnEqualizer.setOnClickListener(v -> startActivity(new Intent(this, EqualizerActivity.class)));
     }
 }

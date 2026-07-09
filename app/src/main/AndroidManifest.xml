@@ -299,6 +299,11 @@
         <meta-data
             android:name="android.max_aspect"
             android:value="10.0" />
+
+        <activity
+            android:name=".settings.EqualizerActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>

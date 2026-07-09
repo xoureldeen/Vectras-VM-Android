@@ -23,6 +23,8 @@ public class DynamicBubble {
     }
 
     private void setup() {
+        bubble.animate().alpha(0.5f).setDuration(200);
+
         bubble.setOnTouchListener((v, event) -> {
             switch (event.getActionMasked()) {
 
@@ -44,6 +46,9 @@ public class DynamicBubble {
 
                     // If the displacement exceeds the threshold, it is determined that pulling is occurring.
                     if (Math.abs(movedX) > CLICK_ACTION_THRESHOLD || Math.abs(movedY) > CLICK_ACTION_THRESHOLD) {
+
+                        if (!isDragging) bubble.animate().alpha(1).setDuration(200);
+
                         isDragging = true;
 
                         // Move the view using your finger.
@@ -75,6 +80,8 @@ public class DynamicBubble {
     }
 
     private void onDropped() {
+        bubble.animate().alpha(0.5f).setDuration(200);
+
         if (bubble.getX() > (float) container.getWidth() / 2) {
             bubble.animate().x(container.getWidth() - bubble.getWidth());
         } else {

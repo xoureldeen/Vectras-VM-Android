@@ -752,7 +752,7 @@ public class X11Activity extends AppCompatActivity implements View.OnApplyWindow
     @Override
     protected void onDestroy() {
         unregisterReceiver(receiver);
-        if (streamAudio != null) streamAudio.stop();
+        if (streamAudio != null) streamAudio.release();
         super.onDestroy();
     }
 
