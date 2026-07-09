@@ -5,6 +5,7 @@ import android.content.Context;
 import android.media.AudioAttributes;
 import android.media.AudioFormat;
 import android.media.AudioTrack;
+import android.media.audiofx.Equalizer;
 import android.util.Log;
 
 import com.vectras.vm.utils.FileUtils;
@@ -19,6 +20,7 @@ public class StreamAudio {
     private int sampleRate = 48000;
     public boolean isDestroyed;
     private StreamAudio cross;
+    private SoundEffect soundEffect;
 
     public StreamAudio(Context context) {
         this.context = context;
@@ -56,6 +58,10 @@ public class StreamAudio {
         sampleRate = 48000;
     }
 
+    public void release() {
+        isPlay = false;
+        releaseSoundEffect();
+    }
 
     public void streamFromFile() {
         if (isPlay) return;
@@ -102,6 +108,8 @@ public class StreamAudio {
                     .setTransferMode(AudioTrack.MODE_STREAM)
                     .build();
 
+            applyEffect(audioTrack);
+
             audioTrack.play();
 
             if (cross != null && !cross.isDestroyed && cross.isPlaying()) cross.stop();
@@ -133,6 +141,63 @@ public class StreamAudio {
 
             if (cross != null && !cross.isDestroyed && !cross.isPlaying()) cross.play();
         }).start();
+    }
+
+    float[] currentdBData = new float[5];
+
+    public void applyEffect(AudioTrack audioTrack) {
+        if (soundEffect != null && soundEffect.equalizer.getNumberOfBands() < 2) return;
+
+        AudioSettingsData audioSettingsData = new AudioSettingsData(context);
+
+        if (!audioSettingsData.isEqualizerEnabled()) {
+            releaseSoundEffect();
+            return;
+        }
+
+        if (soundEffect == null || soundEffect.session != audioTrack.getAudioSessionId())
+            soundEffect = new SoundEffect(context, audioTrack.getAudioSessionId());
+
+        if (soundEffect.equalizer.getNumberOfBands() < 2) return;
+
+        float[] dBData = new float[5];
+
+        //Bass -> Mid -> Treble
+        dBData[0] = audioSettingsData.getLowBass();
+        dBData[1] = audioSettingsData.getBass();
+        dBData[2] = audioSettingsData.getMid();
+        dBData[3] = audioSettingsData.getTreble();
+        dBData[4] = audioSettingsData.getUpperTreble();
+
+        if (
+                currentdBData[0] == dBData[0] &&
+                        currentdBData[1] == dBData[1] &&
+                        currentdBData[2] == dBData[2] &&
+                        currentdBData[3] == dBData[3] &&
+                        currentdBData[4] == dBData[4]) {
+            return;
+        }
+
+        this.currentdBData = dBData;
+
+        // Convert dB to mB
+        for (int i = 0; i < dBData.length; i++) {
+            dBData[i] = dBData[i] * 100;
+        }
+
+        soundEffect.applyEffect(dBData);
+
+        soundEffect.setEnabled(audioSettingsData.isEqualizerEnabled());
+
+        Log.d(TAG, "Equalizer enabled: " + audioSettingsData.isEqualizerEnabled());
+    }
+
+    public void releaseSoundEffect() {
+        if (soundEffect != null) {
+            soundEffect.setEnabled(false);
+            soundEffect.release();
+            soundEffect = null;
+        }
     }
 
     private boolean isContextDestroyed(Context context) {

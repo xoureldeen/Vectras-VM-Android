@@ -629,6 +629,17 @@
     <string name="auto_switch_to_external_mouse_note">Automatically switches when the mouse is connected and disconnected.</string>
     <string name="the_necessary_packages_have_been_installed">The necessary packages have been installed.</string>
     <string name="an_error_occurred_while_creating_the_virtual_drive">An error occurred while creating the virtual drive.</string>
+    <string name="equalizer">Equalizer</string>
+    <string name="equalizer_settings_note">Treble, mid and bass.</string>
+    <string name="equalizer_note">You may need to restart the virtual machine for the changes to take effect. Sound effects may be affected if you use accessories such as headphones.</string>
+    <string name="use_equalizer">Use equalizer</string>
+    <string name="upper_treble">Upper treble</string>
+    <string name="treble">Treble</string>
+    <string name="mid">Mid</string>
+    <string name="bass">Bass</string>
+    <string name="low_bass">Low bass</string>
+    <string name="your_device_is_not_supported">Your device is not supported.</string>
+    <string name="undo">Undo</string>
 
 
     <!--======================TERMUX STRINGS====================-->

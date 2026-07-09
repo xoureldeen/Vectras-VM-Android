@@ -1341,6 +1341,6 @@ public class MainSettingsManager extends AppCompatActivity
 
     public static Boolean getAutoSwitchToExternalMouse(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getBoolean("autoSwitchToExternalMouse", true);
+        return prefs.getBoolean("autoSwitchToExternalMouse", false);
     }
 }

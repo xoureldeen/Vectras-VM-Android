@@ -770,6 +770,17 @@
     <string name="blur_effect">Hiệu ứng mờ</string>
     <string name="blur_effect_note">Làm mờ xung quanh để tăng khả năng tập trung vào một vùng cần được chú ý.</string>
     <string name="x11_general_setting_note">Bạn cần khởi động lại ứng dụng khi chuyển đổi giữa tích hợp sẵn và ngoài.</string>
+    <string name="equalizer">Bộ chỉnh âm</string>
+    <string name="equalizer_settings_note">Bổng, trung và trầm.</string>
+    <string name="equalizer_note">Bạn có thể cần khởi động lại máy ảo để áp dụng các thay đổi. Hiệu ứng âm thanh có thể chỉ có tác dụng nếu bạn sử dụng các phụ kiện như tai nghe.</string>
+    <string name="use_equalizer">Dùng bộ chỉnh âm</string>
+    <string name="upper_treble">Bổng cao</string>
+    <string name="treble">Bổng</string>
+    <string name="mid">Trung</string>
+    <string name="bass">Trầm</string>
+    <string name="low_bass">Trầm sâu</string>
+    <string name="your_device_is_not_supported">Thiết bị của bạn không được hỗ trợ.</string>
+    <string name="undo">Hoàn tác</string>
 
     <!-- CPUs -->
 
