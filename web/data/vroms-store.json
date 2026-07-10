@@ -675,6 +675,26 @@
     "id": ""
   },
   {
+    "rom_name": "macOS High Sierra",
+    "rom_icon": "https://static.wikia.nocookie.net/ipod/images/e/ec/MacOSHighSierraCircle.png/revision/latest/thumbnail/width/360/height/450?cb=20241004222256",
+    "rom_url": "https://youtu.be/ZvMxdVennwU",
+    "rom_path": "macOS High Sierra.cvbi",
+    "rom_avail": true,
+    "gui": true,
+    "rom_size": "10.13",
+    "rom_arch": "X86_64",
+    "rom_kernel": "apple",
+    "rom_extra": "",
+    "final_rom_file_name": "",
+    "desc": "This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nmacOS High Sierra (version 10.13) is the fourteenth major release of macOS, Apple's desktop operating system for Macintosh computers. macOS High Sierra was announced at the WWDC 2017 on June 5, 2017 and was released on September 25, 2017. The name \"High Sierra\" refers to the High Sierra region in California. Its name signified its goal to be a refinement of the previous macOS version, macOS Sierra, focused on performance improvements and technical updates rather than features. This makes it similar to previous macOS releases Snow Leopard, Mavericks and El Capitan. Among the apps with notable changes are Photos and Safari.",
+    "file_size": "16 GB",
+    "containsAds": true,
+    "creator": "Nguyen Bao An Bui",
+    "verified": true,
+    "vecid": "macoshighsierracvbi",
+    "id": "99624"
+  },
+  {
     "rom_name": "macOS Mojave",
     "rom_icon": "https://cdsassets.apple.com/live/SZLF0YNV/images/sp/111930_mojave-roundel-240.png",
     "rom_url": "https://youtu.be/4ZACcqnYzkM",
