@@ -640,6 +640,18 @@
     <string name="low_bass">Low bass</string>
     <string name="your_device_is_not_supported">Your device is not supported.</string>
     <string name="undo">Undo</string>
+    <string name="internal_storage">Internal storage</string>
+    <string name="open_with">Open with</string>
+    <string name="file_picker">File picker</string>
+    <string name="file_picker_settings_note">Built-in file picker and browser.</string>
+    <string name="use_file_picker">Use file picker</string>
+    <string name="resume">Resume</string>
+    <string name="file_picker_resume_note">Continue in the last folder where you selected the file in the previous use.</string>
+    <string name="show_hidden_files">Show hidden files</string>
+    <string name="show_hidden_files_note">This applies to files and folders whose names begin with \".\".</string>
+    <string name="the_folder_path_has_been_copied_to_the_clipboard">The folder path has been copied to the clipboard.</string>
+    <string name="divider">Divider</string>
+    <string name="file_picker_divier_note">Add dividers between items.</string>
 
 
     <!--======================TERMUX STRINGS====================-->

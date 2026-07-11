@@ -109,7 +109,6 @@ public class Terminal2 {
                 ProcessBuilder processBuilder = new ProcessBuilder();
                 processBuilder.redirectErrorStream(true);
 
-
                 String filesDir = Objects.requireNonNull(context.getFilesDir().getAbsolutePath());
                 String prootPath = new File(filesDir, "usr/bin/proot").getAbsolutePath();
                 String tmpDir = new File(filesDir, "usr/tmp").getAbsolutePath();
@@ -157,7 +156,7 @@ public class Terminal2 {
                 resultData data = startProcess((startup.isEmpty() ? "" : startup + " && ") + command, process.get(), callback);
 
                 if (callback != null) callback.onFinished(command, data.log.toString(), data.status);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 if (callback != null) callback.onError(command, e);
 
                 addToLogs(command, e.getMessage());

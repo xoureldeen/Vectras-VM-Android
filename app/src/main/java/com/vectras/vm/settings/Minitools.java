@@ -287,7 +287,7 @@ public class Minitools extends AppCompatActivity {
             FileUtils.delete(new File(getFilesDir().getAbsolutePath() + "/usr"));
 
             runOnUiThread(() -> {
-                progressDialog.dismiss();
+                DialogUtils.safeDismiss(this, progressDialog);
                 Intent intent = new Intent();
                 intent.setClass(this, SetupWizard2Activity.class);
                 startActivity(intent);

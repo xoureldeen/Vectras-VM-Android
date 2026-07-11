@@ -1331,11 +1331,13 @@ public class VncCanvas extends AppCompatImageView {
 
 	}
 
+	private static final String SHIFT_CHARS = "~!@#$%^&*()_+{}|:\"<>?";
+	private static final int LEFT_SHIFT_KEY_CODE = 0xFFE1;
+
 	public void sendText(String s) {
 		int l = s.length();
 		for (int i = 0; i < l; i++) {
 			char c = s.charAt(i);
-			int meta = 0;
 			int keysym = c;
 			if (Character.isISOControl(c)) {
 				if (c == '\n') {
@@ -1344,9 +1346,20 @@ public class VncCanvas extends AppCompatImageView {
 					continue;
 				}
 			}
+
+			boolean isNeedShift = Character.isUpperCase(c) || SHIFT_CHARS.indexOf(c) >= 0;
+
 			try {
-				rfb.writeKeyEvent(keysym, meta, true);
-				rfb.writeKeyEvent(keysym, meta, false);
+				if (isNeedShift) {
+					rfb.writeKeyEvent(LEFT_SHIFT_KEY_CODE, 0, true);
+				}
+
+				rfb.writeKeyEvent(keysym, 0, true);
+				rfb.writeKeyEvent(keysym, 0, false);
+
+				if (isNeedShift) {
+					rfb.writeKeyEvent(LEFT_SHIFT_KEY_CODE, 0, false);
+				}
 			} catch (IOException ioe) {
                 Log.e(TAG, "sendText: ",ioe);
 			}

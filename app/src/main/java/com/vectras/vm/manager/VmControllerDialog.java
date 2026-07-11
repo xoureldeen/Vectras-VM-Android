@@ -5,6 +5,7 @@ import android.androidVNC.VncCanvas;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -26,6 +27,7 @@ import com.vectras.vm.AppConfig;
 import com.vectras.vm.R;
 import com.vectras.vm.VMManager;
 import com.vectras.vm.databinding.DialogChangeRemovableDevicesBinding;
+import com.vectras.vm.file.FilePickerDialog;
 import com.vectras.vm.main.core.DisplaySystem;
 import com.vectras.vm.main.vms.DataMainRoms;
 import com.vectras.vm.settings.VNCSettingsActivity;
@@ -226,7 +228,16 @@ public class VmControllerDialog extends DialogFragment {
                     if (isHavingOpticalDisc() || isHavingSecondaryOpticalDisc()) {
 
                         if (isHavingOpticalDisc()) {
-                            binding.lnCdrom.setOnClickListener(v -> isoPicker.launch("*/*"));
+                            binding.lnCdrom.setOnClickListener(v -> {
+                                if (MainSettingsManager.getBuiltInFilePicker(requireContext())) {
+                                    FilePickerDialog filePickerDialog = new FilePickerDialog();
+                                    if (requireActivity() instanceof MainVNCActivity) filePickerDialog.setFixTextColor(true);
+                                    filePickerDialog.pick(requireActivity(), filePickerDialog.FIT_PICK_OPTICAL_FILE_MODE, (path -> handleIsoFile(Uri.fromFile(new File(path)))));
+                                } else {
+                                    isoPicker.launch("*/*");
+                                }
+
+                            });
 
                             binding.ivEjectcdrom.setOnClickListener(v -> {
                                 QmpSender.ejectOpticalDisc(requireActivity(), infoBlock);
@@ -240,7 +251,15 @@ public class VmControllerDialog extends DialogFragment {
                         }
 
                         if (isHavingSecondaryOpticalDisc()) {
-                            binding.lnSecondaryCdrom.setOnClickListener(v -> isoPickerSecondary.launch("*/*"));
+                            binding.lnSecondaryCdrom.setOnClickListener(v -> {
+                                if (MainSettingsManager.getBuiltInFilePicker(requireContext())) {
+                                    FilePickerDialog filePickerDialog = new FilePickerDialog();
+                                    if (requireActivity() instanceof MainVNCActivity) filePickerDialog.setFixTextColor(true);
+                                    filePickerDialog.pick(requireActivity(), filePickerDialog.FIT_PICK_OPTICAL_FILE_MODE, (path -> handleIsoFile2(Uri.fromFile(new File(path)))));
+                                } else {
+                                    isoPickerSecondary.launch("*/*");
+                                }
+                            });
 
                             binding.ivSecondaryEjectcdrom.setOnClickListener(v -> {
                                 QmpSender.ejectSecondaryOpticalDisc(requireActivity(), infoBlock);
@@ -282,7 +301,15 @@ public class VmControllerDialog extends DialogFragment {
                     }
 
                     if (infoBlock.contains(QmpSender.DEFAULT_FLOPPY_DISK_0_ID)) {
-                        binding.lnFda.setOnClickListener(v -> floppyAPicker.launch("*/*"));
+                        binding.lnFda.setOnClickListener(v -> {
+                            if (MainSettingsManager.getBuiltInFilePicker(requireContext())) {
+                                FilePickerDialog filePickerDialog = new FilePickerDialog();
+                                if (requireActivity() instanceof MainVNCActivity) filePickerDialog.setFixTextColor(true);
+                                filePickerDialog.pick(requireActivity(), filePickerDialog.FIT_PICK_FLOPPY_FILE_MODE, (path -> handleFloppyAFile(Uri.fromFile(new File(path)))));
+                            } else {
+                                floppyAPicker.launch("*/*");
+                            }
+                        });
 
                         binding.ivEjectfda.setOnClickListener(v -> {
                             QmpSender.ejectFloppyDiskA(requireActivity());
@@ -297,7 +324,15 @@ public class VmControllerDialog extends DialogFragment {
                     }
 
                     if (infoBlock.contains(QmpSender.DEFAULT_FLOPPY_DISK_1_ID)) {
-                        binding.lnFdb.setOnClickListener(v -> floppyBPicker.launch("*/*"));
+                        binding.lnFdb.setOnClickListener(v -> {
+                            if (MainSettingsManager.getBuiltInFilePicker(requireContext())) {
+                                FilePickerDialog filePickerDialog = new FilePickerDialog();
+                                if (requireActivity() instanceof MainVNCActivity) filePickerDialog.setFixTextColor(true);
+                                filePickerDialog.pick(requireActivity(), filePickerDialog.FIT_PICK_FLOPPY_FILE_MODE, (path -> handleFloppyBFile(Uri.fromFile(new File(path)))));
+                            } else {
+                                floppyBPicker.launch("*/*");
+                            }
+                        });
 
                         binding.ivEjectfdb.setOnClickListener(v -> {
                             QmpSender.ejectFloppyDiskB(requireActivity());
@@ -312,7 +347,15 @@ public class VmControllerDialog extends DialogFragment {
                     }
 
                     if (infoBlock.contains(QmpSender.DEFAULT_MEMORY_CARD_ID)) {
-                        binding.lnSd.setOnClickListener(v -> memoryCardPicker.launch("*/*"));
+                        binding.lnSd.setOnClickListener(v -> {
+                            if (MainSettingsManager.getBuiltInFilePicker(requireContext())) {
+                                FilePickerDialog filePickerDialog = new FilePickerDialog();
+                                if (requireActivity() instanceof MainVNCActivity) filePickerDialog.setFixTextColor(true);
+                                filePickerDialog.pick(requireActivity(), filePickerDialog.DISK_FILE, (path -> handleMemoryCardFile(Uri.fromFile(new File(path)))));
+                            } else {
+                                memoryCardPicker.launch("*/*");
+                            }
+                        });
 
                         binding.ivEjectsd.setOnClickListener(v -> {
                             QmpSender.ejectMemoryCard(requireActivity());
@@ -571,124 +614,134 @@ public class VmControllerDialog extends DialogFragment {
     }
 
     private final ActivityResultLauncher<String> isoPicker =
-            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
-                if (uri != null) {
-                    try {
-                        new Thread(() -> {
-                            String path = FileUtils.getPath(getContext(), uri);
+            registerForActivityResult(new ActivityResultContracts.GetContent(), this::handleIsoFile);
 
-                            if (path == null) {
-                                showErrorSelectedFileDialog();
-                                dismiss();
-                                return;
-                            }
+    public void handleIsoFile(Uri uri) {
+        if (uri != null) {
+            try {
+                new Thread(() -> {
+                    String path = FileUtils.getPath(getContext(), uri);
 
-                            File selectedFilePath = new File(path);
-
-                            if (isAdded()) {
-                                requireActivity().runOnUiThread(() -> {
-                                    QmpSender.changeOpticalDisc(requireActivity(), selectedFilePath.getAbsolutePath(), infoBlock);
-                                    dismiss();
-                                });
-                            }
-                        }).start();
-                    } catch (Exception e) {
+                    if (path == null) {
                         showErrorSelectedFileDialog();
                         dismiss();
+                        return;
                     }
-                }
-            });
+
+                    File selectedFilePath = new File(path);
+
+                    if (isAdded()) {
+                        requireActivity().runOnUiThread(() -> {
+                            QmpSender.changeOpticalDisc(requireActivity(), selectedFilePath.getAbsolutePath(), infoBlock);
+                            dismiss();
+                        });
+                    }
+                }).start();
+            } catch (Exception e) {
+                showErrorSelectedFileDialog();
+                dismiss();
+            }
+        }
+    }
 
     private final ActivityResultLauncher<String> isoPickerSecondary =
-            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
-                if (uri != null) {
-                    try {
-                        new Thread(() -> {
-                            File selectedFilePath = new File(Objects.requireNonNull(FileUtils.getPath(getContext(), uri)));
+            registerForActivityResult(new ActivityResultContracts.GetContent(), this::handleIsoFile2);
 
-                            if (isAdded()) {
-                                requireActivity().runOnUiThread(() -> {
-                                    QmpSender.changeSecondaryOpticalDisc(requireActivity(), selectedFilePath.getAbsolutePath(), infoBlock);
-                                    dismiss();
-                                });
-                            }
-                        }).start();
-                    } catch (Exception e) {
-                        showErrorSelectedFileDialog();
-                        dismiss();
+    public void handleIsoFile2(Uri uri) {
+        if (uri != null) {
+            try {
+                new Thread(() -> {
+                    File selectedFilePath = new File(Objects.requireNonNull(FileUtils.getPath(getContext(), uri)));
+
+                    if (isAdded()) {
+                        requireActivity().runOnUiThread(() -> {
+                            QmpSender.changeSecondaryOpticalDisc(requireActivity(), selectedFilePath.getAbsolutePath(), infoBlock);
+                            dismiss();
+                        });
                     }
-                }
-            });
+                }).start();
+            } catch (Exception e) {
+                showErrorSelectedFileDialog();
+                dismiss();
+            }
+        }
+    }
 
     private final ActivityResultLauncher<String> floppyAPicker =
-            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
-                if (uri != null) {
-                    try {
-                        new Thread(() -> {
-                            File selectedFilePath = new File(Objects.requireNonNull(FileUtils.getPath(getContext(), uri)));
+            registerForActivityResult(new ActivityResultContracts.GetContent(), this::handleFloppyAFile);
 
-                            if (isAdded()) {
-                                requireActivity().runOnUiThread(() -> {
-                                    QmpSender.changeFloppyDiskA(requireActivity(), selectedFilePath.getAbsolutePath());
-                                    dismiss();
-                                });
-                            }
-                        }).start();
-                    } catch (Exception e) {
-                        showErrorSelectedFileDialog();
-                        dismiss();
+    public void handleFloppyAFile(Uri uri) {
+        if (uri != null) {
+            try {
+                new Thread(() -> {
+                    File selectedFilePath = new File(Objects.requireNonNull(FileUtils.getPath(getContext(), uri)));
+
+                    if (isAdded()) {
+                        requireActivity().runOnUiThread(() -> {
+                            QmpSender.changeFloppyDiskA(requireActivity(), selectedFilePath.getAbsolutePath());
+                            dismiss();
+                        });
                     }
-                }
-            });
+                }).start();
+            } catch (Exception e) {
+                showErrorSelectedFileDialog();
+                dismiss();
+            }
+        }
+    }
 
     private final ActivityResultLauncher<String> floppyBPicker =
-            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
-                if (uri != null) {
-                    try {
-                        new Thread(() -> {
-                            File selectedFilePath = new File(Objects.requireNonNull(FileUtils.getPath(getContext(), uri)));
+            registerForActivityResult(new ActivityResultContracts.GetContent(), this::handleFloppyBFile);
 
-                            if (isAdded()) {
-                                requireActivity().runOnUiThread(() -> {
-                                    QmpSender.changeFloppyDiskB(requireActivity(), selectedFilePath.getAbsolutePath());
-                                    dismiss();
-                                });
-                            }
-                        }).start();
-                    } catch (Exception e) {
-                        showErrorSelectedFileDialog();
-                        dismiss();
+    public void handleFloppyBFile(Uri uri) {
+        if (uri != null) {
+            try {
+                new Thread(() -> {
+                    File selectedFilePath = new File(Objects.requireNonNull(FileUtils.getPath(getContext(), uri)));
+
+                    if (isAdded()) {
+                        requireActivity().runOnUiThread(() -> {
+                            QmpSender.changeFloppyDiskB(requireActivity(), selectedFilePath.getAbsolutePath());
+                            dismiss();
+                        });
                     }
-                }
-            });
+                }).start();
+            } catch (Exception e) {
+                showErrorSelectedFileDialog();
+                dismiss();
+            }
+        }
+    }
 
     private final ActivityResultLauncher<String> memoryCardPicker =
-            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
-                if (uri != null) {
-                    try {
-                        new Thread(() -> {
-                            String filePath = FileUtils.getPath(getContext(), uri);
+            registerForActivityResult(new ActivityResultContracts.GetContent(), this::handleMemoryCardFile);
 
-                            if (filePath == null) {
-                                showErrorSelectedFileDialog();
-                                return;
-                            }
+    public void handleMemoryCardFile(Uri uri) {
+        if (uri != null) {
+            try {
+                new Thread(() -> {
+                    String filePath = FileUtils.getPath(getContext(), uri);
 
-                            File selectedFilePath = new File(filePath);
-
-                            if (isAdded()) {
-                                requireActivity().runOnUiThread(() -> {
-                                    QmpSender.changeMemoryCard(requireActivity(), selectedFilePath.getAbsolutePath());
-                                    dismiss();
-                                });
-                            }
-                        }).start();
-                    } catch (Exception e) {
+                    if (filePath == null) {
                         showErrorSelectedFileDialog();
-                        dismiss();
+                        return;
                     }
-                }
-            });
+
+                    File selectedFilePath = new File(filePath);
+
+                    if (isAdded()) {
+                        requireActivity().runOnUiThread(() -> {
+                            QmpSender.changeMemoryCard(requireActivity(), selectedFilePath.getAbsolutePath());
+                            dismiss();
+                        });
+                    }
+                }).start();
+            } catch (Exception e) {
+                showErrorSelectedFileDialog();
+                dismiss();
+            }
+        }
+    }
 
     private void showErrorSelectedFileDialog() {
         DialogUtils.oneDialog(requireActivity(),
