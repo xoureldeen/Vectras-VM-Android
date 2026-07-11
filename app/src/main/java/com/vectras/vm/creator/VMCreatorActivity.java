@@ -32,6 +32,7 @@ import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.AppConfig;
 import com.vectras.vm.Fragment.CreateImageDialogFragment;
 import com.vectras.vm.R;
+import com.vectras.vm.file.FilePickerDialog;
 import com.vectras.vm.store.RomInfo;
 import com.vectras.vm.SplashActivity;
 import com.vectras.vm.VMManager;
@@ -103,13 +104,25 @@ public class VMCreatorActivity extends AppCompatActivity {
             return true;
         } else if (id == R.id.add_file) {
             try {
-                filePicker.launch("*/*");
+                if (MainSettingsManager.getBuiltInFilePicker(this)) {
+                    FilePickerDialog filePickerDialog = new FilePickerDialog();
+                    filePickerDialog.pick(this, filePickerDialog.TYPE_FILE, (path -> handleAddFile(Uri.fromFile(new File (path)))));
+                } else {
+                    filePicker.launch("*/*");
+                }
             } catch (Exception e) {
                 IntentUtils.showErrorDialog(this);
             }
             return true;
         } else if (id == R.id.show_in_folder) {
-            FileUtils.openFolder(this, VmFileManager.getPath(vmID));
+            if (MainSettingsManager.getBuiltInFilePicker(this)) {
+                FilePickerDialog filePickerDialog = new FilePickerDialog();
+                filePickerDialog.setHomeName(current.itemName);
+                filePickerDialog.setLockHome(true);
+                filePickerDialog.browse(this, VmFileManager.getPath(vmID));
+            } else {
+                FileUtils.openFolder(this, VmFileManager.getPath(vmID));
+            }
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -305,7 +318,12 @@ public class VMCreatorActivity extends AppCompatActivity {
             } else if (getIntent().hasExtra("importcvbinow")) {
                 setDefault();
                 try {
-                    cvbiPicker.launch("*/*");
+                    if (MainSettingsManager.getBuiltInFilePicker(this)) {
+                        FilePickerDialog filePickerDialog = new FilePickerDialog();
+                        filePickerDialog.pick(this, filePickerDialog.ROM_FILE, (path -> importRom(null, path, new File(path).getName())));
+                    } else {
+                        cvbiPicker.launch("*/*");
+                    }
                 } catch (Exception e) {
                     IntentUtils.showErrorDialog(this);
                 }
@@ -505,44 +523,46 @@ public class VMCreatorActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     private final ActivityResultLauncher<String> filePicker =
-            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
-                if (uri == null) return;
-                showProgressDialog(getString(R.string.copying_file));
+            registerForActivityResult(new ActivityResultContracts.GetContent(), this::handleAddFile);
 
-                executor.execute(() -> {
-                    try {
-                        isProcessingFile = true;
+    public void handleAddFile(Uri uri) {
+        if (uri == null) return;
+        showProgressDialog(getString(R.string.copying_file));
 
-                        String filePath = copyToTemp(uri);
+        executor.execute(() -> {
+            try {
+                isProcessingFile = true;
 
-                        runOnUiThread(() -> DialogUtils.twoDialog(this,
-                                getString(R.string.file_added),
-                                filePath,
-                                getString(R.string.copy_full_path),
-                                getString(R.string.close),
-                                true,
-                                R.drawable.check_24px,
-                                true,
-                                () -> ClipboardUltils.copyToClipboard(this, filePath),
-                                null,
-                                null));
-                    } catch (Exception e) {
-                        runOnUiThread(() -> DialogUtils.oneDialog(this,
-                                getString(R.string.oops),
-                                getString(R.string.adding_file_failed_content),
-                                getString(R.string.ok),
-                                true,
-                                R.drawable.error_96px,
-                                true,
-                                null,
-                                null));
-                        Log.e(TAG, "filePicker: " + e.getMessage());
-                    } finally {
-                        isProcessingFile = false;
-                        runOnUiThread(() -> DialogUtils.safeDismiss(this, progressDialog));
-                    }
-                });
-            });
+                String filePath = copyToTemp(uri);
+
+                runOnUiThread(() -> DialogUtils.twoDialog(this,
+                        getString(R.string.file_added),
+                        filePath,
+                        getString(R.string.copy_full_path),
+                        getString(R.string.close),
+                        true,
+                        R.drawable.check_24px,
+                        true,
+                        () -> ClipboardUltils.copyToClipboard(this, filePath),
+                        null,
+                        null));
+            } catch (Exception e) {
+                runOnUiThread(() -> DialogUtils.oneDialog(this,
+                        getString(R.string.oops),
+                        getString(R.string.adding_file_failed_content),
+                        getString(R.string.ok),
+                        true,
+                        R.drawable.error_96px,
+                        true,
+                        null,
+                        null));
+                Log.e(TAG, "filePicker: " + e.getMessage());
+            } finally {
+                isProcessingFile = false;
+                runOnUiThread(() -> DialogUtils.safeDismiss(this, progressDialog));
+            }
+        });
+    }
 
     private void loadConfig(DataMainRoms vmConfig) {
         if (vmConfig != null) current = vmConfig;
@@ -1295,13 +1315,26 @@ public class VMCreatorActivity extends AppCompatActivity {
 
         try {
             if (PENDING_SELECT_FILE_MODE == SELECT_CDROM_0_FILE_MODE || PENDING_SELECT_FILE_MODE == SELECT_CDROM_1_FILE_MODE) {
-                isoPicker.launch("*/*");
+                if (MainSettingsManager.getBuiltInFilePicker(this)) {
+                    builtInFilePicker(PICK_OPTICAL_FILE_MODE);
+                } else {
+                    isoPicker.launch("*/*");
+                }
             } else if (PENDING_SELECT_FILE_MODE == SELECT_FLOPPY_A_FILE_MODE || PENDING_SELECT_FILE_MODE == SELECT_FLOPPY_B_FILE_MODE) {
+                if (MainSettingsManager.getBuiltInFilePicker(this)) {
+                    builtInFilePicker(PICK_FLOPPY_FILE_MODE);
+                } else {
                     floppyPicker.launch("*/*");
+                }
             } else {
-                diskPicker.launch("*/*");
+                if (MainSettingsManager.getBuiltInFilePicker(this)) {
+                    builtInFilePicker(PICK_DRIVE_FILE_MODE);
+                } else {
+                    diskPicker.launch("*/*");
+                }
             }
         } catch (Exception e) {
+            Log.e(TAG, "pickStorageFile: ", e);
             IntentUtils.showErrorDialog(this);
         }
     }
@@ -1474,5 +1507,24 @@ public class VMCreatorActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    final int PICK_DRIVE_FILE_MODE = 0;
+    final int PICK_OPTICAL_FILE_MODE = 1;
+    final int PICK_FLOPPY_FILE_MODE = 2;
+
+    private void builtInFilePicker(int mode) {
+        FilePickerDialog filePickerDialog = new FilePickerDialog();
+
+        int finalMode;
+        if (mode == PICK_DRIVE_FILE_MODE) {
+            finalMode = filePickerDialog.FIT_PICK_DISK_FILE_MODE;
+        } else if (mode == PICK_OPTICAL_FILE_MODE) {
+            finalMode = filePickerDialog.FIT_PICK_OPTICAL_FILE_MODE;
+        } else {
+            finalMode = filePickerDialog.FIT_PICK_FLOPPY_FILE_MODE;
+        }
+
+        filePickerDialog.pick(this, finalMode, (path -> handleFile(Uri.fromFile(new File(path)))));
     }
 }

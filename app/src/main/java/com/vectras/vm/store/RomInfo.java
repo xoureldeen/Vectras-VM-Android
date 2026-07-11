@@ -22,11 +22,13 @@ import com.anbui.elephant.interaction.Interaction;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.ImagePrvActivity;
 import com.vectras.vm.R;
 import com.vectras.vm.VMManager;
 import com.vectras.vm.creator.VMCreatorActivity;
 import com.vectras.vm.databinding.ActivityRomInfoBinding;
+import com.vectras.vm.file.FilePickerDialog;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.ImageUtils;
@@ -72,89 +74,90 @@ public class RomInfo extends AppCompatActivity {
     }
 
     private final ActivityResultLauncher<String> romPicker =
-            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
+            registerForActivityResult(new ActivityResultContracts.GetContent(), this::handlePickedRom);
 
-                if (uri == null) return;
+    public void handlePickedRom(Uri uri) {
+        if (uri == null) return;
 
-                executor.execute(() -> {
-                    String filePath;
-                    try {
-                        File selectedFilePath = new File(getPath(uri));
-                        filePath = selectedFilePath.getPath();
-                    } catch (Exception e) {
-                        filePath = "";
+        executor.execute(() -> {
+            String filePath;
+            try {
+                File selectedFilePath = new File(getPath(uri));
+                filePath = selectedFilePath.getPath();
+            } catch (Exception e) {
+                filePath = "";
+            }
+
+            String selectedFileName = FileUtils.getFileNameFromUri(this, uri);
+
+            if (isFinishing() || isDestroyed()) return;
+
+            String finalFilePath = filePath;
+            runOnUiThread(() -> {
+                if (selectedFileName.equals(getIntent().getStringExtra("filename")) ||
+                        (selectedFileName.endsWith(".cvbi.zip") && selectedFileName.equals(getIntent().getStringExtra("filename") + ".zip"))) {
+                    Intent intent = new Intent();
+
+                    if (getIntent().hasExtra("icon") &&
+                            !Objects.requireNonNull(getIntent().getStringExtra("icon")).isEmpty() &&
+                            (!selectedFileName.endsWith(".cvbi")
+                                    || !selectedFileName.endsWith(".cvbi.zip"))) {
+
+                        Glide.with(this)
+                                .asBitmap()
+                                .load(getIntent().getStringExtra("icon"))
+                                .into(new CustomTarget<Bitmap>() {
+                                    @Override
+                                    public void onResourceReady(@NonNull Bitmap resource,
+                                                                @Nullable Transition<? super Bitmap> transition) {
+                                        File cacheDir = getExternalCacheDir();
+
+                                        if (cacheDir != null)
+                                            ImageUtils.saveBitmapToPNGFile(resource, cacheDir.getAbsolutePath(), "thumbnail.png");
+
+                                        intent.putExtra("romicon", cacheDir != null ? cacheDir.getAbsolutePath() + "/thumbnail.png" : "");
+                                    }
+
+                                    @Override
+                                    public void onLoadCleared(@Nullable Drawable placeholder) {
+                                        intent.putExtra("romicon", "");
+                                    }
+                                });
+                    } else {
+                        intent.putExtra("romicon", "");
                     }
 
-                    String selectedFileName = FileUtils.getFileNameFromUri(this, uri);
+                    intent.setClass(getApplicationContext(), VMCreatorActivity.class);
+                    intent.putExtra("addromnow", "");
+                    intent.putExtra("romname", getIntent().getStringExtra("title"));
+                    intent.putExtra("romfilename", getIntent().getStringExtra("filename"));
+                    intent.putExtra("finalromfilename", getIntent().getStringExtra("finalromfilename"));
+                    intent.putExtra("rompath", finalFilePath);
+                    intent.putExtra("romuri", uri.toString());
+                    if (Objects.requireNonNull(getIntent().getStringExtra("extra")).contains(selectedFileName)) {
+                        intent.putExtra("addtodrive", "");
+                        intent.putExtra("romextra", getIntent().getStringExtra("extra"));
+                    } else {
+                        intent.putExtra("addtodrive", "1");
+                        intent.putExtra("romextra", getIntent().getStringExtra("extra"));
+                    }
 
-                    if (isFinishing() || isDestroyed()) return;
+                    VMManager.setArch(getIntent().hasExtra("arch") && getIntent().getStringExtra("arch") != null ? Objects.requireNonNull(getIntent().getStringExtra("arch")) : "", this);
 
-                    String finalFilePath = filePath;
-                    runOnUiThread(() -> {
-                        if (selectedFileName.equals(getIntent().getStringExtra("filename")) ||
-                                (selectedFileName.endsWith(".cvbi.zip") && selectedFileName.equals(getIntent().getStringExtra("filename") + ".zip"))) {
-                            Intent intent = new Intent();
-
-                            if (getIntent().hasExtra("icon") &&
-                                    !Objects.requireNonNull(getIntent().getStringExtra("icon")).isEmpty() &&
-                                    (!selectedFileName.endsWith(".cvbi")
-                                            || !selectedFileName.endsWith(".cvbi.zip"))) {
-
-                                Glide.with(this)
-                                        .asBitmap()
-                                        .load(getIntent().getStringExtra("icon"))
-                                        .into(new CustomTarget<Bitmap>() {
-                                            @Override
-                                            public void onResourceReady(@NonNull Bitmap resource,
-                                                                        @Nullable Transition<? super Bitmap> transition) {
-                                                File cacheDir = getExternalCacheDir();
-
-                                                if (cacheDir != null)
-                                                    ImageUtils.saveBitmapToPNGFile(resource, cacheDir.getAbsolutePath(), "thumbnail.png");
-
-                                                intent.putExtra("romicon", cacheDir != null ? cacheDir.getAbsolutePath() + "/thumbnail.png" : "");
-                                            }
-
-                                            @Override
-                                            public void onLoadCleared(@Nullable Drawable placeholder) {
-                                                intent.putExtra("romicon", "");
-                                            }
-                                        });
-                            } else {
-                                intent.putExtra("romicon", "");
-                            }
-
-                            intent.setClass(getApplicationContext(), VMCreatorActivity.class);
-                            intent.putExtra("addromnow", "");
-                            intent.putExtra("romname", getIntent().getStringExtra("title"));
-                            intent.putExtra("romfilename", getIntent().getStringExtra("filename"));
-                            intent.putExtra("finalromfilename", getIntent().getStringExtra("finalromfilename"));
-                            intent.putExtra("rompath", finalFilePath);
-                            intent.putExtra("romuri", uri.toString());
-                            if (Objects.requireNonNull(getIntent().getStringExtra("extra")).contains(selectedFileName)) {
-                                intent.putExtra("addtodrive", "");
-                                intent.putExtra("romextra", getIntent().getStringExtra("extra"));
-                            } else {
-                                intent.putExtra("addtodrive", "1");
-                                intent.putExtra("romextra", getIntent().getStringExtra("extra"));
-                            }
-
-                            VMManager.setArch(getIntent().hasExtra("arch") && getIntent().getStringExtra("arch") != null ? Objects.requireNonNull(getIntent().getStringExtra("arch")) : "", this);
-
-                            startActivity(intent);
-                        } else {
-                            DialogUtils.oneDialog(RomInfo.this,
-                                    getString(R.string.problem_has_been_detected),
-                                    getString(R.string.please_select) + " " + getIntent().getStringExtra("filename"),
-                                    getString(R.string.ok),
-                                    true, R.drawable.warning_48px,
-                                    true,
-                                    null,
-                                    null);
-                        }
-                    });
-                });
+                    startActivity(intent);
+                } else {
+                    DialogUtils.oneDialog(RomInfo.this,
+                            getString(R.string.problem_has_been_detected),
+                            getString(R.string.please_select) + " " + getIntent().getStringExtra("filename"),
+                            getString(R.string.ok),
+                            true, R.drawable.warning_48px,
+                            true,
+                            null,
+                            null);
+                }
             });
+        });
+    }
 
     public String getPath(Uri uri) {
         return FileUtils.getPath(RomInfo.this, uri);
@@ -168,7 +171,12 @@ public class RomInfo extends AppCompatActivity {
         if (getIntent().hasExtra("isRomInfo") && getIntent().getBooleanExtra("isRomInfo", false)) {
             binding.btnPick.setOnClickListener(v -> {
                 try {
-                    romPicker.launch("*/*");
+                    if (MainSettingsManager.getBuiltInFilePicker(this)) {
+                        FilePickerDialog filePickerDialog = new FilePickerDialog();
+                        filePickerDialog.pick(this, filePickerDialog.ROM_FILE, (path -> handlePickedRom(Uri.fromFile(new File(path)))));
+                    } else {
+                        romPicker.launch("*/*");
+                    }
                 } catch (Exception e) {
                     IntentUtils.showErrorDialog(this);
                 }

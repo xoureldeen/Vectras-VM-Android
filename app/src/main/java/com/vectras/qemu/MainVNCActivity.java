@@ -1479,8 +1479,9 @@ public class MainVNCActivity extends VncCanvasActivity {
         });
 
         bindingSendKey.sendtextButton.setOnClickListener(v -> {
-            vncCanvas.sendText(bindingSendKey.sendtextEdittext.getText().toString());
+            String text = bindingSendKey.sendtextEdittext.getText().toString();
             bindingSendKey.sendtextEdittext.setText("");
+            new Thread(() -> vncCanvas.sendText(text)).start();
         });
 
         bindingSendKey.sendtextEdittext.addTextChangedListener(new TextWatcher() {

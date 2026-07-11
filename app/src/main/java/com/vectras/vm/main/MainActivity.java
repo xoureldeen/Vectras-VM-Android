@@ -46,6 +46,7 @@ import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.AboutActivity;
 import com.vectras.vm.AppConfig;
 import com.vectras.vm.creator.VMCreatorActivity;
+import com.vectras.vm.file.FilePickerDialog;
 import com.vectras.vm.settings.Minitools;
 import com.vectras.vm.R;
 import com.vectras.vm.WebViewActivity;
@@ -522,7 +523,14 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
                 startActivity(new Intent(this, Settings2Activity.class));
             } else if (id == R.id.navigation_data_explorer) {
 //                startActivity(new Intent(this, DataExplorerActivity.class));
-                FileUtils.openFolder(this, AppConfig.maindirpath);
+                if (MainSettingsManager.getBuiltInFilePicker(this)) {
+                    FilePickerDialog filePickerDialog = new FilePickerDialog();
+                    filePickerDialog.setHomeName(getString(R.string.app_name));
+                    filePickerDialog.setLockHome(true);
+                    filePickerDialog.browse(this, AppConfig.maindirpath);
+                } else {
+                    FileUtils.openFolder(this, AppConfig.maindirpath);
+                }
             } else if (id == R.id.navigation_item_donate) {
                 String tw = "https://www.patreon.com/VectrasTeam";
                 Intent w = new Intent(ACTION_VIEW);

@@ -781,6 +781,18 @@
     <string name="low_bass">Trầm sâu</string>
     <string name="your_device_is_not_supported">Thiết bị của bạn không được hỗ trợ.</string>
     <string name="undo">Hoàn tác</string>
+    <string name="internal_storage">Bộ nhớ trong</string>
+    <string name="open_with">Mở bằng</string>
+    <string name="file_picker">Trình chọn tệp</string>
+    <string name="file_picker_settings_note">Trình chọn và duyệt tệp tích hợp sẵn.</string>
+    <string name="use_file_picker">Dùng trình chọn tệp</string>
+    <string name="resume">Tiếp tục</string>
+    <string name="file_picker_resume_note">Tiếp tục ở thư mục cuối cùng mà bạn đã chọn tệp trong lần dùng trước đó.</string>
+    <string name="show_hidden_files">Hiện các tệp ẩn</string>
+    <string name="show_hidden_files_note">Áp dụng với các tệp và thư mục có tên bắt đầu bằng \".\".</string>
+    <string name="the_folder_path_has_been_copied_to_the_clipboard">Đã sap chép đường dẫn thư mục vào bảng tạm.</string>
+    <string name="divider">Đường phân cách</string>
+    <string name="file_picker_divier_note">Thêm các đường phân cách giữa các mục.</string>
 
     <!-- CPUs -->
 

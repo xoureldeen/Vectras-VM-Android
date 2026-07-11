@@ -1343,4 +1343,16 @@ public class MainSettingsManager extends AppCompatActivity
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         return prefs.getBoolean("autoSwitchToExternalMouse", false);
     }
+
+    public static void setBuiltInFilePicker(Context context, Boolean _boolean) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putBoolean("builtInFilePicker", _boolean);
+        edit.apply();
+    }
+
+    public static Boolean getBuiltInFilePicker(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return prefs.getBoolean("builtInFilePicker", false);
+    }
 }
