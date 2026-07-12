@@ -1,16 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="app_name">Vectras VM</string>
-
-    <!--======================VECTRAS STRINGS====================-->
-    <!-- logger -->
     <string name="startvm">虚拟机已启动！</string>
     <string name="stopvm">虚拟机已关闭！</string>
     <string name="noproccesses">无进程！</string>
     <string name="unknownstate">未知状态！</string>
-
     <string name="desktopInstructions">要使用外接鼠标:\n\t请在虚拟机中关闭鼠标加速.\n\t\t对于X-Window，执行: xset m 1\n\t\t对于其它操作系统在 Vectras主选项中关闭\"增强指针准确性\"或者在鼠标选项中选择\"usb-tablet\" (usb-tablet为QEMU中的一个选项)\n\t接入外接鼠标后点击OK\n\t最后通过让鼠标滑至屏幕的各个边缘以校准</string>
-
     <string name="navigation_drawer_open">打开抽屉</string>
     <string name="navigation_drawer_close">收起抽屉</string>
     <string name="address_caption">地址</string>
@@ -30,13 +25,10 @@
     <string name="username">用户名</string>
     <string name="save">保存</string>
     <string name="memory_usage">内存使用量</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="external_vnc">允许外部VNC连接</string>
     <string name="display">显示</string>
     <string name="remove">移除</string>
     <string name="view_logs">查看日志</string>
-    <!-- Strings used for fragments for navigation -->
-
     <string name="input_mode_hardware_mouse">硬件鼠标模式</string>
     <string name="rom_name">ROM 名称</string>
     <string name="rom_drive_qcow2_img_etc">ROM驱动（qcow2,img等）</string>
@@ -47,9 +39,7 @@
     <string name="mouse_mode">鼠标模式</string>
     <string name="export">导出</string>
     <string name="sign_out">退出</string>
-
     <string name="create_a_machine">新建虚拟机</string>
-
     <string name="arrow_down">下箭头</string>
     <string name="arrow_left">左箭头</string>
     <string name="arrow_right">右箭头</string>
@@ -99,19 +89,14 @@
     <string name="save_as_copy">作为副本保存</string>
     <string name="scaling">缩放</string>
     <string name="scaling_zoomable">可缩放</string>
-
     <string name="patreon">Patreon</string>
-
-    <!-- Send selected metakey -->
     <string name="send_key_again">再次发送按键</string>
     <string name="special_keys">发送按键</string>
     <string name="username_caption">用户名</string>
     <string name="username_hint">用于 Windows 身份验证</string>
     <string name="terminal">终端</string>
-
     <string name="install">安装</string>
     <string name="modify">修改</string>
-
     <string name="try_again">再次尝试</string>
     <string name="size_in_gb">大小（GB）</string>
     <string name="create_qcow2">创建 QCOW2</string>
@@ -227,9 +212,6 @@
     <string name="error_NO_SUCH_FILE_OR_DIRECTORY">运行虚拟机时出现问题: 虚拟机所需要的文件或文件夹不存在</string>
     <string name="auto_create_new_hard_drive_when_creating_new_vm">创建新虚拟机时自动新建硬盘</string>
     <string name="with_size_is_128GB">它的大小为128GB</string>
-
-
-    <!--======================TERMUX STRINGS====================-->
     <string name="new_session">新建会话</string>
     <string name="toggle_soft_keyboard">键盘</string>
     <string name="reset_terminal">重置</string>
@@ -237,56 +219,39 @@
     <string name="share_transcript_title">终端显示文本</string>
     <string name="toggle_keep_screen_on">保持屏幕打开</string>
     <string name="autofill_password">自动填充密码</string>
-
     <string name="bootstrap_installer_body">安装中…</string>
     <string name="bootstrap_error_title">无法安装</string>
     <string name="bootstrap_error_body">Vterm 无法安装初始化包</string>
     <string name="bootstrap_error_abort">停止</string>
     <string name="bootstrap_error_try_again">再次尝试</string>
     <string name="bootstrap_error_not_primary_user_message">Vterm 只能安装在主用户帐户上</string>
-
     <string name="max_terminals_reached_title">已达到的最大终端数</string>
     <string name="max_terminals_reached_message">在开新的之前关闭现有项</string>
-
     <string name="reset_toast_notification">重置终端</string>
-
     <string name="select_url">选择 URL</string>
     <string name="select_url_dialog_title">点击 URL 进行复制或长按打开</string>
     <string name="select_all_and_share">分享终端输出</string>
     <string name="select_url_no_found">在终端中找不到 URL</string>
     <string name="select_url_copied_to_clipboard">URL 已复制到剪贴板</string>
     <string name="share_transcript_chooser_title">发送文本至：</string>
-
     <string name="kill_process">终止进程（%d）</string>
     <string name="confirm_kill_process">真的要终止此会话吗？</string>
-
     <string name="session_rename_title">设置会话名称</string>
     <string name="session_rename_positive_button">确认</string>
     <string name="session_new_named_title">新命名会话</string>
     <string name="session_new_named_positive_button">新建</string>
-
     <string name="styling_not_installed">Vterm:Style 插件尚未安装</string>
     <string name="styling_install">安装</string>
-
     <string name="notification_action_exit">退出</string>
     <string name="notification_action_wake_lock">加上唤醒锁</string>
     <string name="notification_action_wake_unlock">释放唤醒锁</string>
-
     <string name="file_received_title">文件保存至 ~/downloads/</string>
     <string name="file_received_edit_button">编辑</string>
     <string name="file_received_open_folder_button">打开文件夹</string>
-
-
-    <!--======================TERMUX-X11 STRINGS====================-->
-
-    <!-- TermuxX11Activity -->
-
     <string name="not_connected">未连接</string>
     <string name="help_button_text">   帮助   </string>
     <string name="preferences_button_text">   首选项  </string>
     <string name="extra_keys_config_desc">在这里您可以像Termux一样设置一些额外按键 (可以看看 <a href="http://wiki.termux.com/wiki/Touch_Keyboard#Extra_Keys_Row">这个</a>) 以及其余项 (e.g. META).\n    留空则使用默认值</string>
-
-    <!-- Log Level -->
     <string name="cancel">取消</string>
     <string name="back_to_the_display">返回显示界面</string>
     <string name="x11">X11</string>
@@ -319,7 +284,6 @@
     <string name="bootstrap_required">需要初始化！</string>
     <string name="you_can_choose_between_auto_download_and_setup_or_manual_setup_by_choosing_bootstrap_file">您可以选择让软件自动下载或者选择初始化包完成手动设置</string>
     <string name="manual_setup">手动安装</string>
-
     <string name="alpine_desktop">Alpine Xfce4</string>
     <string name="settings_x11_display_resolution_mode">分辨率模式</string>
     <string name="settings_x11_display_scale">缩放值（%）</string>
@@ -619,7 +583,7 @@
     <string name="delete_file_failed_content">删除文件时出错，稍后重试</string>
     <string name="file_deleted">文件已删除</string>
     <string name="open_main_folder">打开主文件夹</string>
-    <string name="you_are_using_x11_instead_of_vnc_content">您正在使用 X11而非 VNC。要使用 VNC，请进入设置-> QEMU，向下滚动到底部，然后在用户界面中选择"VNC"。</string>
+    <string name="you_are_using_x11_instead_of_vnc_content">您正在使用 X11而非 VNC。要使用 VNC，请进入设置-&gt; QEMU，向下滚动到底部，然后在用户界面中选择"VNC"。</string>
     <string name="there_is_no_app_to_perform_this_action">没有可用于进行该操作的APP</string>
     <string name="directory_does_not_exist">文件夹不存在</string>
     <string name="shared_folder_is_too_large_content">共享文件夹体积不应超过516MB，请删除部分文件</string>
@@ -732,4 +696,177 @@
     <string name="go_to_termux_x11_settings">前往 Termux:X11 设置。</string>
     <string name="use_sdl">使用 SDL</string>
     <string name="use_sdl_note">如果您想使用 3dfx 并玩老游戏，请开启此选项（仅适用于 x86_64 和 i386）。</string>
+    <string name="free_palistine">解放巴勒斯坦</string>
+    <string name="x86_64">x86_64</string>
+    <string name="error_CR_CVBI4">发生错误。ROM信息已损坏，已应用部分默认设置。错误代码：CR_CVBI4。</string>
+    <string name="file_format_is_not_supported_hard_drive">文件格式不受支持，可能无法正常工作。常见支持格式包括 qcow2、img、vhd、vhdx、vdi、qcow、vmdk 和 vpc。是否继续？</string>
+    <string name="file_format_is_not_supported_optical_drive">文件格式不受支持，可能无法正常工作。常见支持格式包括 iso、img、cdr 和 toast。是否继续？</string>
+    <string name="file_format_is_not_supported_floppy_drive">文件格式不受支持，可能无法正常工作。常见支持格式包括 img、flp 和 ima。是否继续？</string>
+    <string name="mirrors">镜像源</string>
+    <string name="letstart">开始吧</string>
+    <string name="unable_to_copy_file_content">无法复制此文件，请尝试从其他位置选择该文件。</string>
+    <string name="use_vnc">使用VNC</string>
+    <string name="installing_system_files">正在安装系统文件</string>
+    <string name="connecting">连接中…</string>
+    <string name="how_do_you_want_to_install">您想如何安装？</string>
+    <string name="how_do_you_want_to_install_note">标准安装还是手动安装？</string>
+    <string name="standard">标准安装</string>
+    <string name="standard_note">推荐方式，安装程序将自动完成所有设置。</string>
+    <string name="custom">自定义安装</string>
+    <string name="custom_note">如果您想手动选择引导文件并安装所需的Qemu版本。</string>
+    <string name="mirror_note">选择离您最近的镜像源以加快安装速度。</string>
+    <string name="please_do_not_disconnect_the_network_this_may_take_a_few_minutes">请勿断开网络连接，这可能需要几分钟时间。</string>
+    <string name="something_went_wrong">出了点问题</string>
+    <string name="the_setup_could_not_be_completed_and_below_is_the_log">设置未能完成，以下是日志信息。</string>
+    <string name="this_option_is_temporarily_unavailable_because_the_server_cannot_be_connected">由于无法连接服务器，此选项暂时不可用。</string>
+    <string name="vectras_vm_cannot_run_on_this_device">Vectras VM 无法在此设备上运行。</string>
+    <string name="not_enough_storage_space">存储空间不足。</string>
+    <string name="there_are_no_logs">没有日志。</string>
+    <string name="the_required_package_is_not_installed_content">所需的软件包未安装，您需要先安装它才能使用此功能。</string>
+    <string name="need_install_termux_x11_content">未安装 Termux:X11 应用，您需要安装它才能继续。</string>
+    <string name="check_before_extract">解压前检查</string>
+    <string name="check_before_extract_note">快速检测错误，避免浪费时间解压后才发现问题。</string>
+    <string name="checking">检查中…</string>
+    <string name="quick_edit">快速编辑</string>
+    <string name="write_something">写点什么…</string>
+    <string name="switch_to_vnc">切换到VNC</string>
+    <string name="preferences">首选项</string>
+    <string name="size_gb">大小 (GB)</string>
+    <string name="create_a_new_virtual_disk">创建新虚拟磁盘</string>
+    <string name="it_will_be_created_in">将创建在</string>
+    <string name="shared_by">共享者</string>
+    <string name="system_update">系统更新</string>
+    <string name="system_update_note">有系统更新可用，立即更新以获得完整体验。</string>
+    <string name="qemu_documentation">QEMU 文档</string>
+    <string name="you_need_to_switch_to_sdl_to_use_3dfx">您需要切换到SDL才能使用3dfx。</string>
+    <string name="device_manager">设备管理器</string>
+    <string name="show_in_folder">在文件夹中显示</string>
+    <string name="exit">退出</string>
+    <string name="threedfx">3dfx</string>
+    <string name="refresh">刷新</string>
+    <string name="last_crash_note">非常抱歉，应用之前发生了崩溃。</string>
+    <string name="virtual_mouse">虚拟鼠标</string>
+    <string name="show_virtual_mouse">显示虚拟鼠标</string>
+    <string name="hide_virtual_mouse">隐藏虚拟鼠标</string>
+    <string name="this_bootstrap_file_is_invalid">此引导文件无效。</string>
+    <string name="vm_has_been_created">虚拟机已创建。</string>
+    <string name="vm_has_been_edited">虚拟机已编辑。</string>
+    <string name="an_error_occurred_and_vm_was_not_created">发生错误，虚拟机未创建。</string>
+    <string name="an_error_occurred_and_vm_was_not_modified">发生错误，虚拟机未修改。</string>
+    <string name="edit_with_create_command">使用参数编辑器编辑</string>
+    <string name="edit_with_create_command_content">您可以使用参数编辑器应用来编辑此虚拟机。</string>
+    <string name="unable_to_save_please_try_again_later">无法保存，请稍后重试。</string>
+    <string name="advanced">高级</string>
+    <string name="boot">启动</string>
+    <string name="show_boot_menu">显示启动菜单</string>
+    <string name="defaulttext">默认</string>
+    <string name="hard_disk">硬盘</string>
+    <string name="floppy_disk">软盘</string>
+    <string name="network">网络</string>
+    <string name="rom_successfully_exported">ROM 导出成功。</string>
+    <string name="options">选项</string>
+    <string name="add_file">添加文件</string>
+    <string name="file_added">文件已添加</string>
+    <string name="copy_full_path">复制完整路径</string>
+    <string name="adding_file_failed_content">添加文件失败，请稍后重试。</string>
+    <string name="items_have_been_cleared">项目已清空。</string>
+    <string name="show_recycle_bin">显示回收站</string>
+    <string name="an_error_occurred_while_deleting_the_vm">删除虚拟机时发生错误。</string>
+    <string name="the_vm_files_were_retained_because_they_are_still_being_used_elsewhere">虚拟机文件已被保留，因为它们仍在其他地方使用。</string>
+    <string name="pause">暂停</string>
+    <string name="pause_vm_note">虚拟机的状态将被保存并关闭以节省资源。下次启动时将恢复到此状态。请不要更改、移动或删除此虚拟机使用的文件。</string>
+    <string name="pausing_vm_note">虚拟机正在暂停…
+请不要离开此页面。</string>
+    <string name="resuming">正在恢复…</string>
+    <string name="vm_resume_error_note">恢复之前暂停的虚拟机状态时出现问题。如果您在启动前修改了此虚拟机或Qemu设置，请检查是否将其更改为与上次开机时相同的设置。您想保留还是移除保存的状态？</string>
+    <string name="keep_and_continue">保留并继续</string>
+    <string name="remove_and_continue">移除并继续</string>
+    <string name="vm_state_save_failed_note">发生错误，无法保存虚拟机状态。请稍后重试。</string>
+    <string name="this_folder_cannot_be_opened">无法打开此文件夹。</string>
+    <string name="new_notification">新通知</string>
+    <string name="tap_to_view">点击查看。</string>
+    <string name="view_in_an_bui_app">在 An Bui 应用中查看</string>
+    <string name="view_in_an_bui_app_note">您可以在此处查看和获取。</string>
+    <string name="tools">工具</string>
+    <string name="threedfx_wrappers">3dfx 包装器</string>
+    <string name="virtio_tools_for_windows">Windows VirtIO 工具</string>
+    <string name="download_required">需要下载</string>
+    <string name="this_tool_needs_to_be_downloaded_before_use">此工具需要先下载才能使用。下载完成后将通知您。</string>
+    <string name="download_failed_note">下载失败，请稍后重试。</string>
+    <string name="virtio_tools_for_windows_is_now_ready_to_use">Windows VirtIO 工具现已就绪</string>
+    <string name="do_you_want_to_insert_it_into_the_optical_drive_right_now">是否立即将其插入光驱？</string>
+    <string name="try_play_store_version">试试 Play 商店版</string>
+    <string name="enter_a_command">输入命令</string>
+    <string name="console">控制台</string>
+    <string name="take_screenshot">截图</string>
+    <string name="unable_to_take_a_screenshot">无法截图。</string>
+    <string name="saved_to_the_gallery">已保存到相册。</string>
+    <string name="taking_a_screenshot">正在截图…</string>
+    <string name="this_vm_is_already_running">此虚拟机已在运行。</string>
+    <string name="the_server_is_running">服务器正在运行</string>
+    <string name="host_shared_folder_format_content">在虚拟机中访问此链接以访问您设备上的下载文件夹：
+
+%s
+
+您也可以从虚拟机发送文件到您设备的下载文件夹，以下是使用 curl 的示例：
+
+%s</string>
+    <string name="host_shared_folder_error_content">启动服务器时发生错误，请稍后重试。</string>
+    <string name="copy_link">复制链接</string>
+    <string name="copy_upload_command">复制上传命令</string>
+    <string name="folder_sharing_server">文件夹共享服务器</string>
+    <string name="mute">静音</string>
+    <string name="unmute">取消静音</string>
+    <string name="cdrom_1">光驱 1</string>
+    <string name="cdrom_2">光驱 2</string>
+    <string name="locked_and_cannot_be_ejected_content">设备已锁定，暂时无法弹出。请稍后重试。您可以尝试在此虚拟机运行的操作系统中打开设备管理器或文件管理器并请求弹出。</string>
+    <string name="locked_and_cannot_be_changed_content">设备已锁定，暂时无法更换。请稍后重试。您可以尝试先弹出设备，然后再次尝试更换。</string>
+    <string name="manage">管理</string>
+    <string name="connect">连接</string>
+    <string name="shutting_down">正在关机…</string>
+    <string name="cannot_save_here_please_choose_another_location">无法保存到此处，请选择其他位置。</string>
+    <string name="processor">处理器</string>
+    <string name="board">主板</string>
+    <string name="core">核心</string>
+    <string name="cores">核心</string>
+    <string name="thread">线程</string>
+    <string name="threads">线程</string>
+    <string name="refresh_rate">刷新率</string>
+    <string name="low_refresh_rate">低刷新率</string>
+    <string name="low_refresh_rate_note">如果您的设备因绘制过多帧而过载，可以启用此功能以提升虚拟机性能并将刷新率降低至30。</string>
+    <string name="edge_to_edge">全面屏</string>
+    <string name="disable_edge_to_edge">禁用全面屏</string>
+    <string name="pinch_to_zoom">双指缩放</string>
+    <string name="vm_picker">虚拟机选择器</string>
+    <string name="switchtext">切换</string>
+    <string name="switch_to">切换到</string>
+    <string name="no_vms_are_available">没有可用的虚拟机。</string>
+    <string name="hard_drive_0">硬盘 0</string>
+    <string name="hard_drive_1">硬盘 1</string>
+    <string name="optical_drive">光驱</string>
+    <string name="optical_drive_0">光驱 0</string>
+    <string name="optical_drive_1">光驱 1</string>
+    <string name="vm_creator_this_file_is_already_in_use_content">此文件已在虚拟机的其他地方使用。您需要找到并移除或重命名它，然后重新选择。</string>
+    <string name="higher_quality">更高质量</string>
+    <string name="vnc_higher_quality_note">图像质量将会提高，但如果使用外部连接，延迟会更大。</string>
+    <string name="battery">电池</string>
+    <string name="preparing">准备中…</string>
+    <string name="notification">通知</string>
+    <string name="notification_system_description">管理通知类型和主题。</string>
+    <string name="suggestions_and_tips">建议和提示</string>
+    <string name="suggestions_and_tips_settings_description">接收关于我们的建议和提示的通知。</string>
+    <string name="in_system_settings">在系统设置中。</string>
+    <string name="missing_packages">缺少的软件包</string>
+    <string name="missing_packages_content">以下是您需要安装的缺少软件包：</string>
+    <string name="x11_general_setting_note">在内置和外部显示之间切换时需要重启应用。</string>
+    <string name="contains_ads">包含广告</string>
+    <string name="new_session_failsafe">安全模式</string>
+    <string name="use_external_x11_note">使用 Termux:X11 应用代替内置屏幕。</string>
+    <string name="blur_effect">模糊效果</string>
+    <string name="blur_effect_note">模糊周围区域以增加对需要注意的特定区域的聚焦。</string>
+    <string name="g4_cpu_turbo">G4 (高性能)</string>
+    <string name="g4_cpu_basic">G4 (基本)</string>
+    <string name="g2_cpu_workstation">G2 (工作站)</string>
+    <string name="g2_cpu_low_power">G2 (低功耗)</string>
+    <string name="hello_blank_fragment">空白片段</string>
 </resources>
