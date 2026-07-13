@@ -793,6 +793,15 @@
     <string name="the_folder_path_has_been_copied_to_the_clipboard">Đã sap chép đường dẫn thư mục vào bảng tạm.</string>
     <string name="divider">Đường phân cách</string>
     <string name="file_picker_divier_note">Thêm các đường phân cách giữa các mục.</string>
+    <string name="storage_note">Các ổ lưu trữ, thư mục được chia sẻ,…</string>
+    <string name="open_source_licenses">Giấy phép nguồn mở</string>
+    <string name="board_note">Bộ xử lý, nhân, luồng,…</string>
+    <string name="firmware">Phần mềm</string>
+    <string name="firmware_note">UEFI, khởi động từ, tuỳ chọn khởi động,…</string>
+    <string name="advanced_note">Các tham số mở rộng,…</string>
+    <string name="card_type">Loại thẻ</string>
+    <string name="network_card">Thẻ mạng</string>
+    <string name="none">Trống</string>
 
     <!-- CPUs -->
 

@@ -3,9 +3,15 @@ package com.vectras.vm.main.vms;
 import com.google.gson.annotations.SerializedName;
 
 public class DataMainRoms {
-    public int cpu = 0;
-    public int cores = 0;
-    public int threads = 0;
+    public String vmID = "";
+
+    @SerializedName(
+            value = "arch",
+            alternate = { "imgArch" }
+    )
+    public String itemArch = "";
+
+    // Personalize
 
     @SerializedName(
             value = "icon",
@@ -19,11 +25,15 @@ public class DataMainRoms {
     )
     public String itemName = "";
 
-    @SerializedName(
-            value = "arch",
-            alternate = { "imgArch" }
-    )
-    public String itemArch = "";
+    // Board
+
+    public int cpu = 0;
+    public int cores = 0;
+    public int threads = 0;
+
+    public boolean battery = false;
+
+    // Storage
 
     @SerializedName(
             value = "drive",
@@ -33,11 +43,6 @@ public class DataMainRoms {
 
     public String hd1 = "";
 
-    @SerializedName(
-            value = "qemu",
-            alternate = { "imgExtra" }
-    )
-    public String itemExtra = "";
 
     @SerializedName(
             value = "cdrom",
@@ -47,15 +52,19 @@ public class DataMainRoms {
 
     public String cdrom1 = "";
 
+
     public String fda = "";
 
     public String fdb = "";
 
+
     public boolean sharedFolder = false;
 
-    public String vmID = "";
+    // Network
 
-    public int qmpPort = 0;
+    public int networkCard = 0;
+
+    // Firmware
 
     public int bootFrom = 0;
 
@@ -67,5 +76,16 @@ public class DataMainRoms {
 
     public boolean isUseDefaultBios = true;
 
-    public boolean battery = false;
+    // Advanced
+
+    @SerializedName(
+            value = "qemu",
+            alternate = { "imgExtra" }
+    )
+    public String itemExtra = "";
+
+    // Deprecated
+
+    @Deprecated
+    public int qmpPort = 0;
 }

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 import com.vectras.vm.adapters.GithubUserAdapter;
 import com.vectras.vm.utils.CommandUtils;
 import com.vectras.vm.utils.UIUtils;
@@ -99,6 +100,8 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
                 if (!qemuVersionName.isEmpty()) qemuVersion.setText(qemuVersionName); else getString(R.string.unknow);
             });
         });
+
+        findViewById(R.id.btn_open_source_licenses).setOnClickListener(v -> startActivity(new Intent(this, OssLicensesMenuActivity.class)));
 
     }
 

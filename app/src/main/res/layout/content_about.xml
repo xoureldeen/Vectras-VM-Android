@@ -99,6 +99,14 @@
                         android:text="@string/free_palistine"
                         android:textSize="16sp" />
                 </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_open_source_licenses"
+                    style="?attr/buttonBarNegativeButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/open_source_licenses"/>
+
             </LinearLayout>
 
         </LinearLayout>

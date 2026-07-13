@@ -15,6 +15,7 @@ buildscript {
         // Add other classpaths like Google Services and Firebase Crashlytics if needed here.
         classpath libs.google.services  // assuming you need it for your project
         classpath libs.firebase.crashlytics.gradle
+        classpath libs.play.services.oss.licenses.plugin
 // assuming you need it for project
     }
 }

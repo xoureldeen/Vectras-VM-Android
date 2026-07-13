@@ -29,8 +29,7 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
-                    style="?attr/materialCardViewFilledStyle"
-                    app:cardBackgroundColor="?attr/colorSurface">
+                    app:cardBackgroundColor="?attr/colorSurfaceContainerLowest">
                     <ImageView
                         android:id="@+id/ivIcon"
                         android:layout_width="70dp"

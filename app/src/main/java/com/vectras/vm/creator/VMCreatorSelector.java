@@ -2,26 +2,13 @@ package com.vectras.vm.creator;
 
 import android.app.Activity;
 import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.material.color.MaterialColors;
 import com.vectras.vm.R;
-import com.vectras.vm.databinding.DialogListSelectorLayoutBinding;
-import com.vectras.vm.databinding.SimpleLayoutListViewWithCheckBinding;
+import com.vectras.vm.creator.configs.ListManager;
 import com.vectras.vm.utils.UniversalPickerDialog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 
 public class VMCreatorSelector {
     private static final String TAG = "VMCreatorSelector";
@@ -52,6 +39,14 @@ public class VMCreatorSelector {
 
     public static void cpuThread(Activity activity, String arch, int position, UniversalPickerDialog.UniversalPickerDialogCallback callback) {
         showDialog(activity, ListManager.threads(arch), position, callback, activity.getString(R.string.thread));
+    }
+
+    public static void networkCard(Activity activity, int position, UniversalPickerDialog.UniversalPickerDialogCallback callback) {
+        showDialog(activity, ListManager.networkCards(activity), position, callback, activity.getString(R.string.network_card));
+    }
+
+    public static HashMap<String, Object> getNetworkCard(Context context, int position) {
+        return ListManager.networkCards(context).get(position);
     }
 
     public static HashMap<String, Object> getBootFrom(Context context, int position) {

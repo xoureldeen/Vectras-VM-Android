@@ -1,9 +1,7 @@
 [versions]
 activityKtx = "1.13.0"
-agp = "9.2.1"
 annotation = "1.10.0"
 appcompat = "1.7.1"
-comGoogleFirebase = "firebase-crashlytics"
 commonsCompress = "1.28.0"
 commonsIo = "2.22.0"
 constraintlayout = "2.2.1"
@@ -11,16 +9,12 @@ coreKtx = "1.19.0"
 documentfile = "1.1.0"
 drawerlayout = "1.2.0"
 espressoCore = "3.7.0"
-firebaseBom = "34.15.0"
+firebaseBom = "34.16.0"
 firebaseCrashlyticsGradle = "3.0.7"
-firebaseMessaging = "25.1.0"
-glide = "5.0.7"
-googleFirebase = "firebase-analytics"
-googleFirebaseCrashlytics = "3.0.7"
-googleGmsGoogleServices = "4.5.0"
+firebaseMessaging = "25.1.1"
+glide = "5.0.9"
 googleServices = "4.5.0"
 gradle = "9.2.1"
-gradleToolchainsFoojayResolverConvention = "1.0.0"
 gson = "2.14.0"
 guava = "33.6.0-jre"
 junit = "4.13.2"
@@ -33,6 +27,8 @@ retrofit2 = "3.0.0"
 swiperefreshlayout = "1.2.0"
 viewpager = "1.1.0"
 window = "1.5.1"
+playServicesOssLicensesPlugin = "0.12.0"
+playServicesOssLicenses = "17.0.0"
 
 [libraries]
 androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "activityKtx" }
@@ -67,11 +63,5 @@ kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-p
 lottie = { group = "com.airbnb.android", name = "lottie", version.ref = "lottie" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit2" }
-
-[plugins]
-android-application = { id = "com.android.application", version.ref = "agp" }
-com-google-firebase = { id = "com.google.firebase", version.ref = "comGoogleFirebase" }
-google-firebase = { id = "com.google.firebase", version.ref = "googleFirebase" }
-google-firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "googleFirebaseCrashlytics" }
-google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
-foojay-resolver = { id = "org.gradle.toolchains.foojay-resolver-convention", version.ref = "gradleToolchainsFoojayResolverConvention" }
+play-services-oss-licenses-plugin = { group = "com.google.android.gms", name = "oss-licenses-plugin", version.ref = "playServicesOssLicensesPlugin" }
+play-services-oss-licenses = { group = "com.google.android.gms", name = "play-services-oss-licenses", version.ref = "playServicesOssLicenses" }
