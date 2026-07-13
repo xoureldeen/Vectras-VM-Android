@@ -73,6 +73,11 @@ public class StartVM {
 
         if (!cpuParams.isEmpty()) extraParams = cpuParams + " " + extraParams;
 
+        String network = Objects.requireNonNull(VMCreatorSelector.getNetworkCard(activity, vmData.networkCard).get("value")).toString();
+        if (!network.isEmpty()) {
+            extraParams = "-device " + network + ",netdev=net0 -netdev user,id=net0 " + extraParams;
+        }
+
         String bootFromParams = Objects.requireNonNull(VMCreatorSelector.getBootFrom(activity, vmData.bootFrom).get("value")).toString();
         String showBootMenuParams = vmData.isShowBootMenu ? "menu=on" : "";
         String bootParams = "";

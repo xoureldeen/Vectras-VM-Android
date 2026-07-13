@@ -52,7 +52,7 @@ public class SwitchView extends LinearLayout {
             typedArray.recycle();
         }
 
-        findViewById(R.id.root).setOnClickListener(v -> switchWidget.setChecked(!switchWidget.isChecked()));
+        setOnClickListener(v -> switchWidget.setChecked(!switchWidget.isChecked()));
 
         switchWidget.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (listener != null) {

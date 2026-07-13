@@ -49,7 +49,7 @@ public class CheckBoxView extends LinearLayout {
             typedArray.recycle();
         }
 
-        findViewById(R.id.root).setOnClickListener(v -> checkBox.setChecked(!checkBox.isChecked()));
+        setOnClickListener(v -> checkBox.setChecked(!checkBox.isChecked()));
 
         checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (listener != null) {

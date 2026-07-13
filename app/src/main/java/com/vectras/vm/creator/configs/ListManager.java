@@ -1,4 +1,4 @@
-package com.vectras.vm.creator;
+package com.vectras.vm.creator.configs;
 
 import android.content.Context;
 
@@ -143,6 +143,30 @@ public class ListManager {
                 || arch.equals(MainSettingsManager.PPC_ARCH)))
             UniversalPickerDialog.putToList(list, "2", "2");
 
+        return list;
+    }
+
+    public static ArrayList<HashMap<String, Object>> networkCards(Context context) {
+        ArrayList<HashMap<String, Object>> list = new ArrayList<>();
+        UniversalPickerDialog.putToList(list, context.getString(R.string.none), "");
+        UniversalPickerDialog.putToList(list, context.getString(R.string.intel_e1000e_82574l), "e1000e");
+        UniversalPickerDialog.putToList(list, context.getString(R.string.intel_igb_82576), "igb");
+        UniversalPickerDialog.putToList(list, context.getString(R.string.intel_e1000_82540em), "e1000");
+        UniversalPickerDialog.putToList(list, context.getString(R.string.intel_e1000_82545em), "e1000-82545em");
+        UniversalPickerDialog.putToList(list, context.getString(R.string.intel_e1000_82544gc), "e1000-82544gc");
+        UniversalPickerDialog.putToList(list, context.getString(R.string.intel_i82801), "i82801");
+        UniversalPickerDialog.putToList(list, context.getString(R.string.intel_i82562), "i82562");
+        UniversalPickerDialog.putToList(list, context.getString(R.string.intel_i82559er), "i82559er");
+        UniversalPickerDialog.putToList(list, context.getString(R.string.intel_i82558b), "i82558b");
+        UniversalPickerDialog.putToList(list, context.getString(R.string.intel_i82557c), "i82557c");
+        UniversalPickerDialog.putToList(list, context.getString(R.string.intel_i82551), "i82551");
+        UniversalPickerDialog.putToList(list, context.getString(R.string.intel_i82550), "i82550");
+        UniversalPickerDialog.putToList(list, context.getString(R.string.realtek_rtl8139), "rtl8139");
+        UniversalPickerDialog.putToList(list, context.getString(R.string.amd_pcnet), "pcnet");
+        UniversalPickerDialog.putToList(list, context.getString(R.string.novell_ne2000), "ne2k_pci");
+        UniversalPickerDialog.putToList(list, context.getString(R.string.vmware_vmxnet3), "vmxnet3");
+        UniversalPickerDialog.putToList(list, context.getString(R.string.virtio_net), "virtio-net-pci");
+        UniversalPickerDialog.putToList(list, context.getString(R.string.virtio_net_transitional), "virtio-net-pci-transitional");
         return list;
     }
 }

@@ -168,6 +168,7 @@ public class ExportRomActivity extends AppCompatActivity {
             vmConfigMap.put("fdb", "");
         }
 
+        vmConfigMap.put("networkCard", current.networkCard);
         vmConfigMap.put("sharedFolder", current.sharedFolder);
         vmConfigMap.put("bootFrom", current.bootFrom);
         vmConfigMap.put("isShowBootMenu", current.isShowBootMenu);

@@ -652,6 +652,16 @@
     <string name="the_folder_path_has_been_copied_to_the_clipboard">The folder path has been copied to the clipboard.</string>
     <string name="divider">Divider</string>
     <string name="file_picker_divier_note">Add dividers between items.</string>
+    <string name="storage_note">Drives, shared folder,…</string>
+    <string name="open_source_licenses">Open source licenses</string>
+    <string name="board_note">Processor, cores, threads,…</string>
+    <string name="firmware">Firmware</string>
+    <string name="firmware_note">UEFI, boot from, boot menu,…</string>
+    <string name="advanced_note">Extra params,…</string>
+    <string name="network_note">Network card,…</string>
+    <string name="card_type">Card type</string>
+    <string name="network_card">Network card</string>
+    <string name="none">None</string>
 
 
     <!--======================TERMUX STRINGS====================-->
@@ -881,6 +891,27 @@
     <string name="g3_cpu" translatable="false">G3</string>
     <string name="g2_cpu_workstation">G2 (Workstation)</string>
     <string name="g2_cpu_low_power">G2 (Low-Power)</string>
+
+    <!-- Network cards -->
+    <string name="intel_e1000e_82574l" translatable="false">Intel E1000E (82574L)</string>
+    <string name="intel_igb_82576" translatable="false">Intel IGB (82576)</string>
+    <string name="intel_e1000_82540em" translatable="false">Intel E1000 (82540EM)</string>
+    <string name="intel_e1000_82545em" translatable="false">Intel E1000 (82545EM)</string>
+    <string name="intel_e1000_82544gc" translatable="false">Intel E1000 (82544GC)</string>
+    <string name="intel_i82801" translatable="false">Intel i82801</string>
+    <string name="intel_i82562" translatable="false">Intel i82562</string>
+    <string name="intel_i82559er" translatable="false">Intel i82559ER</string>
+    <string name="intel_i82558b" translatable="false">Intel i82558B</string>
+    <string name="intel_i82557c" translatable="false">Intel i82557C</string>
+    <string name="intel_i82551" translatable="false">Intel i82551</string>
+    <string name="intel_i82550" translatable="false">Intel i82550</string>
+    <string name="realtek_rtl8139" translatable="false">Realtek RTL8139</string>
+    <string name="amd_pcnet" translatable="false">AMD PCNET</string>
+    <string name="novell_ne2000" translatable="false">Novell NE2000</string>
+    <string name="vmware_vmxnet3" translatable="false">VMWare (VMXNET3)</string>
+    <string name="virtio_net" translatable="false">VirtIO Net</string>
+    <string name="virtio_net_transitional" translatable="false">VirtIO Net (Transitional)</string>
+
     <!-- Feature: User Profile -->
 
     <!-- Feature: Settings -->

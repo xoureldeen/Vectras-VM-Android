@@ -4,10 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingVertical="8dp"
-    android:paddingStart="16dp"
-    android:paddingEnd="8dp"
-    android:gravity="center_vertical"
-    android:background="?attr/selectableItemBackground">
+    android:paddingHorizontal="16dp"
+    android:gravity="center_vertical">
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
