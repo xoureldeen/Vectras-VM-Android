@@ -1302,6 +1302,26 @@
     "id": "99679"
   },
   {
+    "rom_name": "Windows 10 22H2 ARM64",
+    "rom_icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGdZ3UWM5f8Bz9xUPQ21x973GSDQPcgIEJwA&s",
+    "rom_url": "https://youtu.be/7zOg-8aNJt0",
+    "rom_path": "Windows 10 22H2 ARM64.cvbi",
+    "rom_avail": true,
+    "gui": true,
+    "rom_size": "The final version of Windows 10",
+    "rom_arch": "ARM64",
+    "rom_kernel": "windows",
+    "rom_extra": "",
+    "final_rom_file_name": "",
+    "desc": "This Rom is from Nguyen Bao An Bui. You can get it on An Bui app: https://play.google.com/store/apps/details?id=com.anbui.app\n\nWindows 10 is a major release of the Windows NT operating system developed by Microsoft. The successor to Windows 8.1, it was released to manufacturing on July 15, 2015, became generally available on July 29, 2015, and was a free upgrade to users of Windows 7, 8, and 8.1. Its server counterparts are Windows Server 2016, 2019, and 2022. It was succeeded by Windows 11 in October 2021.",
+    "file_size": "7 GB",
+    "containsAds": true,
+    "creator": "Nguyen Bao An Bui",
+    "verified": true,
+    "vecid": "windows1022h2arm64cvbi",
+    "id": "99623"
+  },
+  {
     "rom_name": "Windows 10 buid 10051",
     "rom_icon": "https://vuetiwuvbyxywfukompp.supabase.co/storage/v1/object/public/getmyos/v1/files/2018/09/17/windows-logo_1_926ed76111646acbbe332bc5af0cf2ce.png",
     "rom_url": "https://youtu.be/MkJVYVd9AME",
