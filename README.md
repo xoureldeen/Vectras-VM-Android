@@ -161,7 +161,13 @@ Help support the project by contributing!
 
 ## ⭐ Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=xoureldeen/Vectras-VM-Android,AnBui2004/Vectras-VM-Emu-Android&type=date&legend=top-left)](https://www.star-history.com/#xoureldeen/Vectras-VM-Android&AnBui2004/Vectras-VM-Emu-Android&type=date&legend=top-left)
+<a href="https://www.star-history.com/?type=date&legend=top-left&repos=xoureldeen%2FVectras-VM-Android%2CAnBui2004%2FVectras-VM-Emu-Android">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=xoureldeen/Vectras-VM-Android%2CAnBui2004/Vectras-VM-Emu-Android&type=date&theme=dark&legend=top-left&sealed_token=tCBSpkm0wCO-niH9BZfotAc5o9pw1qYcHmnl_Tf0CGpqLiLKWlKV8B83nEWskG5QlSQU-aSX65HooXNo165vG8U7TUp9EOPXZiKJpeAroPcxaIGR2G0eTQ" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=xoureldeen/Vectras-VM-Android%2CAnBui2004/Vectras-VM-Emu-Android&type=date&legend=top-left&sealed_token=tCBSpkm0wCO-niH9BZfotAc5o9pw1qYcHmnl_Tf0CGpqLiLKWlKV8B83nEWskG5QlSQU-aSX65HooXNo165vG8U7TUp9EOPXZiKJpeAroPcxaIGR2G0eTQ" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=xoureldeen/Vectras-VM-Android%2CAnBui2004/Vectras-VM-Emu-Android&type=date&legend=top-left&sealed_token=tCBSpkm0wCO-niH9BZfotAc5o9pw1qYcHmnl_Tf0CGpqLiLKWlKV8B83nEWskG5QlSQU-aSX65HooXNo165vG8U7TUp9EOPXZiKJpeAroPcxaIGR2G0eTQ" />
+ </picture>
+</a>
 
 [ico-telegram]: https://img.shields.io/badge/Telegram-2CA5E0?logo=telegram&logoColor=white
 [ico-discord]: https://img.shields.io/badge/Discord-%235865F2.svg?&logo=discord&logoColor=white
