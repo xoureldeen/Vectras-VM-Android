@@ -13,9 +13,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.R;
-import com.vectras.vm.creator.VMCreatorSelector;
+import com.vectras.vm.creator.utils.EditorUtils;
+import com.vectras.vm.creator.utils.VMCreatorSelector;
 import com.vectras.vm.databinding.CreatorFirmwareDialogBinding;
 import com.vectras.vm.main.vms.DataMainRoms;
+import com.vectras.vm.utils.DialogUtils;
 
 import java.util.Objects;
 
@@ -24,6 +26,8 @@ public class FirmwareConfigsDialog extends BottomSheetDialogFragment {
 
     String vmId;
     DataMainRoms configs;
+
+    boolean isSave = true;
 
     public void setConfigs(DataMainRoms configs) {
         this.configs = configs;
@@ -37,6 +41,14 @@ public class FirmwareConfigsDialog extends BottomSheetDialogFragment {
     @NonNull
     @Override
     public BottomSheetDialog onCreateDialog(Bundle savedInstanceState) {
+        // This can happen after the app is freed from memory and then reopened.
+        if (configs == null) {
+            isSave = false;
+            DialogUtils.oopsDialog(requireActivity(), getString(R.string.something_went_wrong));
+            dismiss();
+            return EditorUtils.getDummyDialog(requireActivity());
+        }
+
         binding = CreatorFirmwareDialogBinding.inflate(getLayoutInflater());
 
         BottomSheetDialog dialog = new BottomSheetDialog(requireActivity());
@@ -65,13 +77,15 @@ public class FirmwareConfigsDialog extends BottomSheetDialogFragment {
 
     public void onDismiss(@NonNull DialogInterface dialogInterface) {
         super.onDismiss(dialogInterface);
-        if (callback != null) {
+        if (callback != null && isSave) {
             save();
             callback.onDismiss(configs);
         }
     }
 
     private void initialize() {
+        if (!isAdded()) return;
+
         binding.sbvBootfrom.setOnClickListener(v -> VMCreatorSelector.bootFrom(requireActivity(), configs.bootFrom, ((position, name, value) -> {
             configs.bootFrom = position;
             binding.sbvBootfrom.setSubtitle(name);
@@ -97,6 +111,8 @@ public class FirmwareConfigsDialog extends BottomSheetDialogFragment {
     }
 
     private void load() {
+        if (!isAdded()) return;
+
         binding.sbvBootfrom.setSubtitle(Objects.requireNonNull(VMCreatorSelector.getBootFrom(requireActivity(), configs.bootFrom).get("name")).toString());
 
         binding.cbvShowbootmenu.setChecked(configs.isShowBootMenu);

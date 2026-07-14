@@ -7,7 +7,7 @@ import android.util.Log;
 import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.qemu.utils.RamInfo;
-import com.vectras.vm.creator.VMCreatorSelector;
+import com.vectras.vm.creator.utils.VMCreatorSelector;
 import com.vectras.vm.main.vms.DataMainRoms;
 import com.vectras.vm.manager.BatteryEmulatorManager;
 import com.vectras.vm.manager.FirmwareManager;
@@ -15,7 +15,6 @@ import com.vectras.vm.manager.ParamManager;
 import com.vectras.vm.manager.QemuManager;
 import com.vectras.vm.manager.VmFileManager;
 import com.vectras.vm.settings.ItemSettingsSelector;
-import com.vectras.vm.setupwizard.SetupFeatureCore;
 import com.vectras.vm.utils.CpuHelper;
 import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.FileUtils;
@@ -52,30 +51,74 @@ public class StartVM {
 
         String extraParams = vmData.itemExtra;
 
-        String cpuParams = "";
+        String machineParams = "";
+        if (!ParamManager.hasMachine(extraParams)) {
+            String machine = Objects.requireNonNull(VMCreatorSelector.getMachine(activity, MainSettingsManager.getArch(activity), vmData.machine).get("value")).toString();
+            if (!machine.isEmpty()) {
+                machineParams = "-M " + machine;
+            }
 
-        String cpu = Objects.requireNonNull(VMCreatorSelector.getCpu(activity, MainSettingsManager.getArch(activity), vmData.cpu).get("value")).toString();
-        if (!cpu.isEmpty() && !extraParams.contains("-cpu ")) {
-            cpuParams = " -cpu " + cpu;
+            if (
+                    vmConfigs.nvirt &&
+                            !MainSettingsManager.getArch(activity).equals(MainSettingsManager.PPC_ARCH) &&
+                    MainSettingsManager.getArch(activity).equals(MainSettingsManager.ARM64_ARCH)
+            ) {
+                machineParams += ",virtualization=true";
+            }
+
+            machineParams += " ";
         }
 
-        CpuHelper cpuHelper = new CpuHelper();
+        String cpuParams = "";
+        if (!ParamManager.hasCpu(extraParams)) {
+            String cpu = Objects.requireNonNull(VMCreatorSelector.getCpu(activity, MainSettingsManager.getArch(activity), vmData.cpu).get("value")).toString();
 
-        int cores = Integer.parseInt(Objects.requireNonNull(VMCreatorSelector.getCpuCore(MainSettingsManager.getArch(activity), vmConfigs.cores).get("value")).toString());
-        int threads = Math.max(1, vmConfigs.threads + 1);
-        if (!extraParams.contains("-smp ")) {
-            if (cores * threads > cpuHelper.getCpuThreads()) {
-                cpuParams += " -smp sockets=1,cores=" + cpuHelper.getCpuCores() + ",threads=1";
-            } else {
-                cpuParams += " -smp sockets=1,cores=" + cores + ",threads=" + threads;
+            String flags = "";
+            if (
+                    vmConfigs.nvirt &&
+                            (
+                                    MainSettingsManager.getArch(activity).equals(MainSettingsManager.X86_64_ARCH) ||
+                                            MainSettingsManager.getArch(activity).equals(MainSettingsManager.I386_ARCH)
+                            )
+            ) {
+                flags += ",+vmx,+svm";
+            }
+
+            if (!flags.isEmpty() && cpu.isEmpty()) {
+                if (MainSettingsManager.getArch(activity).equals(MainSettingsManager.X86_64_ARCH)) {
+                    cpu = "qemu64";
+                } else if (MainSettingsManager.getArch(activity).equals(MainSettingsManager.I386_ARCH)) {
+                    cpu = "qemu32";
+                }
+            }
+
+            if (!cpu.isEmpty()) {
+                cpuParams = " -cpu " + cpu + flags;
             }
         }
 
-        if (!cpuParams.isEmpty()) extraParams = cpuParams + " " + extraParams;
 
+        if (!ParamManager.hasSmp(extraParams)) {
+            CpuHelper cpuHelper = new CpuHelper();
+
+            int cores = Integer.parseInt(Objects.requireNonNull(VMCreatorSelector.getCpuCore(MainSettingsManager.getArch(activity), vmConfigs.cores).get("value")).toString());
+            int threads = Math.max(1, vmConfigs.threads + 1);
+            if (!extraParams.contains("-smp ")) {
+                if (cores * threads > cpuHelper.getCpuThreads()) {
+                    cpuParams += " -smp sockets=1,cores=" + cpuHelper.getCpuCores() + ",threads=1";
+                } else {
+                    cpuParams += " -smp sockets=1,cores=" + cores + ",threads=" + threads;
+                }
+            }
+        }
+
+        if (!cpuParams.isEmpty()) cpuParams += " ";
+
+
+        String networkParams = "";
         String network = Objects.requireNonNull(VMCreatorSelector.getNetworkCard(activity, vmData.networkCard).get("value")).toString();
         if (!network.isEmpty()) {
-            extraParams = "-device " + network + ",netdev=net0 -netdev user,id=net0 " + extraParams;
+            networkParams = " -device " + network + ",netdev=net0 -netdev user,id=net0";
         }
 
         String bootFromParams = Objects.requireNonNull(VMCreatorSelector.getBootFrom(activity, vmData.bootFrom).get("value")).toString();
@@ -85,7 +128,7 @@ public class StartVM {
             bootParams = "-boot " + bootFromParams + (!bootFromParams.isEmpty() && !showBootMenuParams.isEmpty() ? "," : "") + showBootMenuParams + " ";
         }
 
-        extraParams = bootParams + extraParams;
+        extraParams = machineParams + cpuParams + bootParams + networkParams + " " + extraParams;
         return env(activity, extraParams, vmData.itemPath, false);
     }
 
@@ -291,14 +334,14 @@ public class StartVM {
                 extractFirmware(activity);
             }
 
-            String machine = "-M ";
-            if (Objects.equals(MainSettingsManager.getArch(activity), "X86_64")) {
-                machine += "pc";
-                params.add(machine);
-            } else if (Objects.equals(MainSettingsManager.getArch(activity), "ARM64")) {
-                machine += "virt";
-                params.add(machine);
-            }
+//            String machine = "-M ";
+//            if (Objects.equals(MainSettingsManager.getArch(activity), "X86_64")) {
+//                machine += "pc";
+//                params.add(machine);
+//            } else if (Objects.equals(MainSettingsManager.getArch(activity), "ARM64")) {
+//                machine += "virt";
+//                params.add(machine);
+//            }
 
             if (MainSettingsManager.useMemoryOvercommit(activity)) {
                 params.add("-overcommit");

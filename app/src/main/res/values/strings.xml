@@ -662,6 +662,13 @@
     <string name="card_type">Card type</string>
     <string name="network_card">Network card</string>
     <string name="none">None</string>
+    <string name="use_external_x11_note">Use the Termux:X11 app instead of the built-in screen.</string>
+    <string name="blur_effect">Blur effect</string>
+    <string name="blur_effect_note">Blur the surrounding area to increase focus on a specific area that needs attention.</string>
+    <string name="machine_type">Machine type</string>
+    <string name="machine">Machine</string>
+    <string name="nested_virtualization">Nested virtualization</string>
+    <string name="play_sound">Play sound</string>
 
 
     <!--======================TERMUX STRINGS====================-->
@@ -818,14 +825,11 @@
     <string name="settings_tag_keyboard">Keyboard</string>
     <string name="settings_tag_other">Other</string>
     <string name="executing_command_please_wait">Executing command, please wait…</string>
-    <string name="use_external_x11_note">Use the Termux:X11 app instead of the built-in screen.</string>
-    <string name="blur_effect">Blur effect</string>
-    <string name="blur_effect_note">Blur the surrounding area to increase focus on a specific area that needs attention.</string>
 
     <!-- CPUs -->
     <string name="max_cpu" translatable="false">Max</string>
     <string name="host_cpu" translatable="false">Host</string>
-    <string name="qemu64" translatable="false">QEMU64</string>
+    <string name="qemu64" translatable="false">QEMU64</string> <!-- Default -->
     <string name="qemu32" translatable="false">QEMU32</string>
     <string name="base_cpu" translatable="false">Base</string>
     <string name="kvm64" translatable="false">KVM64</string>
@@ -911,6 +915,18 @@
     <string name="vmware_vmxnet3" translatable="false">VMWare (VMXNET3)</string>
     <string name="virtio_net" translatable="false">VirtIO Net</string>
     <string name="virtio_net_transitional" translatable="false">VirtIO Net (Transitional)</string>
+
+    <!-- Boards -->
+    <string name="i440fx" translatable="false">i440FX</string>
+    <string name="q35" translatable="false">Q35</string>
+
+    <string name="virt" translatable="false">ARM Virtual Machine</string>
+
+    <string name="mac99" translatable="false">Mac99</string>
+    <string name="g3beige" translatable="false">Heathrow</string> <!-- Default -->
+    <string name="pegasos2" translatable="false">bPlan Pegasos II</string>
+    <string name="amigaone" translatable="false">Eyetech AmigaOne</string>
+    <string name="sam460ex" translatable="false">aCube Sam460ex</string>
 
     <!-- Feature: User Profile -->
 

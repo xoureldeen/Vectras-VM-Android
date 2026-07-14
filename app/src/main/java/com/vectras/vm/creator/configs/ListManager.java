@@ -146,6 +146,39 @@ public class ListManager {
         return list;
     }
 
+    public static ArrayList<HashMap<String, Object>> machines(Context context, String arch) {
+        return switch (arch) {
+            case MainSettingsManager.ARM64_ARCH -> machinesArm64(context);
+            case MainSettingsManager.PPC_ARCH -> machinesPpc(context);
+            default -> machinesX8664(context);
+        };
+    }
+
+    public static ArrayList<HashMap<String, Object>> machinesX8664(Context context) {
+        ArrayList<HashMap<String, Object>> list = new ArrayList<>();
+        UniversalPickerDialog.putToList(list, context.getString(R.string.defaulttext), "");
+        UniversalPickerDialog.putToList(list, context.getString(R.string.i440fx), "pc");
+        UniversalPickerDialog.putToList(list, context.getString(R.string.q35), "q35");
+        return list;
+    }
+
+    public static ArrayList<HashMap<String, Object>> machinesArm64(Context context) {
+        ArrayList<HashMap<String, Object>> list = new ArrayList<>();
+        UniversalPickerDialog.putToList(list, context.getString(R.string.virt), "virt");
+        return list;
+    }
+
+    public static ArrayList<HashMap<String, Object>> machinesPpc(Context context) {
+        ArrayList<HashMap<String, Object>> list = new ArrayList<>();
+        UniversalPickerDialog.putToList(list, context.getString(R.string.defaulttext), "");
+        UniversalPickerDialog.putToList(list, context.getString(R.string.mac99), "mac99");
+        UniversalPickerDialog.putToList(list, context.getString(R.string.g3beige), "g3beige");
+        UniversalPickerDialog.putToList(list, context.getString(R.string.pegasos2), "pegasos2");
+        UniversalPickerDialog.putToList(list, context.getString(R.string.amigaone), "amigaone");
+        UniversalPickerDialog.putToList(list, context.getString(R.string.sam460ex), "sam460ex");
+        return list;
+    }
+
     public static ArrayList<HashMap<String, Object>> networkCards(Context context) {
         ArrayList<HashMap<String, Object>> list = new ArrayList<>();
         UniversalPickerDialog.putToList(list, context.getString(R.string.none), "");

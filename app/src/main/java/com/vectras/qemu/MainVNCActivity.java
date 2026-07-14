@@ -65,6 +65,7 @@ import com.vectras.vm.databinding.DesktopControlsBinding;
 import com.vectras.vm.databinding.GameControlsBinding;
 import com.vectras.vm.databinding.SendKeyDialogBinding;
 import com.vectras.vm.manager.QmpSender;
+import com.vectras.vm.manager.VNCKeyManager;
 import com.vectras.vm.manager.VmAudioManager;
 import com.vectras.vm.manager.VmFileManager;
 import com.vectras.vm.manager.VmControllerDialog;
@@ -113,8 +114,6 @@ public class MainVNCActivity extends VncCanvasActivity {
     String[] functionsArray = {"F1", "F2", "F3", "F4",
             "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12"};
 
-    public boolean ctrlClicked = false;
-    public boolean altClicked = false;
     private final ArrayList<HashMap<String, Object>> listmapForSendKey = new ArrayList<>();
     private boolean isConnected = false;
 
@@ -123,6 +122,8 @@ public class MainVNCActivity extends VncCanvasActivity {
     private ScaleGestureDetector scaleDetector;
     private boolean isScaling = false;
     private boolean isPinchToZoom;
+
+    VNCKeyManager vncKeyManager;
 
     private InputManager inputManager;
 
@@ -887,6 +888,11 @@ public class MainVNCActivity extends VncCanvasActivity {
     }
 
     @Override
+    public void onKeyChanged(int key, boolean isDown, int flags) {
+        if (vncKeyManager != null) vncKeyManager.onKeyChanged(key, isDown, flags);
+    }
+
+    @Override
     public void onConnected() {
         runOnUiThread(() -> {
             isConnected = true;
@@ -925,6 +931,9 @@ public class MainVNCActivity extends VncCanvasActivity {
             }
 
             firstConnection = true;
+
+            vncKeyManager = new VNCKeyManager(vncCanvas);
+            vncKeyManager.setButtons(null, bindingDesktopControls.ctrlBtn, bindingDesktopControls.altBtn, bindingDesktopControls.winBtn);
         });
     }
 
@@ -947,6 +956,8 @@ public class MainVNCActivity extends VncCanvasActivity {
                     MainSettingsManager.getAutoSwitchToExternalMouse(this) &&
                     Config.mouseMode == Config.MouseMode.External)
                 setUIModeMobile(false);
+
+            if (vncKeyManager != null) vncKeyManager.reset();
         });
     }
 
@@ -1249,39 +1260,17 @@ public class MainVNCActivity extends VncCanvasActivity {
 
         bindingDesktopControls.enterBtn.setOnClickListener(v -> simulateKeyPress(KeyEvent.KEYCODE_ENTER));
 
-        bindingDesktopControls.ctrlBtn.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("UseCompatLoadingForDrawables")
-            @Override
-            public void onClick(View v) {
-                if (!ctrlClicked) {
-                    sendKey(KeyEvent.KEYCODE_CTRL_LEFT, false);
-                    bindingDesktopControls.ctrlBtn.setBackgroundResource(R.drawable.controls_button2);
-                    ctrlClicked = true;
-                } else {
-                    sendKey(KeyEvent.KEYCODE_CTRL_LEFT, true);
-                    bindingDesktopControls.ctrlBtn.setBackgroundResource(R.drawable.controls_button1);
-                    ctrlClicked = false;
-                }
-            }
+        bindingDesktopControls.ctrlBtn.setOnClickListener(v -> {
+            if (vncKeyManager != null) vncKeyManager.ctrlKey();
         });
 
-        bindingDesktopControls.altBtn.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("UseCompatLoadingForDrawables")
-            @Override
-            public void onClick(View v) {
-                if (!altClicked) {
-                    sendKey(KeyEvent.KEYCODE_ALT_LEFT, false);
-                    bindingDesktopControls.altBtn.setBackgroundResource(R.drawable.controls_button2);
-                    altClicked = true;
-                } else {
-                    sendKey(KeyEvent.KEYCODE_ALT_LEFT, true);
-                    bindingDesktopControls.altBtn.setBackgroundResource(R.drawable.controls_button1);
-                    altClicked = false;
-                }
-            }
+        bindingDesktopControls.altBtn.setOnClickListener(v -> {
+            if (vncKeyManager != null) vncKeyManager.altKey();
         });
 
-        bindingDesktopControls.delBtn.setOnClickListener(v -> simulateKeyPress(KeyEvent.KEYCODE_DEL));
+        bindingDesktopControls.delBtn.setOnClickListener(v -> {
+            if (vncKeyManager != null) vncKeyManager.deleteKey();
+        });
 
         bindingControls.btnQmp.setOnClickListener(v -> {
             if (monitorMode) {
@@ -1327,10 +1316,7 @@ public class MainVNCActivity extends VncCanvasActivity {
         });
 
         bindingDesktopControls.winBtn.setOnClickListener(v -> {
-            sendKey(KeyEvent.KEYCODE_CTRL_LEFT, false);
-            sendKey(KeyEvent.KEYCODE_ESCAPE, false);
-            sendKey(KeyEvent.KEYCODE_CTRL_LEFT, false);
-            sendKey(KeyEvent.KEYCODE_ESCAPE, false);
+            if (vncKeyManager != null) vncKeyManager.winKey();
         });
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
@@ -1566,6 +1552,11 @@ public class MainVNCActivity extends VncCanvasActivity {
             _all.setOnClickListener(_view1 -> {
                 if (_position == 0) {
                     sendCtrlAtlDelKey();
+                } else if (_position == 2) {
+                    if (vncKeyManager != null) {
+                        vncKeyManager.winKey();
+                        new Handler(Looper.getMainLooper()).postDelayed(() -> vncKeyManager.winKey(), 100);
+                    }
                 } else {
                     Boolean useKeyEvent = (Boolean) _data.get(_position).get("useKeyEvent");
                     Boolean sendWithQMP = (Boolean) _data.get(_position).get("useQMP");

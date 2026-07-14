@@ -35,6 +35,7 @@ import com.vectras.vm.creator.editor.NetworkConfigsDialog;
 import com.vectras.vm.creator.utils.CreatorUtils;
 import com.vectras.vm.creator.editor.FirmwareConfigsDialog;
 import com.vectras.vm.creator.editor.StorageConfigsDialog;
+import com.vectras.vm.creator.utils.VMCreatorSelector;
 import com.vectras.vm.file.FilePickerDialog;
 import com.vectras.vm.store.RomInfo;
 import com.vectras.vm.SplashActivity;
@@ -480,18 +481,18 @@ public class VMCreatorActivity extends AppCompatActivity {
         if (DeviceUtils.is64bit()) {
             defQemuParams = switch (MainSettingsManager.getArch(this)) {
                 case "ARM64" ->
-                        "-M virt,virtualization=true -accel tcg,thread=multi -device nec-usb-xhci -device usb-kbd -device usb-mouse -device VGA";
+                        "-accel tcg,thread=multi -device nec-usb-xhci -device usb-kbd -device usb-mouse -device VGA";
                 case "PPC" -> "-M mac99 -accel tcg,thread=multi";
                 default ->
-                        "-M pc -accel tcg,thread=multi -vga std -usb -device usb-tablet";
+                        "-accel tcg,thread=multi -vga std -usb -device usb-tablet";
             };
         } else {
             defQemuParams = switch (MainSettingsManager.getArch(this)) {
                 case "ARM64" ->
-                        "-M virt -device nec-usb-xhci -device usb-kbd -device usb-mouse -device VGA";
+                        "-device nec-usb-xhci -device usb-kbd -device usb-mouse -device VGA";
                 case "PPC" -> "-M mac99";
                 default ->
-                        "-M pc -vga std -usb -device usb-tablet";
+                        "-vga std -usb -device usb-tablet";
             };
         }
         binding.title.setText(getString(R.string.new_vm));
@@ -503,6 +504,7 @@ public class VMCreatorActivity extends AppCompatActivity {
             current.cores = Math.min(1, VMCreatorSelector.getCpuCorePosition(new CpuHelper().getCpuCores() - 1));
         } else if (currentArch.equals(MainSettingsManager.ARM64_ARCH)) {
             current.cores = Math.min(2, VMCreatorSelector.getCpuCorePosition(new CpuHelper().getCpuCores() - 1));
+            current.nvirt = true;
         }
 
         current.networkCard = 3; // Intel E1000 (82540EM)
