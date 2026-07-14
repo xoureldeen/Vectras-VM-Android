@@ -3,7 +3,6 @@ package com.vectras.vm.manager;
 import android.app.Activity;
 
 import com.vectras.vm.R;
-import com.vectras.vm.creator.VMCreatorSelector;
 import com.vectras.vm.utils.UniversalPickerDialog;
 
 import java.util.ArrayList;

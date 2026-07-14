@@ -56,6 +56,8 @@ public class VmControllerDialog extends DialogFragment {
     public VncCanvas vncCanvas;
     public View screenshotFrame;
 
+    float lastVolume;
+
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -194,27 +196,37 @@ public class VmControllerDialog extends DialogFragment {
                 if (isAdded() && (!(requireActivity() instanceof MainVNCActivity)) && (!(requireActivity() instanceof X11Activity))) {
                     if (streamAudio == null)
                         streamAudio = new StreamAudio(requireActivity().getApplicationContext());
-                    if (!streamAudio.isPlaying()) VmAudioManager.set(Config.vmID);
+                    if (!streamAudio.isPlaying()) {
+                        binding.sliderVolume.setVisibility(View.GONE);
+                        VmAudioManager.set(Config.vmID);
+                    }
                 }
 
-                if (streamAudio == null ||
-                        !isAdded() ||
-                        audioFileSize == 0 ||
-                        (isAdded() && (!(requireActivity() instanceof MainVNCActivity)) && !(requireActivity() instanceof X11Activity) && !VmAudioManager.currentVmId.equals(Config.vmID))
+                if (streamAudio == null || !isAdded() || audioFileSize == 0 || !(requireActivity() instanceof MainVNCActivity) && !(requireActivity() instanceof X11Activity) && !VmAudioManager.currentVmId.equals(Config.vmID)
                 ) {
                     binding.lnMute.setVisibility(View.GONE);
+                    binding.sliderVolume.setVisibility(View.GONE);
                 } else {
+                    binding.sliderVolume.setValue(streamAudio.getVolume());
+                    binding.sliderVolume.addOnChangeListener((slider, value, fromUser) -> streamAudio.setVolume(value));
+
                     if (isAdded() && requireActivity() instanceof X11Activity) {
                         if (!streamAudio.getFile().equals(VmFileManager.findAudioRaw(getContext(), Config.vmID)) || !streamAudio.isPlaying()) {
-                            binding.ivMute.setImageResource(R.drawable.volume_up_24px);
-                            binding.tvMute.setText(R.string.unmute);
+//                            binding.ivMute.setImageResource(R.drawable.volume_up_24px);
+//                            binding.tvMute.setText(R.string.unmute);
+                            binding.sliderVolume.setVisibility(View.GONE);
                         }
                     } else if (!streamAudio.isPlaying()) {
-                        binding.ivMute.setImageResource(R.drawable.volume_up_24px);
-                        binding.tvMute.setText(R.string.unmute);
+//                        binding.ivMute.setImageResource(R.drawable.volume_up_24px);
+//                        binding.tvMute.setText(R.string.unmute);
+                        binding.sliderVolume.setVisibility(View.GONE);
                     }
 
-                    binding.lnMute.setOnClickListener(v -> mute());
+                    if (binding.sliderVolume.getVisibility() == View.VISIBLE) {
+                        binding.lnMute.setVisibility(View.GONE);
+                    } else {
+                        binding.lnMute.setOnClickListener(v -> mute());
+                    }
                 }
 
                 if (infoBlock != null && (infoBlock.contains(QmpSender.DEFAULT_OPTICAL_DISC_1_ID)
@@ -381,6 +393,10 @@ public class VmControllerDialog extends DialogFragment {
 
 
                 if (isAdded() && requireActivity() instanceof MainVNCActivity mainVNCActivity) {
+                    binding.sliderBrightness.setValue(vncCanvas.getAlpha() * 100);
+                    binding.sliderBrightness.addOnChangeListener((slider, value, fromUser) -> vncCanvas.setAlpha(value / 100));
+
+
                     binding.lnRefresh.setOnClickListener(v -> {
                         requireActivity().startActivity(new Intent(requireActivity(), MainVNCActivity.class));
                         requireActivity().overridePendingTransition(0, 0);
@@ -512,6 +528,8 @@ public class VmControllerDialog extends DialogFragment {
                 } else {
                     binding.lnUserInterface.setVisibility(View.GONE);
                 }
+
+                if (streamAudio != null) lastVolume = streamAudio.getVolume();
             });
         }).start();
 
@@ -529,6 +547,13 @@ public class VmControllerDialog extends DialogFragment {
         super.onDismiss(dialog);
         if (onDismissCallback != null) {
             onDismissCallback.run();
+        }
+
+        if (streamAudio != null && streamAudio.getVolume() == 0) {
+            if (lastVolume == 0) lastVolume = 1f;
+
+            streamAudio.stop();
+            streamAudio.setNextPlayVolume(lastVolume);
         }
     }
 
@@ -577,29 +602,34 @@ public class VmControllerDialog extends DialogFragment {
         if (isAdded() && requireActivity() instanceof X11Activity) {
             if (streamAudio.isPlaying() && streamAudio.getFile().equals(VmFileManager.findAudioRaw(getContext(), Config.vmID))) {
                 streamAudio.stop();
-                binding.ivMute.setImageResource(R.drawable.volume_up_24px);
-                binding.tvMute.setText(R.string.unmute);
+//                binding.ivMute.setImageResource(R.drawable.volume_up_24px);
+//                binding.tvMute.setText(R.string.unmute);
             } else {
                 if (!streamAudio.getFile().equals(VmFileManager.findAudioRaw(getContext(), Config.vmID))) {
                     streamAudio.stop();
                     streamAudio.setFile(VmFileManager.findAudioRaw(getContext(), Config.vmID));
                 }
                 streamAudio.play();
-                binding.ivMute.setImageResource(R.drawable.volume_off_24px);
-                binding.tvMute.setText(R.string.mute);
+//                binding.ivMute.setImageResource(R.drawable.volume_off_24px);
+//                binding.tvMute.setText(R.string.mute);
+                binding.lnMute.setVisibility(View.GONE);
+                binding.sliderVolume.setVisibility(View.VISIBLE);
             }
         } else if (streamAudio.isPlaying()) {
             streamAudio.stop();
-            binding.ivMute.setImageResource(R.drawable.volume_up_24px);
-            binding.tvMute.setText(R.string.unmute);
+//            binding.ivMute.setImageResource(R.drawable.volume_up_24px);
+//            binding.tvMute.setText(R.string.unmute);
         } else {
             if (isAdded() && requireActivity() instanceof MainVNCActivity) {
                 streamAudio.play();
             } else {
                 VmAudioManager.stream(Config.vmID);
             }
-            binding.ivMute.setImageResource(R.drawable.volume_off_24px);
-            binding.tvMute.setText(R.string.mute);
+//            binding.ivMute.setImageResource(R.drawable.volume_off_24px);
+//            binding.tvMute.setText(R.string.mute);
+
+            binding.lnMute.setVisibility(View.GONE);
+            binding.sliderVolume.setVisibility(View.VISIBLE);
         }
     }
 

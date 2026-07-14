@@ -10,9 +10,12 @@ import androidx.annotation.NonNull;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.vectras.vm.R;
 import com.vectras.vm.creator.QemuParamsEditorActivity;
+import com.vectras.vm.creator.utils.EditorUtils;
 import com.vectras.vm.databinding.CreatorAdvancedDialogBinding;
 import com.vectras.vm.main.vms.DataMainRoms;
+import com.vectras.vm.utils.DialogUtils;
 
 import java.util.Objects;
 
@@ -21,6 +24,8 @@ public class AdvancedConfigsDialog extends BottomSheetDialogFragment {
 
     String vmId;
     DataMainRoms configs;
+
+    boolean isSave = true;
 
     public void setConfigs(DataMainRoms configs) {
         this.configs = configs;
@@ -36,6 +41,14 @@ public class AdvancedConfigsDialog extends BottomSheetDialogFragment {
     @NonNull
     @Override
     public BottomSheetDialog onCreateDialog(Bundle savedInstanceState) {
+        // This can happen after the app is freed from memory and then reopened.
+        if (configs == null) {
+            isSave = false;
+            DialogUtils.oopsDialog(requireActivity(), getString(R.string.something_went_wrong));
+            dismiss();
+            return EditorUtils.getDummyDialog(requireActivity());
+        }
+
         binding = CreatorAdvancedDialogBinding.inflate(getLayoutInflater());
 
         BottomSheetDialog dialog = new BottomSheetDialog(requireActivity());
@@ -72,13 +85,15 @@ public class AdvancedConfigsDialog extends BottomSheetDialogFragment {
 
     public void onDismiss(@NonNull DialogInterface dialogInterface) {
         super.onDismiss(dialogInterface);
-        if (callback != null) {
+        if (callback != null && isSave) {
             save();
             callback.onDismiss(configs);
         }
     }
 
     private void initialize() {
+        if (!isAdded()) return;
+
         binding.qemu.setOnClickListener(v -> {
             iseditparams = true;
             Intent intent = new Intent();
@@ -99,6 +114,8 @@ public class AdvancedConfigsDialog extends BottomSheetDialogFragment {
     }
 
     private void load() {
+        if (!isAdded()) return;
+
         binding.qemu.setText(configs.itemExtra);
     }
 

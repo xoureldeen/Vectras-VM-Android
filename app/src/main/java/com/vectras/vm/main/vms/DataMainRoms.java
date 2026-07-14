@@ -26,12 +26,14 @@ public class DataMainRoms {
     public String itemName = "";
 
     // Board
+    public int machine = 0;
+    public boolean nvirt; // Nested virtualization
 
     public int cpu = 0;
     public int cores = 0;
     public int threads = 0;
 
-    public boolean battery = false;
+    public boolean battery;
 
     // Storage
 
@@ -58,7 +60,7 @@ public class DataMainRoms {
     public String fdb = "";
 
 
-    public boolean sharedFolder = false;
+    public boolean sharedFolder;
 
     // Network
 
@@ -68,11 +70,11 @@ public class DataMainRoms {
 
     public int bootFrom = 0;
 
-    public boolean isShowBootMenu = false;
+    public boolean isShowBootMenu;
 
     public boolean isUseLocalTime = true;
 
-    public boolean isUseUefi = false;
+    public boolean isUseUefi;
 
     public boolean isUseDefaultBios = true;
 

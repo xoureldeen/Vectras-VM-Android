@@ -1179,6 +1179,7 @@ public abstract class VncCanvasActivity extends AppCompatActivity {
 
     boolean defaultKeyDownHandler(int keyCode, KeyEvent evt) {
         if (vncCanvas.processLocalKeyEvent(keyCode, evt)) {
+            onKeyChanged(keyCode, true, -1);
             return true;
         }
         return super.onKeyDown(keyCode, evt);
@@ -1186,6 +1187,7 @@ public abstract class VncCanvasActivity extends AppCompatActivity {
 
     boolean defaultKeyUpHandler(int keyCode, KeyEvent evt) {
         if (vncCanvas.processLocalKeyEvent(keyCode, evt)) {
+            onKeyChanged(keyCode, false, -1);
             return true;
         }
         return super.onKeyUp(keyCode, evt);
@@ -1813,6 +1815,10 @@ public abstract class VncCanvasActivity extends AppCompatActivity {
     }
 
     public void onDisconnected() {
+
+    }
+
+    public void onKeyChanged(int key, boolean isDown, int flags) {
 
     }
 

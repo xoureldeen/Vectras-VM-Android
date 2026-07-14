@@ -1,4 +1,4 @@
-package com.vectras.vm.creator;
+package com.vectras.vm.creator.utils;
 
 import android.app.Activity;
 import android.content.Context;
@@ -39,6 +39,15 @@ public class VMCreatorSelector {
 
     public static void cpuThread(Activity activity, String arch, int position, UniversalPickerDialog.UniversalPickerDialogCallback callback) {
         showDialog(activity, ListManager.threads(arch), position, callback, activity.getString(R.string.thread));
+    }
+
+    public static HashMap<String, Object> getMachine(Context context, String arch, int position) {
+        ArrayList<HashMap<String, Object>> list = ListManager.machines(context, arch);
+        return list.get(position < 0 ? 0 : Math.min(position, list.size() - 1));
+    }
+
+    public static void machine(Activity activity, String arch, int position, UniversalPickerDialog.UniversalPickerDialogCallback callback) {
+        showDialog(activity, ListManager.machines(activity, arch), position, callback, activity.getString(R.string.machine));
     }
 
     public static void networkCard(Activity activity, int position, UniversalPickerDialog.UniversalPickerDialogCallback callback) {

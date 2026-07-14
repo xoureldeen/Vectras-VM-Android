@@ -131,6 +131,39 @@
                 android:textColor="?attr/colorControlNormal"
                 android:textSize="22sp"/>
 
+            <com.google.android.material.slider.Slider
+                style="@style/Widget.Material3Expressive.Slider.Medium"
+                android:id="@+id/slider_volume"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:value="100"
+                android:valueFrom="0"
+                android:valueTo="100"
+                app:trackIconActiveStart="@drawable/volume_up_24px"
+                app:trackIconActiveColor="?attr/colorSurfaceContainerLow"/>
+
+            <LinearLayout
+                android:id="@+id/ln_mute"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingVertical="8dp"
+                android:paddingHorizontal="16dp"
+                android:background="?attr/selectableItemBackground">
+                <ImageView
+                    android:id="@+id/iv_mute"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/volume_up_24px"/>
+                <TextView
+                    android:id="@+id/tv_mute"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:textColor="?attr/colorControlNormal"
+                    android:text="@string/play_sound"/>
+            </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/ln_power"
                 android:layout_width="match_parent"
@@ -229,28 +262,6 @@
                     android:padding="8dp"
                     android:textColor="?attr/colorControlNormal"
                     android:text="@string/folder_sharing_server"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/ln_mute"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:paddingVertical="8dp"
-                android:paddingHorizontal="16dp"
-                android:background="?attr/selectableItemBackground">
-                <ImageView
-                    android:id="@+id/iv_mute"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/volume_off_24px"/>
-                <TextView
-                    android:id="@+id/tv_mute"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:textColor="?attr/colorControlNormal"
-                    android:text="@string/mute"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -516,6 +527,17 @@
                     android:textColor="?attr/colorControlNormal"
                     android:text="@string/user_interface"
                     android:textSize="22sp"/>
+
+                <com.google.android.material.slider.Slider
+                    style="@style/Widget.Material3Expressive.Slider.Medium"
+                    android:id="@+id/slider_brightness"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:value="100"
+                    android:valueFrom="0"
+                    android:valueTo="100"
+                    app:trackIconActiveStart="@drawable/brightness_5_24px"
+                    app:trackIconActiveColor="?attr/colorSurfaceContainerLow"/>
 
                 <LinearLayout
                     android:id="@+id/ln_screenMode"

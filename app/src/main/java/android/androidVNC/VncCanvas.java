@@ -859,10 +859,10 @@ public class VncCanvas extends AppCompatImageView {
 	}
 
 	// Useful shortcuts for modifier masks.
-	final static int CTRL_MASK = KeyEvent.META_SYM_ON;
-	final static int SHIFT_MASK = KeyEvent.META_SHIFT_ON;
-	final static int META_MASK = 0;
-	final static int ALT_MASK = KeyEvent.META_ALT_ON;
+	public final static int CTRL_MASK = KeyEvent.META_SYM_ON;
+	public final static int SHIFT_MASK = KeyEvent.META_SHIFT_ON;
+	public final static int META_MASK = 0;
+	public final static int ALT_MASK = KeyEvent.META_ALT_ON;
 	private static final int MOUSE_BUTTON_NONE = 0;
 	static final int MOUSE_BUTTON_LEFT = 1;
 	static final int MOUSE_BUTTON_MIDDLE = 2;
@@ -1130,7 +1130,7 @@ public class VncCanvas extends AppCompatImageView {
 			boolean down = (evt.getAction() == KeyEvent.ACTION_DOWN);
 			int key;
 			int metaState = evt.getMetaState();
-			metaState = 0;
+			//metaState = 0;
 			// Log.v("Key Pressed", keyCode + ", metaState = " + metaState);
 
 			switch (keyCode) {
@@ -1207,6 +1207,11 @@ public class VncCanvas extends AppCompatImageView {
 				break;
 			}
 
+			if ((evt.getMetaState() & KeyEvent.META_META_ON) == KeyEvent.META_META_ON) {
+				// Log.v("meta", "setting meta mask");
+				metaState = metaState | VncCanvas.META_MASK;
+			}
+
 			if ((evt.getMetaState() & KeyEvent.META_CTRL_ON) == KeyEvent.META_CTRL_ON) {
 				// Log.v("meta", "setting ctrl mask");
 				metaState = metaState | VncCanvas.CTRL_MASK;
@@ -1232,7 +1237,7 @@ public class VncCanvas extends AppCompatImageView {
 					lastKeyDown = key;
 				}
 
-				rfb.writeKeyEvent(key, metaState, down);
+				rfb.writeKeyEvent(key, metaStateCollector > 0 ? metaStateCollector : metaState, down);
 				this.ALT_PRESSED = false;
 			} catch (Exception e) {
                 Log.e(TAG, "processLocalKeyEvent: ", e);
@@ -1249,10 +1254,15 @@ public class VncCanvas extends AppCompatImageView {
 		}
 	}
 
+	public int metaStateCollector = 0;
+
 	public void sendMetaKey1(int key, int flags) {
 		try {
 			rfb.writeKeyEvent(key, flags, true);
 			rfb.writeKeyEvent(key, flags, false);
+
+			VncCanvasActivity activity = (VncCanvasActivity) VncCanvas.this.getContext();
+			activity.onKeyChanged(key, false, flags);
 		} catch (IOException ioe) {
             Log.e(TAG, "sendMetaKey1: ", ioe);
 		}
@@ -1262,6 +1272,9 @@ public class VncCanvas extends AppCompatImageView {
 	public void sendMetaKey1Down(int key, int flags) {
 		try {
 			rfb.writeKeyEvent(key, flags, true);
+
+			VncCanvasActivity activity = (VncCanvasActivity) VncCanvas.this.getContext();
+			activity.onKeyChanged(key, true, flags);
 		} catch (IOException ioe) {
             Log.e(TAG, "sendMetaKey1Down: ", ioe);
 		}
@@ -1271,6 +1284,9 @@ public class VncCanvas extends AppCompatImageView {
 	public void sendMetaKey1Up(int key, int flags) {
 		try {
 			rfb.writeKeyEvent(key, flags, false);
+
+			VncCanvasActivity activity = (VncCanvasActivity) VncCanvas.this.getContext();
+			activity.onKeyChanged(key, false, flags);
 		} catch (IOException ioe) {
             Log.e(TAG, "sendMetaKey1Up: ", ioe);
 		}
@@ -1331,7 +1347,6 @@ public class VncCanvas extends AppCompatImageView {
 
 	}
 
-	private static final String SHIFT_CHARS = "~!@#$%^&*()_+{}|:\"<>?";
 	private static final int LEFT_SHIFT_KEY_CODE = 0xFFE1;
 
 	public void sendText(String s) {
@@ -1347,7 +1362,7 @@ public class VncCanvas extends AppCompatImageView {
 				}
 			}
 
-			boolean isNeedShift = Character.isUpperCase(c) || SHIFT_CHARS.indexOf(c) >= 0;
+			boolean isNeedShift = Character.isUpperCase(c) || isSpecialKey(c) > -1;
 
 			try {
 				if (isNeedShift) {
@@ -1364,6 +1379,9 @@ public class VncCanvas extends AppCompatImageView {
                 Log.e(TAG, "sendText: ",ioe);
 			}
 		}
+
+		VncCanvasActivity activity = (VncCanvasActivity) VncCanvas.this.getContext();
+		activity.onKeyChanged(-1, false, -1);
 	}
 
 	void sendMetaKey(MetaKeyBean meta) {

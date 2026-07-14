@@ -22,6 +22,7 @@ import com.vectras.vm.AppConfig;
 import com.vectras.vm.Fragment.CreateImageDialogFragment;
 import com.vectras.vm.R;
 import com.vectras.vm.creator.utils.CreatorUtils;
+import com.vectras.vm.creator.utils.EditorUtils;
 import com.vectras.vm.databinding.CreatorStorageDialogBinding;
 import com.vectras.vm.file.FilePickerDialog;
 import com.vectras.vm.main.vms.DataMainRoms;
@@ -42,6 +43,9 @@ public class StorageConfigsDialog extends BottomSheetDialogFragment {
 
     String vmId;
     DataMainRoms configs;
+
+    boolean isSave = true;
+
     public void setConfigs(DataMainRoms configs) {
         this.configs = configs;
         if (configs != null) {
@@ -57,6 +61,14 @@ public class StorageConfigsDialog extends BottomSheetDialogFragment {
     @NonNull
     @Override
     public BottomSheetDialog onCreateDialog(Bundle savedInstanceState) {
+        // This can happen after the app is freed from memory and then reopened.
+        if (configs == null) {
+            isSave = false;
+            DialogUtils.oopsDialog(requireActivity(), getString(R.string.something_went_wrong));
+            dismiss();
+            return EditorUtils.getDummyDialog(requireActivity());
+        }
+
         binding = CreatorStorageDialogBinding.inflate(getLayoutInflater());
 
         utils = new CreatorUtils(requireActivity(), vmId);
@@ -87,7 +99,7 @@ public class StorageConfigsDialog extends BottomSheetDialogFragment {
 
     public void onDismiss(@NonNull DialogInterface dialogInterface) {
         super.onDismiss(dialogInterface);
-        if (callback != null) {
+        if (callback != null && isSave) {
             save();
             callback.onDismiss(configs);
         }
@@ -130,6 +142,8 @@ public class StorageConfigsDialog extends BottomSheetDialogFragment {
 
 
     private void handleFile(Uri uri) {
+        if (!isAdded()) return;
+
         if (MainSettingsManager.copyFile(requireActivity())) {
             utils.showProgressDialog(getString(R.string.copying_file));
 
@@ -138,25 +152,30 @@ public class StorageConfigsDialog extends BottomSheetDialogFragment {
 
                     String path = utils.copyToTemp(uri);
 
-                    requireActivity().runOnUiThread(() -> setDrive(PENDING_SELECT_FILE_MODE, path));
+                    if (isAdded())
+                        requireActivity().runOnUiThread(() -> setDrive(PENDING_SELECT_FILE_MODE, path));
                 } catch (Exception e) {
-                    requireActivity().runOnUiThread(() -> DialogUtils.oneDialog(requireActivity(),
-                            getString(R.string.oops),
-                            getString(R.string.unable_to_copy_file_content),
-                            getString(R.string.ok),
-                            true,
-                            R.drawable.warning_48px,
-                            true,
-                            null,
-                            null));
+                    if (isAdded())
+                        requireActivity().runOnUiThread(() -> DialogUtils.oneDialog(requireActivity(),
+                                getString(R.string.oops),
+                                getString(R.string.unable_to_copy_file_content),
+                                getString(R.string.ok),
+                                true,
+                                R.drawable.warning_48px,
+                                true,
+                                null,
+                                null));
                     Log.e(TAG, "isoPicker: " + e.getMessage());
                 } finally {
-                    requireActivity().runOnUiThread(() -> utils.dissmissProgressDialog());
+                    if (isAdded())
+                        requireActivity().runOnUiThread(() -> utils.dissmissProgressDialog());
                 }
             });
         } else {
             executor.execute(() -> {
                 CreatorUtils.FilePathData filePathData = utils.getFilePath(uri);
+
+                if (!isAdded()) return;
 
                 if (!filePathData.isValid) {
                     requireActivity().runOnUiThread(() -> DialogUtils.oneDialog(requireActivity(),
@@ -181,14 +200,17 @@ public class StorageConfigsDialog extends BottomSheetDialogFragment {
     }
 
     private void handleDiskFile(Uri uri) {
-        ProgressDialog progressDialog1 = new ProgressDialog(requireActivity());
-        progressDialog1.show();
+        if (!isAdded()) return;
+        utils.showProgressDialog(getString(R.string.just_a_moment));
+
         new Thread(() -> {
             CreatorUtils.FilePathData filePathData = utils.getFilePath(uri);
 
+            if (!isAdded()) return;
+
             if (filePathData.isValid) {
                 requireActivity().runOnUiThread(() -> {
-                    progressDialog1.reset();
+                    utils.dissmissProgressDialog();
 
                     if (FormatManager.isHardDriveFileFormat(filePathData.name)) {
                         startHandleHardDriveFile(uri);
@@ -205,6 +227,8 @@ public class StorageConfigsDialog extends BottomSheetDialogFragment {
 
     @SuppressLint("SetTextI18n")
     private void startHandleHardDriveFile(Uri _content_describer) {
+        if (!isAdded()) return;
+
         if (MainSettingsManager.copyFile(requireActivity())) {
 
             if (requireActivity().isFinishing() || requireActivity().isDestroyed()) return;
@@ -212,6 +236,8 @@ public class StorageConfigsDialog extends BottomSheetDialogFragment {
 
             executor.execute(() -> {
                 try {
+                    if (!isAdded()) return;
+
                     String _filename = FileUtils.getFileNameFromUri(requireActivity(), _content_describer);
                     if (_filename == null || _filename.isEmpty()) {
                         _filename = String.valueOf(System.currentTimeMillis());
@@ -220,6 +246,9 @@ public class StorageConfigsDialog extends BottomSheetDialogFragment {
                     String path = utils.copyToTemp(_content_describer);
 
                     String final_filename = _filename;
+
+                    if (!isAdded()) return;
+
                     requireActivity().runOnUiThread(() -> {
                         if (requireActivity().isFinishing() || requireActivity().isDestroyed()) {
                             if (!vmId.isEmpty())
@@ -230,7 +259,7 @@ public class StorageConfigsDialog extends BottomSheetDialogFragment {
                         setDrive(PENDING_SELECT_FILE_MODE, path);
                     });
                 } catch (Exception e) {
-                    requireActivity().runOnUiThread(() -> DialogUtils.oneDialog(requireActivity(),
+                    if (!isAdded()) requireActivity().runOnUiThread(() -> DialogUtils.oneDialog(requireActivity(),
                             getString(R.string.oops),
                             getString(R.string.unable_to_copy_hard_drive_file_content),
                             getString(R.string.ok),
@@ -240,16 +269,19 @@ public class StorageConfigsDialog extends BottomSheetDialogFragment {
                             null,
                             null));
                 } finally {
-                    requireActivity().runOnUiThread(() -> utils.dissmissProgressDialog());
+                    if (!isAdded()) requireActivity().runOnUiThread(() -> utils.dissmissProgressDialog());
                 }
             });
         } else {
-            ProgressDialog progressDialog1 = new ProgressDialog(requireActivity());
-            progressDialog1.show();
+            utils.showProgressDialog(getString(R.string.just_a_moment));
+
             new Thread(() -> {
                 String path = FileUtils.getPath(requireContext(), _content_describer);
+
+                if (!isAdded()) return;
+
                 requireActivity().runOnUiThread(() -> {
-                    progressDialog1.reset();
+                    utils.dissmissProgressDialog();
 
                     if (!FileUtils.isValidFilePath(requireActivity(), path, false)) {
                         DialogUtils.oneDialog(requireActivity(),
@@ -276,6 +308,8 @@ public class StorageConfigsDialog extends BottomSheetDialogFragment {
     // STORAGE LOGIC CORE
 
     private void initialize() {
+        if (!isAdded()) return;
+
         binding.drive.setOnClickListener(v -> pickStorageFile(SELECT_DISK_0_FILE_MODE));
         binding.driveField.setOnClickListener(v -> pickStorageFile(SELECT_DISK_0_FILE_MODE));
         binding.driveField.setEndIconOnClickListener(v -> {
@@ -287,7 +321,6 @@ public class StorageConfigsDialog extends BottomSheetDialogFragment {
         });
 
 
-
         binding.tieHd1.setOnClickListener(v -> pickStorageFile(SELECT_DISK_1_FILE_MODE));
         binding.tilHd1.setOnClickListener(v -> pickStorageFile(SELECT_DISK_1_FILE_MODE));
         binding.tilHd1.setEndIconOnClickListener(v -> {
@@ -297,7 +330,6 @@ public class StorageConfigsDialog extends BottomSheetDialogFragment {
                 storageFileOptionDialog(SELECT_DISK_1_FILE_MODE);
             }
         });
-
 
 
         if (MainSettingsManager.getArch(requireActivity()).equals(MainSettingsManager.ARM64_ARCH)) {
@@ -337,6 +369,8 @@ public class StorageConfigsDialog extends BottomSheetDialogFragment {
     private String PENDING_OLD_FILE_AFTER_SELECTED_NEW_FILE = "";
 
     private void pickStorageFile(int mode) {
+        if (!isAdded()) return;
+
         PENDING_SELECT_FILE_MODE = mode;
         PENDING_OLD_FILE_AFTER_SELECTED_NEW_FILE = Objects.requireNonNull(getPeddingStorageEditText().getText()).toString();
 
@@ -367,6 +401,8 @@ public class StorageConfigsDialog extends BottomSheetDialogFragment {
     }
 
     private void storageFileOptionDialog(int mode) {
+        if (!isAdded()) return;
+
         PENDING_SELECT_FILE_MODE = mode;
 
         //TextInputLayout peddingTextInputLayout = getPeddingStorageInputLayout();
@@ -383,7 +419,7 @@ public class StorageConfigsDialog extends BottomSheetDialogFragment {
                 () -> pickStorageFile(mode),
                 () -> {
                     String path = new File(Objects.requireNonNull(peddingTextInputEditText.getText()).toString()).getAbsolutePath();
-                    if (path.startsWith(VmFileManager.quickGetPath(vmId)))  {
+                    if (path.startsWith(VmFileManager.quickGetPath(vmId))) {
                         ProgressDialog progressDialog1 = new ProgressDialog(requireActivity());
                         progressDialog1.show();
                         new Thread(() -> {
@@ -422,6 +458,8 @@ public class StorageConfigsDialog extends BottomSheetDialogFragment {
     }
 
     private void setDrive(Integer mode, String path) {
+        if (!isAdded()) return;
+
         if (isFileReadyinUse(path)) {
             DialogUtils.oopsDialog(requireActivity(), getString(R.string.vm_creator_this_file_is_already_in_use_content));
             utils.deleteTemp(new File(path).getName());
@@ -508,6 +546,8 @@ public class StorageConfigsDialog extends BottomSheetDialogFragment {
     final int PICK_FLOPPY_FILE_MODE = 2;
 
     private void builtInFilePicker(int mode) {
+        if (!isAdded()) return;
+
         FilePickerDialog filePickerDialog = new FilePickerDialog();
 
         int finalMode;
@@ -534,11 +574,11 @@ public class StorageConfigsDialog extends BottomSheetDialogFragment {
         if (MainSettingsManager.getArch(getContext()).equals(MainSettingsManager.ARM64_ARCH)) {
             binding.lnFloppyContainer.setVisibility(View.GONE);
         } else {
-            if (configs.fda!= null && !configs.fda.isEmpty()) {
+            if (configs.fda != null && !configs.fda.isEmpty()) {
                 setDrive(SELECT_FLOPPY_A_FILE_MODE, (configs.fda.contains("/") ? "" : VmFileManager.getPath(vmId)).concat(configs.fda));
             }
 
-            if (configs.fdb!= null && !configs.fdb.isEmpty()) {
+            if (configs.fdb != null && !configs.fdb.isEmpty()) {
                 setDrive(SELECT_FLOPPY_B_FILE_MODE, (configs.fdb.contains("/") ? "" : VmFileManager.getPath(vmId)).concat(configs.fdb));
             }
         }

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.media.AudioAttributes;
 import android.media.AudioFormat;
 import android.media.AudioTrack;
-import android.media.audiofx.Equalizer;
 import android.util.Log;
 
 import com.vectras.vm.utils.FileUtils;
@@ -20,6 +19,7 @@ public class StreamAudio {
     private int sampleRate = 48000;
     public boolean isDestroyed;
     private StreamAudio cross;
+    AudioTrack audioTrack;
     private SoundEffect soundEffect;
 
     public StreamAudio(Context context) {
@@ -31,6 +31,7 @@ public class StreamAudio {
     }
 
     public void stop() {
+        if (audioTrack != null) audioTrack.stop();
         isPlay = false;
     }
 
@@ -57,6 +58,24 @@ public class StreamAudio {
     public void setHighSampleRate() {
         sampleRate = 48000;
     }
+
+    float volume = 1f;
+
+    public void setVolume(float volume) {
+        this.volume = volume / 100;
+        if (audioTrack != null) audioTrack.setVolume(this.volume);
+    }
+
+    float nextPlayVolume = -1;
+
+    public void setNextPlayVolume(float volume) {
+        this.volume = volume / 100;
+    }
+
+    public float getVolume() {
+        return volume * 100;
+    }
+
 
     public void release() {
         isPlay = false;
@@ -95,7 +114,7 @@ public class StreamAudio {
                 return;
             }
 
-            AudioTrack audioTrack = new AudioTrack.Builder()
+            audioTrack = new AudioTrack.Builder()
                     .setAudioAttributes(new AudioAttributes.Builder()
                             .setUsage(AudioAttributes.USAGE_MEDIA)
                             .build())
@@ -107,6 +126,10 @@ public class StreamAudio {
                     .setBufferSizeInBytes(minBuf * 4)
                     .setTransferMode(AudioTrack.MODE_STREAM)
                     .build();
+
+            audioTrack.setVolume(nextPlayVolume < 0 ? volume : nextPlayVolume);
+
+            nextPlayVolume = -1;
 
             applyEffect(audioTrack);
 

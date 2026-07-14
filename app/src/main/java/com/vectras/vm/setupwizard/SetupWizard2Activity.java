@@ -28,7 +28,7 @@ import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.AppConfig;
 import com.vectras.vm.R;
 import com.vectras.vm.VMManager;
-import com.vectras.vm.creator.VMCreatorSelector;
+import com.vectras.vm.creator.utils.VMCreatorSelector;
 import com.vectras.vm.databinding.ActivitySetupWizard2Binding;
 import com.vectras.vm.databinding.SetupQemuDoneBinding;
 import com.vectras.vm.main.MainActivity;
