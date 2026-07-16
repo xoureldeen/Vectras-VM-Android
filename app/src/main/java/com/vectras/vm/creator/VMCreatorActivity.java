@@ -548,14 +548,11 @@ public class VMCreatorActivity extends AppCompatActivity {
                 _contentDialog = getResources().getString(R.string.qemu_params_is_empty);
             }
 
-            if (isAllDriveEmpty()) {
-                if (!current.itemExtra.isEmpty()) {
-                    if (!_contentDialog.isEmpty()) {
-                        _contentDialog += "\n\n";
-                    }
-                    _contentDialog += getResources().getString(R.string.you_have_not_added_any_storage_devices);
+            if (isAllDriveEmpty() && !VMManager.isHaveADisk(current.itemExtra)) {
+                if (!_contentDialog.isEmpty()) {
+                    _contentDialog += "\n\n";
                 }
-
+                _contentDialog += getResources().getString(R.string.you_have_not_added_any_storage_devices);
             }
 
             if (_contentDialog.isEmpty()) {

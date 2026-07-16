@@ -865,7 +865,7 @@ public class VMManager {
     }
 
     public static boolean isHaveADisk(String env) {
-        return env.contains("-drive") || env.contains("-hda") || env.contains("-hdb") || env.contains("-cdrom") || env.contains("-fda") || env.contains("-fdb");
+        return env.contains("-drive ") || env.contains("-hda ") || env.contains("-hdb ") || env.contains("-cdrom ") || env.contains("-fda ") || env.contains("-fdb ");
     }
 
     public static void setIconWithName(ImageView imageview, String name) {

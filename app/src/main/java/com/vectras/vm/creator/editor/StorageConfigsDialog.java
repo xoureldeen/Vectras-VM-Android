@@ -64,7 +64,7 @@ public class StorageConfigsDialog extends BottomSheetDialogFragment {
         // This can happen after the app is freed from memory and then reopened.
         if (configs == null) {
             isSave = false;
-            DialogUtils.oopsDialog(requireActivity(), getString(R.string.something_went_wrong));
+            if (savedInstanceState == null) DialogUtils.oopsDialog(requireActivity(), getString(R.string.something_went_wrong));
             dismiss();
             return EditorUtils.getDummyDialog(requireActivity());
         }
@@ -259,7 +259,7 @@ public class StorageConfigsDialog extends BottomSheetDialogFragment {
                         setDrive(PENDING_SELECT_FILE_MODE, path);
                     });
                 } catch (Exception e) {
-                    if (!isAdded()) requireActivity().runOnUiThread(() -> DialogUtils.oneDialog(requireActivity(),
+                    if (isAdded()) requireActivity().runOnUiThread(() -> DialogUtils.oneDialog(requireActivity(),
                             getString(R.string.oops),
                             getString(R.string.unable_to_copy_hard_drive_file_content),
                             getString(R.string.ok),
@@ -269,7 +269,7 @@ public class StorageConfigsDialog extends BottomSheetDialogFragment {
                             null,
                             null));
                 } finally {
-                    if (!isAdded()) requireActivity().runOnUiThread(() -> utils.dissmissProgressDialog());
+                    if (isAdded()) requireActivity().runOnUiThread(() -> utils.dissmissProgressDialog());
                 }
             });
         } else {
