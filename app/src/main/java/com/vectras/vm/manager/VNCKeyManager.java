@@ -51,7 +51,7 @@ public class VNCKeyManager {
 
         holdMarksCollector = 0;
 
-        if (vncCanvas == null || !vncCanvas.isAttachedToWindow()) return;
+        if (vncCanvas == null || !vncCanvas.isAttachedToWindow() || vncCanvas.rfb == null) return;
 
         vncCanvas.metaStateCollector = 0;
 

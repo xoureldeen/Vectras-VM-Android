@@ -44,7 +44,7 @@ public class BoardConfigsDialog extends BottomSheetDialogFragment {
         // This can happen after the app is freed from memory and then reopened.
         if (configs == null) {
             isSave = false;
-            DialogUtils.oopsDialog(requireActivity(), getString(R.string.something_went_wrong));
+            if (savedInstanceState == null) DialogUtils.oopsDialog(requireActivity(), getString(R.string.something_went_wrong));
             dismiss();
             return EditorUtils.getDummyDialog(requireActivity());
         }
