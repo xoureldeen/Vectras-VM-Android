@@ -88,6 +88,18 @@ public class FileUtils {
             if (isFileExists(path)) return path;
         }
 
+        // When pick folder
+        if (uri.getHost() != null && uri.getHost().equals("com.android.externalstorage.documents")) {
+            String docId = DocumentsContract.getTreeDocumentId(uri);
+            String[] split = docId.split(":");
+            String type = split[0];
+
+            if ("primary".equalsIgnoreCase(type)) {
+                String path = Environment.getExternalStorageDirectory() + "/" + split[1];
+                if (isFileExists(path)) return path;
+            }
+        }
+
         // check here to KITKAT or new version
         final boolean isKitKat = true;
         String selection = null;

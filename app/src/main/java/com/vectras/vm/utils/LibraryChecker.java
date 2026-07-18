@@ -5,11 +5,8 @@ import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 
-import androidx.appcompat.app.AlertDialog;
-
 import com.vectras.vm.AppConfig;
 import com.vectras.vm.R;
-import com.vectras.vterm.Terminal;
 import com.vectras.vterm.Terminal2;
 
 import java.util.HashSet;
@@ -17,6 +14,10 @@ import java.util.Set;
 
 public class LibraryChecker {
     private Context context;
+
+    public interface LibraryCheckerCallback {
+        void onCommandCompleted(String output, String errors);
+    }
 
     public LibraryChecker(Context context) {
         this.context = context;
@@ -105,7 +106,7 @@ public class LibraryChecker {
     }
 
     // Method to check if the package is installed
-    public void isPackageInstalled(String packageName, Terminal.CommandCallback callback) {
+    public void isPackageInstalled(String packageName, LibraryCheckerCallback callback) {
         String command = "apk info";
 
         Terminal2 terminal2 = new Terminal2(context);
@@ -136,7 +137,7 @@ public class LibraryChecker {
     }
 
     // Method to check if the package is installed
-    public static void isPackageInstalled2(Context context, String packageName, Terminal.CommandCallback callback) {
+    public static void isPackageInstalled2(Context context, String packageName, LibraryCheckerCallback callback) {
         String command = "apk info";
 
         Terminal2 terminal2 = new Terminal2(context);

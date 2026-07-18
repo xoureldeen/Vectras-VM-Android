@@ -83,13 +83,13 @@ public class AppConfig {
                     " libusbredirparser usbredir-dev sdl2 sdl2-dev sdl2_image-dev libepoxy-dev virglrenderer-dev rdma-core fluxbox" +
                     " libusb libaio ncurses-libs curl libnfs gtk+3.0 gtk+3.0-dev fuse libpulse libseccomp jack pipewire liburing pulseaudio pulseaudio-alsa alsa-plugins-pulse" +
                     " mesa-dri-gallium mesa-vulkan-swrast vulkan-loader mesa-utils mesa-egl mesa-gbm mesa-vulkan-ati mesa-vulkan-broadcom mesa-vulkan-freedreno mesa-vulkan-panfrost" +
-                    " qemu-audio-sdl capstone libcbor snappy lzo ndctl keyutils-libs vde2-libs libdw libbpf sndio-libs linux-pam fuse3-libs libssh vte3 iasl perl";
+                    " qemu-audio-sdl capstone libcbor snappy lzo ndctl keyutils-libs vde2-libs libdw libbpf sndio-libs linux-pam fuse3-libs libssh vte3 iasl perl cdrkit";
         } else {
             return "sudo bash aria2 tar dwm xterm libslirp libslirp-dev pulseaudio-dev glib-dev pixman-dev zlib-dev spice-dev" +
                     " libusbredirparser usbredir-dev sdl2 sdl2-dev sdl2_image-dev libepoxy-dev virglrenderer-dev rdma-core fluxbox" +
                     " libusb libaio ncurses-libs curl libnfs gtk+3.0 gtk+3.0-dev fuse libpulse libseccomp jack pipewire liburing pulseaudio pulseaudio-alsa alsa-plugins-pulse" +
                     " mesa-dri-gallium mesa-vulkan-swrast vulkan-loader mesa-utils mesa-egl" +
-                    " qemu-audio-sdl capstone libcbor snappy lzo ndctl keyutils-libs vde2-libs libdw libbpf sndio-libs linux-pam fuse3-libs libssh vte3 iasl perl";
+                    " qemu-audio-sdl capstone libcbor snappy lzo ndctl keyutils-libs vde2-libs libdw libbpf sndio-libs linux-pam fuse3-libs libssh vte3 iasl perl cdrkit";
         }
     }
 
@@ -99,13 +99,13 @@ public class AppConfig {
                     " libusbredirparser usbredir-dev sdl2 sdl2-dev sdl2_image-dev libepoxy-dev virglrenderer-dev rdma-core fluxbox" +
                     " libusb libaio ncurses-libs curl libnfs gtk+3.0 gtk+3.0-dev fuse libpulse libseccomp jack pipewire liburing pulseaudio pulseaudio-alsa alsa-plugins-pulse" +
                     " mesa-dri-gallium mesa-vulkan-swrast vulkan-loader mesa-utils mesa-egl" +
-                    " qemu-audio-sdl capstone libcbor snappy lzo ndctl keyutils-libs vde2-libs libdw libbpf sndio-libs linux-pam fuse3-libs libssh vte3 iasl perl";
+                    " qemu-audio-sdl capstone libcbor snappy lzo ndctl keyutils-libs vde2-libs libdw libbpf sndio-libs linux-pam fuse3-libs libssh vte3 iasl perl cdrkit";
         } else {
             return "sudo bash aria2 tar dwm xterm libslirp libslirp-dev pulseaudio-dev glib-dev pixman-dev zlib-dev spice-dev" +
                     " libusbredirparser usbredir-dev sdl2 sdl2-dev sdl2_image-dev libepoxy-dev virglrenderer-dev rdma-core fluxbox" +
                     " libusb libaio ncurses-libs curl libnfs gtk+3.0 gtk+3.0-dev fuse libpulse libseccomp jack pipewire liburing pulseaudio pulseaudio-alsa alsa-plugins-pulse" +
                     " mesa-dri-gallium mesa-vulkan-swrast vulkan-loader mesa-utils mesa-egl" +
-                    " qemu-audio-sdl capstone libcbor snappy lzo ndctl keyutils-libs vde2-libs libdw libbpf sndio-libs linux-pam fuse3-libs libssh vte3 libatomic iasl perl";
+                    " qemu-audio-sdl capstone libcbor snappy lzo ndctl keyutils-libs vde2-libs libdw libbpf sndio-libs linux-pam fuse3-libs libssh vte3 libatomic iasl perl cdrkit";
         }
     }
 

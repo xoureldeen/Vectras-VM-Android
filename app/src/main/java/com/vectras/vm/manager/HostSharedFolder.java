@@ -9,7 +9,6 @@ import com.vectras.vm.R;
 import com.vectras.vm.utils.ClipboardUltils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.ProgressDialog;
-import com.vectras.vterm.Terminal;
 import com.vectras.vterm.Terminal2;
 
 public class HostSharedFolder {

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 
 import com.vectras.vm.VectrasApp;
-import com.vectras.vterm.Terminal;
 import com.vectras.vterm.Terminal2;
 
 public class CommandUtils {

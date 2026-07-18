@@ -14,7 +14,6 @@ import com.vectras.vm.VMManager;
 import com.vectras.vm.manager.VmFileManager;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
-import com.vectras.vterm.Terminal;
 import com.vectras.vterm.Terminal2;
 
 public class PendingCommand {

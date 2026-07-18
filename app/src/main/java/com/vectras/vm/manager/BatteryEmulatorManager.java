@@ -5,7 +5,6 @@ import android.content.Context;
 import com.vectras.vm.setupwizard.SetupFeatureCore;
 import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.FileUtils;
-import com.vectras.vterm.Terminal;
 import com.vectras.vterm.Terminal2;
 
 import java.io.File;

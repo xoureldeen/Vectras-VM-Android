@@ -2,6 +2,7 @@ package com.vectras.vm.creator.utils;
 
 import android.app.Activity;
 import android.net.Uri;
+import android.util.Log;
 
 import com.vectras.vm.manager.VmFileManager;
 import com.vectras.vm.utils.FileUtils;
@@ -12,6 +13,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class CreatorUtils {
+    final String TAG = "CreatorUtils";
+
     public static final String PENDING_FOLDER = "pending/";
 
     Activity activity;
@@ -34,6 +37,10 @@ public class CreatorUtils {
         if (progressDialog != null && !activity.isFinishing() && !activity.isDestroyed()) {
             progressDialog.dismiss();
         }
+    }
+
+    public boolean makeTempDirectory() {
+        return FileUtils.createDirectory(VmFileManager.getTempPath(activity, vmId, PENDING_FOLDER));
     }
 
     public String getTempPath(String fileName) {
@@ -79,6 +86,10 @@ public class CreatorUtils {
         deleteTemp(new File(path).getName());
     }
 
+    public void unMarkDelete(String path) {
+        VmFileManager.unMarkPendingDelete(path);
+    }
+
     public FilePathData getFilePath(Uri uri) {
         try {
             String filePath = FileUtils.getPath(activity, uri);
@@ -93,6 +104,7 @@ public class CreatorUtils {
                 };
             }
         } catch (Exception e) {
+            Log.e(TAG, "getFilePath: " + uri.toString(), e);
             return new FilePathData();
         }
 

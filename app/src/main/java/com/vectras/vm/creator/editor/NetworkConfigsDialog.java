@@ -80,6 +80,15 @@ public class NetworkConfigsDialog extends BottomSheetDialogFragment {
         }
     }
 
+    // Auto save.
+    public void onPause() {
+        super.onPause();
+        if (callback != null && isSave) {
+            save();
+            callback.onDismiss(configs);
+        }
+    }
+
     private void initialize() {
         if (!isAdded()) return;
 
