@@ -2,6 +2,7 @@ package com.vectras.vterm;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -11,20 +12,11 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
-
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.termux.app.TermuxService;
-import com.vectras.vm.AppConfig;
 import com.vectras.vm.R;
 import com.vectras.vterm.view.ZoomableTextView;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -32,6 +24,8 @@ import java.util.Enumeration;
 import java.util.Objects;
 
 public class TerminalBottomSheetDialog {
+    final String TAG = "TerminalBottomSheetDialog";
+
     private final ZoomableTextView terminalOutput;
     private final EditText commandInput;
     private final View view;
@@ -39,6 +33,8 @@ public class TerminalBottomSheetDialog {
     private final BottomSheetDialog bottomSheetDialog;
     LinearLayout inputContainer;
     boolean isAllowAddToResultCommand = true;
+
+    Terminal2 terminal2;
 
     public TerminalBottomSheetDialog(Activity activity) {
         this.activity = activity;
@@ -50,6 +46,14 @@ public class TerminalBottomSheetDialog {
         terminalOutput = view.findViewById(R.id.tvTerminalOutput);
         commandInput = view.findViewById(R.id.etCommandInput);
         inputContainer = view.findViewById(R.id.ln_input);
+
+        if (!checkInstallation()) {
+            inputContainer.setVisibility(View.GONE);
+            appendTextAndScroll(activity.getString(R.string.the_system_has_not_been_installed));
+            return;
+        }
+
+        terminal2 = new Terminal2(activity);
 
         TextView tvPrompt = view.findViewById(R.id.tvPrompt);
         updateUserPrompt(tvPrompt);
@@ -79,6 +83,8 @@ public class TerminalBottomSheetDialog {
             // If the event is a key-down event on the "enter" button
             if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
                     (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                if (activity.isFinishing() || activity.isDestroyed()) return true;
+
                 activity.runOnUiThread(() -> appendTextAndScroll(commandInput.getText().toString() + "\n"));
                 executeShellCommand(commandInput.getText().toString());
                 commandInput.setText("");
@@ -95,12 +101,14 @@ public class TerminalBottomSheetDialog {
     }
 
     private void updateUserPrompt(TextView promptView) {
+        if (activity == null || activity.isFinishing() || activity.isDestroyed()) return;
+
         // Run this in a separate thread to not block UI
         new Thread(() -> {
-            String username = null;
+            String username = terminal2.getUsername();
             // Update the prompt on the UI thread
             String finalUsername = username != null ? username : "root";
-            activity.runOnUiThread(() -> promptView.setText(finalUsername + "@localhost:~$ "));
+            activity.runOnUiThread(() -> promptView.setText(finalUsername.concat("@localhost:~$ ")));
         }).start();
     }
 
@@ -139,129 +147,55 @@ public class TerminalBottomSheetDialog {
                 }
             }
         } catch (SocketException ex) {
-            ex.printStackTrace();
+            Log.e(TAG, "getLocalIpAddress:", ex);
         }
         return null;
     }
 
     // Method to execute the shell command
     public void executeShellCommand(String userCommand) {
-        if (checkInstallation())
-            new Thread(() -> {
-                try {
-                    activity.runOnUiThread(() -> {
-                        if (terminalOutput.getVisibility() == View.GONE) terminalOutput.setVisibility(View.VISIBLE);
-                        appendTextAndScroll("root@localhost:~$ " + userCommand + "\n");
-                        inputContainer.setVisibility(View.GONE);
-                    });
-                    // Setup the qemuProcess builder to start PRoot with environmental variables and commands
-                    ProcessBuilder processBuilder = new ProcessBuilder();
+        inputContainer.setVisibility(View.GONE);
+        terminal2.execute(userCommand, new Terminal2.Terminal2Callback() {
+            @Override
+            public void onRunning(String command, String newLine) {
+                if (activity == null || activity.isFinishing() || activity.isDestroyed()) return;
 
-                    // Adjust these environment variables as necessary for your app
-                    String filesDir = AppConfig.internalDataDirPath;
+                activity.runOnUiThread(() -> {
+                    appendTextAndScroll(newLine);
+                    inputContainer.setVisibility(View.GONE);
+                });
+            }
 
-                    File tmpDir = new File(filesDir, "usr/tmp");
+            @Override
+            public void onFinished(String command, String log, int status) {
+                if (activity == null || activity.isFinishing() || activity.isDestroyed()) return;
 
-                    // Setup environment for the PRoot qemuProcess
-                    processBuilder.environment().put("PROOT_TMP_DIR", tmpDir.getAbsolutePath());
+                activity.runOnUiThread(() -> {
+                    inputContainer.setVisibility(View.VISIBLE);
+                    commandInput.requestFocus();
+                });
+            }
 
-                    processBuilder.environment().put("HOME", "/root");
-                    processBuilder.environment().put("USER", "root");
-                    //processBuilder.environment().put("PATH", "/bin:/usr/bin:/sbin:/usr/sbin");
-                    //processBuilder.environment().put("LD_LIBRARY_PATH", TermuxService.PREFIX_PATH + "/lib");
-                    processBuilder.environment().put("TERM", "xterm-256color");
-                    processBuilder.environment().put("TMPDIR", "/tmp");
-                    processBuilder.environment().put("SHELL", "/bin/sh");
-                    processBuilder.environment().put("DISPLAY", ":0");
-                    processBuilder.environment().put("PULSE_SERVER", "127.0.0.1");
-                    processBuilder.environment().put("XDG_RUNTIME_DIR", "${TMPDIR}");
-                    processBuilder.environment().put("SDL_VIDEODRIVER", "x11");
+            @Override
+            public void onError(String command, Exception exception) {
+                if (activity == null || activity.isFinishing() || activity.isDestroyed()) return;
 
-                    String[] prootCommand = {
-                            TermuxService.PREFIX_PATH + "/bin/proot", // PRoot binary path
-                            "--kill-on-exit",
-                            "--link2symlink",
-                            "-0",
-                            "-r", filesDir + "/distro", // Path to the rootfs
-                            "-b", "/dev",
-                            "-b", "/proc",
-                            "-b", "/sys",
-                            "-b", AppConfig.internalDataDirPath + "distro/root:/dev/shm",
-                            "-b", "/sdcard",
-                            "-b", "/storage",
-                            "-b", "/data",
-                            "-b", AppConfig.internalDataDirPath + "usr/tmp:/tmp",
-                            "-w", "/root",
-                            "/bin/sh",
-                            "--login"// The shell to execute inside PRoot
-                    };
-
-                    processBuilder.command(prootCommand);
-                    Process process = processBuilder.start();
-                    // Get the input and output streams of the process
-                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()));
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                    BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-
-                    // Send user command to PRoot
-                    writer.write(userCommand);
-                    writer.newLine();
-                    writer.flush();
-                    writer.close();
-
-                    // Read the input stream for the output of the command
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        final String outputLine = line;
-                        activity.runOnUiThread(() -> {
-                            appendTextAndScroll(outputLine + "\n");
-                            inputContainer.setVisibility(View.VISIBLE);
-                            forcusCommandInput();
-                        });
-                    }
-
-                    // Read any errors from the error stream
-                    while ((line = errorReader.readLine()) != null) {
-                        final String errorLine = line;
-                        activity.runOnUiThread(() -> {
-                            appendTextAndScroll(errorLine + "\n");
-                            inputContainer.setVisibility(View.VISIBLE);
-                            forcusCommandInput();
-                        });
-                    }
-
-                    // Clean up
-                    reader.close();
-                    errorReader.close();
-
-                    // Wait for the process to finish
-                    process.waitFor();
-
-                } catch (IOException | InterruptedException e) {
-                    // Handle exceptions by printing the stack trace in the terminal output
-                    final String errorMessage = e.getMessage();
-                    activity.runOnUiThread(() -> {
-                        appendTextAndScroll("Error: " + errorMessage + "n");
-                        inputContainer.setVisibility(View.VISIBLE);
-                        forcusCommandInput();
-                    });
-                }
-            }).start(); // Execute the command in a separate thread to prevent blocking the UI thread
-        else
-            new AlertDialog.Builder(activity, R.style.MainDialogTheme)
-                    .setTitle("Error!")
-                    .setMessage("Verify that \"setupFiles()\" is working properly in onCreate().")
-                    .setCancelable(false)
-                    .show();
+                activity.runOnUiThread(() -> appendTextAndScroll(exception.toString()));
+            }
+        });
     }
 
     private boolean checkInstallation() {
+        if (activity == null || activity.isFinishing() || activity.isDestroyed()) return false;
+
         String filesDir = activity.getFilesDir().getAbsolutePath();
         File distro = new File(filesDir, "distro");
         return distro.exists();
     }
 
     private void forcusCommandInput() {
+        if (activity == null || activity.isFinishing() || activity.isDestroyed()) return;
+
         commandInput.post(() -> {
             commandInput.requestFocus();
             InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);

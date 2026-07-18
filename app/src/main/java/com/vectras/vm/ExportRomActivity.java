@@ -19,7 +19,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.gson.Gson;
+import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.databinding.ActivityExportRomBinding;
+import com.vectras.vm.file.FilePickerDialog;
 import com.vectras.vm.main.vms.DataMainRoms;
 import com.vectras.vm.manager.VmFileManager;
 import com.vectras.vm.utils.DialogUtils;
@@ -59,7 +61,34 @@ public class ExportRomActivity extends AppCompatActivity {
             binding.edContent.setEnabled(false);
             binding.edAuthor.setEnabled(true);
             binding.edContent.setEnabled(true);
-            folderPicker.launch(current.itemName + ".cvbi");
+
+            if (MainSettingsManager.getBuiltInFilePicker(this)) {
+                FilePickerDialog filePickerDialog = new FilePickerDialog();
+                filePickerDialog.pick(this, FilePickerDialog.TYPE_FOLDER, (path -> new Thread(() -> {
+                    String exportFolder = path + "/";
+                    String outputPath;
+                    String outputFileName = current.itemName + ".cvbi";
+
+                    if (!FileUtils.isFileExists(exportFolder + current.itemName + ".cvbi")) {
+                        outputPath = exportFolder + outputFileName;
+                    } else {
+                        int prefix = 0;
+                        while (true) {
+                            if (!FileUtils.isFileExists(exportFolder + current.itemName + " (" + prefix + ").cvbi")) {
+                                outputFileName = current.itemName + " (" + prefix + ").cvbi";
+                                outputPath = exportFolder + outputFileName;
+                                break;
+                            } else {
+                                prefix++;
+                            }
+                        }
+                    }
+
+                    runOnUiThread(() -> startCreate(Uri.fromFile(new File(outputPath))));
+                }).start()));
+            } else {
+                folderPicker.launch(current.itemName + ".cvbi");
+            }
         });
 
         data = getSharedPreferences("data", Activity.MODE_PRIVATE);
@@ -126,9 +155,12 @@ public class ExportRomActivity extends AppCompatActivity {
             vmConfigMap.put("icon", current.itemIcon);
         }
 
+        vmConfigMap.put("machine", current.machine);
+
         vmConfigMap.put("cpu", current.cpu);
         vmConfigMap.put("cores", current.cores);
         vmConfigMap.put("threads", current.threads);
+        vmConfigMap.put("nvirt", current.nvirt);
 
         vmConfigMap.put("battery", current.battery);
 
@@ -168,13 +200,17 @@ public class ExportRomActivity extends AppCompatActivity {
             vmConfigMap.put("fdb", "");
         }
 
-        vmConfigMap.put("networkCard", current.networkCard);
         vmConfigMap.put("sharedFolder", current.sharedFolder);
+
+        vmConfigMap.put("networkCard", current.networkCard);
+
         vmConfigMap.put("bootFrom", current.bootFrom);
         vmConfigMap.put("isShowBootMenu", current.isShowBootMenu);
         vmConfigMap.put("isUseLocalTime", current.isUseLocalTime);
+
         vmConfigMap.put("isUseUefi", current.isUseUefi);
         vmConfigMap.put("isUseDefaultBios", current.isUseDefaultBios);
+
         vmConfigMap.put("qemu", VmFileManager.pathToTextMark(this, current.vmID, current.itemExtra));
         vmConfigMap.put("arch", current.itemArch);
 
@@ -319,7 +355,13 @@ public class ExportRomActivity extends AppCompatActivity {
                         true,
                         () -> {
                             if (isShowInFolder) {
-                                FileUtils.openFolder(this, file.getParent());
+                                if (MainSettingsManager.getBuiltInFilePicker(this)) {
+                                    FilePickerDialog filePickerDialog = new FilePickerDialog();
+                                    filePickerDialog.setLockHome(true);
+                                    filePickerDialog.browse(this, file.getParent());
+                                } else {
+                                    FileUtils.openFolder(this, file.getParent());
+                                }
                             }
                         },
                         () -> {

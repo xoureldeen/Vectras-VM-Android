@@ -20,7 +20,6 @@ import com.vectras.vm.main.core.MainStartVM;
 import com.vectras.vm.manager.VmServiceManager;
 import com.vectras.vm.utils.ClipboardUltils;
 import com.vectras.vm.utils.DialogUtils;
-import com.vectras.vterm.Terminal;
 import com.vectras.vterm.Terminal2;
 
 import java.util.Objects;

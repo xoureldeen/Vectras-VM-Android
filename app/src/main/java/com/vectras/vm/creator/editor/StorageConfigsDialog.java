@@ -31,7 +31,7 @@ import com.vectras.vm.manager.VmFileManager;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.IntentUtils;
-import com.vectras.vm.utils.ProgressDialog;
+import com.vectras.vterm.Terminal2;
 
 import java.io.File;
 import java.util.Objects;
@@ -57,6 +57,7 @@ public class StorageConfigsDialog extends BottomSheetDialogFragment {
     CreatorStorageDialogBinding binding;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
     private CreatorUtils utils;
+    private ActivityResultLauncher<Uri> folderPicker;
 
     @NonNull
     @Override
@@ -64,7 +65,8 @@ public class StorageConfigsDialog extends BottomSheetDialogFragment {
         // This can happen after the app is freed from memory and then reopened.
         if (configs == null) {
             isSave = false;
-            if (savedInstanceState == null) DialogUtils.oopsDialog(requireActivity(), getString(R.string.something_went_wrong));
+            if (savedInstanceState == null)
+                DialogUtils.oopsDialog(requireActivity(), getString(R.string.something_went_wrong));
             dismiss();
             return EditorUtils.getDummyDialog(requireActivity());
         }
@@ -99,6 +101,15 @@ public class StorageConfigsDialog extends BottomSheetDialogFragment {
 
     public void onDismiss(@NonNull DialogInterface dialogInterface) {
         super.onDismiss(dialogInterface);
+        if (callback != null && isSave) {
+            save();
+            callback.onDismiss(configs);
+        }
+    }
+
+    // Auto save.
+    public void onPause() {
+        super.onPause();
         if (callback != null && isSave) {
             save();
             callback.onDismiss(configs);
@@ -259,17 +270,19 @@ public class StorageConfigsDialog extends BottomSheetDialogFragment {
                         setDrive(PENDING_SELECT_FILE_MODE, path);
                     });
                 } catch (Exception e) {
-                    if (isAdded()) requireActivity().runOnUiThread(() -> DialogUtils.oneDialog(requireActivity(),
-                            getString(R.string.oops),
-                            getString(R.string.unable_to_copy_hard_drive_file_content),
-                            getString(R.string.ok),
-                            true,
-                            R.drawable.warning_48px,
-                            true,
-                            null,
-                            null));
+                    if (isAdded())
+                        requireActivity().runOnUiThread(() -> DialogUtils.oneDialog(requireActivity(),
+                                getString(R.string.oops),
+                                getString(R.string.unable_to_copy_hard_drive_file_content),
+                                getString(R.string.ok),
+                                true,
+                                R.drawable.warning_48px,
+                                true,
+                                null,
+                                null));
                 } finally {
-                    if (isAdded()) requireActivity().runOnUiThread(() -> utils.dissmissProgressDialog());
+                    if (isAdded())
+                        requireActivity().runOnUiThread(() -> utils.dissmissProgressDialog());
                 }
             });
         } else {
@@ -310,6 +323,10 @@ public class StorageConfigsDialog extends BottomSheetDialogFragment {
     private void initialize() {
         if (!isAdded()) return;
 
+        folderPicker = registerForActivityResult(
+                new ActivityResultContracts.OpenDocumentTree(),
+                this::startCreateOpticalDisk);
+
         binding.drive.setOnClickListener(v -> pickStorageFile(SELECT_DISK_0_FILE_MODE));
         binding.driveField.setOnClickListener(v -> pickStorageFile(SELECT_DISK_0_FILE_MODE));
         binding.driveField.setEndIconOnClickListener(v -> {
@@ -347,11 +364,23 @@ public class StorageConfigsDialog extends BottomSheetDialogFragment {
 
         binding.cdrom.setOnClickListener(v -> pickStorageFile(SELECT_CDROM_0_FILE_MODE));
         binding.cdromField.setOnClickListener(v -> pickStorageFile(SELECT_CDROM_0_FILE_MODE));
-        binding.cdromField.setEndIconOnClickListener(v -> setDrive(SELECT_CDROM_0_FILE_MODE, null));
+        binding.cdromField.setEndIconOnClickListener(v -> {
+            if (Objects.requireNonNull(binding.cdrom.getText()).toString().isEmpty()) {
+                createOpticalDisk(SELECT_CDROM_0_FILE_MODE);
+            } else {
+                storageFileOptionDialog(SELECT_CDROM_0_FILE_MODE);
+            }
+        });
 
         binding.tieCdrom1.setOnClickListener(v -> pickStorageFile(SELECT_CDROM_1_FILE_MODE));
         binding.tilCdrom1.setOnClickListener(v -> pickStorageFile(SELECT_CDROM_1_FILE_MODE));
-        binding.tilCdrom1.setEndIconOnClickListener(v -> setDrive(SELECT_CDROM_1_FILE_MODE, null));
+        binding.tilCdrom1.setEndIconOnClickListener(v -> {
+            if (Objects.requireNonNull(binding.tieCdrom1.getText()).toString().isEmpty()) {
+                createOpticalDisk(SELECT_CDROM_1_FILE_MODE);
+            } else {
+                storageFileOptionDialog(SELECT_CDROM_1_FILE_MODE);
+            }
+        });
 
 
         binding.svSharedFolder.setSubTitle(AppConfig.sharedFolder);
@@ -404,33 +433,39 @@ public class StorageConfigsDialog extends BottomSheetDialogFragment {
         if (!isAdded()) return;
 
         PENDING_SELECT_FILE_MODE = mode;
+        boolean isHardDrive = mode == SELECT_DISK_0_FILE_MODE || mode == SELECT_DISK_1_FILE_MODE;
 
         //TextInputLayout peddingTextInputLayout = getPeddingStorageInputLayout();
         TextInputEditText peddingTextInputEditText = getPeddingStorageEditText();
 
         DialogUtils.threeDialog(requireActivity(),
-                getString(R.string.change_hard_drive),
-                getString(R.string.do_you_want_to_change_create_or_remove),
+                getString(isHardDrive ? R.string.change_hard_drive : R.string.change_optical_drive),
+                getString(isHardDrive ? R.string.do_you_want_to_change_create_or_remove : R.string.do_you_want_to_change_create_or_remove_optical_drive),
                 getString(R.string.change), getString(R.string.remove),
                 getString(R.string.create),
                 true,
-                R.drawable.hard_drive_24px,
+                isHardDrive ? R.drawable.hard_drive_24px : R.drawable.album_24px,
                 true,
                 () -> pickStorageFile(mode),
                 () -> {
                     String path = new File(Objects.requireNonNull(peddingTextInputEditText.getText()).toString()).getAbsolutePath();
                     if (path.startsWith(VmFileManager.quickGetPath(vmId))) {
-                        ProgressDialog progressDialog1 = new ProgressDialog(requireActivity());
-                        progressDialog1.show();
+                        utils.showProgressDialog(getString(R.string.just_a_moment));
                         new Thread(() -> {
                             utils.markDelete(path);
-                            requireActivity().runOnUiThread(progressDialog1::reset);
+                            requireActivity().runOnUiThread(utils::dissmissProgressDialog);
                         }).start();
                     }
 
                     setDrive(mode, "");
                 },
-                () -> callQcow2CreatorDialog(PENDING_SELECT_FILE_MODE), null);
+                () -> {
+                    if (isHardDrive) {
+                        callQcow2CreatorDialog(PENDING_SELECT_FILE_MODE);
+                    } else {
+                        createOpticalDisk(PENDING_SELECT_FILE_MODE);
+                    }
+                }, null);
     }
 
     private void callQcow2CreatorDialog(int mode) {
@@ -474,13 +509,13 @@ public class StorageConfigsDialog extends BottomSheetDialogFragment {
         peddingTextInputEditText.setText(path != null ? path : "");
 
         if (path == null || path.isEmpty()) {
-            if (PENDING_SELECT_FILE_MODE == SELECT_CDROM_0_FILE_MODE || PENDING_SELECT_FILE_MODE == SELECT_CDROM_1_FILE_MODE || PENDING_SELECT_FILE_MODE == SELECT_FLOPPY_A_FILE_MODE || PENDING_SELECT_FILE_MODE == SELECT_FLOPPY_B_FILE_MODE) {
+            if (PENDING_SELECT_FILE_MODE == SELECT_FLOPPY_A_FILE_MODE || PENDING_SELECT_FILE_MODE == SELECT_FLOPPY_B_FILE_MODE) {
                 peddingTextInputLayout.setEndIconMode(TextInputLayout.END_ICON_NONE);
             } else {
                 peddingTextInputLayout.setEndIconDrawable(R.drawable.add_24px);
             }
         } else {
-            if (PENDING_SELECT_FILE_MODE == SELECT_CDROM_0_FILE_MODE || PENDING_SELECT_FILE_MODE == SELECT_CDROM_1_FILE_MODE || PENDING_SELECT_FILE_MODE == SELECT_FLOPPY_A_FILE_MODE || PENDING_SELECT_FILE_MODE == SELECT_FLOPPY_B_FILE_MODE) {
+            if (PENDING_SELECT_FILE_MODE == SELECT_FLOPPY_A_FILE_MODE || PENDING_SELECT_FILE_MODE == SELECT_FLOPPY_B_FILE_MODE) {
                 peddingTextInputLayout.setEndIconMode(TextInputLayout.END_ICON_CUSTOM);
                 peddingTextInputLayout.setEndIconDrawable(R.drawable.close_24px);
                 setRemovableDriveEndIconOnClickListener(PENDING_SELECT_FILE_MODE, peddingTextInputLayout);
@@ -605,5 +640,86 @@ public class StorageConfigsDialog extends BottomSheetDialogFragment {
         configs.cdrom1 = Objects.requireNonNull(binding.tieCdrom1.getText()).toString();
 
         configs.sharedFolder = binding.svSharedFolder.isChecked();
+    }
+
+    private void createOpticalDisk(int mode) {
+        if (!isAdded()) return;
+
+        PENDING_SELECT_FILE_MODE = mode;
+
+        if (MainSettingsManager.getBuiltInFilePicker(requireActivity())) {
+            FilePickerDialog filePickerDialog = new FilePickerDialog();
+            filePickerDialog.pick(requireActivity(), FilePickerDialog.TYPE_FOLDER, (path -> startCreateOpticalDisk(Uri.fromFile(new File(path)))));
+        } else {
+            folderPicker.launch(null);
+        }
+    }
+
+    private void startCreateOpticalDisk(Uri uri) {
+        if (uri != null) {
+            utils.showProgressDialog(getString(R.string.just_a_moment));
+
+            new Thread(() -> {
+                CreatorUtils.FilePathData filePathData = utils.getFilePath(uri);
+
+                if (!isAdded()) return;
+
+                requireActivity().runOnUiThread(() -> {
+                    utils.dissmissProgressDialog();
+                    utils.makeTempDirectory();
+
+                    if (filePathData.isValid) {
+                        String oldPath = PENDING_SELECT_FILE_MODE == SELECT_CDROM_0_FILE_MODE ? Objects.requireNonNull(binding.cdrom.getText()).toString() : Objects.requireNonNull(binding.tieCdrom1.getText()).toString();
+                        if (!oldPath.isEmpty()) utils.markDelete(oldPath);
+
+                        String fileTempPath = utils.getTempPath(PENDING_SELECT_FILE_MODE == SELECT_CDROM_0_FILE_MODE ? VmFileManager.OPTICAL_DISC_0 : VmFileManager.OPTICAL_DISC_1);
+                        String filePath = PENDING_SELECT_FILE_MODE == SELECT_CDROM_0_FILE_MODE ? VmFileManager.getOpticalDisk0(vmId) : VmFileManager.getOpticalDisk1(vmId);
+
+                        String COMPLETED_MARK = "iso file has been created.";
+
+                        if (!isAdded()) return;
+
+                        Terminal2 terminal2 = new Terminal2(requireActivity());
+                        terminal2.setShowProgressDialog(true);
+                        terminal2.execute("mkisofs -o \"" + fileTempPath + "\" -r \"" + filePathData.path + "\" && echo \"" + COMPLETED_MARK + "\"", new Terminal2.Terminal2Callback() {
+                            @Override
+                            public void onRunning(String command, String newLine) {
+                                // Nothing to do.
+                            }
+
+                            @Override
+                            public void onFinished(String command, String log, int status) {
+                                if (!isAdded()) return;
+
+                                requireActivity().runOnUiThread(() -> {
+                                    if (log.contains(COMPLETED_MARK)) {
+                                        setDrive(PENDING_SELECT_FILE_MODE, filePath);
+                                    } else {
+                                        if (!oldPath.isEmpty()) utils.unMarkDelete(oldPath);
+                                        DialogUtils.oopsDialog(requireActivity(), getString(R.string.something_went_wrong) + "\n\n" + log);
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onError(String command, Exception exception) {
+                                if (!isAdded()) return;
+
+                                requireActivity().runOnUiThread(() -> {
+                                    if (!oldPath.isEmpty()) utils.unMarkDelete(oldPath);
+                                    DialogUtils.oopsDialog(requireActivity(), getString(R.string.something_went_wrong) + "\n\n" + exception.getMessage());
+                                    PENDING_SELECT_FILE_MODE = -1;
+                                });
+                            }
+                        });
+                    } else {
+                        DialogUtils.oopsDialog(requireActivity(), getString(R.string.invalid_file_path_content));
+                        PENDING_SELECT_FILE_MODE = -1;
+                    }
+                });
+            }).start();
+        } else {
+            PENDING_SELECT_FILE_MODE = -1;
+        }
     }
 }

@@ -33,7 +33,6 @@ import com.vectras.vm.databinding.FragmentHomeSystemMonitorBinding;
 import com.vectras.vm.manager.QmpSender;
 import com.vectras.vm.utils.CommandUtils;
 import com.vectras.vm.utils.DialogUtils;
-import com.vectras.vterm.Terminal;
 import com.vectras.vterm.Terminal2;
 
 import java.io.File;

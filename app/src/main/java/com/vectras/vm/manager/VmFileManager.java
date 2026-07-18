@@ -27,6 +27,8 @@ public class VmFileManager {
     public static final String HIDE_VM_SUFFIX = "_";
     public static final String PENDING_DELETE_SUFFIX = "_delete_";
     public static final String PENDING_ADD_SUFFIX = "_add_";
+    public static final String OPTICAL_DISC_0 = "OpticalDisc0.iso";
+    public static final String OPTICAL_DISC_1 = "OpticalDisc1.iso";
 
 
     public static boolean hide(String vmId) {
@@ -199,6 +201,14 @@ public class VmFileManager {
 
     public static String getThumbnail(String vmId) {
         return VmFileManager.getPath(vmId, THUMBNAIL_FILE_NAME);
+    }
+
+    public static String getOpticalDisk0(String vmId) {
+        return VmFileManager.getPath(vmId, OPTICAL_DISC_0);
+    }
+
+    public static String getOpticalDisk1(String vmId) {
+        return VmFileManager.getPath(vmId, OPTICAL_DISC_1);
     }
 
     public static String getScreenshotPpm(Context context, String vmId) {

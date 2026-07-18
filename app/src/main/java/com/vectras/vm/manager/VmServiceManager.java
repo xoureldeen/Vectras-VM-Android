@@ -5,7 +5,6 @@ import android.os.Handler;
 import android.os.Looper;
 
 import com.vectras.vm.MainService;
-import com.vectras.vterm.Terminal;
 
 public class VmServiceManager {
     public static void stopService(Context context) {

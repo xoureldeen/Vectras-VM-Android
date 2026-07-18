@@ -3,7 +3,7 @@ apply plugin: 'maven-publish'
 
 android {
     namespace "com.termux.terminal"
-    compileSdkVersion 36
+    compileSdkVersion 37
 
     buildTypes {
         release {
@@ -31,6 +31,13 @@ android {
         targetSdk 28
     }
 
+
+    externalNativeBuild {
+        cmake {
+            path file('src/main/cpp/CMakeLists.txt')
+            version '3.22.1'
+        }
+    }
 }
 
 tasks.withType(Test).configureEach {

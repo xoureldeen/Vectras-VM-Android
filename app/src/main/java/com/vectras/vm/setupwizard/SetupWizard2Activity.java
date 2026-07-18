@@ -42,7 +42,6 @@ import com.vectras.vm.utils.PermissionUtils;
 import com.vectras.vm.utils.TarUtils;
 import com.vectras.vm.utils.UIUtils;
 import com.vectras.vterm.Terminal2;
-import com.vectras.vterm.TerminalBottomSheetDialog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -167,14 +166,7 @@ public class SetupWizard2Activity extends AppCompatActivity {
 
         binding.selectMirrorOption.setOnClickListener(v -> selectMirror());
 
-        binding.ivOpenTerminal.setOnClickListener(v -> {
-            if (DeviceUtils.is64bit() && DeviceUtils.isArm()) {
-                startActivity(new Intent(this, TermuxActivity.class));
-            } else {
-                TerminalBottomSheetDialog VTERM = new TerminalBottomSheetDialog(this);
-                VTERM.showVterm();
-            }
-        });
+        binding.ivOpenTerminal.setOnClickListener(v -> startActivity(new Intent(this, TermuxActivity.class)));
 
         binding.btnTryAgain.setOnClickListener(v -> {
             if (ACTION == ACTION_SYSTEM_UPDATE) {

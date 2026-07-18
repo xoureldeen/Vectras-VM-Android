@@ -98,8 +98,10 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:hint="@string/optical_drive_0"
+                app:endIconContentDescription="@string/make_image"
+                app:endIconDrawable="@drawable/add_24px"
+                app:endIconMode="custom"
                 android:theme="@style/AppTheme.TextInput"
-                app:endIconDrawable="@drawable/close_24px"
                 app:startIconDrawable="@drawable/album_24px">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -121,8 +123,10 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:hint="@string/optical_drive_1"
+                app:endIconContentDescription="@string/make_image"
+                app:endIconDrawable="@drawable/add_24px"
+                app:endIconMode="custom"
                 android:theme="@style/AppTheme.TextInput"
-                app:endIconDrawable="@drawable/close_24px"
                 app:startIconDrawable="@drawable/album_24px">
 
                 <com.google.android.material.textfield.TextInputEditText

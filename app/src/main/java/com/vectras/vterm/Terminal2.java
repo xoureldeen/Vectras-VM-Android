@@ -14,7 +14,6 @@ import com.vectras.vm.utils.ProgressDialog;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.Objects;
@@ -50,6 +49,10 @@ public class Terminal2 {
     public void setUserName(String user) {
         this.user = user;
         home = user.equals("root") ? "/root" : "/home/" + user;
+    }
+
+    public String getUsername() {
+        return user;
     }
 
     public void setRootMode() {

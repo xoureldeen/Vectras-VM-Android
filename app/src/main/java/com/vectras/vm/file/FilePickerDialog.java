@@ -110,11 +110,23 @@ public class FilePickerDialog extends DialogFragment {
         } else {
             binding.btnOpenInOtherApp.setVisibility(View.GONE);
         }
+
         binding.tvFullPath.setOnClickListener(v -> {
             if (!isAdded()) return;
             ClipboardUltils.copyToClipboard(requireContext(), currentPath, false);
             Toast.makeText(requireContext(), R.string.the_folder_path_has_been_copied_to_the_clipboard, Toast.LENGTH_SHORT).show();
         });
+
+        if (pickType == TYPE_FOLDER) {
+            binding.btnPick.setVisibility(View.VISIBLE);
+
+            binding.btnPick.setOnClickListener(v -> {
+                if (callback != null) callback.onPicked(currentPath);
+                settings.lastPath(currentPath);
+                dismiss();
+            });
+        }
+
         binding.btnClose.setOnClickListener(v -> dismiss());
         
         return dialog;
@@ -149,6 +161,7 @@ public class FilePickerDialog extends DialogFragment {
     public void pick(Activity activity, int type, FilePickerDialogCallback callback) {
         this.callback = callback;
         pickType = type;
+
         show(((FragmentActivity) activity).getSupportFragmentManager(), "file_picker");
     }
 
@@ -159,7 +172,7 @@ public class FilePickerDialog extends DialogFragment {
             binding.btnUp.setVisibility(View.INVISIBLE);
             binding.btnUp.setEnabled(false);
         } else if (lockHome && homePath.equals(path)) {
-            binding.tvTitle.setText(homeName.isEmpty() ? new File(path).getName() : homeName);
+            binding.tvTitle.setText(homeName == null || homeName.isEmpty() ? new File(path).getName() : homeName);
             binding.btnHome.setVisibility(View.GONE);
             binding.btnUp.setVisibility(View.INVISIBLE);
             binding.btnUp.setEnabled(false);
@@ -193,6 +206,10 @@ public class FilePickerDialog extends DialogFragment {
             if (!isShowHiddenFile && file.getName().startsWith(".")) continue;
 
             FilePickerData item = new FilePickerData();
+
+            if (pickType == TYPE_FOLDER) {
+                if (!file.isDirectory()) continue;
+            }
 
             item.name = file.getName();
             item.path = file.getAbsolutePath();

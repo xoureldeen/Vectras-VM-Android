@@ -72,7 +72,6 @@ import com.vectras.vm.main.vms.VmsFragment;
 import com.vectras.vm.logger.VectrasStatus;
 import com.vectras.vm.settings.Settings2Activity;
 import com.vectras.vm.settings.UpdaterActivity;
-import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.IntentUtils;
@@ -80,7 +79,6 @@ import com.vectras.vm.utils.LibraryChecker;
 import com.vectras.vm.utils.NotificationUtils;
 import com.vectras.vm.utils.PackageUtils;
 import com.vectras.vm.utils.UIUtils;
-import com.vectras.vterm.TerminalBottomSheetDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -511,12 +509,7 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
             } else if (id == R.id.navigation_item_desktop) {
                 DisplaySystem.launch(this);
             } else if (id == R.id.navigation_item_terminal) {
-                if (DeviceUtils.is64bit() && DeviceUtils.isArm()) {
-                    startActivity(new Intent(this, TermuxActivity.class));
-                } else {
-                    TerminalBottomSheetDialog VTERM = new TerminalBottomSheetDialog(this);
-                    VTERM.showVterm();
-                }
+                startActivity(new Intent(this, TermuxActivity.class));
             } else if (id == R.id.navigation_item_view_logs) {
                 showLogsDialog();
             } else if (id == R.id.navigation_item_settings) {

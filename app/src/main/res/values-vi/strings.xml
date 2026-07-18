@@ -651,6 +651,10 @@
     <string name="machine">Máy</string>
     <string name="nested_virtualization">Ảo hoá lồng nhau</string>
     <string name="play_sound">Phát âm thanh</string>
+    <string name="the_system_has_not_been_installed">Hệ thông chưa được cài đặt.</string>
+    <string name="choose_this_folder">Chọn thư mục này</string>
+    <string name="change_optical_drive">Thay đổi ổ quang</string>
+    <string name="do_you_want_to_change_create_or_remove_optical_drive">Bạn muốn thay đổi, tạo hay xoá?\n\nNếu bạn chọn tạo, bạn cần chọn thư mục chứa các tệp cần thiết để tạo đĩa quang.</string>
 
     <!--======================TERMUX STRINGS====================-->
     <string name="application_name" translatable="false">Vterm</string>
