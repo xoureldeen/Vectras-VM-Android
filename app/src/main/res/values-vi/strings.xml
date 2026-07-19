@@ -655,6 +655,7 @@
     <string name="choose_this_folder">Chọn thư mục này</string>
     <string name="change_optical_drive">Thay đổi ổ quang</string>
     <string name="do_you_want_to_change_create_or_remove_optical_drive">Bạn muốn thay đổi, tạo hay xoá?\n\nNếu bạn chọn tạo, bạn cần chọn thư mục chứa các tệp cần thiết để tạo đĩa quang.</string>
+    <string name="you_are_not_allowed_to_use_this_folder">Bạn không được phép sử dụng thư mục này.</string>
 
     <!--======================TERMUX STRINGS====================-->
     <string name="application_name" translatable="false">Vterm</string>

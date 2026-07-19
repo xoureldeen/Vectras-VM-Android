@@ -649,9 +649,15 @@ public class StorageConfigsDialog extends BottomSheetDialogFragment {
 
         if (MainSettingsManager.getBuiltInFilePicker(requireActivity())) {
             FilePickerDialog filePickerDialog = new FilePickerDialog();
+            filePickerDialog.setDoNotSelectInSystemFolder(true);
             filePickerDialog.pick(requireActivity(), FilePickerDialog.TYPE_FOLDER, (path -> startCreateOpticalDisk(Uri.fromFile(new File(path)))));
         } else {
-            folderPicker.launch(null);
+            try {
+                folderPicker.launch(null);
+            } catch (Exception e) {
+                Log.e(TAG, "createOpticalDisk: ", e);
+                IntentUtils.showErrorDialog(requireActivity());
+            }
         }
     }
 

@@ -69,6 +69,24 @@ public class FileUtils {
         }
     }
 
+    public static String getDirectoryPath(Context context, Uri uri) {
+        try {
+            if (uri.getHost() != null && uri.getHost().equals("com.android.externalstorage.documents")) {
+                String docId = DocumentsContract.getTreeDocumentId(uri);
+                String[] split = docId.split(":");
+                String type = split[0];
+
+                if ("primary".equalsIgnoreCase(type)) {
+                    String path = Environment.getExternalStorageDirectory() + "/" + split[1];
+                    if (isFileExists(path)) return path;
+                }
+            }
+        } catch (Exception ignored) {
+        }
+
+        return getPath(context, uri);
+    }
+
     @SuppressLint("NewApi")
     public static String getPath(Context context, final Uri uri) {
         if ((uri.toString().startsWith("content://ru.zdevs.zarchiver") ||
@@ -88,17 +106,6 @@ public class FileUtils {
             if (isFileExists(path)) return path;
         }
 
-        // When pick folder
-        if (uri.getHost() != null && uri.getHost().equals("com.android.externalstorage.documents")) {
-            String docId = DocumentsContract.getTreeDocumentId(uri);
-            String[] split = docId.split(":");
-            String type = split[0];
-
-            if ("primary".equalsIgnoreCase(type)) {
-                String path = Environment.getExternalStorageDirectory() + "/" + split[1];
-                if (isFileExists(path)) return path;
-            }
-        }
 
         // check here to KITKAT or new version
         final boolean isKitKat = true;
