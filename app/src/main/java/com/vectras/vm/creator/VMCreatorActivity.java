@@ -473,6 +473,26 @@ public class VMCreatorActivity extends AppCompatActivity {
                 thumbnailPath = (current.itemIcon.contains("/") ? current.itemIcon : VmFileManager.getPath(vmID, current.itemIcon));
                 updateThumbnailViewer("");
             }
+
+            if (current.itemPath != null && !current.itemPath.isEmpty())
+                current.itemPath = (current.itemPath.contains("/") ? current.itemPath : VmFileManager.getPath(vmID, current.itemPath));
+
+            if (current.hd1 != null && !current.hd1.isEmpty())
+                current.hd1 = (current.hd1.contains("/") ? current.hd1 : VmFileManager.getPath(vmID, current.hd1));
+
+
+            if (current.imgCdrom != null && !current.imgCdrom.isEmpty())
+                current.imgCdrom = (current.imgCdrom.contains("/") ? current.imgCdrom : VmFileManager.getPath(vmID, current.imgCdrom));
+
+            if (current.cdrom1 != null && !current.cdrom1.isEmpty())
+                current.cdrom1 = (current.cdrom1.contains("/") ? current.cdrom1 : VmFileManager.getPath(vmID, current.cdrom1));
+
+
+            if (current.fda != null && !current.fda.isEmpty())
+                current.fda = (current.fda.contains("/") ? current.fda : VmFileManager.getPath(vmID, current.fda));
+
+            if (current.fdb != null && !current.fdb.isEmpty())
+                current.fdb = (current.fdb.contains("/") ? current.fdb : VmFileManager.getPath(vmID, current.fdb));
         }
     }
 
