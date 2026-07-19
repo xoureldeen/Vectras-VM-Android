@@ -51,6 +51,7 @@ public class FilePickerDialog extends DialogFragment {
     String homePath;
     boolean lockHome;
     int pickType = -1;
+    boolean doNotSelectInSystemFolder;
 
     boolean isShowHiddenFile;
     boolean isShowHiddenDiviers;
@@ -121,6 +122,13 @@ public class FilePickerDialog extends DialogFragment {
             binding.btnPick.setVisibility(View.VISIBLE);
 
             binding.btnPick.setOnClickListener(v -> {
+                if (!isAdded()) return;
+
+                if (!isAllowPick(currentPath)) {
+                    Toast.makeText(requireContext(), R.string.you_are_not_allowed_to_use_this_folder, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 if (callback != null) callback.onPicked(currentPath);
                 settings.lastPath(currentPath);
                 dismiss();
@@ -158,11 +166,19 @@ public class FilePickerDialog extends DialogFragment {
         browse(activity);
     }
 
+    public void setDoNotSelectInSystemFolder(boolean doNotSelect) {
+        doNotSelectInSystemFolder = doNotSelect;
+    }
+
     public void pick(Activity activity, int type, FilePickerDialogCallback callback) {
         this.callback = callback;
         pickType = type;
 
         show(((FragmentActivity) activity).getSupportFragmentManager(), "file_picker");
+    }
+
+    public boolean isAllowPick(String path) {
+        return !(doNotSelectInSystemFolder && (path.equals(Environment.getExternalStorageDirectory().getAbsolutePath()) || path.startsWith(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Android")));
     }
 
     public void updateUpButton(String path) {
@@ -426,6 +442,8 @@ public class FilePickerDialog extends DialogFragment {
 
                     binding.lnLoading.setVisibility(View.GONE);
                     isLoading = false;
+
+                    if (pickType == TYPE_FOLDER) binding.btnPick.setEnabled(isAllowPick(currentPath));
                 });
             }).start();
         }

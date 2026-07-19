@@ -92,7 +92,7 @@ public class CreatorUtils {
 
     public FilePathData getFilePath(Uri uri) {
         try {
-            String filePath = FileUtils.getPath(activity, uri);
+            String filePath = FileUtils.getDirectoryPath(activity, uri);
 
             if (filePath != null && FileUtils.isFileExists(filePath)) {
                 return new FilePathData() {

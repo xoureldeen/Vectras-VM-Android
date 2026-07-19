@@ -300,12 +300,12 @@
                         android:layout_weight="1"
                         android:textColor="?attr/colorControlNormal"
                         android:text="@string/cdrom_1"/>
-                    <ImageView
+                    <com.google.android.material.button.MaterialButton
+                        style="@style/Widget.Material3Expressive.Button.IconButton.Tonal"
                         android:id="@+id/iv_ejectcdrom"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/eject_24px"
-                        android:background="?attr/selectableItemBackgroundBorderless"/>
+                        app:icon="@drawable/eject_24px"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -328,12 +328,12 @@
                         android:layout_weight="1"
                         android:textColor="?attr/colorControlNormal"
                         android:text="@string/cdrom_2"/>
-                    <ImageView
+                    <com.google.android.material.button.MaterialButton
+                        style="@style/Widget.Material3Expressive.Button.IconButton.Tonal"
                         android:id="@+id/iv_secondary_ejectcdrom"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/eject_24px"
-                        android:background="?attr/selectableItemBackgroundBorderless"/>
+                        app:icon="@drawable/eject_24px"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -356,12 +356,12 @@
                         android:layout_weight="1"
                         android:textColor="?attr/colorControlNormal"
                         android:text="@string/floppy_drive_a"/>
-                    <ImageView
+                    <com.google.android.material.button.MaterialButton
+                        style="@style/Widget.Material3Expressive.Button.IconButton.Tonal"
                         android:id="@+id/iv_ejectfda"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/eject_24px"
-                        android:background="?attr/selectableItemBackgroundBorderless"/>
+                        app:icon="@drawable/eject_24px"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -384,12 +384,12 @@
                         android:layout_weight="1"
                         android:textColor="?attr/colorControlNormal"
                         android:text="@string/floppy_drive_b"/>
-                    <ImageView
+                    <com.google.android.material.button.MaterialButton
+                        style="@style/Widget.Material3Expressive.Button.IconButton.Tonal"
                         android:id="@+id/iv_ejectfdb"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/eject_24px"
-                        android:background="?attr/selectableItemBackgroundBorderless"/>
+                        app:icon="@drawable/eject_24px"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -411,12 +411,12 @@
                         android:layout_weight="1"
                         android:textColor="?attr/colorControlNormal"
                         android:text="@string/sd_card"/>
-                    <ImageView
+                    <com.google.android.material.button.MaterialButton
+                        style="@style/Widget.Material3Expressive.Button.IconButton.Tonal"
                         android:id="@+id/iv_ejectsd"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/eject_24px"
-                        android:background="?attr/selectableItemBackgroundBorderless"/>
+                        app:icon="@drawable/eject_24px"/>
                 </LinearLayout>
 
                 <LinearLayout
