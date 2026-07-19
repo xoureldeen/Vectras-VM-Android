@@ -923,7 +923,9 @@ public class VMCreatorActivity extends AppCompatActivity {
                 }
 
                 try {
-                    loadConfig(new Gson().fromJson(FileUtils.readFromFile(this, new File(VmFileManager.getConfigFile(vmID))), DataMainRoms.class));
+                    DataMainRoms newConfigs = new Gson().fromJson(FileUtils.readFromFile(this, new File(VmFileManager.getConfigFile(vmID))), DataMainRoms.class);
+                    newConfigs.itemExtra = VmFileManager.textMarkToPath(this, vmID, newConfigs.itemExtra);
+                    loadConfig(newConfigs);
                 } catch (JsonSyntaxException e) {
                     DialogUtils.oneDialog(this, getResources().getString(R.string.oops), getResources().getString(R.string.error_CR_CVBI4), getResources().getString(R.string.ok), true, R.drawable.warning_48px, true, null, null);
                     return;
