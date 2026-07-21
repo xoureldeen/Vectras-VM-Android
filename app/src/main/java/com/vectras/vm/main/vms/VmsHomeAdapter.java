@@ -15,12 +15,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.vectras.qemu.Config;
 import com.vectras.vm.R;
 import com.vectras.vm.VMManager;
 import com.vectras.vm.main.core.MainStartVM;
 import com.vectras.vm.main.core.RomOptionsDialog;
 import com.vectras.vm.manager.VmFileManager;
+import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 
 import java.io.File;
@@ -55,6 +55,29 @@ public class VmsHomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         // Get current position of item in recyclerview to bind data and assign values from list
         final MyHolder myHolder = (MyHolder) holder;
         final DataMainRoms current = data.get(position);
+
+        if (current == null) {
+            myHolder.ivIcon.setImageResource(R.drawable.ic_computer_180dp_with_padding);
+            myHolder.textName.setText(activity.getString(R.string.unknow));
+            myHolder.textArch.setText(activity.getString(R.string.unknow));
+
+            myHolder.cdRoms.setOnClickListener(view -> DialogUtils.twoDialog(
+                    activity,
+                    activity.getString(R.string.oops),
+                    activity.getString(R.string.delete_broken_vm_content),
+                    activity.getString(R.string.ok),
+                    activity.getString(R.string.cancel),
+                    true,
+                    R.drawable.error_96px,
+                    true,
+                    () -> VMManager.deleteVmInList(activity, position),
+                    null,
+                    null
+            ));
+
+            return;
+        }
+
         myHolder.textName.setText(current.itemName);
         myHolder.textArch.setText(current.itemArch);
         if (!current.itemIcon.isEmpty() && FileUtils.isFileExists(current.itemIcon)){

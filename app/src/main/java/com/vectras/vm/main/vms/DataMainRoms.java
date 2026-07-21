@@ -33,7 +33,10 @@ public class DataMainRoms {
     public int cores = 0;
     public int threads = 0;
 
+    // Dummy devices
+
     public boolean battery;
+    public boolean wifi;
 
     // Storage
 

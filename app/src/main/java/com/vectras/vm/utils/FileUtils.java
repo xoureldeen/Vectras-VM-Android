@@ -627,6 +627,21 @@ public class FileUtils {
         return false;
     }
 
+    public static boolean copyFile(String filePath, String destFolderPath, String newName) {
+        File file = new File(filePath);
+
+        if (!file.exists()) return false;
+
+        try {
+            copy(file, new File(destFolderPath, newName));
+            return true;
+        } catch (Exception ignored) {
+
+        }
+
+        return false;
+    }
+
     public static boolean delete(String path) {
         try {
             return delete(new File(path));
@@ -701,11 +716,10 @@ public class FileUtils {
             while ((line = reader.readLine()) != null) {
                 content.append(line).append("\n");
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            return "";
         }
         return content.toString();
-
     }
 
     public static boolean writeToFile(String folderPath, String fileName, String content) {

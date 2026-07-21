@@ -656,6 +656,14 @@
     <string name="change_optical_drive">Thay đổi ổ quang</string>
     <string name="do_you_want_to_change_create_or_remove_optical_drive">Bạn muốn thay đổi, tạo hay xoá?\n\nNếu bạn chọn tạo, bạn cần chọn thư mục chứa các tệp cần thiết để tạo đĩa quang.</string>
     <string name="you_are_not_allowed_to_use_this_folder">Bạn không được phép sử dụng thư mục này.</string>
+    <string name="delete_broken_vm_content">Máy ảo này đã hỏng, bạn có muốn xoá nó không?</string>
+    <string name="report">Báo cáo</string>
+    <string name="send_log_to_server_content">Nhật ký này sẽ được gửi lên máy chủ của chúng tôi. Bạn có muốn tiếp tục?</string>
+    <string name="send">Gửi</string>
+    <string name="sending">Đang gửi…</string>
+    <string name="thank_you_for_sending_the_report">Cảm ơn bạn đã gửi báo cáo.</string>
+    <string name="send_the_report_failed_content">Đã xảy ra lỗi khi gửi báo cáo. Hãy thử lại sau.</string>
+    <string name="wifi_card_dummy">Thẻ Wi-Fi (giả)</string>
 
     <!--======================TERMUX STRINGS====================-->
     <string name="application_name" translatable="false">Vterm</string>

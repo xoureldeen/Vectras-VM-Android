@@ -184,7 +184,7 @@ public class VmControllerDialog extends DialogFragment {
 
 
                 binding.lnPause.setOnClickListener(v -> {
-                    VMManager.showPauseDialog(requireActivity());
+                    VMManager.showPauseDialog(requireActivity(), Config.vmID);
                     dismiss();
                 });
 

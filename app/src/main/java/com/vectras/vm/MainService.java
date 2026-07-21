@@ -50,7 +50,7 @@ public class MainService extends Service {
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle(getString(R.string.app_name))
                 .setContentText("The virtual machines are running...")
-                .setSmallIcon(R.drawable.ic_vectras_vm_48)
+                .setSmallIcon(R.drawable.vectras_vm_24px)
                 .addAction(R.drawable.close_24px, getString(R.string.stop), pStopSelf)
                 .build();
 

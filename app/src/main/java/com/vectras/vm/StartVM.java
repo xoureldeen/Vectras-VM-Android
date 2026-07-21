@@ -14,6 +14,7 @@ import com.vectras.vm.manager.FirmwareManager;
 import com.vectras.vm.manager.ParamManager;
 import com.vectras.vm.manager.QemuManager;
 import com.vectras.vm.manager.VmFileManager;
+import com.vectras.vm.manager.WifiCardEmulatorManager;
 import com.vectras.vm.settings.ItemSettingsSelector;
 import com.vectras.vm.utils.CpuHelper;
 import com.vectras.vm.utils.DeviceUtils;
@@ -45,6 +46,10 @@ public class StartVM {
                 if (!snapshotParams.contains("-incoming defer"))
                     snapshotParams += " -incoming defer";
                 Log.d("StartVM.env", snapshotParams);
+
+                FileUtils.copyFile(VmFileManager.getPath(vmConfigs.vmID, VmFileManager.COMPILED_BATERRY_ACPI_FILE_NAME), VmFileManager.getTempPath(activity, vmConfigs.vmID));
+                FileUtils.copyFile(VmFileManager.getPath(vmConfigs.vmID, VmFileManager.COMPILED_WIFI_CARD_ACPI_FILE_NAME), VmFileManager.getTempPath(activity, vmConfigs.vmID));
+
                 return snapshotParams;
             }
         }
@@ -401,6 +406,11 @@ public class StartVM {
         if (vmConfigs.battery) {
             if (BatteryEmulatorManager.setup(activity, vmConfigs.vmID))
                 params.add("-acpitable file=" + VmFileManager.getCompiledBatteryAcpi(activity, vmConfigs.vmID));
+        }
+
+        if (vmConfigs.wifi) {
+            if (WifiCardEmulatorManager.setup(activity, vmConfigs.vmID))
+                params.add("-acpitable file=" + VmFileManager.getCompiledWifiCardAcpi(activity, vmConfigs.vmID));
         }
 
         return String.join(" ", params);

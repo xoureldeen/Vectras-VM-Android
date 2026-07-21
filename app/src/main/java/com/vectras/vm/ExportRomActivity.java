@@ -204,6 +204,8 @@ public class ExportRomActivity extends AppCompatActivity {
 
         vmConfigMap.put("networkCard", current.networkCard);
 
+        vmConfigMap.put("wifi", current.wifi);
+
         vmConfigMap.put("bootFrom", current.bootFrom);
         vmConfigMap.put("isShowBootMenu", current.isShowBootMenu);
         vmConfigMap.put("isUseLocalTime", current.isUseLocalTime);

@@ -2,13 +2,16 @@ package com.vectras.vm.creator.editor;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.content.res.AppCompatResources;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.R;
 import com.vectras.vm.creator.utils.EditorUtils;
 import com.vectras.vm.creator.utils.VMCreatorSelector;
@@ -104,9 +107,16 @@ public class NetworkConfigsDialog extends BottomSheetDialogFragment {
         if (!isAdded()) return;
 
         binding.sbvCardType.setSubtitle(Objects.requireNonNull(VMCreatorSelector.getNetworkCard(requireActivity(), configs.networkCard).get("name")).toString());
+
+        if (MainSettingsManager.getArch(requireContext()).equals(MainSettingsManager.PPC_ARCH)) {
+            binding.cbvWifiCardDummy.setVisibility(View.GONE);
+            binding.sbvCardType.setBackground(AppCompatResources.getDrawable(requireContext(), R.drawable.object_shape_single_high));
+        } else {
+            binding.cbvWifiCardDummy.setChecked(configs.wifi);
+        }
     }
 
     private void save() {
-        // It may be used in subsequent versions.
+        configs.wifi = binding.cbvWifiCardDummy.isChecked();
     }
 }

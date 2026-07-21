@@ -2144,7 +2144,7 @@ public class VncCanvas extends AppCompatImageView {
 		// Request initial framebuffer update
 		isNeedWriteFullUpdateRequest = true;
 
-		startDeadCheck();
+//		startDeadCheck();
 
         VncCanvasActivity activity = (VncCanvasActivity) VncCanvas.this.getContext();
         activity.onConnected();

@@ -674,6 +674,14 @@
     <string name="change_optical_drive">Change optical drive</string>
     <string name="do_you_want_to_change_create_or_remove_optical_drive">Do you want to change, create or remove?\n\nIf you choose to create, you need to select the folder containing the necessary files to create the optical disc.</string>
     <string name="you_are_not_allowed_to_use_this_folder">You are not allowed to use this folder.</string>
+    <string name="delete_broken_vm_content">This virtual machine is broken, would you like to delete it?</string>
+    <string name="report">Report</string>
+    <string name="send_log_to_server_content">This log will be sent to our server. Do you want to continue?</string>
+    <string name="send">Send</string>
+    <string name="sending">Sending…</string>
+    <string name="thank_you_for_sending_the_report">Thank you for sending the report.</string>
+    <string name="send_the_report_failed_content">An error occurred while submitting the report. Please try again later.</string>
+    <string name="wifi_card_dummy">Wi-Fi card (dummy)</string>
 
 
     <!--======================TERMUX STRINGS====================-->

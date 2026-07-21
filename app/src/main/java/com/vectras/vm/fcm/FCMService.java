@@ -34,7 +34,7 @@ public class FCMService
                 NotificationUtils.generalChannelId,
                 data.get("title") != null ? data.get("title") : getString(R.string.new_notification),
                 data.get("message") != null ? data.get("message") : getString(R.string.tap_to_view),
-                R.drawable.ic_vectras_vm_48,
+                R.drawable.vectras_vm_24px,
                 data.get("image") != null ? data.get("image") : null,
                 -1,
                 data.get("url") != null ? data.get("url") : null,
