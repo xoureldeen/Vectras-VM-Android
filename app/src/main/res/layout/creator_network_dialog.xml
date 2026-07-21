@@ -40,7 +40,15 @@
                 android:layout_height="wrap_content"
                 app:title="@string/card_type"
                 app:subtitle="@string/defaulttext"
-                android:background="@drawable/object_shape_single_high"/>
+                android:background="@drawable/object_shape_top_high"/>
+
+            <com.vectras.vm.view.CheckBoxView
+                android:id="@+id/cbv_wifi_card_dummy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                app:setText="@string/wifi_card_dummy"
+                android:background="@drawable/object_shape_bottom_high"/>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

@@ -106,6 +106,7 @@ public class QemuConsoleDialog extends DialogFragment {
 
         executor.execute(() -> {
             String response = QmpSender.send(command);
+            if (!isAdded()) return;
             requireActivity().runOnUiThread(() -> {
 
                 if (command.trim().equals("quit")) {

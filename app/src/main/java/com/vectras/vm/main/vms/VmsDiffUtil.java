@@ -26,7 +26,7 @@ public class VmsDiffUtil extends DiffUtil.Callback {
     @Override
     public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
         // Compare using a unique key (e.g., vmID)
-        return oldList.get(oldItemPosition).vmID.equals(newList.get(newItemPosition).vmID);
+        return oldList.get(oldItemPosition) != null && newList.get(newItemPosition) != null && oldList.get(oldItemPosition).vmID.equals(newList.get(newItemPosition).vmID);
     }
 
     @Override

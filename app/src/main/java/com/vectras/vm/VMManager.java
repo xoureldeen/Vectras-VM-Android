@@ -369,7 +369,7 @@ public class VMManager {
         JsonArray arr = JsonParser.parseString(vmList).getAsJsonArray();
         if (position < 0 || position > arr.size() - 1) return false;
         JsonObject obj = arr.get(position).getAsJsonObject();
-        String vmId = obj.has("vmID") ? obj.get("vmID").getAsString() : null;
+        String vmId = (obj != null && obj.has("vmID")) ? obj.get("vmID").getAsString() : null;
         arr.remove(position);
 
         vmList = new Gson().toJson(arr);
@@ -409,6 +409,16 @@ public class VMManager {
         Config.vmID = oldVmId;
 
         return isCompleted;
+    }
+
+    public static boolean deleteVmInList(Context context, int position) {
+        if (!JSONUtils.isValidVmList()) return false;
+        String vmList = FileUtils.readFromFile(context, new File(AppConfig.maindirpath + "roms-data.json"));
+        JsonArray arr = JsonParser.parseString(vmList).getAsJsonArray();
+        if (position < 0 || position > arr.size() - 1) return false;
+        arr.remove(position);
+
+        return FileUtils.writeToFile(AppConfig.maindirpath, "roms-data.json", vmList);
     }
 
     public static int restoreAll() {
@@ -920,6 +930,8 @@ public class VMManager {
     }
 
     public static boolean deleteMigrate() {
+        FileUtils.delete(VmFileManager.getPath(Config.vmID, VmFileManager.COMPILED_BATERRY_ACPI_FILE_NAME));
+        FileUtils.delete(VmFileManager.getPath(Config.vmID, VmFileManager.COMPILED_WIFI_CARD_ACPI_FILE_NAME));
         return FileUtils.delete(new File(VmFileManager.getSnapshotBin(Config.vmID)));
     }
 
@@ -931,7 +943,7 @@ public class VMManager {
         return FileUtils.move(AppConfig.vmFolder + Config.vmID + "/snapshot.bin.bak", AppConfig.vmFolder + Config.vmID + "/snapshot.bin");
     }
 
-    public static void showPauseDialog(Activity _activity) {
+    public static void showPauseDialog(Activity _activity, String vmId) {
         DialogUtils.twoDialog(
                 _activity,
                 _activity.getString(R.string.pause),
@@ -977,6 +989,9 @@ public class VMManager {
                             QmpSender.resume();
                             _activity.runOnUiThread(() -> DialogUtils.oopsDialog(_activity, _activity.getString(R.string.vm_state_save_failed_note)));
                         } else {
+                            FileUtils.copyFile(VmFileManager.getCompiledBatteryAcpi(_activity, vmId), VmFileManager.getPath(vmId));
+                            FileUtils.copyFile(VmFileManager.getCompiledWifiCardAcpi(_activity, vmId), VmFileManager.getPath(vmId));
+
                             QmpSender.quickShutdown();
                         }
 

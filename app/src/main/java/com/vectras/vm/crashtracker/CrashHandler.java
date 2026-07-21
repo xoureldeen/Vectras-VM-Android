@@ -33,20 +33,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     public void uncaughtException(Thread t, Throwable e) {
         Log.e(TAG, "uncaughtException: ", e);
 
-        DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy_MM_dd-HH_mm_ss", Locale.US);
-        String time = DATE_FORMAT.format(new Date());
-
-        LinkedHashMap<String, String> head = new LinkedHashMap<>();
-        head.put("Time Of Crash", time);
-        head.put("Device", String.format("%s, %s", Build.MANUFACTURER, Build.MODEL));
-        head.put("Android Version", String.format(Locale.US,"%s (%d)", Build.VERSION.RELEASE, Build.VERSION.SDK_INT));
-        head.put("App Version", String.format(Locale.US, "%s (%d)", context.getString(R.string.app_version), context.getResources().getInteger(R.integer.app_version_code)));
-        head.put("Kernel", DeviceUtils.getKernel());
-        head.put("Support Abis",
-                Build.SUPPORTED_ABIS != null
-                        ? Arrays.toString(Build.SUPPORTED_ABIS)
-                        : "unknown");
-        head.put("Fingerprint", Build.FINGERPRINT);
+        LinkedHashMap<String, String> head = CrashTrackerUtils.getClientInfo(context, System.currentTimeMillis(), false);
 
         StringBuilder builder = new StringBuilder();
 

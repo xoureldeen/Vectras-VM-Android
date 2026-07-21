@@ -60,6 +60,14 @@
             android:gravity="bottom|end">
 
             <com.google.android.material.button.MaterialButton
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:id="@+id/btn_report"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:text="@string/report" />
+
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_copy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
