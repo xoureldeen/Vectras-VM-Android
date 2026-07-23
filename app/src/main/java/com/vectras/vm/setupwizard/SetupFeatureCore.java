@@ -1,10 +1,12 @@
 package com.vectras.vm.setupwizard;
 
-import android.app.Activity;
+import static android.os.Build.VERSION.SDK_INT;
+
 import android.content.Context;
 import android.os.Build;
 import android.util.Log;
 
+import com.termux.app.TermuxService;
 import com.vectras.vm.R;
 import com.vectras.vm.VMManager;
 import com.vectras.vm.utils.DeviceUtils;
@@ -116,6 +118,7 @@ public class SetupFeatureCore {
 
         // Step 1: Copy asset to filesDir
         isCompleted = copyAssetToFile(context, assetPath, extractedFilePath);
+        if (isCompleted) isCompleted = extractX11LoaderApk(context);
 
         // Step 2: Run tar extraction
         if (isCompleted) {
@@ -235,7 +238,7 @@ public class SetupFeatureCore {
 
     public static void checkabi(Context context) {
         if (!DeviceUtils.is64bit())
-            DialogUtils.oneDialog((Activity) context,
+            DialogUtils.oneDialog(context,
                     context.getResources().getString(R.string.warning),
                     context.getResources().getString(R.string.cpu_not_support_64),
                     context.getString(R.string.ok),
@@ -244,5 +247,39 @@ public class SetupFeatureCore {
                     true,
                     null,
                     null);
+    }
+
+    public static boolean extractX11LoaderApk(Context context) {
+        File loaderFile = new File(TermuxService.PREFIX_PATH + "/libexec/termux-x11/loader.apk");
+
+        if (!loaderFile.exists() || (SDK_INT >= 34 && loaderFile.canWrite())) {
+            if (loaderFile.exists() && !loaderFile.delete()) {
+                lastErrorLog = "Deleting loader.apk failed.";
+                return false;
+            }
+
+            if (!FileUtils.createDirectory(loaderFile.getParent())) {
+                lastErrorLog = "Creating directory for loader.apk failed.";
+                return false;
+            }
+
+            SetupFeatureCore.copyAssetToFile(context, "bootstrap/loader.apk", loaderFile.getAbsolutePath());
+
+            if (SDK_INT >= 34) {
+                if (!loaderFile.setWritable(false, false)) {
+                    lastErrorLog = "The attempt to change permissions for loader.apk failed.";
+                    return false;
+                }
+            }
+
+            if (loaderFile.exists() && (SDK_INT < 34 || !loaderFile.canWrite())) {
+                return true;
+            } else {
+                lastErrorLog = "loader.apk is unavailable or permissions don't match.";
+                return false;
+            }
+        }
+
+        return true;
     }
 }

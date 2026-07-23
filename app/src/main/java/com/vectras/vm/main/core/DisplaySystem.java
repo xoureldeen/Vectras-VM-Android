@@ -1,6 +1,5 @@
 package com.vectras.vm.main.core;
 
-import static android.os.Build.VERSION.SDK_INT;
 import static com.vectras.vm.utils.LibraryChecker.isPackageInstalled2;
 
 import android.app.Activity;
@@ -18,13 +17,13 @@ import com.vectras.vm.R;
 import com.vectras.vm.VectrasApp;
 import com.vectras.vm.core.ShellExecutor;
 import com.vectras.vm.core.TermuxX11;
+import com.vectras.vm.setupwizard.SetupFeatureCore;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.PackageUtils;
 import com.vectras.vm.x11.X11Activity;
 import com.vectras.vterm.Terminal2;
 
-import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -41,7 +40,7 @@ public class DisplaySystem {
         if (MainSettingsManager.getVmUi(context).equals("VNC")) {
             context.startActivity(new Intent(context, MainVNCActivity.class));
         } else if (MainSettingsManager.getVmUi(context).equals("X11")) {
-            DisplaySystem.launchX11(context, false);
+            DisplaySystem.launchX11(context);
         }
     }
 
@@ -53,7 +52,7 @@ public class DisplaySystem {
             activity.startActivity(new Intent(activity, MainVNCActivity.class));
     }
 
-    public static void launchX11(Context context, boolean isKill) {
+    public static void launchX11(Context context) {
         if (!isUseBuiltInX11() && !PackageUtils.isInstalled("com.termux.x11", context)) {
             DialogUtils.needInstallTermuxX11(context);
             return;
@@ -102,7 +101,7 @@ public class DisplaySystem {
                                 public void onFinished(String command, String log, int status) {
                                     new Handler(Looper.getMainLooper()).post(() -> {
                                         if (status == terminal2.SUCCESS) {
-                                            launchX11(context, isKill);
+                                            launchX11(context);
                                         } else {
                                             DialogUtils.oopsDialog(context, log);
                                         }
@@ -153,13 +152,12 @@ public class DisplaySystem {
 
         Log.d(TAG, "startTermuxX11...");
         if (isUseBuiltInX11()) {
-            if (SDK_INT >= 34) {
-                File loaderApk = new File(TermuxService.PREFIX_PATH + "/libexec/termux-x11/loader.apk");
-                loaderApk.setWritable(false, false);
-            }
-
-            ShellExecutor shellExec = new ShellExecutor();
-            shellExec.exec(TermuxService.PREFIX_PATH + "/bin/termux-x11 :0");
+            Log.d(TAG, "startTermuxX11: Loading loader.apk...");
+            new Thread(() -> {
+                SetupFeatureCore.extractX11LoaderApk(context);
+                ShellExecutor shellExec = new ShellExecutor();
+                shellExec.exec(TermuxService.PREFIX_PATH + "/bin/termux-x11 :0");
+            }).start();
         } else {
             if (PackageUtils.isInstalled("com.termux.x11", context)){
                 try {

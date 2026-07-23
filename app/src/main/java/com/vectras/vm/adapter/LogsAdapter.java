@@ -65,6 +65,8 @@ public class LogsAdapter extends RecyclerView.Adapter<LogsAdapter.logViewHolder>
     private int mLogLevel = 3;
     private boolean mLockAutoScroll = false;
 
+    private boolean forceLightText;
+
 
     /**
      * Interfaces
@@ -87,9 +89,10 @@ public class LogsAdapter extends RecyclerView.Adapter<LogsAdapter.logViewHolder>
     }
 
 
-    public LogsAdapter(LinearLayoutManager layoutManager, Context context) {
+    public LogsAdapter(LinearLayoutManager layoutManager, Context context, boolean forceLightText) {
         this.mContext = context;
         this.mLinearLayoutManager = layoutManager;
+        this.forceLightText = forceLightText;
 
         setLogLevel(VectrasStatus.LogLevel.DEBUG.getInt());
 
@@ -141,6 +144,7 @@ public class LogsAdapter extends RecyclerView.Adapter<LogsAdapter.logViewHolder>
             String msg = logItem.getString(mContext);
             String time = getTime(logItem, mTimeFormat);
             text = (!time.isEmpty() ? String.format("[%s] ", time) : "") + msg;
+            if (forceLightText) viewHolder.textLog.setTextColor(android.graphics.Color.WHITE);
             viewHolder.textLog.setText(Html.fromHtml(text));
         } catch (Exception e) {
             VectrasStatus.logException(e);

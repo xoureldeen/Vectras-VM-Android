@@ -31,9 +31,14 @@ public class ShellExecutor {
 
         Runnable processRunnable = () -> {
             try (FileWriter logWriter = new FileWriter(logPath, true)) {
-                shellExecutorProcess = new ProcessBuilder(shellPath).start();
+                ProcessBuilder pb = new ProcessBuilder(shellPath);
+                pb.redirectErrorStream(true);
+
+                shellExecutorProcess = pb.start();
+
                 OutputStream outputStream = shellExecutorProcess.getOutputStream();
 
+                Log.d(TAG, "Running command: " + command);
                 logWriter.write("Running command: " + command + "\n");
                 outputStream.write((command + "\n").getBytes());
                 outputStream.flush();

@@ -70,7 +70,7 @@ import com.google.android.material.button.MaterialButton;
  * The {@link ExtraKeysInfo} is created by TermuxAppSharedProperties.setExtraKeys().
  * Then its got and the view height is adjusted in TermuxActivity.setTerminalToolbarHeight().
  * The client used is TermuxTerminalExtraKeys, which extends
- * {@link com.termux.x11.utils.TermuxX11ExtraKeys } to handle Termux app specific logic and
+ * {@link com.vectras.vm.x11.utils.TermuxX11ExtraKeys } to handle Termux app specific logic and
  * leave the rest to the super class.
  */
 public final class ExtraKeysView extends GridLayout {

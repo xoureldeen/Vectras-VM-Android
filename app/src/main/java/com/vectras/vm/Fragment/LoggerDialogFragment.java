@@ -31,6 +31,7 @@ public class LoggerDialogFragment extends DialogFragment {
     private final String TAG = "LoggerDialogFragment";
     private final Timer _timer = new Timer();
     private boolean isReading;
+    public boolean forceLightText;
 
     @NonNull
     @Override
@@ -40,7 +41,7 @@ public class LoggerDialogFragment extends DialogFragment {
         Objects.requireNonNull(alertDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         alertDialog.setContentView(R.layout.fragment_logs);
         LinearLayoutManager layoutManager = new LinearLayoutManager(VectrasApp.getApp());
-        LogsAdapter mLogAdapter = new LogsAdapter(layoutManager, VectrasApp.getApp());
+        LogsAdapter mLogAdapter = new LogsAdapter(layoutManager, VectrasApp.getApp(), forceLightText);
         RecyclerView logList = alertDialog.findViewById(R.id.recyclerLog);
         logList.setAdapter(mLogAdapter);
         logList.setLayoutManager(layoutManager);

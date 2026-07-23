@@ -67,7 +67,7 @@ import org.json.JSONObject;
  * Its up to the {@link ExtraKeysView.IExtraKeysView} client on how to handle individual key values
  * of an {@link ExtraKeyButton}. They are sent as is via
  * {@link ExtraKeysView.IExtraKeysView#onExtraKeyButtonClick(View, ExtraKeyButton, Button)}. The
- * {@link com.termux.x11.utils.TermuxX11ExtraKeys} which is an implementation of the interface,
+ * {@link com.vectras.vm.x11.utils.TermuxX11ExtraKeys} which is an implementation of the interface,
  * checks if the key is one of {@link ExtraKeysConstants#PRIMARY_KEY_CODES_FOR_STRINGS} and generates
  * a {@link android.view.KeyEvent} for it, and if its not, then converts the key to code points by
  * calling {@link CharSequence#codePoints()} and passes them to the terminal as literal strings.
