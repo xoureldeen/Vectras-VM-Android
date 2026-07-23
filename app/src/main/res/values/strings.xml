@@ -736,14 +736,6 @@
 
     <!--======================TERMUX-X11 STRINGS====================-->
 
-    <!-- TermuxX11Activity -->
-
-    <string name="not_connected">Not connected</string>
-    <string name="help_button_text">   Help   </string>
-    <string name="preferences_button_text">   Preferences   </string>
-    <string name="extra_keys_config_desc">Here you can set value of extra-keys variable like in Termux app (read <a href="http://wiki.termux.com/wiki/Touch_Keyboard#Extra_Keys_Row">this</a>) and more (e.g. META).
-    Put empty string for the default value.</string>
-
     <!-- Log Level -->
     <string name="cancel">Cancel</string>
     <string name="back_to_the_display">Back to the Display</string>
@@ -838,6 +830,119 @@
     <string name="settings_tag_keyboard">Keyboard</string>
     <string name="settings_tag_other">Other</string>
     <string name="executing_command_please_wait">Executing command, please wait…</string>
+
+    <string name="not_connected">Not connected</string>
+    <string name="preferences_button_text">   PREFERENCES   </string>
+    <string name="help_button_text">   HELP   </string>
+    <string name="exit_button_text">   EXIT   </string>
+
+    <string name="extra_keys_config_desc">Here you can set value of extra-keys variable like in Termux app (read <a href="http://wiki.termux.com/wiki/Touch_Keyboard#Extra_Keys_Row">this</a>) and more \n
+E.g. <b>META</b> for <i>META key</i>, \n
+<b>KEYBOARD</b> for <i>soft keyboard toggling key</i>, \n
+<b>PREFERENCES</b> for <i>preferences opening key</i>, \n
+<b>MOUSE_HELPER</b> for <i>mouse helper toggling key</i>, \n
+<b>STYLUS_HELPER</b> for <i>stylus click override overlay toggling key</i>, \n
+<b>EXIT</b> for <i>application exit key</i>.</string>
+    <string name="lorie_notification_content_text">Pull down to show options</string>
+    <string name="lorie_notification_open_preferences">Preferences</string>
+    <string name="lorie_notification_exit">Exit</string>
+    <string name="lorie_notification_restart_activity">Restart</string>
+    <string name="lorie_notification_toggle_soft_keyboard">Toggle IME</string>
+    <string name="lorie_notification_toggle_additional_key_bar">Toggle additional keyboard</string>
+    <string name="lorie_notification_release_pointer_and_keyboard_capture">Release captures</string>
+    <string name="lorie_notification_toggle_fullscreen">Toggle fullscreen</string>
+
+    <string name="lorie_pref_main">Preferences</string>
+    <string name="lorie_pref_output">Output</string>
+    <string name="lorie_pref_pointer">Pointer</string>
+    <string name="lorie_pref_kbd">Keyboard</string>
+    <string name="lorie_pref_other">Other</string>
+    <string name="lorie_pref_version">Version</string>
+    <string name="lorie_pref_ekbar">Extra key bar preferences</string>
+    <string name="lorie_pref_userActions">Response to user actions</string>
+
+    <string name="lorie_pref_displayResolutionMode">Display resolution mode</string>
+    <string name="lorie_pref_displayScale">Display scale, %</string>
+    <string name="lorie_pref_displayResolutionExact">Display resolution</string>
+    <string name="lorie_pref_displayResolutionCustom">Display resolution</string>
+    <string name="lorie_pref_displayFilteringMode">Display filtering mode</string>
+    <string name="lorie_pref_adjustResolution">Adjust the set resolution to fit screen orientation</string>
+    <string name="lorie_pref_displayStretch">Stretch to fit display</string>
+    <string name="lorie_pref_Reseed">Reseed screen while soft keyboard is open</string>
+    <string name="lorie_pref_Reseed_summary">The screen size will be adjusted while Soft Keyboard is open.</string>
+    <string name="lorie_pref_PIP">PIP mode</string>
+    <string name="lorie_pref_PIP_summary">Show app in picture-in-picture mode when home button or recents button is pressed</string>
+    <string name="lorie_pref_fullscreen">Fullscreen</string>
+    <string name="lorie_pref_fullscreen_summary">Toggle immersive mode in your device display</string>
+    <string name="lorie_pref_forceOrientation">Screen orientation</string>
+    <string name="lorie_pref_hideCutout">Hide display cutout (if any)</string>
+    <string name="lorie_pref_keepScreenOn">Keep Screen On</string>
+
+    <string name="lorie_pref_touchMode">Touchscreen input mode</string>
+    <string name="lorie_pref_scaleTouchpad">Apply display scale factor to touchpad</string>
+    <string name="lorie_pref_showStylusClickOverride">Show stylus click options</string>
+    <string name="lorie_pref_showStylusClickOverride_summary">Stylus touch override, left, middle or right click (stylus only)</string>
+    <string name="lorie_pref_stylusIsMouse">Enable stylus mouse mode</string>
+    <string name="lorie_pref_stylusIsMouse_summary">Make your stylus work like a mouse. When activated, stylus will only move the cursor and send mouse clicks, ignoring pressure, angle, and tilt.</string>
+    <string name="lorie_pref_stylusButtonContactModifierMode">Stylus button contact modifier mode</string>
+    <string name="lorie_pref_stylusButtonContactModifierMode_summary">Enable this option to send right or middle mouse buttons only when stylus touches the screen while the button is pressed.</string>
+    <string name="lorie_pref_showMouseHelper">Show mouse click helper overlay</string>
+    <string name="lorie_pref_showMouseHelper_summary">Onscreen mouse buttons usable with touchpad</string>
+    <string name="lorie_pref_pointerCapture">Capture external pointer devices when possible</string>
+    <string name="lorie_pref_pointerCapture_summary">Intercept all hardware pointer events. Pointer is back to Android after pressing Escape key.</string>
+    <string name="lorie_pref_transformCapturedPointer">Transform captured pointer movements</string>
+    <string name="lorie_pref_capturedPointerSpeedFactor">Captured pointer speed factor, %</string>
+    <string name="lorie_pref_tapToMove">Enable tap-to-move for touchpads</string>
+    <string name="lorie_pref_ignoreGamepadEvents">Ignore gamepad input events</string>
+    <string name="lorie_pref_ignoreGamepadEvents_summary">Prevent gamepad and joystick events from being forwarded to X server</string>
+
+    <string name="lorie_pref_showAdditionalKbd">Show additional keyboard</string>
+    <string name="lorie_pref_showAdditionalKbd_summary">Show keyboard with additional keys.</string>
+    <string name="lorie_pref_showIMEWhileExternalConnected">Show IME with external keyboard</string>
+    <string name="lorie_pref_showIMEWhileExternalConnected_summary">Show software keyboard while hardware keyboard is connected.</string>
+    <string name="lorie_pref_preferScancodes">Prefer scancodes when possible</string>
+    <string name="lorie_pref_preferScancodes_summary">Let X server handle hardware keyboard layout (with DE settings or setxkbmap).</string>
+    <string name="lorie_pref_hardwareKbdScancodesWorkaround">Hardware keyboard scancodes workaround</string>
+    <string name="lorie_pref_hardwareKbdScancodesWorkaround_summary">Fixes scancodes on some devices. Might cause problems with multiple layouts.</string>
+    <string name="lorie_pref_dexMetaKeyCapture">Intercept system shortcuts</string>
+    <string name="lorie_pref_dexMetaKeyCapture_summary">Samsung Dex only. Allows interception of &quot;Alt+F4&quot;, &quot;Meta+D&quot;, &quot;Meta+E&quot;, etc.</string>
+    <string name="lorie_pref_enableAccessibilityService">Enable Accessibility service for intercepting system shortcuts manually.</string>
+    <string name="lorie_pref_enableAccessibilityService_summary">Open Accessibility settings.</string>
+    <string name="lorie_pref_enableAccessibilityServiceAutomatically">Enable Accessibility service for intercepting system shortcuts automatically.</string>
+    <string name="lorie_pref_enableAccessibilityServiceAutomatically_summary">Requires WRITE_SECURE_SETTINGS permission.</string>
+    <string name="lorie_pref_pauseKeyInterceptingWithEsc">Pause key intercepting with Esc key</string>
+    <string name="lorie_pref_filterOutWinkey">Filter out intercepted Win (Meta/Mod4) key.</string>
+    <string name="lorie_pref_filterOutWinkey_summary">Allows you to use Dex shortcuts while intercepting. Requires Accessibility service to work.</string>
+    <string name="lorie_pref_enforceCharBasedInput">Enforce char based input</string>
+    <string name="lorie_pref_enforceCharBasedInput_summary">Suppresses suggestions, predictive typing and CJK languages</string>
+
+    <string name="lorie_pref_clipboardEnable">Clipboard sharing</string>
+    <string name="lorie_pref_requestNotificationPermission">Request notification permission</string>
+    <string name="lorie_pref_xrMode">Meta Oculus XR mode</string>
+    <string name="lorie_pref_configureResponseToUserActions">Configure response to user actions</string>
+    <string name="lorie_pref_storeSecondaryDisplayPreferencesSeparately">Store preferences for secondary displays separately</string>
+    <string name="lorie_pref_storeSecondaryDisplayPreferencesSeparately_summary">Open this screen on display you want to configure</string>
+
+    <string name="lorie_pref_adjustHeightForEK">Adjust display height for extra keys bar</string>
+    <string name="lorie_pref_adjustHeightForEK_summary">May cause screen flickering during toggling EK bar.</string>
+    <string name="lorie_pref_useTermuxEKBarBehaviour">Deactivate special keys on additional key bar after each keypress</string>
+    <string name="lorie_pref_useTermuxEKBarBehaviour_summary">Use long-tap to lock special keys</string>
+    <string name="lorie_pref_opacityEKBar">Opacity of extra keys bar, %</string>
+    <string name="lorie_pref_extra_keys_config">Extra keys config</string>
+
+    <string name="lorie_pref_swipeUpAction">Three finger swipe up</string>
+    <string name="lorie_pref_swipeDownAction">Three finger swipe down</string>
+    <string name="lorie_pref_volumeUpAction">Volume up</string>
+    <string name="lorie_pref_volumeDownAction">Volume down</string>
+    <string name="lorie_pref_backButtonAction">Back button</string>
+    <string name="lorie_pref_notificationTapAction">Notification tap</string>
+    <string name="lorie_pref_notificationButton0Action">Notification first button</string>
+    <string name="lorie_pref_notificationButton1Action">Notification second button</string>
+    <string name="lorie_pref_mediaKeysAction">Media keys</string>
+
+    <string name="lorie_pref_summary_requiresExactOrCustom">Requires "display resolution mode" to be "exact" or "custom"</string>
+    <string name="lorie_pref_summary_requiresIntercepting">Requires intercepting system shortcuts with Dex mode or with Accessibility service</string>
+    <string name="lorie_pref_summary_requiresTrackpadAndNative">Requires "Touchscreen input mode" to be "Trackpad" and "Display resolution mode" to be not "native"</string>
 
     <!-- CPUs -->
     <string name="max_cpu" translatable="false">Max</string>

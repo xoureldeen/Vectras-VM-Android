@@ -18,29 +18,21 @@ import android.os.Looper;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.util.Log;
-import android.view.Surface;
 
 import androidx.annotation.Keep;
 
 import com.vectras.vm.BuildConfig;
 
-import java.io.DataInputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.net.ConnectException;
-import java.net.InetAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.net.URL;
-import java.util.Arrays;
 
 @Keep @SuppressLint({"StaticFieldLeak", "UnsafeDynamicallyLoadedCode"})
 public class CmdEntryPoint extends ICmdEntryInterface.Stub {
     public static final String ACTION_START = "com.vectras.vm.x11.CmdEntryPoint.ACTION_START";
-    public static final int PORT = 7892;
-    public static final byte[] MAGIC = "0xDEADBEEF".getBytes();
-    private static final Handler handler;
+    static final Handler handler;
     public static Context ctx;
+    private final Intent intent = createIntent();
 
     /**
      * Command-line entry point.
@@ -48,6 +40,7 @@ public class CmdEntryPoint extends ICmdEntryInterface.Stub {
      * @param args The command-line arguments
      */
     public static void main(String[] args) {
+        android.util.Log.i("CmdEntryPoint", "commit " + BuildConfig.VERSION_NAME);
         handler.post(() -> new CmdEntryPoint(args));
         Looper.loop();
     }
@@ -56,27 +49,37 @@ public class CmdEntryPoint extends ICmdEntryInterface.Stub {
         if (!start(args))
             System.exit(1);
 
+        android.util.Log.i("CmdEntryPoint", "start " + BuildConfig.VERSION_NAME);
+
         spawnListeningThread();
         sendBroadcastDelayed();
     }
 
     @SuppressLint({"WrongConstant", "PrivateApi"})
-    void sendBroadcast() {
+    private Intent createIntent() {
         String targetPackage = getenv("TERMUX_X11_OVERRIDE_PACKAGE");
         if (targetPackage == null)
             targetPackage = "com.vectras.vm";
         // We should not care about multiple instances, it should be called only by `Termux:X11` app
         // which is single instance...
         Bundle bundle = new Bundle();
-        bundle.putBinder("", this);
+        bundle.putBinder(null, this);
 
         Intent intent = new Intent(ACTION_START);
-        intent.putExtra("", bundle);
+        intent.putExtra(null, bundle);
         intent.setPackage(targetPackage);
 
         if (getuid() == 0 || getuid() == 2000)
             intent.setFlags(0x00400000 /* FLAG_RECEIVER_FROM_SHELL */);
 
+        return intent;
+    }
+
+    private void sendBroadcast() {
+        sendBroadcast(intent);
+    }
+
+    static void sendBroadcast(Intent intent) {
         try {
             ctx.sendBroadcast(intent);
         } catch (Exception e) {
@@ -127,58 +130,13 @@ public class CmdEntryPoint extends ICmdEntryInterface.Stub {
     // In this case opened port works like a lock file.
     private void sendBroadcastDelayed() {
         if (!connected())
-            sendBroadcast();
+            sendBroadcast(intent);
 
         handler.postDelayed(this::sendBroadcastDelayed, 1000);
     }
 
     void spawnListeningThread() {
-        new Thread(() -> { // New thread is needed to avoid android.os.NetworkOnMainThreadException
-            /*
-                The purpose of this function is simple. If the application has not been launched
-                before running termux-x11, the initial sendBroadcast had no effect because no one
-                received the intent. To allow the application to reconnect freely, we will listen on
-                port `PORT` and when receiving a magic phrase, we will send another intent.
-             */
-            Log.e("CmdEntryPoint", "Listening port " + PORT);
-            try (ServerSocket listeningSocket =
-                         new ServerSocket(PORT, 0, InetAddress.getByName("127.0.0.1"))) {
-                listeningSocket.setReuseAddress(true);
-                while(true) {
-                    try (Socket client = listeningSocket.accept()) {
-                        Log.e("CmdEntryPoint", "Somebody connected!");
-                        // We should ensure that it is some
-                        byte[] b = new byte[MAGIC.length];
-                        DataInputStream reader = new DataInputStream(client.getInputStream());
-                        reader.readFully(b);
-                        if (Arrays.equals(MAGIC, b)) {
-                            Log.e("CmdEntryPoint", "New client connection!");
-                            sendBroadcast();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace(System.err);
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace(System.err);
-            }
-        }).start();
-    }
-
-    public static void requestConnection() {
-        System.err.println("Requesting connection...");
-        new Thread(() -> { // New thread is needed to avoid android.os.NetworkOnMainThreadException
-            try (Socket socket = new Socket("127.0.0.1", CmdEntryPoint.PORT)) {
-                socket.getOutputStream().write(CmdEntryPoint.MAGIC);
-            } catch (ConnectException e) {
-                if (e.getMessage() != null && e.getMessage().contains("Connection refused")) {
-                    Log.e("CmdEntryPoint", "ECONNREFUSED: Connection has been refused by the server");
-                } else
-                    Log.e("CmdEntryPoint", "Something went wrong when we requested connection", e);
-            } catch (Exception e) {
-                Log.e("CmdEntryPoint", "Something went wrong when we requested connection", e);
-            }
-        }).start();
+        new Thread(this::listenForConnections).start();
     }
 
     /** @noinspection DataFlowIssue*/
@@ -212,10 +170,10 @@ public class CmdEntryPoint extends ICmdEntryInterface.Stub {
     }
 
     public static native boolean start(String[] args);
-    public native void windowChanged(Surface surface, String name);
     public native ParcelFileDescriptor getXConnection();
     public native ParcelFileDescriptor getLogcatOutput();
     private static native boolean connected();
+    private native void listenForConnections();
 
     static {
         try {
@@ -224,7 +182,7 @@ public class CmdEntryPoint extends ICmdEntryInterface.Stub {
         } catch (Exception e) {
             Log.e("CmdEntryPoint", "Something went wrong when preparing MainLooper", e);
         }
-        handler = new Handler();
+        handler = new Handler(Looper.getMainLooper());
         ctx = createContext();
 
         String path = "lib/" + Build.SUPPORTED_ABIS[0] + "/libXlorie.so";

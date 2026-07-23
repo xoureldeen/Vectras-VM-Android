@@ -15,6 +15,7 @@ import com.vectras.vm.main.core.DisplaySystem;
 import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.PackageUtils;
+import com.vectras.vm.x11.LoriePreferences;
 
 import java.util.Objects;
 
@@ -49,21 +50,19 @@ public class X11DisplaySettingsActivity extends AppCompatActivity {
         binding.lnEnabled.setOnClickListener(v -> binding.swEnabled.toggle());
 
         binding.lnPreferences.setOnClickListener(v -> {
-            Intent intent = new Intent();
             if (DisplaySystem.isUseBuiltInX11()) {
-                intent.setClass(this, MainSettingsManager.class);
-                intent.putExtra("goto", "termuxx11");
+                startActivity(new Intent(this, LoriePreferences.class) {{ setAction(Intent.ACTION_MAIN); }});
             } else {
                 if (PackageUtils.isInstalled("com.termux.x11", this)) {
+                    Intent intent = new Intent();
                     intent.setClassName("com.termux.x11", "com.termux.x11.MainActivity");
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                    startActivity(intent);
                 } else {
                     DialogUtils.needInstallTermuxX11(this);
-                    return;
                 }
             }
-            startActivity(intent);
         });
 
         binding.swRunQemuWithXterm.setOnCheckedChangeListener((buttonView, isChecked) -> MainSettingsManager.setRunQemuWithXterm(this, isChecked));

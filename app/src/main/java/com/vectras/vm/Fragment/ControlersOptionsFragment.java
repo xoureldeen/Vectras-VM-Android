@@ -1,19 +1,19 @@
 package com.vectras.vm.Fragment;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
 import android.view.View;
 import android.view.Window;
 
 import com.vectras.qemu.MainSettingsManager;
-import com.vectras.qemu.MainVNCActivity;
 import com.vectras.vm.R;
 import com.vectras.vm.databinding.ControlsFragmentBinding;
-import com.vectras.vm.x11.X11Activity;
 
 public class ControlersOptionsFragment extends DialogFragment {
     public ControlsFragmentBinding binding;
@@ -54,4 +54,11 @@ public class ControlersOptionsFragment extends DialogFragment {
         alertDialog.show();
         return alertDialog;
     }
+
+    public void onDismiss(@NonNull DialogInterface dialog) {
+        super.onDismiss(dialog);
+        if (setOnDismiss != null) setOnDismiss.run();
+    }
+
+    public Runnable setOnDismiss;
 }

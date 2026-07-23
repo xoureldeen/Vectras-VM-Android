@@ -197,7 +197,7 @@ public class Terminal2 {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                Log.d(TAG, line);
+//                Log.d(TAG, line);
                 VectrasStatus.logError(line);
                 output.append(line).append("\n");
                 if (callback != null) callback.onRunning(command, line);

@@ -705,16 +705,16 @@ public class VMManager {
                     },
                     null, null);
             isQemuStopedWithError = true;
-        } else if (_result.contains("Couldn't connect to XServer")) {
-            if (isTryAgain) {
-                DialogUtils.oneDialog(_activity, _activity.getString(R.string.problem_has_been_detected), _activity.getString(R.string.x11_display_cannot_be_used_at_this_time_content) + "\n\n" + _result, R.drawable.cast_warning_24px);
-                _activity.stopService(new Intent(_activity, MainService.class));
-                isQemuStopedWithError = true;
-                isTryAgain = false;
-            } else {
-                MainStartVM.startTryAgain(_activity);
-                isTryAgain = true;
-            }
+//        } else if (_result.contains("Couldn't connect to XServer")) {
+//            if (isTryAgain) {
+//                DialogUtils.oneDialog(_activity, _activity.getString(R.string.problem_has_been_detected), _activity.getString(R.string.x11_display_cannot_be_used_at_this_time_content) + "\n\n" + _result, R.drawable.cast_warning_24px);
+//                _activity.stopService(new Intent(_activity, MainService.class));
+//                isQemuStopedWithError = true;
+//                isTryAgain = false;
+//            } else {
+//                MainStartVM.startTryAgain(_activity);
+//                isTryAgain = true;
+//            }
         } else if (_result.contains("No such file or directory")) {
             //Error code: NO_SUCH_FILE_OR_DIRECTORY
             DialogUtils.oneDialog(_activity, _activity.getString(R.string.problem_has_been_detected), _activity.getString(R.string.error_NO_SUCH_FILE_OR_DIRECTORY) + "\n\n" + _result, R.drawable.file_copy_24px);

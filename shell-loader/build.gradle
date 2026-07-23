@@ -1,15 +1,23 @@
 //file:noinspection UnnecessaryQualifiedReference, GrDeprecatedAPIUsage
 apply plugin: 'com.android.application'
 
+def appSigningConfig = project(':app').android.signingConfigs.debug
+
 android {
 
+    buildTypes {
+        debug {
+            if (appSigningConfig != null) {
+                signingConfig appSigningConfig
+            }
+        }
+    }
     buildToolsVersion '36.1.0'
-    compileSdk 36
+    compileSdk 34
 }
 
 android.namespace 'com.vectras.vm'
 android.defaultConfig.minSdkVersion 21
-android.buildTypes.debug.signingConfig null
 android.buildFeatures.buildConfig true
 android.compileOptions.sourceCompatibility SDK_VERSION
 android.compileOptions.targetCompatibility SDK_VERSION

@@ -916,7 +916,7 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
         bottomSheetDialog.show();
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApp());
-        LogsAdapter mLogAdapter = new LogsAdapter(layoutManager, getApp());
+        LogsAdapter mLogAdapter = new LogsAdapter(layoutManager, getApp(), false);
         bottomsheetdialogLoggerBinding.recyclerLog.setAdapter(mLogAdapter);
         bottomsheetdialogLoggerBinding.recyclerLog.setLayoutManager(layoutManager);
         mLogAdapter.scrollToLastPosition();
