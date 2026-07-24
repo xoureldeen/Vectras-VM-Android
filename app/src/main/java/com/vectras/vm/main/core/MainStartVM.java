@@ -124,7 +124,8 @@ public class MainStartVM {
             return;
         }
 
-        setDefault();
+        // Do not reset when continuing to run on the built-in X11 screen.
+        if (!isLaunchFromPending) setDefault();
 
         if (isLaunchFromPending) {
             isLaunchFromPending = false;
@@ -149,7 +150,7 @@ public class MainStartVM {
             if (MainSettingsManager.getVmUi(context).equals("X11") && !VMManager.isVMRunning(context, vmID)) {
                 if (MainSettingsManager.getRunQemuWithXterm(context)) {
                     String logFilePath = VmFileManager.getLog(context, vmID);
-                    runCommandFormat = String.format(runCommandFormat, "mkdir -p \"" + new File(logFilePath).getParent() + "\"; xterm -e bash -c \"%s 2>&1 | tee " + logFilePath + "\"; cat " + logFilePath + "; rm " + logFilePath);
+                    runCommandFormat = String.format(runCommandFormat, "mkdir -p \"" + new File(logFilePath).getParent() + "\"; echo \"\" > " + logFilePath + "; xterm -e bash -c \"%s 2>&1 | tee " + logFilePath + "\"; cat " + logFilePath + "; rm " + logFilePath);
                 } else {
                     runCommandFormat = String.format(runCommandFormat, "bash -c \"%s\"");
                 }

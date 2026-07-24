@@ -29,6 +29,7 @@ import com.google.gson.JsonSyntaxException;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.AppConfig;
 import com.vectras.vm.R;
+import com.vectras.vm.creator.configs.ListManager;
 import com.vectras.vm.creator.editor.AdvancedConfigsDialog;
 import com.vectras.vm.creator.editor.BoardConfigsDialog;
 import com.vectras.vm.creator.editor.NetworkConfigsDialog;
@@ -62,6 +63,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -469,6 +472,10 @@ public class VMCreatorActivity extends AppCompatActivity {
                 binding.title.setText(current.itemName);
             }
 
+            ArrayList<HashMap<String, Object>> listCpuCores = ListManager.cores(MainSettingsManager.getArch(this));
+            if (current.cores > listCpuCores.size() - 1)
+                current.cores = listCpuCores.size() - 1;
+
             if (current.itemIcon != null && !current.itemIcon.isEmpty()) {
                 thumbnailPath = (current.itemIcon.contains("/") ? current.itemIcon : VmFileManager.getPath(vmID, current.itemIcon));
                 updateThumbnailViewer("");
@@ -526,6 +533,8 @@ public class VMCreatorActivity extends AppCompatActivity {
             current.cores = Math.min(2, VMCreatorSelector.getCpuCorePosition(new CpuHelper().getCpuCores() - 1));
             current.nvirt = true;
         }
+
+        current.memory = 512;
 
         current.networkCard = 3; // Intel E1000 (82540EM)
     }

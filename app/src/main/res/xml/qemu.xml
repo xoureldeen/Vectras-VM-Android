@@ -18,35 +18,35 @@
 <!--            app:icon="@drawable/ic_arch"-->
 <!--            app:useSimpleSummaryProvider="true" />-->
 
-        <SwitchPreferenceCompat
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:defaultValue="false"
-            android:key="customMemory"
-            android:title="@string/custom_memory"
-            app:icon="@drawable/round_build_24" />
-        <EditTextPreference
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:defaultValue="512"
-            android:inputType="number"
-            android:key="memory"
-            android:selectAllOnFocus="true"
-            android:singleLine="true"
-            android:title="@string/memory_capacity_mb"
-            app:useSimpleSummaryProvider="true"
-            app:icon="@drawable/round_memory_24" />
-        <ListPreference
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:defaultValue="None"
-            android:entries="@array/soundCardLabels"
-            android:entryValues="@array/soundCardValues"
-            android:key="soundCard"
-            android:title="@string/sound_card"
-            app:isPreferenceVisible="false"
-            app:icon="@drawable/round_volume_up_24"
-            app:useSimpleSummaryProvider="true" />
+<!--        <SwitchPreferenceCompat-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:defaultValue="false"-->
+<!--            android:key="customMemory"-->
+<!--            android:title="@string/custom_memory"-->
+<!--            app:icon="@drawable/round_build_24" />-->
+<!--        <EditTextPreference-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:defaultValue="512"-->
+<!--            android:inputType="number"-->
+<!--            android:key="memory"-->
+<!--            android:selectAllOnFocus="true"-->
+<!--            android:singleLine="true"-->
+<!--            android:title="@string/memory_capacity_mb"-->
+<!--            app:useSimpleSummaryProvider="true"-->
+<!--            app:icon="@drawable/round_memory_24" />-->
+<!--        <ListPreference-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:defaultValue="None"-->
+<!--            android:entries="@array/soundCardLabels"-->
+<!--            android:entryValues="@array/soundCardValues"-->
+<!--            android:key="soundCard"-->
+<!--            android:title="@string/sound_card"-->
+<!--            app:isPreferenceVisible="false"-->
+<!--            app:icon="@drawable/round_volume_up_24"-->
+<!--            app:useSimpleSummaryProvider="true" />-->
         <!--<ListPreference
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -109,13 +109,13 @@
             android:key="useUEFI"
             android:title="@string/use_uefi_for_x64_only"
             app:icon="@drawable/hard_disk_24px" />-->
-        <SwitchPreferenceCompat
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:defaultValue="true"
-            android:key="useMemoryOvercommit"
-            android:title="@string/use_memory_overcommit"
-            app:icon="@drawable/memory_alt_24px" />
+<!--        <SwitchPreferenceCompat-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:defaultValue="true"-->
+<!--            android:key="useMemoryOvercommit"-->
+<!--            android:title="@string/use_memory_overcommit"-->
+<!--            app:icon="@drawable/memory_alt_24px" />-->
         <!--<SwitchPreferenceCompat
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -664,6 +664,8 @@
     <string name="thank_you_for_sending_the_report">Cảm ơn bạn đã gửi báo cáo.</string>
     <string name="send_the_report_failed_content">Đã xảy ra lỗi khi gửi báo cáo. Hãy thử lại sau.</string>
     <string name="wifi_card_dummy">Thẻ Wi-Fi (giả)</string>
+    <string name="pick">Lựa chọn</string>
+    <string name="capacity_too_large">Dung lượng quá lớn.</string>
 
     <!--======================TERMUX STRINGS====================-->
     <string name="application_name" translatable="false">Vterm</string>

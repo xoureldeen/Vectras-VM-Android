@@ -33,6 +33,8 @@ public class DataMainRoms {
     public int cores = 0;
     public int threads = 0;
 
+    public int memory = 0;
+
     // Dummy devices
 
     public boolean battery;

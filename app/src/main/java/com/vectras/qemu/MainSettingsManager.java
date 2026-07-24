@@ -440,32 +440,32 @@ public class MainSettingsManager extends AppCompatActivity
                 collapsingToolbarLayout.setSubtitle(getString(R.string.qemu));
             }
 
-            SwitchPreferenceCompat customMemory = findPreference("customMemory");
-            assert customMemory != null;
-            EditTextPreference memory = findPreference("memory");
-            assert memory != null;
-
-            memory.setOnBindEditTextListener(editText -> {
-                editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-                editText.setFilters(new InputFilter[]{
-                        new InputFilter.LengthFilter(4)
-                });
-            });
-
-            if (!customMemory.isChecked()) {
-                memory.setEnabled(false);
-            }
-            customMemory.setOnPreferenceChangeListener((preference, newValue) -> {
-                if (!(Boolean) newValue) {
-                    if (memory.isEnabled())
-                        memory.setEnabled(false);
-                } else {
-                    if (!memory.isEnabled())
-                        memory.setEnabled(true);
-
-                }
-                return true;
-            });
+//            SwitchPreferenceCompat customMemory = findPreference("customMemory");
+//            assert customMemory != null;
+//            EditTextPreference memory = findPreference("memory");
+//            assert memory != null;
+//
+//            memory.setOnBindEditTextListener(editText -> {
+//                editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+//                editText.setFilters(new InputFilter[]{
+//                        new InputFilter.LengthFilter(4)
+//                });
+//            });
+//
+//            if (!customMemory.isChecked()) {
+//                memory.setEnabled(false);
+//            }
+//            customMemory.setOnPreferenceChangeListener((preference, newValue) -> {
+//                if (!(Boolean) newValue) {
+//                    if (memory.isEnabled())
+//                        memory.setEnabled(false);
+//                } else {
+//                    if (!memory.isEnabled())
+//                        memory.setEnabled(true);
+//
+//                }
+//                return true;
+//            });
 
             Preference prefAVX = findPreference("AVX");
             if (!getArch(requireContext()).equals("X86_64"))
