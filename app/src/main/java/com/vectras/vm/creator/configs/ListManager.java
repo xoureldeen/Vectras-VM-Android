@@ -202,4 +202,53 @@ public class ListManager {
         UniversalPickerDialog.putToList(list, context.getString(R.string.virtio_net_transitional), "virtio-net-pci-transitional");
         return list;
     }
+
+    public static ArrayList<HashMap<String, Object>> memoryCapacity(Context context, String arch) {
+        ArrayList<HashMap<String, Object>> list = new ArrayList<>();
+        UniversalPickerDialog.putToList(list, 1);
+        UniversalPickerDialog.putToList(list, 2);
+        UniversalPickerDialog.putToList(list, 4);
+        UniversalPickerDialog.putToList(list, 8);
+        UniversalPickerDialog.putToList(list, 16);
+        UniversalPickerDialog.putToList(list, 32);
+        UniversalPickerDialog.putToList(list, 64);
+        UniversalPickerDialog.putToList(list, 128);
+        UniversalPickerDialog.putToList(list, 256);
+        UniversalPickerDialog.putToList(list, 512);
+        UniversalPickerDialog.putToList(list, 768);
+        UniversalPickerDialog.putToList(list, 1024);
+        UniversalPickerDialog.putToList(list, 1280);
+        UniversalPickerDialog.putToList(list, 1536);
+        UniversalPickerDialog.putToList(list, 1792);
+        UniversalPickerDialog.putToList(list, 2048);
+        UniversalPickerDialog.putToList(list, 2304);
+        UniversalPickerDialog.putToList(list, 2560);
+        UniversalPickerDialog.putToList(list, 2816);
+        UniversalPickerDialog.putToList(list, 3072);
+        UniversalPickerDialog.putToList(list, 3328);
+        UniversalPickerDialog.putToList(list, 3584);
+        UniversalPickerDialog.putToList(list, 3840);
+        UniversalPickerDialog.putToList(list, 4096);
+
+        if (!arch.equals(MainSettingsManager.X86_64_ARCH) && !arch.equals(MainSettingsManager.ARM64_ARCH))
+            return list;
+
+        UniversalPickerDialog.putToList(list, 4352);
+        UniversalPickerDialog.putToList(list, 4608);
+        UniversalPickerDialog.putToList(list, 4864);
+        UniversalPickerDialog.putToList(list, 5120);
+        UniversalPickerDialog.putToList(list, 5376);
+        UniversalPickerDialog.putToList(list, 5632);
+        UniversalPickerDialog.putToList(list, 5888);
+        UniversalPickerDialog.putToList(list, 6144);
+        UniversalPickerDialog.putToList(list, 6400);
+        UniversalPickerDialog.putToList(list, 6656);
+        UniversalPickerDialog.putToList(list, 6912);
+        UniversalPickerDialog.putToList(list, 7168);
+        UniversalPickerDialog.putToList(list, 7424);
+        UniversalPickerDialog.putToList(list, 7680);
+        UniversalPickerDialog.putToList(list, 7936);
+        UniversalPickerDialog.putToList(list, 8192);
+        return list;
+    }
 }

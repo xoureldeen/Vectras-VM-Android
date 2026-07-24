@@ -12,6 +12,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.SplittableRandom;
 
 public class CrashTrackerUtils {
     public static LinkedHashMap<String, String> getClientInfo(Context context, long timestamp, boolean isANR) {
@@ -31,5 +32,23 @@ public class CrashTrackerUtils {
         info.put("Fingerprint", Build.FINGERPRINT);
 
         return info;
+    }
+
+    public static String arnDiagnosis(String log) {
+        StringBuilder predictions = new StringBuilder();
+
+        if (
+                log.contains("android.app.QueuedWork.processPendingWork") &&
+                        log.contains("- waiting to lock <") &&
+                        log.contains("android.app.QueuedWork.waitToFinish")
+        ) {
+            predictions.append("I/O congestion\n");
+        }
+
+        if (log.contains("android.os.BinderProxy.transactNative")) {
+            predictions.append("system_server slow\n");
+        }
+
+        return predictions.toString().trim();
     }
 }

@@ -27,6 +27,10 @@ public class UniversalPickerDialog {
     }
 
     public static void show(Activity activity, ArrayList<HashMap<String, Object>> list, int position, UniversalPickerDialogCallback callback, String title) {
+        show(activity, list, position, callback, title, true);
+    }
+
+    public static void show(Activity activity, ArrayList<HashMap<String, Object>> list, int position, UniversalPickerDialogCallback callback, String title, boolean markSelected) {
         if (activity.isFinishing() || activity.isDestroyed()) return;
         LinearLayoutManager layoutmanager = new LinearLayoutManager(activity);
         DialogListSelectorLayoutBinding binding = DialogListSelectorLayoutBinding.inflate(activity.getLayoutInflater());
@@ -38,7 +42,7 @@ public class UniversalPickerDialog {
         binding.tvTitle.setText(title);
         binding.btnClose.setOnClickListener(v -> dialog.dismiss());
 
-        binding.list.setAdapter(new RecyclerviewAdapter(activity, dialog, list, position, callback));
+        binding.list.setAdapter(new RecyclerviewAdapter(activity, dialog, list, position, callback, markSelected));
         binding.list.setLayoutManager(layoutmanager);
 
         if (activity.isFinishing() || activity.isDestroyed()) return;
@@ -63,15 +67,17 @@ public class UniversalPickerDialog {
         Activity activity;
         ArrayList<HashMap<String, Object>> data;
         int currentPosition;
+        boolean markSelected;
         AlertDialog dialog;
         UniversalPickerDialogCallback callback;
 
-        public RecyclerviewAdapter(Activity activity, AlertDialog alertDialog, ArrayList<HashMap<String, Object>> arr, int position, UniversalPickerDialogCallback callback) {
+        public RecyclerviewAdapter(Activity activity, AlertDialog alertDialog, ArrayList<HashMap<String, Object>> arr, int position, UniversalPickerDialogCallback callback, boolean markSelected) {
             this.activity = activity;
             data = arr;
             currentPosition = position;
             dialog = alertDialog;
             this.callback = callback;
+            this.markSelected = markSelected;
         }
 
         @NonNull
@@ -89,9 +95,9 @@ public class UniversalPickerDialog {
             TextView title = view.findViewById(R.id.textview);
             ImageView check = view.findViewById(R.id.iv_check);
             title.setText(Objects.requireNonNull(data.get(position).get("name")).toString());
-            title.setTextColor(MaterialColors.getColor(title, position == currentPosition ? androidx.appcompat.R.attr.colorPrimary : com.google.android.material.R.attr.colorOnSurface));
-            view.setBackgroundResource(position == currentPosition ? R.drawable.dialog_shape_single_button : R.drawable.dialog_shape_click_effect_button);
-            check.setVisibility(position == currentPosition ? View.VISIBLE : View.INVISIBLE);
+            title.setTextColor(MaterialColors.getColor(title, markSelected && position == currentPosition ? androidx.appcompat.R.attr.colorPrimary : com.google.android.material.R.attr.colorOnSurface));
+            view.setBackgroundResource(markSelected && position == currentPosition ? R.drawable.dialog_shape_single_button : R.drawable.dialog_shape_click_effect_button);
+            check.setVisibility(markSelected && position == currentPosition ? View.VISIBLE : View.INVISIBLE);
             view.findViewById(R.id.main).setOnClickListener(v -> {
                 if (activity.isFinishing() || activity.isDestroyed()) return;
                 callback.onSelected(
@@ -123,6 +129,17 @@ public class UniversalPickerDialog {
             ) {
         HashMap<String, Object> thisItem = new HashMap<>();
         thisItem.put("name", name);
+        thisItem.put("value", value);
+        listMap.add(thisItem);
+    }
+
+    public static void putToList
+            (
+                    ArrayList<HashMap<String, Object>> listMap,
+                    int value
+            ) {
+        HashMap<String, Object> thisItem = new HashMap<>();
+        thisItem.put("name", value);
         thisItem.put("value", value);
         listMap.add(thisItem);
     }

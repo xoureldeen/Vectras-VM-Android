@@ -16,6 +16,8 @@
         android:id="@+id/nsv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:scrollbars="vertical"
+        android:fadeScrollbars="true"
         android:requiresFadingEdge="vertical"
         android:fadingEdgeLength="48dp">
 
@@ -43,7 +45,7 @@
                 android:focusable="true"
                 android:hint="@string/hard_drive_0"
                 android:theme="@style/AppTheme.TextInput"
-                app:endIconContentDescription="@string/make_image"
+                app:endIconContentDescription="@string/options"
                 app:endIconDrawable="@drawable/add_24px"
                 app:endIconMode="custom"
                 app:startIconDrawable="@drawable/hard_drive_24px">
@@ -68,7 +70,7 @@
                 android:focusable="true"
                 android:hint="@string/hard_drive_1"
                 android:theme="@style/AppTheme.TextInput"
-                app:endIconContentDescription="@string/make_image"
+                app:endIconContentDescription="@string/options"
                 app:endIconDrawable="@drawable/add_24px"
                 app:endIconMode="custom"
                 app:startIconDrawable="@drawable/hard_drive_24px">
@@ -98,7 +100,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:hint="@string/optical_drive_0"
-                app:endIconContentDescription="@string/make_image"
+                app:endIconContentDescription="@string/options"
                 app:endIconDrawable="@drawable/add_24px"
                 app:endIconMode="custom"
                 android:theme="@style/AppTheme.TextInput"
@@ -123,7 +125,7 @@
                 android:clickable="true"
                 android:focusable="true"
                 android:hint="@string/optical_drive_1"
-                app:endIconContentDescription="@string/make_image"
+                app:endIconContentDescription="@string/options"
                 app:endIconDrawable="@drawable/add_24px"
                 app:endIconMode="custom"
                 android:theme="@style/AppTheme.TextInput"

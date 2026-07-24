@@ -108,16 +108,28 @@ public class StartVM {
 
             int cores = Integer.parseInt(Objects.requireNonNull(VMCreatorSelector.getCpuCore(MainSettingsManager.getArch(activity), vmConfigs.cores).get("value")).toString());
             int threads = Math.max(1, vmConfigs.threads + 1);
-            if (!extraParams.contains("-smp ")) {
-                if (cores * threads > cpuHelper.getCpuThreads()) {
-                    cpuParams += " -smp sockets=1,cores=" + cpuHelper.getCpuCores() + ",threads=1";
-                } else {
-                    cpuParams += " -smp sockets=1,cores=" + cores + ",threads=" + threads;
-                }
+
+            if (cores * threads > cpuHelper.getCpuThreads()) {
+                cpuParams += " -smp sockets=1,cores=" + cpuHelper.getCpuCores() + ",threads=1";
+            } else {
+                cpuParams += " -smp sockets=1,cores=" + cores + ",threads=" + threads;
             }
         }
 
         if (!cpuParams.isEmpty()) cpuParams += " ";
+
+
+        String memoryParams = "";
+        if (!ParamManager.hasMemory(extraParams)) {
+            memoryParams = "-m ";
+            if (vmConfigs.memory > 0) {
+                memoryParams += vmConfigs.memory;
+            } else {
+                memoryParams += (int) (RamInfo.vectrasMemory(activity) / 100 * 80);
+            }
+        }
+
+        if (!memoryParams.isEmpty()) memoryParams += " ";
 
 
         String networkParams = "";
@@ -133,7 +145,7 @@ public class StartVM {
             bootParams = "-boot " + bootFromParams + (!bootFromParams.isEmpty() && !showBootMenuParams.isEmpty() ? "," : "") + showBootMenuParams + " ";
         }
 
-        extraParams = machineParams + cpuParams + bootParams + networkParams + " " + extraParams;
+        extraParams = machineParams + cpuParams + memoryParams + bootParams + networkParams + " " + extraParams;
         return env(activity, extraParams, vmData.itemPath, false);
     }
 
@@ -348,10 +360,11 @@ public class StartVM {
 //                params.add(machine);
 //            }
 
-            if (MainSettingsManager.useMemoryOvercommit(activity)) {
-                params.add("-overcommit");
-                params.add("mem-lock=off");
-            }
+            // This is the default in Qemu, so no need to set it.
+//            if (MainSettingsManager.useMemoryOvercommit(activity)) {
+//                params.add("-overcommit");
+//                params.add("mem-lock=off");
+//            }
 
 
             if (vmConfigs.isUseLocalTime) {
@@ -369,15 +382,15 @@ public class StartVM {
 
 //            params.add(boot);
 
-            if (!ParamManager.hasMemory(extras)) {
-                String memoryStr = "-m ";
-                if (MainSettingsManager.getArch(activity).equals("PPC") && RamInfo.vectrasMemory(activity) > 2048) {
-                    memoryStr += 2048;
-                } else {
-                    memoryStr += RamInfo.vectrasMemory(activity);
-                }
-                params.add(memoryStr);
-            }
+//            if (!ParamManager.hasMemory(extras)) {
+//                String memoryStr = "-m ";
+//                if (MainSettingsManager.getArch(activity).equals("PPC") && RamInfo.vectrasMemory(activity) > 2048) {
+//                    memoryStr += 2048;
+//                } else {
+//                    memoryStr += RamInfo.vectrasMemory(activity);
+//                }
+//                params.add(memoryStr);
+//            }
 
             if (ifType.isEmpty()) {
                 if (extras.contains("-drive media=cdrom,file=")) {
@@ -459,7 +472,7 @@ public class StartVM {
             params += "-spice port=6999,disable-ticketing=on";
         } else if (MainSettingsManager.getVmUi(context).equals("X11")) {
             params += "-display ";
-            params += MainSettingsManager.getUseSdl(context) ? "sdl" : "gtk" + ",gl=on";
+            params += MainSettingsManager.getUseSdl(context) ? "sdl" : "gtk";
             params += " -monitor ";
             params += MainSettingsManager.getRunQemuWithXterm(context) ? "stdio" : "vc";
         }

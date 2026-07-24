@@ -2,6 +2,8 @@ package com.vectras.vm.creator.editor;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -12,13 +14,17 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.vectras.qemu.MainSettingsManager;
+import com.vectras.qemu.utils.RamInfo;
 import com.vectras.vm.R;
+import com.vectras.vm.creator.configs.ListManager;
 import com.vectras.vm.creator.utils.EditorUtils;
 import com.vectras.vm.creator.utils.VMCreatorSelector;
 import com.vectras.vm.databinding.CreatorBoardDialogBinding;
 import com.vectras.vm.main.vms.DataMainRoms;
 import com.vectras.vm.utils.DialogUtils;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 public class BoardConfigsDialog extends BottomSheetDialogFragment {
@@ -28,6 +34,8 @@ public class BoardConfigsDialog extends BottomSheetDialogFragment {
     DataMainRoms configs;
 
     boolean isSave = true;
+
+    int availableMemory = Integer.MAX_VALUE;
 
     public void setConfigs(DataMainRoms configs) {
         this.configs = configs;
@@ -48,6 +56,8 @@ public class BoardConfigsDialog extends BottomSheetDialogFragment {
             dismiss();
             return EditorUtils.getDummyDialog(requireActivity());
         }
+
+        availableMemory = RamInfo.vectrasMemory(requireActivity());
 
         binding = CreatorBoardDialogBinding.inflate(getLayoutInflater());
 
@@ -120,6 +130,52 @@ public class BoardConfigsDialog extends BottomSheetDialogFragment {
             binding.sbvThread.setBackground(AppCompatResources.getDrawable(requireContext(), R.drawable.object_shape_bottom_high));
         }
 
+
+        binding.cpiMemory.setEndIconOnClickListener(v -> {
+            // 11 = 1024
+            int postion = 11;
+            boolean markSelected = false;
+
+            if (binding.tietMemory.getText() != null && !binding.tietMemory.getText().toString().isEmpty()) {
+                int current = Integer.parseInt(binding.tietMemory.getText().toString());
+                int nearest = Integer.MAX_VALUE;
+                ArrayList<HashMap<String, Object>> list = ListManager.memoryCapacity(requireContext(), MainSettingsManager.getArch(requireContext()));
+
+                for (int i = 0; i < list.size(); i++) {
+                    int distance = Math.abs(((int) list.get(i).get("value")) - current);
+                    if (distance == 0) {
+                        postion = i;
+                        markSelected = true;
+                        break;
+                    } else if (distance < nearest) {
+                        nearest = distance;
+                        postion = i;
+                    }
+                }
+            }
+
+
+            VMCreatorSelector.memory(requireActivity(), MainSettingsManager.getArch(requireContext()), postion, markSelected, ((position, name, value) -> {
+                binding.tietMemory.setText(value);
+                binding.tietMemory.setSelection(value.length());
+            }));
+        });
+
+        binding.tietMemory.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (!editable.toString().isEmpty() && Integer.parseInt(editable.toString()) > (availableMemory / 100 * 80)) {
+                    binding.cpiMemory.setError(getString(R.string.capacity_too_large));
+                } else {
+                    binding.cpiMemory.setError(null);
+                }
+            }
+        });
+
         load();
     }
 
@@ -133,11 +189,14 @@ public class BoardConfigsDialog extends BottomSheetDialogFragment {
         binding.sbvThread.setSubtitle(String.valueOf(configs.threads + 1));
         binding.cbvNestedVirtualization.setChecked(configs.nvirt);
 
+        binding.tietMemory.setText(String.valueOf(configs.memory));
+
         binding.cbvBattery.setChecked(configs.battery);
     }
 
     private void save() {
         configs.nvirt = binding.cbvNestedVirtualization.isChecked();
+        configs.memory = binding.tietMemory.getText() == null || binding.tietMemory.getText().toString().isEmpty() ? 0 : Integer.parseInt(binding.tietMemory.getText().toString());
         configs.battery = binding.cbvBattery.isChecked();
     }
 }

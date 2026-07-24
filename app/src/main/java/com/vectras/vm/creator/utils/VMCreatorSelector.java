@@ -50,6 +50,10 @@ public class VMCreatorSelector {
         showDialog(activity, ListManager.machines(activity, arch), position, callback, activity.getString(R.string.machine));
     }
 
+    public static void memory(Activity activity, String arch, int position, boolean markSelected, UniversalPickerDialog.UniversalPickerDialogCallback callback) {
+        showDialog(activity, ListManager.memoryCapacity(activity, arch), position, callback, activity.getString(R.string.memory_capacity_mb), markSelected);
+    }
+
     public static void networkCard(Activity activity, int position, UniversalPickerDialog.UniversalPickerDialogCallback callback) {
         showDialog(activity, ListManager.networkCards(activity), position, callback, activity.getString(R.string.network_card));
     }
@@ -68,5 +72,9 @@ public class VMCreatorSelector {
 
     public static void showDialog(Activity activity, ArrayList<HashMap<String, Object>> list, int position, UniversalPickerDialog.UniversalPickerDialogCallback callback, String title) {
         UniversalPickerDialog.show(activity, list, position, callback, title);
+    }
+
+    public static void showDialog(Activity activity, ArrayList<HashMap<String, Object>> list, int position, UniversalPickerDialog.UniversalPickerDialogCallback callback, String title, boolean markSelected) {
+        UniversalPickerDialog.show(activity, list, position, callback, title, markSelected);
     }
 }

@@ -176,6 +176,7 @@ public class SplashActivity extends AppCompatActivity {
                             if (traceText.isEmpty()) return;
 
                             LinkedHashMap<String, String> head = CrashTrackerUtils.getClientInfo(this, anrTimestamp, true);
+                            String diagnosticResults = CrashTrackerUtils.arnDiagnosis(traceText);
 
                             StringBuilder builder = new StringBuilder();
 
@@ -188,6 +189,13 @@ public class SplashActivity extends AppCompatActivity {
                             }
 
                             builder.append("\n\n");
+
+                            if (!diagnosticResults.isEmpty()) {
+                                builder.append("Diagnostic results:\n");
+                                builder.append(diagnosticResults);
+                                builder.append("\n\n");
+                            }
+
                             builder.append(traceText);
 
                             if (FileUtils.writeToFile(file.getParent(), file.getName(), builder.toString())) {
