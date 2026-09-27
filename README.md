@@ -22,8 +22,6 @@ Welcome to Vectras VM! A virtual machine app for Android based on QEMU that lets
 
 If you need help, check out [our documentation](https://vectras.vercel.app/how.html). For quick answers, join the [Vectras Telegram group](http://t.me/vectras_vm_discussion). And here's a suggestion if you're new to Vectras VM:
 
-[![Tutorial for beginners](https://img.youtube.com/vi/L6ADe5aVp0Y/mqdefault.jpg)](https://www.youtube.com/watch?v=L6ADe5aVp0Y)
-
 ## 📱 Device Compatibility
 
 Works fine on devices manufactured in 2021 or later and devices equipped with Snapdragon 855 CPU or better. You can try running Vectras VM on unsupported devices, but we cannot guarantee stability or support. Here are the devices tested:
@@ -63,30 +61,12 @@ Works fine on devices manufactured in 2021 or later and devices equipped with Sn
 
 ### ✅ Stable Releases
 
-You can download Vectras VM from the [releases](https://github.com/xoureldeen/Vectras-VM-Android/releases) page or the [official website](https://vectras.vercel.app/download.html).
+You can download Vectras VM from the [releases](https://github.com/xoureldeen/Vectras-VM-Android/releases) page.
 
 or
 
 
 [![OpenAPK](https://img.shields.io/badge/Get%20it%20on-OpenAPK-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://www.openapk.net/vectras-vm/com.vectras.vm/)
-
-### 🧪 Beta Releases
-
-We publish a **new beta release after every commit** — so you can always test the latest features and improvements!
-
-[![Download Beta](https://img.shields.io/badge/Download-Beta-blue?style=for-the-badge&logo=github)](https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases)
-
-### ⚙️ Bootstraps
-QEMU 7.2.22 - 3dfx is here!
-
-- [For Android ARM (64-bit)](https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/4.4.7/base-qemu-7.2.22-3dfx-july-2026-vectras-vm-arm64-v8a.tar.gz)
-- [For Android ARM (32-bit)](https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/4.4.7/base-qemu-7.2.22-july-2026-vectras-vm-armeabi-v7a.tar.gz)
-- [For Android x86 (64-bit)](https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/4.4.7/base-qemu-7.2.22-3dfx-july-2026-vectras-vm-x86_64.tar.gz)
-- [For Android x86 (32-bit)](https://github.com/AnBui2004/Vectras-VM-Emu-Android/releases/download/4.4.7/base-qemu-7.2.22-july-2026-vectras-vm-x86.tar.gz)
-
-### 💽 3Dfx Wrappers
-Play classic games with 3Dfx support on Windows 95, 98, ME, 2000, and XP! Turnip & Zink will help improve performance if your device has a supported Adreno GPU. Note: It may be unstable and have low performance.
-- [⬇️ Download here](https://github.com/AnBui2004/Vectras-VM-Emu-Android/blob/master/3dfx/4.1.1%2B/3dfx-wrappers-i686.iso)
 
 ### 😼 Advanced
 Advanced options are [here](ADVANCED.md).
@@ -99,12 +79,6 @@ Vectras VM is on the Play Store with the new Qemu 10, it runs natively on Androi
 <a href="https://play.google.com/store/apps/details?id=com.vectrasllc.vm">
 <img src="resources/GetItOnGooglePlay_Badge_Web_color_English.png" style="width: 192px;" />
 </a>
-
-# 💕 Donate
-Help support the project by contributing!
-
-[![Buy Me a Coffee at ko-fi.com][ico-ko-fi]][link-ko-fi]
-[![Support me on Patreon](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fshieldsio-patreon.vercel.app%2Fapi%3Fusername%3Dendel%26type%3Dpatrons&style=flat)](https://patreon.com/VectrasTeam)
 
 # ❤️ Thanks to
 - [3DFX QEMU PATCH](https://github.com/kjliew/qemu-3dfx)
