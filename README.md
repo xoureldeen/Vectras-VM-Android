@@ -37,7 +37,7 @@ Vectras VM is a QEMU-based virtual machine app for Android. Create and manage vi
 - Import and export `.cvbi` ROM packages, or use your own disk images and installation media.
 - Browse the ROM Store and Software Store for downloadable content.
 - Use the bundled bootstrap and Alpine Linux environment through PROOT, with an integrated terminal.
-- Choose an online QEMU package or supply a compatible local archive during setup.
+- Choose an online QEMU package or supply a compatible local archive when available.
 - Use supported graphics options, including 3dfx with a suitable QEMU build and guest configuration.
 
 The QEMU version depends on the package you install; it is not fixed by the APK version.
@@ -101,7 +101,9 @@ An alternative download listing is available on [OpenAPK](https://www.openapk.ne
 
 ## 🚀 First-time setup
 
-The Community Version uses the bootstrap and Alpine Linux environment bundled in the APK. The app extracts this environment during setup; the QEMU package is selected separately.
+The Community Version uses the bootstrap and Alpine Linux environment bundled in the APK. The app extracts this environment during setup, then installs QEMU using the path for your device architecture.
+
+**Our official 3dfx-patched QEMU builds are currently available only for ARM64 (`arm64-v8a`) and x86_64.** ARMv7 (`armeabi-v7a`) and 32-bit x86 use standard official QEMU packages from Alpine, without the 3dfx modification, when their archive links in `setupfiles.json` are empty.
 
 When prompted, choose one of the two QEMU setup options:
 

@@ -72,6 +72,7 @@ public class SetupWizard2Activity extends AppCompatActivity {
     String progressText ="0%";
     String qemuDownloadUrl = "";
     String qemuDownloadSha256 = "";
+    boolean installQemuFromAlpinePackages = false;
     boolean isExecutingCommand = false;
     boolean isLibProotError = false;
     boolean aria2Error = false;
@@ -375,6 +376,16 @@ public class SetupWizard2Activity extends AppCompatActivity {
     }
 
     private void requestQemuArchive() {
+        if (isExecutingCommand) return;
+        installQemuFromAlpinePackages = false;
+        if (QemuSetupPolicy.is32BitAbi(Build.SUPPORTED_ABIS[0])) {
+            loadQemuManifest(true);
+            return;
+        }
+        showQemuArchiveDialog();
+    }
+
+    private void showQemuArchiveDialog() {
         uiController(STEP_SETUP_OPTIONS);
         binding.standardSetupOption.setVisibility(View.VISIBLE);
         DialogUtils.twoDialog(this,
@@ -389,22 +400,30 @@ public class SetupWizard2Activity extends AppCompatActivity {
     }
 
     private void getDataForStandardSetup() {
+        loadQemuManifest(false);
+    }
+
+    private void loadQemuManifest(boolean showArchiveOptions) {
         if (isExecutingCommand) return;
         isExecutingCommand = true;
         uiController(STEP_GETTING_DATA);
         qemuDownloadUrl = "";
         qemuDownloadSha256 = "";
+        installQemuFromAlpinePackages = false;
         Retrofit2Utils.get(AppConfig.bootstrapfileslink, (isSuccess, body, status, error) -> {
             isExecutingCommand = false;
             if (isFinishing() || isDestroyed()) return;
             if (isSuccess) {
                 try {
                     JsonObject manifest = JsonParser.parseString(body).getAsJsonObject();
-                    String key = DeviceUtils.isArm()
-                            ? (DeviceUtils.is64bit() ? "aarch64" : "armhf")
-                            : (DeviceUtils.is64bit() ? "amd64" : "x86");
+                    String abi = Build.SUPPORTED_ABIS[0];
+                    String key = QemuSetupPolicy.manifestKey(abi);
                     if (manifest.has(key) && !manifest.get(key).isJsonNull()) {
-                        String url = manifest.get(key).getAsString();
+                        if (!manifest.get(key).isJsonPrimitive() || !manifest.get(key).getAsJsonPrimitive().isString()) {
+                            throw new IllegalArgumentException("Invalid QEMU URL field in setup JSON");
+                        }
+                        String url = manifest.get(key).getAsString().trim();
+                        installQemuFromAlpinePackages = QemuSetupPolicy.usesAlpinePackages(abi, url);
                         // No release URL is hard-coded: the repository JSON selects the archive.
                         if (url.startsWith("https://") && Uri.parse(url).getHost() != null) {
                             qemuDownloadUrl = url;
@@ -421,12 +440,19 @@ public class SetupWizard2Activity extends AppCompatActivity {
                 } catch (Exception e) {
                     qemuDownloadUrl = "";
                     qemuDownloadSha256 = "";
+                    installQemuFromAlpinePackages = false;
                     Log.e("SetupWizard2Activity", "Invalid QEMU setup JSON", e);
                 }
             } else {
                 Log.e("SetupWizard2Activity", "Could not load QEMU setup JSON: " + status, error);
             }
-            if (!qemuDownloadUrl.isEmpty()) {
+            if (installQemuFromAlpinePackages) {
+                isCustomSetupMode = false;
+                startSetup();
+            } else if (showArchiveOptions) {
+                // Keep manual selection available even when the manifest request fails.
+                showQemuArchiveDialog();
+            } else if (!qemuDownloadUrl.isEmpty()) {
                 isCustomSetupMode = false;
                 startSetup();
             } else {
@@ -438,7 +464,10 @@ public class SetupWizard2Activity extends AppCompatActivity {
 
     private void startSetup() {
         if (isExecutingCommand) return;
-        if (!isCustomSetupMode && qemuDownloadUrl.isEmpty()) {
+        final boolean installQemuFromPackages = installQemuFromAlpinePackages
+                && QemuSetupPolicy.is32BitAbi(Build.SUPPORTED_ABIS[0]);
+        if (installQemuFromPackages) isCustomSetupMode = false;
+        if (!installQemuFromPackages && !isCustomSetupMode && qemuDownloadUrl.isEmpty()) {
             requestQemuArchive();
             return;
         }
@@ -450,7 +479,7 @@ public class SetupWizard2Activity extends AppCompatActivity {
             final String downloadQemuCommand;
             try {
                 checkQemuCommand = SetupFeatureCore.readTextFromAssets(this, "setup/check-qemu.sh");
-                downloadQemuCommand = isCustomSetupMode ? "" :
+                downloadQemuCommand = installQemuFromPackages || isCustomSetupMode ? "" :
                         SetupFeatureCore.readTextFromAssets(this, "setup/download-qemu.sh");
             } catch (Exception e) {
                 isExecutingCommand = false;
@@ -484,11 +513,11 @@ public class SetupWizard2Activity extends AppCompatActivity {
                         " echo \"Starting setup...\";" +
                         " apk update;" +
                         " echo \"Installing packages...\";" +
-                        " apk add " + (DeviceUtils.is64bit() ? AppConfig.neededPkgs()
-                        : AppConfig.neededPkgs32bit()) + ";";
+                        " apk add " + (QemuSetupPolicy.is32BitAbi(Build.SUPPORTED_ABIS[0]) ? AppConfig.neededPkgs32bit()
+                        : AppConfig.neededPkgs()) + ";";
 
                 String qemuArchivePath = isCustomSetupMode ? tarPath : "/root/setup.tar.gz";
-                if (!isCustomSetupMode) {
+                if (!installQemuFromPackages && !isCustomSetupMode) {
                     // Verify the complete download before removing an installed QEMU during updates.
                     cmd += " set -- " + shellQuote(qemuDownloadUrl) + " " +
                             shellQuote(qemuDownloadSha256) + ";\n" + downloadQemuCommand + "\n";
@@ -517,10 +546,17 @@ public class SetupWizard2Activity extends AppCompatActivity {
                             " set -e;";
                 }
 
-                cmd += " echo \"Installing Qemu...\";" +
-                        " tar -xzvf " + shellQuote(qemuArchivePath) + " -C /;" +
-                        " rm " + shellQuote(qemuArchivePath) + ";" +
-                        " chmod 755 /usr/local/bin/*;";
+                cmd += " echo \"Installing Qemu...\";";
+                if (installQemuFromPackages) {
+                    cmd += " echo \"Installing QEMU from Alpine packages...\";" +
+                            " apk add --no-cache " + QemuSetupPolicy.ALPINE_QEMU_PACKAGES + ";" +
+                            " for binary in qemu-system-i386 qemu-system-x86_64 qemu-system-aarch64 qemu-system-ppc qemu-img; do " +
+                            " /usr/bin/\"$binary\" --version || exit $?; done;";
+                } else {
+                    cmd += " tar -xzvf " + shellQuote(qemuArchivePath) + " -C /;" +
+                            " rm " + shellQuote(qemuArchivePath) + ";" +
+                            " chmod 755 /usr/local/bin/*;";
+                }
                 if (ACTION != ACTION_SYSTEM_UPDATE) {
                     cmd += " echo \"Just a sec...\";" +
                             " mkdir -p ~/.vnc && echo -e \"555555\\n555555\" | vncpasswd -f > ~/.vnc/passwd && chmod 0600 ~/.vnc/passwd;";
@@ -547,6 +583,7 @@ public class SetupWizard2Activity extends AppCompatActivity {
                             try {
                                 FileUtils.copyFileFromUri(this, uri, tarPath);
                                 runOnUiThread(() -> {
+                                    installQemuFromAlpinePackages = false;
                                     isCustomSetupMode = true;
                                     startSetup();
                                 });
