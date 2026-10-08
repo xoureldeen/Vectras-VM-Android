@@ -14,12 +14,9 @@ import androidx.core.os.LocaleListCompat;
 import androidx.preference.PreferenceManager;
 
 import com.google.android.material.color.DynamicColors;
-import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.vectras.qemu.Config;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.utils.FileUtils;
-import com.vectras.vm.utils.GmsChecker;
 import com.vectras.vm.utils.PackageUtils;
 import com.vectras.vm.utils.UIUtils;
 
@@ -97,14 +94,6 @@ public class VectrasApp extends Application {
             }
         });
 
-        FirebaseCrashlytics.getInstance().log("App started: " + AppConfig.vectrasVersion);
-
-        if (GmsChecker.isAvailable(this)) {
-            AppConfig.isGmsAvailable = true;
-            FirebaseAnalytics.getInstance(this).logEvent(FirebaseAnalytics.Event.APP_OPEN, null);
-        } else {
-            FirebaseCrashlytics.getInstance().log("Device does not support GMS.");
-        }
     }
 
     private void setupTheme() {

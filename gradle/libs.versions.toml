@@ -9,11 +9,7 @@ coreKtx = "1.19.0"
 documentfile = "1.1.0"
 drawerlayout = "1.2.0"
 espressoCore = "3.7.0"
-firebaseBom = "34.16.0"
-firebaseCrashlyticsGradle = "3.0.7"
-firebaseMessaging = "25.1.1"
 glide = "5.0.9"
-googleServices = "4.5.0"
 gradle = "9.3.1"
 gson = "2.14.0"
 guava = "33.6.0-jre"
@@ -48,13 +44,7 @@ commons-compress = { group = "org.apache.commons", name = "commons-compress", ve
 commons-io = { group = "commons-io", name = "commons-io", version.ref = "commonsIo" }
 compiler = { group = "com.github.bumptech.glide", name = "compiler", version.ref = "glide" }
 converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit2" }
-firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
-firebase-crashlytics-gradle = { group = "com.google.firebase", name = "firebase-crashlytics-gradle", version.ref = "firebaseCrashlyticsGradle" }
-firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebaseMessaging" }
-firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
-firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
-google-services = { group = "com.google.gms", name = "google-services", version.ref = "googleServices" }
 gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "gradle" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }

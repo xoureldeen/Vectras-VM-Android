@@ -11,11 +11,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.R;
 import com.vectras.vm.databinding.ActivityNotificationSettingsBinding;
-import com.vectras.vm.databinding.ActivitySettings2Binding;
-import com.vectras.vm.fcm.FCMManager;
 import com.vectras.vm.utils.UIUtils;
 
 import java.util.Objects;
@@ -37,17 +34,6 @@ public class NotificationSettingsActivity extends AppCompatActivity {
     }
 
     private void initialize() {
-        binding.swSuggestionsAndTips.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            MainSettingsManager.setSuggestionsAndTipsNotification(this, isChecked);
-
-            if (isChecked) {
-                FCMManager.subscribe();
-            } else {
-                FCMManager.unSubscribe();
-            }
-        });
-        binding.lnSuggestionsAndTips.setOnClickListener(v -> binding.swSuggestionsAndTips.toggle());
-
         binding.lnManageInSystemSettings.setOnClickListener(v -> {
             Intent intent = new Intent();
             intent.setAction("android.settings.APP_NOTIFICATION_SETTINGS");
@@ -65,7 +51,5 @@ public class NotificationSettingsActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), getString(R.string.unavailable), Toast.LENGTH_SHORT).show();
             }
         });
-
-        binding.swSuggestionsAndTips.setChecked(MainSettingsManager.getSuggestionsAndTipsNotification(this));
     }
 }

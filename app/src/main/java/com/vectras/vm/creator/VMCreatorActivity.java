@@ -1,7 +1,6 @@
 package com.vectras.vm.creator;
 
 import android.annotation.SuppressLint;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -59,7 +58,6 @@ import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.ImageUtils;
 import com.vectras.vm.utils.IntentUtils;
 import com.vectras.vm.utils.JSONUtils;
-import com.vectras.vm.utils.PackageUtils;
 import com.vectras.vm.utils.ProgressDialog;
 import com.vectras.vm.utils.UIUtils;
 
@@ -1065,22 +1063,6 @@ public class VMCreatorActivity extends AppCompatActivity {
     }
 
     private void checkCreateCommandConfig() {
-        if (PackageUtils.getVersionCode("com.anbui.cqcm.app", this) < 735 || !FileUtils.isFileExists(VmFileManager.getCreateCommandConfigFile(vmID))) {
-            binding.opencqcm.setVisibility(View.GONE);
-        } else {
-            binding.opencqcm.setOnClickListener(v -> {
-                if (PackageUtils.isInstalled("com.anbui.cqcm.app", this)) {
-                    Intent intentcqcm = new Intent();
-                    intentcqcm.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intentcqcm.setComponent(new ComponentName("com.anbui.cqcm.app", "com.anbui.cqcm.app.DownloadActivity"));
-                    intentcqcm.putExtra("content", FileUtils.readAFile(VmFileManager.getCreateCommandConfigFile(vmID)));
-                    intentcqcm.putExtra("vectrasVMId", vmID);
-                    startActivity(intentcqcm);
-                    finish();
-                } else {
-                    IntentUtils.openUrl(this, "https://play.google.com/store/apps/details?id=com.anbui.cqcm.app", true);
-                }
-            });
-        }
+        binding.opencqcm.setVisibility(View.GONE);
     }
 }

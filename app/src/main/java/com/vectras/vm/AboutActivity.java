@@ -1,9 +1,14 @@
 package com.vectras.vm;
 
 import android.content.Intent;
+import android.content.DialogInterface;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.StyleSpan;
 
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
 import com.vectras.vm.adapters.GithubUserAdapter;
 import com.vectras.vm.utils.CommandUtils;
+import com.anbui.elephant.retrofit2utils.Retrofit2Utils;
 import com.vectras.vm.utils.UIUtils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -27,11 +33,17 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.Objects;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class AboutActivity extends AppCompatActivity implements View.OnClickListener{
     ExecutorService executor = Executors.newSingleThreadExecutor();
+    private static final int MAX_LEGAL_DOCUMENT_LENGTH = 200000;
+    private AlertDialog legalDocumentDialog;
     Button btn_osl, btn_clog;
     ImageButton btn_discord, btn_youtube, btn_github, btn_telegram, btn_instagram, btn_facebook;
 
@@ -73,7 +85,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
         fab.setOnClickListener(view -> {
             Intent i = new Intent(Intent.ACTION_SEND);
             i.setType("message/rfc822");
-            i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"anbuigo2004@gmail.com"});
+            i.putExtra(Intent.EXTRA_EMAIL  , new String[]{"noureldeenelsayed1212@gmail.com"});
             i.putExtra(Intent.EXTRA_SUBJECT, "Vectras User: " + Build.BRAND);
             i.putExtra(Intent.EXTRA_TEXT   , "Device Model: \n" + Build.MODEL + "\n");
             try {
@@ -86,7 +98,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
         });
 
         RecyclerView recyclerView = findViewById(R.id.github_users_recycler_view);
-        String[] usernames = {"vectras-team", "xoureldeen", "ahmedbarakat2007", "anbui2004"};
+        String[] usernames = {"vectras-team", "xoureldeen"};
 
         GithubUserAdapter adapter = new GithubUserAdapter(this, usernames);
         recyclerView.setAdapter(adapter);
@@ -102,7 +114,103 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
         });
 
         findViewById(R.id.btn_open_source_licenses).setOnClickListener(v -> startActivity(new Intent(this, OssLicensesMenuActivity.class)));
+        findViewById(R.id.btn_terms).setOnClickListener(v -> showLegalDocument(
+                R.string.terms_of_service, AppConfig.vectrasTerms, "TERMSOFSERVICE.md"));
+        findViewById(R.id.btn_privacy).setOnClickListener(v -> showLegalDocument(
+                R.string.privacy_policy, AppConfig.vectrasPrivacy, "PRIVACYANDPOLICY.md"));
 
+    }
+
+    private void showLegalDocument(int title, String url, String assetName) {
+        if (isFinishing() || isDestroyed()) return;
+        if (legalDocumentDialog != null) legalDocumentDialog.dismiss();
+
+        AlertDialog dialog = new AlertDialog.Builder(this, R.style.MainDialogTheme)
+                .setTitle(title)
+                .setMessage(R.string.legal_document_loading)
+                .setPositiveButton(R.string.close, null)
+                .setNeutralButton(R.string.try_again, null)
+                .create();
+        legalDocumentDialog = dialog;
+        dialog.setOnDismissListener(ignored -> {
+            if (legalDocumentDialog == dialog) legalDocumentDialog = null;
+        });
+        dialog.show();
+        TextView message = dialog.findViewById(android.R.id.message);
+        if (message != null) message.setTextIsSelectable(true);
+        dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setVisibility(View.GONE);
+        dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setOnClickListener(v -> {
+            dialog.dismiss();
+            showLegalDocument(title, url, assetName);
+        });
+
+        executor.execute(() -> {
+            String bundledText;
+            try {
+                bundledText = readLegalDocumentAsset(assetName);
+            } catch (IOException e) {
+                bundledText = "";
+            }
+            final String fallback = bundledText;
+            runOnUiThread(() -> {
+                if (isFinishing() || isDestroyed() || !dialog.isShowing()) return;
+                if (!fallback.isEmpty()) dialog.setMessage(formatLegalDocument(fallback));
+
+                Retrofit2Utils.get(url, (success, body, status, error) -> runOnUiThread(() -> {
+                    if (isFinishing() || isDestroyed() || !dialog.isShowing()) return;
+                    if (success && isValidLegalDocument(body)) {
+                        dialog.setMessage(formatLegalDocument(body));
+                    } else {
+                        String text = fallback.isEmpty()
+                                ? getString(R.string.legal_document_unavailable)
+                                : getString(R.string.legal_document_bundled) + "\n\n" + fallback;
+                        dialog.setMessage(formatLegalDocument(text));
+                        dialog.getButton(DialogInterface.BUTTON_NEUTRAL).setVisibility(View.VISIBLE);
+                    }
+                }));
+            });
+        });
+    }
+
+    private String readLegalDocumentAsset(String assetName) throws IOException {
+        StringBuilder text = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+                getAssets().open("legal/" + assetName), StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                text.append(line).append('\n');
+                if (text.length() > MAX_LEGAL_DOCUMENT_LENGTH) {
+                    throw new IOException("Legal document is too large");
+                }
+            }
+        }
+        return isValidLegalDocument(text.toString()) ? text.toString() : "";
+    }
+
+    private boolean isValidLegalDocument(String text) {
+        return text != null && text.length() <= MAX_LEGAL_DOCUMENT_LENGTH
+                && text.trim().startsWith("# ");
+    }
+
+    private CharSequence formatLegalDocument(String markdown) {
+        SpannableStringBuilder text = new SpannableStringBuilder();
+        for (String line : markdown.replace("\r\n", "\n").split("\n", -1)) {
+            String displayLine = line.replaceFirst("^#{1,6} +", "");
+            int start = text.length();
+            text.append(displayLine).append('\n');
+            if (!displayLine.equals(line)) {
+                text.setSpan(new StyleSpan(Typeface.BOLD), start, start + displayLine.length(),
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }
+        return text;
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (legalDocumentDialog != null) legalDocumentDialog.dismiss();
+        executor.shutdownNow();
+        super.onDestroy();
     }
 
     @Override

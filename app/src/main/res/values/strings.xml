@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Vectras VM</string>
+    <string name="app_name">Vectras VM Github</string>
 
     <!--======================VECTRAS STRINGS====================-->
     <string name="qemu_version" translatable="false">Stable</string>
@@ -454,6 +454,15 @@
     <string name="standard_note">Recommended and setup will automatically install everything.</string>
     <string name="custom">Custom</string>
     <string name="custom_note">If you want to manually select the bootstrap file you want to install the Qemu version you desire.</string>
+    <string name="qemu_archive_required">QEMU archive required</string>
+    <string name="download_qemu_from_github">Online QEMU</string>
+    <string name="select_qemu_archive">Select QEMU</string>
+    <string name="online_qemu_note">Read the repository setup JSON and download the QEMU archive for this device.</string>
+    <string name="select_qemu_note">Select a local QEMU .tar.gz archive matching this device architecture.</string>
+    <string name="download_qemu_archive_content">The built-in bootstrap and Alpine system are ready. Choose Select QEMU for a local archive, or Online QEMU to download using the link in our repository setup JSON.</string>
+    <string name="qemu_online_unavailable_content">Could not load a valid QEMU download link for %2$s from %1$s. Check the connection and the repository JSON, then retry. You can also use Select QEMU to choose a local archive.</string>
+    <string name="select_qemu_archive_content">The built-in bootstrap and Alpine system are ready. Select the QEMU archive %1$s to continue.</string>
+    <string name="select_file">Select file</string>
     <string name="mirror_note">Choose the mirror closest to you for faster setup.</string>
     <string name="please_do_not_disconnect_the_network_this_may_take_a_few_minutes">Please do not disconnect the network. This may take a few minutes.</string>
     <string name="something_went_wrong">Something went wrong</string>
@@ -605,7 +614,6 @@
     <string name="missing_packages">Missing packages</string>
     <string name="missing_packages_content">These are the missing packages that you should install:</string>
     <string name="x11_general_setting_note">You need to restart the app when switching between built-in and external.</string>
-    <string name="contains_ads">Contains ads</string>
     <string name="linux" translatable="false">Linux</string>
     <string name="windows" translatable="false">Windows</string>
     <string name="macos" translatable="false">macOS</string>
@@ -613,8 +621,6 @@
     <string name="bsd" translatable="false">BSD</string>
     <string name="other">Other</string>
     <string name="operating_system">Operating system</string>
-    <string name="free_community">Free/Community</string>
-    <string name="high_quality_contains_ads">High quality/Contains ads</string>
     <string name="gui" translatable="false">GUI</string>
     <string name="no_gui">No GUI</string>
     <string name="random_suggestion">Random suggestion</string>
@@ -654,6 +660,11 @@
     <string name="file_picker_divier_note">Add dividers between items.</string>
     <string name="storage_note">Drives, shared folder,…</string>
     <string name="open_source_licenses">Open source licenses</string>
+    <string name="terms_of_service">Terms of service</string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="legal_document_loading">Loading document…</string>
+    <string name="legal_document_bundled">Showing the copy included with this app. The latest online version could not be loaded.</string>
+    <string name="legal_document_unavailable">Could not load this document. Check your connection and try again.</string>
     <string name="board_note">Processor, cores, threads,…</string>
     <string name="firmware">Firmware</string>
     <string name="firmware_note">UEFI, boot from, boot menu,…</string>

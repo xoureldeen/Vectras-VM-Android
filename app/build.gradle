@@ -1,7 +1,5 @@
 plugins {
     id 'com.android.application'
-    id 'com.google.gms.google-services'
-    id 'com.google.firebase.crashlytics'
     id 'com.google.android.gms.oss-licenses-plugin'
 }
 
@@ -13,8 +11,8 @@ android {
         applicationId "com.vectras.vm"
         minSdk minApi
         targetSdk targetApi
-        versionCode 156
-        versionName "4.4.9"
+        versionCode 157
+        versionName "4.5.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -59,7 +57,10 @@ android {
 
     splits {
         abi {
-            enable false
+            enable true
+            reset()
+            include 'arm64-v8a', 'armeabi-v7a', 'x86', 'x86_64'
+            universalApk true
         }
     }
 
@@ -82,6 +83,32 @@ android {
         abortOnError false
         checkReleaseBuilds false
     }
+
+    sourceSets {
+        main.assets.srcDir "$buildDir/generated/legalAssets"
+        debug.assets.srcDir "$buildDir/generated/loaderAssets/debug"
+        release.assets.srcDir "$buildDir/generated/loaderAssets/release"
+    }
+}
+
+androidComponents {
+    onVariants(selector().all()) { variant ->
+        variant.outputs.each { output ->
+            def abiFilter = output.filters.find {
+                it.filterType == com.android.build.api.variant.FilterConfiguration.FilterType.ABI
+            }
+            if (variant.buildType == 'release') {
+                def abiName = abiFilter?.identifier ?: 'universal'
+                output.outputFileName.set(output.versionCode.map { code ->
+                    "vectras-vm-github-${abiName}-${code}.apk".toString()
+                })
+            } else if (variant.buildType == 'debug') {
+                // ABI splits are configured globally; keep debug as one universal APK.
+                output.enabled.set(abiFilter == null)
+                if (abiFilter == null) output.outputFileName.set('app-debug.apk')
+            }
+        }
+    }
 }
 
 dependencies {
@@ -94,10 +121,6 @@ dependencies {
     implementation libs.androidx.preference.ktx
     implementation libs.androidx.swiperefreshlayout
     implementation libs.androidx.viewpager
-    implementation platform(libs.firebase.bom)
-    implementation libs.firebase.analytics
-    implementation libs.firebase.crashlytics
-    implementation libs.firebase.messaging
     implementation libs.guava
     implementation libs.gson
     implementation libs.androidx.window
@@ -129,6 +152,25 @@ dependencies {
 }
 
 afterEvaluate {
+    def legalAssetsTask = tasks.register("generateLegalDocumentAssets", Copy) {
+        from(rootProject.projectDir) {
+            include "TERMSOFSERVICE.md", "PRIVACYANDPOLICY.md"
+        }
+        into(layout.buildDirectory.dir("generated/legalAssets/legal"))
+    }
+
+    ["Debug", "Release"].each { buildType ->
+        def buildTypeLower = buildType.toLowerCase()
+        def copyLoaderTask = tasks.register("generate${buildType}LoaderAsset", Copy) {
+            dependsOn(":shell-loader:assemble${buildType}")
+            from(project(":shell-loader").layout.buildDirectory.file("outputs/apk/${buildTypeLower}/loader.apk"))
+            into(layout.buildDirectory.dir("generated/loaderAssets/${buildTypeLower}/bootstrap"))
+        }
+        tasks.named("merge${buildType}Assets").configure {
+            dependsOn(copyLoaderTask, legalAssetsTask)
+        }
+    }
+
     tasks.register("generatePrefs") {
         //noinspection UnnecessaryQualifiedReference
         def xml = groovy.xml.DOMBuilder.parse((new StringReader(file('src/main/res/xml/preferences_x11.xml').text)))

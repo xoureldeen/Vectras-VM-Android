@@ -5,8 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
@@ -15,10 +13,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-
-import com.anbui.elephant.content.ContentManager;
-import com.anbui.elephant.interaction.Interaction;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
@@ -33,21 +27,16 @@ import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.ImageUtils;
 import com.vectras.vm.utils.IntentUtils;
-import com.vectras.vm.utils.PackageUtils;
 
 import java.io.File;
 import java.util.Objects;
-import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class RomInfo extends AppCompatActivity {
     ActivityRomInfoBinding binding;
     public static boolean isFinishNow = false;
-    private String contentID = "";
-    private boolean isAnBuiContent;
     private final ExecutorService executor = Executors.newSingleThreadExecutor();
-    private Interaction interaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -193,27 +182,12 @@ public class RomInfo extends AppCompatActivity {
             binding.textSize.setText(getIntent().getStringExtra("shortdesc"));
         }
 
-        if (getIntent().hasExtra("containsAds")) {
-            binding.tvContainsAds.setVisibility(getIntent().getBooleanExtra("containsAds", false) ? View.VISIBLE : View.GONE);
-        }
-
         if (getIntent().hasExtra("desc")) {
             binding.descTxt.setText(getIntent().getStringExtra("desc"));
         }
 
         if (getIntent().hasExtra("icon")) {
             Glide.with(this).load(getIntent().getStringExtra("icon")).placeholder(R.drawable.ic_computer_180dp_with_padding).error(R.drawable.ic_computer_180dp_with_padding).into(binding.ivIcon);
-        }
-
-        if (getIntent().hasExtra("id") &&
-                !Objects.requireNonNull(getIntent().getStringExtra("id")).isEmpty()) {
-            contentID = getIntent().getStringExtra("id");
-            isAnBuiContent = true;
-
-        } else if (getIntent().hasExtra("vecid") &&
-                !Objects.requireNonNull(getIntent().getStringExtra("vecid")).isEmpty()) {
-
-            contentID = getIntent().getStringExtra("vecid");
         }
 
         int currentVerifyIcon = R.drawable.verified_user_24px;
@@ -253,17 +227,6 @@ public class RomInfo extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        binding.lnViews.setOnClickListener((v -> DialogUtils.oneDialog(
-                RomInfo.this,
-                getString(R.string.views),
-                interaction.getFomatedViewCount() + ".",
-                getString(R.string.ok),
-                true,
-                R.drawable.show_chart_24px,
-                true,
-                null,
-                null)));
 
         String finalCurrentVerifyText = currentVerifyText;
         String finalCurrentVerifyContent = currentVerifyContent;
@@ -323,115 +286,10 @@ public class RomInfo extends AppCompatActivity {
                 null,
                 null)));
 
-        binding.btnLike.setOnClickListener(v -> sendLikeUpdate());
-
-        if (isAnBuiContent && PackageUtils.isInstalled("com.anbui.app", this)) {
-            binding.viewinanbuiapp.setVisibility(View.VISIBLE);
-            binding.viewinanbuiapp.setOnClickListener(v -> {
-                Intent intent;
-                try {
-                    intent = Intent.parseUri("intent://content/" + contentID + "#Intent;scheme=anbui;package=com.anbui.app;S.browser_fallback_url=https%3A%2F%2Fanbui.ovh%2Fapps%2Fgetanbuiapp.html;end", Intent.URI_INTENT_SCHEME);
-                    startActivity(intent);
-                } catch (Exception ignored) {
-                    binding.viewinanbuiapp.setVisibility(View.GONE);
-                }
-            });
-        }
-
-        if (!contentID.isEmpty()) {
-            interaction = new Interaction(this, contentID);
-
-            interaction.initialize((isSuccess, views, likes) -> {
-                if (isSuccess) {
-                    binding.btnLike.setVisibility(View.VISIBLE);
-                    boolean isLiked = interaction.isLiked();
-                    String likeContent = (likes == 0) ? getString(R.string.like) : interaction.getFormatedLikeCount();
-                    if (isLiked)
-                        binding.btnLike.setIcon(ContextCompat.getDrawable(RomInfo.this, R.drawable.thumb_up_filled_24px));
-                    binding.btnLike.setText(likeContent);
-
-                    binding.lnAllViews.setVisibility(View.VISIBLE);
-                    String viewsContent = interaction.getFomatedViewCount() + " " + getString(views > 1 ? R.string.unit_of_views : R.string.unit_of_view);
-                    binding.tvViews.setText(viewsContent);
-                } else {
-                    binding.lnAllViews.setVisibility(View.GONE);
-                    binding.btnLike.setVisibility(View.GONE);
-                }
-            });
-        }
     }
-
-    private void sendLikeUpdate() {
-        if (interaction.isRequesting || !interaction.isAllowAction) return;
-
-        binding.btnLike.setIcon(ContextCompat.getDrawable(RomInfo.this, !interaction.isLiked() ? R.drawable.thumb_up_filled_24px : R.drawable.thumb_up_24px));
-        binding.btnLike.setText(!interaction.isLiked() ? getString(R.string.liked) : getString(R.string.like));
-
-        interaction.like((isSuccess, views, likes) -> {
-            if (isSuccess) {
-                binding.btnLike.setVisibility(View.VISIBLE);
-                String likeContent = (likes == 0) ? getString(R.string.like) : interaction.getFormatedLikeCount();
-                binding.btnLike.setIcon(ContextCompat.getDrawable(RomInfo.this, interaction.isLiked() ? R.drawable.thumb_up_filled_24px : R.drawable.thumb_up_24px));
-                binding.btnLike.setText(likeContent);
-
-                binding.lnAllViews.setVisibility(View.VISIBLE);
-                String viewsContent = interaction.getFomatedViewCount() + " " + getString(views > 1 ? R.string.unit_of_views : R.string.unit_of_view);
-                binding.tvViews.setText(viewsContent);
-            } else {
-                binding.btnLike.setVisibility(View.GONE);
-            }
-        });
-    }
-
-    String[] anbuiContentUrls = null;
-    boolean isAllowGetAnbuiContentUrls = true;
 
     private void download() {
-        if (isAnBuiContent && isAllowGetAnbuiContentUrls) {
-            if (anbuiContentUrls == null) {
-                binding.btnDownload.setVisibility(View.GONE);
-                binding.cvIcon.animate().scaleY(0.5f).setDuration(200).start();
-                binding.cvIcon.animate().scaleX(0.5f).setDuration(200).start();
-                binding.cpiDownloading.setVisibility(View.VISIBLE);
-                binding.cpiDownloading.animate().alpha(1).setDuration(200).start();
-
-                ContentManager.getUrls(this, contentID, ((urls) -> {
-                    if (isFinishing() || isDestroyed()) return;
-
-                    openAnBuiContentUrl(urls);
-                    anbuiContentUrls = urls;
-
-                    runOnUiThread(() -> {
-                        binding.btnDownload.setVisibility(View.VISIBLE);
-                        binding.cvIcon.animate().scaleY(1).setDuration(200).start();
-                        binding.cvIcon.animate().scaleX(1).setDuration(200).start();
-                        binding.cpiDownloading.animate().alpha(0).setDuration(200).start();
-                        new Handler(Looper.getMainLooper()).postDelayed(() -> binding.cpiDownloading.setVisibility(View.GONE), 200);
-                    });
-                }));
-            } else {
-                openAnBuiContentUrl(anbuiContentUrls);
-            }
-        } else {
-            IntentUtils.openUrl(this, getIntent().getStringExtra("getrom"));
-        }
-    }
-
-    private void openAnBuiContentUrl(String[] urls) {
-        if (isFinishing() || isDestroyed()) return;
-
-        Intent openurl = new Intent();
-        openurl.setAction(Intent.ACTION_VIEW);
-
-        if (urls != null && urls.length > 0 && !urls[0].isEmpty()) {
-            openurl.setData(Uri.parse(urls[new Random().nextInt(urls.length)]));
-            startActivity(openurl);
-        } else {
-            isAllowGetAnbuiContentUrls = false;
-
-            openurl.setData(Uri.parse(getIntent().getStringExtra("getrom")));
-            startActivity(openurl);
-        }
+        IntentUtils.openUrl(this, getIntent().getStringExtra("getrom"));
     }
 
     @NonNull

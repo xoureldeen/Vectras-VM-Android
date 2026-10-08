@@ -49,7 +49,7 @@ public class SetupFeatureCore {
         String filesDir;
 
         if (isInstalledSystemFiles(context)) {
-            return true;
+            return finishSystemFilesSetup(context);
         } else {
             filesDir = context.getFilesDir().getAbsolutePath();
 
@@ -82,8 +82,7 @@ public class SetupFeatureCore {
             }
 
             if (isInstalledDistro(context)) {
-                lastErrorLog = "Installed proot.";
-                return true;
+                return finishSystemFilesSetup(context);
             }
 
             File tmpDir = new File(context.getFilesDir(), "usr/tmp");
@@ -96,13 +95,28 @@ public class SetupFeatureCore {
             }
 
             if (!extractSystemFiles(context, "alpine19", "distro", false)) {
-                return extractSystemFiles(context, "alpine19", "distro", true);
-            } else {
-                return true;
+                if (!extractSystemFiles(context, "alpine19", "distro", true)) return false;
             }
+            return finishSystemFilesSetup(context);
         }
 
         return false;
+    }
+
+    private static boolean finishSystemFilesSetup(Context context) {
+        if (!isInstalledSystemFiles(context)) {
+            lastErrorLog = "The bundled bootstrap or Alpine system is incomplete.";
+            return false;
+        }
+        File tmpDir = new File(context.getFilesDir(), "usr/tmp");
+        if (!tmpDir.isDirectory() && !tmpDir.mkdirs()) {
+            lastErrorLog = "Failed to create the proot temporary directory.";
+            return false;
+        }
+        FileUtils.chmod(tmpDir, 0771);
+        if (!extractX11LoaderApk(context)) return false;
+        lastErrorLog = "";
+        return true;
     }
 
     public static boolean extractSystemFiles(Context context, String fromAsset, String extractTo, boolean tryNoSameOwner) {
@@ -118,7 +132,6 @@ public class SetupFeatureCore {
 
         // Step 1: Copy asset to filesDir
         isCompleted = copyAssetToFile(context, assetPath, extractedFilePath);
-        if (isCompleted) isCompleted = extractX11LoaderApk(context);
 
         // Step 2: Run tar extraction
         if (isCompleted) {
@@ -263,7 +276,10 @@ public class SetupFeatureCore {
                 return false;
             }
 
-            SetupFeatureCore.copyAssetToFile(context, "bootstrap/loader.apk", loaderFile.getAbsolutePath());
+            if (!SetupFeatureCore.copyAssetToFile(context, "bootstrap/loader.apk", loaderFile.getAbsolutePath())) {
+                lastErrorLog = "Copying loader.apk from the app assets failed. " + lastErrorLog;
+                return false;
+            }
 
             if (SDK_INT >= 34) {
                 if (!loaderFile.setWritable(false, false)) {

@@ -277,39 +277,6 @@
                                 android:text="@string/no_gui" />
                         </com.google.android.material.chip.ChipGroup>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingTop="32dp"
-                            android:text="@string/other"
-                            android:textSize="18sp" />
-
-                        <com.google.android.material.divider.MaterialDivider
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginVertical="16dp" />
-
-                        <com.google.android.material.chip.ChipGroup
-                            android:id="@+id/chip_group_search_filter_other"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:singleSelection="true">
-
-                            <com.google.android.material.chip.Chip
-                                android:id="@+id/chip_search_filter_other_free_community"
-                                style="@style/Widget.Material3.Chip.Filter"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/free_community" />
-
-                            <com.google.android.material.chip.Chip
-                                android:id="@+id/chip_search_filter_other_high_quality_contains_ads"
-                                style="@style/Widget.Material3.Chip.Filter"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/high_quality_contains_ads" />
-                        </com.google.android.material.chip.ChipGroup>
-
                     </LinearLayout>
                 </LinearLayout>
             </androidx.core.widget.NestedScrollView>

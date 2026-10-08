@@ -593,11 +593,8 @@
     <string name="in_system_settings">Ở cài đặt hệ thống.</string>
     <string name="missing_packages">Một số gói đang bị thiếu</string>
     <string name="missing_packages_content">Đây là những gói đang bị thiếu và bạn nên cài đặt chúng:</string>
-    <string name="contains_ads">Có chứa quảng cáo</string>
     <string name="other">Khác</string>
     <string name="operating_system">Hệ điều hành</string>
-    <string name="free_community">Miễn phí/Cộng đồng</string>
-    <string name="high_quality_contains_ads">Chất lượng cao/Chứa quảng cáo</string>
     <string name="no_gui">Không GUI</string>
     <string name="random_suggestion">Gợi ý ngẫu nhiên</string>
     <string name="search_settings_note">Search in store and suggestions.</string>

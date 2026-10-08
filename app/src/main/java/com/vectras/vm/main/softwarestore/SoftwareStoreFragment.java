@@ -96,7 +96,7 @@ public class SoftwareStoreFragment extends Fragment {
         softwareStoreCallToHomeListener.updateSearchStatus(false);
         binding.linearload.setVisibility(View.VISIBLE);
 
-        Retrofit2Utils.get(AppConfig.vectrasRaw + "software-store.json", ((isSuccess, body, status, error) -> {
+        Retrofit2Utils.get(AppConfig.softwareStoreJson, ((isSuccess, body, status, error) -> {
             binding.linearload.setVisibility(View.GONE);
             if (isSuccess) {
                 if (!body.isEmpty())

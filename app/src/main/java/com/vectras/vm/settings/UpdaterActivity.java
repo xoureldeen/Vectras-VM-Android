@@ -107,7 +107,7 @@ public class UpdaterActivity extends AppCompatActivity {
         int versionCode = PackageUtils.getThisVersionCode(getApplicationContext());
         String versionName = PackageUtils.getThisVersionName(getApplicationContext());
 
-        Retrofit2Utils.get(AppConfig.vectrasRaw + "UpdateConfig.json", ((isSuccess, body, status, error) -> {
+        Retrofit2Utils.get(AppConfig.updateJson, ((isSuccess, body, status, error) -> {
             if (isSuccess) {
                 binding.lpiProgressbar.setVisibility(View.GONE);
                 binding.lnBottombar.setVisibility(View.VISIBLE);

@@ -97,13 +97,6 @@
                         android:text="size"
                         android:textSize="14sp" />
 
-                    <TextView
-                        android:id="@+id/tv_contains_ads"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:text="@string/contains_ads"
-                        android:textSize="14sp" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -120,42 +113,6 @@
                     android:paddingVertical="16dp"
                     android:paddingHorizontal="8dp"
                     android:animateLayoutChanges="true" >
-
-                    <LinearLayout
-                        android:id="@+id/ln_all_views"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:visibility="gone"
-                        tools:visibility="visible" >
-                        <LinearLayout
-                            android:id="@+id/ln_views"
-                            android:layout_width="110dp"
-                            android:layout_height="wrap_content"
-                            android:paddingHorizontal="8dp"
-                            android:gravity="center"
-                            android:orientation="vertical"
-                            android:background="?attr/selectableItemBackground">
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:src="@drawable/show_chart_24px" />
-
-                            <TextView
-                                android:id="@+id/tv_views"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:singleLine="true"
-                                android:text="@string/views" />
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="1dp"
-                            android:layout_height="25dp"
-                            android:background="?attr/colorSurfaceContainerHighest"/>
-                    </LinearLayout>
 
                     <LinearLayout
                         android:id="@+id/ln_verified"
@@ -304,17 +261,6 @@
                 android:animateLayoutChanges="true" >
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_like"
-                    style="@style/Widget.Material3Expressive.Button.OutlinedButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    app:icon="@drawable/thumb_up_24px"
-                    android:text="@string/like"
-                    android:visibility="gone"
-                    tools:visibility="visible" />
-
-                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_download"
                     style="@style/Widget.Material3Expressive.Button"
                     android:layout_width="wrap_content"
@@ -331,50 +277,6 @@
                     android:layout_weight="1"
                     android:text="@string/import_settings" />
             </LinearLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/viewinanbuiapp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/object_shape_single_high"
-                android:padding="16dp"
-                android:layout_margin="16dp"
-                android:visibility="gone"
-                tools:visibility="visible">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/viewinanbuiapp_arrow"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/view_in_an_bui_app"
-                        android:textSize="18sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/view_in_an_bui_app_note"
-                        android:textColor="?android:attr/textColorSecondary"
-                        android:textSize="14sp" />
-                </LinearLayout>
-
-                <ImageView
-                    android:id="@+id/viewinanbuiapp_arrow"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/keyboard_arrow_right_24px"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
                 android:layout_width="wrap_content"

@@ -107,6 +107,20 @@
                     android:layout_height="wrap_content"
                     android:text="@string/open_source_licenses"/>
 
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_terms"
+                    style="?attr/buttonBarNegativeButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/terms_of_service" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_privacy"
+                    style="?attr/buttonBarNegativeButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/privacy_policy" />
+
             </LinearLayout>
 
         </LinearLayout>
@@ -181,9 +195,10 @@
                         android:layout_height="48dp"
                         android:layout_margin="8dp"
                         android:padding="8dp"
-                        android:textAlignment="textStart"
                         android:src="@drawable/ic_youtube"
-                        app:tint="?attr/colorControlNormal"/>
+                        android:textAlignment="textStart"
+                        android:visibility="gone"
+                        app:tint="?attr/colorControlNormal" />
 
                     <ImageButton
                         android:id="@+id/btn_instagram"
@@ -192,9 +207,10 @@
                         android:layout_height="48dp"
                         android:layout_margin="8dp"
                         android:padding="8dp"
-                        android:textAlignment="textStart"
                         android:src="@drawable/ic_instagram"
-                        app:tint="?attr/colorControlNormal"/>
+                        android:textAlignment="textStart"
+                        android:visibility="gone"
+                        app:tint="?attr/colorControlNormal" />
 
                     <ImageButton
                         android:id="@+id/btn_facebook"

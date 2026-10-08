@@ -2,7 +2,6 @@ package com.vectras.vm;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.Build;
 
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.utils.DeviceUtils;
@@ -20,32 +19,28 @@ public class AppConfig {
     public static int vectrasVersionCode;
     public static final int standardSetupVersion = 922202607;
     public static final int coreSetupVersion = 0;
-    public static String vectrasWebsite = "https://vectras.vercel.app/";
-    public static String vectrasWebsiteRaw = "https://raw.githubusercontent.com/AnBui2004/Vectras-VM-Emu-Android/refs/heads/master/web/";
-    public static String bootstrapfileslink = vectrasWebsiteRaw + "/data/setupfiles4.json";
+    public static String vectrasWebsite = "https://getvectras.com/";
+    public static String vectrasWebsiteRaw = "https://raw.githubusercontent.com/xoureldeen/vectras-vm-bucket/main/web/";
+    public static String bootstrapfileslink = vectrasWebsiteRaw + "data/setupfiles.json";
     public static String vectrasHelp = vectrasWebsite + "how.html";
     public static String community = vectrasWebsite + "community.html";
     public static String vectrasRaw = vectrasWebsiteRaw + "data/";
     public static String vectrasLicense = vectrasRaw + "LICENSE.md";
-    public static String vectrasPrivacy = vectrasRaw + "PRIVACYANDPOLICY.md";
-    public static String vectrasTerms = vectrasRaw + "TERMSOFSERVICE.md";
+    public static String vectrasSourceRaw = "https://raw.githubusercontent.com/xoureldeen/Vectras-VM-Android/master/";
+    public static String vectrasPrivacy = vectrasSourceRaw + "PRIVACYANDPOLICY.md";
+    public static String vectrasTerms = vectrasSourceRaw + "TERMSOFSERVICE.md";
     public static String vectrasInfo = vectrasRaw + "info.md";
     public static String vectrasRepo = "https://github.com/xoureldeen/Vectras-VM-Android";
     public static String updateJson = vectrasRaw + "UpdateConfig.json";
+    public static String romStoreJson = vectrasRaw + "vroms-store.json";
+    public static String softwareStoreJson = vectrasRaw + "software-store.json";
     public static String blogJson = vectrasRaw + "news_list.json";
     // public static final String storeJson = vectrasRaw + "store_list.json";
     public static String storeJson = vectrasWebsiteRaw + "store_list.json";
 
-    public static String releaseUrl = vectrasWebsite;
-
-    public static String getSetupFiles() {
-        String abi = Build.SUPPORTED_ABIS[0];
-        return releaseUrl + "vectras-vm-" + abi + ".tar.gz";
-    }
-
     public static String romsJson(Activity activity) {
         if (Objects.equals(MainSettingsManager.getArch(activity), "X86_64")) {
-            return vectrasRaw + "roms-x86_64.json";
+            return vectrasRaw + "roms-X86_64.json";
         } else if (Objects.equals(MainSettingsManager.getArch(activity), "I386")) {
             return vectrasRaw + "roms-i386.json";
         } else if (Objects.equals(MainSettingsManager.getArch(activity), "ARM64")) {
@@ -120,5 +115,4 @@ public class AppConfig {
     public static String virtIOWinUrl = "https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.285-1/virtio-win.iso";
     public static String virtIOWinUrlMd5 = "9e650d0e7c6e017a91ca299c8f7ed766";
 
-    public static boolean isGmsAvailable = false;
 }

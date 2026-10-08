@@ -42,7 +42,7 @@ public class SetArchActivity extends AppCompatActivity implements View.OnClickLi
         binding.archarm64.setOnClickListener(this);
         binding.archppc.setOnClickListener(this);
         binding.webBtn.setOnClickListener(this);
-        binding.buttongetcm.setOnClickListener(this);
+        binding.buttongetcm.setVisibility(View.GONE);
         binding.bntimport.setOnClickListener(this);
 
         setSupportActionBar(binding.toolbar);
@@ -56,10 +56,6 @@ public class SetArchActivity extends AppCompatActivity implements View.OnClickLi
             }
             return false;
         });
-
-//        if (PackageUtils.isInstalled("com.anbui.cqcm.app", this)) {
-//            binding.buttongetcm.setText(getResources().getString(R.string.open));
-//        }
 
         binding.bntimport.setOnDragListener((v, event) -> {
             Log.i("Drag", "onDrag: " + event.getAction());
@@ -132,8 +128,6 @@ public class SetArchActivity extends AppCompatActivity implements View.OnClickLi
             finish();
         } else if (id == R.id.webBtn) {
             IntentUtils.openUrl(this, "https://www.qemu.org/");
-        } else if (id == R.id.buttongetcm) {
-            IntentUtils.openApp(this, "com.anbui.cqcm.app");
         } else if (id == R.id.bntimport) {
             Intent intent = new Intent();
             intent.setClass(getApplicationContext(), VMCreatorActivity.class);

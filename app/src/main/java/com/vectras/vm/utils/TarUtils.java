@@ -114,8 +114,10 @@ public class TarUtils {
                 String name = entry.getName();
 
                 if (entry.isSymbolicLink() || entry.isLink()) {
-                    Log.w(TAG, "Symlink in TAR: " + name);
-                    return false;
+                    if (!isSafeLink(entry, canonicalDestDir)) {
+                        Log.w(TAG, "Unsafe link in TAR: " + name + " -> " + entry.getLinkName());
+                        return false;
+                    }
                 }
 
                 if (!isSafePath(name, canonicalDestDir.getAbsolutePath())) {
@@ -139,6 +141,22 @@ public class TarUtils {
         }
 
         return true;
+    }
+
+    private static boolean isSafeLink(TarArchiveEntry entry, File canonicalDestDir) throws IOException {
+        String linkName = entry.getLinkName();
+        if (linkName == null || linkName.isEmpty() || linkName.startsWith("/") || linkName.startsWith("\\")) {
+            return false;
+        }
+
+        File entryFile = new File(canonicalDestDir, entry.getName());
+        File linkTarget = entry.isSymbolicLink()
+                ? new File(entryFile.getParentFile(), linkName)
+                : new File(canonicalDestDir, linkName);
+
+        String destinationPath = canonicalDestDir.getCanonicalPath();
+        String targetPath = linkTarget.getCanonicalPath();
+        return targetPath.startsWith(destinationPath + File.separator);
     }
 
 

@@ -21,8 +21,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
 import com.anbui.elephant.retrofit2utils.Retrofit2Utils;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.termux.app.TermuxActivity;
 import com.vectras.qemu.MainSettingsManager;
 import com.vectras.vm.AppConfig;
@@ -36,7 +36,6 @@ import com.vectras.vm.utils.DeviceUtils;
 import com.vectras.vm.utils.DialogUtils;
 import com.vectras.vm.utils.FileUtils;
 import com.vectras.vm.utils.IntentUtils;
-import com.vectras.vm.utils.JSONUtils;
 import com.vectras.vm.utils.ListUtils;
 import com.vectras.vm.utils.PermissionUtils;
 import com.vectras.vm.utils.TarUtils;
@@ -67,12 +66,12 @@ public class SetupWizard2Activity extends AppCompatActivity {
     final int STEP_SYSTEM_UPDATE = -1;
     int currentStep = 0;
     String logs = "";
-    String bootstrapFileLink = "";
     String selectedMirrorCommand = "echo ";
     String selectedMirrorLocation = "";
-    String downloadBootstrapsCommand = "";
     String tarPath = "";
     String progressText ="0%";
+    String qemuDownloadUrl = "";
+    String qemuDownloadSha256 = "";
     boolean isExecutingCommand = false;
     boolean isLibProotError = false;
     boolean aria2Error = false;
@@ -145,21 +144,7 @@ public class SetupWizard2Activity extends AppCompatActivity {
         binding.btnAllowPermission.setOnClickListener(v -> PermissionUtils.requestStoragePermission(this));
 
         binding.standardSetupOption.setOnClickListener(v -> {
-            if (downloadBootstrapsCommand.isEmpty()) {
-                DialogUtils.twoDialog(SetupWizard2Activity.this, getString(R.string.oops),
-                        getString(R.string.this_option_is_temporarily_unavailable_because_the_server_cannot_be_connected),
-                        getString(R.string.try_again),
-                        getString(R.string.ok),
-                        true, R.drawable.warning_48px,
-                        true,
-                        this::getDataForStandardSetup,
-                        null,
-                        null);
-            } else {
-                isCustomSetupMode = false;
-                startSetup();
-            }
-
+            getDataForStandardSetup();
         });
 
         binding.customSetupOption.setOnClickListener(v -> bootstrapFilePicker.launch("*/*"));
@@ -174,8 +159,6 @@ public class SetupWizard2Activity extends AppCompatActivity {
                 binding.btnSkipSystemUpdate.setVisibility(View.GONE);
             } else if (isLibProotError) {
                 IntentUtils.openTelegramLink(this);
-            } else if (SetupFeatureCore.isInstalledSystemFiles(this)) {
-                getDataForStandardSetup();
             } else {
                 extractSystemFiles();
             }
@@ -366,11 +349,6 @@ public class SetupWizard2Activity extends AppCompatActivity {
     }
 
     private void extractSystemFiles() {
-        if (ACTION == ACTION_SYSTEM_UPDATE) {
-            getDataForStandardSetup();
-            return;
-        }
-
         uiController(STEP_EXTRACTING_SYSTEM_FILES);
 
         executor.execute(() -> {
@@ -386,7 +364,7 @@ public class SetupWizard2Activity extends AppCompatActivity {
 
                     runOnUiThread(() -> new Handler(Looper.getMainLooper()).postDelayed(() -> {
                         if (result) {
-                            getDataForStandardSetup();
+                            requestQemuArchive();
                         } else {
                             uiController(STEP_ERROR, getString(R.string.system_files_installation_failed_content) + (!SetupFeatureCore.lastErrorLog.isEmpty() ? "\n\n" + SetupFeatureCore.lastErrorLog : ""));
                         }
@@ -396,51 +374,100 @@ public class SetupWizard2Activity extends AppCompatActivity {
         });
     }
 
-    private void getDataForStandardSetup() {
-        uiController(STEP_GETTING_DATA);
+    private void requestQemuArchive() {
+        uiController(STEP_SETUP_OPTIONS);
+        binding.standardSetupOption.setVisibility(View.VISIBLE);
+        DialogUtils.twoDialog(this,
+                getString(R.string.qemu_archive_required),
+                getString(R.string.download_qemu_archive_content),
+                getString(R.string.download_qemu_from_github),
+                getString(R.string.select_qemu_archive),
+                true, R.drawable.folder_24px, true,
+                this::getDataForStandardSetup,
+                () -> bootstrapFilePicker.launch("*/*"),
+                null);
+    }
 
-        Retrofit2Utils.get(AppConfig.bootstrapfileslink, ((isSuccess, body, status, error) -> {
+    private void getDataForStandardSetup() {
+        if (isExecutingCommand) return;
+        isExecutingCommand = true;
+        uiController(STEP_GETTING_DATA);
+        qemuDownloadUrl = "";
+        qemuDownloadSha256 = "";
+        Retrofit2Utils.get(AppConfig.bootstrapfileslink, (isSuccess, body, status, error) -> {
+            isExecutingCommand = false;
+            if (isFinishing() || isDestroyed()) return;
             if (isSuccess) {
-                if (JSONUtils.isValidFromString(body)) {
-                    HashMap<String, Object> mmap;
-                    mmap = new Gson().fromJson(body, new TypeToken<HashMap<String, Object>>() {
-                    }.getType());
-                    if (mmap != null && mmap.containsKey("aarch64") && mmap.containsKey("armhf") && mmap.containsKey("amd64") && mmap.containsKey("x86")) {
-                        if (DeviceUtils.isArm()) {
-                            bootstrapFileLink = Objects.requireNonNull(mmap.get(DeviceUtils.is64bit() ? "aarch64" : "armhf")).toString();
-                        } else {
-                            bootstrapFileLink = Objects.requireNonNull(mmap.get(DeviceUtils.is64bit() ? "amd64" : "x86")).toString();
+                try {
+                    JsonObject manifest = JsonParser.parseString(body).getAsJsonObject();
+                    String key = DeviceUtils.isArm()
+                            ? (DeviceUtils.is64bit() ? "aarch64" : "armhf")
+                            : (DeviceUtils.is64bit() ? "amd64" : "x86");
+                    if (manifest.has(key) && !manifest.get(key).isJsonNull()) {
+                        String url = manifest.get(key).getAsString();
+                        // No release URL is hard-coded: the repository JSON selects the archive.
+                        if (url.startsWith("https://") && Uri.parse(url).getHost() != null) {
+                            qemuDownloadUrl = url;
+                            String digestKey = key + "_sha256";
+                            if (manifest.has(digestKey) && !manifest.get(digestKey).isJsonNull()) {
+                                String digest = manifest.get(digestKey).getAsString();
+                                if (!digest.matches("[0-9a-fA-F]{64}")) {
+                                    throw new IllegalArgumentException("Invalid QEMU SHA-256 in setup JSON");
+                                }
+                                qemuDownloadSha256 = digest;
+                            }
                         }
-                        downloadBootstrapsCommand = " aria2c -x 4 --async-dns=false --disable-ipv6 --check-certificate=false -o setup.tar.gz " + bootstrapFileLink;
                     }
+                } catch (Exception e) {
+                    qemuDownloadUrl = "";
+                    qemuDownloadSha256 = "";
+                    Log.e("SetupWizard2Activity", "Invalid QEMU setup JSON", e);
                 }
-                new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                    if (ACTION == ACTION_SYSTEM_UPDATE) {
-                        startSetup();
-                    } else {
-                        uiController(STEP_SETUP_OPTIONS);
-                    }
-                }, 1000);
             } else {
-                new Handler(Looper.getMainLooper()).postDelayed(() -> uiController(STEP_SETUP_OPTIONS), 1000);
-                Log.e("SetupWizard2Activity", "getDataForStandardSetup: " + error);
+                Log.e("SetupWizard2Activity", "Could not load QEMU setup JSON: " + status, error);
             }
-        }));
+            if (!qemuDownloadUrl.isEmpty()) {
+                isCustomSetupMode = false;
+                startSetup();
+            } else {
+                uiController(STEP_ERROR, getString(R.string.qemu_online_unavailable_content,
+                        AppConfig.bootstrapfileslink, Build.SUPPORTED_ABIS[0]));
+            }
+        });
     }
 
     private void startSetup() {
+        if (isExecutingCommand) return;
+        if (!isCustomSetupMode && qemuDownloadUrl.isEmpty()) {
+            requestQemuArchive();
+            return;
+        }
+        isExecutingCommand = true;
         uiController(STEP_INSTALLING_PACKAGES);
 
         new Thread(() -> {
+            final String checkQemuCommand;
+            final String downloadQemuCommand;
+            try {
+                checkQemuCommand = SetupFeatureCore.readTextFromAssets(this, "setup/check-qemu.sh");
+                downloadQemuCommand = isCustomSetupMode ? "" :
+                        SetupFeatureCore.readTextFromAssets(this, "setup/download-qemu.sh");
+            } catch (Exception e) {
+                isExecutingCommand = false;
+                runOnUiThread(() -> uiController(STEP_ERROR, e.toString()));
+                return;
+            }
             if (isCustomSetupMode) {
                 runOnUiThread(() -> appendTextAndScroll(" | " + getString(R.string.checking)));
 
                 try {
                     if (!TarUtils.isAllowExtract(tarPath)) {
+                        isExecutingCommand = false;
                         runOnUiThread(() -> uiController(STEP_ERROR, getString(R.string.this_bootstrap_file_is_invalid)));
                         return;
                     }
                 } catch (Exception e) {
+                    isExecutingCommand = false;
                     runOnUiThread(() -> uiController(STEP_ERROR, e.toString()));
                     return;
                 }
@@ -459,6 +486,13 @@ public class SetupWizard2Activity extends AppCompatActivity {
                         " echo \"Installing packages...\";" +
                         " apk add " + (DeviceUtils.is64bit() ? AppConfig.neededPkgs()
                         : AppConfig.neededPkgs32bit()) + ";";
+
+                String qemuArchivePath = isCustomSetupMode ? tarPath : "/root/setup.tar.gz";
+                if (!isCustomSetupMode) {
+                    // Verify the complete download before removing an installed QEMU during updates.
+                    cmd += " set -- " + shellQuote(qemuDownloadUrl) + " " +
+                            shellQuote(qemuDownloadSha256) + ";\n" + downloadQemuCommand + "\n";
+                }
 
                 if (ACTION == ACTION_SYSTEM_UPDATE) {
                     cmd += "echo \"Uninstalling...\";" +
@@ -480,42 +514,27 @@ public class SetupWizard2Activity extends AppCompatActivity {
                             " rm -f /usr/local/share/man/man7/qemu*;" +
                             " rm -f /usr/local/share/man/man8/qemu*;" +
                             " rm -rf /usr/local/share/qemu;" +
-                            " set -e;" +
-                            " echo \"Downloading Qemu...\";" +
-                            downloadBootstrapsCommand + ";" +
-                            " echo \"Installing Qemu...\";" +
-                            " tar -xzvf setup.tar.gz -C /;" +
-                            " rm setup.tar.gz;" +
-                            " chmod 755 /usr/local/bin/*;";
-                } else {
-                    if (isCustomSetupMode) {
-                        cmd += " echo \"Installing Qemu...\";" +
-                                " tar -xzvf " + tarPath + " -C /;" +
-                                " rm " + tarPath + ";" +
-                                " chmod 755 /usr/local/bin/*;" +
-                                " echo \"Just a sec...\";" +
-                                " mkdir -p ~/.vnc && echo -e \"555555\\n555555\" | vncpasswd -f > ~/.vnc/passwd && chmod 0600 ~/.vnc/passwd;";
-                    } else {
-                        if (FileUtils.isFileExists(getFilesDir().getAbsolutePath() + "/distro/root/setup.tar.gz"))
-                            FileUtils.delete(getFilesDir().getAbsolutePath() + "/distro/root/setup.tar.gz");
-
-                        cmd +=  " echo \"Downloading Qemu...\";" +
-                                downloadBootstrapsCommand + ";" +
-                                " echo \"Installing Qemu...\";" +
-                                " tar -xzvf setup.tar.gz -C /;" +
-                                " rm setup.tar.gz;" +
-                                " chmod 755 /usr/local/bin/*;" +
-                                " echo \"Just a sec...\";" +
-                                " mkdir -p ~/.vnc && echo -e \"555555\\n555555\" | vncpasswd -f > ~/.vnc/passwd && chmod 0600 ~/.vnc/passwd;";
-
-                    }
+                            " set -e;";
                 }
 
-                cmd += " echo \"Installation successful! xssFjnj58Id\"";
+                cmd += " echo \"Installing Qemu...\";" +
+                        " tar -xzvf " + shellQuote(qemuArchivePath) + " -C /;" +
+                        " rm " + shellQuote(qemuArchivePath) + ";" +
+                        " chmod 755 /usr/local/bin/*;";
+                if (ACTION != ACTION_SYSTEM_UPDATE) {
+                    cmd += " echo \"Just a sec...\";" +
+                            " mkdir -p ~/.vnc && echo -e \"555555\\n555555\" | vncpasswd -f > ~/.vnc/passwd && chmod 0600 ~/.vnc/passwd;";
+                }
+
+                cmd += "\n" + checkQemuCommand + "\necho \"Installation successful! xssFjnj58Id\"";
 
                 execute(cmd);
             });
         }).start();
+    }
+
+    private static String shellQuote(String value) {
+        return "'" + value.replace("'", "'\"'\"'") + "'";
     }
 
     private final ActivityResultLauncher<String> bootstrapFilePicker =
@@ -559,25 +578,27 @@ public class SetupWizard2Activity extends AppCompatActivity {
 
             @Override
             public void onFinished(String command, String log, int status) {
-                if (status != terminal2.SUCCESS) {
-                    isExecutingCommand = false;
-                    if (aria2Error && downloadBootstrapsCommand.contains("aria2c")) {
-                        runOnUiThread(() -> {
-                            downloadBootstrapsCommand = " curl -o setup.tar.gz -L " + bootstrapFileLink;
-                            startSetup();
-                        });
-                    } else {
-                        runOnUiThread(() -> {
-                            String toastMessage = "Command failed with exit code: " + status;
-                            appendTextAndScroll("Error: " + toastMessage + "\n");
-                            uiController(STEP_ERROR, logs);
-                        });
-                    }
+                isExecutingCommand = false;
+                if (status == terminal2.SUCCESS && log.contains("Installation successful! xssFjnj58Id")) {
+                    runOnUiThread(() -> {
+                        MainSettingsManager.setStandardSetupVersion(SetupWizard2Activity.this, AppConfig.standardSetupVersion);
+                        MainSettingsManager.setCoreSetupVersion(SetupWizard2Activity.this, AppConfig.coreSetupVersion);
+                        MainSettingsManager.setsetUpWithManualSetupBefore(SetupWizard2Activity.this, isCustomSetupMode);
+                        uiController(STEP_JOIN_COMMUNITY);
+                        if (ACTION == ACTION_SYSTEM_UPDATE) uiControllerFinalSteps(STEP_FINISH);
+                    });
+                } else {
+                    runOnUiThread(() -> {
+                        String toastMessage = "Command failed with exit code: " + status;
+                        appendTextAndScroll("Error: " + toastMessage + "\n");
+                        uiController(STEP_ERROR, logs);
+                    });
                 }
             }
 
             @Override
             public void onError(String command, Exception exception) {
+                isExecutingCommand = false;
                 runOnUiThread(() -> {
                     appendTextAndScroll("Error: " + exception.getMessage() + "\n");
                     uiController(STEP_ERROR, logs);
@@ -590,20 +611,13 @@ public class SetupWizard2Activity extends AppCompatActivity {
     private void appendTextAndScroll(String newLog) {
         logs += newLog;
 
-        if (newLog.contains("xssFjnj58Id")) {
-            isExecutingCommand = false;
-            MainSettingsManager.setStandardSetupVersion(this, AppConfig.standardSetupVersion);
-            MainSettingsManager.setCoreSetupVersion(this, AppConfig.coreSetupVersion);
-            MainSettingsManager.setsetUpWithManualSetupBefore(this, isCustomSetupMode);
-            uiController(STEP_JOIN_COMMUNITY);
-            if (ACTION == ACTION_SYSTEM_UPDATE) {
-                uiControllerFinalSteps(STEP_FINISH);
-            }
-        } else if (newLog.contains("libproot.so --help") || newLog.contains("/bin/sh: can't fork:")) {
+        if (newLog.contains("libproot.so --help") || newLog.contains("/bin/sh: can't fork:")) {
             isLibProotError = true;
         } else if (newLog.contains("not complete: /root/setup.tar.gz")) {
             aria2Error = true;
         } else if (newLog.contains("temporary error")) {
+            isServerError = true;
+        } else if (newLog.contains("QEMU download failed")) {
             isServerError = true;
         }
 

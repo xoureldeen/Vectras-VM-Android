@@ -859,7 +859,6 @@
     <string name="missing_packages">缺少的软件包</string>
     <string name="missing_packages_content">以下是您需要安装的缺少软件包：</string>
     <string name="x11_general_setting_note">在内置和外部显示之间切换时需要重启应用。</string>
-    <string name="contains_ads">包含广告</string>
     <string name="new_session_failsafe">安全模式</string>
     <string name="use_external_x11_note">使用 Termux:X11 应用代替内置屏幕。</string>
     <string name="blur_effect">模糊效果</string>
@@ -873,8 +872,6 @@
     <string name="no_matching_results_found_search_content">未找到匹配的结果。\n请尝试添加或移除下方的过滤器。</string>
     <string name="other">其他</string>
     <string name="operating_system">操作系统</string>
-    <string name="free_community">免费/社区版</string>
-    <string name="high_quality_contains_ads">高质量/包含广告</string>
     <string name="no_gui">无图形界面</string>
     <string name="random_suggestion">随机推荐</string>
     <string name="search_settings_note">在商店和推荐中搜索。</string>

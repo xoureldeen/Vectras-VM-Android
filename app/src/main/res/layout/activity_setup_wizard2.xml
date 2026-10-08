@@ -235,13 +235,13 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/standard"
+                                android:text="@string/download_qemu_from_github"
                                 android:textSize="18sp" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/standard_note"
+                                android:text="@string/online_qemu_note"
                                 android:textColor="?android:attr/textColorSecondary"
                                 android:textSize="14sp" />
                         </LinearLayout>
@@ -277,13 +277,13 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/custom"
+                                android:text="@string/select_qemu_archive"
                                 android:textSize="18sp" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/custom_note"
+                                android:text="@string/select_qemu_note"
                                 android:textColor="?android:attr/textColorSecondary"
                                 android:textSize="14sp" />
                         </LinearLayout>

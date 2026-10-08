@@ -25,6 +25,3 @@
 -keep class com.vectras.qemu.MainSettingsManager$QemuPreferencesFragment { *; }
 -keep class com.vectras.qemu.MainSettingsManager$VncPreferencesFragment { *; }
 -keep class android.media.LoudnessCodecController { *; }
--keepclassmembers class com.google.firebase.database.GenericTypeIndicator{*;}
--keep class * extends com.google.firebase.database.GenericTypeIndicator{*;}
--keep class com.google.firebase.database.GenericTypeIndicator{*;}

@@ -53,7 +53,6 @@ import com.vectras.vm.WebViewActivity;
 import com.vectras.vm.databinding.ActivityMainBinding;
 import com.vectras.vm.databinding.ActivityMainContentBinding;
 import com.vectras.vm.databinding.UpdateBottomDialogLayoutBinding;
-import com.vectras.vm.fcm.FCMManager;
 import com.vectras.vm.main.romstore.RomStoreHomeAdpater;
 import com.vectras.vm.main.softwarestore.SoftwareStoreFragment;
 import com.vectras.vm.main.softwarestore.SoftwareStoreHomeAdapter;
@@ -370,9 +369,6 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
 
         NotificationUtils.requestPermission(this);
 
-        if (MainSettingsManager.getSuggestionsAndTipsNotification(this))
-            FCMManager.subscribe();
-
         setupSearch();
     }
 
@@ -648,14 +644,14 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
                             String romKernel = (rom.romKernel != null) ? rom.romKernel : "";
 
                             return (romName.toLowerCase().contains(keyword.toLowerCase())
-                                    || romKernel.toLowerCase().contains(keyword.toLowerCase())) && filterSearch(rom.romArch, rom.romKernel,  rom.gui, rom.containsAds);
+                                    || romKernel.toLowerCase().contains(keyword.toLowerCase())) && filterSearch(rom.romArch, rom.romKernel, rom.gui);
                         })
                         .collect(Collectors.toList());
             } else {
                 for (DataRoms rom : (currentSearchMode == SEARCH_ROM_STORE ? SharedData.dataRomStore : SharedData.dataSoftwareStore)) {
                     if (rom.romName.toLowerCase().contains(keyword.toLowerCase()) ||
                             rom.romKernel.toLowerCase().contains(keyword.toLowerCase())) {
-                        if (filterSearch(rom.romArch, rom.romKernel, rom.gui, rom.containsAds)) filteredData.add(rom);
+                        if (filterSearch(rom.romArch, rom.romKernel, rom.gui)) filteredData.add(rom);
                     }
                 }
             }
@@ -672,8 +668,7 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
                     MainSettingsManager.getSearchRandomSuggestion(this)) &&
                     searchArchTags.isEmpty() &&
                             searchOsTags.isEmpty() &&
-                            searchIsContainsAds == null
-                            && searchIsGui == null
+                            searchIsGui == null
             ) {
                 binding.lnSearchempty.setVisibility(View.VISIBLE);
                 binding.lnSearchSuggestions.setVisibility(View.GONE);
@@ -736,7 +731,6 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
 
     private String searchOsTags = "";
 
-    private Boolean searchIsContainsAds;
     private Boolean searchIsGui;
 
     private RomStoreHomeAdpater adapterRomStoreSearchSuggestions;
@@ -748,7 +742,6 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
                 binding.chipGroupSearchFilterArch.clearCheck();
                 binding.chipGroupSearchFilterOs.clearCheck();
                 binding.chipGroupSearchFilterUi.clearCheck();
-                binding.chipGroupSearchFilterOther.clearCheck();
             }
         });
 
@@ -823,7 +816,7 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
         });
 
         binding.chipGroupSearchFilterUi.setOnCheckedStateChangeListener((group, checkedIds) -> {
-            searchIsContainsAds = null;
+            searchIsGui = null;
             for (int id : checkedIds) {
                 Boolean isGui = null;
 
@@ -843,32 +836,11 @@ public class MainActivity extends AppCompatActivity implements RomStoreFragment.
             }
         });
 
-        binding.chipGroupSearchFilterOther.setOnCheckedStateChangeListener((group, checkedIds) -> {
-            searchIsContainsAds = null;
-            for (int id : checkedIds) {
-                Boolean isContainsAds = null;
-
-                if (id == R.id.chip_search_filter_other_free_community) {
-                    isContainsAds = false;
-                }
-
-                if (id == R.id.chip_search_filter_other_high_quality_contains_ads) {
-                    isContainsAds = true;
-                }
-
-                searchIsContainsAds = isContainsAds;
-            }
-
-            if (!binding.searchview.getEditText().getText().toString().isEmpty()) {
-                search(binding.searchview.getEditText().getText().toString());
-            }
-        });
     }
 
-    private boolean filterSearch(String arch, String os, boolean gui, boolean isContainsAds) {
+    private boolean filterSearch(String arch, String os, boolean gui) {
         return (searchArchTags.isEmpty() || searchArchTags.contains(arch)) &&
                 (searchOsTags.isEmpty() || searchOsTags.contains(os)) &&
-                (searchIsContainsAds == null || searchIsContainsAds == isContainsAds) &&
                 (searchIsGui == null || searchIsGui == gui);
     }
 

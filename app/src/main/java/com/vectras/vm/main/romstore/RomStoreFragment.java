@@ -95,7 +95,7 @@ public class RomStoreFragment extends Fragment {
         romStoreCallToHomeListener.updateSearchStatus(false);
         binding.linearload.setVisibility(View.VISIBLE);
 
-        Retrofit2Utils.get(AppConfig.vectrasRaw + "vroms-store.json", ((isSuccess, body, status, error) -> {
+        Retrofit2Utils.get(AppConfig.romStoreJson, ((isSuccess, body, status, error) -> {
             binding.linearload.setVisibility(View.GONE);
             if (isSuccess) {
                 if (!body.isEmpty())
