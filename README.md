@@ -135,7 +135,7 @@ The app reads these JSON files through GitHub's raw-content URLs. Downloadable a
 
 ## 🛒 Play Store edition
 
-The **Play Store edition is a separate, paid, simplified version** of Vectras VM. It runs **QEMU 10 natively on Android**, rather than using the PROOT-based runtime of the GitHub Community Version.
+The **Play Store edition is a separate, paid, simplified ui version** of Vectras VM. It runs **QEMU 10 natively on Android** with Spice Client instead of legacy vnc, rather than using the PROOT-based runtime of the GitHub Community Version.
 
 This repository and its installation instructions cover the **Community Version**. The two editions have different runtimes and setup flows; their features and requirements should not be assumed to be identical.
 
