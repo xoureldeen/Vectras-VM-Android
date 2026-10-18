@@ -1,5 +1,8 @@
 <div align="center">
   <img src="resources/vectrasvm.png" alt="Vectras VM logo" width="128" />
+<p align="center">
+  <a href="https://trendshift.io/repositories/12183" target="_blank"><img src="https://trendshift.io/api/badge/repositories/12183" alt="xoureldeen%2FVectras-VM-Android | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
+</p>
 </div>
 
 # 🪴 Vectras VM Github
@@ -7,7 +10,7 @@
 ### 🌱 Community Version for Android
 
 [![Latest release](https://img.shields.io/github/v/release/xoureldeen/Vectras-VM-Android)](https://github.com/xoureldeen/Vectras-VM-Android/releases)
-[![Total downloads](https://img.shields.io/github/downloads/xoureldeen/Vectras-VM-Android/total)](https://github.com/xoureldeen/Vectras-VM-Android/releases)
+[![Total downloads](https://img.shields.io/github/downloads/xoureldeen/Vectras-VM-Android/total?cacheSeconds=3600)](https://github.com/xoureldeen/Vectras-VM-Android/releases)
 [![Android](https://img.shields.io/badge/Android-6.0%2B-3DDC84?logo=android&logoColor=white)](#-device-compatibility)
 [![License: GPL v2](https://img.shields.io/badge/License-GPL_v2-blue.svg)](LICENSE)
 [![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?logo=telegram&logoColor=white)](https://t.me/vectras_os)
