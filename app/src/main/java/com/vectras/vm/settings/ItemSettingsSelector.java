@@ -68,6 +68,7 @@ public class ItemSettingsSelector {
         UniversalPickerDialog.putToList(list, "Tiếng Việt", "vi");
         UniversalPickerDialog.putToList(list, "한국어", "ko");
         UniversalPickerDialog.putToList(list, "العربية", "ar");
+UniversalPickerDialog.putToList(list, "Português (Brasil)", "pt-BR");
         return list;
     }
 
