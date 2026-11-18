@@ -3,7 +3,7 @@ apply plugin: 'maven-publish'
 
 android {
     namespace "com.termux.view"
-    compileSdkVersion 36
+    compileSdkVersion 37
 
     dependencies {
         implementation libs.androidx.annotation
