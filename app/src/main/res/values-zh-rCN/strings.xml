@@ -1156,7 +1156,7 @@
     <string name="qemu32">QEMU32</string>
     <string name="qemu64">QEMU64</string>
     <string name="qemu_archive_required">需要 QEMU 压缩包</string>
-    <string name="qemu_console_head">compat_monitor1 控制台\nQemu 监视器 - 输入 'help' 获取更多信息\n(qemu)</string>
+    <string name="qemu_console_head">compat_monitor1 控制台\nQemu 监视器 - 输入 \'help\' 获取更多信息\n(qemu)</string>
     <string name="qemu_online_unavailable_content">无法为 %2$s 从 %1$s 加载有效的 QEMU 下载链接。请检查网络连接和仓库 JSON，然后重试。您也可以使用「选择 QEMU」选择本地压缩包。</string>
     <string name="qemu_opengl_is_not_available_content">OpenGL 仅在使用 X11 显示且启用 OpenGL 时可用。前往设置了解更多。</string>
     <string name="qemu_version">稳定版</string>
