@@ -723,7 +723,7 @@ public class X11Activity extends AppCompatActivity {
     Notification buildNotification() {
         NotificationCompat.Builder builder =  new NotificationCompat.Builder(this, getNotificationChannel(mNotificationManager))
                 .setContentTitle("Termux:X11")
-                .setSmallIcon(R.drawable.vectras_vm_24px)
+                .setSmallIcon(R.drawable.ic_service_notification)
                 .setContentText(getResources().getText(R.string.lorie_notification_content_text))
                 .setOngoing(true)
                 .setPriority(Notification.PRIORITY_MAX)

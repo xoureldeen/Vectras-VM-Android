@@ -16,8 +16,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/vectras_vm_96px"
-            app:tint="?attr/colorPrimary" />
+            android:src="@drawable/vectras_vm_96px" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -48,8 +47,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/vectras_vm_96px"
-            app:tint="?attr/colorPrimary" />
+            android:src="@drawable/vectras_vm_96px" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

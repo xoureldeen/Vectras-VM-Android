@@ -53,7 +53,7 @@ public class ToolsManager {
 
                             NotificationManagerCompat manager = NotificationManagerCompat.from(VectrasApp.getContext());
                             NotificationCompat.Builder builder = new NotificationCompat.Builder(VectrasApp.getContext(), NotificationUtils.downloadChannelId)
-                                    .setSmallIcon(R.drawable.arrow_cool_down_24px)
+                                    .setSmallIcon(R.drawable.ic_service_notification)
                                     .setContentTitle(activity.getString(R.string.virtio_tools_for_windows))
                                     .setContentText("0%")
                                     .setPriority(NotificationCompat.PRIORITY_LOW)
@@ -97,7 +97,6 @@ public class ToolsManager {
                                             Context context = VectrasApp.getContext();
 
                                             builder.setProgress(0, 0, false)
-                                                    .setSmallIcon(R.drawable.check_24px)
                                                     .setContentText(context.getString(R.string.virtio_tools_for_windows_is_now_ready_to_use))
                                                     .setOngoing(false);
 
@@ -112,7 +111,6 @@ public class ToolsManager {
                                             Context context = VectrasApp.getContext();
 
                                             builder.setProgress(0, 0, false)
-                                                    .setSmallIcon(R.drawable.error_96px)
                                                     .setContentText(context.getString(R.string.download_failed_note))
                                                     .setOngoing(false);
 

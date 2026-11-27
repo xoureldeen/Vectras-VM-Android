@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="resources/vectrasvm.png" alt="Vectras VM logo" width="128" />
+  <img src="resources/vectrasvm.png" alt="Vectras VM Community logo" width="128" />
 <p align="center">
   <a href="https://trendshift.io/repositories/12183" target="_blank"><img src="https://trendshift.io/api/badge/repositories/12183" alt="xoureldeen%2FVectras-VM-Android | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
 </p>
